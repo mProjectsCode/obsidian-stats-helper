@@ -79,14 +79,16 @@ bun run harvest -- \
   --max-runtime-minutes "$max_runtime_minutes" \
   --rate-limit-floor "$rate_limit_floor"
 
-if git diff --quiet -- data; then
+bun run status
+
+if git diff --quiet -- data STATUS.md; then
   echo "No data changes"
   exit 0
 fi
 
 git config user.name "${GIT_COMMITTER_NAME:-obsidian-stats-helper-pi}"
 git config user.email "${GIT_COMMITTER_EMAIL:-obsidian-stats-helper-pi@users.noreply.github.com}"
-git add data
+git add data STATUS.md
 git commit -m "${COMMIT_MESSAGE:-Update plugin metadata}"
 git pull --rebase origin "$branch"
 git push origin "$branch"

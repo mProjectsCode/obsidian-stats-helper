@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { parseLinkHeader } from "../src/github.ts";
 import { normalizeDailyState, parseCommunityPlugins, selectPlugins, simplifyRelease } from "../src/harvester.ts";
+import { buildStatusMarkdown } from "../src/status.ts";
 
 describe("parseCommunityPlugins", () => {
   test("keeps required fields and defaults optional strings", () => {
@@ -146,5 +147,35 @@ describe("parseLinkHeader", () => {
     const links = parseLinkHeader('<https://api.github.com/repos/a/b/releases?page=2>; rel="next", <x>; rel="last"');
     expect(links.next).toBe("https://api.github.com/repos/a/b/releases?page=2");
     expect(links.last).toBe("x");
+  });
+});
+
+describe("buildStatusMarkdown", () => {
+  test("summarizes the current harvest state", () => {
+    expect(
+      buildStatusMarkdown({
+        index: {
+          generatedAt: "2026-06-01T12:00:00.000Z",
+          plugins: [{ presentInCommunityList: true }, { presentInCommunityList: false }],
+        },
+        state: {
+          completed: false,
+          cursorIndex: 1,
+          day: null,
+          pluginCount: 4,
+          startedAt: null,
+          updatedAt: "2026-06-01T12:30:00.000Z",
+        },
+        cachedRequests: 12,
+        pluginFiles: 2,
+      }),
+    ).toBe(`# Status
+
+- Last harvest update: 2026-06-01T12:30:00.000Z
+- Current pass: in progress (1/4, 25.0%)
+- Indexed plugins: 2 (1 present, 1 removed)
+- Plugin detail files: 2
+- HTTP cache entries: 12
+`);
   });
 });
