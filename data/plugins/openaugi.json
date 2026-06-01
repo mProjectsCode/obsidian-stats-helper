@@ -1,0 +1,279 @@
+{
+  "author": "bitsofchris",
+  "defaultBranch": "master",
+  "description": "Parse your voice notes into atomic notes, tasks, and summaries. OpenAugi is the voice to self-organizing second brain. While taking a voice note say 'auggie' to help the agent. Augmented Intelligence is AI for thinkers.",
+  "errors": [],
+  "id": "openaugi",
+  "lastChangedAt": "2026-06-01T16:01:58.573Z",
+  "lastFetchedAt": "2026-06-01T16:01:58.573Z",
+  "manifest": {
+    "author": "Chris Lettieri",
+    "authorUrl": "https://bitsofchris.com",
+    "description": "Process information faster with augmented intelligence (AI for thinkers). Parse your voice notes into atomic notes, tasks, and summaries. Grab context from dataview queries and linked notes. De-duplicate and merge atomic ideas into a clean, organized vault.",
+    "id": "openaugi",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.8.9",
+    "name": "OpenAugi",
+    "version": "0.5.2"
+  },
+  "name": "OpenAugi",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:4e4cfd4a41ee95332f6074680b4cf8a6b1db37b80fd6465c0153b5cbbfc0f5c5",
+          "name": "main.js",
+          "size": 79870
+        },
+        {
+          "digest": "sha256:54f6e39874e81de29257103f49ac742b70e25e15d5f34d9defbfd56e2029ed15",
+          "name": "manifest.json",
+          "size": 463
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.5.2 — Mobile Compatibility Fix\r\n\r\n## What's Changed\r\n\r\n**Fixed: Plugin now loads on Obsidian mobile**\r\n\r\nThe 0.5.1 release re-enabled mobile support but the plugin still failed to load on mobile devices because the task dispatch module imports Node.js-only modules (`child_process`, `fs`, `path`) that don't exist in the mobile runtime.\r\n\r\nThis release fixes that by:\r\n- Using dynamic `import()` for TaskDispatchService so Node.js modules are only loaded on desktop\r\n- Guarding task dispatch commands behind `Platform.isMobile` so they don't appear in the command palette on mobile\r\n- Lazy-importing `detectTmuxPath` in the settings tab to avoid pulling in Node.js at startup\r\n\r\nTask dispatch remains fully functional on desktop. On mobile, context gathering, note processing, and all AI-powered features work as expected — only the desktop-only task dispatch commands are hidden.\r\n\r\n## Full Changelog\r\n\r\nhttps://github.com/bitsofchris/openaugi-obsidian-plugin/compare/0.5.1...0.5.2\r\n",
+      "draft": false,
+      "name": "0.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-02-26T02:54:44Z",
+      "tag": "0.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:61547c101e10dd9526706008d3288310dcf8e2b7b0974592039c091d79735529",
+          "name": "main.js",
+          "size": 79173
+        },
+        {
+          "digest": "sha256:55d90f0ef72d124856d107e723b32e5421cfba9055d743922616d790253fd63b",
+          "name": "manifest.json",
+          "size": 463
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## TL;DR\r\n\r\nRe-enables mobile support — `isDesktopOnly` was incorrectly set to `true` in 0.5.0.\r\n\r\n## What's Fixed\r\n\r\n- **Mobile support restored**: Set `isDesktopOnly: false` in manifest.json. All core features (context gathering, distillation, parsing, publishing) work on mobile. Task dispatch (tmux-based) gracefully shows an error message on platforms without tmux.\r\n\r\n## Upgrade Notes\r\n\r\nIf you were unable to enable OpenAugi on mobile after updating to 0.5.0, this release fixes that. No other changes.\r\n",
+      "draft": false,
+      "name": "0.5.1",
+      "prerelease": false,
+      "publishedAt": "2026-02-26T01:38:32Z",
+      "tag": "0.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:61547c101e10dd9526706008d3288310dcf8e2b7b0974592039c091d79735529",
+          "name": "main.js",
+          "size": 79173
+        },
+        {
+          "digest": "sha256:14f6435965f8b45bed56a33ec9b62676cdcb314fee48eeea4f816c39162f7474",
+          "name": "manifest.json",
+          "size": 462
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## TL;DR\r\n\r\nNew Task Dispatch system — launch AI agent sessions directly from Obsidian task notes with full vault context.\r\n\r\n## What's New\r\n\r\n### Features\r\n\r\n- **Task Dispatch**: Write a task note with `task_id` in frontmatter, run a command, and an agent session launches in a tmux terminal pre-loaded with context from the note and all linked notes\r\n- **Session management**: List, attach to, or kill running agent sessions from a modal\r\n- **Named repository paths**: Map short names to directories in settings so `working_dir: my-repo` resolves to the full path\r\n- **MCP integration**: Agents are instructed to use the OpenAugi MCP for vault search and writing results back to the task note's `## Results` section\r\n- **Working directory resolution**: Supports named repos, absolute paths, vault-relative paths, and a configurable default — with automatic directory creation\r\n- **tmux auto-detection**: Finds tmux automatically across common Homebrew and system install locations\r\n\r\n### Improvements\r\n\r\n- **Context injection**: Task context is now passed as the initial user prompt instead of system prompt, making it visible in the agent's conversation\r\n- **README rewrite**: Repositioned as \"The Personal Intelligence Layer for Your Agents\" — context engineering, task dispatch, and note processing\r\n\r\n### Test Coverage\r\n\r\n- Added 46 tests for task-dispatch-service covering: `resolveRepoPath`, `shellEscape`, `getTaskId`, `getWorkingDir`, `getAgentConfig`, `assembleContext`, file I/O, tmux session management, `launchOrAttach`, `killSession`, and `openTerminal`\r\n\r\n## How to Use\r\n\r\n1. Install tmux: `brew install tmux`\r\n2. Create a task note with `task_id` in frontmatter\r\n3. Optionally set `working_dir` to a repo name, absolute path, or vault-relative path\r\n4. Run **Task dispatch: Launch or attach** from the command palette\r\n5. Configure repository path mappings in Settings → Task Dispatch\r\n\r\nSee [Task Dispatch docs](TASK_DISPATCH.md) for the full reference.\r\n",
+      "draft": false,
+      "name": "0.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-02-25T22:56:59Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d7e4eefd2b6d05726ddbf7ec4ecddd323b97848fa4e7fce32260e526ed743a76",
+          "name": "main.js",
+          "size": 64941
+        },
+        {
+          "digest": "sha256:179aeb6b8a9987ff6b16181b02b27e3bb6a5d5aeefea5e9faf1cfa8d0993a5f3",
+          "name": "manifest.json",
+          "size": 463
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## TL;DR\r\nFixed dataview TABLE queries not discovering notes for context gathering, and added copy-to-clipboard in the context preview.\r\n\r\n## What's New\r\n\r\n### Bug Fixes\r\n- **Dataview TABLE queries now work for context gathering**: TABLE-style dataview queries (e.g., `TABLE file.mtime FROM #tag`) were silently failing to discover notes. The old string-parsing approach couldn't handle escaped pipe characters (`\\|`) in TABLE-rendered markdown. Switched to Dataview's structured `query()` API which returns clean file paths for both LIST and TABLE queries.\r\n\r\n### Improvements\r\n- **Copy to Clipboard in context preview**: Added a \"Copy to Clipboard\" button in the context preview modal so you can paste gathered context into external tools (Claude, ChatGPT, etc.)\r\n- **Modal closes after copy**: The context preview modal now automatically closes after copying to clipboard, streamlining the workflow.\r\n\r\n## Upgrade Notes\r\n- No breaking changes. The dataview fix uses the structured `dvApi.query()` API which has been available since Dataview 0.5.x. If you're on an older Dataview version, the plugin will log a message to the console.\r\n",
+      "draft": false,
+      "name": "0.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-02-22T21:07:42Z",
+      "tag": "0.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f3e387c37a7e92fae558c8a086fd4771a8b9a5151db71cd475aae02be630640e",
+          "name": "main.js",
+          "size": 64748
+        },
+        {
+          "digest": "sha256:2f1e22c37c0c880718407ef0984887d86208bf4178d9abd519710de3f197e7bc",
+          "name": "manifest.json",
+          "size": 463
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Bidirectional Link Traversal: Backlink Context Extraction\r\n\r\nAdds the ability to gather context from notes that link TO discovered notes, not just notes linked FROM them.\r\n\r\n### What's New\r\n\r\n**\"Include backlinks\" toggle** in context gathering modal (enabled by default)\r\n- Discovers notes that link TO your discovered notes\r\n- Extracts only the **header section** containing the link reference (not the full note)\r\n- Visual indicator: \"← backlink\" badge in note selection modal\r\n\r\n**Output formatting**\r\n- Forward links: `# Note: filename` (full content)\r\n- Backlinks: `# Backlink: filename` (header section snippet)\r\n\r\n### How It Works\r\n\r\n1. BFS traversal now discovers both forward links AND backlinks at each depth level\r\n2. Forward links → full note content (existing behavior)\r\n3. Backlinks → header section containing the link reference\r\n4. If a note appears as both forward and backlink, forward link takes priority (full content)\r\n5. Duplicate snippets are deduplicated (multiple links in same section = one snippet)\r\n\r\n### Settings\r\n\r\n- **Include backlinks by default**: On (Settings → Context Gathering)\r\n- **Backlink context**: 0 = header section (default), 1-5 = N lines before/after\r\n\r\n### Files Changed\r\n\r\n- `src/types/context.ts` - Added `isBacklink`, `backlinkSnippet` fields\r\n- `src/types/settings.ts` - Added `includeBacklinks`, `backlinkContextLines` defaults\r\n- `src/services/distill-service.ts` - Added `getBacklinksForFile()`, `getBacklinkSnippets()`, `extractContextAroundLine()`\r\n- `src/services/context-gathering-service.ts` - Modified BFS for bidirectional traversal, public `aggregateContent()`\r\n- `src/ui/context-gathering-modal.ts` - Added toggle and slider\r\n- `src/ui/context-selection-modal.ts` - Added backlink badge\r\n- `src/ui/settings-tab.ts` - Added default settings\r\n- `src/main.ts` - Fixed aggregation to use context-gathering-service, deep merge for settings\r\n- `docs/CODEBASE_MAP.md` - Updated documentation\r\n- `README.md` - Added usage guide\r\n",
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-01-30T12:44:48Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6476bd96ed47d471e2ccf96275015a1e430ff756ee8d1e434a456985f266a456",
+          "name": "main.js",
+          "size": 59654
+        },
+        {
+          "digest": "sha256:7a3aa690f2c7978180fff4cee6d2fed9c87830ecf2cdddde79134ab8f48ebc5f",
+          "name": "manifest.json",
+          "size": 463
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### TL;DR\r\nDynamic model selection with live fetching from OpenAI API, plus cleaner context extraction by hiding dataview queries.\r\n\r\n\r\n### Features\r\n\r\n1. Dynamic Model Selection: The settings now fetch available models directly from your OpenAI account instead of a hardcoded list. Click \"Refresh Models\" to update the list anytime.\r\n2. Model Caching: Your available models are cached locally so the dropdown loads instantly on subsequent visits.\r\nImprovements\r\nCleaner Context Extraction: Dataview query blocks are now stripped from the content sent to AI processing, preventing the raw query syntax from cluttering your distilled notes.\r\n\r\n### How to Use\r\nGo to Settings → OpenAugi → Click \"Refresh Models\" to load the latest models available to your API key. The dropdown will update with all compatible chat models, sorted with flagship models first.\r\n\r\n",
+      "draft": false,
+      "name": "0.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-01-12T14:20:18Z",
+      "tag": "0.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:74355bebc355c081dbe20509e493f5d528b8204dc31555643817d607ada34657",
+          "name": "main.js",
+          "size": 57362
+        },
+        {
+          "digest": "sha256:0eb72f06e15d71422d980381df0c1553d9e7f828ba33d82e2a09e8f3cab85971",
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Release Notes: Unified Context Gathering System + OpenAI Model Selection\r\n\r\nThis release introduces a powerful **Unified Context Gathering System** that transforms how OpenAugi discovers, reviews, and processes your notes, plus flexible **OpenAI model selection** for all AI operations.\r\n\r\n## ✨ New Features\r\n\r\n### 🧠 Unified Context Gathering System\r\n\r\n**One flexible system, multiple outputs** - Instead of separate rigid workflows, you now have a three-stage pipeline that gives you complete control:\r\n\r\n1. **Configure** - Choose source (linked notes or recent activity), depth, filters\r\n2. **Review** - See discovered notes in checkbox list, toggle individual notes on/off  \r\n3. **Process** - Choose to distill into atomic notes OR publish as a single blog post\r\n\r\n#### New Commands\r\n\r\n- **`OpenAugi: Process Notes`** - Process curated sets of linked notes with link traversal up to 3 levels deep\r\n- **`OpenAugi: Process Recent Activity`** - Weekly reviews and activity summaries with time-based discovery\r\n- **`OpenAugi: Save Context`** - Gather research without AI processing, create reference documents\r\n\r\n#### Key Capabilities\r\n\r\n- **🔗 Link Depth Traversal**: Breadth-first search up to 3 levels deep (was limited to 1)\r\n- **📋 Checkbox Review**: Preview ALL discovered notes before processing, toggle individual notes\r\n- **📊 Smart Filtering**: Character limits (default 100k), folder exclusions, journal section filtering\r\n- **📝 Dual Output Modes**: \r\n  - **Distill**: Atomic notes + summary (existing behavior enhanced)\r\n  - **Publish**: Single polished blog post ready for sharing (NEW!)\r\n- **💾 Raw Context Saving**: Skip AI processing, just aggregate content\r\n\r\n### 🤖 OpenAI Model Selection\r\n\r\n**Flexible model configuration** for all AI operations:\r\n\r\n- **Preset Models**: Choose from `gpt-5`, `gpt-5-mini`, `gpt-5-nano` (default: `gpt-5`)\r\n- **Custom Override**: Specify any OpenAI model name (e.g., `gpt-4o-2024-11-20`)\r\n- **Settings Integration**: Configure in Settings → OpenAugi → OpenAI Model\r\n- **No Hardcoded Models**: All model references now come from configuration\r\n\r\n## 🚀 Publishing System (NEW!)\r\n\r\nTransform your notes into polished, shareable content:\r\n\r\n- **Single Blog Post Output**: Conversational tone preserving your voice\r\n- **Markdown Formatting**: Headers, emphasis, short paragraphs\r\n- **Frontmatter Metadata**: Type, date, prompt used, source notes\r\n- **Custom Prompts**: Use different \"lenses\" for focused processing\r\n- **Ready to Share**: Copy-paste directly to blog, Discord, forums\r\n\r\n**Example Output:**\r\n```markdown\r\n---\r\ntype: published-post\r\npublished_date: 2025-10-13T14:30:00Z\r\nprompt_used: default\r\nstatus: draft\r\nsource_notes: [[Note 1]], [[Note 2]]\r\n---\r\n\r\n# Building a Second Brain That Actually Works\r\n\r\n[Polished blog post content ready for publishing]\r\n```\r\n\r\n## 🔧 Enhanced Settings\r\n\r\n### Context Gathering Settings\r\n- **Default Link Depth**: 1-3 levels (was fixed at 1)\r\n- **Default Max Characters**: 100,000 (prevents token overflow)\r\n- **Filter Recent Sections by Default**: Journal section filtering toggle\r\n\r\n### OpenAI Settings\r\n- **Model Selection**: Dropdown with preset options\r\n- **Custom Model Override**: Text input for any model name\r\n- **Published Folder**: Where blog posts are saved (`OpenAugi/Published`)\r\n\r\n## 🐛 Bug Fixes\r\n\r\n- **Journal Section Filtering**: Fixed issue where date headers with additional text (e.g., `### 2025-10-13 - new`) weren't being recognized and filtered properly\r\n\r\n\r\n\r\n## 🔄 Backwards Compatibility\r\n\r\n**Zero breaking changes!** All existing commands still work:\r\n- Legacy commands marked appropriately in documentation\r\n- Existing file structures unchanged\r\n- Settings migration handled automatically\r\n- Old workflows continue to function\r\n\r\n\r\n",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2025-10-13T19:38:44Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c28f1048b7d6d486725692ee741b799b07349d949983ec179cee915aac4ecc24",
+          "name": "main.js",
+          "size": 42876
+        },
+        {
+          "digest": "sha256:721e50fa61272768d4a97aa1dfb1fa93c39a5f378c736f86e4d4d5f73c16cf76",
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "digest": "sha256:f2d5b8d17adcd34cf4de0d36b90c65db051fb6e348e571ff9ddc487b5041a6e2",
+          "name": "styles.css",
+          "size": 1593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Key new feature is \"distill recent activity\" where you can select recent notes (by date string subheader, date string note title, or recently modified time) and distill them. Also, added \"custom lens\" distillation where you can select a note to add additional context for how or what you want to extract from your notes.\r\n\r\nFeatures Added\r\n\r\n- Interactive Note Selection: New checkbox-based interface for previewing and selecting notes before processing, with \"Save as Collection\" functionality for creating persistent note sets.\r\n- Custom Prompt Lenses: A system for using custom prompts as \"lenses\" to focus AI processing on specific aspects of notes. Users can create and select different processing perspectives.\r\n- Time-Aware Distillation: Enhanced \"Distill Recent Activity\" command with date range selection, automatic date-based discovery, and smart journal filtering.\r\n- Session-Based Organization: All atomic notes from a single distillation are now grouped in timestamped session folders for better organization.\r\n- Minor bug fixes",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2025-07-28T12:16:43Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 20382
+        },
+        {
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "name": "styles.css",
+          "size": 771
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- Minor fixes for Community Plugin approval\r\n- Adds the \"Distill linked notes\" command to create atomic notes from a cluster linked notes (either Dataview query and/or links)",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2025-05-06T11:47:18Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 10585
+        },
+        {
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "name": "styles.css",
+          "size": 771
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Initial Release\r\n\r\nWhen taking a voice note say \"auggie this is a task\" or \"auggie make a new note about X\".\r\n\r\nImport your voice transcript into Obsidian.\r\n\r\nHit CMD+P and run the OpenAugi: Parse Transcript command.\r\n\r\nThis will create:\r\n\r\natomic notes for every idea in your transcript\r\nextract tasks\r\nsummarize the entire voice note\r\nThe summary note will be created with any relevant tasks and links to the new atomic notes.",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-04-17T12:49:54Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "bitsofchris/openaugi-obsidian-plugin"
+}

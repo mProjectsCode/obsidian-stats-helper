@@ -1,0 +1,530 @@
+{
+  "author": "John Banister",
+  "defaultBranch": "main",
+  "description": "Provides advanced word counting features for selected text across all view modes. Goes beyond basic word counting with customizable path exclusion, and more.",
+  "errors": [],
+  "id": "custom-selected-word-count",
+  "lastChangedAt": "2026-06-01T16:01:58.573Z",
+  "lastFetchedAt": "2026-06-01T16:01:58.573Z",
+  "manifest": {
+    "author": "banisterious",
+    "authorUrl": "https://github.com/banisterious",
+    "description": "Comprehensive text analysis for selected text including word counting, character counting, and sentence counting with modern UI design.",
+    "fundingUrl": {
+      "Buy Me a Coffee": "https://www.buymeacoffee.com/banisterious",
+      "GitHub Sponsor": "https://github.com/sponsors/banisterious"
+    },
+    "id": "custom-selected-word-count",
+    "isDesktopOnly": true,
+    "minAppVersion": "0.15.0",
+    "name": "Custom Selected Word Count",
+    "version": "1.7.2"
+  },
+  "name": "Custom Selected Word Count",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8b567d60b72cd773fe9374b82a3f4b5a3f51b6783780f4472d55d82721e7137b",
+          "name": "main.js",
+          "size": 54205
+        },
+        {
+          "digest": "sha256:d932315aaed7b1f0fd4a60f3cb56d4259c3f05289996f58cdbfaad5ccbbcd93c",
+          "name": "manifest.json",
+          "size": 532
+        },
+        {
+          "digest": "sha256:2d379578a1556f80b7975dd1c8a3d85103bc0f334508a10efb0578deb547e306",
+          "name": "styles.css",
+          "size": 22015
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Post-audit consistency cleanup, prompted by a static review of the 1.7.1 release. No user-visible behavior changes (the user-facing `Notice` on heading/phrase-exclusion errors is unchanged); two internal tidies that bring `src/main.ts` in line with itself.\r\n\r\n## Internal\r\n\r\n- **Error-logging consistency in `src/main.ts`.** `addExcludedHeading` and `addExcludedPhrase` had `catch` blocks that called `console.error(...)` directly, while every other catch in the file routes through `this.log(..., errorMessage(error))`. Updated the two outliers to match. Behavior change: the diagnostic now prints only when debug logging is enabled (rather than unconditionally). The user-facing `Notice('Failed to add ...')` continues to surface either way.\r\n\r\n## Files in this release\r\n\r\n`main.js`, `manifest.json`, `styles.css`. Each carries a build-provenance attestation. Verify with:\r\n\r\n```sh\r\ngh attestation verify main.js --repo banisterious/obsidian-custom-selected-word-count\r\n```",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.7.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T17:35:09Z",
+      "tag": "1.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e4096b3bd13375854613f92276d74626c93b446ad5b2d6e3bbce0a7c4ceabd1a",
+          "name": "main.js",
+          "size": 54209
+        },
+        {
+          "digest": "sha256:f64c94de0eed73782db35daede232e980fa8018bd3ad77d218f3aeb68ff5bd3c",
+          "name": "manifest.json",
+          "size": 532
+        },
+        {
+          "digest": "sha256:2d379578a1556f80b7975dd1c8a3d85103bc0f334508a10efb0578deb547e306",
+          "name": "styles.css",
+          "size": 22015
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Final release of the architectural audit. Phase 6 lands the cleanup items the earlier phases deferred: housekeeping (planning-doc archive, regex dedup), two investigation outcomes (Canvas polling + mobile decisions), and substantial documentation (architecture overview, post-audit framing in the project guidelines). No user-visible behavior changes; one cosmetic source-code change (the sentence-count abbreviation regex).\r\n\r\n## Internal\r\n\r\n- **Sentence-count abbreviation regex dedup.** The alternation list in `src/counting/sentences.ts` had nine duplicate tokens (`mil`, `museum`, `name`, `pro`, `travel`, `xxx`, and `tel` each appeared twice; `xxx` and `tel` three times). Removed the duplicates while preserving first-occurrence order. 53 alternations down to 44 unique. Behavior-preserving (regex alternations are set-based), and per Phase 4 finding #2 the guard never actually fires at runtime, the dedup is a readability fix. The three `LOCKED quirk:` tests that confirm `\"Mr.\"`, `\"Dr.\"`, `\"etc.\"` produce false splits continue to pass.\r\n\r\n- **Canvas polling architecture review.** Kept the 500 ms `setInterval` and documented the reasoning. Selections inside Obsidian Canvas iframes fire `selectionchange` on the iframe's `contentDocument`, not the parent document the plugin listens to, so the polling exists as a workaround. An event-driven alternative would need a `MutationObserver` on the Canvas container plus per-iframe listener management, with uncertain cross-frame event reliability; complexity-to-benefit doesn't favor switching. Current polling is gated by `enableLiveCount` and no-ops outside Canvas view; cost is bounded.\r\n\r\n- **Mobile decision revisit.** Kept `isDesktopOnly: true`. Obsidian's developer docs explicitly state that custom status bar items are not supported on mobile (`addStatusBarItem()` is \"Not available on mobile\"). The status bar is substantial in this plugin's UX, so partial mobile support would require gating five settings on `Platform.isMobileApp` plus re-validating selection mechanics on real devices. Revisit if Obsidian adds mobile status-bar support or specific user interest surfaces.\r\n\r\n- **New architecture overview document.** `docs/architecture/overview.md` describes the post-Phase-5 module tree, data flow for counting a selection, `applyExclusions`'s pipeline shape, settings persistence, the override mechanism, Canvas polling caveat, build/test/lint, the release pipeline, and a \"where to make changes\" how-to-modify guide. First stop for navigating the codebase; the source is the second stop.\r\n\r\n- **Planning-doc archive.** Moved `docs/planning/new-exclusions-feature.md` and `docs/planning/per-note-exclusion-overrides.md` to `docs/planning/archive/`. Both pre-date the audit and have been marked complete since. The `archive/` subdirectory is created with these as its first inhabitants.\r\n\r\n- **Audit master plan status flipped to complete.** `docs/planning/audit-implementation-plan.md` ticks all seven audit phases as shipped:\r\n\r\n  ```\r\n  Phase 0 — Release blockers       -> 1.6.3\r\n  Phase 1 — Investigation          -> no release\r\n  Phase 2 — Hygiene + bug fixes    -> 1.6.3 (bundled)\r\n  Phase 3 — API conformance        -> 1.6.3 (bundled)\r\n  Phase 4 — Test infrastructure    -> 1.6.7\r\n  Phase 5 — Single-file split      -> 1.7.0\r\n  Phase 6 — Lower-priority cleanup -> 1.7.1 (this release)\r\n  ```\r\n\r\n  Three intermediate patch releases shipped during the audit (1.6.4, 1.6.5, 1.6.6) for community-site rescan fixes, CSS polish, and the CI release pipeline rollout.\r\n\r\n## Files in this release\r\n\r\n`main.js`, `manifest.json`, `styles.css`. Each carries a build-provenance attestation tying it to the source repository at this tag. Verify with:\r\n\r\n```sh\r\ngh attestation verify main.js --repo banisterious/obsidian-custom-selected-word-count\r\n```",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T19:52:11Z",
+      "tag": "1.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b84ad574ba8f4aa17740a17653c81b36fb713c2c5131e48c18ae8a4a889324a5",
+          "name": "main.js",
+          "size": 54252
+        },
+        {
+          "digest": "sha256:870e92f6c59d3ec246c30d8396a523cc1fa0ddeb21a9d54ea38187d68dc69d14",
+          "name": "manifest.json",
+          "size": 532
+        },
+        {
+          "digest": "sha256:2d379578a1556f80b7975dd1c8a3d85103bc0f334508a10efb0578deb547e306",
+          "name": "styles.css",
+          "size": 22015
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "First minor-version bump of the audit. Phase 5 of the architectural audit lands: the 3260-line `main.ts` is decomposed into 17 focused modules under `src/`, and the exclusion pipeline previously triplicated across the three count functions now lives in a single `applyExclusions` orchestrator. No user-visible behavior changes. Every count, every exclusion, every override mechanism behaves exactly as in 1.6.7. The 134 characterization tests from 1.6.7 pass without modification at every commit on the phase branch, which is what makes a refactor this large safe to ship.\r\n\r\n## Internal\r\n\r\n- **Module decomposition.** Top-level `main.ts` becomes a 20-line re-export that bundles the default (for Obsidian) and the named declarations the test suite imports against. The Plugin class itself, the modal, the settings tab, the seven exclusion processors, the four count functions plus the new `applyExclusions` orchestrator, the shared types, and the debug utilities each live in their own module under `src/`. The esbuild config still entries on top-level `main.ts`, so the produced `main.js` bundle is functionally identical.\r\n  ```\r\n  src/\r\n  ├── main.ts                          // Plugin class\r\n  ├── types.ts                         // CountResult, WordCountHistoryEntry\r\n  ├── obsidian-internals.ts            // AppInternals, AppWithInternals\r\n  ├── settings/\r\n  │   ├── types.ts                     // WordCountPluginSettings + defaults\r\n  │   └── tab.ts                       // WordCountSettingTab\r\n  ├── utils/\r\n  │   └── debug.ts                     // debugLog, errorMessage, DebugLoggable\r\n  ├── processing/\r\n  │   ├── frontmatter.ts\r\n  │   ├── overrides.ts\r\n  │   ├── code.ts\r\n  │   ├── comments.ts\r\n  │   ├── links.ts\r\n  │   ├── headings.ts\r\n  │   └── words-and-phrases.ts\r\n  ├── counting/\r\n  │   ├── pipeline.ts                  // applyExclusions\r\n  │   ├── words.ts\r\n  │   ├── characters.ts\r\n  │   ├── sentences.ts\r\n  │   └── index.ts                     // countSelectedText aggregator\r\n  └── ui/\r\n      └── modal.ts                     // WordCountModal + ConfirmModal\r\n  ```\r\n- **`applyExclusions` consolidation.** `countSelectedWords`, `countSelectedCharacters`, and `countSelectedSentences` each previously carried a ~150-line copy of the same `processTextWithOverrides`-wrapped pipeline (code blocks -> inline code -> comments -> links -> headings -> words/phrases). One definition now in `src/counting/pipeline.ts`; each count function calls `applyExclusions(text, settings, plugin, disabled)` and then runs its own mode-specific post-processing. Roughly 300 lines of duplication removed. The audit-plan §Phase 1 `DEFAULT_WORD_REGEX` deduplication lands as part of the same extraction (both regex-selection branches in `countSelectedWords` now build from the constant).\r\n- **No public-API change.** The plugin id, manifest, on-disk settings shape, frontmatter property name (`cswc-disable`), and inline override marker syntax (`<!-- cswc-disable -->` and `%% cswc-disable %%`) are unchanged. Existing user data and per-note overrides keep working.\r\n- **Refactor approach.** Six extraction passes, each committed independently, each ending with `npm test` + `npm run lint` + `npm run build` all green. The pass-by-pass record and the dependency graph live in [`docs/planning/audit-phase-5-split.md`](https://github.com/banisterious/obsidian-custom-selected-word-count/blob/1.7.0/docs/planning/audit-phase-5-split.md) § Findings.\r\n\r\n## Files in this release\r\n\r\n`main.js`, `manifest.json`, `styles.css`. Each carries a build-provenance attestation tying it to the source repository at this tag. Verify with:\r\n\r\n```sh\r\ngh attestation verify main.js --repo banisterious/obsidian-custom-selected-word-count\r\n```",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T19:17:42Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:496b6e0381dfe3fc171e54b7a5c3c8743d361e8ef4b6bbb47cbfe84a65a70aff",
+          "name": "main.js",
+          "size": 56676
+        },
+        {
+          "digest": "sha256:71a9d094f71fcacd0c0d2e2136d4e62c45319a0b6d404b2260195abc481f53ca",
+          "name": "manifest.json",
+          "size": 532
+        },
+        {
+          "digest": "sha256:2d379578a1556f80b7975dd1c8a3d85103bc0f334508a10efb0578deb547e306",
+          "name": "styles.css",
+          "size": 22015
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Internal-only release: lands the Phase 4 vitest test infrastructure from the architectural audit and bumps `eslint-plugin-obsidianmd` to 0.3.0 to match the community-site rescan's server-side ruleset. No user-visible behavior changes. Every count, every exclusion, every override mechanism behaves exactly as in 1.6.6. The test suite is the load-bearing safety net for Phase 5's planned single-file refactor.\r\n\r\n## Internal\r\n\r\n- **Vitest characterization test suite (Phase 4 of the audit).** 134 tests across six files lock the current behavior of the three count entry points (`countSelectedWords`, `countSelectedCharacters`, `countSelectedSentences`), the `countSelectedText` aggregator, the seven exclusion processors, frontmatter override parsing (`getDisabledExclusionsFromFrontmatter` with array / string / `\"all\"` shapes), and the inline `<!-- cswc-disable -->` and `%% cswc-disable %%` markers. Run locally with `npm test`; the release workflow now runs the suite between Lint and Build, so a failing test blocks the draft release. To support test imports, ~16 top-level functions and the settings types were marked `export` in `main.ts` (no runtime effect; the bundler treats them identically). Three pre-existing quirks surfaced and are now locked in by `LOCKED quirk:` tests so a later phase can decide whether to fix each:\r\n  - Path-exclusion is greedy: once a path-start segment is detected, every subsequent segment is appended to the buffer and the prefix-anchored regex keeps matching, so the path \"swallows\" all trailing words to end of input.\r\n  - The sentence-detection abbreviation guard (`Mr.`, `Dr.`, `etc.`) never fires, because the period is consumed by the sentence-split regex before the guard tests for it. False splits like `\"Mr. Smith\"` -> 2 sentences are current behavior today.\r\n  - The sentence-detection file-extension guard discards entire sentences ending with `name.ext` rather than just the in-filename period.\r\n\r\n  Details in [`docs/planning/audit-phase-4-tests.md`](https://github.com/banisterious/obsidian-custom-selected-word-count/blob/1.6.7/docs/planning/audit-phase-4-tests.md) § Findings.\r\n- **Bumped `eslint-plugin-obsidianmd` from 0.2.9 to 0.3.0.** Matches the version the Obsidian Community website's automated rescan runs server-side, so local `npm run lint` results stay aligned with what the catalog scanner sees on release tags. The 0.3.0 recommended config has one entry that applies its rules without a `files:` restriction, and some of those rules (e.g. `no-plugin-as-component`) require typescript-eslint parser services and crash on non-TS inputs. Worked around by scoping the unrestricted entry to `**/*.ts` and `**/*.tsx`, and extending `eslint.config.mjs`'s `ignores` list to exclude common non-source extensions (`.json`, `.md`, `.css`, etc.).\r\n- **Bumped `@types/node` from `^16.11.6` to `^22.0.0`.** The previous pin predated the project's Node 22 target (per `.nvmrc`) and blocked installing modern devDependencies. Types are dev-only and erased at runtime.\r\n- **Removed dead `.eslintignore`.** ESLint 9 no longer reads it; its two entries (`node_modules/`, `main.js`) were already in `eslint.config.mjs`'s `ignores` array. Removing the file silences the `ESLintIgnoreWarning` that fired on every lint run.\r\n\r\n## Files in this release\r\n\r\n`main.js`, `manifest.json`, `styles.css`. Each carries a build-provenance attestation tying it to the source repository at this tag. Verify with:\r\n\r\n​```sh\r\ngh attestation verify main.js --repo banisterious/obsidian-custom-selected-word-count\r\n​```",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T01:53:52Z",
+      "tag": "1.6.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ca1ffb69aea9a004afb8708565f727e92cd30dcec56acf6fc17f767cb04bec1f",
+          "name": "main.js",
+          "size": 56195
+        },
+        {
+          "digest": "sha256:7d9a405a21a565f09038d3af475958d4e1af780e28be01fceac9aa308df4b0bb",
+          "name": "manifest.json",
+          "size": 532
+        },
+        {
+          "digest": "sha256:2d379578a1556f80b7975dd1c8a3d85103bc0f334508a10efb0578deb547e306",
+          "name": "styles.css",
+          "size": 22015
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "First release cut through the new GitHub Actions release pipeline. Every asset (`main.js`, `manifest.json`, `styles.css`) now carries a verifiable build-provenance attestation. Also clears the responsive `@media` block's four `!important` declarations that the community-site rescan had been flagging.\r\n\r\n## Changed\r\n\r\n- **Responsive `@media` rule scoped to our modal.** The narrow-viewport (`max-width: 600px`) block targeted the bare `.modal` class — every Obsidian modal, not just this plugin's, and used `!important` four times to override Obsidian's default modal width. The selector is now `.modal:has(.word-count-modal)`, which scopes the rule to our own modal and supplies enough specificity to drop all four `!important` declarations. Trades four `!important` rescan warnings for one `:has()` warning (net -3 warnings) and matches the `:has()` pattern already used elsewhere in `styles.css`.\r\n\r\n## Internal\r\n\r\n- **Release pipeline with verifiable provenance.** Added `.github/workflows/release.yml` that builds, lints, attests, and creates a draft release on every plain SemVer tag (`1.6.6`) or pre-release SemVer tag (`1.6.6-rc1`). Each release asset (`main.js`, `manifest.json`, `styles.css`) now carries a GitHub artifact attestation from `actions/attest-build-provenance@v2`. Users and Obsidian's community-site scanner can verify with:\r\n  ```sh\r\n  gh attestation verify main.js --repo banisterious/obsidian-custom-selected-word-count\r\n  ```\r\n- **Pinned Node version for CI / local parity.** Added `.nvmrc` (22.20.0) so `actions/setup-node@v4` and local `nvm` resolve the same Node.\r\n- **Rewrote `docs/developer/release.md`.** Documents the CI-driven flow, the trial-run procedure with `-rc1` tags, the artifact verification command, and the recovery path for a failed CI run.\r\n- **Narrowed caught error types and frontmatter input.** Ten `@typescript-eslint/no-unsafe-*` findings, surfaced by the new CI lint gate. Added a module-level `errorMessage(error: unknown): string` helper and routed the seven `catch` blocks that read `error.message` through it (`instanceof Error` narrowing). Annotated `cache.frontmatter['cswc-disable']` as `unknown` with a `(item): item is string` type predicate on the array-filter branch. Cast `loadData()`'s return through `Partial<WordCountPluginSettings> | null` in `loadSettings`. No user-visible behavior change.\r\n\r\n## Files in this release\r\n\r\n`main.js`, `manifest.json`, `styles.css`. Each carries a build-provenance attestation tying it to the source repository at this tag.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T22:34:48Z",
+      "tag": "1.6.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6a7f29bb16d3631c9f430ebf8827351e86a927e7482032bedebd3e6636a0a341",
+          "name": "main.js",
+          "size": 56158
+        },
+        {
+          "digest": "sha256:5680f57508e6f33aed4bba4ac5a96b3c3ef73421e5e09927211c3fcce1b59e5d",
+          "name": "manifest.json",
+          "size": 545
+        },
+        {
+          "digest": "sha256:ba8a8ef7e8f271d1175fb9ea6b30823cab824a5e62a35a0e8cc36ed599ec8671",
+          "name": "styles.css",
+          "size": 22036
+        }
+      ],
+      "author": "banisterious",
+      "description": "CSS polish to clear advisory Warnings from the community-site rescan. No functional changes; visually identical to 1.6.4.\r\n\r\n## Internal\r\n\r\n- **Merged three pairs of duplicate CSS selectors.** `.word-count-modal .modal-header`, `.word-count-modal .modal-title`, and `.word-count-settings-group` (inside `.word-count-settings`) each had two separate rule blocks doing partial styling against the same element. The cascade was already picking the same final values; consolidating the rules makes the intent clearer.\r\n- **Dropped two redundant `!important` declarations.**\r\n  - `.word-count-hidden { display: none; }` (was `!important`). The class is toggled via `toggleClass` on settings sub-section containers; nothing sets a competing inline `display`.\r\n  - `body.word-count-hide-core .status-bar-item.plugin-word-count { display: none; }` (was `!important`). The body-class + two-class selector has plenty of specificity to win against Obsidian's core word-count item.\r\n\r\n## Known advisory items (not addressed)\r\n\r\n- Four `!important` uses in the `@media (max-width: 600px)` block defend against Obsidian's default modal width on narrow viewports. Replacing them cleanly requires `:has()` (which has its own performance warning) or a JS-driven outer-modal class, both trade-offs. Left in place for now.\r\n- Six `:has()` selectors remain in `styles.css` for modal sizing and parent-state-driven styling (indented sub-section opacity, status-bar settings grouping). `:has()` is well-supported in Obsidian's Electron; the rescan warning is precautionary.\r\n- Artifact attestations for `main.js` / `styles.css` are still Recommendations. Phase 6 of the audit plan adds a release workflow with `actions/attest-build-provenance`.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T22:01:43Z",
+      "tag": "1.6.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6a7f29bb16d3631c9f430ebf8827351e86a927e7482032bedebd3e6636a0a341",
+          "name": "main.js",
+          "size": 56158
+        },
+        {
+          "digest": "sha256:23f4c03606881cbbaf37b9078613dbe5aca2bfcbdb026119f54fcfb443e6c60f",
+          "name": "manifest.json",
+          "size": 545
+        },
+        {
+          "digest": "sha256:bdabebd91e01ebd0d77463e01f02caab67146dd677793d64289cf0f16bcd1842",
+          "name": "styles.css",
+          "size": 22522
+        }
+      ],
+      "author": "banisterious",
+      "description": "Follow-up patch that addresses the community-site automated rescan after 1.6.3. Clears the one CSS Error, both timer-related Warnings, and all nine `no-explicit-any` Warnings. Artifact attestations remain as Recommendations and ship with the Phase 6 release-workflow work.\r\n\r\n## Fixed\r\n\r\n- **CSS syntax error flagged by the community-site rescan.** `styles.css` had a stray `}` inside the nested `.word-count-settings { ... }` block that prematurely closed the `.word-count-container-indented` rule. Everything below it ended up accidentally at top level (including `&:has(...)` selectors that need a parent) and the closing `}` for `.word-count-settings` then had no matching open. Removing the stray brace lets the block nest naturally and balances the brace count.\r\n\r\n## Changed\r\n\r\n- **Timer functions now use `window.*` instead of `activeWindow.*`.** The rescan asked for explicit `window.setTimeout` / `clearTimeout` / `setInterval` / `clearInterval` instead of the `activeWindow.*` form 1.6.3 had moved to. Eight sites updated: debounce timer, canvas polling, Reading-view Select-All, two copy-button feedback flashes, and the onunload debounce-clear. `window.*` is more predictable for timer ids. (`activeWindow` is a focus-following getter, so a timer obtained from `activeWindow.setTimeout()` could end up tied to a different window than the corresponding `clearTimeout()` if focus shifted in between.)\r\n\r\n## Internal\r\n\r\n- **Cleared `no-explicit-any` warnings.** Nine `any` declarations remained after the 1.6.3 settings-callback typing pass:\r\n  - The two logging helpers (`debugLog`, `log`) now take `...args: unknown[]` (forwarded to `console.log` which accepts `unknown[]`).\r\n  - `getHeadingAtCursor(editor, cursor)` now uses `Editor` and `EditorPosition` from `obsidian`.\r\n  - The five `(this.app as any)` casts reaching internal Obsidian App members (`setting.open()`, `setting.openTabById()`, `appVersion`) now go through a locally-declared `AppInternals` interface and `AppWithInternals = App & AppInternals` intersection type. The cast stays — those members aren't in the published types, but `any` is gone.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T21:27:28Z",
+      "tag": "1.6.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:079b8bf3d9528630c85e7619e9882a753b0ef1c2ad78ac5339c3fa5ef89b79d2",
+          "name": "main.js",
+          "size": 56206
+        },
+        {
+          "digest": "sha256:854429a05fc20983ec2a8ff3b1c648cba715a9c1476fce128af2530ac6704a1a",
+          "name": "manifest.json",
+          "size": 545
+        },
+        {
+          "digest": "sha256:34e2bea4ea2a5a78155eb245686130c543689c62adeca46554c162a7d59b9041",
+          "name": "styles.css",
+          "size": 22533
+        }
+      ],
+      "author": "banisterious",
+      "description": "This release clears the Obsidian community-site automated review for catalog acceptance, fixes several long-standing settings-persistence bugs, and lands the Obsidian-API conformance sweep that the audit identified: popout-window-safe timers and DOM access, typed settings callbacks, Platform-based OS detection, and `createEl`/`createDiv` everywhere. The lint baseline against `eslint-plugin-obsidianmd@^0.2.9` is now zero findings.\r\n\r\n## Highlights\r\n\r\n- **Clears the community-site automated review.** The dynamic `<style>` element flagged by the audit is gone. (CSS lives in `styles.css` as a body-class-gated rule.)\r\n- **\"Hide core word count\" actually hides the core word count.** The setting was misnamed for a long time and was hiding everything *except* the core word count item. Now it does what the label says.\r\n- **Live status bar updates fire from popped-out leaves.** Selections inside a popout window now drive the main window's `Selected: N` status bar.\r\n- **History entries persist correctly across restarts.** Word, character, and sentence counts all round-trip to disk now.\r\n\r\n## Fixed\r\n\r\n- **Customized exclusion list is no longer reset on plugin load.** `loadSettings` was unconditionally overwriting the user's list with the default and saving, destroying customization on every Obsidian restart. *Note: customizations made before this version were silently overwritten on disk and cannot be recovered; this fix prevents future loss.*\r\n- **Character and sentence counts now persist in history entries.** The runtime history array and the persisted settings array were never synced; new entries (and the extra counts) never reached disk. History entries from prior versions never actually persisted across sessions, so there's nothing to migrate.\r\n- **\"Hide core word count\" works as named.** Hides Obsidian's built-in Word Count item, leaves other status-bar items (backlinks, properties, editor-status, etc.) visible. Three issues compounded: our item collided with the core item's class, the CSS selector was inverted, and a companion rule had been commented out as \"temporarily disabled\" while the code still added the class.\r\n- **Live status bar updates fire from popouts.** Listeners are registered per-window via `workspace.on('window-open', ...)`, and selection reads use `activeWindow.getSelection()`. *Known limitation: the plugin's `Selected: N` item itself still appears in the main window only — popouts don't yet carry their own status-bar item.*\r\n\r\n## Changed\r\n\r\n- **Mobile catalog visibility.** `manifest.isDesktopOnly` flipped from `false` to `true` so the manifest matches the README's existing note that mobile support is untested. Existing mobile installs continue to run; new mobile installs are not offered from the in-app catalog until mobile testing actually happens.\r\n- **UI text uses Obsidian's sentence-case convention.** The command name, modal title, setting names, button labels, and descriptions throughout. Proper nouns (Markdown, Obsidian, Windows, Unix, macOS, Linux) and acronyms (HTML, URL, UNC, JSON, etc.) are preserved.\r\n- **Popout-window compatibility throughout.** Bare `document` / `setTimeout` / `setInterval` references replaced with Obsidian's `activeDocument` and `activeWindow.*` equivalents.\r\n- **Clear-history confirmation dialog.** Replaced the browser-native `confirm()` with an in-plugin `ConfirmModal` extending `obsidian.Modal`. Same Cancel / Clear UX, documented Obsidian API.\r\n\r\n## Internal\r\n\r\n- **Lint toolchain.** Migrated from `.eslintrc` to flat config (`eslint.config.mjs`); upgraded `eslint` to `^9`, `typescript-eslint` to `^8`, TypeScript to `~4.9`. Added `eslint-plugin-obsidianmd@^0.2.9` so the project lints against the same rules used by the community-site automated review.\r\n- **Obsidian DOM helpers throughout.** Replaced every `document.createElement(...)` and `parent.createEl('div', ...)` with Obsidian's `createEl` / `createDiv` / `createSpan` helpers.\r\n- **Typed settings-tab callbacks.** ~30 `(toggle: any) => ...` and friends now use `ToggleComponent`, `TextComponent`, `DropdownComponent`, `ButtonComponent` from `obsidian`. The advanced-regex Reset button keeps a direct `TextComponent` reference instead of looking it up via constructor-name string matching and casting to `any`.\r\n- **Inline DOM styles moved to CSS classes.** Copy-button confirmation flash toggles a `word-count-copy-confirmed` class; settings-UI show/hide uses the existing `word-count-hidden` utility class.\r\n- **OS detection via `Platform` API.** The log-export `system` payload reads `Platform.isMacOS` / `isWin` / `isLinux` / `isMobileApp` / `isDesktopApp` instead of substring-matching `navigator.userAgent`.\r\n- **Deprecated API replaced.** Four `workspace.activeLeaf` reads now use `getMostRecentLeaf()`.\r\n- **Settings heading uses Obsidian helper.** The lone `createEl('h4')` in the override-info panel now uses `new Setting(...).setHeading()`.\r\n- **Promise hygiene.** Async callbacks passed to `addEventListener` and similar fire-and-forget paths are now wrapped in sync arrows that explicitly `void` the returned promise.\r\n- **Dependency hygiene.** Replaced `builtin-modules` with `node:module`'s `builtinModules` export and removed the dependency from `package.json`.\r\n- **Dead code removed.** An unused exclusion-info helper, an empty `setupRibbonButton` whose backing field was never assigned, an empty `updateClasses` no-op, the `saveHistory` delegate (call sites now use `saveSettings` directly), three unused imports from `obsidian`, ten unused local declarations, two `(this as any).renderHeadingsList = ...` escape hatches.\r\n- **Trivial lint sweeps.** Eight unnecessary regex escapes inside character classes, a missing braces wrap on a `case` block with a lexical declaration, and a caught error binding `catch (e)` → `catch`.\r\n- **Stale comments and version literal.** Removed the leading `// BUILD: 2025-05-07` and `// Remember to rename these classes and interfaces!` comments. Replaced the hardcoded `version: '1.1.0'` literal in the log-export payload with `this.plugin.manifest.version`.\r\n- **Removed orphan release artifact.** Deleted `custom-selected-word-count-v1.6.2.zip` from the working tree.\r\n\r\n## Documentation\r\n\r\n- Added `docs/developer/release.md` documenting the three-file release rule (`main.js`, `manifest.json`, `styles.css`) and local verification steps.\r\n- Removed references to a not-yet-written architecture overview from `README.md` and several files under `docs/`. The architecture document lands in a future phase after the source split.\r\n",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T20:30:59Z",
+      "tag": "1.6.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2005fad335d124d658a71af3298f478eb78956b1c2eaf2d7d4d46899f38eae8d",
+          "name": "custom-selected-word-count-v1.6.2.zip",
+          "size": 19019
+        },
+        {
+          "digest": "sha256:3537fa959575b1ba1445d6e5b606c54b106166e0723f643005ca15e63c9b47a3",
+          "name": "main.js",
+          "size": 56634
+        },
+        {
+          "digest": "sha256:69cb51c6e454872b6dbcbf9c3c3e0d0b05950b6751299c3c090ac13f39da8b0d",
+          "name": "manifest.json",
+          "size": 533
+        },
+        {
+          "digest": "sha256:6c527e00d058b88e87e4091fa86f2f8d65642b92148e493c8a9d27e28957823f",
+          "name": "styles.css",
+          "size": 21734
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Version 1.6.2\r\n\r\nFixed an issue where clicking the status bar after using Select All (`Ctrl+A` or `Cmd+A`) in Reading Mode would show \"No text selected\" instead of opening the word count modal. The modal now correctly displays word count details for all selected text.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.2",
+      "prerelease": false,
+      "publishedAt": "2025-08-08T22:14:54Z",
+      "tag": "1.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c9c7d15e7e8d9da77b45f8639488212f39f625bc695283e9aa54a260d75c68da",
+          "name": "custom-selected-word-count-1.6.1.zip",
+          "size": 18928
+        },
+        {
+          "digest": "sha256:e19e7e521ba28e28d6993fa988d0890f556671e30af1c96109e1d58084e0e1a6",
+          "name": "main.js",
+          "size": 56211
+        },
+        {
+          "digest": "sha256:ef61361a9734145a3bc5b486d1a2ed0d43af2bc6766424fe16206885aca355a8",
+          "name": "manifest.json",
+          "size": 533
+        },
+        {
+          "digest": "sha256:6c527e00d058b88e87e4091fa86f2f8d65642b92148e493c8a9d27e28957823f",
+          "name": "styles.css",
+          "size": 21734
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Release 1.6.1 - Select All Fix\r\n\r\n## Bug Fix:\r\n- Fixed Select All in Reading view - Resolved timing issue where selecting all text with `Ctrl+A` or `Cmd+A` would briefly show the word count before disappearing\r\n\r\n## Technical Details:\r\n- Improved event handler timing to prevent selection change interference\r\n- Enhanced debug logging for better troubleshooting\r\n\r\n**Usage:** This patch ensures that when you press `Ctrl+A` or `Cmd+A` in Reading view, the status bar word count now properly displays and remains visible as expected.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.1",
+      "prerelease": false,
+      "publishedAt": "2025-07-22T01:58:05Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:25f6d8c6636c7001f547a2a987295174f71bfeac2dd89dcabfbce11bbc9888f5",
+          "name": "custom-selected-word-count-1.6.0.zip",
+          "size": 17989
+        },
+        {
+          "digest": "sha256:61cd0ef3523a0c36bfb1c8033afe0915c532d0fd0b4c35fb7d7844f26b977198",
+          "name": "main.js",
+          "size": 51924
+        },
+        {
+          "digest": "sha256:789d9313dfb88cb97f10c64637f6f08c83417040a4701c3bd0403c3fa7b6a8fe",
+          "name": "manifest.json",
+          "size": 548
+        },
+        {
+          "digest": "sha256:6c527e00d058b88e87e4091fa86f2f8d65642b92148e493c8a9d27e28957823f",
+          "name": "styles.css",
+          "size": 21734
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Version 1.6.0 - Canvas Integration & Modal Redesign\r\n\r\nThis release brings **major enhancements** to the Custom Selected Word Count plugin with full Canvas support, a beautiful modal redesign, and important bug fixes.\r\n\r\n## What's New\r\n\r\n### Canvas Integration\r\n- **Full Canvas Support**: Word counting now works seamlessly in Canvas views\r\n- **Smart Status Bar**: Automatically detects text selection within Canvas cards and sticky notes  \r\n- **Clickable Status Bar**: Click to open the modal directly from Canvas views\r\n- **Intelligent Detection**: Advanced iframe polling system ensures reliable text selection across all view types\r\n\r\n### Redesigned Modal Experience\r\n- **Card-Based Design**: Clean, professional layout with dedicated cards for each metric\r\n- **Native Icon System**: Leverages Obsidian's built-in Lucide icons for consistency\r\n- **Theme Adaptive**: Icons automatically adjust to light/dark themes\r\n- **Smart Typography**: Dynamic font sizing handles large numbers gracefully with thousands separators\r\n- **Enhanced UX**: Streamlined interface with improved copy functionality and visual feedback\r\n\r\n### Smart Quote Support\r\n- **Fixed Contractions**: Words like \"don't\", \"I'm\", \"can't\" now count correctly regardless of quote style\r\n- **Unicode Support**: Handles both straight apostrophes (`'`) and smart quotes (`'` `'`)\r\n- **Improved Accuracy**: More precise word recognition for modern text formatting\r\n\r\n## Technical Improvements\r\n\r\n- **Icon Modernization**: Migrated from emoji fallbacks to Obsidian's native `setIcon()` system\r\n- **Consistent Sizing**: Standardized 14-16px icon dimensions across all components\r\n- **Pixel-Perfect Alignment**: Fine-tuned positioning for professional appearance  \r\n- **Settings Enhancement**: Improved custom regex handling with proper field validation\r\n\r\n## Bug Fixes\r\n\r\n- Fixed smart quote contractions being incorrectly split into multiple words\r\n- Corrected custom regex settings initialization and reset functionality\r\n- Resolved Canvas text selection detection issues\r\n\r\n## Full Feature Set\r\n\r\nThis plugin now provides comprehensive text analysis with:\r\n\r\n- ✅ **Advanced word counting** with contraction support\r\n- ✅ **Flexible character counting** (all, no-spaces, letters-only)\r\n- ✅ **Smart sentence detection** with abbreviation handling\r\n- ✅ **Universal compatibility** (Reading, Editing, Live Preview, Canvas)\r\n- ✅ **Powerful exclusions** (paths, comments, links, headings, custom words/phrases)\r\n- ✅ **Per-note overrides** via YAML frontmatter\r\n- ✅ **Rich history tracking** with timestamps and copy functionality\r\n- ✅ **Custom regex patterns** for expert users\r\n\r\n---\r\n\r\n**Full changelog**: https://github.com/banisterious/obsidian-custom-selected-word-count/blob/main/CHANGELOG.md                 ",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.6.0",
+      "prerelease": false,
+      "publishedAt": "2025-07-21T18:44:19Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:da49800820921c7651522dc2c61e0dc564554927cd6b16476d473224a7a9a0c0",
+          "name": "custom-selected-word-count-1.5.0.zip",
+          "size": 16272
+        },
+        {
+          "digest": "sha256:219f8f8a3b18c1daf9368737525fd59b8a8e205b0750a81e0b3a5f0285a3f158",
+          "name": "main.js",
+          "size": 46983
+        },
+        {
+          "digest": "sha256:594a0a407a027ef5e82bc2e4df0a9f11cf6494451e521de0c434db760e75b949",
+          "name": "manifest.json",
+          "size": 534
+        },
+        {
+          "digest": "sha256:66087e816590f174d313db4d28bd7d22c93722d09cd796be069bf254ec5946ce",
+          "name": "styles.css",
+          "size": 20664
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Custom Selected Word Count v1.5.0\r\n\r\n## This release introduces powerful per-note exclusion overrides, improved UI organization, and comprehensive documentation updates.\r\n\r\n## Highlights\r\n\r\n- Per-note exclusion overrides - Override global settings for individual notes\r\n- Inline comment markers - Disable exclusions for specific text sections\r\n- Code exclusion UI - Previously hidden settings now accessible\r\n- Better organized settings - Improved visual hierarchy and property references\r\n- Comprehensive docs - All features now fully documented\r\n\r\n## New Features\r\n\r\n### Per-Note Exclusion Override System\r\n\r\n### Override global exclusion settings for individual notes using YAML frontmatter:\r\n\r\n```markdown\r\n---\r\ncswc-disable: [exclude-urls, exclude-comments]\r\n---\r\n```\r\n\r\nOr disable all exclusions at once:\r\n\r\n```markdown\r\n---\r\ncswc-disable: all\r\n---\r\n```\r\n\r\nSupported override values:\r\n- Path exclusions: exclude-windows-paths, exclude-unix-paths, exclude-unc-paths, exclude-environment-paths\r\n- Content exclusions: exclude-urls, exclude-code-blocks, exclude-inline-code, exclude-comments\r\n- Structure exclusions: exclude-headings, exclude-specific-headings, exclude-words-phrases\r\n\r\n### Inline Comment-Based Overrides\r\n\r\nUse special comment markers to disable exclusions for specific sections within your notes:\r\n\r\nThis text follows global exclusion rules.\r\n\r\n```markdown\r\n<!-- cswc-disable -->\r\nThis section ignores all exclusions - URLs, paths, and comments are counted.\r\n<!-- cswc-enable -->\r\n\r\nBack to normal exclusion rules.\r\n```\r\n\r\nAlso works with Obsidian comment syntax: `%% cswc-disable %%` and `%% cswc-enable %%`\r\n\r\n### Code Exclusion Settings\r\n\r\nThe settings UI now includes previously missing code exclusion toggles:\r\n- Master toggle \"Exclude code\"\r\n- Sub-options for \"Exclude code blocks\" (triple-backtick blocks)\r\n- Sub-options for \"Exclude inline code\" (single-backtick code)\r\n\r\n## Improvements\r\n\r\n### Settings UI Enhancements\r\n\r\n- Added property value indicators next to each exclusion toggle (e.g., `Property: exclude-urls`)\r\n- Added collapsible \"Using per-note exclusion overrides\" help section with examples\r\n- Reorganized settings with better grouping and visual hierarchy\r\n- Improved section headings and descriptions for clarity\r\n\r\n### Technical Improvements\r\n\r\n- Added proper word-count- prefix to CSS classes for better scoping\r\n- Implemented efficient frontmatter parsing using Obsidian's MetadataCache API\r\n- Minimal performance impact with smart caching\r\n\r\n## Documentation\r\n\r\nAll documentation has been overhauled to include the new features:\r\n- Architecture overview updated with per-note override system details\r\n- User guides now cover all features from the architecture\r\n- Settings reference includes all new options\r\n- Added comprehensive examples and use cases\r\n\r\n## Technical Details\r\n\r\nNew Functions:\r\n- `getDisabledExclusionsFromFrontmatter()` - Parses YAML frontmatter for overrides\r\n- `processTextWithOverrides()` - Handles inline comment markers\r\n\r\nUpdated Functions:\r\n- All counting functions (`countSelectedWords`, `countSelectedCharacters`, `countSelectedSentences`) now respect override settings\r\n\r\n## Installation\r\n\r\nFrom Obsidian Community Plugins\r\n\r\n1. Open Settings → Community Plugins\r\n2. Search for \"Custom Selected Word Count\"\r\n3. Install and enable the plugin\r\n\r\n## Manual Installation\r\n\r\n1. Download main.js, manifest.json, and styles.css from this release\r\n2. Place them in your vault's .obsidian/plugins/custom-selected-word-count/ folder\r\n3. Enable the plugin in Settings → Community Plugins\r\n\r\n## Acknowledgments\r\n\r\nThank you to all users who have provided feedback and feature requests. Your input helps make this plugin better for everyone!\r\n\r\n## Bug Reports & Feature Requests\r\n\r\nIf you encounter any issues or have suggestions for future improvements, please create an [issue](https://github.com/banisterious/obsidian-custom-selected-word-count/issues).\r\n\r\n## Support\r\n\r\nIf you find this plugin useful, consider supporting its development:\r\n\r\n<a href=\"https://www.buymeacoffee.com/banisterious\" target=\"_blank\"><img src=\"https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png\" alt=\"Buy Me A Coffee\" style=\"height: 60px !important;width: 217px !important;\" ></a>\r\n\r\n---\r\n\r\nFull Changelog: https://github.com/banisterious/obsidian-custom-selected-word-count/compare/1.4.0...1.5.0",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.5.0",
+      "prerelease": false,
+      "publishedAt": "2025-07-06T21:45:30Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:afb9fff756f421d150b0eea415dd88b4aabf73dbfbbb8c8c4989da6da56b1774",
+          "name": "custom-selected-word-count-1.4.0.zip",
+          "size": 15086
+        },
+        {
+          "digest": "sha256:df647a46b429175990a32fee317c0e6d375ab82b6ee61aace16faefebaea126f",
+          "name": "main.js",
+          "size": 41545
+        },
+        {
+          "digest": "sha256:14c5bd66290adc0ef4eca9759f16918cc5bc7913fa3ce2765f84728375e44946",
+          "name": "manifest.json",
+          "size": 535
+        },
+        {
+          "digest": "sha256:2d713ea344956dcb45e9d783b262410ac99bdadf9015bf972ed9e64999bc8415",
+          "name": "styles.css",
+          "size": 20592
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Enhanced Heading Exclusion & Inline Editing\r\n\r\n## New Features\r\n\r\nSelective Heading Section Exclusion\r\n  - Right-click on specific headings to exclude their entire sections from word count\r\n  - Replaces the previous \"blind\" exclusion with precise, user-controlled selection\r\n  - Smart heading detection and section boundary awareness\r\n\r\nWords and Phrases Exclusion System\r\n  - Individual Words: Comma-separated list for excluding specific words (e.g., \"the, and, or, but\")\r\n  - Custom Phrases: Right-click selected text → \"Exclude phrase from word count\"\r\n  - Case-insensitive matching with duplicate detection\r\n\r\nImproved Edit Experience\r\n  - Inline editing for both excluded headings and phrases\r\n  - Keyboard shortcuts: Enter to save, Escape to cancel\r\n  - No more popup dialogs - edit directly in the settings interface\r\n\r\n---\r\n\r\nInstallation: Available through Obsidian's Community Plugins or manual installation (BRAT recommended)",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.4.0",
+      "prerelease": false,
+      "publishedAt": "2025-07-04T18:28:59Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:de63955bbe1cacae2f0eccb3251afa91c4e87d9f1c5ecc4b9f7a9f463085996c",
+          "name": "custom-selected-word-count-1.3.0.zip",
+          "size": 12822
+        },
+        {
+          "digest": "sha256:901b28f4f0fae0b2e7ef111a3066bf0664b93e419007e77157d8836b3c32db30",
+          "name": "main.js",
+          "size": 30885
+        },
+        {
+          "digest": "sha256:670901f38438e70b865ce8ae18f1d714218a12a3475996282e1b0f9031809eb2",
+          "name": "manifest.json",
+          "size": 385
+        },
+        {
+          "digest": "sha256:499c91a41a67c0ca460db12af6587ab77a3e0ef08e035a75bd104eddbe820ae6",
+          "name": "styles.css",
+          "size": 20516
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Version 1.3.0 - Enhanced Text Analysis with Link Processing and Comment Exclusion\r\n\r\nThis release introduces two major new features that significantly improve text analysis accuracy and provide users with granular control over\r\nwhat gets counted.\r\n\r\n## New: Link Processing System\r\n\r\nGet more accurate word counts by focusing on the text users actually see!\r\n\r\n- Smart Internal Link Handling: `[[Note Name|Alias]]` → counts only \"Alias\"\r\n- Simple Internal Links: `[[Note Name]]` → counts \"Note Name\"\r\n- External Links: `[link text](url)` → counts only \"link text\"\r\n- Clean Results: Excludes URLs, file paths, and technical markup from word counting\r\n- Universal Integration: Works across word, character, and sentence counting modes\r\n- User Control: Master toggle setting (disabled by default for backward compatibility)\r\n\r\n## New: Comment Exclusion System\r\n\r\nTake control over comment handling with flexible exclusion options:\r\n\r\n- Dual Comment Support: Handle both Obsidian (`%% comment %%`) and HTML (`<!-- comment -->`) comments\r\n- Granular Control: Choose to exclude just markers or entire comments including content\r\n- Individual Toggles: Separate settings for each comment type\r\n- Content Options: Decide whether to count text inside comments or exclude it entirely\r\n- Seamless Integration: Applied consistently across all counting modes\r\n- Safe Defaults: All comment exclusion features disabled by default\r\n\r\n## Settings Overview\r\n\r\nThe new features add these settings sections:\r\n\r\n- Link Processing: Single toggle for excluding non-visible link portions\r\n- Comment Exclusion: Master toggle with granular controls for each comment type\r\n- Enhanced Documentation: Updated architecture docs and user guides\r\n\r\n## Backward Compatibility\r\n\r\nAll new features are disabled by default - your existing workflows remain unchanged until you choose to enable these enhancements.\r\n\r\n## Full Changelog\r\n\r\nSee CHANGELOG.md for complete technical details.\r\n\r\n---\r\n\r\nInstallation: Available through Obsidian's Community Plugins.\r\n\r\nNeed Help? Check our docs/README.md or create an [issue](https://github.com/banisterious/obsidian-custom-selected-word-count/issues).",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.3.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-30T20:29:55Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2b6dfec5ea84d6f649a483639752760c5ee1d3d4213d73b9dc721e02bdec99b6",
+          "name": "custom-selected-word-count-1.2.0.zip",
+          "size": 12009
+        },
+        {
+          "digest": "sha256:a2b276dc2a42fe095d491e11af44c6a9c78648e104e97d378b35b491941fc6c1",
+          "name": "main.js",
+          "size": 26024
+        },
+        {
+          "digest": "sha256:a0265e8faa181b5689e661f9d73b119345d4ce53054a85355bf12b741b566bcc",
+          "name": "manifest.json",
+          "size": 385
+        },
+        {
+          "digest": "sha256:e4c663370bd99cacd2c2d60c83dc7a14c8719a67b841869bca095bb6b5c5d388",
+          "name": "styles.css",
+          "size": 20738
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Custom Selected Word Count v1.2.0 - Comprehensive Text Analysis\r\n\r\n## New Features\r\n\r\n### Character Counting\r\n- Three modes: all characters, no spaces, or letters only\r\n- Toggle visibility and individual copy functionality\r\n\r\n### Sentence Counting\r\n- Smart detection with abbreviation handling (Mr., Dr., etc.)\r\n- Excludes decimal numbers, file extensions, and code blocks\r\n\r\n### Modern UI Redesign\r\n- Card-based modal with professional monochrome styling\r\n- Individual count cards for words, characters, and sentences\r\n- Enhanced history with multi-metric tracking\r\n\r\n## Key Points\r\n\r\n- Core word counting unchanged: All existing accuracy, exclusions, and settings preserved\r\n- Path exclusions apply to words only: Character and sentence counts analyze raw selected text\r\n- Backward compatible: Existing settings and history data fully supported\r\n\r\n## Installation\r\n\r\nRecommended: Community Plugin Store\r\n1. Open Obsidian Settings > Community Plugins\r\n2. Browse and search for \"Custom Selected Word Count\"\r\n3. Install and enable the plugin\r\n\r\nAlternative: BRAT Plugin\r\n1. Install the https://github.com/TfTHacker/obsidian42-brat\r\n2. Use BRAT to install from this repository\r\n3. Enable the plugin in Community Plugins settings\r\n\r\nManual Installation\r\n1. Download the release files\r\n2. Place in VaultFolder/.obsidian/plugins/custom-selected-word-count/\r\n3. Enable in Obsidian Settings > Community Plugins\r\n\r\n## More Info\r\n\r\n- https://github.com/banisterious/obsidian-custom-selected-word-count/tree/main/docs\r\n- https://github.com/banisterious/obsidian-custom-selected-word-count/issues\r\n- https://github.com/banisterious/obsidian-custom-selected-word-count/compare/v1.1.0...v1.2.0",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.2.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-29T15:47:07Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:57e80ca574d88bea4acccda0c5984b1a27ddd7c4d246cecb1e656779ca7cbc7e",
+          "name": "custom-selected-word-count-1.1.0.zip",
+          "size": 9664
+        },
+        {
+          "digest": "sha256:42d2cccfd70f2298705544a416fa3a5166551145f8874a3c74878be198d164c7",
+          "name": "main.js",
+          "size": 19666
+        },
+        {
+          "digest": "sha256:3b142e96cdb0a2411ff70d5d6230a4e208a3ee3d14d4f296977b9b4352afe1da",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:1a89f4ed6386e3a59333815171c5efdf90388b019714e02b8728fa0d6678f810",
+          "name": "styles.css",
+          "size": 14566
+        }
+      ],
+      "author": "banisterious",
+      "description": "# Release v1.1.0 - Enhanced Settings & Debug Tools\r\n\r\n## 🆕 New Features\r\n\r\n### Debug Log Export\r\n- Export comprehensive debug logs with timestamp in ocswcp-logs-YYYYMMDD-HHMMSS.json format\r\n- Includes plugin settings, system information, and Obsidian version details\r\n- Only visible when debug logging is enabled for a cleaner interface\r\n\r\n### Complete Advanced Regex Implementation\r\n- Fixed previously broken advanced regex functionality\r\n- Interactive regex input field with live validation\r\n- Test area to preview regex matches with sample text\r\n- \"Reset to Default\" button for easy experimentation\r\n- Real-time error display with user-friendly messages\r\n\r\n## 🎨 UI/UX Improvements\r\n\r\n### Streamlined Settings Interface\r\n- Cleaner, more professional settings layout\r\n- Better visual hierarchy and reduced clutter\r\n\r\n### Enhanced User Experience\r\n- Fixed red warning box appearing when no errors exist\r\n- Conditional visibility for debug features\r\n- Improved visual feedback throughout the interface\r\n\r\n## 🔧 Technical Improvements\r\n\r\n- Fixed TypeScript compilation errors and improved type safety\r\n- Better error handling for regex validation\r\n- Enhanced code organization and maintainability\r\n\r\n  ---\r\nFull Changelog: https://github.com/banisterious/obsidian-custom-selected-word-count/compare/v1.0.1...v1.1.0",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-19T23:13:44Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:25da476333297ca5cefbbe3f6e52635832f4c2905a243df72e1eda29f1d2c4a3",
+          "name": "main.js",
+          "size": 17255
+        },
+        {
+          "digest": "sha256:e75ca12fe460958cb0cce86ff91fbc09ced5185b1c6e057b5c3695c1cef27a9f",
+          "name": "manifest.json",
+          "size": 368
+        },
+        {
+          "digest": "sha256:e380ba52d365068d289183f8310c9d38a146c84a2707bdd6b3539fd6bd40fb24",
+          "name": "styles.css",
+          "size": 15376
+        }
+      ],
+      "author": "banisterious",
+      "description": "## v1.0.1 – Initial Release (minor fixes)\r\n\r\n**Custom Selected Word Count for Obsidian**\r\n\r\n- Accurate word counting for selected text in all view modes (Source, Live Preview, Reading)\r\n- Path and file extension exclusion options\r\n- Command palette, status bar, and ribbon integration (desktop only)\r\n- Word count history with optional timestamps\r\n- **Advanced:** Custom Regex for word detection, with live test area and reset options\r\n- Mobile-friendly UI improvements\r\n- Fully documented, accessible, and user-friendly\r\n\r\n> See the [README](https://github.com/banisterious/obsidian-custom-selected-word-count/blob/main/README.md) for full details and usage instructions.",
+      "draft": false,
+      "name": "Custom Selected Word Count v1.0.1 - minor fixes",
+      "prerelease": false,
+      "publishedAt": "2025-06-12T02:58:44Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 23510
+        },
+        {
+          "name": "manifest.json",
+          "size": 443
+        }
+      ],
+      "author": "banisterious",
+      "description": "## v1.0.0 – Initial Release\r\n\r\n**Custom Selected Word Count for Obsidian**\r\n\r\n- Accurate word counting for selected text in all view modes (Source, Live Preview, Reading)\r\n- Path and file extension exclusion options\r\n- Command palette, status bar, and ribbon integration (desktop only)\r\n- Word count history with optional timestamps\r\n- **Advanced:** Custom Regex for word detection, with live test area and reset options\r\n- Mobile-friendly UI improvements\r\n- Fully documented, accessible, and user-friendly\r\n\r\n> See the [README](https://github.com/banisterious/obsidian-custom-selected-word-count/blob/main/README.md) for full details and usage instructions.",
+      "draft": false,
+      "name": "v1.0.0 – Initial Release",
+      "prerelease": false,
+      "publishedAt": "2025-05-06T23:34:50Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "banisterious/obsidian-custom-selected-word-count"
+}

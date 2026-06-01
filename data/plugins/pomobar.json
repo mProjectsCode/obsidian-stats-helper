@@ -1,0 +1,231 @@
+{
+  "author": "semanticdata",
+  "defaultBranch": "master",
+  "description": "A simple Pomodoro timer that lives in your status bar. Left click to start/stop, right click to reset when paused, middle click to cycle between 25/15/5 minute durations.",
+  "errors": [],
+  "id": "pomobar",
+  "lastChangedAt": "2026-06-01T16:01:58.573Z",
+  "lastFetchedAt": "2026-06-01T16:01:58.573Z",
+  "manifest": {
+    "author": "Miguel Pimentel",
+    "authorUrl": "https://github.com/semanticdata",
+    "description": "A simple Pomodoro timer that lives in your status bar. Left click to start/stop, right click to reset when paused, middle click to cycle between work/break durations.",
+    "fundingUrl": "https://github.com/sponsors/semanticdata",
+    "id": "pomobar",
+    "isDesktopOnly": true,
+    "minAppVersion": "0.15.0",
+    "name": "PomoBar",
+    "version": "1.6.1"
+  },
+  "name": "PomoBar",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:933f37133d37f92b55cb2b057591cb11042dfddad5035f18ebaf69ea01b7ad5b",
+          "name": "main.js",
+          "size": 19301
+        },
+        {
+          "digest": "sha256:15dc0322cf21bbbde38a0b69e156e44302cdda8f91c5b5fe4b1bcdbd789a56bf",
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:4ca2d316a34f591c81a22d355920673a19d563b1eae5d0e00eb3842a8f43480b",
+          "name": "styles.css",
+          "size": 3472
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## Fixed\r\n\r\n- Fixed test accessor bug in timer state management where wrong variable was checked in type validation.\r\n- Added null check for vault adapter to prevent runtime errors when loading custom audio files.\r\n- Removed debug console.log statement from timer interval cleanup.\r\n- Added error handling for audio playback failures to gracefully handle autoplay policy and format issues.\r\n- Fixed audio overlap issue by stopping currently playing audio before starting new sound.\r\n- Corrected volume slider description to match actual value range (0-1 instead of 0-100%).\r\n- Removed dead/commented CSS style.\r\n- Simplified volume preview sound logic for better readability.\r\n- Fixed TypeScript build errors in test helpers:\r\n  - Added missing `App` export to test setup file\r\n  - Resolved Jest mock type issues by switching from type casting to `jest.spyOn()` approach\r\n  - Fixed \"Generic type 'Mock' requires between 0 and 1 type arguments\" errors\r\n  - Eliminated \"Argument of type '{}' is not assignable to parameter of type 'never'\" errors\r\n\r\n## Refactored\r\n\r\n- Extracted duplicate sound selection logic into `getSelectedSound()` helper method in SoundManager.\r\n- Simplified timer duration calculation using array indexing instead of if/else chain.\r\n- Flattened icon selection conditions to reduce nesting in timer state management.\r\n- Added TODO comment to revisit CDN URL duplication in sound management.\r\n- Comprehensive test suite refactoring and optimization:\r\n  - Enhanced test suite with comprehensive helper functions to reduce code duplication:\r\n    - Added `common-test-helpers.ts` with shared mock setup utilities\r\n    - Added `plugin-test-helpers.ts` for plugin-specific test patterns\r\n    - Enhanced `settings-test-helpers.ts` with validation testing utilities\r\n  - Broke down large test files into focused, maintainable modules:\r\n    - Split `settings-tab.test.ts` into 3 specialized files (display, interactions, validation)\r\n    - Split `plugin.test.ts` into 4 specialized files (commands, compatibility, lifecycle, settings-management)\r\n  - Improved test code quality by extracting common patterns and reducing duplication across test suites\r\n  - Fixed lint errors in test suite by adding proper ESLint disable comments for helper functions with internal assertions\r\n  - Optimized test suite by removing redundant tests:\r\n    - Eliminated 17 unnecessary tests (21.5% reduction) while maintaining coverage\r\n    - Removed 2 fully redundant test files (`settings/interactions.test.ts`, `plugin/settings-management.test.ts`)\r\n    - Consolidated overlapping timer state transition tests\r\n    - Merged duplicate lifecycle and cleanup tests\r\n    - Reduced test count from 79 to 62 tests across 10 files\r\n    - Maintained >70% code coverage with significantly reduced maintenance burden\r\n\r\n## What's Changed\r\n* Refactor tests into smaller files and fix timer bugs by @semanticdata in https://github.com/semanticdata/obsidian-pomodoro/pull/12\r\n\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.6.0...1.6.1",
+      "draft": false,
+      "name": "1.6.1 - Fix timer bugs and Refactor tests into smaller files",
+      "prerelease": false,
+      "publishedAt": "2025-12-29T18:34:34Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:105c87161075de7f3fd38b3e04010f5befbb3ef3aafcaa71d8282e2913f1874f",
+          "name": "main.js",
+          "size": 19537
+        },
+        {
+          "digest": "sha256:ed6163d5f95ae99765b434d802f82a6fdb808d055c9e5e20cd866fc2ddcc49df",
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:7a6c54d73dc45cd7b808133c696cdf5acdab9a07ca40618d78c6564ac9f41a05",
+          "name": "styles.css",
+          "size": 3516
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## Added\r\n\r\n- New persistent notification feature that maintains timer state across plugin reloads.\r\n- Settings migration logic to handle future feature updates seamlessly.\r\n\r\n## Changed\r\n\r\n- Major timer refactoring for more reliable state management:\r\n  - Moved from manual timing to epoch-based timing for improved accuracy.\r\n  - Pause state now managed by storing remaining duration.\r\n  - Running state inferred from timer interval being set.\r\n  - Start/Pause consolidated into single `toggleTimer` method.\r\n- Improved variable naming throughout the codebase for better readability.\r\n- Enhanced audio notification persistence to work reliably with the new timer system.\r\n\r\n## Fixed\r\n\r\n- Fixed negative time formatting display issues.\r\n- Resolved timer consistency issues during state transitions.\r\n- Fixed test suite after major refactoring:\r\n  - Replaced manual time calculations with moment.js integration.\r\n  - Fixed circular reference errors in test mocks.\r\n  - Centralized mock definitions for better maintainability.\r\n  - Improved fake timer integration with moment.js.\r\n- Corrected TypeScript errors and assertion failures in tests.\r\n- Fixed overflow display of negative numbers in timer countdown.\r\n\r\n## Developer Experience\r\n\r\n- Comprehensive test refactoring and improvements.\r\n- Added proper test cleanup and mock management.\r\n- Updated documentation to reflect new timer architecture.\r\n- Code formatting with Prettier across the entire codebase.\r\n- Resolved lint issues and improved code quality.\r\n\r\n## What's Changed\r\n* Feature: Persistent Notifications by @semanticdata in https://github.com/semanticdata/obsidian-pomodoro/pull/11 which was mainly driven by @HighPriest in #10 \r\n\r\n## New Contributors\r\n\r\n- @HighPriest - Thank you so much for all your help!\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.5.0...1.6.0",
+      "draft": false,
+      "name": "1.6.0 - Persistent Notifications",
+      "prerelease": false,
+      "publishedAt": "2025-12-28T05:10:53Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dcea787d148f2a145f84bed9b481c521f84a81c5bf512a85c507cafd52e05906",
+          "name": "main.js",
+          "size": 17762
+        },
+        {
+          "digest": "sha256:273403ab030207939538b580d9c0d9783833e9c43505edbcd81311e8c232395c",
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "digest": "sha256:93d1fb70202fc5fd91ef9a12f26569d986a9ccd42d956fbd97c4da755c4139f7",
+          "name": "styles.css",
+          "size": 3501
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## What's Changed\r\n\r\n* Feature: add optional auto progression by @semanticdata in https://github.com/semanticdata/obsidian-pomodoro/pull/8 to automatically start the next timer in your cycle.\r\n\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.4.0...1.5.0",
+      "draft": false,
+      "name": "1.5.0 - Auto-progression",
+      "prerelease": false,
+      "publishedAt": "2025-09-09T02:55:23Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:95dd706e81774b85ae5b51e75fd33cf24b2fdcca6c8474e8f593b500b91173fe",
+          "name": "main.js",
+          "size": 17080
+        },
+        {
+          "digest": "sha256:7021f98cb01ef4873645c9aa16fcefdb6989f6450b8bcc79e4e27c2bfafa379e",
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "digest": "sha256:93d1fb70202fc5fd91ef9a12f26569d986a9ccd42d956fbd97c4da755c4139f7",
+          "name": "styles.css",
+          "size": 3501
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## Key Changes\r\n\r\n* **Feature**: Sound Notifications by @semanticdata in https://github.com/semanticdata/obsidian-pomodoro/pull/6\r\n\r\n### Changed\r\n\r\n- Simplified audio loading logic by removing complex local file path resolution.\r\n- Updated all dependencies to latest versions.\r\n- Replaced Settings Headings with proper `setHeading()` method for Obsidian plugin guidelines compliance.\r\n\r\n### Fixed\r\n\r\n- Updated test mocks to support new `setHeading()` method.\r\n- Corrected test expectations and setting indices after settings UI restructure.\r\n- Fixed lint errors in sound manager.\r\n\r\n### Added\r\n\r\n- New optional notification sound at the end of the timer.\r\n  - Audio notifications load from CDN for improved reliability and cross-platform compatibility.\r\n  - Option to use Custom URL or File instead of the default options.\r\n- New Obsidian command to toggle Sound Notifications on and off.\r\n\r\n## Contributions\r\n\r\n- @Sanctom originally started this feature addition in Issue #5 and graciously offered their time to test the build before release. Thank you!\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.3.0...1.4.0",
+      "draft": false,
+      "name": "1.4.0 - Sound Notifications",
+      "prerelease": false,
+      "publishedAt": "2025-08-26T19:16:26Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cf05810f8f780bc79d826c647d2dd1dafc20ddd8a22d612456eed37bda0bed7c",
+          "name": "main.js",
+          "size": 11633
+        },
+        {
+          "digest": "sha256:78146aa574c4343ccd2325eb6037c4aa52503c1a91935c552e481a2bdf49ed65",
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "digest": "sha256:93d1fb70202fc5fd91ef9a12f26569d986a9ccd42d956fbd97c4da755c4139f7",
+          "name": "styles.css",
+          "size": 3501
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## What's Changed\r\n\r\n- Adjusted colors to more closely match other status bar elements.\r\n- Moved from inline SVG icons to separate files.\r\n\r\n### Added\r\n\r\n- New Obsidian commands:\r\n  - Toggle status bar visibility.\r\n  - Toggle icon visibility.\r\n  - Toggle the timer (play/pause).\r\n  - Reset timer.\r\n  - Cycle timer to next phase.\r\n- New dependency to handle SVG icons `esbuild-plugin-svg`.\r\n- New icon logic:\r\n  - New Paused icon used when the timer is paused.\r\n  - New Play icon used when the timer is running.\r\n  - Timer icon used when inactive.\r\n- Comprehensive test coverage improvements:\r\n  - Added command integration tests for all new keyboard shortcuts.\r\n  - Added icon state transition tests for new icon switching logic.\r\n  - Added timer completion flow tests for work/break transitions.\r\n\r\n### Fixed\r\n\r\n- Resolved test hanging issues caused by mock timer implementation using real `setTimeout`.\r\n- Added proper test cleanup in `afterEach` hooks to prevent timer leaks.\r\n- Fixed mock interval implementation to avoid creating real timers during testing.\r\n\r\n## Screenshots\r\n\r\n<label>Command Palette</label>\r\n<img width=\"707\" height=\"277\" alt=\"image\" src=\"https://github.com/user-attachments/assets/14e9accf-5462-4cdf-8211-69c2ec2001e3\" />\r\n\r\n<label>Hotkeys</label>\r\n<img width=\"773\" height=\"328\" alt=\"image\" src=\"https://github.com/user-attachments/assets/39b48ff9-7f46-4abf-b6d7-b980bb919dc2\" />\r\n\r\n<label>Settings</label>\r\n<img width=\"783\" height=\"436\" alt=\"image\" src=\"https://github.com/user-attachments/assets/4299a8f1-5013-4821-a7e0-ef89c89ef239\" />\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.2.0...1.3.0",
+      "draft": false,
+      "name": "1.3.0 - Obsidian Commands",
+      "prerelease": false,
+      "publishedAt": "2025-08-17T20:12:42Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bc3a3d74d9ec36ba7ac6884639207f6bae0e273450a0f6b17fdcb7ada3ca2486",
+          "name": "main.js",
+          "size": 8422
+        },
+        {
+          "digest": "sha256:18ccbaf7b27b3f6e3783cd5164e091fe7bde174a853be96a25ee0c432ea618fa",
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "digest": "sha256:b3583aae9074fb281294017e5ed986533c64da8d6428f72b54e477a94dc7f301",
+          "name": "styles.css",
+          "size": 3551
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## Changed\r\n\r\n- Briefly tried switching from using esbuild to Vite, then reverted the build system from Vite back to esbuild. While Vite was explored for its development features, esbuild proved to be a more stable and performant choice for an Obsidian plugin.\r\n- Refactored the codebase for better organization and maintainability.\r\n- Improved timer state management for more reliable operation.\r\n- Standardized CSS class names for consistency.\r\n- Extracted repetitive input validation logic into reusable helper functions.\r\n- Refactored timer methods to eliminate code duplication in interval management.\r\n\r\n## Added\r\n\r\n- New opt-in status bar icon for the plugin.\r\n- Documentation site built with MkDocs.\r\n- CHANGELOG with all plugin release notes.\r\n- Increased test coverage for the plugin lifecycle, timer logic, and settings.\r\n  - Robust input validation tests for the settings tab.\r\n  - Edge case testing for the timer and other components.\r\n\r\n## Fixed\r\n\r\n- Timer inconsistencies when cycling through durations.\r\n- A memory leak that occurred when the plugin was unloaded.\r\n- A bug that allowed settings to be changed in an unsafe way.\r\n- Replaced browser alerts with Obsidian's native `Notice` API.\r\n- Improved DOM event listener management to prevent memory leaks on plugin reload.\r\n- Replaced magic numbers with named constants for MouseEvent.button values.\r\n- Renamed `resetTimerState` to `resetPomodoroSession` for better clarity.\r\n- Minor bugs related to type errors, event handling, and input validation.\r\n",
+      "draft": false,
+      "name": "PomoBar 1.2.0",
+      "prerelease": false,
+      "publishedAt": "2025-08-09T00:44:00Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3c8db748edf98cd1966cacede36a8a77801aff568697a1502dc425e4127eac1d",
+          "name": "main.js",
+          "size": 26430
+        },
+        {
+          "digest": "sha256:0f96b45151b06e9611038b56ed752c2ec6439ed2fd45733c33d3c8e2b7cb6da0",
+          "name": "manifest.json",
+          "size": 453
+        },
+        {
+          "digest": "sha256:539d4acfbd93c73febb56518b68a68dd1d679a004ac7fa302c155798c4a6b290",
+          "name": "styles.css",
+          "size": 709
+        }
+      ],
+      "author": "semanticdata",
+      "description": "## PomoBar v1.1.0\r\n\r\nNow includes settings to customize the duration of your pomodoros, and your breaks.\r\n\r\n**Full Changelog**: https://github.com/semanticdata/obsidian-pomodoro/compare/1.0.0...1.1.0",
+      "draft": false,
+      "name": "PomoBar 1.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-11T21:37:01Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 13070
+        },
+        {
+          "name": "manifest.json",
+          "size": 453
+        },
+        {
+          "name": "styles.css",
+          "size": 711
+        }
+      ],
+      "author": "semanticdata",
+      "description": "A minimalist Pomodoro timer that lives in your [Obsidian](https://obsidian.md/) status bar. Focus on your work while keeping track of time with this unobtrusive timer.",
+      "draft": false,
+      "name": "PomoBar v1.0.0 is released!",
+      "prerelease": false,
+      "publishedAt": "2025-01-30T17:51:55Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "semanticdata/obsidian-pomodoro"
+}
