@@ -21,9 +21,6 @@ export interface ReleaseSummary {
   prerelease: boolean;
   draft: boolean;
   assets: ReleaseAssetSummary[];
-  hasReleaseAttestation: boolean | null;
-  attestationCheckedAt: string | null;
-  attestationError?: string;
 }
 
 export interface PluginData {
@@ -57,16 +54,6 @@ export interface HttpCacheEntry {
   lastModified?: string;
 }
 
-export interface AttestationCacheFile {
-  entries: Record<string, AttestationCacheEntry>;
-}
-
-export interface AttestationCacheEntry {
-  hasReleaseAttestation: boolean | null;
-  checkedAt: string;
-  error?: string;
-}
-
 export interface RateLimit {
   limit: number | null;
   remaining: number | null;
@@ -82,7 +69,6 @@ export interface HarvestOptions {
   maxPlugins?: number;
   maxRuntimeMinutes: number;
   rateLimitFloor: number;
-  attestationBudget: number;
 }
 
 export interface HarvestRunState {

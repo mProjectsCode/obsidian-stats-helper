@@ -51,7 +51,6 @@ function parseArgs(args: string[]): HarvestOptions {
     maxPlugins,
     maxRuntimeMinutes: readInteger(values, "maxRuntimeMinutes", 25),
     rateLimitFloor: readInteger(values, "rateLimitFloor", 100),
-    attestationBudget: readInteger(values, "attestationBudget", 50),
   };
 }
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { parseLinkHeader } from "../src/github.ts";
-import { parseCommunityPlugins, selectPlugins, simplifyRelease } from "../src/harvester.ts";
+import { normalizeDailyState, parseCommunityPlugins, selectPlugins, simplifyRelease } from "../src/harvester.ts";
 
 describe("parseCommunityPlugins", () => {
   test("keeps required fields and defaults optional strings", () => {
@@ -27,7 +27,6 @@ describe("selectPlugins", () => {
           dryRun: true,
           maxRuntimeMinutes: 25,
           rateLimitFloor: 100,
-          attestationBudget: 50,
         },
         {
           day: "2026-06-01",
@@ -59,9 +58,60 @@ describe("selectPlugins", () => {
         dryRun: true,
         maxRuntimeMinutes: 25,
         rateLimitFloor: 100,
-        attestationBudget: 50,
       }),
     ).toEqual([{ id: "two", repo: "a/two", name: "", author: "", description: "" }]);
+  });
+});
+
+describe("normalizeDailyState", () => {
+  const fallback = {
+    day: null,
+    cursorIndex: 0,
+    completed: false,
+    pluginCount: 3,
+    startedAt: "2026-06-02T00:00:00Z",
+    updatedAt: "2026-06-02T00:00:00Z",
+  };
+
+  test("keeps an in-progress cursor across calendar days", () => {
+    expect(
+      normalizeDailyState(
+        {
+          day: "2026-06-01",
+          cursorIndex: 2,
+          completed: false,
+          pluginCount: 3,
+          startedAt: "2026-06-01T00:00:00Z",
+          updatedAt: "2026-06-01T23:00:00Z",
+        },
+        fallback,
+        3,
+      ),
+    ).toEqual({
+      day: "2026-06-01",
+      cursorIndex: 2,
+      completed: false,
+      pluginCount: 3,
+      startedAt: "2026-06-01T00:00:00Z",
+      updatedAt: "2026-06-01T23:00:00Z",
+    });
+  });
+
+  test("starts a new pass after the previous pass completed", () => {
+    expect(
+      normalizeDailyState(
+        {
+          day: "2026-06-01",
+          cursorIndex: 3,
+          completed: true,
+          pluginCount: 3,
+          startedAt: "2026-06-01T00:00:00Z",
+          updatedAt: "2026-06-01T23:00:00Z",
+        },
+        fallback,
+        3,
+      ),
+    ).toEqual(fallback);
   });
 });
 
@@ -87,8 +137,6 @@ describe("simplifyRelease", () => {
       prerelease: false,
       draft: false,
       assets: [{ name: "main.js", size: 123, digest: "sha256:abc" }],
-      hasReleaseAttestation: null,
-      attestationCheckedAt: null,
     });
   });
 });

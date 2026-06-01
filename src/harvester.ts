@@ -1,11 +1,9 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { checkReleaseAttestation, getCachedAttestation } from "./attestations.ts";
 import { GitHubClient, GitHubHttpError, fetchCommunityPlugins, parseLinkHeader } from "./github.ts";
 import { chunkForPlugin } from "./hash.ts";
 import { readJsonFile, stableStringify, writeJsonFile } from "./json.ts";
 import type {
-  AttestationCacheFile,
   CommunityPlugin,
   HarvestError,
   HarvestOptions,
@@ -16,7 +14,6 @@ import type {
 } from "./types.ts";
 
 const httpCachePath = "data/state/http-cache.json";
-const attestationCachePath = "data/state/attestations.json";
 const harvestRunPath = "data/state/harvest-run.json";
 
 interface GitHubRepo {
@@ -57,7 +54,6 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
 
   const fetchedAt = new Date().toISOString();
   const httpCache = await readJsonFile<HttpCacheFile>(httpCachePath, { entries: {} });
-  const attestationCache = await readJsonFile<AttestationCacheFile>(attestationCachePath, { entries: {} });
   const github = new GitHubClient({
     token: process.env.GITHUB_TOKEN,
     cache: httpCache,
@@ -68,7 +64,6 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
   const dailyState = useDailyState ? await readDailyState(fetchedAt, allPlugins.length) : null;
   const selectedPlugins = selectPlugins(allPlugins, options, dailyState ?? undefined);
   const summaries: IndexPluginSummary[] = [];
-  const attestationBudget = { remaining: options.attestationBudget };
   const startedAtMs = Date.now();
   let processed = 0;
   let nextCursorIndex = dailyState?.cursorIndex ?? 0;
@@ -88,7 +83,7 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
   for (let index = 0; index < selectedPlugins.length; index += 1) {
     const plugin = selectedPlugins[index];
     const existing = await readPluginData(plugin.id);
-    const result = await harvestPlugin(github, attestationCache, plugin, existing, fetchedAt, attestationBudget);
+    const result = await harvestPlugin(github, plugin, existing, fetchedAt);
     processed += 1;
 
     summaries.push({
@@ -103,7 +98,6 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
     if (!options.dryRun) {
       await writePluginData(result.data, existing);
       await writeJsonFile(httpCachePath, httpCache);
-      await writeJsonFile(attestationCachePath, attestationCache);
     }
 
     if (dailyState) {
@@ -198,18 +192,14 @@ export function simplifyRelease(release: GitHubRelease): ReleaseSummary {
       size: asset.size,
       ...(asset.digest ? { digest: asset.digest } : {}),
     })),
-    hasReleaseAttestation: null,
-    attestationCheckedAt: null,
   };
 }
 
 async function harvestPlugin(
   github: GitHubClient,
-  attestations: AttestationCacheFile,
   plugin: CommunityPlugin,
   existing: PluginData | null,
   fetchedAt: string,
-  attestationBudget: { remaining: number },
 ): Promise<HarvestPluginResult> {
   const errors: HarvestError[] = [];
   const [owner, repoName] = parseRepo(plugin.repo);
@@ -254,30 +244,6 @@ async function harvestPlugin(
     }
   }
 
-  const checkedReleases: ReleaseSummary[] = [];
-  for (const release of releases) {
-    const cachedAttestation = getCachedAttestation(attestations, plugin.repo, release);
-
-    if (!cachedAttestation && attestationBudget.remaining <= 0) {
-      checkedReleases.push(release);
-      continue;
-    }
-
-    if (!cachedAttestation) {
-      attestationBudget.remaining -= 1;
-    }
-
-    const attestation =
-      cachedAttestation ?? (await checkReleaseAttestation(attestations, plugin.repo, release, fetchedAt));
-
-    checkedReleases.push({
-      ...release,
-      hasReleaseAttestation: attestation.hasReleaseAttestation,
-      attestationCheckedAt: attestation.checkedAt,
-      ...(attestation.error ? { attestationError: attestation.error } : {}),
-    });
-  }
-
   const next: PluginData = {
     id: plugin.id,
     name: plugin.name,
@@ -288,7 +254,7 @@ async function harvestPlugin(
     removedAt: null,
     defaultBranch,
     manifest,
-    releases: checkedReleases,
+    releases,
     lastFetchedAt: fetchedAt,
     lastChangedAt: existing?.lastChangedAt ?? fetchedAt,
     errors,
@@ -424,9 +390,8 @@ async function markPluginRemoved(pluginId: string, removedAt: string, changedAt:
 }
 
 async function readDailyState(fetchedAt: string, pluginCount: number): Promise<HarvestRunState> {
-  const day = fetchedAt.slice(0, 10);
   const fallback: HarvestRunState = {
-    day,
+    day: null,
     cursorIndex: 0,
     completed: false,
     pluginCount,
@@ -435,13 +400,23 @@ async function readDailyState(fetchedAt: string, pluginCount: number): Promise<H
   };
   const existing = await readJsonFile<HarvestRunState>(harvestRunPath, fallback);
 
-  if (existing.day !== day) {
+  return normalizeDailyState(existing, fallback, pluginCount);
+}
+
+export function normalizeDailyState(
+  existing: HarvestRunState,
+  fallback: HarvestRunState,
+  pluginCount: number,
+): HarvestRunState {
+  if (existing.completed || existing.cursorIndex >= pluginCount) {
     return fallback;
   }
 
   return {
     ...fallback,
     ...existing,
+    completed: false,
+    cursorIndex: Math.max(0, existing.cursorIndex),
     pluginCount,
   };
 }
@@ -570,7 +545,4 @@ function validateOptions(options: HarvestOptions): void {
     throw new Error("--max-runtime-minutes must be a positive integer");
   }
 
-  if (!Number.isInteger(options.attestationBudget) || options.attestationBudget < 0) {
-    throw new Error("--attestation-budget must be a non-negative integer");
-  }
 }
