@@ -23,12 +23,14 @@ if [[ -z "${GITHUB_TOKEN:-}" && -n "${GITHUB_PAT:-}" ]]; then
 fi
 
 if [[ -z "${GITHUB_TOKEN:-}" ]]; then
-  echo "GITHUB_TOKEN or GITHUB_PAT must be set"
+  echo "GITHUB_TOKEN or GITHUB_PAT must be set."
+  echo "Set it in $env_file or in .env. See .env.example for the expected format."
   exit 1
 fi
 
 if ! command -v bun >/dev/null 2>&1; then
-  echo "bun must be installed and available on PATH"
+  echo "bun must be installed and available on PATH."
+  echo "Install Bun from https://bun.sh/docs/installation, then rerun this command."
   exit 1
 fi
 
