@@ -1,0 +1,368 @@
+{
+  "author": "heliostatic",
+  "defaultBranch": "master",
+  "description": "Controls for displaying or hiding completed tasks.",
+  "errors": [],
+  "id": "completed-task-display",
+  "lastChangedAt": "2026-06-01T11:59:01.768Z",
+  "lastFetchedAt": "2026-06-01T11:59:01.768Z",
+  "manifest": {
+    "author": "Ben Lee-Cohen",
+    "authorUrl": "https://github.com/heliostatic/completed-task-display",
+    "description": "Provides a button in the ribbon to hide or display completed tasks",
+    "id": "completed-task-display",
+    "isDesktopOnly": false,
+    "minAppVersion": "0.10.0",
+    "name": "Completed Task Display",
+    "version": "1.0.11"
+  },
+  "name": "Completed Task Display",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:5d9fc2370e40d984176a56f7d9cf94b2d3c5a9839d37fda821295d54c1389d35",
+          "name": "completed-task-display.zip",
+          "size": 25910
+        },
+        {
+          "digest": "sha256:b5afd6ba67f5a83ae1e45e43b3518aa953298da3258f2046ad30d3496104f6b9",
+          "name": "main.js",
+          "size": 82440
+        },
+        {
+          "digest": "sha256:37852bc27022426f60f3b6a3a68549fe9979d28c5c2c46b9e87fd7f0a7fa5e30",
+          "name": "manifest.json",
+          "size": 341
+        },
+        {
+          "digest": "sha256:3a27a81741fc63c0d835e1b791a7e08fef7c889cb002e82f965690ebf2213fad",
+          "name": "styles.css",
+          "size": 2605
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 1.0.11\r\n\r\n### Changes\r\n- fix: resolve toggle and sub-bullet hiding bugs (#33, #34, #35)\r\n- chore: close Beads issue completed-task-display-zcq after release 1.0.10\r\n\r\n\r\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.10...1.0.11",
+      "draft": false,
+      "name": "1.0.11 -- Two pass hiding",
+      "prerelease": false,
+      "publishedAt": "2025-12-16T18:32:48Z",
+      "tag": "1.0.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:351eae35093bb627298374887c0991a2e09a04eecd17787ea79e770d48100d86",
+          "name": "completed-task-display.zip",
+          "size": 25317
+        },
+        {
+          "digest": "sha256:3654b5c741c4c734fd3818ef53d236f98e4b229160d452189b21e2ecdbc49c51",
+          "name": "main.js",
+          "size": 79914
+        },
+        {
+          "digest": "sha256:38cb6d0720dd09c1bc476f8ce05528a090145c3a790b914287b33b7b97ea840b",
+          "name": "manifest.json",
+          "size": 341
+        },
+        {
+          "digest": "sha256:3a27a81741fc63c0d835e1b791a7e08fef7c889cb002e82f965690ebf2213fad",
+          "name": "styles.css",
+          "size": 2605
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 1.0.10: Fix display of collapsed tasks in source mode\r\n\r\n### Changes\r\n\r\n- fix: properly collapse hidden task lines in source mode (fixes #32)\r\n\r\n\r\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.9...1.0.10",
+      "draft": false,
+      "name": "1.0.10",
+      "prerelease": false,
+      "publishedAt": "2025-11-24T16:09:23Z",
+      "tag": "1.0.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:408e25b6e0b24762f8c11217ff7013ef26864162be1c03d11a3e84fd2a0b107d",
+          "name": "completed-task-display.zip",
+          "size": 25272
+        },
+        {
+          "digest": "sha256:3654b5c741c4c734fd3818ef53d236f98e4b229160d452189b21e2ecdbc49c51",
+          "name": "main.js",
+          "size": 79914
+        },
+        {
+          "digest": "sha256:b3b3aeebe7ad870e46c9d64dfdc980b8dbc98d8ba500f2bb380e69a897dabf45",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:979c540a82b622f24b3dc02ef8d644e9368d83985bf7498b020cb2f3431196ef",
+          "name": "styles.css",
+          "size": 2283
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Critical Bug Fix: Nested Bullets Display\nVersion 1.0.9 fixes a critical regression introduced in 1.0.8 where nested bullet points were incorrectly hidden even when the \"Hide sub-bullets\" setting was disabled.\n\n### What Was Fixed\n- **Nested bullets now display correctly** ([#30](https://github.com/heliostatic/completed-task-display/issues/30))\n  - Fixed Level 2+ bullets disappearing when Level 3+ items existed below them\n  - Nested items are now only hidden when BOTH conditions are met:\n    1. \"Toggle Completed Task View\" is active (hiding completed tasks)\n    2. \"Hide sub-bullets\" setting is enabled\n    3. The nested item is beneath a COMPLETED task `[x]` or `[X]`\n  - Plain bullets at any indentation level are never incorrectly hidden\n\n### Root Cause\nThe CSS rules for hiding sub-bullets in edit mode were too aggressive and not properly scoped:\n- CSS selector `:has([contenteditable=\"false\"])` matched ALL lines (fold indicators have this attribute)\n- Sub-bullet hiding CSS applied whenever completed tasks were hidden, regardless of the hideSubBullets setting\n- No body class to distinguish when the \"Hide sub-bullets\" feature was enabled\n\n### Technical Changes\n- **Removed problematic CSS rules** - Deleted overly broad selectors that were hiding sub-bullets in edit mode\n- **Added body class management** - New `updateBodyClasses()` method manages both `hide-completed-tasks` and `hide-sub-bullets` body classes\n- **Proper CSS scoping** - Sub-bullet CSS now requires BOTH body classes to be present\n- **Simplified selectors** - Removed `:not(:has(.cm-list-1)):not(:has(.cm-list-2))` that was causing false matches\n\n### For Users\nIf you experienced nested bullets disappearing unexpectedly in v1.0.8, this update resolves the issue. The \"Hide sub-bullets\" setting now works as intended - only hiding indented items beneath completed tasks when explicitly enabled.\n\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.8...v1.0.9\n",
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": false,
+      "publishedAt": "2025-11-13T16:11:06Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:958395e81d75c13bea34944c51f71e539eb76a4782fc6b59215068c2d5f37ca0",
+          "name": "completed-task-display.zip",
+          "size": 25020
+        },
+        {
+          "digest": "sha256:462e45c3ff3168605f8437ae023bb593ec0406a2e7e73edbf04efad9212e7450",
+          "name": "main.js",
+          "size": 78827
+        },
+        {
+          "digest": "sha256:49e4a8191034a854f677f247f76c65aa753b6a66e5c9036dd35919e3aab4210d",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3042ee2a6c89af3d7e8237cd4387faaf1eef96c4e0a34769a7b6994d0d3d7a2f",
+          "name": "styles.css",
+          "size": 2865
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Live Preview Line Hiding Overhaul\r\nVersion 1.0.8 completely reimplements how completed tasks are hidden in Live Preview mode, fixing several long-standing issues and providing a much more polished experience.\r\n\r\n### Key Features & Fixes\r\n  - Fixed overlapping line numbers (https://github.com/heliostatic/completed-task-display/issues/28)\r\n    - Switched from line decorations to CodeMirror replace decorations\r\n    - Properly removes hidden lines from editor layout\r\n    - Gutter line numbers now align correctly without visual artifacts\r\n  - Improved Live Preview support\r\n    - Tasks hide cleanly without breaking Obsidian's rendering\r\n    - Toggle functionality works seamlessly in all view modes\r\n  - Sub-bullets hiding feature                          \r\n  - Added new setting to hide sub-bullets when parent task is completed\r\n    - Works intelligently in Edit/Live Preview mode with JavaScript-based indentation detection\r\n    - In Reading view, sub-bullets automatically hide when parent is hidden (standard DOM\r\n  behavior)                                             \r\n- Fully documented in README with mode-specific behavior explanations\r\n  Technical\r\n\r\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.7...1.0.8",
+      "draft": false,
+      "name": "v1.0.8 – Greatly improved line number support",
+      "prerelease": false,
+      "publishedAt": "2025-10-29T19:42:15Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4f89251a648aac54763d99f17e4438a686a1cf2161f2ad6646ffdf0067302489",
+          "name": "completed-task-display.zip",
+          "size": 16514
+        },
+        {
+          "digest": "sha256:f0ec792fc6e30cd98721dabe7431382c7b16045e70504921b14b645d48f92e82",
+          "name": "main.js",
+          "size": 50700
+        },
+        {
+          "digest": "sha256:bbe7a902845a30975063fb29dc6c2c36d04ed364ba50940597fe0deda69e1085",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:a7ae9d9e14f45f08e7606009fd85121418f90b9960dcb9f3b4e5d104ac5b3f8e",
+          "name": "styles.css",
+          "size": 407
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## v1.0.7 - Critical Bug Fix for Custom Task Statuses\n\nThis is a critical bug fix release that resolves an issue where the plugin was incorrectly hiding ALL custom task statuses, not just completed tasks.\n\n### 🐛 Critical Bug Fix\n- **Fix plugin hiding non-completed task statuses** - The plugin was hiding all task statuses except empty `[ ]`, including custom statuses like `[?]`, `[!]`, `[/]`, etc.\n- Now only hides truly completed tasks: `[x]` and `[X]`\n\n### What Was Broken\nPreviously, if you used custom task statuses (supported by the Tasks plugin, AnuPpuccin theme, or other tools), they would all be hidden when the plugin was enabled:\n- `[?]` possible tasks ❌ (was hidden)\n- `[!]` urgent tasks ❌ (was hidden)\n- `[/]` in-progress tasks ❌ (was hidden)\n- `[-]` cancelled tasks ❌ (was hidden)\n- Any other custom status ❌ (was hidden)\n\n### What's Fixed\nNow only completed tasks are hidden:\n- `[x]` completed tasks ✅ (hidden)\n- `[X]` completed tasks ✅ (hidden)\n- `[?]` possible tasks ✅ (visible)\n- `[!]` urgent tasks ✅ (visible)\n- `[/]` in-progress tasks ✅ (visible)\n- `[-]` cancelled tasks ✅ (visible)\n- Any other custom status ✅ (visible)\n\n### Technical Details\nChanged CSS selector from:\n```css\n[data-task]:not([data-task=\" \"])  /* Hide everything except empty */\n```\n\nTo:\n```css\n[data-task=\"x\"], [data-task=\"X\"]  /* Hide only completed */\n```\n\n### Issues Resolved\n- Fixes #3 - Main bug report about custom statuses being hidden\n- Addresses #13 - Task status support request\n- Addresses #19 - In-progress status support\n\n---\n\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.6...1.0.7",
+      "draft": false,
+      "name": "v1.0.7 - Critical Bug Fix for Custom Task Statuses",
+      "prerelease": false,
+      "publishedAt": "2025-10-21T19:51:25Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ffc8135b13c3f47722fdbd557905587ed45bd9808ca095650080c637d0a28f76",
+          "name": "completed-task-display.zip",
+          "size": 16495
+        },
+        {
+          "digest": "sha256:f0ec792fc6e30cd98721dabe7431382c7b16045e70504921b14b645d48f92e82",
+          "name": "main.js",
+          "size": 50700
+        },
+        {
+          "digest": "sha256:27e457c5ed63ce7790c64933ea2c681f44222d140b79740ba8e8ebad1deccae9",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:8f44fcbbcb60347cfeac1928a8a4237394faddd0d077727cd7ca9029a6ce5b00",
+          "name": "styles.css",
+          "size": 332
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## v1.0.6 - Bug Fixes and Modernization\n\nThis release includes critical bug fixes and modernizes the development infrastructure to current standards.\n\n### 🐛 Bug Fixes\n- Fix CSS syntax error causing parsing issues\n- Add error handling for corrupted plugin data\n- Improve CSS selectors for hiding completed tasks in edit mode\n- Fix line number display issues in edit mode (#28)\n\n### 🔧 Code Quality Improvements\n- Update package.json metadata to accurately reflect the plugin\n- Remove console.log statements from production code\n- Add proper error handling with try-catch blocks\n- Improve CSS organization with comments\n\n### 🚀 Infrastructure Modernization\n- Update TypeScript from 4.0.3 to 5.9.3\n- Update Rollup from 2.32.1 to 4.52.5 \n- Update all Rollup plugins to latest versions\n- Update @types/node from v14 to v24\n- Update Obsidian API to v1.10.0\n- Modernize GitHub Actions workflow (Node 15.x → 20.x LTS)\n- Replace deprecated GitHub Actions with current versions\n\n### 📄 Legal & Documentation\n- Add MIT LICENSE file\n- Initialize Beads issue tracker for project management\n\n### 🏗️ Build System\n- Add \"type\": \"module\" to package.json\n- Fix deprecated GitHub Actions warnings\n- Ensure zero vulnerabilities in dependency audit\n\n---\n\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.5...1.0.6",
+      "draft": false,
+      "name": "v1.0.6 - Bug Fixes and Modernization",
+      "prerelease": false,
+      "publishedAt": "2025-10-21T15:52:50Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7a45393245776bafccecc56337a1c01a92eaa9f50726d96fce3313880bca2176",
+          "name": "main.js",
+          "size": 50240
+        },
+        {
+          "digest": "sha256:3697736e42c7e5b7dfe65fd3641d3e672cf4b8bc81a9b506d5a468d15d182acc",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:8b35899c50d3fd81b4592eb0b25151cdd14d37d46e3ddf6e12213baba737f01c",
+          "name": "styles.css",
+          "size": 218
+        }
+      ],
+      "author": "heliostatic",
+      "description": "## What's Changed\r\n* Fix plugin update mechanism by adding missing version entries to versions.json by @Copilot in https://github.com/heliostatic/completed-task-display/pull/23\r\n* save hiddenState between restarts by @dpowers in https://github.com/heliostatic/completed-task-display/pull/20\r\n\r\n## New Contributors\r\n* @zhao414 made their first contribution in https://github.com/heliostatic/completed-task-display/pull/16\r\n* @Copilot made their first contribution in https://github.com/heliostatic/completed-task-display/pull/23\r\n* @dpowers made their first contribution in https://github.com/heliostatic/completed-task-display/pull/20\r\n\r\n**Full Changelog**: https://github.com/heliostatic/completed-task-display/compare/1.0.4...1.0.5",
+      "draft": false,
+      "name": "1.0.5 -- Persisting display state across restarts",
+      "prerelease": false,
+      "publishedAt": "2025-07-18T18:16:59Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "name": "completed-task-display-1.0.4.zip",
+          "size": 13860
+        },
+        {
+          "name": "main.js",
+          "size": 38745
+        },
+        {
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "name": "styles.css",
+          "size": 218
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "",
+      "draft": false,
+      "name": "1.0.4",
+      "prerelease": false,
+      "publishedAt": "2023-04-13T21:44:40Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "name": "completed-task-display-1.0.3.zip",
+          "size": 12109
+        },
+        {
+          "name": "main.js",
+          "size": 32947
+        },
+        {
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "name": "styles.css",
+          "size": 218
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "",
+      "draft": false,
+      "name": "1.0.3",
+      "prerelease": false,
+      "publishedAt": "2022-02-14T20:07:49Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "completed-task-display-1.0.2.zip",
+          "size": 11449
+        },
+        {
+          "name": "main.js",
+          "size": 31119
+        },
+        {
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "name": "styles.css",
+          "size": 105
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "",
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2021-01-05T02:02:29Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "completed-task-display-1.0.1.zip",
+          "size": 11978
+        },
+        {
+          "name": "main.js",
+          "size": 33410
+        },
+        {
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "name": "styles.css",
+          "size": 105
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "",
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2021-01-04T18:27:32Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 41823
+        },
+        {
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "name": "styles.css",
+          "size": 105
+        }
+      ],
+      "author": "heliostatic",
+      "description": "",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2021-01-04T17:55:40Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "heliostatic/completed-task-display"
+}
