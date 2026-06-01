@@ -1,0 +1,285 @@
+{
+  "author": "Charles Kelsoe",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Developer tools to capture annotated screenshots with structured context, reload plugins live, and inspect icons, CSS variables, and commands.",
+  "errors": [],
+  "id": "developer-toolbox",
+  "lastChangedAt": "2026-06-01T20:03:58.646Z",
+  "lastFetchedAt": "2026-06-01T20:03:58.646Z",
+  "manifest": {
+    "author": "Charles Kelsoe",
+    "authorUrl": "https://github.com/ckelsoe",
+    "description": "Developer tools to capture annotated screenshots with structured context, reload plugins live, and inspect icons, CSS variables, and commands.",
+    "id": "developer-toolbox",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.5.7",
+    "name": "Developer Toolbox",
+    "version": "0.9.0"
+  },
+  "name": "Developer Toolbox",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:f16e13fe215a5b896346d64c10aa94460cef28ea138cd9c3855e4c5b0af58d7c",
+          "name": "main.js",
+          "size": 257777
+        },
+        {
+          "digest": "sha256:cb538adf87871187b51a4b0bae31be8eea28d267efa0689238b0304de2b50ede",
+          "name": "manifest.json",
+          "size": 367
+        },
+        {
+          "digest": "sha256:8bf43a33df17308dec80660e045f789909f7fd9d824c1daf4415152886076846",
+          "name": "styles.css",
+          "size": 10354
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Diagnostics log: a new tool that keeps a structured per-command results ledger as one markdown file in the vault. Each entry is a section with a label, status (ok, error, or info), an optional elapsed time, an ISO timestamp, and a body that is either a JSON block for a success payload or a fenced error with name, message, and stack. Other tools record entries through the shared `lib.diagnostics` bus, so the log fills as you use the toolbox. Use the \"Copy diagnostics log\", \"Clear diagnostics log\", and \"Open diagnostics log\" commands, or the ribbon (`scroll-text` icon), to work with the file. The log subfolder and an opt-in session-start snapshot are configurable, and disabling the tool turns recording off entirely.\n- Event spy: a new passive tool that observes Obsidian's event buses and records each firing to the diagnostics log so you can see event timing and order in the vault. Workspace watching covers file-open, active-leaf-change, and layout-change. Vault watching covers create, modify, delete, and rename. Editor changes (editor-change) can be watched too but are off by default because that event fires on every keystroke and would flood the log. Records go to the diagnostics log and require the Diagnostics log tool to be enabled; with it off, observed events are dropped. The spy filters out its own log writes (anything under the storage root) so recording an event cannot trigger another write and loop forever.\n\n",
+      "draft": false,
+      "name": "0.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T13:16:25Z",
+      "tag": "0.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b4906ea48c73e010504708d95dcaf51419bf98b92720f7bb63d3cfe361e0dbef",
+          "name": "main.js",
+          "size": 251596
+        },
+        {
+          "digest": "sha256:130000058970767acd09e384964b5eb32523b5ce7c5808549c3ddb99c00b3074",
+          "name": "manifest.json",
+          "size": 367
+        },
+        {
+          "digest": "sha256:8bf43a33df17308dec80660e045f789909f7fd9d824c1daf4415152886076846",
+          "name": "styles.css",
+          "size": 10354
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- Removed the word \"Obsidian\" from the manifest description, which the marketplace flags as redundant with the plugin directory context.\n- Replaced a `!important` hide rule with a higher-specificity selector, per the guideline to avoid `!important`.\n- Renamed the command inspector's command and ribbon action to \"Inspect hotkeys and ids\" so its command id and name no longer contain the word \"command\", per the command-naming guideline.\n\n",
+      "draft": false,
+      "name": "0.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-30T20:59:48Z",
+      "tag": "0.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:577442ac871d0224e6700a545f6cebd019132a44a59fb196436c4f2c27a04aec",
+          "name": "main.js",
+          "size": 251575
+        },
+        {
+          "digest": "sha256:4054a6eb0b9e7ec05291520b41b11bc7b6ae4c85ade8d0546b4ee8dca681563b",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:76baa64748dce4c32e2821a06a3125c2512d04a4b80a56ff10f27e9ca477903a",
+          "name": "styles.css",
+          "size": 10164
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Icon browser: a new tool that lists and previews every icon ID usable in `setIcon` and `addRibbonIcon`. Open it from the ribbon (`palette` icon) or the \"Browse icons\" command, search by ID, and click any icon to copy its ID string to the clipboard. The list is read live from Obsidian, so it reflects the icons actually registered in your install.\n- CSS variable inspector: a new tool that lists every CSS custom property (`--name`) the app and active theme define, each with its live computed value for the current light or dark scheme. Open it from the ribbon (`paintbrush` icon) or the \"Inspect CSS variables\" command, search by name or value, and click any row to copy a paste-ready `--name: value;` declaration. A \"Copy all\" action copies the whole filtered list. Values are read live via the CSSOM, so they track the active theme.\n- Command inspector: a new tool that lists every registered command with its owning plugin and effective hotkey. Open it from the ribbon (`terminal` icon) or the \"Inspect commands\" command, search by command ID, plugin, or hotkey, and click any row to copy the command ID. The hotkey shown is the binding actually in effect (a user override beats the app default, which beats the plugin-declared default), and \"Copy all\" exports the filtered list as tab-separated rows. Commands and hotkeys are read live from Obsidian's internal registries, so the table degrades gracefully if a future build changes their shape.\n- Inspector modals (icon browser, CSS variable inspector, command inspector) share a wider dialog and a virtualized list, so the full result set scrolls smoothly with no display cap. Each uses Obsidian's native search box with a clear button, and long IDs and values truncate with an ellipsis and a hover tooltip instead of wrapping.\n\n",
+      "draft": false,
+      "name": "0.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-30T20:13:08Z",
+      "tag": "0.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:58a8aa44aabaaed7666f111a29b4007a5bf787238e2a440f87442cdd193bc01b",
+          "name": "main.js",
+          "size": 241314
+        },
+        {
+          "digest": "sha256:bdca2d549e94f4018d7016c94aca5d533d48c3b3dc2f10284eaf9b3228ccea76",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:d3d9e17c71b406a793f038956ab14c95055a81a5c472dfc17722dc31b565a233",
+          "name": "styles.css",
+          "size": 6602
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- State inspector: a new tool that shows the live environment as a browse-and-copy snapshot. Open it from the ribbon (`activity` icon) or the \"Inspect live state\" command to see the Obsidian version, Electron version, operating system, vault name, active file, view mode, leaf type, and enabled plugin count. Copy any single field, or copy the whole snapshot as one block. It respects the same include-vault-name, include-plugin-list, and path-style options as issue capture.\n- The captured context now includes the Electron version, so it also appears in issue-capture payloads and notes.\n\n",
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T20:14:11Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:eea20d26245a4c0b669641d3a82031856c731f5cd76fc63786a54f7db0afc373",
+          "name": "main.js",
+          "size": 237064
+        },
+        {
+          "digest": "sha256:25a1f6062db1769b2dc0e461ed22ceb672f6536b0bf1651ff217e92f41559da8",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:192ec71bf4733983f71a3ae1d3e49945cc2061036e96f5adf9d37e13ba591840",
+          "name": "styles.css",
+          "size": 6437
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Annotation editing (issue capture): a new Select tool puts the stage into edit mode where you click an annotation to move, resize, or rotate it with handles. Shift-click (or ctrl/cmd-click) selects multiple objects to move, recolor, or delete as a group. Changing color or stroke width with objects selected applies to the selection. A Delete action removes the selected objects.\n- Blackout redactions are locked on placement: they cannot be selected, moved, resized, or deleted until you flip the Unlock blackouts toggle in the annotation toolbar, so a redaction cannot be slid off the thing it hides by accident.\n- Highlight tool: drag a semi-transparent marker fill over the screenshot. Overlapping strokes blend like a real highlighter.\n- Re-edit committed text: double-click any text annotation to change its wording. Clearing the text removes the object.\n- Annotation drafts: closing the capture without copying now keeps the screenshot and your editable annotations. The new \"Resume annotation draft\" command reopens the modal with every object still editable instead of a flattened image. The draft is cleared once you copy. A settings toggle controls whether drafts are kept (on by default).\n\n",
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T18:12:53Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:eaad63f5bf6bb3fc885521df047cffa22810f7cecf7d70990477e8ff44c49b08",
+          "name": "main.js",
+          "size": 227118
+        },
+        {
+          "digest": "sha256:ad259bcb094a96ceaa27ce38ae7950a667a9094c45867b7d9eaef8f00251dd56",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:fffccb83c9ac0ec1829ec33a7bb6f4953b4fca1d06e01ca57a509fef7f3dee61",
+          "name": "styles.css",
+          "size": 6220
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- New issue type: Feedback, for subjective input that is not a defect, enhancement, or question.\n- Separate ribbon icons for immediate (`camera`) and delayed (`timer`) screenshots, alongside the text-only issue icon.\n\n### Changed\n- Immediate screenshots now apply a short configurable settle (default 300 ms, slider 0-500 ms) so the triggering click and its highlight clear before the frame is grabbed, and the triggering element is blurred. The delayed countdown is now a slider (2-15 s, default 5 s).\n- Output paths are now a single shared \"Storage folder\" (default `_dev-tools`) plus a per-tool subfolder name. Set the root once and screenshots, issue notes, and the reloader log all move with it. Each subfolder setting shows the storage folder as its prefix. Existing installs are migrated: the storage root is set and each tool's subfolder is derived from its previous path; custom subfolder names are preserved.\n\n",
+      "draft": false,
+      "name": "0.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T14:02:14Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5f6989325df17ec6ce7701ba1acf18cfd9cbc8926c187fee72a04acdc6231621",
+          "name": "main.js",
+          "size": 225180
+        },
+        {
+          "digest": "sha256:7fbf1873acfe83502969a7de22f98aca6683628e2c1fc45844c319eff64d4dc1",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:fffccb83c9ac0ec1829ec33a7bb6f4953b4fca1d06e01ca57a509fef7f3dee61",
+          "name": "styles.css",
+          "size": 6220
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Issue notes: capturing an issue now also writes a Markdown note to the vault (default `dev-tools/dev-issues/`) with the type, context, description, and an embedded link to the screenshot when one was captured. On by default; toggle and folder are configurable in settings.\n\n### Changed\n- Output files are now grouped under a single `dev-tools/` parent folder: screenshots in `dev-tools/dev-screenshots/`, the reloader event log in `dev-tools/dev-logs/`, and issue notes in `dev-tools/dev-issues/`. Existing installs that kept the old default paths are migrated automatically; custom paths are preserved.\n- Folder creation now creates missing parent folders, so nested output paths work without manual setup.\n\n### Fixed\n- Settings defaults are merged into stored settings on load, so a newly added setting is never undefined for an existing install.\n\n",
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T12:24:16Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cc927f39dc46225b75b794d1c7ea9434f0455379d2cfe3a0b5ccba498de65522",
+          "name": "main.js",
+          "size": 222449
+        },
+        {
+          "digest": "sha256:e3f31959a2ff1083d199c82706d2d83dd3aea6ea1b9d1a7c9d214b67d367fb72",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:fffccb83c9ac0ec1829ec33a7bb6f4953b4fca1d06e01ca57a509fef7f3dee61",
+          "name": "styles.css",
+          "size": 6220
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Reloader event log (opt-in): appends every watcher and reload event to a timestamped Markdown file in the vault (default `developer-toolbox-reloader-log.md`). Records watcher start, each detected file change with its filename, and each reload outcome. Writes are serialized so a build's burst of events cannot interleave. Settings expose a toggle, the log path, and an Open button. Useful for confirming the watcher fires and for spotting events too fast to see on screen.\n\n### Changed\n- Reloading a plugin now re-scans manifests from disk (via Obsidian's internal `loadManifests`) between disable and enable, so the version shown in Obsidian's Community plugins list reflects the freshly built `manifest.json` instead of the value cached at startup. Best-effort and guarded against the internal method being absent.\n\n### Fixed\n- File watcher no longer fires phantom reloads. Events with no filename (emitted by some platforms on rename or atomic writes) were bypassing the watched-files filter and triggering a reload roughly every few minutes when the folder was touched, for example by Obsidian rewriting `data.json`. The filter now requires a known filename.\n\n",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T11:59:34Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:030f5a17aeb40a1421d3cb55336d6e9cbb4dc5bf43fa071c640b07590ead2f1e",
+          "name": "main.js",
+          "size": 220454
+        },
+        {
+          "digest": "sha256:6d0176654cdd24137cfef55a5f9135ded05b13926add733c7a99f69ca607dcfc",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:7cbf68ad778ee73c40b4266101e93f86a4ad378ed54e30d706bcae3af10a0840",
+          "name": "styles.css",
+          "size": 6173
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Plugin reloader tool. Reloads a plugin in place via Obsidian's internal `disablePlugin` + `enablePlugin` so a fresh build takes effect without restarting Obsidian.\n- Configurable dev plugins: pick plugins by name in the settings tab; the IDs are stored. The \"Developer Toolbox: Reload plugin\" command opens a fuzzy picker of installed plugins (listed by display name with the ID as subtext, never typed by hand). The \"Developer Toolbox: Reload dev plugins\" command reloads all configured dev plugins at once.\n- Status ribbon icon: doubles as a reload status light. Turns amber and pulses when a watched file changed and a reload is pending; flashes green right after a reload. Clicking it reloads the configured dev plugins and clears the pending state.\n- Status bar indicator: a persistent always-visible item showing the running toolbox version (read from disk) and the load time, for example `↻ v0.2.0 · 18:27:43`. The load time updates on every reload so a same-version reload still visibly confirms it took effect. Shows `↻ reload needed` when a change is pending and `↻ reloaded ✓` right after a reload. Clicking it reloads the configured dev plugins.\n- File watching: when dev plugins are configured, their folders are watched for changes to `main.js`, `manifest.json`, or `styles.css`. The directory is watched rather than the file so esbuild's atomic-rename writes do not deafen the watch after the first build. Events are debounced (default 250 ms, configurable) to coalesce a single build's burst of writes.\n- Auto-reload toggle (off by default): when on, a detected change reloads the plugin immediately; when off, the change only flags the ribbon icon so you reload manually.\n- Reloader diagnostics (on by default): a notice surfaces on watcher start, on a pending change, and on every reload, so a silent watcher failure becomes visible.\n- Reload notices report the reloaded plugin's version, read straight from `manifest.json` on disk so it reflects the freshly built file regardless of Obsidian's in-memory manifest cache.\n- Settings tab footer shows the toolbox version and a link to the GitHub repository.\n\n",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T22:58:24Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bb8419fc21f7f76a3cac23b6ff9dee37361eb9ff7d52a015f6facc1d559c5e3b",
+          "name": "main.js",
+          "size": 211862
+        },
+        {
+          "digest": "sha256:a8717dff2887b4aa72a41ba38c4f4c6d03395aaba89bda68e587e2c3f16abbb2",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:c3aa65b85fca72b951e6d768c738788f3e65dbc0b27c2acb1f8e415d7499147f",
+          "name": "styles.css",
+          "size": 5450
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- Plugin toolbox dispatcher with a typed ToolHandle contract, per-tool enable/disable from the settings tab, and automatic side-effect cleanup on disable or unload.\n- Issue Capture tool: capture an Obsidian screenshot, annotate it, fill in type and description, review a paste-ready markdown payload, and copy.\n- Capture pipeline based on `webContents.capturePage` (verified by the 2026-05-28 spike: 150-230 ms, pixel-perfect, captures DOM + native window chrome + every transient UI tested). Automatic fallback to `desktopCapturer.getSources + getUserMedia` for forward-compatibility if `electron.remote` is removed in a future Obsidian Electron upgrade.\n- Three command-palette entries: \"Developer Toolbox: Screenshot now\", \"Developer Toolbox: Delayed screenshot\", \"Developer Toolbox: Text-only issue\". Two ribbon icons (camera + message-square-plus).\n- Annotation toolbar: freehand pen, box, arrow, text label, blackout (PII redaction), plus undo, redo, clear-all. Color palette of eight swatches keyed by data-color attribute so the colored circles render correctly regardless of theme. Stroke width selector with three presets (thin 2 px, medium 4 px, thick 7 px). Text annotation opens an inline textarea on click; Enter commits, Esc cancels, blur commits.\n- Countdown for the delayed capture uses Obsidian's `Notice` API so it is reliably visible regardless of theme z-index ordering. Decrements once per second and auto-dismisses before the capture frame.\n- Auto-captured context: Obsidian version (via userAgent regex; `App.appVersion` is `undefined` in 1.12.7), OS family, vault name, active file path, view mode, active leaf type, enabled plugin list. View-mode detection falls back to scanning open markdown leaves when focus has briefly moved to the capture flow. Path redaction defaults to vault-relative with the home directory replaced by `~`.\n- Settings tab: per-tool enabled toggle, delayed-countdown duration, default issue type, screenshot folder, plus a Privacy section (home-redact, plugin-list, vault-name toggles, path-style dropdown).\n\n### Deferred to v0.2.0\n- Per-object selection, move, resize, and rotation on annotations. Per-tool transform handles will use Konva's Transformer.\n- Highlight (semi-transparent) annotation tool.\n- Editable annotation persistence across modal closures (Konva `stage.toJSON()` sidecar).\n- Multi-select.\n- Double-click to edit existing text annotations in place.\n\n### Verified\n- Capture API works in Obsidian 1.12.7 / Electron 39.8.3 on Windows 11 (2026-05-28 spike, retained images in `obs-test-vault/spike-images/`).\n- End-to-end workflow signed off by user on 2026-05-28: screenshot, annotation (pen, box, arrow, text, blackout, stroke widths, color swatches), payload generation, copy, save to vault, and delayed-countdown capture all functional.\n- minAppVersion bumped to 1.5.7 to cover `Vault.getFolderByPath` (used during dev-screenshots folder management).\n",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T21:20:44Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "ckelsoe/obsidian-developer-toolbox"
+}
