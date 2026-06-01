@@ -1,0 +1,214 @@
+{
+  "author": "whiteandgrey",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. A lightweight drawing plugin for simple flowcharts.",
+  "errors": [],
+  "id": "simple-draw",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "whiteandgrey",
+    "authorUrl": "https://github.com/whiteandgrey",
+    "description": "A lightweight drawing plugin for simple flowcharts.",
+    "id": "simple-draw",
+    "isDesktopOnly": true,
+    "minAppVersion": "0.15.0",
+    "name": "SimpleDraw",
+    "version": "1.5.6"
+  },
+  "name": "SimpleDraw",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:9495449477f9f0b4f473fdfdcc85f66ac25ee17c27c10201412b7ce8f162e5af",
+          "name": "main.js",
+          "size": 124806
+        },
+        {
+          "digest": "sha256:fafbd2211bd1dc1f9ceaa95c46d73101476a2ef5b7df7d6d8841b09e7b01ab51",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.5 → v1.5.6\r\n\r\n## 概述\r\n\r\nv1.5.6 修复了标签层级不再跟随箭头的问题，同时保留双击功能。\r\n\r\n## 改动清单\r\n\r\n### 1. 标签层级跟随箭头\r\n\r\n**根因**：v1.5.4 为了修复双击，将原本每帧执行的 `insertBefore` 代码块完全删除。标签退回到 `createDiv` 的默认位置（`elementsLayer` 末尾），不再跟随箭头 z-order。\r\n\r\n**修复**：将 `insertBefore` 移入标签**首次创建**的代码块内（`if (!labelEl)` 大括号中）。创建时定位一次，后续帧不再移动 DOM 节点。\r\n\r\n```diff\r\n if (!labelEl) {\r\n     labelEl = this.elementsLayer.createDiv('simpledraw-arrow-label');\r\n     // ... styles, content ...\r\n+    // 仅创建时执行一次 insertBefore，定位到所连最高 z-order 文本框后面\r\n+    insertBefore(labelEl, ref.nextSibling);\r\n }\r\n // 后续帧不移动 labelEl → 不破坏浏览器双击检测\r\n```\r\n\r\n`rebuildAll()` 会 `innerHTML = ''` 清除所有标签 → 下次渲染时 `!labelEl` 为 true → 重新创建 + `insertBefore` 定位 → 之后帧保持不动 → z-order 与双击同时正确。\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `src/view.ts` | +14 行 | insertBefore 移入创建块内 |\r\n| `manifest.json` | +1 行 / -1 行 | 版本号 1.5.5 → 1.5.6 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.6\r\n- 此前版本：1.5.5\r\n",
+      "draft": false,
+      "name": "1.5.6 修复了标签层级不再跟随箭头的问题，同时保留双击功能",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T16:13:42Z",
+      "tag": "1.5.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:16a0325330fbe5b282fa01cc7f8c4a8206150f1dc3d4d286eee932be5e6dee9f",
+          "name": "main.js",
+          "size": 124434
+        },
+        {
+          "digest": "sha256:d0b25d8e9750ca8441b8b190ad23c8914f32544e674c1c5b9385eefe38395915",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.4 → v1.5.5\r\n\r\n## 概述\r\n\r\nv1.5.5 修复了空内容未自动隐藏标签、重新输入文字变灰色两个 bug。\r\n\r\n---\r\n\r\n## 改动清单\r\n\r\n### 1. 空内容自动隐藏标签\r\n\r\n**问题**：删空标签内容后，`labelVisible` 仍为 `true`（仅✓按钮中 auto-hide，Escape/点击别处未处理），标签仍显示灰色占位符。\r\n\r\n**修复**：将 auto-hide 逻辑恢复到 `closeEditors()` 中，无论通过何种方式关闭编辑器，空内容都会自动隐藏标签。✓ 确认按钮简化，冗余的 auto-hide 代码删除。\r\n\r\n### 2. 重新输入文字变灰色\r\n\r\n**问题**：`renderArrows()` 中为空内容设置了占位符的 inline 样式（`opacity: 0.5`、`color: var(--text-muted)`），但从未清除。即使后续内容变为非空，新渲染的文字仍继承这些灰色半透明样式。\r\n\r\n**修复**：在 Markdown 渲染前清除这两个样式：\r\n```typescript\r\ncontentEl.style.opacity = '';\r\ncontentEl.style.color = '';\r\n```\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `src/view.ts` | ~8 行 | closeEditors 恢复 auto-hide + 确认按钮简化 + 样式清除 |\r\n| `manifest.json` | +1 行 / -1 行 | 版本号 1.5.4 → 1.5.5 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.5\r\n- 此前版本：1.5.4",
+      "draft": false,
+      "name": "1.5.5 修复了空内容未自动隐藏标签、重新输入文字变灰色两个 bug。",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T15:28:40Z",
+      "tag": "1.5.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ff7d8b163a2c5ee34cda6295ee772ec4bf88587be38965dfacf18b26f2d9d5ae",
+          "name": "main.js",
+          "size": 124597
+        },
+        {
+          "digest": "sha256:d3a57a0d549d1b91e96fed4ad60530c6c0dd2f81b688cffc67e6abe34da6da3f",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.3 → v1.5.4\r\n\r\n## 概述\r\n\r\nv1.5.4 将线段标签的命中检测重构为与普通文本框一致的**坐标碰撞机制**，并修复了 `insertBefore` 每帧移动标签 DOM 节点导致浏览器无法生成 dblclick 事件的严重 bug。同时修复了 `closeEditors` 误隐藏标签的问题。\r\n\r\n---\r\n\r\n## 改动清单\r\n\r\n### 1. 线段标签命中检测重构为坐标碰撞\r\n\r\n**哲学**：线段标签底层应被当作\"轻量文本框\"对待，使用与 `getElementAt`/`isPointInElement` 完全同思路的坐标碰撞检测，而非 DOM 查询。\r\n\r\n**新增方法**（`engine.ts`）：\r\n- `getLabelAt(x, y) → ArrowData | null` — 逆序遍历所有 `labelVisible=true` 的箭头，计算标签边界盒，检查点是否落在盒内\r\n- `isPointInLabel(arrow, x, y) → boolean` — 精确矩形碰撞（有 `labelWidth/Height` 时）或估算碰撞（140×36）\r\n\r\n### 2. 修复 `insertBefore` 破坏双击（关键修复）\r\n\r\n**根因**：v1.5.3 在 `renderArrows()` 中对每个锚定标签执行 `insertBefore` 以跟随箭头 z-order。每次鼠标事件后的异步渲染都会移动标签的 DOM 树位置，浏览器在两次单击间检测到 DOM 移动，**判定两次点击落在不同元素上 → 不生成 dblclick 事件**。\r\n\r\n**修复**：\r\n- 删除 `renderArrows()` 中的 `insertBefore` 逻辑，标签 DOM 不再每帧移动\r\n- `handleDefaultMouseDown()` 实现**逻辑双击**：第二次单击已选中的标签直接打开编辑器，无需依赖浏览器的 dblclick 事件\r\n\r\n```typescript\r\nconst labelArrow = this.engine.getLabelAt(pos.x, pos.y);\r\nif (labelArrow) {\r\n    if (this.engine.selectedIds.has(labelArrow.id)) {\r\n        // 箭头已选中 → 第二次单击 → 逻辑双击 → 打开编辑器\r\n        this.startArrowLabelEditor(labelArrow.id);\r\n    } else {\r\n        // 首次单击 → 选中箭头（与普通文本框行为一致）\r\n        this.engine.selectElement(labelArrow.id, additive);\r\n        this.requestRender();\r\n    }\r\n    return;\r\n}\r\n```\r\n\r\n- `onDblClick()` 保留 `getLabelAt` 作为兜底（浏览器仍能正常触达 dblclick 的少数场景）\r\n\r\n### 3. 修复 `closeEditors` 误隐藏标签\r\n\r\n将 `closeEditors()` 中自动 `labelVisible=false` 的行为移至 ✓ 确认按钮内，使其仅在用户显式确认时触发。\r\n\r\n---\r\n\r\n## 行为对比\r\n\r\n| 操作 | 效果 |\r\n|------|------|\r\n| 单击标签文字 | 选中父箭头（选中框 + resize 角点） |\r\n| 再次单击标签文字 | 打开标签编辑器（逻辑双击，不依赖 dblclick） |\r\n| 双击线段 | `getElementAt` → `showArrowEditor` |\r\n| 双击文本框 | `getElementAt` → `startEditingTextbox` |\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `src/engine.ts` | +25 行 | 新增 getLabelAt / isPointInLabel |\r\n| `src/view.ts` | ~30 行 | 逻辑双击 + 删除 insertBefore + closeEditors 去 auto-hide |\r\n| `manifest.json` | +1 行 / -1 行 | 版本号 1.5.3 → 1.5.4 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.4\r\n- 此前版本：1.5.3\r\n",
+      "draft": false,
+      "name": "1.5.4 hotfix",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T14:49:54Z",
+      "tag": "1.5.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:89631de445286172d3d4673cc2e295b2881672952fccab519a9f8517263a2557",
+          "name": "main.js",
+          "size": 124295
+        },
+        {
+          "digest": "sha256:091a9209929649f94ae083f58efb79cd2500459578992d70ab5d92d0a11e217c",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.2 → v1.5.3\r\n\r\n## 概述\r\n\r\nv1.5.3 修复了线段文本显示层级不跟随线段的问题，以及编辑框 auto-grow 在重新打开后归零的问题。\r\n\r\n---\r\n\r\n## 改动清单\r\n\r\n### 1. 线段文本显示层级跟随线段\r\n\r\n**根因**：标签（`.simpledraw-arrow-label`）固定 `z-index: 22`，而锚定箭头 SVG 的层级由其 DOM 顺序决定（通过 `insertBefore` 插入到所连最高 z-order 文本框后面）。置顶/置底文本框后 `rebuildAll()` 重新排列了文本框和箭头 SVG 的顺序，但标签始终保持在最顶层。\r\n\r\n**修复**：\r\n- `styles.css`：移除 `.simpledraw-arrow-label { z-index: 22; }`\r\n- `src/view.ts` 标签创建：移除 `labelEl.style.zIndex = '22'`\r\n- `src/view.ts` 标签渲染循环：对每个锚定箭头（`connectedIds.length > 0`），用与箭头 SVG 相同的 `maxIdx/insertAfter` 逻辑，将标签 `insertBefore` 到同一个引用文本框后面\r\n\r\n```\r\nDOM 顺序：textboxA → arrow_A→B → label_A→B → textboxB → ...\r\n```\r\n\r\n标签现在完全靠 DOM 顺序决定层级，与箭头一致。\r\n\r\n### 2. 编辑框 auto-grow 在重新打开后归零\r\n\r\n**根因**：`textarea.value = content` 之后没有立刻触发 auto-grow，导致 textarea 始终以 `minHeight: 60px` 显示。虽然输入时 auto-grow 工作，但关闭编辑器再打开时高度恢复为 60px。\r\n\r\n**修复**：在两个编辑器的 textarea 创建代码中，设置 value 后立即执行：\r\n```typescript\r\ntextarea.style.height = 'auto';\r\ntextarea.style.height = Math.max(60, textarea.scrollHeight) + 'px';\r\n```\r\n\r\n受影响的方法：`startEditingTextbox()`（普通文本框编辑器）和 `startArrowLabelEditor()`（标签编辑器）。\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `styles.css` | -1 行 | 移除 `.simpledraw-arrow-label { z-index: 22 }` |\r\n| `src/view.ts` | ~20 行 | 移除 inline zIndex + insertBefore DOM 定位 + 两处 auto-grow 触发 |\r\n| `manifest.json` | +1 行 / -1 行 | 版本号 1.5.2 → 1.5.3 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.3\r\n- 此前版本：1.5.2\r\n",
+      "draft": false,
+      "name": "1.5.3 线段文本显示层级优化+bug修复",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T15:30:34Z",
+      "tag": "1.5.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:198d90f31d45961d32dc8616d10236107a30dff7ecfcc66a5d56f06be667236f",
+          "name": "main.js",
+          "size": 123738
+        },
+        {
+          "digest": "sha256:b73b251f24d0c57cade20c492c144fc4e7a6fd1e80079143de65dd624baf42ac",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.1 → v1.5.2\r\n\r\n## 概述\r\n\r\nv1.5.2 对箭头标签功能进行了三项优化：编辑器字号不与渲染内容联动、标签支持拖拽角点调整大小、标签相对线段位置切换；随后修复了拦截点击、缩放跳变、Delete 误删箭头、编辑框太小、椭圆填充矩形等 bug。\r\n\r\n---\r\n\r\n## 改动清单\r\n\r\n### 1. 字号按钮不再改变编辑器 textarea 大小\r\n\r\n**文件**：`src/view.ts` — `startArrowLabelEditor()`\r\n\r\n**问题**：点击 A-/A+/R 时不仅修改了渲染内容的字号，还同时修改了 textarea 的字体大小，导致编辑器窗口文字跟随变化。\r\n\r\n**修复**：移除 3 个按钮 click 处理中的 `textarea.style.fontSize = ...` 语句。textarea 始终使用 CSS 变量 `var(--font-text-size)`，与普通文本框编辑器行为一致。\r\n\r\n### 2. 箭头标签支持拖拽角点调整大小\r\n\r\n**新增字段**（`src/types.ts`）：\r\n\r\n| 字段 | 类型 | 说明 |\r\n|------|------|------|\r\n| `labelWidth?` | `number` | 标签框宽度 |\r\n| `labelHeight?` | `number` | 标签框高度 |\r\n\r\n**文件**：`src/engine.ts`\r\n- `dragging` 类型新增 `'label-resize'`，新增 `arrowId` 字段\r\n\r\n**文件**：`src/view.ts`\r\n- `renderArrows()` — 标签 DOM 支持显式 width/height；选中非编辑状态的标签显示 4 个 resize 手柄（se/sw/ne/nw）\r\n- `handleDefaultMouseDown()` — 新增 `[data-label-handle-id]` 命中检测，进入标签 resize 拖拽状态\r\n- `onMouseMove()` — 新增 `label-resize` 处理：**对称缩放**，中心固定在箭头中点不变，四个角均匀缩放\r\n- `onMouseUp()` — 自动保存历史记录（复用已有的非 pan 拖拽处理）\r\n\r\n### 3. 标签与线段位置关系切换\r\n\r\n**新增字段**（`src/types.ts`）：\r\n\r\n| 字段 | 类型 | 默认 | 说明 |\r\n|------|------|------|------|\r\n| `labelPosition?` | `'overlap' \\| 'above' \\| 'below'` | `'overlap'` | 标签相对线段位置 |\r\n\r\n**文件**：`src/engine.ts`\r\n- 新增 `getLabelOffset(arrow, position)` — 按箭头中点处路径段的法向量方向计算偏移量（15px），支持 above（法线正方向）和 below（法线负方向）\r\n\r\n**文件**：`src/locale.ts`\r\n- 新增 3 个翻译键（中英各 3）\r\n\r\n| 键 | 中文 | English |\r\n|----|------|---------|\r\n| `arrowLabelEditor.position.overlap` | 重叠 | Overlap |\r\n| `arrowLabelEditor.position.above` | 上移 | Above |\r\n| `arrowLabelEditor.position.below` | 下移 | Below |\r\n\r\n**文件**：`src/view.ts`\r\n- `startArrowLabelEditor()` — toolbar 中字号按钮后新增 3 个位置按钮（⊥ / ↑ / ↓），高亮当前选中项，点击后保存历史并重建编辑器\r\n- `renderArrows()` — 标签定位时叠加 `getLabelOffset()` 计算的偏移量\r\n\r\n### 4. Bug 修复\r\n\r\n#### 4.1 标签 resize 角点无法拖拽\r\n\r\n**根因1（最终根因）**：`onMouseDown()` 入口过滤条件（`view.ts:554`）中 `.simpledraw-arrow-label` 的 `closest` 检测会捕获**标签内部所有子元素**（含 resize 手柄）的点击事件，因为 `target.closest('.simpledraw-arrow-label')` 从手柄上溯到标签元素，返回 truthy → `return;` → 拖拽事件被丢弃。\r\n\r\n```typescript\r\n// 修复前\r\ntarget.closest('.simpledraw-arrow-label')  // ← 手柄是标签的子元素，永远匹配\r\n```\r\n\r\n**修复**：将过滤条件中的 `.simpledraw-arrow-label` 替换为 `!target.closest('.simpledraw-label-resize-handle') && !target.closest('[data-arrow-label-id]')`，使手柄和标签文字的点击通过过滤，进入 `handleDefaultMouseDown`。\r\n\r\n**根因2**：`onMouseMove()` 使用绝对坐标公式 `2*abs(mouseX-cx)`，不依赖初始尺寸，导致 mousedown 时标签尺寸跳变。\r\n\r\n**修复**：改回 DOM 测量 + delta 增量公式 `origW + 2*dx`，mousedown 瞬间 dx=0 → 尺寸不变，拖拽手感平滑。\r\n\r\n#### 4.2 点击标签文字无法选中箭头\r\n\r\n**根因**：与 4.1 相同的 `onMouseDown` 过滤条件拦截了标签区域的所有点击，`handleDefaultMouseDown` 中的文本点击检测代码无法执行。\r\n\r\n**修复**：过滤条件添加 `!target.closest('[data-arrow-label-id]')` 白名单；文本检测代码改为**始终 return**（不启动 MOVE），即使箭头已选中也触发 `requestRender()` 使手柄立即出现。\r\n\r\n#### 4.3 椭圆形状（ellipse）填充仍为矩形\r\n\r\n**根因**：`renderTextboxDOM()` 中 `container`（`.simpledraw-textbox-inner`）已有 `borderRadius: 50%`，但 `wrapper` 未设置，wrapper 的背景色从四角溢出。\r\n\r\n**修复**：在 ellipse 形状分支中增加 `wrapper.style.borderRadius = '50%'`。\r\n\r\n#### 4.4 编辑体验修复\r\n\r\n| 问题 | 根因 | 修复 |\r\n|------|------|------|\r\n| 标签编辑器中按 Delete 删除整个箭头 | `onKeyDown()` 的 Delete/Backspace 分支（`view.ts:1039`）缺少 `this.labelEditorArrowId` 检查，Ctrl+Z/C/V 都有此检查 | 加上 `\\|\\| this.labelEditorArrowId` guard |\r\n| 编辑框太小，长文本编辑不便 | textarea 无 auto-grow；容器 `maxWidth` 仅 350px | input 事件中 auto-grow（`scrollHeight`）；`maxWidth` 改为 500px |\r\n| 编辑框 resize 手柄只能上下拖 | textarea 的 `resize: 'vertical'` 限制 | 改为 `resize: 'both'`（同时适用于普通文本框编辑器和标签编辑器） |\r\n| 普通文本框编辑器无 auto-grow | 仅标签编辑器有 auto-grow | 在 `startEditingTextbox()` 的 input 事件中也增加 `scrollHeight` auto-grow |\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `src/types.ts` | +3 行 | ArrowData 新增 labelPosition/labelWidth/labelHeight |\r\n| `src/engine.ts` | +40 行 | dragging 类型扩展 + getLabelOffset() 方法 |\r\n| `src/locale.ts` | +6 行 | 3 个新翻译键（中英各 3） |\r\n| `src/view.ts` | ~120 行 | 字号修复 + 位置按钮 + resize 手柄 + 鼠标事件 + 渲染 + onMouseDown 过滤修复 + Delete guard + resize:both + auto-grow + 椭圆填充 |\r\n| `manifest.json` | +1 行 / -1 行 | 版本号 1.5.1 → 1.5.2 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.2\r\n- 此前版本：1.5.1\r\n",
+      "draft": false,
+      "name": "1.5.2 修复bug与线段文本优化",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T14:57:14Z",
+      "tag": "1.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9a288ef5336ee97d51aadb55d9cf42f24a43b6936f021b52cb74cd8fe2bf9cdf",
+          "name": "main.js",
+          "size": 119732
+        },
+        {
+          "digest": "sha256:2f84baa468f4bff37adc65f8bfdc3bd5df6ec19513b0de68eccff31ce435f40b",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "# SimpleDraw Obsidian Plugin — 更新日志 v1.5.0 → v1.5.1\r\n# SimpleDraw Obsidian Plugin — 更新日志 v1.4.4 → v1.5.0\r\n## 概述\r\n\r\nv1.5.1 修复了线段文字标签功能的三个交互问题：按钮图标优化、编辑区复制粘贴被拦截、无内容时无法定位标签位置。\r\n\r\n---\r\n\r\n## 改动清单\r\n\r\n### 1. 箭头编辑器按钮图标优化\r\n\r\n**文件**：`src/view.ts` — `showArrowEditor()`\r\n\r\n| 按钮 | 修改前 | 修改后 | 理由 |\r\n|------|--------|--------|------|\r\n| 文字框开关 | `🏷` | `T` | 与工具栏「插入文本框」按钮风格一致 |\r\n| 删除 | `🗑` | `✕` | 与工具栏「清空画板」按钮风格一致 |\r\n\r\n### 2. 标签编辑器中的复制粘贴被拦截\r\n\r\n**根因**：`onKeyDown()` 中 Ctrl+C / Ctrl+V 的判断条件仅检查了 `editingTextboxId` 和 `editingArrowId`，**未检查** `labelEditorArrowId`，导致画布层拦截了键盘事件，textrea 无法收到。\r\n\r\n**修复**：`src/view.ts` `onKeyDown()` — 所有涉及编辑区判定的条件（Ctrl+Z/Ctrl+Shift+Z/Ctrl+Z 替代/Ctrl+C/Ctrl+V）均补充 `|| this.labelEditorArrowId`。\r\n\r\n### 3. 无内容时显示占位提示 + 空内容自动关闭\r\n\r\n**3.1 画布占位提示** — `src/view.ts` `renderArrows()`\r\n\r\n标签 `labelVisible = true` 但内容为空时，不再跳过渲染。画布上以**半透明灰色**显示占位文本，便于用户定位标签位置：\r\n\r\n```\r\n[箭头路径]\r\n    ↓\r\n（请输入 markdown 文本） ← 灰色半透明\r\n```\r\n\r\n当用户输入真实内容后，占位文本自动被 Markdown 渲染结果替换。\r\n\r\n**3.2 textarea 占位** — `src/view.ts` `startArrowLabelEditor()`\r\n\r\n编辑器 textarea 设置 `placeholder` 属性，提示用户输入内容。\r\n\r\n**3.3 空内容自动关闭** — `src/view.ts` `closeEditors()`\r\n\r\n关闭编辑器时，若 textarea 内容为空（`!value.trim()`），自动将 `arrow.labelVisible` 设为 `false`。\r\n\r\n**3.4 翻译键** — `src/locale.ts`\r\n\r\n| 键 | 中文 | English |\r\n|----|------|---------|\r\n| `arrowLabelEditor.placeholder` | 请输入 markdown 文本 | Enter markdown text |\r\n\r\n---\r\n\r\n## 修改文件统计\r\n\r\n| 文件 | 改动 | 说明 |\r\n|------|------|------|\r\n| `src/locale.ts` | +4 行 | 2 个新翻译键（中英各 1） |\r\n| `src/view.ts` | ~20 行 | 按钮文字 + onKeyDown 补充 + 渲染占位 + placeholder + 空内容自动关闭 |\r\n| `main.js` | 自动 | 构建产物 |\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.1\r\n- 此前版本：1.5.0\r\n\r\n---\r\n\r\n## 概述\r\n\r\nv1.5.0 新增**线段文字标签功能**：在箭头上附加可编辑的文字标签，标签始终自动定位在箭头路径的中点，随箭头和文本框移动而自动跟随。\r\n\r\n---\r\n\r\n## 代码改动清单\r\n\r\n### 1. `src/types.ts` — 数据模型扩展\r\n\r\n**ArrowData 新增 4 个可选字段：**\r\n\r\n| 字段 | 类型 | 默认值 | 说明 |\r\n|------|------|--------|------|\r\n| `labelContent` | `string?` | `undefined` | 标签文本（Markdown 格式） |\r\n| `labelVisible` | `boolean?` | `false` | 标签显隐开关 |\r\n| `labelFontSize` | `number?` | `16` | 标签字号 |\r\n| `labelWritingMode` | `'horizontal-tb' \\| 'vertical-rl'?` | `'horizontal-tb'` | 文字书写方向 |\r\n\r\n所有字段均为可选，兼容旧版本 `.simpledraw` 文件。\r\n\r\n---\r\n\r\n### 2. `src/engine.ts` — 新增路径中点算法\r\n\r\n**新增方法 `getArrowMidpoint(arrow: ArrowData): { x: number; y: number }`**\r\n\r\n算法：\r\n```\r\n1. 调用 buildArrowPath() 获取箭头路径的所有转折点\r\n2. 计算每段路径的欧几里得距离 → 累加得到总长度\r\n3. 从起点开始累计分段长度，找到 50% 总长度的位置\r\n4. 在该段内按比例线性插值 → 返回精确 (x, y)\r\n```\r\n\r\n**设计思路对比：**\r\n\r\n| 方案 | 描述 | 优劣 |\r\n|------|------|------|\r\n| 几何中点（路径包围盒） | 取路径点集 (minX+maxX)/2, (minY+maxY)/2 | 对 L/Z 形路径误差大，视觉上偏离 |\r\n| 第一段中点 | 取第一段路径的中点 | 仅对单线段有效 |\r\n| 路径总长度 50% 位置 ✅ | 按路径长度精确 1/2 处 | 任何路径形状均视觉自然 |\r\n| 中间转折点 | 取路径中间的拐点 | 多段线路径不准确 |\r\n\r\n最终采用**路径总长度 50% 位置**，因为它对 L 形、Z 形、多段线等所有箭头形态均能给出视觉上最自然的标签位置。\r\n\r\n---\r\n\r\n### 3. `src/view.ts` — 视图交互与渲染\r\n\r\n#### 3.1 箭头编辑菜单新增按钮（`showArrowEditor()`）\r\n\r\n按钮布局（共 5 个）：\r\n\r\n```\r\n[◀] [▶] [━] [🏷] [🗑]\r\n  ↑    ↑    ↑    ↑    ↑\r\n 尾   首   线   文字  删除\r\n 部   部   型   框\r\n 箭   箭   切   开\r\n 头   头   换   关\r\n```\r\n\r\n- 点击 🏷 按钮 → 切换 `arrow.labelVisible`\r\n- 首次开启且 `labelContent` 为空 → 直接打开标签编辑器\r\n- 未保存历史时自动记录历史状态\r\n\r\n#### 3.2 标签渲染（`renderArrows()` 末尾新增）\r\n\r\n渲染流程：\r\n```\r\n每帧渲染循环 → renderArrows() → 渲染全部箭头路径后 →\r\n遍历所有箭头：\r\n  if arrow.labelVisible && arrow.labelContent:\r\n    1. getArrowMidpoint() → 计算中点\r\n    2. 在 elementsLayer 查找/创建 [data-arrow-label-id] 元素\r\n    3. 定位到中点（transform: translate(-50%, -50%) 居中）\r\n    4. 渲染 Markdown 内容\r\n    5. 移除无效标签 DOM\r\n```\r\n\r\n**标签 DOM 结构：**\r\n```html\r\n<div class=\"simpledraw-arrow-label\" data-arrow-label-id=\"ar_xxx\">\r\n  <div class=\"simpledraw-arrow-label-content\">\r\n    <!-- Obsidian MarkdownRenderer 渲染结果 -->\r\n  </div>\r\n</div>\r\n```\r\n\r\n**跟随机制**：标签位置在 `render()` 循环中每帧重算，连接文本框移动/缩放 → `notifyChange()` → `requestRender()` → `renderArrows()` → `getArrowMidpoint()` 返回新坐标 → 自动更新。无需额外事件监听。\r\n\r\n#### 3.3 简化编辑器（`startArrowLabelEditor()`）\r\n\r\n**交互触发方式（两种）：**\r\n1. 箭头编辑菜单中点击 🏷 后首次开启\r\n2. 双击已可见的标签文本\r\n\r\n**编辑器 UI 对比：**\r\n\r\n| 功能 | 完整文本框编辑器 | 箭头标签编辑器 |\r\n|------|----------------|----------------|\r\n| textarea | ✓ | ✓ |\r\n| 字号 A- | ✓ | ✓ |\r\n| 字号 A+ | ✓ | ✓ |\r\n| 字号 R | ✓ | ✓ |\r\n| ✓ 确认 | ✓ | ✓ |\r\n| 显隐切换 👁 | ✓ | ✗ |\r\n| 填充切换 ▣/□ | ✓ | ✗ |\r\n| 垂直对齐 (⊤⊟⊥) | ✓ | ✗ |\r\n| 水平对齐 (⊏⊜⊐) | ✓ | ✗ |\r\n| 竖排文字 竖 | ✓ | ✗ |\r\n| 形状 (□○◇) | ✓ | ✗ |\r\n| 🔒 锁定 | ✓ | ✗ |\r\n| 插入图片（桌面版独有） | ✗ | ✗ |\r\n\r\n**编辑器定位**：在箭头中点的屏幕坐标附近浮动（如靠边缘则自动调整方向）。\r\n\r\n#### 3.4 `closeEditors()` 扩展\r\n\r\n新增标签编辑器的清理逻辑：\r\n- 读取 textarea 内容 → 写入 `arrow.labelContent`\r\n- 移除编辑器的 DOM 元素\r\n- 重置 `labelEditorArrowId` / `labelEditorEl`\r\n\r\n#### 3.5 `onDblClick()` 改造\r\n\r\n在原有检测逻辑前新增：\r\n\r\n```typescript\r\nif (target.closest('[data-arrow-label-id]')) {\r\n    startArrowLabelEditor(arrowId);\r\n    return;\r\n}\r\n```\r\n\r\n确保双击标签文本直接进入编辑，不与下方箭头碰撞检测冲突。\r\n\r\n#### 3.6 鼠标事件跳过（`onMouseDown()`）\r\n\r\n在 skip 检测列表中新增：\r\n- `.simpledraw-arrow-label` — 避免标签拖拽干扰\r\n- `.simpledraw-arrow-label-editor` — 编辑器覆盖层\r\n\r\n#### 3.7 剪贴板复制扩展（`pasteElements()`）\r\n\r\n复制箭头时同步复制标签属性：\r\n- `arrow.labelContent`\r\n- `arrow.labelVisible`\r\n- `arrow.labelFontSize`\r\n\r\n---\r\n\r\n### 4. `src/styles.css` — 标签样式\r\n\r\n```css\r\n.simpledraw-arrow-label {\r\n    position: absolute;\r\n    pointer-events: auto;\r\n    background: transparent;  /* 无填充 */\r\n    border: none;             /* 无边框 */\r\n    text-align: center;\r\n    cursor: pointer;\r\n    z-index: 22;\r\n    max-width: 200px;\r\n    word-break: break-word;\r\n}\r\n.simpledraw-arrow-label-content p { margin: 0; background: transparent; }\r\n```\r\n\r\n默认透明背景、无边框、文字居中。\r\n\r\n---\r\n\r\n### 5. `src/locale.ts` — 新翻译键\r\n\r\n| 键 | 中文 | English |\r\n|----|------|---------|\r\n| `arrowEditor.toggleLabel` | 文字框开关切换 | Toggle Label |\r\n| `arrowLabelEditor.confirm` | 确认 | Done |\r\n\r\n---\r\n\r\n## 最终功能呈现\r\n\r\n### 创建流程\r\n\r\n```\r\n1. 创建箭头连接两个文本框\r\n2. 双击箭头 → 弹出 5 按钮编辑栏\r\n3. 点击 🏷 按钮 → 线段中点出现透明文字框\r\n4. 首次开启自动进入编辑，输入任意 Markdown 文字\r\n5. 确认后，文字始终跟随箭头移动\r\n6. 再次点击 🏷 → 隐藏文字（保留内容）\r\n7. 双击可见文字 → 重新编辑\r\n```\r\n\r\n### 视觉效果\r\n\r\n```\r\n  ┌─────────┐          ┌─────────┐\r\n  │ 开始    │          │ 结束    │\r\n  └────┬────┘          └────▲────┘\r\n       │ \"转到步骤2\"       │\r\n       └───────────────────┘\r\n          (箭头中点标签)\r\n```\r\n\r\n标签在箭头路径的中点居中显示，无边框无填充，纯文本叠加在箭头上方。\r\n\r\n---\r\n\r\n## 版本\r\n\r\n- 当前版本：1.5.0\r\n- 此前版本：1.4.4\r\n",
+      "draft": false,
+      "name": "箭头线段中可插入文字元素",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T10:58:17Z",
+      "tag": "1.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b0d47423c9404f8da6f9a30affe3c3a84f38a64ecb57b29ecd364577e816fcdb",
+          "name": "main.js",
+          "size": 112786
+        },
+        {
+          "digest": "sha256:add41f37fb5186a0dc05980e2f2aaa794a065ef58981b75586e0f1e7e2e31f14",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "## SimpleDraw Obsidian 插件 1.3.2 → 1.4.4 更新总结\r\n\r\n---\r\n### 1.4.4 — 双锚点方案 + 可调吸附预览\r\n\r\n**12 锚点方案**：在原有 8 锚点（4 角点 + 4 边中点）基础上增加 4 条边的四分之一点（每条边 ×2），共 8 个新锚点。四分点仅在**被箭头连接时**参与吸附对齐，且只与其**配对的目标锚点**对齐。\r\n\r\n| 层面 | 变更 |\r\n|------|------|\r\n| 数据模型 | `AnchorType` 扩展 8 个四分点：`top-q1/q2`、`bottom-q1/q2`、`left-q1/q2`、`right-q1/q2`；新增 `AnchorScheme` 类型 |\r\n| 设置项 | 新增 `anchorScheme`（方案一/方案二）和 `snapPreviewRadius`（4-20px） |\r\n| 设置 UI | 新增「吸附功能」可折叠分组（锚点方案下拉框 + 预览圆圈大小滑块） |\r\n| 锚点计算 | `getAnchorPosition` / `getAnchorDirection` / `anchorToEdgeIdx` / `getAnchors` 全部适配四分点 |\r\n| 对齐点集 | 新增 `getAlignmentPoints()` — 方案二返回 4 边中点 + 被箭头连接的四分点 |\r\n| 配对映射 | 新增 `getQuarterPointPairings()` — 构建四分点 ↔ 配对锚点的双向映射 |\r\n| 对齐检测 | `computeAlignmentPreview` / `applyAlignmentSnap` 改用动态对齐点集 + 四分点配对过滤 |\r\n| 预览优化 | 箭头插入模式吸附圆圈半径改为读取 `snapPreviewRadius` 设置值 |\r\n| **Bug 修复** | 移动端边中点 ↔ 静止端四分点时，从\"跳过\"改为检查反向配对 |\r\n\r\n---\r\n\r\n### 累计修改文件\r\n\r\n| 文件 | 1.3.2 | 1.4.4 |\r\n|------|-------|-------|\r\n| `types.ts` | +1 字段 | +10 行 |\r\n| `settings.ts` | +2 字段 | +2 字段 |\r\n| `locale.ts` | +4 翻译键 | +16 翻译键 |\r\n| `engine.ts` | ~40 行 | ~200 行 |\r\n| `settingsTab.ts` | 不变 | +20 行 |\r\n| `view.ts` | ~30 行 | ~5 行 |\r\n| `styles.css` | +6 行 | 不变 |\r\n| `manifest.json` | 1.3.2 | 1.4.4 |\r\n\r\n---\r\n\r\n## SimpleDraw Obsidian Plugin Update Summary: 1.3.2 → 1.4.4\r\n\r\n### 1.4.4 — Dual Anchor Scheme + Adjustable Snap Preview\r\n\r\n**12-Anchor Scheme**: In addition to the original 8 anchors (4 corner points + 4 edge midpoints), quarter points have been added on 4 edges (2 per edge), totaling 8 new anchors. Quarter points participate in snapping alignment only when **connected by an arrow**, and only align to their **paired target anchor**.\r\n\r\n| Layer         | Changes |\r\n|---------------|---------|\r\n| Data Model    | `AnchorType` extended with 8 quarter points: `top-q1/q2`, `bottom-q1/q2`, `left-q1/q2`, `right-q1/q2`; added `AnchorScheme` type |\r\n| Settings Items | Added `anchorScheme` (Scheme 1 / Scheme 2) and `snapPreviewRadius` (4-20px) |\r\n| Settings UI   | Added collapsible 'Snap Function' group (anchor scheme dropdown + preview circle size slider) |\r\n| Anchor Calculation | `getAnchorPosition`, `getAnchorDirection`, `anchorToEdgeIdx`, and `getAnchors` all adapted to quarter points |\r\n| Alignment Point Set | Added `getAlignmentPoints()` — In Scheme 2, returns 4 edge midpoints + quarter points connected by arrows |\r\n| Pairing Map   | Added `getQuarterPointPairings()` — builds a bidirectional mapping of quarter points ↔ paired anchors |\r\n| Alignment Detection | `computeAlignmentPreview` and `applyAlignmentSnap` now use dynamic alignment point sets + quarter point pairing filtering |\r\n| Preview Optimization | Snap circle radius in arrow insertion mode now reads from the `snapPreviewRadius` setting |\r\n| **Bug Fix**   | When moving an edge midpoint ↔ a stationary quarter point, changed from 'skip' to checking the reverse pairing |\r\n\r\n---\r\n\r\n### Cumulative Changed Files\r\n\r\n| File            | 1.3.2      | 1.4.4      |\r\n|-----------------|------------|------------|\r\n| `types.ts`      | +1 field   | +10 lines  |\r\n| `settings.ts`   | +2 fields  | +2 fields  |\r\n| `locale.ts`     | +4 translation keys | +16 translation keys |\r\n| `engine.ts`     | ~40 lines  | ~200 lines |\r\n| `settingsTab.ts`| unchanged  | +20 lines  |\r\n| `view.ts`       | ~30 lines  | ~5 lines   |\r\n| `styles.css`    | +6 lines   | unchanged  |\r\n| `manifest.json` | 1.3.2      | 1.4.4      |\r\n",
+      "draft": false,
+      "name": "锚点方案选项",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T14:39:09Z",
+      "tag": "1.4.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9eb1a333169d1e8fa49da8065dcaf7e157297fb7ff50c9ff57c908b6ff7a8c5e",
+          "name": "main.js",
+          "size": 108070
+        },
+        {
+          "digest": "sha256:a937cf2f84a397fe20add01cafaf7879ba17552ea53ba3e25ee57d923d039ab0",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "### 1.3.2 — 锁定功能\r\n\r\n**文本框锁**：可锁定文本框防止意外修改，适用于布局定型后的保护。\r\n\r\n| 层面 | 变更 |\r\n|------|------|\r\n| 数据模型 | `TextBoxData` 新增 `locked?: boolean` 字段 |\r\n| 引擎层 | `selectElement` / `selectElementsInRect` / `moveElements` / `deleteElements` / `computeAlignmentPreview` / `applyAlignmentSnap` / `computeResizeSnap` 全部跳过锁定文本框 |\r\n| 视图交互 | ① 点击锁定文本框不选择/不拖拽/不调整大小 ② 双击不进入编辑器 ③ 右键菜单显示「🔓 解锁」 ④ 编辑器工具栏新增 🔒/🔓 按钮 |\r\n| 视觉标识 | 锁定文本框右上角渲染半透明 🔒 图标 |\r\n| 导出 | `doExport()` 自动移除 `.simpledraw-lock-icon` 元素 |\r\n\r\n---\r\n### 1.3.2 — Lock Feature\r\n\r\n**Text Box Lock**: Text boxes can be locked to prevent accidental modification, ideal for protecting finalized layouts.\r\n\r\n| Layer         | Changes |\r\n|---------------|---------|\r\n| Data Model    | Added `locked?: boolean` field to `TextBoxData` |\r\n| Engine Layer  | `selectElement`, `selectElementsInRect`, `moveElements`, `deleteElements`, `computeAlignmentPreview`, `applyAlignmentSnap`, and `computeResizeSnap` all skip locked text boxes |\r\n| View Interaction | ① Clicking a locked text box does not select/drag/resize it ② Double-clicking does not enter the editor ③ Right-click menu shows '🔓 Unlock' ④ Editor toolbar gains an 🔒/🔓 button |\r\n| Visual Indicator | A semi-transparent 🔒 icon is rendered at the upper-right corner of locked text boxes |\r\n| Export         | `doExport()` automatically removes `.simpledraw-lock-icon` elements |\r\n\r\n---",
+      "draft": false,
+      "name": "锁定功能",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T14:15:23Z",
+      "tag": "1.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ac1c997636907aff582ef1030e3f9cd1562e5dc91bc211d1b7d542a4e9fbf295",
+          "name": "main.js",
+          "size": 106343
+        },
+        {
+          "digest": "sha256:b923b209f1c0f52f5e486e9224a401ee27accb994b4a64da282a7fe08c40ec23",
+          "name": "manifest.json",
+          "size": 268
+        }
+      ],
+      "author": "whiteandgrey",
+      "description": "1. 箭头吸附圆点开关\r\n设置中新增「显示箭头连接点」开关，开启后在箭头与文本框的连接处绘制小圆点标记，便于观察连接关系。\r\n2. 文本框默认字号\r\n设置中新增「默认字号」滑块（8-72px），新建文本框时使用此字号。编辑器中的「R」重置按钮也将字号重置为默认值。\r\n3. 自适应箭头安全距离\r\n箭头路由时，若两端锚点距离很近，自动缩小避让间距，防止箭头线段突出文本框边框。\r\n4. 调整大小吸附\r\n拖拽文本框角点调整大小时，边缘会自动吸附到附近文本框的同侧边缘，与移动时的吸附对齐体验一致。\r\n5. 设置面板折叠分组\r\n设置页改为可折叠分组卡片：「基础设置」「箭头设置」「文本框设置」「快捷键」，点击标题展开/收起，界面更整洁。\r\n6. 编辑器工具栏优化\r\n字号按钮（A-/A+/R）移至第二行工具栏，与第一行统一风格。编辑框内字体不再随字号按钮变化，保持默认大小便于编辑。\r\n---\r\n1. **Arrow Snap Point Toggle**  \r\n   Added a \"Show Arrow Connection Points\" toggle in Settings. When enabled, small dot markers are drawn at the connection points between arrows and text boxes, making it easier to observe the connection relationships.\r\n\r\n2. **Default Text Box Font Size**  \r\n   Added a \"Default Font Size\" slider (8–72px) in Settings. Newly created text boxes will use this font size. The \"R\" reset button in the editor also resets the font size to this default value.\r\n\r\n3. **Adaptive Arrow Safe Distance**  \r\n   During arrow routing, if the anchor points at both ends are very close, the obstacle avoidance margin is automatically reduced to prevent arrow segments from protruding beyond the text box borders.\r\n\r\n4. **Resize Snapping**  \r\n   When dragging a text box corner to resize, the edges will automatically snap to the same-side edges of nearby text boxes, providing a snapping alignment experience consistent with that of moving.\r\n\r\n5. **Collapsible Settings Panel Grouping**  \r\n   The Settings page has been redesigned with collapsible grouped cards: \"Basic Settings,\" \"Arrow Settings,\" \"Text Box Settings,\" and \"Keyboard Shortcuts.\" Click the title to expand/collapse, making the interface cleaner.\r\n\r\n6. **Editor Toolbar Optimization**  \r\n   The font size buttons (A-/A+/R) have been moved to the second row of the toolbar, with the same style as the first row. The font inside the editing box no longer changes with the font size buttons, keeping the default size for easier editing.",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T15:36:11Z",
+      "tag": "1.3.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "whiteandgrey/obsidian-simpledraw-plugin"
+}

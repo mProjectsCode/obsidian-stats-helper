@@ -1,0 +1,233 @@
+{
+  "author": "nejimakibird",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Manage text-first models, relationships, and diagrams in Markdown.",
+  "errors": [],
+  "id": "model-weave",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "nejimakibird",
+    "authorUrl": "https://github.com/nejimakibird",
+    "description": "Manage text-first models, relationships, and diagrams in Markdown.",
+    "id": "model-weave",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.7.2",
+    "name": "Model Weave",
+    "version": "0.1.8"
+  },
+  "name": "Model Weave",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:bf4d67c67db3b53ca5a2da540cc716338a1e0c50ce6ce6906ace78bf41fc599b",
+          "name": "main.js",
+          "size": 620896
+        },
+        {
+          "digest": "sha256:de67655cc0d7c6447d1f0bb3503292e145ac48fe833b03d7c04361b1cf9a09f2",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:4c74c766c05f4f52512f75f6f47ae2a40434f3a4dddf2dad79054c7ae2edbf51",
+          "name": "styles.css",
+          "size": 27478
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Model Weave 0.1.8\r\n\r\nModel Weave 0.1.8 is a public release that includes both the internal 0.1.7 Relationship View milestone and the new 0.1.8 Codeset / State Usage improvements.\r\n\r\nThe main focus of this release is to make Markdown-based models easier to inspect, trace, and maintain. It adds a relationship-oriented view for navigating between models and introduces structured codeset/state value usage tracking.\r\n\r\n### Highlights\r\n\r\n* Added Relationship View / Impact View for model navigation and impact analysis.\r\n* Added inbound and outbound model relationship summaries.\r\n* Added unresolved reference display.\r\n* Added related Source Links grouping.\r\n* Added copyable Relationship Summary.\r\n* Added codeset value usage tracking inside Relationship View.\r\n* Added support for `app_process` `Flows.condition` value usage detection.\r\n* Added support for Screen structured condition fields.\r\n* Updated V0.8 format documentation and command-generated templates.\r\n* Added GitHub Actions build workflow.\r\n* Added Codex Git operation policy.\r\n* Fixed ERD resolved relations layout overlap.\r\n\r\n---\r\n\r\n## Included internal 0.1.7 milestone\r\n\r\nThe internal 0.1.7 milestone introduced the foundation for Relationship View / Impact View.\r\n\r\n### Relationship View / Impact View\r\n\r\nRelationship View helps inspect how a model is connected to other models.\r\n\r\nIt can show:\r\n\r\n* Objects referenced by the current model.\r\n* Objects that reference the current model.\r\n* Unresolved references.\r\n* Related Source Links.\r\n* Copyable relationship summary in Markdown.\r\n* Open buttons for related models.\r\n* Collapsible relationship and source link groups.\r\n\r\nThis makes it easier to follow the path from design models to related models and implementation source links.\r\n\r\n### Source Links integration\r\n\r\nRelated Source Links are now surfaced from relationship context where possible.\r\n\r\nThis is useful when a model is connected to implementation files, rules, mappings, screens, or processes, and users want to quickly understand the likely impact area.\r\n\r\n---\r\n\r\n## New in 0.1.8\r\n\r\n### Codeset / State Usage\r\n\r\n0.1.8 adds codeset value usage tracking into Relationship View.\r\n\r\nWhen viewing a `codeset` model, Model Weave can now show where specific codeset values are used in structured fields.\r\n\r\nFor example:\r\n\r\n```markdown\r\n[[CODE-INVENTORY-STATUS]].available\r\n[[CODE-INVENTORY-STATUS]].shortage\r\n```\r\n\r\nThese value references can appear under `Value usage` in Relationship View.\r\n\r\n### Supported structured usage locations\r\n\r\nCodeset value usage is intentionally conservative and based on structured fields only.\r\n\r\nSupported examples include:\r\n\r\n* `app_process` `Flows.condition`\r\n* Screen `Fields.condition`\r\n* Screen `Actions.condition`\r\n* Screen `Messages.condition`\r\n* Screen Local Process `Steps.condition`\r\n* Screen Local Process `Errors.condition`\r\n\r\nModel Weave does not infer codeset usage from arbitrary prose in this release.\r\n\r\n### V0.8 format updates\r\n\r\nThe format documentation and command-generated templates were updated for V0.8 structured condition usage.\r\n\r\nKey points:\r\n\r\n* Natural language text remains useful for human explanation.\r\n* Structured table fields are used for analyzable relationships.\r\n* Screen does not gain `Flows` in V0.8.\r\n* Complex flows should be modeled as `app_process`.\r\n* Screen uses `condition` columns for UI state, action execution, message display, and screen-local behavior.\r\n* Notes and Summary text are not parsed for codeset/state usage.\r\n\r\n### Screen format updates\r\n\r\nScreen templates now include structured condition fields such as:\r\n\r\n* `Fields.condition`\r\n* `Actions.condition`\r\n* `Messages.condition`\r\n* Local Process `Steps.condition`\r\n* Local Process `Errors.condition`\r\n\r\nScreen Local Processes are intended for lightweight screen-local behavior such as clear/reset, initial display, validation, display control, button enable/disable control, and message control.\r\n\r\nComplex processing flows should still be modeled as `app_process`.\r\n\r\n---\r\n\r\n## Fixed\r\n\r\n* Fixed ERD resolved relations layout overlap with Relationship View.\r\n* Improved Relationship View value usage display so value usage is grouped by codeset value instead of compressed into long inline rows.\r\n\r\n---\r\n\r\n## Development / maintenance\r\n\r\n* Added GitHub Actions build workflow.\r\n* Added Codex Git operation policy to prevent unintended remote Git operations such as push, tag push, release creation, or merging into `develop` / `main`.\r\n\r\n---\r\n\r\n## Notes\r\n\r\n* `0.1.7` was an internal milestone and was not published as a separate public release.\r\n* `0.1.8` includes both the internal 0.1.7 Relationship View work and the V0.8 Codeset / State Usage work.\r\n* This release does not include Mermaid renderer expansion. Mermaid renderer improvements are planned separately.\r\n\r\n---\r\n\r\n## Out of scope for this release\r\n\r\nThe following are not included in 0.1.8:\r\n\r\n* Natural-language reference extraction from Notes or Summary.\r\n* State transition diagrams.\r\n* Codeset value usage heatmaps.\r\n* Screen Flow support.\r\n* Mermaid renderer expansion.\r\n* Separate Codeset Usage View.\r\n* Automatic value detection from labels or value codes without a codeset identifier.\r\n",
+      "draft": false,
+      "name": "Model Weave 0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-31T07:57:31Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:75013372fcd5685a2e4106779e57bda72fbbd82bea5ba2409e29e10805add363",
+          "name": "main.js",
+          "size": 570919
+        },
+        {
+          "digest": "sha256:0d3e1a1784f721b9281ba51c686990624498b0b3777562d33f147d9345ad7b22",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:f103974d52291a053f297af6b7f47c8fa92c4a0109c465f617b9e75d20d445a8",
+          "name": "styles.css",
+          "size": 25732
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Model Weave 0.1.6\r\n\r\nThis release adds an experimental app_process Business Flow preview and improves chart readability and fitting behavior.\r\n\r\n### Highlights\r\n- Added experimental app_process Business Flow preview using table-based `Steps` and `Flows`.\r\n- Added lane-based Mermaid rendering for Business Flow.\r\n- Added Business Flow documentation, template, and sample.\r\n- Improved Mermaid chart readability in dark mode.\r\n- Aligned Screen custom preview palette with other chart views.\r\n- Improved Class custom preview Fit behavior when method text wraps.\r\n\r\n### Business Flow\r\n- `Steps` can be written as a Markdown table for structured process steps.\r\n- `Flows` can define step-to-step edges, including branching.\r\n- `lane` groups steps into Mermaid subgraphs.\r\n- Steps without `lane` are rendered outside lane groups.\r\n- `kind: flow` / `subflow` can represent a child flow or another app_process.\r\n\r\n### Fixes and Improvements\r\n- Business Flow now renders in the upper split-pane chart area.\r\n- PNG export supports Business Flow diagrams.\r\n- Mermaid charts are more readable in dark mode.\r\n- Class custom preview Fit now accounts better for wrapped method text.\r\n- Preview/detail styling has been made more consistent.\r\n\r\n### Notes\r\nBusiness Flow is experimental in this release. Existing prose-style app_process `Steps` remain compatible and continue to render as text.",
+      "draft": false,
+      "name": "Model Weave 0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T21:59:11Z",
+      "tag": "0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:48bfd0fd2c05a4ac855e3502225fc5d588c853bbd498de76dc4a4d753afbc94e",
+          "name": "main.js",
+          "size": 545210
+        },
+        {
+          "digest": "sha256:b5bdd2512bf890eab86a57687e33fefd2460433641f441e236abca07c7b296b0",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:c899f471c00786f910809f533709762db01799482d0450744d5c9a51392cbbab",
+          "name": "styles.css",
+          "size": 23826
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Model Weave 0.1.5\r\n\r\nThis release improves Screen previews and fixes duplicate model ID diagnostics.\r\n\r\n### Highlights\r\n- Enhanced single Screen preview layout for screen specifications.\r\n- Added transition target status display for Screen actions.\r\n- Added scoped CSS classes for Screen preview customization with Obsidian CSS snippets.\r\n- Fixed duplicate model ID diagnostics after shallow startup indexing.\r\n\r\n### Added\r\n- Added clearer Screen preview sections:\r\n  - Screen Overview\r\n  - Structure / Layout\r\n  - UI Elements / Fields\r\n  - Behavior / Actions\r\n  - Transition target status\r\n  - Transitions / Outgoing screens\r\n  - Messages\r\n- Added Screen Preview CSS customization documentation in English and Japanese.\r\n\r\n### Improved\r\n- Improved Screen preview table readability.\r\n- Improved Screen chart and detail CSS scoping so chart areas and detail tables can be customized separately.\r\n- Improved Source Links / localSourceRoot documentation.\r\n- Added notes that Source Links may resolve or open local files outside the vault when `localSourceRoot` is configured.\r\n\r\n### Fixed\r\n- Fixed duplicate model ID diagnostics after shallow startup indexing.\r\n- Duplicate model ID warnings are now recomputed globally and shown on every file participating in the duplicate.",
+      "draft": false,
+      "name": "Model Weave 0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T04:24:46Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8954d35b036d3e50843ec6fcb53be620eef745cd981cbfad40798de0b3196ba5",
+          "name": "main.js",
+          "size": 533746
+        },
+        {
+          "digest": "sha256:661610242b08630bc27e2aff3b9e51f2160e19d6578d2274dba24566fc0c68ec",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:f207b23a53cb429d72df08fd1c86113b2072ac6501f2659a0ca10dde38f39b7c",
+          "name": "styles.css",
+          "size": 22445
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Model Weave 0.1.4\r\n\r\n### Improved\r\n- Improved startup performance with lightweight startup indexing and lazy parsing.\r\n- Deferred member diagnostics for shallow models to avoid false unresolved-member warnings.\r\n- Updated README / README_JP with Source Links, localSourceRoot, and performance notes.\r\n\r\n### Fixed\r\n- Reduced unnecessary startup work for larger model vaults.",
+      "draft": false,
+      "name": "Model Weave 0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-25T12:00:37Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:09fe3425ec0cd5212cfc390cf5047b7a23051b560aafb6be5b2e463dac2a6521",
+          "name": "main.js",
+          "size": 521686
+        },
+        {
+          "digest": "sha256:c08e68ca54aa6ad0ce396745b2dbf135246f6bf78d56ab5e387dc1dfa2636d74",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:f207b23a53cb429d72df08fd1c86113b2072ac6501f2659a0ca10dde38f39b7c",
+          "name": "styles.css",
+          "size": 22445
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Model Weave 0.1.3\r\n\r\nThis release improves preview usability and adds Source Links support.\r\n\r\n### Added\r\n- Added `## Source Links` support for model files.\r\n- Added Local source root setting to resolve relative Source Links to external source repositories.\r\n- Added Source Links preview columns: Path, Status, Resolved Path, Notes, and Actions.\r\n- Added Copy Path and Open actions for resolved source paths.\r\n- Added common sections documentation for Source Links.\r\n\r\n### Improved\r\n- Improved Fit positioning for single-object previews.\r\n- Improved lower Connection details layout behavior.\r\n- Improved text selection usability in detail, warning, error, and diagnostics areas.\r\n\r\n### Fixed\r\n- Empty Source Links path rows are ignored to avoid preview layout issues.\r\n- Source path handling now supports Windows, WSL/UNC, and POSIX-style paths more safely.",
+      "draft": false,
+      "name": "Model Weave 0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T09:18:53Z",
+      "tag": "0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:92866402e82c1efc3b91e73e29adda56b9da9ef00eb0649859ab93ff810bbf25",
+          "name": "main.js",
+          "size": 504489
+        },
+        {
+          "digest": "sha256:50ea85abae26c640cfc950ba663e010c3548afdc77147adb04f51835bf5f0e95",
+          "name": "manifest.json",
+          "size": 291
+        },
+        {
+          "digest": "sha256:b48ff7499fb89a84134dddb0c4db07430451e93e3294f96b0d1b13c62882a87c",
+          "name": "styles.css",
+          "size": 19860
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## 0.1.2\r\n\r\nMaintenance release after Community Plugin publication.\r\n\r\n### Changed\r\n\r\n- Updated README / READMEJP to reflect Community Plugins availability.\r\n- Added Known Limitations section.\r\n- Updated release version to 0.1.2.\r\n\r\n### Notes\r\n\r\n- No feature behavior changes.\r\n- No renderer changes.",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T00:07:38Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:92866402e82c1efc3b91e73e29adda56b9da9ef00eb0649859ab93ff810bbf25",
+          "name": "main.js",
+          "size": 504489
+        },
+        {
+          "digest": "sha256:43f07e07094db80fce5df6292849bc00cc7ae00e57333f07f69e79037159b7fe",
+          "name": "manifest.json",
+          "size": 301
+        },
+        {
+          "digest": "sha256:4902c2bcbd672d2e5e2e83f899a96b04b160aef33e6df6ade8535dfc0008cb7e",
+          "name": "styles.css",
+          "size": 20725
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "## Changes\r\n\r\n- Fixed Obsidian Community Portal review issues.\r\n- Updated `minAppVersion` to `1.7.2`.\r\n- Replaced direct inline style usage with CSS classes and CSS variables.\r\n- Improved Mermaid rendering safety.\r\n- Updated release assets for Community Plugin review.",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T08:01:17Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1c486fd3c8d8be7373a3c40d795f3dd58c46f8639644ffa1f2e2f203883c888d",
+          "name": "main.js",
+          "size": 504173
+        },
+        {
+          "digest": "sha256:dd6fd5bcc2460720e5933fbf975d748b8045301066040b1339003d3530e9230d",
+          "name": "manifest.json",
+          "size": 301
+        },
+        {
+          "digest": "sha256:605c91db7cf8a88975850c7825e8b5272d71b9360454887e9389a07bb66b50be",
+          "name": "styles.css",
+          "size": 19313
+        }
+      ],
+      "author": "nejimakibird",
+      "description": "Initial public release of Model Weave.\r\n\r\n- Text-first modeling in Markdown\r\n- Relationship and diagram previews\r\n- Diagnostics and PNG export",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-30T02:37:12Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "nejimakibird/model-weave"
+}

@@ -1,0 +1,545 @@
+{
+  "author": "Faiszal Anwar",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Two-way sync between your Obsidian vault and a Lark Wiki space. Uses lark-cli under the hood. Includes setup wizard, one-click sync, and three-way conflict resolution.",
+  "errors": [],
+  "id": "lark-wiki-sync",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "Faiszal Anwar (Antikode)",
+    "authorUrl": "https://github.com/fszlnwr",
+    "description": "Two-way sync with Lark Wiki spaces via lark-cli. Setup wizard, plan modal, push confirmation, three-way conflict resolution, inline image attachments.",
+    "id": "lark-wiki-sync",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.5.0",
+    "name": "Lark Wiki Sync",
+    "version": "0.0.20"
+  },
+  "name": "Lark Wiki Sync",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:156804f10310ddac94b175bf077607c872b78d334de5939b06a5b84bb10674ab",
+          "name": "main.js",
+          "size": 41299
+        },
+        {
+          "digest": "sha256:0e9ca0e2201be8bc2ed8b41d3ee8d4b8cb745c4c4cd4a3c9f5e234628e51c62c",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:6f62c790fae1f01b3ee59272572d37e30aaf183ac949cd1a3e0d4579ab42b1aa",
+          "name": "styles.css",
+          "size": 4168
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Two more findings from the obsidian-releases automated review on 0.0.19:\n\n- **Settings heading**: dropped the top-level ` + \"`<h2>`\" + ` in favour of Obsidian's built-in section-heading API. The per-section ` + \"`.setHeading()`\" + ` calls below already provide structure, and Obsidian's settings tab header shows the plugin name on its own.\n- **Inline width**: moved ` + \"`t.inputEl.style.width = \\\"100%\\\"`\" + ` for the ignore-patterns textarea into a CSS class (` + \"`.lark-wiki-sync-ignore-textarea`\" + `) for theming.\n\nNo functional changes vs 0.0.19. Modal titles still use ` + \"`<h2>`\" + ` because the lint rule only applies to settings tab sections.",
+      "draft": false,
+      "name": "v0.0.20 — community-plugin lint fixes (round 2)",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T14:32:40Z",
+      "tag": "0.0.20"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d04be4d9cd9bdda1df69f312ea675c7bd543917cf58c2d6bee96c0a5de081faf",
+          "name": "main.js",
+          "size": 41316
+        },
+        {
+          "digest": "sha256:23979d925ea518e01c7989f57e3fe753dbc925576f27d121c245f5d47b1a7a13",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:dab39cbb194c6b047e8bcbabf4c20df6aa9a6ccc4073f4930eb741170b384501",
+          "name": "styles.css",
+          "size": 4084
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Fixes the two automated-review failures from the obsidian-releases submission of 0.0.18:\n\n- **License warning** → added an MIT ` + \"`LICENSE`\" + ` file to the repo root.\n- **Manifest error** → description no longer includes the word \\\"Obsidian\\\":\n\n  > Two-way sync with Lark Wiki spaces via lark-cli. Setup wizard, plan modal, push confirmation, three-way conflict resolution, inline image attachments.\n\nNo functional changes vs 0.0.18. Same ` + \"`main.js`\" + `, same ` + \"`styles.css`\" + `, same install.",
+      "draft": false,
+      "name": "v0.0.19 — community-plugin lint fixes (LICENSE + description)",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T14:16:20Z",
+      "tag": "0.0.19"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d04be4d9cd9bdda1df69f312ea675c7bd543917cf58c2d6bee96c0a5de081faf",
+          "name": "main.js",
+          "size": 41316
+        },
+        {
+          "digest": "sha256:9d106ced9e7be698a65502da9beca22c4be63851cb4b5b2b8aa011654001df4a",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:dab39cbb194c6b047e8bcbabf4c20df6aa9a6ccc4073f4930eb741170b384501",
+          "name": "styles.css",
+          "size": 4084
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**Replaces the silent ` + \"`.remote.conflict.md`\" + ` sidecar fallback with a real resolution modal.** When the conflict policy is \\\"ask\\\" (the default) and both sides changed since last sync, a modal pops up between the plan modal and apply listing every conflicting file.\n\n**Per-file choices:**\n- **Keep local** — push your edits to Lark, overwriting remote.\n- **Keep remote** — pull Lark version, overwriting your local file.\n- **Save sidecar (default)** — write a ` + \"`.remote.conflict.md`\" + ` alongside the local file for manual merge. Non-destructive.\n\n**Quick diff hint:** each row shows local-vs-remote line counts so you can tell which side has more edits before deciding.\n\nClick **Apply resolutions** to execute your picks, or **Cancel — skip all conflicts** to bail. Cancel falls back to the sidecar default for every file (nothing destructive happens).\n\n**For users on ` + \"`prefer-local`\" + ` / ` + \"`prefer-remote`\" + `**: behaviour is unchanged — those policies skip the modal and apply the chosen side automatically. Only \\\"ask\\\" triggers the modal.\n\n**To test:** edit the same file in both Obsidian and Lark, sync. The plan modal will show 1 conflict, then the resolution modal will appear with three choices.",
+      "draft": false,
+      "name": "v0.0.18 — conflict resolution modal",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T04:15:56Z",
+      "tag": "0.0.18"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e966b5e67495fcabe178964002470bfb869a964f5544f3844853e9d844bdfe6a",
+          "name": "main.js",
+          "size": 38487
+        },
+        {
+          "digest": "sha256:b07a74e3c805bd0f5badaa1d409765551a647eb336c7b960f66a6b1b173e5174",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:a7ca7a4d85514d96ca8b8db31876123e254a703466d8cf561caf26a30d139799",
+          "name": "styles.css",
+          "size": 3239
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Three small wins from the v1.0 polish bundle.\n\n**Auto-sync timer.** Set ` + \"`Auto-sync interval`\" + ` in settings to run a sync every N minutes. Auto-sync still respects ` + \"`Confirm before sync`\" + ` — if it's on, the plan modal pops up and you decide whether to apply. Set to 0 to disable.\n\n**Per-file opt-out via frontmatter.** Add to any file's frontmatter:\n\\`\\`\\`\n---\nlark_sync: false\n---\n\\`\\`\\`\nThat file is skipped on every sync, in both directions, without being removed from either side. Useful for drafts you don't want pushed yet, or files you want to fork from the wiki and own locally. Also accepts ` + \"`no`\" + `, ` + \"`0`\" + `, and quoted variants.\n\n**Glob ignore patterns.** New text-area in settings under \\\"Sync behaviour\\\". One pattern per line. Matched against the vault-relative path of each docx node BEFORE fetch — ignored files don't cost a network call.\n\nGlob conventions:\n- ` + \"`*`\" + ` matches anything except ` + \"`/`\" + `\n- ` + \"`**`\" + ` matches anything including ` + \"`/`\" + `\n- ` + \"`?`\" + ` matches a single non-slash character\n\nExamples:\n- ` + \"`📥 Lark/**/Drafts/**`\" + ` skips all docs inside any \\\"Drafts\\\" subtree\n- ` + \"`**/*.tmp.md`\" + ` skips temp files\n- ` + \"`📥 Lark/Nexus Wiki/_attachments/**`\" + ` is implicit because attachments aren't docx nodes anyway\n\nNo migration needed — existing ` + \"`ignorePatterns`\" + ` defaults from earlier releases just start being honoured now.",
+      "draft": false,
+      "name": "v0.0.17 — auto-sync, lark_sync flag, ignore patterns",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T04:12:10Z",
+      "tag": "0.0.17"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c497fba1061c6c719d213682705e39931b2cccffed423557cd841e548d3a8497",
+          "name": "main.js",
+          "size": 36528
+        },
+        {
+          "digest": "sha256:0a9b221ab67099b64c6ee4b8f8ce5ea65cc2311fe2756255e97230c1416d2df4",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:a7ca7a4d85514d96ca8b8db31876123e254a703466d8cf561caf26a30d139799",
+          "name": "styles.css",
+          "size": 3239
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Inter-doc links inside Lark docs (` + \"`https://<tenant>.feishu.cn/wiki/<node_token>`\" + `) now become Obsidian wikilinks (` + \"`[[Target Doc]]`\" + ` or ` + \"`[[Target Doc|original label]]`\" + `) on pull, when the destination is already in your sync state.\n\n**What this changes:**\n- Pulled docs feel native — clicking a wiki link jumps to the synced ` + \"`.md`\" + ` file in Obsidian.\n- Obsidian's backlinks panel surfaces inter-doc connections.\n- Multi-level tenant hosts like ` + \"`fcn.sg.larksuite.com`\" + ` are matched (the regex allows any number of subdomain levels).\n- Non-Lark hosts and unmapped tokens are left untouched.\n\n**Reverse direction (Obsidian [[…]] → Lark URL) is deferred** because we don't yet capture your tenant's host on the wiki-space config. Push of files containing wikilinks will still send the literal ` + \"`[[…]]`\" + ` text to Lark today, which renders as plain text. That's the next wikilink-related task.\n\n**Picking up the change:** toggle plugin off/on (or BRAT auto-update). Re-sync once — the next pull rewrites every applicable link in every doc.",
+      "draft": false,
+      "name": "v0.0.16 — wikilink conversion on pull",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T04:08:37Z",
+      "tag": "0.0.16"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1cb8666551463a2213a20c61cf86f331b31447db866c4e6a9df8d1a844e76536",
+          "name": "main.js",
+          "size": 35987
+        },
+        {
+          "digest": "sha256:540b8ab74565265eb95f5b3883fb72f8e351c15cfb68e6768ea93e8aaf882e7d",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:a7ca7a4d85514d96ca8b8db31876123e254a703466d8cf561caf26a30d139799",
+          "name": "styles.css",
+          "size": 3239
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "A pass over every visible surface.\n\n**Pre-sync plan modal.** Every sync now pauses with a plan view grouped by space, listing pulls / pushes / conflicts / reconciles with collapsible per-file lists. Three buttons:\n- **Cancel** — do nothing.\n- **Pull only** — apply pulls + reconciles + conflicts, skip pushes.\n- **Apply all** — do everything.\n\nThe old push-only confirmation is gone; you now see the full picture before anything happens. Toggle off in **Settings → Confirm before sync**.\n\n**Per-space status in settings.** Each space row now shows:\n- File count (computed live from sync state)\n- Relative last-sync time per space (\\\"2 min ago\\\", \\\"3h ago\\\")\n- Whole space vs. subtree scope\n- A **Sync just this** button so you don’t have to sync everything to update one wiki\n\n**Live progress Notice.** While syncing, the Notice updates in real time: ` + \"`Lark Wiki Sync — Nexus Wiki: ↓ pulling 12/48 · FRD.md`\" + `. Useful on big spaces.\n\n**Visual wizard stepper.** The setup wizard replaces the plain \\\"Step 2 of 6\\\" with a numbered pill stepper across the top. Auth verification now renders its result inline under the button (✓ connected as … / ✗ with the actual error) instead of bouncing through a separate Notice.\n\n**Migration.** ` + \"`confirmBeforePush`\" + ` setting auto-renames to ` + \"`confirmBeforeSync`\" + ` on first load — your existing toggle state carries over.\n\nEngine internals: ` + \"`SyncEngine.run()`\" + ` now accepts ` + \"`confirmPlan(plan)`\" + `, ` + \"`onProgress(event)`\" + `, and ` + \"`onlySpaceId`\" + ` for ad-hoc scoping. Per-space ` + \"`lastSyncedAt`\" + ` is now persisted on each ` + \"`WikiSpaceConfig`\" + `.",
+      "draft": false,
+      "name": "v0.0.15 — UI polish: plan modal, per-space status, live progress, wizard stepper",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T03:26:49Z",
+      "tag": "0.0.15"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:53c9aa856acd7180723b56ecffc3a0c4927a2a2a11f21b99d85b6960c5638144",
+          "name": "main.js",
+          "size": 30997
+        },
+        {
+          "digest": "sha256:2754b9f57ef1b1acab6da15206f658c76f2069723272d8a941460d03081eecd9",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**Push now preserves structure.** Pipe tables you edit locally come back to Lark as ` + \"`<lark-table>`\" + ` (rendered as proper tables in Lark UI), and image embeds you pulled (` + \"`![[<token>.<ext>]]`\" + `) come back as ` + \"`<image token=\\\"...\\\"/>`\" + ` so they don't disappear.\n\n**Conservative on images:** the inverse converter only rewrites ` + \"`![[…]]`\" + ` embeds whose target matches the Lark token shape AND lives in the per-space ` + \"`_attachments/`\" + ` cache. Newly-pasted local screenshots are left alone — uploading those to Lark is a separate roadmap item.\n\n**Hash invariant maintained:** state still stores the Obsidian-form hash, so re-pulling the same content (after Lark stores the lark-form we sent) produces a stable round-trip.\n\nRe-sync to test. The push-confirm modal still gates anything destructive.",
+      "draft": false,
+      "name": "v0.0.14 — lossless push round-trip",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T03:09:20Z",
+      "tag": "0.0.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:01d72afe7ed20d59b3c5bf1aabb72d998fe01b4a963b454884784c9f09b96909",
+          "name": "main.js",
+          "size": 29424
+        },
+        {
+          "digest": "sha256:c7eecb719af7fac2cd773325733e359ddd28b303fed590b76898f421f32373bf",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**The actual push fix.** lark-cli v1.0.16 rejects ` + \"`--mode replace_all`\" + ` without a selection — despite the name, ` + \"`replace_all`\" + ` is a selection-scoped operation. The mode that replaces the whole document body is ` + \"`overwrite`\" + `. Plugin now uses that, and pushes should land.\n\nRe-sync after the auto-update; you should see ` + \"`pushed N`\" + ` instead of N errors.",
+      "draft": false,
+      "name": "v0.0.13 — push fix: use --mode overwrite",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T10:06:01Z",
+      "tag": "0.0.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:88dbf4614643d41c05766110b9751714d0e22dbfe9682cb6b2a7e74508e957af",
+          "name": "main.js",
+          "size": 29430
+        },
+        {
+          "digest": "sha256:6de78fcb4da4e92102dd8896a958968af9c168cc7118c5d991a6303ed038b37d",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**Fixes the silent-failure bug from 0.0.11.** When a push failed under the hood (most often missing ` + \"`docx:document`\" + ` scope), the catch block only logged to the dev console — the Notice just said ` + \"`pushed 0`\" + ` and you had no way to know why.\n\n**What's new:**\n- ` + \"`SyncResult.errors[]`\" + ` captures every per-file failure with phase, file path, and the actual ` + \"`lark-cli`\" + ` error message.\n- New **results modal** pops up after any sync that produced errors. Lists each failed file grouped by phase (pull / push / conflict) with the real error message and a re-auth command you can copy-paste.\n- Post-sync notice now appends ` + \"`, N error(s)`\" + ` so the count is visible before you open the modal, and stays on screen for 8 seconds when errors exist.\n\n**Most likely cause of your push not landing:** missing scope. Run:\n\\`\\`\\`\nlark-cli auth login --scope \"docx:document\"\n\\`\\`\\`\nand try again. The new modal will show this exact hint when push fails for that reason.",
+      "draft": false,
+      "name": "v0.0.12 — surface push errors in a results modal",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T10:00:11Z",
+      "tag": "0.0.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:51c3eb6bd737bad64c9ca44ad22613a8a9b6fe107dd4afdc26b5767d5adaac8e",
+          "name": "main.js",
+          "size": 27569
+        },
+        {
+          "digest": "sha256:3d1633bd050c320d7da53474194ae6246c4e4ab678f6763e5faf40651f9c66a0",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**Fixes the \\\"sync only goes one way\\\" bug.** Sync state was keyed by local path, so every time the path mapping changed (folder mirroring in 0.0.5, per-space subfolder in 0.0.9, multi-space refactor in 0.0.10) every state entry was silently orphaned. With no prior state, every node was treated as a first-sync collision and logged as a conflict — the push branch was unreachable.\n\n**What changed:**\n- ` + \"`StateStore`\" + ` is now keyed by Lark ` + \"`nodeToken`\" + ` instead of local path. Re-keying happens automatically on first load — your existing state survives.\n- New \\\"reconcile\\\" classification: if there's no state but the local file already matches remote exactly (very common after a path mapping change), the engine silently adopts it as the baseline instead of flagging a conflict.\n- New **push confirmation modal**. Before any local-only edits go up to Lark, the engine pauses and shows a list of files going up. Click \\\"Cancel push\\\" to keep this sync pull-only, or \\\"Push to Lark\\\" to proceed. Toggle off in **Settings → Confirm before pushing** if you want unattended sync.\n- Post-sync notice now also reports \\\"reconciled N\\\" when silent adoption happens.\n\n**To pick it up:**\n1. BRAT will auto-update; or toggle the plugin off/on.\n2. Edit a file in your vault that's already synced.\n3. Click the ribbon. You should see the push-confirmation modal listing your edited file.\n4. Confirm → file uploads to Lark; the post-sync notice should show ` + \"`pushed 1`\" + `.\n\nIf you'd been seeing a wall of conflicts and zero pushes — that should clear up after one full sync (the reconcile branch handles all the orphaned files).",
+      "draft": false,
+      "name": "v0.0.11 — push actually fires + confirmation modal",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T09:45:39Z",
+      "tag": "0.0.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1ae14e27e1d8e9cad3e33e228ef724343bf5adff3f22bdbb4ccbf6ba94bfaef0",
+          "name": "main.js",
+          "size": 24221
+        },
+        {
+          "digest": "sha256:374358ffada25634fbb54e85e59f90475fe98ab02e9ce66d69eb2674dbf0c572",
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "You can now sync more than one Lark Wiki space into the same vault.\n\n**What's new:**\n- New data model: ` + \"`settings.spaces[]`\" + ` — add as many wiki spaces as you want.\n- Settings tab gets a list of configured spaces with **Remove** buttons and an **Add a wiki space** button that opens the wizard.\n- Wizard's heading and intro adapt to whether any spaces are already configured. Re-running it ADDS another space; existing entries are not modified.\n- ` + \"`SyncEngine.run()`\" + ` iterates every space. A failure in one space is logged and counted; the others keep going.\n- Each space stays self-contained at ` + \"`📥 Lark/<Space Name>/...`\" + ` with its own ` + \"`_attachments/`\" + `.\n\n**Migration is automatic.** Pre-0.0.10 configs with the inline ` + \"`wikiSpaceId`\" + ` / ` + \"`wikiSpaceName`\" + ` / ` + \"`wikiRootNode`\" + ` fields get hoisted into ` + \"`spaces[]`\" + ` on first load; the legacy keys are dropped from your data.json.\n\n**To use it:**\n1. BRAT will auto-update; or toggle the plugin off/on.\n2. To add a second wiki: Settings → Lark Wiki Sync → **Add a wiki space**. Walk through the wizard — paste a URL or pick from the dropdown — and Finish.\n3. Click the ribbon → both spaces sync in one go.\n\n**Side fix this release:**\n- ` + \"`sync-state.json`\" + ` is now in ` + \"`.gitignore`\" + ` (it leaks per-vault sync metadata when the repo is symlinked into a vault). Existing release tarballs are untouched; future commits won't include it.",
+      "draft": false,
+      "name": "v0.0.10 — multi-space sync",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T09:14:37Z",
+      "tag": "0.0.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:08433fd1292e2c9526572083702c402e1c3b26e77744ee3838d8fb284af9e228",
+          "name": "main.js",
+          "size": 22871
+        },
+        {
+          "digest": "sha256:f524854439664373e8552f65f05992c0bebafd8bf59198f06ffd72f5b0263c8e",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Each synced wiki space now lives under its own subfolder, so you can sync multiple spaces into one ` + \"`📥 Lark/`\" + ` parent folder without them stepping on each other.\n\n**Layout change:**\n- Default ` + \"`localRoot`\" + ` is now ` + \"`📥 Lark`\" + ` (was ` + \"`📥 Wiki`\" + `).\n- Files land at ` + \"`📥 Lark/<Space Name>/<Parent>/<Doc>.md`\" + `.\n- Attachments live at ` + \"`📥 Lark/<Space Name>/_attachments/`\" + ` — self-contained per space.\n\n**For existing installs:**\n1. Re-run the setup wizard (Settings → Lark Wiki Sync → Re-run wizard). This populates the new ` + \"`wikiSpaceName`\" + ` field.\n2. Settings → Reset sync state.\n3. Move or delete files from your current flat folder.\n4. Click Sync → files re-land in the new nested layout.\n\nIf you don't re-run the wizard, the plugin falls back to the flat (0.0.8) behaviour so nothing breaks.",
+      "draft": false,
+      "name": "v0.0.9 — default folder \"📥 Lark\", per-space subfolder",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T12:53:07Z",
+      "tag": "0.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b60ccbc9b40a76afb677ae780f566229f5e9bbe046c596101bb3f66899db31bb",
+          "name": "main.js",
+          "size": 22068
+        },
+        {
+          "digest": "sha256:3728a6581da6d9bb726f436ceab295de3a8b19ad124a56e56d1b076959c9726e",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Ribbon icon swapped to Obsidian's built-in Lucide `sync` glyph (two curved arrows forming a cycle). Nothing else changed.",
+      "draft": false,
+      "name": "v0.0.8 — ribbon uses built-in sync icon",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T12:37:49Z",
+      "tag": "0.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:43c0efa7fccbd8090f54856afa55998204f80786ecb406f1efcbdb5432fd23af",
+          "name": "main.js",
+          "size": 22367
+        },
+        {
+          "digest": "sha256:6438727ce8d7bb099a3d870023f83f41c41708c2ca0051d2b114305e4514e73d",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Images in Lark docs are now downloaded into your vault as real files and embedded via ` + \"`![[filename.ext]]`\" + ` wikilinks.\n\n**What changed:**\n- Pulling a doc scans for ` + \"`<image token=...>`\" + ` tags, downloads each one to ` + \"`<localRoot>/_attachments/<token>.<ext>`\" + ` (lark-cli auto-detects the extension).\n- The markdown embed is just ` + \"`![[<token>.<ext>]]`\" + ` — Obsidian resolves it globally, so your note file can live at any depth.\n- One-time cache scan per sync, so repeat syncs don't re-download anything already on disk.\n- Embedded sheets (` + \"`<sheet token=...>`\" + `) still render as a placeholder — that's a separate API surface and will come later.\n\n**To pick it up:** toggle the plugin off/on in Obsidian, then click Sync. Every doc with images will re-pull once (new hash since the placeholders are now embeds), drop files into ` + \"`📥 Wiki Nexus/_attachments/`\" + `, and stabilise.",
+      "draft": false,
+      "name": "v0.0.7 — inline images are downloaded (v0.5 roadmap)",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T12:22:31Z",
+      "tag": "0.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:32edc918bed52ba82f3b2cacb0842f7586c050f110416d3eb79ed1b434baa2a1",
+          "name": "main.js",
+          "size": 21045
+        },
+        {
+          "digest": "sha256:c1547d96781fbfa07d531ceaec2517c3b4ac314cfb5c2ad66527168273e65fb3",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Lark returns its own flavored markdown with custom tags (` + \"`<lark-table>`\" + `, ` + \"`<image token=...>`\" + `, ` + \"`<sheet token=...>`\" + `, ` + \"`<text>`\" + `) that Obsidian doesn't render. The plugin now transforms these to standard Obsidian markdown on pull:\n\n- **Tables** → GFM pipe tables (first row becomes the header).\n- **Images / embedded sheets** → placeholder text with the Lark token preserved (real attachment handling still queued for v0.5).\n- **Styling wrappers** → stripped, content kept.\n\nRe-sync to get re-rendered files. No need to reset state — the rewritten hashes will correctly detect that remote changed (from the old transformed form to the new transformed form), pull once, then stabilise.\n\n**Caveat for push:** a file with converted tables can't yet round-trip back to Lark. Push of table-free files is still unaffected.",
+      "draft": false,
+      "name": "v0.0.6 — readable markdown in Obsidian",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T12:06:05Z",
+      "tag": "0.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:251b2ebe4eaa3a78d4e6b9e70253f3e5078e27a8b4fc327b3067aa50020d34f7",
+          "name": "main.js",
+          "size": 19922
+        },
+        {
+          "digest": "sha256:72f273d55e44f2e159d3c982e3e358850ea2e9cc5148ae71349b24a84e8db56e",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "Sync now walks the full wiki subtree with pagination at every level, and mirrors the node hierarchy into nested vault folders instead of flattening everything at the root.\n\n**Fixes:**\n- Pagination: ` + \"`wiki nodes list`\" + ` was only returning the first page (up to 50 nodes). Now loops through ` + \"`has_more`\" + ` / ` + \"`page_token`\" + `.\n- Recursion: now walks every descendant up to depth 20, independent of ` + \"`obj_type`\" + ` (non-docx containers can still have docx children).\n- The root node itself (when scoped by URL) is now included, so pointing the wizard at a single leaf doc syncs that doc.\n- Intermediate folders are created recursively before writing.\n\n**Heads-up — path mapping changed.** Files used to land flat at ` + \"`📥 Wiki/Title.md`\" + `. They now mirror the tree: ` + \"`📥 Wiki/Parent/Child/Leaf.md`\" + `. Before re-syncing:\n1. In Obsidian → plugin settings → **Reset sync state**.\n2. Move or delete the old flat files so they don't sit alongside the new nested copies.",
+      "draft": false,
+      "name": "v0.0.5 — pull the full tree + folder mirroring",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T11:52:27Z",
+      "tag": "0.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:972fd91afbb000a917b380f91f8ba1d92330a4a724e604df57a2a1f9a10f9acb",
+          "name": "main.js",
+          "size": 19154
+        },
+        {
+          "digest": "sha256:eec910231ea522765082204d0c65e0d60a7dfbb5379f4b6d0af1bcbca64ff82a",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "lark-cli exits 1 for API errors and writes the error payload to stdout. The plugin now parses that payload and surfaces just the message + hint in Obsidian, instead of dumping the whole JSON response.",
+      "draft": false,
+      "name": "v0.0.4 — cleaner error messages for API failures",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T11:46:10Z",
+      "tag": "0.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4769c8e5cbc56cb644b4797b85d06aae4bfde118c0e651634a5c16154d06a638",
+          "name": "main.js",
+          "size": 19053
+        },
+        {
+          "digest": "sha256:62d752f9c489bc4f8e806ba753af3b52e5485517251ec36741b161877f1a3746",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "The scaffold guessed at lark-cli's command surface; this release aligns it with what the real ` + \"`lark-cli`\" + ` v1.0.16 actually exposes.\n\n**Fixes:**\n- ` + \"`contact +me`\" + ` → ` + \"`contact +get-user`\" + ` (the former doesn't exist)\n- ` + \"`wiki spaces nodes list`\" + ` → ` + \"`wiki nodes list`\" + ` with ` + \"`--params '{\\\"space_id\\\":...}'`\" + ` (OpenAPI-style), not explicit ` + \"`--space-id`\" + ` flags\n- ` + \"`wiki spaces get_node`\" + ` now uses ` + \"`--params '{\\\"token\\\":...}'`\" + `\n- Plugin now surfaces ` + \"`ok:false`\" + ` API errors (including scope-missing hints) instead of silently returning empty data\n\n**Heads-up on scopes:** the first time you run the wizard / sync you may see errors like ` + \"`insufficient permissions (required scope: wiki:space:retrieve)`\" + `. Fix by running in a terminal:\n\n\\`\\`\\`\nlark-cli auth login --scope \"wiki:space:retrieve wiki:node:retrieve docx:document:readonly docx:document\"\n\\`\\`\\`\n\n(Adjust scopes to pull-only vs. pull+push as needed.)",
+      "draft": false,
+      "name": "v0.0.3 — fix lark-cli command contract",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T11:43:07Z",
+      "tag": "0.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:875a93168d9c13019abef2f3456ccd96472bc35914b62912bdad701e55bea43a",
+          "name": "main.js",
+          "size": 18761
+        },
+        {
+          "digest": "sha256:458bf603856f8077fef56981e0ce650d00bba7da973d9ccf96b374de57ebaf61",
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "**Bug fix.** On macOS, Obsidian subprocesses don't inherit your shell's PATH, so lark-cli's \\`#!/usr/bin/env node\\` shebang couldn't find \\`node\\` and every call failed with \\`env: node: No such file or directory\\` (exit 127). The plugin now prepends \\`/opt/homebrew/bin\\`, \\`/usr/local/bin\\`, and common nvm/volta/fnm dirs before spawning.\n\nBRAT users: auto-updates to this release. Reload Obsidian after the update lands.",
+      "draft": false,
+      "name": "v0.0.2 — fix macOS PATH for lark-cli spawn",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T11:06:02Z",
+      "tag": "0.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b6d366289bdf3bc64582da9c3450baafd4d98385c1f857cbd0b9ea9af22c1fab",
+          "name": "main.js",
+          "size": 18409
+        },
+        {
+          "digest": "sha256:1fc787ca2400aef265f7e6c85ad4fd96c358a3f4a58abc710c09db8af990fefc",
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:17de45e611b13d33614390392b94e35fa5b2da7b1dcc7b2623274a61ece6ecb6",
+          "name": "styles.css",
+          "size": 225
+        }
+      ],
+      "author": "fszlnwr",
+      "description": "First release. Pull path works end-to-end; push is implemented but unverified against a real wiki; the `ask` conflict policy falls back to writing a `.remote.conflict.md` sidecar until the 3-way diff modal ships. Roadmap in `PLAN.md`.\n\n### Install via BRAT\n\nAdd `fszlnwr/obsidian-lark-wiki-sync` as a beta plugin in BRAT.\n\n### Prerequisites\n\n- `lark-cli` installed and authorized (`lark-cli auth login`)\n- Obsidian desktop (`isDesktopOnly: true` because it shells out to `lark-cli`)",
+      "draft": false,
+      "name": "v0.0.1 — first BRAT-installable scaffold",
+      "prerelease": false,
+      "publishedAt": "2026-04-24T10:57:22Z",
+      "tag": "0.0.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "fszlnwr/obsidian-lark-wiki-sync"
+}

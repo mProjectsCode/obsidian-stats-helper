@@ -1,0 +1,140 @@
+{
+  "author": "lossless-group",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Pull OpenGraph metadata from any URL into note frontmatter — title, image, description, publisher — via OpenGraph.io or Microlink.",
+  "errors": [],
+  "id": "metafetch",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "The Lossless Group",
+    "authorUrl": "https://lossless.group",
+    "description": "Pull OpenGraph metadata from any URL into note frontmatter — title, image, description, publisher — via OpenGraph.io or Microlink.",
+    "fundingUrl": "https://coff.ee/losslessgroup",
+    "id": "metafetch",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.10",
+    "name": "Metafetch",
+    "version": "0.1.6"
+  },
+  "name": "Metafetch",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:6cc1be604d49a8e2c9cd1fcf3ddf5de759093a9e6e1e83dc00afb469832f5855",
+          "name": "main.js",
+          "size": 47579
+        },
+        {
+          "digest": "sha256:5300d86bd85e745de82e1de27fc64a3b0877cb113ad002ca663257e336db86d0",
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:f8fafc92d322ef294fa4722cfbf38259dad40d1eb2bd7c2ca83566b5d601a167",
+          "name": "styles.css",
+          "size": 8883
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Every release asset of Metafetch is now cryptographically attested back to its source code — install with the same proof-of-build verification GitHub uses for its own releases.**\n\n## Why care?\n\nWhen you install a community plugin, you trust that the bytes downloaded into `<vault>/.obsidian/plugins/metafetch/` were actually built from the source code you can read on GitHub. Most plugins ask you to take that on faith. Starting with 0.1.6, Metafetch ships with **GitHub artifact attestations** — a sigstore-backed cryptographic signature linking each `main.js`, `manifest.json`, and `styles.css` back to the exact commit and GitHub Actions workflow run that produced it.\n\nYou can verify any release asset before you enable the plugin:\n\n```bash\ngh attestation verify main.js --repo lossless-group/metafetch\n```\n\nIf the file came out of a legitimate build of the source repo, the command exits 0 and tells you which workflow run produced it. If anything's been tampered with mid-flight — a compromised CDN, a maliciously-edited release attachment — the verification fails.\n\nThis is the same security primitive GitHub uses for its own first-party tooling. It costs you nothing to verify and gives you a real answer to \"do I trust this install?\"\n\n## What it changes for users\n\n**Installing from inside Obsidian:** nothing. The Community Plugins directory pulls the latest release assets the same way it always has. The attestations sit alongside the release as metadata, unobtrusive.\n\n**Installing manually or auditing what's in your vault:** you can now verify before you copy files in. Drop the three release assets into a folder, run `gh attestation verify` against each, then move them into `.obsidian/plugins/metafetch/` only after the cryptographic check passes.\n\n**For the curious:** each verify run tells you which GitHub Actions workflow run built the asset, when, from which commit. Provenance trail is fully reconstructible.\n\n## A note about vault enumeration\n\nThe Obsidian Community Plugins scorecard surfaces a recommendation: *\"Vault Enumeration: This plugin reads the full list of markdown files in your vault.\"* That's accurate, and it's by design — the **Batch Fetch** command walks markdown files in the vault to find the ones with a `url:` frontmatter field, so it knows which notes to process. The enumeration happens **only when you explicitly run the batch command**, never on plugin load or as a background activity. The single-file *Fetch Open Graph Data* command doesn't enumerate at all — it operates on the active note only.\n\n## How the build pipeline works now\n\nA GitHub Actions workflow (`.github/workflows/release.yml`) fires on every 3-digit-semver tag push. In a clean Ubuntu runner it:\n\n1. Checks out the tagged commit\n2. Installs dependencies via pnpm (frozen lockfile)\n3. Builds `main.js` + `styles.css` via the same `pnpm build` you'd run locally\n4. Signs the three release assets via [`actions/attest-build-provenance@v1`](https://github.com/actions/attest-build-provenance), which uses OIDC + sigstore to bind each file to the workflow run that produced it\n5. Creates the GitHub Release with the three core assets attached and the marketing copy pulled from `release-notes/<tag>.md` in the repo\n\nResult: provenance is enforced by infrastructure, not by maintainer discipline. Manual `gh release create` from a developer's local machine is no longer the path — every release goes through the workflow.\n\n## The Lossless Group plugin family\n\nMetafetch sits alongside three sibling plugins, all by [The Lossless Group](https://lossless.group):\n\n| Plugin | What it does |\n|---|---|\n| [**Cite Wide**](https://community.obsidian.md/plugins/cite-wide) | Stable hex-identifier citations + URL-based dedupe + LLM-paste research conversion |\n| [**Image Gin**](https://community.obsidian.md/plugins/image-gin) | Recraft + Ideogram image generation, Magnific stock search, ImageKit CDN, drag-gate |\n| [**Perplexed**](https://community.obsidian.md/plugins/perplexed) | Source-cited research from Perplexity, Claude, Perplexica, or LM Studio + per-directory templates |\n| **Metafetch** | Pull OpenGraph metadata into note frontmatter via OpenGraph.io or Microlink |\n\nIf Metafetch (or any of the family) saves you time, [buy us a coffee](https://coff.ee/losslessgroup). The plugins are free; the coffee keeps the next one coming.\n\n## Under the hood — what shipped in this commit\n\n- Added `.github/workflows/release.yml` — the build-attest-release workflow described above\n- Added `release-notes/0.1.6.md` (this file) — the convention going forward: each release's marketing copy lives in the repo at this path before the tag is pushed, so the workflow can pick it up. Per the marketing-doctrine codified in `content-farm/context-v/skills/changelog-conventions/SKILL.md` *\"These are marketing artifacts, not internal documentation.\"*\n- Version bumped 0.1.5 → 0.1.6 across `manifest.json`, `package.json`, `versions.json`\n- No source-code changes — the vault-enumeration behavior the scorecard surfaces is the existing Batch Fetch implementation, called only when the user invokes the batch command\n",
+      "draft": false,
+      "name": "0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T07:58:48Z",
+      "tag": "0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5082b31f604293f9bc8d0cad93e0b9e4b9c59707fd40e55064ea609eb77c685f",
+          "name": "main.js",
+          "size": 47579
+        },
+        {
+          "digest": "sha256:d3d1f7724f8dc3a6b0f24f01d1d65497f77fbf76f99e73fb3b2eba783db6732a",
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:f8fafc92d322ef294fa4722cfbf38259dad40d1eb2bd7c2ca83566b5d601a167",
+          "name": "styles.css",
+          "size": 8883
+        }
+      ],
+      "author": "mpstaton",
+      "description": "**One command. Any URL. Title, image, description, publisher — all pulled from the page's own OpenGraph metadata and written into your note's frontmatter.**\n\n## Why care?\n\nKnowledge vaults get richer when every reference you save carries its visual identity and a one-line summary. Doing that by hand for every link breaks the writing flow — paste the URL, leave Obsidian to grab the title, hunt down the og:image, paraphrase the description, copy the publisher name, finally come back to your draft having lost ten minutes and your train of thought.\n\nMetafetch reads the page's Open Graph metadata once and writes the structured fields straight into your note's frontmatter. Your downstream tooling — Dataview, Bases, custom queries, theme-aware preview cards — then treats every URL you've saved as data, not as a wall of opaque link text.\n\nWe built it for [The Lossless Group](https://lossless.group)'s internal toolkit-tracking vault — a section where each app or service we evaluate gets a note with its banner, screenshot, and one-line summary surfacing in the index view. Metafetch is the one-button command that fills those fields without making you leave the note you're writing.\n\n## Install from inside Obsidian\n\n**Settings → Community Plugins → Browse → search \"Metafetch\" → Install → Enable.**\n\nFrom a cold install to a working command takes about thirty seconds. After enabling, open **Settings → Community Plugins → Metafetch** and drop in your API key for at least one of the two supported providers.\n\n## Two API providers, both free to start\n\n| Provider | What it gives you | Free tier |\n|---|---|---|\n| **[OpenGraph.io](https://opengraph.io/)** | Rich `hybridGraph` returns — Open Graph + Twitter Card + HTML-inferred metadata merged into one canonical shape. Best when you want maximum field coverage. | Yes (account + free API key required) |\n| **[Microlink](https://microlink.io/)** | Fast, simple shape. Best when speed matters more than HTML-inferrence fallback. | Yes (account + free API key required) |\n\nConfigure one, the other, or both. The commands the plugin offers light up based on which providers you've keyed; the ones you haven't set up stay quietly inactive instead of throwing errors.\n\n## What it actually does\n\n### Single-file workflow — *Metafetch: Fetch Open Graph Data*\n\nYou have a note open. Somewhere in the frontmatter (or in a configurable field) is a URL. Hit `Cmd/Ctrl + P` and run the command. A wide modal opens with per-fetch toggles:\n\n- **Overwrite existing** — re-fetch and replace what's there\n- **Create if missing** — fill in fields that don't yet exist  \n- **Write errors to YAML** — record `og_error` blocks in frontmatter when fetches fail (useful for batch cleanup later)\n- **Update fetch date** — stamp `og_fetch_date` so you can query for stale entries\n\nClick *Fetch* and the page's OG metadata lands in your frontmatter as structured fields: `title`, `description`, `image`, `favicon`, `url`, `site_name`, `og_type`. Done.\n\n### Batch workflow — *Metafetch: Batch Fetch Open Graph Data*\n\nYou have a directory of notes — say, your \"Tooling\" folder with 1,600 stub entries from a year of save-the-link-and-keep-moving. Run the batch command and Metafetch walks the directory:\n\n- Skips files that already have OG data (or doesn't — your choice)\n- Inserts a configurable delay between requests so your provider's rate limit stays happy\n- Writes per-file errors into each file's frontmatter; the batch keeps moving rather than halting on the first failure\n- Pauseable / resumable so you can stop, do other work, and pick back up\n\n### What the fields look like in your frontmatter\n\n```yaml\n---\nurl: https://example.com/article\ntitle: \"The Future of Knowledge Tools\"\ndescription: \"A short paragraph about the article…\"\nimage: https://example.com/og.jpg\nfavicon: https://example.com/favicon.ico\nsite_name: Example Publication\nog_type: article\nog_fetch_date: 2026-05-18\n---\n```\n\nThen a Dataview query against your Tooling folder can render every entry as a card with its banner, title, and one-line description — the table view of your knowledge graph.\n\n## The Lossless Group plugin family\n\nMetafetch is the fourth Lossless plugin in Obsidian's Community Plugins directory, all shipped under [The Lossless Group](https://lossless.group):\n\n| Plugin | What it does |\n|---|---|\n| [**Cite Wide**](https://community.obsidian.md/plugins/cite-wide) | Convert numeric footnotes into stable hex identifiers, dedupe citations by URL, parse LLM-pasted research from Perplexity / Google AI / Claude into a canonical reference format |\n| [**Image Gin**](https://community.obsidian.md/plugins/image-gin) | Generate AI images via Recraft + Ideogram, search stock via Magnific, upload to ImageKit CDN — plus a confirmation gate for every dragged-or-pasted image |\n| [**Perplexed**](https://community.obsidian.md/plugins/perplexed) | Stream source-cited research from Perplexity, Anthropic Claude, Perplexica (self-hosted), or LM Studio (local). Per-directory content-generation templates that fill stub files in bulk |\n| **Metafetch** *(this release)* | Pull OpenGraph metadata into note frontmatter via OpenGraph.io or Microlink |\n\nEach is its own Obsidian plugin, independently installable. They compose well — Cite Wide's hex identifiers land in frontmatter next to Metafetch's OG fields next to Perplexed's research output, all of it queryable as structured data via Dataview / Bases.\n\n## Support the work\n\nIf Metafetch (or any of the Lossless plugins) saves you time, [buy us a coffee](https://coff.ee/losslessgroup). The plugins are free; the coffee keeps the next plugin coming.\n\n## Under the hood — what changed since 0.1.2\n\nThis is Metafetch's first release through the new community.obsidian.md submission portal (the old PR-based queue at `obsidianmd/obsidian-releases` was retired in mid-May 2026). Three engineering changes carrying the compliance load:\n\n- **Active-voice description** rewritten across all three surfaces (`manifest.json`, `package.json`, GitHub repo About) — no \"Obsidian\" redundancy, no \"A plugin that...\" self-reference, naming concrete capabilities\n- **All network requests** now route through Obsidian's `requestUrl` rather than native `fetch` — required by the marketplace's `no-restricted-globals` rule, fixes both `openGraphService.ts` call sites\n- **`builtin-modules` npm dep** swapped for Node 14+'s built-in `node:module` `builtinModules` export — one less third-party dep, recommended by the es-tooling/module-replacements project\n\nRelease bundle ships exactly `main.js`, `manifest.json`, `styles.css` — the three files Obsidian actually consumes on install. The repo-root LICENSE remains for anyone cloning the source.\n\n**Full marketplace-compliance checklist** for the Lossless plugin family lives at [`content-farm/context-v/reminders/Obsidian-Marketplace-Compliance.md`](https://github.com/lossless-group/content-farm/blob/main/context-v/reminders/Obsidian-Marketplace-Compliance.md).\n",
+      "draft": false,
+      "name": "0.1.5 — Metafetch is live in Obsidian's Community Plugins directory",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T07:49:32Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:15d071fe10022d946e07014fab34f085c5d91176092d9593f1ffb257a2d474dc",
+          "name": "main.js",
+          "size": 47579
+        },
+        {
+          "digest": "sha256:dd0abfd3fb0632f35679f79f1d192674e9fbaa6240407f0511d8334942a82cea",
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:f8fafc92d322ef294fa4722cfbf38259dad40d1eb2bd7c2ca83566b5d601a167",
+          "name": "styles.css",
+          "size": 8883
+        }
+      ],
+      "author": "mpstaton",
+      "description": "First Metafetch release submitted to community.obsidian.md, the new Obsidian Community Plugins portal that replaced the obsidianmd/obsidian-releases PR queue.\n\n**What changed since 0.1.2:**\n\n- Description rewritten in active voice (no \"Obsidian\", no \"A plugin that...\") — required by the portal's two description rules. Applied across manifest.json, package.json, and the GitHub repo About field\n- All network requests routed through Obsidian's `requestUrl` instead of native `fetch` (required by marketplace rule on `no-restricted-globals`). 2 call sites in `openGraphService.ts`\n- Dropped the `builtin-modules` npm dep in favor of `node:module`'s built-in `builtinModules` (Node 14+) per the es-tooling/module-replacements project flag\n\nBundle ships only `main.js`, `manifest.json`, `styles.css` (no `LICENSE` or `versions.json` in the release attachments, which 0.1.2 included and the scorecard flagged as \"additional files\").\n\nCompliance checklist source: `content-farm/context-v/reminders/Obsidian-Marketplace-Compliance.md`.",
+      "draft": false,
+      "name": "0.1.4 — Marketplace-portal prep",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T07:36:10Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c",
+          "name": "LICENSE",
+          "size": 1211
+        },
+        {
+          "digest": "sha256:77f434dadf357279a3ad5ed890686d1aac2c12526acafc28077b8cf417d325e3",
+          "name": "main.js",
+          "size": 23543
+        },
+        {
+          "digest": "sha256:31b7b5f3971a6e8df3f9c04d6adafc4dde2587341b4335022732176be1e97592",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:2f80bcc3e242bbcf0215a4f6630fc1afa0c80ba939cb9d33215841689e111562",
+          "name": "styles.css",
+          "size": 4057
+        },
+        {
+          "digest": "sha256:2ce1bb8526396f8dccd06d04ca3f15fe223cd9250a214a2b00102b228bf5a516",
+          "name": "versions.json",
+          "size": 23
+        }
+      ],
+      "author": "mpstaton",
+      "description": "Our first \"release\" has settings, one command and one modal.  \r\n\r\n1. Settings: \"Open Graph Fetcher\"\r\n2. Command: \"Open Graph Fetcher: Fetch OpenGraph Data for Current File\" and launches a modal. \r\n3. Modal: Users may choose from a number of settings with a checkbox, then click \"Fetch OpenGraph Data\"\r\n\r\n![2025-07-17_Open-Graph-Fetcher-Fetch-Current-File](https://github.com/user-attachments/assets/19ad9691-74d0-4b6e-b4ce-3abb3adea407)\r\n\r\n\r\nThis [Obsidian](https://obsidian.md/) plugin works only for [OpenGraph.io](https://opengraph.io/)\r\n<a href=\"https://opengraph.io/\"><img width=\"252\" height=\"42\" alt=\"trademark_OpenGraph-io\" src=\"https://github.com/user-attachments/assets/08797db6-8fe7-4ced-a4fe-2ad4df79c26a\" /></a>\r\n\r\nUpdated to latest of all dependencies. ",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2025-07-18T12:27:17Z",
+      "tag": "0.1.2"
+    }
+  ],
+  "removedAt": null,
+  "repo": "lossless-group/metafetch"
+}

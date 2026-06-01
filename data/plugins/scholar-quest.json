@@ -1,0 +1,215 @@
+{
+  "author": "yangshaojun",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Gamify your academic workflow with XP and levels.",
+  "errors": [],
+  "id": "scholar-quest",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "Zhao-Jun Yong",
+    "authorUrl": "https://buymeacoffee.com/zhaojun0425",
+    "description": "Gamify your academic workflow with XP and levels.",
+    "fundingUrl": "https://buymeacoffee.com/zhaojun0425",
+    "id": "scholar-quest",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.4.0",
+    "name": "Scholar Quest",
+    "version": "1.5.0"
+  },
+  "name": "Scholar Quest",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:b869d444be3a11d9eee04576a8d254828b607396102abe6b02daa5a5a7549061",
+          "name": "main.js",
+          "size": 298773
+        },
+        {
+          "digest": "sha256:f2709843a7c45282852ad01256328f839a7534f69f1381cda0a2ca8910166bb7",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "Zhao-Jun-Yong",
+      "description": "## Bug fixes\n\nFive XP re-award and snapshot corruption bugs, all sharing the same root cause: startup metadata events (Obsidian re-indexing the vault on launch) were indistinguishable from live user edits, so XP was awarded again for historical activity on every reload.\n\n**What was happening:** On startup, Obsidian fires `metadata:changed` and `vault:create` events for every file in the vault. The plugin had no way to tell these apart from genuine user edits, so it re-awarded paper XP, atomic-note development XP, and writing progress XP on every reload — flooding the 500-entry activity log and pushing out the career-init entry.\n\n**The fix:** All three XP-awarding paths now check `file.stat.mtime >= loadedAt`. If the file was last modified before the plugin loaded, no XP is awarded — the snapshot is updated and guards are bootstrapped silently instead.\n\n### Fixes\n\n- **Sources** (`paper-skimmed` / `paper-completed`): paper XP re-awarded on every Obsidian reload when snapshot keywords were stale\n- **Ideas** (`atomic-note-developed`): development XP re-awarded on startup for notes edited between sessions; 60-min cooldown always expired after a restart\n- **Projects** (`writing-progress`): writing XP re-awarded on startup for project files edited between sessions; `peakWordCount` also advanced silently, shifting the threshold\n- **`onFileCreate` snapshot wipe**: Obsidian fires `create` events for all pre-existing files during startup indexing; the handler was overwriting every snapshot unconditionally, erasing `completedAt`/`skimmedAt`, `lastDevelopmentAt`, `peakWordCount`, and daily writing state — the source of missing guards that let the above bugs fire\n- **Career calibration double-XP**: re-opening the career wizard searched the activity log for the previous `career-init` entry to subtract old XP before adding the new value; if the log had overflowed the entry was missing, old XP was not subtracted, and new XP stacked on top — fixed by deriving `prevXP` from the stored `careerData` object via the new `calcCareerXP()` function\n\n### Tests\n\n87 tests (9 new covering startup-guard behaviour).",
+      "draft": false,
+      "name": "1.5.0 — Fix XP re-award on reload",
+      "prerelease": false,
+      "publishedAt": "2026-05-25T00:12:02Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:32ab70823ed3b6394606ec760822122063101f117083d0e30d3c5cc231a0aeaf",
+          "name": "main.js",
+          "size": 283805
+        },
+        {
+          "digest": "sha256:ebaa0e08d11e1d6279a5deabd40acabb5686ae8d73b0a3d33e77451484af1789",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Zhao-Jun-Yong/scholar-quest/compare/1.3.0...1.3.1",
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T07:02:16Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:45aef64bbd02f1e5898f86376f4243701c2981086c7be450f0f6ad6501852529",
+          "name": "main.js",
+          "size": 284120
+        },
+        {
+          "digest": "sha256:ab2c675b04e99f97318f6ded6f3604c77fb31766b7052682b9e96dd6ff34e795",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Zhao-Jun-Yong/scholar-quest/compare/1.2.0...1.3.0",
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T06:20:42Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:076152543e0242fb8aa465beb926cb9d8cb855463fa461c5949ee7c23e231121",
+          "name": "main.js",
+          "size": 167304
+        },
+        {
+          "digest": "sha256:2cf7cd0dbd5b87165e3ec2708a7d49ac84d29162c72d4664c53d16031ec9159b",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "Zhao-Jun-Yong",
+      "description": "## What's new\n\n### Manual log — activity catalog\nThe free-text \"Add activity\" input is replaced by a searchable catalog of **52 built-in activities** across 10 discipline categories: wet lab, computational, fieldwork, teaching, mentoring, service, outreach, clinical/participant research, literature work, and off-vault writing. Build a personal shortlist by adding from the catalog; the log modal shows only your list. A fixed **Other (+30 XP, once/day)** entry is always available as a catch-all. The catalog is collapsed by default in settings.\n\n### XP integrity\n- **Reading tag one-time guard** — paper-skimmed and paper-completed XP are awarded once per file. Removing and re-adding the ✅ tag no longer re-awards XP.\n- **Atomic note diminishing returns** — notes 1–10 per day earn full XP (30); notes 11–30 earn half (15); notes 31+ earn a trickle (5). Heavy knowledge-work days are still rewarded; bulk farming is not.\n- **Milestone XP locked** — built-in milestone XP values are now fixed and shown as read-only. User-added custom milestones are capped at 200 XP.\n- **XP values removed from settings** — auto-detected XP values (paper, writing, notes) are no longer user-editable, keeping progression meaningful.\n\n### Runtime improvements\n- Per-file 300ms debounce on metadata change events — prevents race conditions when files are edited rapidly\n- Metadata events skipped during initial vault indexing — no redundant reads or sidebar renders on startup\n- Sidebar re-render debounced at 400ms — eliminates jank during active writing sessions\n- Project milestone initialisation batched to a single save on startup\n\n## Upgrading\nExisting data is automatically migrated — no action needed. Built-in milestone XP values are reset to defaults on first load.",
+      "draft": false,
+      "name": "v1.2.0 — XP integrity, activity catalog, runtime improvements",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T05:05:49Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6755eb6d152751b395ca7130202208e0e5645c95ac7bb154725a02954a1153e3",
+          "name": "main.js",
+          "size": 149527
+        },
+        {
+          "digest": "sha256:0fe4237a166a2993341a1ef35f9f509cbdaa439e37c396cb919c6e78285bf072",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Zhao-Jun-Yong/scholar-quest/compare/1.0.0...1.1.0",
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T10:56:41Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:352263e73bc93fdf7584bb5fef0090cf31b535632e8a31106b42daed8a39ce86",
+          "name": "main.js",
+          "size": 148665
+        },
+        {
+          "digest": "sha256:94a9078335e5f446f6dfefa9200fde5b2a95ccab39f701721a0c7ca8f6452f1f",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Zhao-Jun-Yong/scholar-quest/compare/0.3.0...1.0.0",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T10:00:05Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f6980fcad765424fc553e1b708a733805715c2e860ae2b26757f2f9a99123798",
+          "name": "main.js",
+          "size": 123508
+        },
+        {
+          "digest": "sha256:2ceb3431b639e16e7e74ef863f295fe2b26aea1f529693c49e3c48bdf2751665",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Zhao-Jun-Yong/scholar-quest/compare/0.2.0...0.3.0",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T07:24:49Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d049bd277f851fbaf6a46ae1fe95e0bd693551acdd00beb82925dd88ee4c1937",
+          "name": "main.js",
+          "size": 123202
+        },
+        {
+          "digest": "sha256:f08b54d55ed93ad038776dd098a871b1f8b9fb3cf80f299c991d3c36a4e075d0",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "Zhao-Jun-Yong",
+      "description": "## What's new\n\n### Improvements for first-time users\n- README completely overhauled: corrected tier/level counts (12 tiers, max level 60), added Getting Started, Recommended Workflow, Tier Progression, and Achievements sections\n- Roadmap simplified to plain bullet points\n\n### Status bar\n- Replaced ⚗️ emoji with a pixel art scroll icon rendered as an `<img>` element\n\n### Achievement system\n- 5 achievements now auto-unlock when career history is imported: **Graduate!**, **On Stage**, **Funded!**, **Under Review**, **Accepted!**\n- Renamed **Doctor!** → **Graduate!** to cover both Masters and PhD thesis defences\n- 7 achievement badge sprites scaled up for visual consistency\n\n## Installation\n\nDownload `main.js` and `manifest.json` below and copy to `.obsidian/plugins/scholar-quest/` in your vault.",
+      "draft": false,
+      "name": "0.2.0 — Pixel art scroll, achievement fixes, first-time user docs",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T06:32:56Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a55b2354bbfd77b75cd977ba817252cf1e13414878fd0b175cffc574e66675b3",
+          "name": "main.js",
+          "size": 110668
+        },
+        {
+          "digest": "sha256:4fda1267a631a898c72be54a26fc4a9350420199a0b26b72687bb4151bd66ad0",
+          "name": "manifest.json",
+          "size": 341
+        }
+      ],
+      "author": "Zhao-Jun-Yong",
+      "description": "## Scholar Quest 0.1.0 — Initial Release\n\nGamify your academic workflow with XP, levels, and milestone tracking.\n\n### Features\n- **Auto-detected XP** — papers read, atomic notes created/developed, writing progress\n- **Milestone system** — 14 project types with predefined milestone templates\n- **Manual log** — log off-Obsidian activities in ~2 seconds\n- **Level system** — 12 tiers (Dormant egg → Nova dragon), levels 1–60\n- **Achievement badges** — 26 pixel art achievement icons\n- **Status bar** — ambient level indicator\n- **Fully configurable** — vault paths, tags, XP values, milestone templates\n\n### Installation\n1. Download `main.js` and `manifest.json` below\n2. Create `.obsidian/plugins/scholar-quest/` in your vault\n3. Copy both files in and enable the plugin in Settings → Community plugins\n\n---\n☕ [Buy me a coffee](https://buymeacoffee.com/zhaojun0425) if Scholar Quest helps your research!",
+      "draft": false,
+      "name": "Scholar Quest 0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T07:10:19Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "zhao-jun-yong/scholar-quest"
+}

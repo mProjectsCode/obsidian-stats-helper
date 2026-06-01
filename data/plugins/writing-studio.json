@@ -1,0 +1,705 @@
+{
+  "author": "writerp-777",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. A professional writing environment with Focus Mode, Writing Binder, Sprint Timer, WordPress publishing, Folder Sidebar Explorer, and more.",
+  "errors": [],
+  "id": "writing-studio",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "Don Pucik",
+    "authorUrl": "",
+    "description": "A professional writing environment with Focus Mode, Writing Binder, Sprint Timer, WordPress publishing, Folder Sidebar Explorer, and more.",
+    "id": "writing-studio",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "Writing Studio",
+    "version": "2.4.4"
+  },
+  "name": "Writing Studio",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c27ee2365cf59c1ae10b3d43617c180b0350dfeeeef054bb24ba9883382676c7",
+          "name": "main.js",
+          "size": 839728
+        },
+        {
+          "digest": "sha256:242d5925d780098b1b7962af5e52ed5a46182f5ccaebc3961076deac2ba2fbe6",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:70f065bb85359dfc9648c41d8af7bb4ad016d60144475f326bd0fc8ea4dab4f4",
+          "name": "styles.css",
+          "size": 41200
+        }
+      ],
+      "author": "writerP-777",
+      "description": "## What's fixed\n\n**Persistent startup delays and UI freezing under Lazy Plugin Loader**\n\nWhen other plugins configured with LPL delays loaded after startup, each triggered an `active-leaf-change` event. With no debounce, every event caused a full Launcher re-render calling `getTotalWordCount()` — which reads every file in the active project from disk sequentially. On a project with many chapters, a burst of plugin-load events saturated the vault I/O queue, freezing the Settings panel and sidebar views for up to 1–2 minutes.\n\nTwo fixes:\n\n1. `refreshLauncher()` calls from `active-leaf-change` are now debounced with a 300 ms timer, collapsing rapid bursts into a single render.\n2. `getTotalWordCount()` caches its result per active project and only re-reads from disk when a file is modified or the binder is saved, making subsequent renders instant.\n\n## Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` and place them in your vault's `.obsidian/plugins/writing-studio/` folder, then reload the plugin.\n\n## What's Changed\n* fix: debounce launcher refresh and cache word counts to eliminate LPL startup freeze (v2.4.4) by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/79\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.4.3...2.4.4",
+      "draft": false,
+      "name": "2.4.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T22:05:56Z",
+      "tag": "2.4.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:55160989631d63bd87d37e9fdce7e7ed1b3cec88f82bea3c8a2b295fe0f231e9",
+          "name": "main.js",
+          "size": 838874
+        },
+        {
+          "digest": "sha256:f8c8d1640f5de42339ab0d507be69f7ef06f4c05e15b848a41a6301b89a716b5",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:70f065bb85359dfc9648c41d8af7bb4ad016d60144475f326bd0fc8ea4dab4f4",
+          "name": "styles.css",
+          "size": 41200
+        }
+      ],
+      "author": "writerP-777",
+      "description": "## What's fixed\n\n**Startup delay regression from v2.4.2**\nThe `window.setTimeout(fn, 0)` wrapper added to the `onLayoutReady` callback in v2.4.2 caused a noticeable delay on every startup. In normal load the callback fires from the `layout-ready` event, and wrapping in `setTimeout(0)` pushed all initialization work to the back of the macro-task queue — behind every other plugin's `layout-ready` handler. On vaults with many plugins this was clearly perceptible before the Launcher appeared. Reverted to the original `async` callback pattern.\n\nThe Lazy Plugin Loader stale-render fix from v2.4.2 (`refreshLauncher()` in the existing-leaf branch of `openLauncher()`) is unaffected and remains in place.\n\n## Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` and place them in your vault's `.obsidian/plugins/writing-studio/` folder, then reload the plugin.\n\n## What's Changed\n* fix: remove setTimeout(0) startup delay regression (v2.4.3) by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/78\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.4.2...2.4.3",
+      "draft": false,
+      "name": "2.4.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T21:38:12Z",
+      "tag": "2.4.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0514cbbddab3c1f347a5e61a2e5249f42ac6a3f54d69b356c3389d68c7edccef",
+          "name": "main.js",
+          "size": 838975
+        },
+        {
+          "digest": "sha256:fad3e1553cb7d4bd1b9268286f868a5866f3d568c48b9dbfae3a1d6038fa0e56",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:70f065bb85359dfc9648c41d8af7bb4ad016d60144475f326bd0fc8ea4dab4f4",
+          "name": "styles.css",
+          "size": 41200
+        }
+      ],
+      "author": "writerP-777",
+      "description": "## What's fixed\n\n**Launcher panel stale render under Lazy Plugin Loader (first run)**\nOn the first Obsidian startup after configuring Lazy Plugin Loader, workspace restoration calls `LauncherView.onOpen()` before `projectManager.initialize()` has run, leaving the panel showing \"no project selected.\" `openLauncher()` then found the existing leaf and revealed it without re-rendering, so the stale state persisted whenever `active-leaf-change` did not fire (e.g. the launcher was already the active sidebar leaf). Fixed by calling `refreshLauncher()` in the existing-leaf branch of `openLauncher()`, matching the pattern already used in `openBinder()`.\n\n**Launcher and Binder fail to open on subsequent Lazy Plugin Loader starts**\nOn all runs after the first, the plugin loads after LPL's configurable delay, at which point `workspace.onLayoutReady` fires synchronously inside `onload()`. The async callback yielded at `await projectManager.initialize()`, and the microtask continuation called `getLeftLeaf(false)` while empty/placeholder leaves from the previous session were still mid-cleanup in the workspace's leaf management cycle, causing `getLeftLeaf` to return `null` and the panel to silently not open. Fixed by wrapping the `onLayoutReady` body in `window.setTimeout(fn, 0)`, moving execution to the macro-task queue so all pending workspace leaf work completes before a leaf is requested.\n\n## Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` and place them in your vault's `.obsidian/plugins/writing-studio/` folder, then reload the plugin.\n\n## What's Changed\n* docs: update README version badge to 2.4.1 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/75\n* fix: Launcher/Binder deferred-init failures under Lazy Plugin Loader (v2.4.2) by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/77\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.4.1...2.4.2",
+      "draft": false,
+      "name": "2.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T20:57:29Z",
+      "tag": "2.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:306413acb895f921cb5f3a49151ed46fb091761e105307296bba1489925a35e8",
+          "name": "main.js",
+          "size": 838838
+        },
+        {
+          "digest": "sha256:21cf611faeb8edc22be8a1f2aa9a351b4edd0edd57a59bf80ad4b5ca166ed18b",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:70f065bb85359dfc9648c41d8af7bb4ad016d60144475f326bd0fc8ea4dab4f4",
+          "name": "styles.css",
+          "size": 41200
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* fix: 2.4.1 — settings panel blank under Lazy Plugin Loader by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/74\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.4.0...2.4.1",
+      "draft": false,
+      "name": "2.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T02:20:56Z",
+      "tag": "2.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:27cdfb75076e92e8b5a46b39b86c193e5d8fbc6b065a03de68b101de284d5bd2",
+          "name": "main.js",
+          "size": 838825
+        },
+        {
+          "digest": "sha256:73ad844c5d1074c03e0b20bb138cad41f4988ac2e448488a23fecdb3f5e063b1",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:70f065bb85359dfc9648c41d8af7bb4ad016d60144475f326bd0fc8ea4dab4f4",
+          "name": "styles.css",
+          "size": 41200
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* release: 2.4.0 — sprint timer overlay redesign by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/73\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.3.2...2.4.0",
+      "draft": false,
+      "name": "2.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T01:31:45Z",
+      "tag": "2.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ea40ccbf4027428393a652d7a05ee81d9fb30769c69a4d13cc6fd339d85ae3ea",
+          "name": "main.js",
+          "size": 832572
+        },
+        {
+          "digest": "sha256:fbcb17267e57133a7d15b33ad4889a2615046aa2349e4876232e93ccc859dac5",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:18aad1aa0d4801968094f126c1b50b41a64af8c854dbd23466c253d71b43b3ce",
+          "name": "styles.css",
+          "size": 40645
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* chore: release 2.3.2 (re-release to fix update detection) by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/72\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.3.1...2.3.2",
+      "draft": false,
+      "name": "2.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T19:26:31Z",
+      "tag": "2.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d1101709f86baaf8f15300810e57ecc94f1f92e29a3fe74fcb1e90241cc1f317",
+          "name": "main.js",
+          "size": 832572
+        },
+        {
+          "digest": "sha256:040f99766782a6673498eec2d70bf74602e05ee0b6661fad2b5c78f4d1b3f8db",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:18aad1aa0d4801968094f126c1b50b41a64af8c854dbd23466c253d71b43b3ce",
+          "name": "styles.css",
+          "size": 40645
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* docs: correct language count to 10 in CHANGELOG by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/69\n* docs: add context window management rules to CLAUDE.md by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/70\n* fix: open-in-sidebar-explorer silently fails when right sidebar is empty (2.3.1) by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/71\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.3.0...2.3.1",
+      "draft": false,
+      "name": "2.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T19:17:22Z",
+      "tag": "2.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:88199b8c3d5a465a29855db56e1979fb15fcfbd6fbced5b25dba4492e128bb2d",
+          "name": "main.js",
+          "size": 832817
+        },
+        {
+          "digest": "sha256:ff0505df9880ba697abd61522b5af0e902dacf5e032edbc233454b4504016c65",
+          "name": "main.js.bundle",
+          "size": 8993
+        },
+        {
+          "digest": "sha256:ae08b150d40602d23e4261c99c5c4ea02753a06b6fe545aff49dede5bb8d1eec",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:5ba88037a5e19d4038bbb06986b1546f26dfaa252e54e6e680cce9ec5314b422",
+          "name": "manifest.json.bundle",
+          "size": 8993
+        },
+        {
+          "digest": "sha256:18aad1aa0d4801968094f126c1b50b41a64af8c854dbd23466c253d71b43b3ce",
+          "name": "styles.css",
+          "size": 40645
+        },
+        {
+          "digest": "sha256:a06fcfedb66e3cef3a5356f3cb12b8aecb8a36fccfaaa1f58a299e92dfd2edec",
+          "name": "styles.css.bundle",
+          "size": 8993
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new in 2.3.0\n\n### Internationalization — 10 languages\n\nWriting Studio is now fully translated into 10 languages. The plugin automatically detects your Obsidian language setting and displays in the matching language, falling back to English for any unsupported locale.\n\n**Supported languages:** English · Arabic · Chinese (Simplified) · French · German · Japanese · Korean · Portuguese (Brazil) · Russian · Spanish\n\n**To switch languages:** Settings → General → Language in Obsidian. Restart required.\n\n### Changes\n\n- All plugin UI strings translated across every view, modal, and panel\n- Status badges and document type labels in the Targets Dashboard and Writing Binder now display in the active language\n- Word-count suffix adapts per language (e.g. 字, 語, 자, W)\n- i18n key-parity test suite added — CI catches missing translations automatically\n- README updated with table of contents and Language support section\n\n### Installation\n\nDownload \\main.js\\, \\manifest.json\\, and \\styles.css\\ from this release and copy them to \\<vault>/.obsidian/plugins/obsidian-writing-studio/\\.",
+      "draft": false,
+      "name": "2.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T01:27:57Z",
+      "tag": "2.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:517be00c07196b50abbfdbbf6d9d67f4817939c283a5e0745b40524e0a8f0584",
+          "name": "main.js",
+          "size": 290431
+        },
+        {
+          "digest": "sha256:81b5979844455bffb34d71d9a3b3e4da1ee5d3d46a41e717796b671873725ed1",
+          "name": "main.js.bundle",
+          "size": 8669
+        },
+        {
+          "digest": "sha256:f238b10e5555cc2bf83f37ea15190969a21eaa16df2e0bc520aa0f565a4919d5",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:6f81e2e84492e0d3092306054ae0b44fc6b28f68ec13b9af3fc5dd31ec948d34",
+          "name": "manifest.json.bundle",
+          "size": 8669
+        },
+        {
+          "digest": "sha256:18aad1aa0d4801968094f126c1b50b41a64af8c854dbd23466c253d71b43b3ce",
+          "name": "styles.css",
+          "size": 40645
+        },
+        {
+          "digest": "sha256:328ada2b50a148427feb6229729ae68c0c2faedac750c63c14447ae2b3dc6b2f",
+          "name": "styles.css.bundle",
+          "size": 8669
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Chore(deps): Bump github/codeql-action from 4.35.5 to 4.36.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/59\n* ci: sign release artifacts with cosign for OpenSSF Scorecard by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/60\n* chore: update SECURITY.md supported version to 2.2.x by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/61\n* test: add Jest unit test suite for OpenSSF Best Practices badge by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/62\n* docs: add OpenSSF Best Practices badge to README by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/63\n* feat: add npm run bump version bump script and release process docs by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/64\n* Bump version to 2.2.3 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/65\n* ci: add --yes flag to cosign sign-blob to suppress interactive prompt by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/66\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.2.2...2.2.3",
+      "draft": false,
+      "name": "2.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T01:35:25Z",
+      "tag": "2.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3928784c97c3669111d65aaf5ab59fd113502f94f9cfc24fb07d675ad89f5c76",
+          "name": "main.js",
+          "size": 290304
+        },
+        {
+          "digest": "sha256:6d0e079abf54a7052427cb95f8e84b4ceee14e396066c0667f6d2ff85ab3ae64",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:18aad1aa0d4801968094f126c1b50b41a64af8c854dbd23466c253d71b43b3ce",
+          "name": "styles.css",
+          "size": 40645
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new in 2.2.2\n\n### Added\n- Buy Me a Coffee support button added to the bottom of the **How to use** settings tab\n- Plugin logo and Buy Me a Coffee button added to README\n- ORCID iD badge added to README Security section\n\n## Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` and place them in your vault's `.obsidian/plugins/writing-studio/` folder.",
+      "draft": false,
+      "name": "Release 2.2.2 — Buy Me a Coffee button, logo, ORCID badge",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T01:34:15Z",
+      "tag": "2.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c8b5d9e2c3b8f36e77f71e3c1e2e89884257440e55a38dfbb2e118d289bce07d",
+          "name": "main.js",
+          "size": 289204
+        },
+        {
+          "digest": "sha256:ea003c7e0eac1d6a2b49bc8df3a9c4e1a97f5cf1c184c729b5c6b703f1647f69",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:1c6a5905aca012837cda97b7d08060653c23f55b35fb7e0019ffd1f1cb5a3042",
+          "name": "styles.css",
+          "size": 40497
+        }
+      ],
+      "author": "writerP-777",
+      "description": "## [2.2.1]\n\n### Fixed\n- Remove `fs` module from `EpubEngine` — EPUB binary now written via `vault.createBinary` / `vault.modifyBinary`, eliminating the \"Direct Filesystem Access\" community scorecard warning\n- Remove `!important` from `.ws-hidden` in `styles.css` — replaced with `body .ws-hidden` selector for equivalent specificity, eliminating the \"Avoid !important\" scorecard warning\n\n### Added\n- `scripts/fetch-plugin-guidelines.sh` (`npm run fetch:guidelines`) — downloads the current Obsidian plugin guidelines, developer policies, and submission requirements from the official GitHub source into `docs/obsidian-guidelines/`\n- `scripts/scorecard-check.sh` (`npm run check:scorecard`) — pre-commit hook that checks source files against the cached guidelines and community scorecard patterns; blocks on regressions, warns on accepted known patterns\n\n## What's Changed\n* Release 2.2.1 — remove fs module, scorecard pre-commit hook, UI text fixes by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/52\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.2.0...2.2.1",
+      "draft": false,
+      "name": "2.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T23:12:25Z",
+      "tag": "2.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bbfbcfe31bdbde83616a70fa4ee78a897b7de4f643a1d82760d1f7abef9c631f",
+          "name": "main.js",
+          "size": 289090
+        },
+        {
+          "digest": "sha256:0680851b65a9a7ff337a08151d757e05fa35d2ba0a8be3db936d9d91b34770e6",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:1088d7d8c3b802edb0dab1afb14192319efd644455d9000f1ccc30d60adbd7c3",
+          "name": "styles.css",
+          "size": 40603
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Chore(deps-dev): Bump eslint-plugin-obsidianmd from 0.2.9 to 0.3.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/41\n* Chore(deps): Bump actions/checkout from 4.3.1 to 6.0.2 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/39\n* Chore: pin codemirror versions to match Obsidian runtime by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/47\n* Chore(deps-dev): Bump @types/node from 25.7.0 to 25.9.1 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/44\n* Fix: update EpubEngine types for fflate 0.8.3 compatibility by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/48\n* Chore(deps): Bump github/codeql-action from 4.35.4 to 4.35.5 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/43\n* Chore(deps): Bump fflate from 0.8.2 to 0.8.3 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/42\n* Release 2.2.0 — binder improvements, file scan, UI text consistency by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/51\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.1.12...2.2.0",
+      "draft": false,
+      "name": "2.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T15:04:41Z",
+      "tag": "2.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4aafb384198422ad587e243d1ddc88b137ca4720b3f33866c5e7bd504d55bcaa",
+          "name": "main.js",
+          "size": 281356
+        },
+        {
+          "digest": "sha256:ad1046e379e61415a00d302f0a79405a2e836b5fca67d0c43116d0fb926dac82",
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:1088d7d8c3b802edb0dab1afb14192319efd644455d9000f1ccc30d60adbd7c3",
+          "name": "styles.css",
+          "size": 40603
+        }
+      ],
+      "author": "writerP-777",
+      "description": "## Fixed\n\n- Replaced 18 `!important` declarations in `styles.css` with higher-specificity selectors — eliminates 18 community plugin scorecard CSS warnings\n  - Typography Mode overrides now use `body.writing-studio-typography` prefix (specificity `0,2,1`), beating theme selectors at `0,2,0` without `!important`\n  - Launcher button overrides now use `body .ws-launcher` prefix (specificity `0,1,2`), beating theme `.workspace button` at `0,1,1`\n\n## Changed\n\n- Added GitHub all-releases download count badge to README\n\n## What's Changed\n* chore: bump version to 2.1.12 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/38\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.1.11...2.1.12",
+      "draft": false,
+      "name": "2.1.12",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T17:01:46Z",
+      "tag": "2.1.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e3b29a575b108d4eff8bbb5ac05457f2e40c8a1e0b1bfe3863220abc0f97c241",
+          "name": "main.js",
+          "size": 281247
+        },
+        {
+          "digest": "sha256:bfccc00b798858dfb733493eb17af8ea22a8176020b8678b51b901f1da15222f",
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:116b745f5783b62ba8f1bd4625d1c557ddad5c10321b254f6c71e716e711efda",
+          "name": "styles.css",
+          "size": 41244
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Docs: add direct advisory URL to SECURITY.md for scorecard by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/35\n* Fix: replace activeWindow timer calls with window.* for scorecard by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/36\n* Release: Writing Studio 2.1.11 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/37\n\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.1.10...2.1.11",
+      "draft": false,
+      "name": "2.1.11",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T22:07:01Z",
+      "tag": "2.1.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:49135c0313ae2279cced0ae610467f35217d5964a4c041c8b0b568a74aa86109",
+          "name": "main.js",
+          "size": 281294
+        },
+        {
+          "digest": "sha256:36b11c29720a8ef1c262833bf2ec2c42fbcefcc3e73dbe81df2e84e0efe62555",
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:116b745f5783b62ba8f1bd4625d1c557ddad5c10321b254f6c71e716e711efda",
+          "name": "styles.css",
+          "size": 41244
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Create dependabot-auto-merge.yml by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/16\n* Chore(deps-dev): Bump builtin-modules from 3.3.0 to 5.1.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/10\n* Chore(deps): Bump actions/setup-node from 4.4.0 to 6.4.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/2\n* Chore(deps): Bump actions/upload-artifact from 4.6.2 to 7.0.1 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/3\n* Chore(deps): Bump github/codeql-action from 3.35.3 to 4.35.3 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/4\n* Chore(deps-dev): Bump typescript from 4.7.4 to 6.0.3 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/5\n* Chore(deps): Bump ossf/scorecard-action from 2.4.0 to 2.4.3 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/6\n* Chore(deps-dev): Bump esbuild from 0.17.3 to 0.28.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/7\n* Chore(deps-dev): Bump tslib from 2.4.0 to 2.8.1 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/9\n* Docs: add CHANGELOG.md covering all releases from 2.1.0 to 2.1.9 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/17\n* Chore: add Pocock agent workflow scaffolding and track CLAUDE.md by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/25\n* Chore: add session notes rule to CLAUDE.md by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/26\n* Chore: remove unused @typescript-eslint devDependencies by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/27\n* Chore(deps): Bump actions/checkout from 4.3.1 to 6.0.2 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/18\n* Chore(deps): Bump github/codeql-action from 4.35.3 to 4.35.4 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/20\n* Chore(deps-dev): Bump @types/node from 18.19.130 to 25.7.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/19\n* Chore(deps-dev): Bump builtin-modules from 5.1.0 to 5.2.0 by @dependabot[bot] in https://github.com/writerP-777/obsidian-writing-studio/pull/23\n* Docs: add CONTEXT.md domain glossary and architecture overview by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/28\n* CI: add signed release workflow with Sigstore build provenance by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/29\n* Chore: remove main.js from version control by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/30\n* Docs: add CII Best Practices baseline-1 badge to README by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/31\n* CI: restrict workflow-level token permissions to {} across all workflows by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/32\n* Docs: fix CII badge to use baseline image URL by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/33\n* Release: Writing Studio 2.1.10 by @writerP-777 in https://github.com/writerP-777/obsidian-writing-studio/pull/34\n\n## New Contributors\n* @dependabot[bot] made their first contribution in https://github.com/writerP-777/obsidian-writing-studio/pull/10\n\n**Full Changelog**: https://github.com/writerP-777/obsidian-writing-studio/compare/2.1.9...2.1.10",
+      "draft": false,
+      "name": "2.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T13:09:53Z",
+      "tag": "2.1.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0132ac3f2c413abf05b7e7dbb28bf64df0c2cca5193dd4b155c0a483159b9b68",
+          "name": "main.js",
+          "size": 432536
+        },
+        {
+          "digest": "sha256:3186f414fe15cc2ca73c0a22720bb116681be8af803773799f813535105cf380",
+          "name": "manifest.json",
+          "size": 345
+        },
+        {
+          "digest": "sha256:d28ef48514dca13ec7338324defa74679d1ccf0556890ecbc4fd668de01ca32c",
+          "name": "styles.css",
+          "size": 40602
+        }
+      ],
+      "author": "writerP-777",
+      "description": " ## What's changed\r\n\r\n  - Fixed sentence case on six UI labels (mode switcher, binder, sprint timer, folder sidebar) to meet Obsidian plugin\r\n  store requirements\r\n  - Updated ESLint config to resolve rule conflict between local linter and the Obsidian review bot\r\n\r\n  **No new features. No settings or data affected. Safe to update.**",
+      "draft": false,
+      "name": "Writing Studio 2.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T13:25:14Z",
+      "tag": "2.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2083dcd231bee5e780546291ebc53833bd379b3dad8c5f89b0085f104b8c6c42",
+          "name": "main.js",
+          "size": 423426
+        },
+        {
+          "digest": "sha256:a658131b91be3dd34865283a57cf4f8761234e9a68f11478f85b7772cf0e24a3",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:d28ef48514dca13ec7338324defa74679d1ccf0556890ecbc4fd668de01ca32c",
+          "name": "styles.css",
+          "size": 40602
+        }
+      ],
+      "author": "writerP-777",
+      "description": " ## What's changed\r\n\r\n  This release resolves all issues flagged by the ObsidianReviewBot during community plugin review:\r\n\r\n  - Removed a disallowed `eslint-disable` directive comment\r\n  - Corrected sentence-case for UI strings in the mode switcher, sprint controls, launcher buttons, and export modal\r\n  - Command name \"Publish to wordpress\" updated to comply with Obsidian linting rules\r\n\r\n  No user-facing functionality has changed.",
+      "draft": false,
+      "name": "Writing Studio 2.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T01:27:48Z",
+      "tag": "2.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1001aac7910b2b9a659c0431cebce96f1de4c431b89f854551fb1f8092d28f91",
+          "name": "main.js",
+          "size": 432584
+        },
+        {
+          "digest": "sha256:e5ee38a4b9e62b8f7b61ae096b1cc96068efb13f8b9cf557a4b489d169c7ad9f",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:d28ef48514dca13ec7338324defa74679d1ccf0556890ecbc4fd668de01ca32c",
+          "name": "styles.css",
+          "size": 40602
+        }
+      ],
+      "author": "writerP-777",
+      "description": "What's new in 2.1.7\r\n\r\n  New features\r\n\r\n  - Session word count — tracks words written in the current Obsidian session, shown in\r\n   the Launcher\r\n  - Daily writing log — sprint summaries automatically appended to your Daily Note\r\n  - Manuscript export — export projects to PDF, DOCX, RTF, HTML, and EPUB via Pandoc\r\n  - Mode status bar — active writing mode (Draft, Edit, Review) shown in the Obsidian\r\n  status bar\r\n  - Project word count goal — set and track a total word count target per project\r\n  - Folder sidebar explorer — enhanced folder navigation with breadcrumb trail and file\r\n   browser\r\n\r\n  Fixes\r\n\r\n  - Corrected sentence case on several UI strings flagged by ObsidianReviewBot\r\n  - Fixed \"Publish to WordPress\" command capitalisation\r\n\r\n  Security\r\n\r\n  - Added CodeQL, OpenSSF Scorecard, and ESLint GitHub Actions workflows — every push\r\n  and PR is now scanned automatically\r\n  - All workflow dependencies pinned to commit SHAs\r\n  - Dependabot enabled for npm and GitHub Actions\r\n  - Pre-commit hook runs ESLint (blocking); pre-push hook runs full CodeQL scan (blocks\r\n   on HIGH/CRITICAL findings)\r\n  - Fixed YAML frontmatter backslash escaping in FrontmatterManager\r\n  - Replaced Math.random() UUID generation with crypto.randomUUID() in the EPUB engine\r\n\r\n  Installation\r\n\r\n  Download main.js, manifest.json, and styles.css from this release and copy them to\r\n  <vault>/.obsidian/plugins/obsidian-writing-studio/.",
+      "draft": false,
+      "name": "Writing Studio 2.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T22:32:02Z",
+      "tag": "2.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c8a3882b9f5723224cb039b42b3e4d54993f6a953bb5617851ff68be25ee98ee",
+          "name": "main.js",
+          "size": 405500
+        },
+        {
+          "digest": "sha256:f175e4df9960da3e0e4e566466c120545b10944098170981dd133d72ec5d9c82",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:34bd265769b583cc8946db240de12d344f55dbba6150789f7fcfa3457f0368a0",
+          "name": "styles.css",
+          "size": 37424
+        }
+      ],
+      "author": "writerP-777",
+      "description": " ## What's New in 2.1.6\r\n\r\n  ### Folder Sidebar Explorer — Major Update\r\n\r\n  **Search**\r\n  Search your folders and files directly from the sidebar. Type a query and press Enter to search both file and folder\r\n  names as well as the full text content of Markdown and text files. Results appear instantly with matched terms\r\n  highlighted. Content matches display a text snippet showing exactly where in the file the term was found. Frontmatter\r\n  is excluded from content search to prevent false positives from YAML fields.\r\n\r\n  **Sort**\r\n  A sort dropdown lets you control how folders and files are ordered:\r\n  - Folders first, A–Z (default)\r\n  - Folders first, Z–A\r\n  - Name A–Z\r\n  - Name Z–A\r\n  - Newest modified first\r\n  - Oldest modified first\r\n\r\n  **Insert Selection to Editor**\r\n  When previewing a file in the sidebar, text is now selectable. Highlight any passage and click the **↩ Insert\r\n  selection** button to insert it at the cursor position in your active editor — useful for pulling quotes, references,\r\n  or passages from source files without leaving your draft.\r\n\r\n  **Hover Info Tooltips**\r\n  Hover over any file or folder in the sidebar to see an information card:\r\n  - **Files** — last modified date and time, file size, word count\r\n  - **Folders** — total file count, subfolder count\r\n\r\n  Word count reflects document body only (frontmatter excluded) and loads from Obsidian's file cache.\r\n\r\n  ---\r\n\r\n  ### Documentation\r\n  The README and the in-app **How to Use** tab have been updated to document all new Folder Sidebar Explorer features.",
+      "draft": false,
+      "name": "Writing Studio 2.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T15:59:40Z",
+      "tag": "2.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c6e49cecc1c96fae1eeff7c0126da2461397e4e09753eff25a7b22b7241202dc",
+          "name": "main.js",
+          "size": 384739
+        },
+        {
+          "digest": "sha256:7ff3b5839c482b969cb9ea83628219d08e7ad844d7ecb411cc61f57730aba54b",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:85bd09893f2cfb1bcc08437aa6c908e6d42778643ba5eacaf0e75f09319183cd",
+          "name": "styles.css",
+          "size": 33472
+        }
+      ],
+      "author": "writerP-777",
+      "description": " ### Fixed\r\n  - All inline JavaScript style assignments replaced with CSS classes (Obsidian guidelines compliance)\r\n  - All unhandled promises now properly awaited or handled with `void`\r\n  - Eliminated TypeScript `any` casts — replaced with specific types throughout\r\n  - Sentence case applied consistently across all UI text, settings, and notices\r\n  - Settings tab headings follow Obsidian conventions\r\n  - `normalizePath()` applied to all vault file paths, including Move to Research in Binder\r\n  - Removed unnecessary `async` from methods with no `await`\r\n  - Promise return types corrected where `void` was expected\r\n  - Settings headings use correct `setHeading()` pattern\r\n\r\n  ### Internal\r\n  - ESLint config updated with Obsidian plugin ruleset (`eslint-plugin-obsidianmd`)\r\n  - Full compliance pass against Obsidian community plugin review requirements",
+      "draft": false,
+      "name": "Writing Studio 2.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T22:22:05Z",
+      "tag": "2.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3bd1a42624c146fa7ee46de18941f5928a52fa767fb99a39aa842d3efbaa4ee6",
+          "name": "main.js",
+          "size": 384665
+        },
+        {
+          "digest": "sha256:581179a69d95580a962212c8db049cf7b720b36602c675c881443e9c5c3c3832",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:85bd09893f2cfb1bcc08437aa6c908e6d42778643ba5eacaf0e75f09319183cd",
+          "name": "styles.css",
+          "size": 33472
+        }
+      ],
+      "author": "writerP-777",
+      "description": " What's new in 2.1.4\r\n\r\n  Typography font picker\r\n  Right-click inside the editor while Typography Mode is active to access a new Typography font → menu. All available fonts are listed with a checkmark on the active selection.\r\n  Changes apply instantly without opening settings.\r\n\r\n  Typography fonts now work for all users\r\n  Font files were previously referenced locally and never reached installed users. Fonts are now loaded from Google Fonts and work for everyone out of the box. An internet\r\n  connection is required on first use per font; fonts are cached afterward and work offline.\r\n\r\n  Open on startup toggle\r\n  A new Open on startup setting in Settings → General controls whether the Writing Studio Launcher opens automatically when Obsidian loads. Previously this was always on with no\r\n  way to disable it.\r\n\r\n  Single ribbon icon\r\n  Only the feather icon (Open writing studio) now appears in the ribbon. All other feature icons that were being added automatically have been removed.\r\n\r\n  Grouped context menus\r\n  All Writing Studio items in every right-click menu are now grouped under a Writing studio options heading, keeping them organized and separate from Obsidian's built-in options.\r\n\r\n  \"Add to writing project\" project picker\r\n  Right-clicking a file and choosing Add to writing project now opens a modal with a dropdown listing all your projects, so you can choose which project to add the file to.\r\n\r\n  In-settings documentation\r\n  A new How to use tab in Settings renders the full plugin documentation inline, so instructions are always available without leaving Obsidian. The content stays automatically in\r\n  sync with the README on every build.\r\n\r\n  Updated README\r\n  Full documentation rewrite covering all features, updated workflows, font options table, project template details, and accurate context menu and command references.",
+      "draft": false,
+      "name": "Writing Studio 2.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T16:11:46Z",
+      "tag": "2.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:264834b716c0b1e97927a983c2f1b7058eb0d466b7940916c94b380116f80454",
+          "name": "main.js",
+          "size": 361937
+        },
+        {
+          "digest": "sha256:45522afd70e3b0ab948316fd7cd2f738db6f99aa9614d454c7d53b9f3022703c",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:6953bc3ac634e9a923b7e16edd0e0b0dbf7f856d2d6925e637738cca89d7923c",
+          "name": "styles.css",
+          "size": 37813
+        }
+      ],
+      "author": "writerP-777",
+      "description": "### Fixes\r\n- Fixed sentence case across all UI text strings\r\n- Resolved unhandled promise warnings\r\n- Fixed promises returned where void return was expected\r\n- Replaced `any` types with proper TypeScript types\r\n- Removed inline styles in favor of CSS classes\r\n- Removed unnecessary async from methods with no await expression\r\n- Fixed settings heading conventions",
+      "draft": false,
+      "name": "Writing Studio 2.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T17:47:40Z",
+      "tag": "2.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f250456acae06d6f6fbe5e5d118ac0fab39d74e63d8be82ba811be2ab34aeaf2",
+          "name": "main.js",
+          "size": 361909
+        },
+        {
+          "digest": "sha256:9f7e53e649959da1b700f54ade93f7b56fb5d3f863a1a1bdc72d948bc0f1c603",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:16fe2d31c8d2fa14f896b1ed47df496ba0fb629999aa9b3934d150e27c78ed3d",
+          "name": "styles.css",
+          "size": 37789
+        }
+      ],
+      "author": "writerP-777",
+      "description": "Resolved all required issues flagged by the Obsidian plugin review bot",
+      "draft": false,
+      "name": "Writing Studio 2.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T01:46:29Z",
+      "tag": "2.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2980814d51b95b30385315ae5c60d164972976fea66d3869aff837bb40cfacf3",
+          "name": "main.js",
+          "size": 364820
+        },
+        {
+          "digest": "sha256:ee91f8725f7fed426b1746623ef9040bfb32278b042ee718446f091fb34045d5",
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:64d20e618a3b73ebbe33f824224297fe603560452bb133ff1d5b9e9bb8248120",
+          "name": "styles.css",
+          "size": 34235
+        }
+      ],
+      "author": "writerP-777",
+      "description": "Fixed plugin id, name, and description to comply with Obsidian community plugin submission requirements.",
+      "draft": false,
+      "name": "Writing Studio 2.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-03T21:22:03Z",
+      "tag": "2.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:024a812d3f422c854d21193f8a88f4a5eb3b69d22ac39d347954115e917cc3b5",
+          "name": "main.js",
+          "size": 364829
+        },
+        {
+          "digest": "sha256:b09659b592af8184723f77e9316aa3371a1a3ff3b3851eb998d387e0eb900676",
+          "name": "manifest.json",
+          "size": 431
+        },
+        {
+          "digest": "sha256:64d20e618a3b73ebbe33f824224297fe603560452bb133ff1d5b9e9bb8248120",
+          "name": "styles.css",
+          "size": 34235
+        }
+      ],
+      "author": "writerP-777",
+      "description": "Initial public release of Obsidian Writing Studio.\r\n\r\nFeatures include Focus Mode, Writing Binder, Sprint Timer, Typography Mode, WordPress publishing, Folder Sidebar Explorer, Export Engine, and more.",
+      "draft": false,
+      "name": "Obsidian Writing Studio 2.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-03T20:28:00Z",
+      "tag": "2.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "writerp-777/obsidian-writing-studio"
+}

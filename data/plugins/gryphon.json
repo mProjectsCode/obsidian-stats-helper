@@ -1,0 +1,506 @@
+{
+  "author": "polleoai",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Bring AI to your vault — with guardrails at runtime.",
+  "errors": [],
+  "id": "gryphon",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "POLLEO.AI",
+    "authorUrl": "https://www.polleo.ai",
+    "description": "Bring AI to your vault — with guardrails at runtime.",
+    "id": "gryphon",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.0.0",
+    "name": "Gryphon",
+    "version": "2.2.0"
+  },
+  "name": "Gryphon",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:16bf512c53211b014842a3783f7a216687709a4edf54358f42cf27df1d6d9f1c",
+          "name": "main.js",
+          "size": 1383280
+        },
+        {
+          "digest": "sha256:bdfd27969c7416c878600f6c3e710fda3021a45c50aa8bdc7a19d896bbe844d1",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "name": "styles.css",
+          "size": 30464
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n\n- **Centralized model registry.** Pricing tables, dropdown labels, and per-model metadata (context window, cold-start budgets, legacy-alias migrations, Codex-CLI subset) now live in a single source of truth (`packages/provider-config/src/registry.js`). Per-vendor pricing files (`pricing/openai.js`, `pricing/google.js`, plus the new `pricing/anthropic.js`) and plugin-shell tables derive from it. *(No user-visible behaviour change.)*\n\n### Added\n\n- **Probe-before-commit discipline.** Two scripts (`scripts/probe-model.sh`, `scripts/probe-all-models.sh`) let maintainers confirm any model id resolves against the live vendor API before adding it to the registry. Catches the \"announcement-only SKU\" failure mode that bit `gemini-3.5-flash` in the v2.1 → v2.2 window.\n\n### Removed\n\n- Inline `MODEL_PRICES` / `MODEL_ALIAS` declarations from per-vendor pricing files and the plugin's `constants.js`. All four are derived from the registry now.\n\n",
+      "draft": false,
+      "name": "Gryphon 2.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T00:28:14Z",
+      "tag": "2.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0f8ebc253b23fca14d98b13c4aaaee19b484a83dcc296b3f1735b9b8c8a63da9",
+          "name": "main.js",
+          "size": 1360674
+        },
+        {
+          "digest": "sha256:679db8ee337126894bcf91dd6e4b25790146663ae515078248492cdcd63d6c4b",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "name": "styles.css",
+          "size": 30464
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added — context budget UX (the 2.0 arc)\n\nThis major version turns the context meter from a passive after-the-fact readout into a decision-support surface that tells you what your next prompt will cost *before* you send it, breaks down where the bytes are going when you want to know, and offers one-click recovery when the budget is tight. Driven by a real user incident where a short command hit \"Prompt is too long\" with the context meter sitting at 0%, leaving no actionable next step. Tested on macOS, Linux, and Windows.\n\n- **Concrete model IDs replace aliases.** The model dropdown now lists Haiku 4.5, Sonnet 4.6, Opus 4.6, and Opus 4.7 by name. Previously the dropdown carried generic `sonnet` / `opus` labels that resolved to whatever the CLI defaulted to on the user's machine — which differed by install vintage and silently changed under maintenance. A one-shot migration upgrades existing settings on first load.\n- **\"Used\" meter no longer reads 0% after overflow.** When the API rejects a send with \"Prompt is too long\", the meter now pegs to 100% and the error message names the active model, its window size, and whether the bloat is conversation history (recoverable via `/compact`) or system prompt (needs a larger-window model or memory cleanup).\n- **\"Next\" projection chip.** A second chip next to the existing \"Used\" meter shows what the next send is projected to cost — before you send it. Turns yellow at 80%, red at 95%, and at 95% shows a confirm modal with recovery suggestions (switch model, `/compact`, `/clear`). For Anthropic SDK mode the projection uses an exact token count from the model (free, no charge); for CLI mode and other providers it uses a heuristic estimator. Both adapt to the user's actual memory and skill load by learning the delta over the last 20 turns and applying it to future projections automatically.\n- **Click either chip for a per-source breakdown.** Opens a modal that breaks the projected total into built-in system prompt, tool schemas, each loaded CLAUDE.md / AGENTS.md, the MEMORY.md index, other memory files, conversation history, and your current input — with one-click access to `/compact`, `/clear`, and `/memory`.\n- **`/memory` slash command.** Audits the auto-memory directory for the active vault. Lists every file with size and age, highlights anything older than 90 days as an archive candidate (configurable via `memoryArchiveAgeDays`), and moves the selection to a sibling `memory-archive/` directory that the model doesn't scan. The MEMORY.md index gets matching entries commented out so the index stays consistent. A 5-second toast offers Undo.\n- **Obsidian REST API access policy (CLI mode).** Blocks WebFetch calls to the Obsidian REST API plugin on loopback by default — a guardrail against the model enumerating the vault one URL at a time when a single grep would answer the same question. A toolbar chip lets the user flip per session; when enabled, a warning toast fires the first turn a session crosses 50 REST GETs. Settings tab exposes both the default and the threshold.\n- **Opt-out toggles in Settings:**\n  - \"Use exact token counts (SDK mode)\" — disable to keep all pre-send context computation strictly local\n  - \"Confirm before overflow sends\" — disable to skip the 95% confirm modal\n  - \"Block Obsidian REST API access\" — flip the default the toolbar chip starts from each session\n\n### Compatibility\n\n- Settings migrate automatically on first load — no user action required. Old `sonnet` / `opus` aliases map to their current concrete equivalents (Sonnet 4.6 / Opus 4.7). The migration is logged once in the dev console.\n- New settings keys default to safer-by-default values; an existing user upgrading from 1.6.2 sees the same behaviour they had, plus the new chips and the `/memory` command. Behaviour changes that affect a sent prompt are gated behind the toggles above.\n- Test count: 1133 (up from 1056 in 1.6.2).\n- Cross-platform: smoke-tested on macOS, Linux, and Windows.\n\n",
+      "draft": false,
+      "name": "Gryphon 2.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T00:00:13Z",
+      "tag": "2.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:95f6b7e7f79684492439b93f701487b19f764641f6307522d29ff1c28f05b21d",
+          "name": "main.js",
+          "size": 1330288
+        },
+        {
+          "digest": "sha256:7ffe9b5825140d101aae6069ab44f4a4876141792de121b12736c1ea0ac3b623",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "name": "styles.css",
+          "size": 27995
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed — release pipeline + contact channel\n\n- **Install zip is no longer attached to releases.** Obsidian's Community Plugins installer only consumes `main.js`, `manifest.json`, and `styles.css` — the optional install zip was flagged as an ignored asset by the v1.6.1 scorecard scan (Recommendation, 2026-05-17). The `.github/workflows/release.yml` workflow now builds, attests, and uploads only those three files; the `Build install zip` step and its sigstore attestation entry are removed. Internal docs (`scripts/publish-release.sh` fallback instructions, `docs/maintainer-workflows.md` Playbook GH-3, gotcha bullet) updated to match.\n- **User-facing contact email is now `support@polleo.ai`.** `SECURITY.md` vulnerability reporting address, the README's new Contact section, the `package.json` author field, and the internal Playbook GH-2 / Playbook GH-5 redirect instructions all point at `support@polleo.ai`. The previous `gryphon@polleo.ai` alias still resolves but is no longer the canonical channel — `support@` is brand-stable across any future product rename.\n\n### Unchanged\n\n- **No code, behavior, or UI change.** Same plugin bundle semantics, same features, same 1056-test surface. The release pipeline change affects only how artifacts ship; the contact email change affects only where users find the inbox.\n- **Git commit author identity** in the public release pipeline remains `POLLEO.AI <gryphon@polleo.ai>` — that's the project's git authorship channel, not a user-contact channel, and rewriting it would invalidate the existing public commit history. Different concern, different scope.\n\n### Compatibility\n\n- Identical bundle, identical features, identical UI to v1.6.1. Test count: 1056 (unchanged).\n\n",
+      "draft": false,
+      "name": "Gryphon 1.6.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T20:00:52Z",
+      "tag": "1.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:45456c2e2d145456b64e48334ada8c447e3065a89c27f2b746d591abd3972231",
+          "name": "gryphon-1.6.1.zip",
+          "size": 391203
+        },
+        {
+          "digest": "sha256:95f6b7e7f79684492439b93f701487b19f764641f6307522d29ff1c28f05b21d",
+          "name": "main.js",
+          "size": 1330288
+        },
+        {
+          "digest": "sha256:0ca8a97d56dca415743e7734eb7280177b49786f5d1f1d0e9dd402b3dee4467a",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "name": "styles.css",
+          "size": 27995
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed — documentation\n\n- **README rewritten to reflect multi-provider support.** Six provider modes ship today (Anthropic API, OpenAI API, Google API, Claude Code CLI, Codex CLI, Gemini CLI) plus an Auto-detect mode, but the README's tagline + intro + Requirements + Provider Modes + Settings Reference sections all still framed Gryphon as Claude-only. Now they describe what actually ships:\n  - **Tagline**: \"AI chat for Obsidian. Talk to Claude, GPT, or Gemini...\"\n  - **Requirements**: lists all three API key options + the CLI option; user picks whichever they already have credentials for\n  - **Provider modes table**: expanded from 3 entries to 7 (all six providers + Auto)\n  - **Settings reference table**: expanded with OpenAI / Google / Codex / Gemini settings rows that have shipped since v1.2.0 but were never added to the README\n  - **Affiliation disclaimer**: now covers Anthropic, OpenAI, and Google rather than only Anthropic\n- **No code, binary, or behaviour change.** Same plugin, same features, same security guardrails. This release is purely a docs correction so the Obsidian Community Plugins directory page (which renders README.md from `polleoai/gryphon` HEAD) shows the correct multi-provider positioning to anyone discovering Gryphon in the directory.\n\n### Compatibility\n\n- Identical bundle, identical features, identical UI to v1.6.0. Test count: 1055 (unchanged).\n\n",
+      "draft": false,
+      "name": "Gryphon 1.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T03:26:54Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9e8258eaca08cb89f24ede5a821bd616a4feef256a8daea1a508901e2759c218",
+          "name": "gryphon-1.6.0.zip",
+          "size": 391202
+        },
+        {
+          "digest": "sha256:95f6b7e7f79684492439b93f701487b19f764641f6307522d29ff1c28f05b21d",
+          "name": "main.js",
+          "size": 1330288
+        },
+        {
+          "digest": "sha256:4ad6f7894dc833fa2e999e271d7a7548166667b01f941893348b68f28968a49b",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "name": "styles.css",
+          "size": 27995
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nThis release closes out Gryphon's Obsidian Community Plugins compliance work. v1.5.2 fixed the directory's automated scorecard (workspace build, CSS hygiene, README disclosures); v1.6.0 finishes the loop by making the release pipeline itself first-class — every future release is built in CI with sigstore build-provenance attestations on every asset — and cleans the build-log noise that v1.5.2's pnpm-compat `.npmrc` introduced.\n\nEnd-users see no behavior change. The bundle is identical, the features are identical, the UI is identical. What changed is how Gryphon ships and how it presents itself to Obsidian's automated checks.\n\n### Added — CI release pipeline (the v1.5.2 follow-through)\n\n- **`workflow_dispatch` trigger on the release workflow.** `.github/workflows/release.yml` now supports manual re-fires against an existing tag in addition to the automatic `push: tags:` trigger. The same code path serves both — a job-level `TAG_NAME` env resolves to `inputs.tag || github.ref_name`. Use case: when a tag-push event races the registration of a newly-introduced workflow file (GitHub's first-run timing — exactly what v1.5.2 hit), the maintainer can manually re-fire after the workflow registers. Sigstore attestation is preserved on the re-fire — no need to fall back to attestation-less local uploads.\n\n- **`Validate TAG_NAME shape` pre-step.** Runs before checkout. Rejects any value that doesn't match `^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[A-Za-z0-9.]+)?$` — strict semver, no leading zeros (per semver.org §2 and Obsidian's tag-naming rule). Defends against (a) typos in `workflow_dispatch` inputs, (b) any regex-metachar splice into the downstream `awk` CHANGELOG extractor. Verified against 21 input cases.\n\n- **\"Release ownership\" documentation block in the workflow header.** Spells out that the workflow OWNS the release body and named asset files for every tag it processes. Maintainers should not hand-edit release bodies — the next run reverts them.\n\n### Fixed — build-log hygiene + bash quoting\n\n- **`npm run build` is quiet again.** v1.5.2 shipped an `.npmrc` with `link-workspace-packages=true` and `prefer-workspace-packages=true` so pnpm 9.x (used by Obsidian's build-verification sandbox) could link workspace siblings locally. npm 11 doesn't recognize those keys and emitted six \"Unknown project config\" warnings on every install + build. v1.6.0 replaces the mechanism with `\"file:../<sibling>\"` entries directly in each workspace's `package.json` — both npm and pnpm honor those natively without any per-tool config. The `.npmrc` is removed.\n\n- **`scripts/notify-athena-release.sh` no longer crashes silently.** Line 55's `\"$VERSION…\"` (with a literal UTF-8 ellipsis) tripped bash variable-name parsing under `set -euo pipefail`, exiting with \"unbound variable: VERSION…\" before the consumer-dispatch fired. Now `\"${VERSION}…\"` with explicit brace delimiters. End-effect: post-release Athena notifications fire correctly again.\n\n### Changed — release-pipeline ergonomics\n\n- **`scripts/cut-public-release.sh`** post-push instructions now recommend `gh workflow run release.yml -f tag=<version>` as the primary fallback when the auto-fire doesn't run (preserves CI build + sigstore attestation). The previously-recommended `gh release create` is reframed as a last-resort \"CI itself is broken\" fallback, with a note that locally-uploaded assets cannot be sigstore-attested.\n\n### Internal\n\n- **`pnpm-lock.yaml` is gitignored.** npm's `package-lock.json` remains the source of truth for reproducible installs (it's what Athena's auto-bump and the CI release workflow use); pnpm regenerates its own lockfile from `pnpm-workspace.yaml` on every install. The trade-off — pnpm's transitive resolution isn't pinned — is bounded because npm pins everything anyway, and is documented inline in `.gitignore`.\n\n- **`scripts/release-smoke-test.sh`** header comment updated to reflect the post-`.npmrc` mechanism — `pnpm-workspace.yaml` + per-package `file:` deps as the load-bearing pair.\n\n### Compatibility\n\n- **No behavior change for end users.** Identical bundle, identical features, identical UI.\n- **No new code dependencies.** Same SDKs, same versions, same `node_modules` shape.\n- **First release built in CI.** v1.5.2 was uploaded manually because its workflow file was introduced in the same commit as the tag — GitHub's first-run timing prevented the tag-push from firing it. v1.6.0's tag-push fires the now-registered workflow end-to-end, producing sigstore build-provenance attestations for `main.js`, `manifest.json`, `styles.css`, and the install zip. The \"2 release assets missing GitHub artifact attestation\" scorecard warning that lingered on v1.5.2 clears once Obsidian's scanner moves to v1.6.0.\n- **Test count**: 1055 (v1.5.2) → 1055 (this release; no test code touched).\n- **Workspace dep declarations**: `\"@gryphon/<sibling>\": \"*\"` → `\"@gryphon/<sibling>\": \"file:../<sibling>\"` in `packages/plugin/package.json` and `packages/provider-runtime/package.json`. Downstream consumers vendoring this repo as a submodule (Athena) install via npm; npm honors `file:` paths the same way it honored the previous `*` matching, so the consumer path is unchanged.\n\n",
+      "draft": false,
+      "name": "Gryphon 1.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T20:00:15Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0f98784b9b93a6b72767d399ba098bafb35274be8bd8c11b1c64927a3e10baa1",
+          "name": "gryphon-v1.5.2.zip",
+          "size": 391204
+        },
+        {
+          "digest": "sha256:95f6b7e7f79684492439b93f701487b19f764641f6307522d29ff1c28f05b21d",
+          "name": "main.js",
+          "size": 1330288
+        },
+        {
+          "digest": "sha256:c0d3d017a61d514f59c0efbab7700029bb1d894f27176ae441528e4295fa2594",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "name": "styles.css",
+          "size": 27995
+        }
+      ],
+      "author": "jivebug",
+      "description": "\n### Fixed\n\n- **Plugin can now be built from a clean checkout with `pnpm install`.** Obsidian's Community Plugins scorecard runs build verification in a pnpm-based sandbox; pnpm refuses the `workspaces` field in `package.json` and requires its own `pnpm-workspace.yaml`, so the v1.5.1 build crashed before installing `esbuild`. The pnpm-workspace file is now present and the workspace packages link locally via `.npmrc`. Both `npm install` and `pnpm install` produce identical bundles.\n- **Stylesheet rewritten to drop `!important`, `:has()`, and a duplicate selector.** Specificity is now provided via parent-class scoping (`.gryphon-container ...`) and a `[data-type=\"gryphon-view\"]` attribute selector rather than `!important`. No visual regression in the standalone test vault.\n- **README placeholder hunt.** Template-flavoured variable syntax (`<drive>`, `{vault}`, `<escaped-cwd>`, `<vault>`) is gone — replaced with concrete examples or natural-language paths. Install instructions, contributing notes, and the privacy table updated to match the post-launch state.\n\n### Added\n\n- **GitHub Actions release workflow.** `.github/workflows/release.yml` builds the plugin in CI on each tag push, attaches sigstore build-provenance attestations to every release asset (`main.js`, `manifest.json`, `styles.css`, install zip), and creates the GitHub Release using the matching CHANGELOG section as the body. Replaces the manual `gh release create` + asset upload step that ran on the maintainer's local machine. The local `cut-public-release.sh` still drives the dev-side commit, tag, and push; everything from there happens in CI.\n- **Smoke test exercises the pnpm path.** `scripts/release-smoke-test.sh` now runs `pnpm install + pnpm run build` (if pnpm is installed locally) in addition to the existing npm-path check. The Obsidian-sandbox failure mode is now load-bearing in the release gate.\n- **Explicit network endpoint and system-identity disclosures** in `README.md` enumerate the full surface that bundled SDKs (`@anthropic-ai/sdk`, `openai`, `@google/genai`) could contact, called out per provider mode. Identity reads (`os.hostname`, `os.userInfo`, env-var lookups for CLI auto-detection) are documented for transparency. None of this changes runtime behavior.\n\n### Compatibility\n\n- **No behavior change for end users.** Same APIs, same UI, same chat surface, same vault tools.\n- **No new code dependencies.** `@gryphon/*` workspace packages still resolve via `\"*\"` and an `.npmrc` so the npm install path Athena uses is unchanged.\n- **Athena auto-bump path verified.** `release-smoke-test.sh` runs the npm-install + require-each-legacy-path sequence Athena depends on; v1.5.2 ships only after that gate passes.\n- **Test count**: 1056 → 1056 (the v1.5.1 back-compat-shims regression test continues to pass; no new tests added in this release).\n\n",
+      "draft": false,
+      "name": "Gryphon 1.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T17:24:43Z",
+      "tag": "1.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:74ba6b20e1321edd38e8a24490f9adc5bd826ffbe4cb86a9f5ef30dd90ad26b6",
+          "name": "main.js",
+          "size": 1330291
+        },
+        {
+          "digest": "sha256:bd1b609a8b3f301d8ad7f69c1cb306ce3083b524a61d9c9955d8fc74ef266b8b",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "Patch release. **No end-user behavior change** — if you install Gryphon via the Obsidian Community Plugins directory, BRAT, or manual zip, this release changes nothing for you.\n\n## What's fixed\n\nv1.5.0's three-axis workspace split moved every source file under `packages/{plugin,protect,provider-runtime,provider-config}/src/...`. That broke any project that vendors Gryphon as a git submodule and imports from the legacy `vendor/gryphon/src/...` paths to subclass `GryphonChatView` or wrap pricing tables.\n\nv1.5.1 ships a thin re-export layer at the pre-v1.5 paths so submodule consumers can advance their pin without code changes. See `src/README.md` in the repo for the contract surface and the criteria under which the shims will eventually be retired (a future major-version boundary).\n\n## Who needs this\n\n- Vendor-submodule consumers: **yes** — bumping your pin to v1.5.1 unblocks builds that broke on v1.5.0.\n- Everyone else (Community Plugins, BRAT, manual install): **no action needed**.\n\n## Internal\n\n- Regression test (`back-compat-shims.test.js`) pins the contract surface so future internal refactors fail in CI before they can ship a broken release.\n- New `scripts/release-smoke-test.sh` exercises the snapshot from a consumer's perspective; `cut-public-release.sh` now invokes it as a hard pre-flight gate.\n- Test count: 1053 → 1056. Build size unchanged at ~1299 KB.\n\nFull diff: https://github.com/polleoai/gryphon/compare/1.5.0...1.5.1",
+      "draft": false,
+      "name": "Gryphon v1.5.1 — back-compat shims for submodule consumers",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T05:18:05Z",
+      "tag": "1.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:95f6b7e7f79684492439b93f701487b19f764641f6307522d29ff1c28f05b21d",
+          "name": "main.js",
+          "size": 1330288
+        },
+        {
+          "digest": "sha256:871622688c62d0e2a75086c2096e0d968910496920bab7af6a57bb027b8cbb7a",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "v1.5.0 is a foundation-laying release: end-user behavior is unchanged from v1.4.2; the codebase is now organized into separately-versioned internal layers, preparing for upcoming protection-content updates and standalone library distribution.\n\n## What you'll notice\n\nNothing — every v1.4.x feature works identically. Settings persist normally; no migration needed. Hooks fire identically. Permission modes work identically. The Obsidian Community Plugins update flow handles it.\n\n## What changed under the hood\n\nProvider configuration, the LLM runtime, and the runtime-protection layer now live in independently-evolvable code units. This unblocks two upcoming things: continuously-updated protection content (think antivirus signature updates but for AI tool calls), and standalone library use of the protection layer outside Obsidian.\n\n## Compatibility\n\n- No breaking changes for end users.\n- No change for downstream submodule consumers — the shipping artifacts (\\`main.js\\`, \\`manifest.json\\`, \\`styles.css\\`, \\`hooks/\\`) are at the same paths as before.\n- Test count: 1052 → 1053 (same coverage, redistributed across four internal workspaces).\n\nFree, MIT, local-first. While feeling safe.\n\nFull changelog: https://github.com/polleoai/gryphon/blob/main/CHANGELOG.md",
+      "draft": false,
+      "name": "Gryphon v1.5.0 — internal architectural reorganization",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T00:21:59Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1368d03a63445a9928eaa594b82dbcd521b26a44a10e7f3dc58f53d73102326a",
+          "name": "main.js",
+          "size": 1260541
+        },
+        {
+          "digest": "sha256:50b85f453f8bcaddaa8da7444b13cda785390999a7b44198313d483a5aaeb3c2",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "## What's new\n\n### Fixed\n- **Cross-provider flag drops are now visible in DevTools.** When `extraProcessArgs` flags belonging to a different provider get filtered out, the resulting log line uses `console.error` instead of `console.warn`. DevTools hides `warn`-level messages by default but shows `error`, so a consumer plugin's silently-no-op'd `--allowedTools` is no longer silent.\n- **`extraProcessArgsByProvider` typoed keys now warn loudly.** A consumer plugin that wrote `claude_code` (underscore) or `claudeCode` (camel) instead of the correct `claude-code` used to silently no-op for every spawn. The chat view now validates keys at construction and logs a `console.error` for any unknown provider key.\n- **Settings → Connection timeout: out-of-range input no longer silent.** Typing a number outside the 5–600 range used to be ignored without feedback. A status line below the field now shows the validation result (\\`✓ Override active: 90s\\` / \\`✗ Invalid: must be 5–600 seconds. Currently using: 60s\\`) and the effective timeout in real time.\n- **\\`saveSettings\\` resilient to a listener that throws.** A buggy listener subscribed to \\`gryphon:settings-changed\\` could previously reject \\`saveSettings\\`, surfacing a \"settings save failed\" toast even though the persisted data was already on disk. The trigger is now wrapped in \\`try/catch\\`.\n- **Settings reactive surface logs API drift.** If a future Obsidian release renames \\`app.workspace.trigger\\`, the silent guard used to absorb the change. The guard now logs a \\`console.error\\` for the API-drift case while staying silent in headless test environments.\n\n### Internal (no user-visible impact)\n- **\\`extra-args-filter\\` recognizes the \\`--flag=value\\` inline form** — previously, a consumer using the inline form (e.g. \\`--allowedTools=Bash,Read\\`) would have that flag pass through to non-Claude providers because the whole token wasn't in any provider's flag set.\n- **Misleading comment in \\`factory.js\\`** about the per-provider filter clarified.\n\n### Compatibility\n- Test count: 1047 → 1052. Build size: 1229.6 KB → 1231.0 KB. No breaking changes.\n\n---\n\n**Install**: download \\`main.js\\`, \\`manifest.json\\`, and \\`styles.css\\` and place them in \\`<your-vault>/.obsidian/plugins/gryphon/\\`. Reload Obsidian and enable Gryphon in Settings → Community plugins.\n\n[Full changelog](https://github.com/polleoai/gryphon/blob/1.4.2/CHANGELOG.md) · [Repo](https://github.com/polleoai/gryphon)",
+      "draft": false,
+      "name": "v1.4.2 — Review-pass fixes (observability + resilience)",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T03:08:56Z",
+      "tag": "1.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c2fb3f9264fe01935af565c4bee9cd9878fe414a06ece7b6b118d2b99b3220da",
+          "name": "main.js",
+          "size": 1259089
+        },
+        {
+          "digest": "sha256:800963012a4927171cfbd894f2cba333357c3d8988f062d27c1b01d00971eecf",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "## What's new\n\n### Fixed\n- **Cross-provider flag leakage no longer breaks non-Claude spawns** ([#39](https://github.com/polleoai/gryphon/issues/39)): when a consuming plugin passed Claude-Code-only flags (e.g. \\`--disable-slash-commands\\`, \\`--allowedTools\\`, \\`--append-system-prompt\\`) via \\`extraProcessArgs\\`, switching the active provider to Codex CLI or Gemini CLI used to fail the spawn with \"unexpected argument.\" Each provider now filters out flags that belong to other providers before spawning, with a one-line warning so consumers see what was dropped.\n- **Toolbar badges now refresh when settings change** ([#40](https://github.com/polleoai/gryphon/issues/40)): the model / effort / permission badges used to keep showing the value that was active when the chat panel was first opened. Switching provider or model in Settings — Gryphon's own Settings tab or a consumer plugin's — now updates all three badges immediately. No more \"reload Obsidian to see the right model\" workaround.\n\n### Added\n- **\\`extraProcessArgsByProvider\\` option for clean per-provider arg routing**: alongside the legacy \\`extraProcessArgs\\` (which now filters cross-provider flags), consuming plugins can pass \\`extraProcessArgsByProvider: { 'claude-code': [...], 'codex-cli': [...], 'gemini-cli': [...] }\\`. Each provider receives only its own bucket — no filtering needed because each entry is already addressed to the right provider. Recommended path for new consumer integrations.\n- **\\`gryphon:settings-changed\\` workspace event**: every \\`plugin.saveSettings()\\` now fires this event after persisting. Consumer plugins that maintain their own settings-derived state can subscribe to invalidate their caches automatically.\n\n### Compatibility\n- Test count: 1029 → 1047. Build size: 1227.0 KB → 1229.6 KB. No breaking changes.\n\n---\n\n**Install**: download \\`main.js\\`, \\`manifest.json\\`, and \\`styles.css\\` and place them in \\`<your-vault>/.obsidian/plugins/gryphon/\\`. Reload Obsidian and enable Gryphon in Settings → Community plugins.\n\n[Full changelog](https://github.com/polleoai/gryphon/blob/1.4.1/CHANGELOG.md) · [Repo](https://github.com/polleoai/gryphon)",
+      "draft": false,
+      "name": "v1.4.1 — extraArgs filter + reactive settings badges",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T02:22:33Z",
+      "tag": "1.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:48417d360eb867d0108b246fad8936be49f8c18da77b1d89d82dc7edcfa494d4",
+          "name": "main.js",
+          "size": 1256411
+        },
+        {
+          "digest": "sha256:1de4e21ad45b0abdc9149dd7fda4ff92f70dd8b17a00e47d02c2becc3f9bbcc3",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "## What's new\n\n### Added\n- **Configurable connection timeout** ([#38](https://github.com/polleoai/gryphon/issues/38)): the \"wait for first token\" budget is now model-adaptive — Haiku 30 s, Sonnet 60 s, Opus 120 s, Opus 1M 180 s; non-Anthropic providers stay at 60 s. Resolves false-abort cases on Opus 1M and other slow-cold-start configurations where the previous fixed 60 s deadline aborted before the model produced its first token.\n- **Connection timeout override setting**: new \"Connection timeout (seconds)\" field under Settings → Gryphon. Leave empty to use the model-adaptive default; set 5–600 to override for slow networks or unusually large prompts.\n\n### Changed\n- The connection-timeout error bubble now shows the actual elapsed time (e.g. \"Connection timed out after 90s\") and points users at the new setting in addition to suggesting a faster model.\n\n### Internal (no user-visible impact)\n- Build pipeline simplified for downstream consumers: Gryphon now publishes through tagged releases only; consumer projects pull released tags via standard git submodule semantics rather than receiving silent overlays from the dev tree. Improves reproducibility for downstream builds.\n\n### Compatibility\n- **Test count**: 1017 → 1029.\n- **Build size**: 1225.6 KB → 1227.0 KB.\n- **No breaking changes**: existing settings carry forward; the new `connectionTimeoutMs` setting defaults to \"use the model-adaptive default.\"\n\n---\n\n**Install**: download `main.js`, `manifest.json`, and `styles.css` and place them in `<your-vault>/.obsidian/plugins/gryphon/`. Reload Obsidian and enable Gryphon in Settings → Community plugins.\n\n[Full changelog](https://github.com/polleoai/gryphon/blob/1.4.0/CHANGELOG.md) · [Repo](https://github.com/polleoai/gryphon)",
+      "draft": false,
+      "name": "v1.4.0 — Connection timeout config + vendoring rework",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T23:37:36Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e2b91251ef1fe7448c0c95d33172ff3e166a6cd079d624409762c663514fcf9f",
+          "name": "main.js",
+          "size": 1255013
+        },
+        {
+          "digest": "sha256:c5bdf0d9d11eebb88eafc06d2aa26c218ea124e51724577c7b5b4ef7114eb5d0",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:82bd9e1ab4f3e9af8df083fae89f80d7cd4272b179458c80770b0859f0dfcad3",
+          "name": "styles.css",
+          "size": 27692
+        }
+      ],
+      "author": "jivebug",
+      "description": "## What's new\n\nA polish pass closing ten user-filed issues + three new behaviors. No breaking changes.\n\n### Three new behaviors\n\n- **`/new` command** ([#28](https://github.com/polleoai/gryphon/issues/28)) — clear context for the next message without losing your visible chat. Switch Provider mid-thread without forwarding earlier turns to a different vendor; renders as a thin centered divider.\n- **Status notice on Provider change** ([#29](https://github.com/polleoai/gryphon/issues/29)) — when you switch Provider in Settings, a one-line notice flashes naming the new provider and reporting how many prior turns will seed the next message. When the conversation exceeds the cap, it tells you exactly how many older turns are dropped.\n- **Auto-retry on rate-limit** ([#34](https://github.com/polleoai/gryphon/issues/34)) — opt-in Settings toggle. When on AND the rate-limit response includes a precise retry-after delay (≤ 60 s), Gryphon automatically resubmits your prompt once after the window expires. Off by default; per-day quotas never auto-retry.\n\n### Seven bug fixes\n\n- **Rate-limit messages preserve your typed prompt** ([#34](https://github.com/polleoai/gryphon/issues/34))\n- **Aborted prompts stay reachable via up-arrow after reload** ([#36](https://github.com/polleoai/gryphon/issues/36))\n- **Context-window measurement no longer over-counts on tool-heavy turns** ([#31](https://github.com/polleoai/gryphon/issues/31)) — auto-compact was firing 3-5× too early on agentic turns\n- **Deny notices keep the model's prior text in view** ([#32](https://github.com/polleoai/gryphon/issues/32))\n- **Repeated protected-command attempts always show the modal** ([#33](https://github.com/polleoai/gryphon/issues/33)) — third try used to skip\n- **Internal context wrapper no longer leaks into user bubbles** ([#35](https://github.com/polleoai/gryphon/issues/35)) — defenses at every read, write, and render path; existing chat history migrates automatically\n- **Conversation cap scales with the model's context window** ([#30](https://github.com/polleoai/gryphon/issues/30)) — 200K models stay at 100 turns, 1M models get 500\n\n### Quieter polish\n\n- Friendlier message when a turn ends without text (replaces the bare \\\"No response requested.\\\" placeholder with an explanation + recovery hint)\n- Cold-start parse cost deferred for unused provider SDKs ([#26](https://github.com/polleoai/gryphon/issues/26))\n\n### Compatibility\n\n- Test count: 950 → 1016\n- Build size: 1217.5 KB → 1225.6 KB\n- No breaking changes — existing settings, chat history, and provider configs carry forward without action\n\n---\n\n## Install\n\nDrop the three attached files into `<vault>/.obsidian/plugins/gryphon/`, then reload Obsidian (Cmd/Ctrl+P → \\\"Reload app without saving\\\").",
+      "draft": false,
+      "name": "Gryphon v1.3.1 — bug-fix pass",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T23:45:01Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8c1616859958d02aa8f26b64d8606289eed7a2a4aa958783ad14c9d1a282d1c1",
+          "name": "main.js",
+          "size": 1246748
+        },
+        {
+          "digest": "sha256:3a303b4ae7c9cab304eb5eb7ced3baa89a263d8c18172410b9115a81297298b0",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:6eb978b6aa2df4a9406a080336b2bcad77a9d3615fa7a97b46945b9e56a247be",
+          "name": "styles.css",
+          "size": 27234
+        }
+      ],
+      "author": "jivebug",
+      "description": "## Highlights\n\n- **Two new local-CLI providers**: Codex CLI and Gemini CLI join Claude Code CLI. Settings → Provider now offers all three.\n- **Full Windows + Linux support** across all CLI providers. Previously CLI modes were Mac-first; v1.3 brings every provider to parity on macOS + Windows + Linux for all six modes (3 CLI + 3 SDK).\n- **Universal deny copy**: every provider now produces identical descriptive text when a protected pattern matches:\n\n  > The Gryphon plugin is blocking the deletion of `/tmp/x.md` because it matches one of your protected patterns (destructive operation).\n  >\n  > To allow it:\n  > - Open Obsidian → Settings → Gryphon → Protected commands\n  > - Uncheck the matching pattern\n  > - Ask me again\n\n  Wording adapts to the operation (deletion / write / edit / execution) and surfaces the file or command name.\n- **Optimized dispatch to different LLM models**: under-the-hood improvements unify how Gryphon talks to each provider. Result: identical guardrail behaviour, identical deny copy, identical chat polish across every model and CLI.\n\n## Reliability\n\n- **Stale-session recovery** for Codex + Gemini CLI: when a stored session id is no longer on disk, Gryphon transparently starts fresh and re-sends instead of erroring out.\n- **Protected-operation modal always re-prompts** on retries — every destructive attempt requires explicit user approval, no silent auto-deny from a prior decision.\n- **Friendlier rate-limit messages** on Gemini distinguish per-day caps from per-minute throttling.\n\n## Quality of life\n\n- Chat rendering polish: duplicate paragraphs collapsed, draft summaries fold into a *Show earlier draft* disclosure when the model regenerates after a refusal.\n- Snake_case tool names from SDK providers (`read_file`, `run_shell_command`) render as friendly natural-language status labels in the toolbar.\n- Bubble prefix changed from Unicode chevron to ASCII `>` for universal Linux font compatibility.\n\n## Compatibility\n\n- macOS + Windows + Linux full pass on all six providers (Claude Code CLI, Codex CLI, Gemini CLI, Anthropic API, OpenAI API, Google API).\n- Linux kernels older than 5.13 trigger an automatic sandbox-fallback for Codex CLI (with a console warning); Gryphon's protected-pattern gate remains the authoritative check.\n- 562 → 950 unit tests this release.\n\nSee `CHANGELOG.md` for the full list.",
+      "draft": false,
+      "name": "v1.3.0 — Codex CLI + Gemini CLI providers, cross-platform parity",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T03:40:20Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0917b1a0b885d0e6b0b2efd49352a1a3972869b194efa3f16d3556bcf20e5373",
+          "name": "main.js",
+          "size": 1194043
+        },
+        {
+          "digest": "sha256:fef31ec3682871acc32594f5270e96b56f10f60a7c4d1467c766f47c969496c3",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:e14c8c17afa057a70f2c0bd31fe9910fa63b0cecc60c12c67a8e6d2f1143ee82",
+          "name": "styles.css",
+          "size": 26077
+        }
+      ],
+      "author": "jivebug",
+      "description": "## Highlights\n\n**Two new providers** alongside Anthropic API and Claude Code:\n\n- **OpenAI API** — supports the GPT-5 family (gpt-5, gpt-5-mini, gpt-5.4, gpt-5.4-mini, gpt-5.5), GPT-4 family, and o-series reasoning models. Default is gpt-5.4-mini.\n- **Google Gemini API** — supports Gemini 2.5 Pro / 2.5 Flash / 2.5 Flash-Lite + 3.x previews. Default is gemini-2.5-flash. Free-tier-eligible via [Google AI Studio](https://aistudio.google.com/apikey).\n\nBoth providers route tool dispatch through the same `executeTool` registry as Anthropic mode, so the **two-axis security model** (permission modes × protected-pattern rules) fires identically across all four providers.\n\n## What's new\n\n- Settings → Provider dropdown adds \"OpenAI API\" and \"Google Gemini API\" alongside Anthropic and Claude Code.\n- **Test key buttons** for OpenAI and Google API keys — one-click validation before running an actual chat turn.\n- **Per-provider model dropdowns**: the toolbar's model picker and Settings → Default model both adapt to the active provider's native model list.\n- **Cross-vendor aliases**: switching providers mid-conversation keeps you on a sensible model. `sonnet` maps to `gpt-5.4-mini` (OpenAI) or `gemini-2.5-flash` (Google) automatically.\n- **Auto-correcting model id**: when you switch providers, the persisted model id auto-resets to the new provider's default if it's not a recognized id. No more cross-vendor 400 errors.\n\n## Notable fixes\n\n- **#24 — silent data loss in SDK chat history**: a bug in `filterMessagesForSave` was dropping OpenAI / Gemini turns from `chat-history.json` because the SDK-detection prefix check only matched legacy anthropic-api session ids. Reclassified from P3 latent to P0 once a user reported wild bug.\n- **#25 — cross-provider drift**: Provider switch left a stale model id, causing the toolbar / Settings dropdown to disagree with the runtime API call.\n- **#27 — cross-vendor model id leak**: a stale `settings.model` from a prior provider could reach the new provider's API and 400.\n- Internal cross-provider stability fixes during code-review rounds (F23-1, F24-1).\n\n## Test coverage\n\n- Test count: **562 → 746** (+184). New test files cover translator round-trips, pricing math, streaming normalization, multi-turn tool dispatch, and attack-detector parity for both new providers.\n\n## Known v1.3 follow-ups\n\nFiled as enhancement issues for v1.3:\n- [#31](https://github.com/polleoai/gryphon/issues/31) — SDK providers overstate context-window usage in tool-use turns (P2 bug)\n- [#30](https://github.com/polleoai/gryphon/issues/30) — extend auto-compact to seed-time + scale cap by context window\n- [#28](https://github.com/polleoai/gryphon/issues/28) / [#29](https://github.com/polleoai/gryphon/issues/29) — `/new` command + Provider-change status notice\n- [#26](https://github.com/polleoai/gryphon/issues/26) — lazy-require provider SDKs (bundle weight reduction)\n\n## Bundle size\n\n374.9 KB → 1166.1 KB (+791 KB; combined `openai` + `@google/genai` SDK weight). Lazy-require deferral is queued for v1.3 (#26) — should reclaim ~700 KB for users on a single provider.\n\n## Install\n\nAvailable via **Settings → Community plugins → Browse → Gryphon**, or download `main.js` + `manifest.json` + `styles.css` from this release and drop into `<vault>/.obsidian/plugins/gryphon/`.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v1.2.0 — OpenAI + Gemini providers",
+      "prerelease": false,
+      "publishedAt": "2026-05-03T04:19:44Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:61cf3c9faad77e99388348ea5ecb1d805c8ed85d57a9ef6007eaa39ef890bd8a",
+          "name": "gryphon-v1.1.4.zip",
+          "size": 142913
+        },
+        {
+          "digest": "sha256:aa0a04003c9c53d04737d09e5758ac848eddee30813a600e2837d51c5c8194fe",
+          "name": "main.js",
+          "size": 378662
+        },
+        {
+          "digest": "sha256:f0bf53eaf50b0af4c1d0f6430a635da0d992882d91fc71ff123e4d77805ef4eb",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:e14c8c17afa057a70f2c0bd31fe9910fa63b0cecc60c12c67a8e6d2f1143ee82",
+          "name": "styles.css",
+          "size": 26077
+        }
+      ],
+      "author": "jivebug",
+      "description": "## Highlights\n\nv1.1 is the first feature release after the v1.0 launch. It bundles five point releases:\n\n- **v1.1.0** — SDK auto-compact at 95% with status-line warning at 80%, persistent thinking blocks, type-while-streaming queue, caret-into-view fix\n- **v1.1.1** — Slash command parity pass: `/btw`, `/version`, `/status`, `/doctor`, `/recap`, `/init`, `/feedback`, `/permissions`\n- **v1.1.2** — Visual-line-aware ArrowUp/Down in the chat input\n- **v1.1.3** — Structured `/context` output with used/remaining/headroom and a dual-side meter tooltip\n- **v1.1.4** — ArrowUp/Down: let the browser decide line boundaries (replaces three iterative heuristic fixes)\n\n## Detailed changelog\n\n## [1.1.4] — 2026-04-29\n\n### Fixed\n\n- [#14](https://github.com/polleoai/gryphon/issues/14): final fix for the multi-line ArrowUp/Down behavior introduced in v1.1.2 (#10). The mirror-element / scrollHeight heuristics tried in v1.1.2 had edge cases that flipped between two failure modes (single-line recall couldn't walk forward in history, OR multi-line per-row navigation broke). Replaced the entire scheme with a **post-frame `selectionStart` check**: don't preventDefault on ArrowUp/Down, let the browser try to move the caret, then in the next animation frame check whether `selectionStart` actually changed. Moved → native row navigation worked. Didn't move → boundary row → walk history. The browser is the only authoritative source for \"where is the caret on a wrapped textarea?\" — its behavior IS the answer. No mirror, no geometry math, no theme/font/cap-state dependencies. ~15 lines of logic instead of ~80. History walk fires ~16ms later than synchronously — imperceptible.\n\n## [1.1.3] — 2026-04-29\n\n### Changed\n\n- [#11](https://github.com/polleoai/gryphon/issues/11): `/context` is now a structured system bubble with full information density: used + remaining tokens (both K-counts and percentages), headroom to the 80% warning threshold, headroom to the 95% auto-compact threshold (SDK) or CC's auto-compact line, message counts, and a phase-appropriate options list. Previous one-line status flash is replaced.\n- Context-meter button tooltip now shows **both** framings — `Context: 32K used · 168K remaining (16% of 200K)` — so users see used and remaining at a glance without typing /context. The displayed % stays \"used\" (rising) for consistency with the meter color thresholds and the v1.1.0 design.\n\n## [1.1.2] — 2026-04-29\n\n### Fixed\n\n- [#10](https://github.com/polleoai/gryphon/issues/10): chat-input ArrowUp/ArrowDown now respects soft-wrapped and pasted multi-line content. Initial implementation used mirror-element geometry; final architecture (post-frame `selectionStart` check) lands in v1.1.4.\n\n## [1.1.1] — 2026-04-29\n\nSlash-command parity pass ([#9](https://github.com/polleoai/gryphon/issues/9)) plus three queue-recovery bugs found in v1.1.0 testing.\n\n### Added — slash commands\n\n- **`/btw <text>`** — side-note context injection. Wraps the message with a \"no expansion needed; reply in one sentence\" preamble so the model logs the note as future context without burning tokens on a long reply. User bubble renders dimmed + italic with a \"· btw\" tag.\n- **`/version`** — quick one-line system info: plugin version, provider, model, OS, Obsidian version.\n- **`/status`** — unified session-status panel: provider, model, effort, permissions, context usage, message count, cumulative cost, auto-compact state.\n- **`/doctor`** — diagnostics dump for bug reports: versions, provider availability, hook scripts present, IPC status, network reachability test.\n- **`/recap`** — generate a conversation summary as a regular bubble without committing the compaction (no archive, no session reset).\n- **`/init`** — scaffold `Gryphon/MANUAL.md` template if missing; opens for editing. Won't overwrite an existing file.\n- **`/feedback [text]`** — modal with three options: GitHub issue (with diagnostic context prefilled), mailto contact@polleo.ai, or open issues page. Never auto-sends. Conversation content is never included unless the user pastes it.\n- **`/permissions`** — added to autocomplete (was already wired as alias of `/perm`).\n\n### Fixed — queue recovery\n\n- [#6](https://github.com/polleoai/gryphon/issues/6): queued prompts are no longer silently lost on stream timeout / error / stop. Texts survive in up-arrow recall, and the oldest queued text is restored to the input box for one-keystroke retry.\n- [#7](https://github.com/polleoai/gryphon/issues/7): `sendMessage` catch branch no longer auto-fires the next queued prompt after a visible error. The user gets a chance to react before queued sends dispatch.\n- [#8](https://github.com/polleoai/gryphon/issues/8): `lastSessionId` is no longer wiped on generic abort (timeout, network error). The next message resumes the same server-side session, preserving conversation context. Only the dedicated `onSessionExpired` callback (CC's \"No conversation found\" stderr) wipes.\n\n## [1.1.0] — 2026-04-28\n\nChat-input UX fixes (issues #2, #3, #4) and SDK auto-compact (issue #5).\n\n### Added\n\n- **SDK auto-compact at 95%** ([#5](https://github.com/polleoai/gryphon/issues/5)). When the conversation reaches 95% of the model's context window in Anthropic API mode, Gryphon now automatically summarizes the conversation and resets to a fresh session seeded with the summary — mirroring Claude Code's own auto-compaction in CLI mode. New `Auto-compact at 95% (SDK mode)` toggle in Settings (default on).\n- **Status-line warning at 80%**. A one-shot proactive notice fires when context utilization crosses 80% (with hysteresis at 75% so it re-arms after a compact). Wording is provider-aware: SDK names Gryphon's auto-compact, CC names Claude Code's. Replaces the previous 70% one-shot.\n- **Lag-failsafe**: if the SDK still returns `prompt is too long` despite our threshold check (e.g., a single tool-loop iteration ballooned history mid-turn), Gryphon now auto-compacts and retries the user's original message transparently.\n- **Emergency trim**: if the auto-compact's own summary turn overflows, Gryphon drops the oldest pairs from the SDK provider's history and retries the summary once.\n- **Persistent thinking blocks** ([#4](https://github.com/polleoai/gryphon/issues/4)). Extended-reasoning (\"thinking\") output from both providers is now captured, persisted in `chat-history.json`, and rendered as a collapsed `<details>` toggle (💭 Thinking) above each assistant response. Survives reload + Obsidian restart for both Anthropic API and Claude Code modes.\n- **Type-while-streaming + queue** ([#3](https://github.com/polleoai/gryphon/issues/3)). The chat input is no longer disabled while a turn streams. Sends made during streaming render an immediate dimmed \"queued\" bubble and dispatch one at a time after the current turn finalizes. Stop / `_cleanupStreamingState` clears the queue.\n\n### Fixed\n\n- **Chat-input caret-into-view** ([#2](https://github.com/polleoai/gryphon/issues/2)). Past the 150px cap the textarea is internally scrollable; the caret now follows arrow-key / Home / End / Page navigation instead of disappearing below the visible region. Implementation uses a hidden mirror-element to measure the caret's pixel y-offset, accounting for soft-wrapped lines.\n\n### Changed\n\n- Context-meter button color thresholds shift to match the new policy: **warn ≥ 80%, danger ≥ 95%**. Previous thresholds (warn ≥ 50%, danger ≥ 80%) were calibrated to a manual-only compact flow.\n- Manual `/compact` flow is unchanged — the auto path reuses the same machinery and skips the user-confirmation step.\n\n\n## Install\n\nDrop `main.js`, `manifest.json`, `styles.css`, and the `hooks/` directory into your vault's `.obsidian/plugins/gryphon/` folder, or unzip `gryphon-v1.1.4.zip` there. Reload Obsidian and enable Gryphon in Community Plugins.\n",
+      "draft": false,
+      "name": "Gryphon 1.1.4 — auto-compact, slash commands, chat-input UX",
+      "prerelease": false,
+      "publishedAt": "2026-05-01T22:45:30Z",
+      "tag": "1.1.4"
+    },
+    {
+      "assets": [],
+      "author": "jivebug",
+      "description": "## [1.1.3] — 2026-04-29\n\n### Changed\n\n- [#11](https://github.com/polleoai/gryphon/issues/11): `/context` is now a structured system bubble with full information density: used + remaining tokens (both K-counts and percentages), headroom to the 80% warning threshold, headroom to the 95% auto-compact threshold (SDK) or CC's auto-compact line, message counts, and a phase-appropriate options list. Previous one-line status flash is replaced.\n- Context-meter button tooltip now shows **both** framings — `Context: 32K used · 168K remaining (16% of 200K)` — so users see used and remaining at a glance without typing /context. The displayed % stays \"used\" (rising) for consistency with the meter color thresholds and the v1.1.0 design.\n\n\n## Install\n\nThis is a historical release. For the latest features and bug fixes, install **v1.1.4** instead. Drop `main.js`, `manifest.json`, `styles.css`, and `hooks/` into your vault's `.obsidian/plugins/gryphon/` and reload — runtime assets for v1.1.3 are not attached to this release page (BRAT will fetch the latest stable). To pin to v1.1.3 specifically, build from the source archive attached automatically by GitHub.\n",
+      "draft": false,
+      "name": "Gryphon 1.1.3 — structured /context output",
+      "prerelease": false,
+      "publishedAt": "2026-05-01T23:46:27Z",
+      "tag": "1.1.3"
+    },
+    {
+      "assets": [],
+      "author": "jivebug",
+      "description": "## [1.1.2] — 2026-04-29\n\n### Fixed\n\n- [#10](https://github.com/polleoai/gryphon/issues/10): chat-input ArrowUp/ArrowDown now respects soft-wrapped and pasted multi-line content. Initial implementation used mirror-element geometry; final architecture (post-frame `selectionStart` check) lands in v1.1.4.\n\n\n## Install\n\nThis is a historical release. For the latest features and bug fixes, install **v1.1.4** instead. Drop `main.js`, `manifest.json`, `styles.css`, and `hooks/` into your vault's `.obsidian/plugins/gryphon/` and reload — runtime assets for v1.1.2 are not attached to this release page (BRAT will fetch the latest stable). To pin to v1.1.2 specifically, build from the source archive attached automatically by GitHub.\n",
+      "draft": false,
+      "name": "Gryphon 1.1.2 — visual-line ArrowUp/Down (superseded by 1.1.4)",
+      "prerelease": false,
+      "publishedAt": "2026-05-01T23:46:26Z",
+      "tag": "1.1.2"
+    },
+    {
+      "assets": [],
+      "author": "jivebug",
+      "description": "## [1.1.1] — 2026-04-29\n\nSlash-command parity pass ([#9](https://github.com/polleoai/gryphon/issues/9)) plus three queue-recovery bugs found in v1.1.0 testing.\n\n### Added — slash commands\n\n- **`/btw <text>`** — side-note context injection. Wraps the message with a \"no expansion needed; reply in one sentence\" preamble so the model logs the note as future context without burning tokens on a long reply. User bubble renders dimmed + italic with a \"· btw\" tag.\n- **`/version`** — quick one-line system info: plugin version, provider, model, OS, Obsidian version.\n- **`/status`** — unified session-status panel: provider, model, effort, permissions, context usage, message count, cumulative cost, auto-compact state.\n- **`/doctor`** — diagnostics dump for bug reports: versions, provider availability, hook scripts present, IPC status, network reachability test.\n- **`/recap`** — generate a conversation summary as a regular bubble without committing the compaction (no archive, no session reset).\n- **`/init`** — scaffold `Gryphon/MANUAL.md` template if missing; opens for editing. Won't overwrite an existing file.\n- **`/feedback [text]`** — modal with three options: GitHub issue (with diagnostic context prefilled), mailto contact@polleo.ai, or open issues page. Never auto-sends. Conversation content is never included unless the user pastes it.\n- **`/permissions`** — added to autocomplete (was already wired as alias of `/perm`).\n\n### Fixed — queue recovery\n\n- [#6](https://github.com/polleoai/gryphon/issues/6): queued prompts are no longer silently lost on stream timeout / error / stop. Texts survive in up-arrow recall, and the oldest queued text is restored to the input box for one-keystroke retry.\n- [#7](https://github.com/polleoai/gryphon/issues/7): `sendMessage` catch branch no longer auto-fires the next queued prompt after a visible error. The user gets a chance to react before queued sends dispatch.\n- [#8](https://github.com/polleoai/gryphon/issues/8): `lastSessionId` is no longer wiped on generic abort (timeout, network error). The next message resumes the same server-side session, preserving conversation context. Only the dedicated `onSessionExpired` callback (CC's \"No conversation found\" stderr) wipes.\n\n\n## Install\n\nThis is a historical release. For the latest features and bug fixes, install **v1.1.4** instead. Drop `main.js`, `manifest.json`, `styles.css`, and `hooks/` into your vault's `.obsidian/plugins/gryphon/` and reload — runtime assets for v1.1.1 are not attached to this release page (BRAT will fetch the latest stable). To pin to v1.1.1 specifically, build from the source archive attached automatically by GitHub.\n",
+      "draft": false,
+      "name": "Gryphon 1.1.1 — slash-command parity pass + queue recovery",
+      "prerelease": false,
+      "publishedAt": "2026-05-01T23:46:25Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [],
+      "author": "jivebug",
+      "description": "## [1.1.0] — 2026-04-28\n\nChat-input UX fixes (issues #2, #3, #4) and SDK auto-compact (issue #5).\n\n### Added\n\n- **SDK auto-compact at 95%** ([#5](https://github.com/polleoai/gryphon/issues/5)). When the conversation reaches 95% of the model's context window in Anthropic API mode, Gryphon now automatically summarizes the conversation and resets to a fresh session seeded with the summary — mirroring Claude Code's own auto-compaction in CLI mode. New `Auto-compact at 95% (SDK mode)` toggle in Settings (default on).\n- **Status-line warning at 80%**. A one-shot proactive notice fires when context utilization crosses 80% (with hysteresis at 75% so it re-arms after a compact). Wording is provider-aware: SDK names Gryphon's auto-compact, CC names Claude Code's. Replaces the previous 70% one-shot.\n- **Lag-failsafe**: if the SDK still returns `prompt is too long` despite our threshold check (e.g., a single tool-loop iteration ballooned history mid-turn), Gryphon now auto-compacts and retries the user's original message transparently.\n- **Emergency trim**: if the auto-compact's own summary turn overflows, Gryphon drops the oldest pairs from the SDK provider's history and retries the summary once.\n- **Persistent thinking blocks** ([#4](https://github.com/polleoai/gryphon/issues/4)). Extended-reasoning (\"thinking\") output from both providers is now captured, persisted in `chat-history.json`, and rendered as a collapsed `<details>` toggle (💭 Thinking) above each assistant response. Survives reload + Obsidian restart for both Anthropic API and Claude Code modes.\n- **Type-while-streaming + queue** ([#3](https://github.com/polleoai/gryphon/issues/3)). The chat input is no longer disabled while a turn streams. Sends made during streaming render an immediate dimmed \"queued\" bubble and dispatch one at a time after the current turn finalizes. Stop / `_cleanupStreamingState` clears the queue.\n\n### Fixed\n\n- **Chat-input caret-into-view** ([#2](https://github.com/polleoai/gryphon/issues/2)). Past the 150px cap the textarea is internally scrollable; the caret now follows arrow-key / Home / End / Page navigation instead of disappearing below the visible region. Implementation uses a hidden mirror-element to measure the caret's pixel y-offset, accounting for soft-wrapped lines.\n\n### Changed\n\n- Context-meter button color thresholds shift to match the new policy: **warn ≥ 80%, danger ≥ 95%**. Previous thresholds (warn ≥ 50%, danger ≥ 80%) were calibrated to a manual-only compact flow.\n- Manual `/compact` flow is unchanged — the auto path reuses the same machinery and skips the user-confirmation step.\n\n\n## Install\n\nThis is a historical release. For the latest features and bug fixes, install **v1.1.4** instead. Drop `main.js`, `manifest.json`, `styles.css`, and `hooks/` into your vault's `.obsidian/plugins/gryphon/` and reload — runtime assets for v1.1.0 are not attached to this release page (BRAT will fetch the latest stable). To pin to v1.1.0 specifically, build from the source archive attached automatically by GitHub.\n",
+      "draft": false,
+      "name": "Gryphon 1.1.0 — chat-input UX + SDK auto-compact",
+      "prerelease": false,
+      "publishedAt": "2026-05-01T23:46:24Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dae7a17828eeefe4790b0cc5532cb9a65ad6c42985c58f5b9dd04820fcf24799",
+          "name": "main.js",
+          "size": 357475
+        },
+        {
+          "digest": "sha256:20fb84157ca0c9e153f2f201d7576a3ca6078b3a1c6285cfa2779dc9b49d8b35",
+          "name": "manifest.json",
+          "size": 258
+        },
+        {
+          "digest": "sha256:14832b7529ab93d02b2b5a8e3ed58d109d5946ca42a89e697ef53a3b5d161af8",
+          "name": "styles.css",
+          "size": 24275
+        },
+        {
+          "digest": "sha256:c3f35dde2dce7e66676691e1d93ce1095ca5672caada559afa86506c8441dc62",
+          "name": "versions.json",
+          "size": 23
+        }
+      ],
+      "author": "jivebug",
+      "description": "First stable release of Gryphon.\n\nThis project was briefly published as **Hermes** at v1.0.0 (2026-04-23) and renamed to **Gryphon** to avoid confusion with the gaining-mindshare Hermes agentic system. This Gryphon 1.0.0 release is the same code as the Hermes 1.0.0 release with a coordinated rename. The historical Hermes repo is archived at [polleoai/hermes](https://github.com/polleoai/hermes).\n\n## Were you using Hermes?\n\nThe Gryphon plugin id is different from Hermes (no Obsidian-side migration), so settings don't carry over automatically. Easiest path:\n\n1. Install Gryphon via BRAT (`polleoai/gryphon`) — installs alongside Hermes, no conflict\n2. **Before launching:** copy `.obsidian/plugins/hermes/data.json` → `.obsidian/plugins/gryphon/data.json` to preserve your API key, permission mode, and protected-pattern toggles\n3. Launch Gryphon — your existing `Hermes/` vault folder (skills, exports, MANUAL.md) will be auto-renamed to `Gryphon/` on first run\n4. Disable and uninstall Hermes from Settings → Community Plugins\n\n`data.json` is plain JSON; no encryption keys to worry about.\n\n## What Gryphon does\n\nChat with Claude inside your Obsidian vault. Read notes, edit files, run shell commands — with a **two-axis security model** that keeps protected patterns guarded even when auto-approve is on. Two providers: Anthropic API (default) or Claude Code subprocess (advanced).\n\nSee README.md for the full feature list, install instructions, and security model details.",
+      "draft": false,
+      "name": "Gryphon 1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T15:35:04Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "polleoai/gryphon"
+}

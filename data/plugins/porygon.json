@@ -1,0 +1,544 @@
+{
+  "author": "iuga",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Turn your notes into a conversation.",
+  "errors": [],
+  "id": "porygon",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "Esteban Del Boca",
+    "description": "Turn your notes into a conversation.",
+    "id": "porygon",
+    "isDesktopOnly": true,
+    "minAppVersion": "0.15.0",
+    "name": "Porygon",
+    "version": "0.9.0"
+  },
+  "name": "Porygon",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:9e67f079cc3b9b678b78937a5170651f56ce6fd3e47d480654fbabcd3f27bc5c",
+          "name": "main.js",
+          "size": 1397894
+        },
+        {
+          "digest": "sha256:f6acda9e7cc16b4f1e7cc3909c9c02603be1e297ce36cf612f1f7f2a89d0a052",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:1f3c0cb79c53e4f20bb7bffc5d09a6ef61271184f280050f9e0e24a894f2effd",
+          "name": "styles.css",
+          "size": 19114
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Refactors\r\n- **Split agent module and decoupled from Ollama** via a provider registry, enabling support for additional model providers.\r\n\r\n### Fixes\r\n- **Composer:** Close the mention popover when clicking outside (composer loses focus).\r\n- **Composer:** Show the accent shadow only on focus.\r\n\r\n### Chores\r\n- Added pre-commit hooks to run lint and build before each commit, preventing CI/CD failures.",
+      "draft": false,
+      "name": "0.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T13:06:17Z",
+      "tag": "0.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4d024dc55c791b563fc93f960dfd44ea484c8e7495e252c1d4bfa7e3c022eb81",
+          "name": "main.js",
+          "size": 1397603
+        },
+        {
+          "digest": "sha256:c9c0a1b8512ffbaedb857d3297b9e70cd11d815467fa6df1768d24cce630ef69",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:11ca1f150ff461ea21deaf018fb74edecd84037ec1868504d209bde52e10207f",
+          "name": "styles.css",
+          "size": 19078
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "When the user sends a message, the chat must smooth-scroll so the new user message sits at the very top of the chat container, with mentions + user message + thinking + tools + answer visible below it; the thinking block is just an inline (non-scrolling) collapsible component that expands freely as part of the message; if the streamed reply grows beyond the viewport the scroll naturally bottom-follows the new content with no empty space below; any explicit user scroll input cancels the auto-scroll and hands control fully back to the user.\r\n\r\nThe chat view must keep the UI responsive while the agent streams a reply, even on long threads: streamed content and thinking tokens have to render into the active bubble as markdown in real time, without ever re-rendering past messages, with live markdown updates coalesced per animation frame and serialized so the async `MarkdownRenderer.render` never races on the same target. \r\n\r\nThe \"Thinking...\" placeholder must appear immediately when the user sends, without waiting on the Ollama health check, and historical thinking bubbles must not pay markdown-render cost while collapsed. \r\n\r\nThe LangChain agent must be built once for the plugin lifetime (with per-turn system prompt injected dynamically) and rebuilt only when the user changes the Ollama host, chat model, or thinking setting, while preserving existing per-conversation checkpointing.\r\n\r\nWhen the thinking block was taller than the viewport, collapsing it on first answer delta shrank the message and left the streaming answer above the viewport. Re-pin the user message to the top so the answer fills the freed space below.\r\n\r\nPinned `uuid` to `^11.1.1` via npm `overrides` to remediate GHSA-w5hq-g745-h8pq (silent out-of-bounds writes in `v3`/`v5`/`v6`), since `@langchain/langgraph`, `langgraph-checkpoint`, and `langgraph-sdk` still pull vulnerable `uuid` versions transitively and no patched upstream release is available yet.",
+      "draft": false,
+      "name": "0.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T12:50:20Z",
+      "tag": "0.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a4c8474efe317f5286f51e6dfa63249341a945fef297b3ff4d56b018e190931",
+          "name": "main.js",
+          "size": 1383254
+        },
+        {
+          "digest": "sha256:718e5dc601312734667769293d539292a750e53e089458239a232967318cfe78",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:e7df43487df2e5329128ed3523a03690acb351c03bdbcaf3bf19b80840458dae",
+          "name": "styles.css",
+          "size": 18540
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Each onboarding step now shows a muted inline hint under the question (default URL for the host step, `ollama run` commands for the chat and embedding steps), and going back to a completed step re-shows its question instead of the saved value so the guidance stays visible. A new fourth step, **Experience**, exposes a single dropdown that derives `ollamaThinking`, `showToolUsage`, and `yolo` from a preset — Minimal, Balanced, Verbose (default), or YOLO — persisted in a new `experience` setting, and the default embedding model is now `qwen3-embedding`. Two bugs are also fixed: `RagIndexer` and `RagSemanticSearchService` compared settings against the same live reference and never detected post-onboarding changes, so the index never ran (they now snapshot the watched fields and short-circuit when no embedding model is set); and `save_memory` rejected `id: null` because its schema only allowed `string | undefined`, which now accepts `null` and treats it as \"append a new memory.\"\r\n",
+      "draft": false,
+      "name": "0.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T19:03:29Z",
+      "tag": "0.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:404b01a5357844de358390ba8ef8fa61b73e52f7f0a764a932a8a438a8a9b03d",
+          "name": "main.js",
+          "size": 1379705
+        },
+        {
+          "digest": "sha256:9fa16e73b7c7e016fb5295a2368f716a7eb9b59db786d3dfd65fa470c0cd83db",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:627262e76949e539e900261811b8be76178070ab7192a5950cb556713d87f078",
+          "name": "styles.css",
+          "size": 17935
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon now remembers things about you across sessions through a file-backed long-term memory stored in plugin settings. Entries live in a user-editable **Memories** textarea wrapped in `<memories>` tags, sorted by importance (high, medium, low) and recency, and the block is injected into the system prompt every turn (capped at the top 50 entries, with a note when older entries are skipped). A `save_memory` agent tool appends, replaces, or deletes entries by id; saves are silent. Timestamps are stored in UTC and the system prompt also exposes a `<context>` block with local datetime, UTC datetime, IANA timezone, and operating system. Memories are sanitized on every save and load so malformed lines never reach disk, and the textarea persists through Obsidian's debouncer to coalesce keystrokes. The chat and embedding model fields in settings are now dropdowns populated from the live Ollama model list, refreshed when the host changes and matching the onboarding UX. The legacy `current_timestamp` tool is removed since the same information now lives in the context block.\r\n",
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T17:46:45Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b8759722ba3fbeae56ceabdaa23c6e0271afe298e80d362de1d2d69f3442809",
+          "name": "main.js",
+          "size": 1374010
+        },
+        {
+          "digest": "sha256:6807980dde40e2299f852aefbdd0cd2c7586f78182f51ef929a5edf11d463978",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:e66ad54f415b7416c889bd57eeb9159f643da9610931a9b1679a5bedd0243022",
+          "name": "styles.css",
+          "size": 17825
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## QoL improvements\r\nPorygon's chat now communicates its state more honestly. While the agent is working, a subtle loading indicator at the top of the panel makes it clear whether it's your turn or Porygon's. The placeholder bubble shown right after you hit send is renamed from `Thinking...` to `Connecting...`, since the agent hasn't actually started thinking yet. The tool-usage panel is leaner too: each entry now shows just the intent, dropping the redundant tool name so the list reads like a clean activity log.\r\n",
+      "draft": false,
+      "name": "0.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-22T13:34:45Z",
+      "tag": "0.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4152e456e6b6720f3abaffd4a2d5358c7098229e8dd9570f1ea071967501f840",
+          "name": "main.js",
+          "size": 1373895
+        },
+        {
+          "digest": "sha256:24ea621ee4db30f7b0d5da4c9111c3ddadf364ca76c402e924359e909f0eb014",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:aa5524888dae0738791e5c19844479f4a1fef0f4d1aeba82fe581dd50176c2ff",
+          "name": "styles.css",
+          "size": 17580
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon can now pause mid-task and ask you a focused question when it genuinely needs your input, instead of guessing or producing a half-relevant answer. A small popover appears in the chat composer with the question and 2–4 short options; you can click an option, pick one with number keys or arrow keys plus Enter, type a free-form reply, or press Escape to let Porygon continue on its own. Once you answer, Porygon resumes exactly where it left off.\r\n\r\nThe same pause-and-ask flow also gates destructive vault actions: creating a folder, creating or editing a note, and renaming or moving files now prompt for **Approve** or **Deny**, and you can type a short free-form reason to deny with feedback so Porygon adjusts its next step. A new **YOLO mode** setting auto-approves these prompts when you want Porygon to move without interruptions, and the setting is read live so you can toggle it mid-conversation.\r\n\r\nThe `list` tool now returns folders alongside notes, so Porygon can find and act on folders by name. The selected option in the prompt uses your theme's accent color for clear contrast on both light and dark themes.",
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T17:07:04Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2e21eb467a82deb1aa9d578e0c7c100951d63c874ac67b74c5cf915efbdfa0ad",
+          "name": "main.js",
+          "size": 1366352
+        },
+        {
+          "digest": "sha256:6c33b5c84656247d0a03019c1da3e6410b05236d7cec8dc4b816051aaeea456a",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:b58600268d6e354f93fcfa44559f8bd512c3ca5052df82ef70b951fe78edf642",
+          "name": "styles.css",
+          "size": 15171
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon now uses a LangGraph `MemorySaver` checkpointer keyed by a per-session UUID so the agent remembers prior turns within a session without resending full history each call. Saved sessions store their metadata as Obsidian-native YAML frontmatter (`id`, `title`, and a flat `mentions:` list of vault paths) instead of a custom comment block, making it queryable through the Properties panel, Dataview, and Bases; on load, mentioned notes and folders are auto-resolved from their paths and re-injected as file context. **Breaking change:** session files saved before 0.5.0 (custom `%%porygon:metadata%%` blocks and timestamp-based filenames) are no longer readable — start fresh or migrate manually.",
+      "draft": false,
+      "name": "0.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T20:12:45Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ff5e7dd29ab9652564b9f373939d95fdfcdd582e34fe62306428209438fc50d3",
+          "name": "main.js",
+          "size": 1358193
+        },
+        {
+          "digest": "sha256:357fd080a5c59fbf188a4ecb89b9ad85395acf00b337d20fa5d6f0f1fe1d5f8d",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:b58600268d6e354f93fcfa44559f8bd512c3ca5052df82ef70b951fe78edf642",
+          "name": "styles.css",
+          "size": 15171
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon introduces a skills system that lets the agent extend its capabilities through Markdown files with YAML frontmatter (`name`, `description`) stored under `porygon/skills/` in the vault. Bundled skills shipped with the plugin are copied into the vault on first launch, parsed once at startup via a new `SkillsService` (after `onLayoutReady` so the vault is fully scanned) and cached, refreshing only when vault create/modify/delete/rename events touch the skills folder. The list is injected into the system prompt as an `<available_skills>` block, and a new `load_skill` agent tool reads the full skill body (without frontmatter) on demand using the exact location advertised in that block.\r\n",
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T16:48:16Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:06172080c2522d12e034b566c9afaf6ee97a7e4a4198b092456981045ee679a4",
+          "name": "main.js",
+          "size": 1348545
+        },
+        {
+          "digest": "sha256:fafc7f99597a4c7c0ae564319a17e70516572049692f8070913f29e59723c852",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:b58600268d6e354f93fcfa44559f8bd512c3ca5052df82ef70b951fe78edf642",
+          "name": "styles.css",
+          "size": 15171
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon adds four vault-aware agent tools: `create_folder` for creating folders with Obsidian `Vault.createFolder`, `copy` for duplicating files or folders with `Vault.copy`, `active_file` for resolving the currently focused Obsidian file when users refer to “this note,” and `backlinks` for listing notes that link to a target note from Obsidian `MetadataCache.resolvedLinks`. These tools extend the assistant from note search/editing into vault organization and graph-aware navigation while preserving exact path validation, no filename guessing, and JSON tool results for transparent agent behavior.\r\n",
+      "draft": false,
+      "name": "0.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T13:13:34Z",
+      "tag": "0.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f17e92d0d01bff2a21c7face6e40ff632dd0bfc8cc8fd45abd05debd6ce1abf",
+          "name": "main.js",
+          "size": 1343569
+        },
+        {
+          "digest": "sha256:1e4a0b52c0194b870fb5940991da4ecb36467ca65de16ef12c8d2fb4003275e9",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:b58600268d6e354f93fcfa44559f8bd512c3ca5052df82ef70b951fe78edf642",
+          "name": "styles.css",
+          "size": 15171
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Porygon fixes a startup double-counting bug in the semantic index, prevents re-embedding of unchanged notes on launch and on stray re-enqueues, and makes the settings status row always reflect the real number of indexed and total notes.\r\n",
+      "draft": false,
+      "name": "0.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T11:58:24Z",
+      "tag": "0.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3448121665482660b7e69d756143be0794b7635299d6b27081ec73fd89810db0",
+          "name": "main.js",
+          "size": 1343478
+        },
+        {
+          "digest": "sha256:a1a481307bf1610ffceb88dbd1da7e1f583ded33a521b192be8ebc0cf8d6af12",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:b58600268d6e354f93fcfa44559f8bd512c3ca5052df82ef70b951fe78edf642",
+          "name": "styles.css",
+          "size": 15171
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## v0.3.0: Local semantic search over the vault\r\nPorygon adds a local RAG foundation for semantic vault search using the same Ollama provider as chat: Markdown notes are chunked with LangChain text splitters, embedded with the configured Ollama embeddings model, and persisted in an IndexedDB-backed index under `src/rag/*`. The index is maintained in the background through startup reconciliation and Obsidian vault create/modify/delete/rename events, supports ignored-path settings and model/host freshness checks, exposes index status in settings, and adds a `semantic_search` agent tool that returns matching note paths, wikilinks, scores, and snippets for contextual note discovery while keeping existing exact `list`, `search`, and `view` tools as fallbacks.\r\n",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T16:19:58Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d55eeb64c51e879539cb9828364e2b6c3e8191faf40c86eda51c455f36dc8fe9",
+          "name": "main.js",
+          "size": 1289062
+        },
+        {
+          "digest": "sha256:8f4e5d9cbf2683410be082b6840840afaa8478711304254a28b7ac4672f7474a",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:554e6a9e853ecbe87b59f246942e2ab4c5038c171f3fa81d6e66c046e59ae6a8",
+          "name": "styles.css",
+          "size": 14598
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": null,
+      "draft": false,
+      "name": "0.2.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T13:05:10Z",
+      "tag": "0.2.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:63140a3a4f6355d4dd416a7602c7d6d9a942cd9197af6a82b8a575e0e9166123",
+          "name": "main.js",
+          "size": 1125014
+        },
+        {
+          "digest": "sha256:ee18909fc162a3b12341f39f05145d4c3b417b449e652fe7d2511487a15b6613",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:e7acd6f717daf973d2b00789973ffea4769d519c101c388d602d4a23e5c05d68",
+          "name": "styles.css",
+          "size": 13844
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Polishing the linting and release process to be approved by the Obsidian team",
+      "draft": false,
+      "name": "0.2.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T17:46:32Z",
+      "tag": "0.2.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c3cea827027b43fd4be574467c8d02fda92dc5dcc3c81949565ff276bf91a38e",
+          "name": "main.js",
+          "size": 1125014
+        },
+        {
+          "digest": "sha256:774743ee2eb82bb860e25e60ff584ef9c64725c8722eabf8608bbe3f93382c0e",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:e7acd6f717daf973d2b00789973ffea4769d519c101c388d602d4a23e5c05d68",
+          "name": "styles.css",
+          "size": 13844
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": null,
+      "draft": false,
+      "name": "0.2.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T14:02:22Z",
+      "tag": "0.2.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:efa70866887f2ff1321850c9ed4218120e7e5fa43f17d3590b882dba0f2ba57c",
+          "name": "main.js",
+          "size": 1278591
+        },
+        {
+          "digest": "sha256:0138ee57eb655970ba4ef9c0a9a55de0776ba833046ce2eb153b3db010b813f1",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:e7acd6f717daf973d2b00789973ffea4769d519c101c388d602d4a23e5c05d68",
+          "name": "styles.css",
+          "size": 13844
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "`0.2.6` improved responsiveness by immediately showing a `Thinking...` Porygon answer bubble until the first streamed token, reasoning delta, or tool intent arrives; added a centered deterministic daily empty-chat quote and a clearer composer placeholder for `/` commands and `@` mentions; introduced a safe `rename(intent, source_path, destination_path)` agent tool that uses Obsidian `FileManager.renameFile` and documents its privacy impact; and addressed Obsidian community plugin publishing feedback by removing interval-based Ollama polling, using event-based health checks, replacing newer APIs that exceeded `minAppVersion`, fixing UI construction warnings, and adding an attested GitHub Actions release workflow for `main.js`, `manifest.json`, and `styles.css`.\r\n",
+      "draft": false,
+      "name": "0.2.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T13:30:38Z",
+      "tag": "0.2.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1888ef5dc25e46b2d48d222f82a6221abf4aa14fd1a542cf23b2489bda0051e5",
+          "name": "main.js",
+          "size": 1276018
+        },
+        {
+          "digest": "sha256:b6a9ad8415286ff9a96c537e9b6431e88d70bc95b0d19aa3f2471d95c3d2aba8",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:bbc29b63ec27312f003b18657f2cbcaba29f1b1240a4acc1dbfebd3b1040ecd0",
+          "name": "styles.css",
+          "size": 13629
+        }
+      ],
+      "author": "iuga",
+      "description": "Linting the code to be approved by Obsidian",
+      "draft": false,
+      "name": "0.2.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-11T14:41:31Z",
+      "tag": "0.2.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:66a507d727c592804456b700b83240e0e2ebdaa85689d81b6f017d7d4532eb43",
+          "name": "main.js",
+          "size": 1276030
+        },
+        {
+          "digest": "sha256:7aa659c121adf7456e8298499c3da8380645c312e258e7e81b9300fd2a6da41c",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:bbc29b63ec27312f003b18657f2cbcaba29f1b1240a4acc1dbfebd3b1040ecd0",
+          "name": "styles.css",
+          "size": 13629
+        }
+      ],
+      "author": "iuga",
+      "description": "This release improves Porygon’s context and command workflow with a redesigned mention popup that supports filtering, keyboard navigation, icons, active-note mentions, folder mentions, and direct child Markdown file attachment for folder context. It also adds slash commands with a searchable popup, including `/new` for starting a new conversation with an optional save prompt and `/save` for writing the current visible conversation to `porygon/conversation_{timestamp}.md`. Bug fixes include using the first message timestamp instead of message text for saved conversation filenames, overwriting saved conversations on repeated saves to match the current UI state, and improving mention chip layout so chips render horizontally, wrap cleanly, and use smaller text.",
+      "draft": false,
+      "name": "0.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T19:09:22Z",
+      "tag": "0.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8190463c32c21755857e6ed8715cd6d04b8d9bce821efd6d09d6171002ff9c41",
+          "name": "main.js",
+          "size": 1266729
+        },
+        {
+          "digest": "sha256:1e2c1a2401fcb9c05778c4eab8992b3a4e92820bbacb39fca28781fb39f1adc8",
+          "name": "manifest.json",
+          "size": 200
+        },
+        {
+          "digest": "sha256:305fd5f37be449ff2b14bc0f2d03490e29eaa9ffb0c4bf8d17f03b0a6f1e5029",
+          "name": "styles.css",
+          "size": 12095
+        }
+      ],
+      "author": "iuga",
+      "description": "- Marks Porygon as desktop-only to better reflect current dependency support.\r\n- Improves release guideline alignment by removing production console logging from the edit tool.\r\n- Updates warning and onboarding hint styles to use Obsidian theme variables instead of hardcoded colors.\r\n- Makes thinking and tool-usage sections use Obsidian’s small UI font size while keeping chat message text unchanged.\r\n- Fixes the view close lifecycle method to satisfy TypeScript without an unnecessary `async`.\r\n- Polishes the plugin description and bumps release metadata to `0.2.3`.",
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T13:11:25Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e8829da89dfe03c877c3106a5dfaef765d9548f86b2eae405b3108e149398ed4",
+          "name": "main.js",
+          "size": 1267204
+        },
+        {
+          "digest": "sha256:b7518bb6d9cd10f85eed4592b77a83ebd0a174c3d9eca4bdbc11fa721970ecb3",
+          "name": "manifest.json",
+          "size": 202
+        },
+        {
+          "digest": "sha256:9a075d9f5670376b487adb09bfd41e40f948bc948e2073b9c8329989ab103afa",
+          "name": "styles.css",
+          "size": 11916
+        }
+      ],
+      "author": "iuga",
+      "description": "Manifest and package.json version management to add the plugin in the registry\r\n",
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T20:10:36Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e8829da89dfe03c877c3106a5dfaef765d9548f86b2eae405b3108e149398ed4",
+          "name": "main.js",
+          "size": 1267204
+        },
+        {
+          "digest": "sha256:94768ecec1f8f8bf8aab4bb7ec7ebdd669c22db9a70e2f3dfea1de554137a56a",
+          "name": "manifest.json",
+          "size": 201
+        },
+        {
+          "digest": "sha256:9a075d9f5670376b487adb09bfd41e40f948bc948e2073b9c8329989ab103afa",
+          "name": "styles.css",
+          "size": 11916
+        }
+      ],
+      "author": "iuga",
+      "description": "Porygon is a privacy-first Obsidian chat plugin powered by local Ollama models, with guided setup, streamed Markdown responses, selectable chat content, optional thinking output, and explicit note mentions for grounded context. This release adds a LangGraph/LangChain agent architecture, vault-aware tools for listing, searching, viewing, and safely editing notes, transparent tool usage reporting, split system/personal prompts stored as readable Markdown, a larger personal prompt editor, improved stability, lint-clean builds, and a complete product rename from The Obsidian Assistant to Porygon.",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T19:51:16Z",
+      "tag": "0.2.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "iuga/obsidian-porygon"
+}

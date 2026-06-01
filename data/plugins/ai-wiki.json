@@ -1,0 +1,909 @@
+{
+  "author": "Ilya",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. AI-powered compoundable knowledge base — extracts, synthesizes and maintains a wiki from raw sources.",
+  "errors": [],
+  "id": "ai-wiki",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "ikeniborn",
+    "authorUrl": "https://github.com/ikeniborn",
+    "description": "AI-powered compoundable knowledge base — extracts, synthesizes and maintains a wiki from raw sources.",
+    "id": "ai-wiki",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.7.2",
+    "name": "AI Wiki",
+    "version": "0.1.145"
+  },
+  "name": "AI Wiki",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2a31f9705cbc489a2ca46db8c1a4e914b98739b5916d1e0471558b8e74fe34ac",
+          "name": "main.js",
+          "size": 1656890
+        },
+        {
+          "digest": "sha256:3ad2468cff176d93d3c5f9e18919d4e359d7f0d751f3658f4f5c4368f1c6b684",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:ac2f7d60dd07dc7f8d6dab43f7cd4c7e03a11e21931c2d6ab2c386480e856ba2",
+          "name": "styles.css",
+          "size": 10257
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 0.1.145\n\n### New\n- feat(ingest): entity-driven two-call orchestration with merge-delete support\n- feat(ingest): enforce wiki_<domain>_<entity> stem mask with migration\n- feat(ingest): add EntitiesOutputSchema and deletes[] field on WikiPagesOutputSchema\n- feat(ingest): add ingest-entities.md system prompt for entity extraction (LLM #1)\n- feat(ingest): document merge via pages+deletes in ingest prompt\n- feat(ingest): add PageSimilarityService.selectByEntities\n- feat(ingest): add mergeDeleteWarnThreshold setting + AgentRunner wiring\n- feat(ingest): support УДАЛЕНА action in ingest log\n- feat(ingest): add removeIndexAnnotation for merge-delete cleanup\n- feat(ingest): emit info_text with entity breakdown instead of lost assistant_text\n- feat(lint): replace batch LLM call with per-article loop using similarity context\n- feat(prompt): add per-article context format and delete instructions to lint prompt\n- feat(schema): add deletes field to LintOutputSchema for duplicate removal\n- feat(view): render info_text events as progress step items with entity list\n- feat(types): add info_text RunEvent variant for phase status messages\n\n### Fixes\n- fix(ingest): tighten apiKey guard and dedupe Jaccard fallback in selectByEntities\n- fix(lint): skip wiki pages in post-loop backlink rewrite; collect writtenPaths for log\n- fix(schema): rename redirectTo → redirect_to to match snake_case convention\n- fix(agent-runner): use !== undefined for embeddingModel sentinel check\n- fix(settings): enable embedding toggle shows child fields, add Semantic Search heading\n- fix(tests): adapt init fixtures to two-call ingest orchestration\n- fix(tests): drop typeof on type-only LocalConfig import in local-config tests\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.142...0.1.145",
+      "draft": false,
+      "name": "0.1.145",
+      "prerelease": false,
+      "publishedAt": "2026-05-29T12:29:48Z",
+      "tag": "0.1.145"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8b544940c8afbd3259174a181979bc2aee6e4b4e04568035501964dfcea66540",
+          "name": "main.js",
+          "size": 1628175
+        },
+        {
+          "digest": "sha256:53653a781326aaff4692860d9a150df59c6ff4c472035973aef4a0b0c2482ea2",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:ac2f7d60dd07dc7f8d6dab43f7cd4c7e03a11e21931c2d6ab2c386480e856ba2",
+          "name": "styles.css",
+          "size": 10257
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 0.1.142\n\n### New\n- feat(ui): add LLM progress steps to all phases; show ingest token count\n\n### Fixes\n- fix(lint): move WikiLink warnings yield after write loop\n- fix(ui): wikilink warnings after write; lint analysing progress; per-step timing ≥1s; tok/s on in/out\n- fix(ingest): include existing pages in knownStems for dead-link detection\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.141...0.1.142",
+      "draft": false,
+      "name": "0.1.142",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T20:07:26Z",
+      "tag": "0.1.142"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:68ea2087b7e2da1842cdaa8ab6cd7f4c3c1fe42f02fc919d0e08a770f93e4965",
+          "name": "main.js",
+          "size": 1532968
+        },
+        {
+          "digest": "sha256:0c5a1ca4bd8b94f3e2e3dd0cfec29d0c5b4bec861188afbcbc2b3f94b405c586",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:b4814ca5aee5c1d5170fb4641a21bef2249cb057330e1d93384cea30e4e4e3c6",
+          "name": "styles.css",
+          "size": 10233
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 0.1.141\n\n### New\n- feat(storage-migration): auto-migrate `.config/` → `_config/` on startup\n- feat(lint-chat): read `_wiki_schema.md` and pass `schema_block` to prompt\n- feat(lint): merge assess+fix into single CoT+Structured call; per-page UI progress\n- feat(ingest): enrich log — CREATED/UPDATED detection, status transitions\n- feat(schemas): add WikiPageSchema, WikiPagesOutputSchema, LintOutputSchema, FormatOutputSchema\n- feat(wiki-index): rewrite to grouped Markdown format; path and wikilink in `_index.md` entries\n- feat(view): Open `_log` / Open `_index` buttons in domain row\n- feat(view): persist and restore last selected domain\n- feat(view): re-run button in query history rows\n- feat(view): live-status section; step time labels; waiting indicator; copy-to-clipboard\n- feat(view): auto-collapse Progress section on operation finish\n- feat(consent): lazy ShellConsentModal + migrate `shellConsentGiven` from `data.json` to `local.json`\n- feat(reinit): show wiki file count in reinit confirm dialog\n- feat: IngestScopeModal, ManageSourcesModal, addSourceBtn / openManageSources\n- feat: ensureDomainConfig — create `.config/` dir, migrate legacy index/log\n- feat: move `_domain.json`, `agent.jsonl`, `dev.jsonl` to `!Wiki/.config/`\n- feat(security): shell consent modal and operation guard (F-2c)\n\n### Fixes\n- fix(i18n): update `agent.jsonl` path to `_config/` in all locales\n- fix(vault-tools): fallback `adapter.write` for hidden dirs; recursive mkdir\n- fix(view): step time labels right-aligned; capture chatBubble ref before async render\n- fix(security): validateIclaudePath, fs.access probe, folder-scoped collectMdInPaths\n- fix(lint): deduplicate dead-link reports per file\n- fix(ingest): reject system files from LLM output\n- fix: replace `wiki_keywords` with `tags` in prompts and schemas\n\n### Other\n- refactor(wiki-path): rename `.config/` → `_config/`, add global constants\n- refactor: remove `query-save` from all layers (agent-runner, controller, view, command)\n- refactor: extract vault-walk utilities to `src/utils/vault-walk.ts`\n- refactor(consent): ShellConsentModal without direct plugin dependency\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.108...0.1.141",
+      "draft": false,
+      "name": "0.1.141",
+      "prerelease": false,
+      "publishedAt": "2026-05-25T12:39:03Z",
+      "tag": "0.1.141"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6697001136c3ffc48c22f38adb78d0dfe42aac1ef18c9879dff7c9ea91c68e87",
+          "name": "main.js",
+          "size": 1528911
+        },
+        {
+          "digest": "sha256:80cb7eaf36234c4000faf91f83416c68f95cc5cd71fa1a7e64eb1c2dc2e1c13d",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:b4814ca5aee5c1d5170fb4641a21bef2249cb057330e1d93384cea30e4e4e3c6",
+          "name": "styles.css",
+          "size": 10233
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.139...0.1.140\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.139...0.1.140",
+      "draft": false,
+      "name": "0.1.140",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T21:17:57Z",
+      "tag": "0.1.140"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6697001136c3ffc48c22f38adb78d0dfe42aac1ef18c9879dff7c9ea91c68e87",
+          "name": "main.js",
+          "size": 1528911
+        },
+        {
+          "digest": "sha256:323a2626e58112e2766284b30cdfe383fd1ef213484c73f34e801ad90119900e",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:b4814ca5aee5c1d5170fb4641a21bef2249cb057330e1d93384cea30e4e4e3c6",
+          "name": "styles.css",
+          "size": 10233
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* feat: wiki config centralization, manage sources, lint schema context, lat.md docs by @ikeniborn in https://github.com/ikeniborn/obsidian-ai-wiki/pull/5\n\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-ai-wiki/compare/0.1.108...0.1.139",
+      "draft": false,
+      "name": "0.1.139",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T21:14:09Z",
+      "tag": "0.1.139"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0ec80f497cba00d092b7d69c3f83a6d8fb9c6edeaf49a3dad7c0d1ecdabff17f",
+          "name": "main.js",
+          "size": 1504184
+        },
+        {
+          "digest": "sha256:5f2a097190721f931272aa619d8c6d879e56803eb8a70003e76eeac0b9ea8835",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:35daba3ecc07e27400ba58b2fb9c6bdc296c6b4b6df33dcc342d12cd5e64ea8b",
+          "name": "styles.css",
+          "size": 8874
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.107...0.1.108",
+      "draft": false,
+      "name": "0.1.108",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T04:46:10Z",
+      "tag": "0.1.108"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0ec80f497cba00d092b7d69c3f83a6d8fb9c6edeaf49a3dad7c0d1ecdabff17f",
+          "name": "main.js",
+          "size": 1504184
+        },
+        {
+          "digest": "sha256:c9a80e962cf1c1721a81e69565a599568d0cc55192d0e1b94941e03d7d53589a",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:35daba3ecc07e27400ba58b2fb9c6bdc296c6b4b6df33dcc342d12cd5e64ea8b",
+          "name": "styles.css",
+          "size": 8874
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* feat: mobile query seed selection — Jaccard improvements, wiki_keywords, annotated index by @ikeniborn in https://github.com/ikeniborn/obsidian-llm-wiki/pull/4\n\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.99...0.1.107",
+      "draft": false,
+      "name": "0.1.107",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T04:38:02Z",
+      "tag": "0.1.107"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:97fb08ab320007838d3d3c9adaab207ccdd03650e7c94c233561ff509f0553a4",
+          "name": "main.js",
+          "size": 1485336
+        },
+        {
+          "digest": "sha256:36970a4b1a0cc9683e27739316374d7c9953ec360b747dcbb4ce5de83f59afe5",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:35daba3ecc07e27400ba58b2fb9c6bdc296c6b4b6df33dcc342d12cd5e64ea8b",
+          "name": "styles.css",
+          "size": 8874
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.99...0.1.102",
+      "draft": false,
+      "name": "0.1.102",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T20:26:48Z",
+      "tag": "0.1.102"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:50df9e96371d67bcbf753959124d063c1b1763d64f43b1b9df77fdb87254ddd0",
+          "name": "main.js",
+          "size": 1477435
+        },
+        {
+          "digest": "sha256:2930587b697d6dfa19f33a3309aea4d1e655b8b87c966eb6a44d865c88bb62a8",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:35daba3ecc07e27400ba58b2fb9c6bdc296c6b4b6df33dcc342d12cd5e64ea8b",
+          "name": "styles.css",
+          "size": 8874
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.98...0.1.99",
+      "draft": false,
+      "name": "0.1.99",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T17:25:25Z",
+      "tag": "0.1.99"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:50df9e96371d67bcbf753959124d063c1b1763d64f43b1b9df77fdb87254ddd0",
+          "name": "main.js",
+          "size": 1477435
+        },
+        {
+          "digest": "sha256:43d8e5376b46214e4a24422aef6e08659e355643e2e149e0ecd52de6ef0482ce",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:35daba3ecc07e27400ba58b2fb9c6bdc296c6b4b6df33dcc342d12cd5e64ea8b",
+          "name": "styles.css",
+          "size": 8874
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* feat: re-init force + structured output resilience + per-file init pipeline by @ikeniborn in https://github.com/ikeniborn/obsidian-llm-wiki/pull/2\n\n\n**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.90...0.1.98",
+      "draft": false,
+      "name": "0.1.98",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T17:22:22Z",
+      "tag": "0.1.98"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b578e0fe444b0ce66066f3395d5eba278794625a16ab4d9b4efb42feb0e3165e",
+          "name": "main.js",
+          "size": 1329569
+        },
+        {
+          "digest": "sha256:9b2e04dbe3b0e37cdac3608665c71d6ab101b27fafa799012e24f7e50d9ba0a1",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.89...0.1.90",
+      "draft": false,
+      "name": "0.1.90",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T21:17:41Z",
+      "tag": "0.1.90"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ebcc5b0c4e2a48316b5a901228a433d559499425ec3702bbca6910c3260dd4f4",
+          "name": "main.js",
+          "size": 1329137
+        },
+        {
+          "digest": "sha256:21a8a4271357b6ff02bcc75d68a5f9e2c1361a8e4e07395eee5d245ad64c2c2b",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/0.1.88...0.1.89",
+      "draft": false,
+      "name": "0.1.89",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T19:28:52Z",
+      "tag": "0.1.89"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ebcc5b0c4e2a48316b5a901228a433d559499425ec3702bbca6910c3260dd4f4",
+          "name": "main.js",
+          "size": 1329137
+        },
+        {
+          "digest": "sha256:8ecc442114d23457ed1e01fd06364c8c94e04c028375e8accdffb1f697d35516",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ikeniborn/obsidian-llm-wiki/compare/v0.1.87...0.1.88",
+      "draft": false,
+      "name": "0.1.88",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T18:13:23Z",
+      "tag": "0.1.88"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ebcc5b0c4e2a48316b5a901228a433d559499425ec3702bbca6910c3260dd4f4",
+          "name": "main.js",
+          "size": 1329137
+        },
+        {
+          "digest": "sha256:0f678d67b444e6428798d6b35e7ae5e1da5686037a3c85bdbd29b15c0c03a0be",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": null,
+      "draft": false,
+      "name": "v0.1.87",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T17:57:01Z",
+      "tag": "v0.1.87"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ebcc5b0c4e2a48316b5a901228a433d559499425ec3702bbca6910c3260dd4f4",
+          "name": "main.js",
+          "size": 1329137
+        },
+        {
+          "digest": "sha256:2d4d1b594ff89c7d46270bb7a6076e2c05f71460d6f6b27ef5362eda91fbb819",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": null,
+      "draft": false,
+      "name": "v0.1.86",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T17:02:02Z",
+      "tag": "v0.1.86"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ebcc5b0c4e2a48316b5a901228a433d559499425ec3702bbca6910c3260dd4f4",
+          "name": "main.js",
+          "size": 1329137
+        },
+        {
+          "digest": "sha256:55a61ed3bcdf987fca632a22313eebf2a31b09115ac1b13206c389304cbea9c0",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Release v0.1.85",
+      "draft": false,
+      "name": "v0.1.85",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T16:21:55Z",
+      "tag": "v0.1.85"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d14aaa48be97da165c1352cb9790636ae83d8f1ee13e72814778b581e4a0cc2a",
+          "name": "main.js",
+          "size": 1317244
+        },
+        {
+          "digest": "sha256:4f7d29e7ed635bfb4764e17861d1001cb8cc1f5e639042a1865f2c84e197f257",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Plugin ID: ai-wiki. Name: AI Wiki.",
+      "draft": false,
+      "name": "0.1.80",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T20:44:13Z",
+      "tag": "0.1.80"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dcacd721a521b643a60cd59e3c838c2f5c12049bbf213e41b97416b5014fa9e4",
+          "name": "main.js",
+          "size": 1316791
+        },
+        {
+          "digest": "sha256:4220b1435ef244a86d544ee17275ed01e710df2b462aaf30b638988bd65e3779",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Fix plugin ID mismatch: id reverts to llm-wiki, display name stays AI Wiki.",
+      "draft": false,
+      "name": "0.1.78",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T20:34:59Z",
+      "tag": "0.1.78"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f4194e21958f9115f49a133f6d075cfff071d27297349774f2afca58155e764a",
+          "name": "main.js",
+          "size": 1312432
+        },
+        {
+          "digest": "sha256:8bc5c2796fb93d8323eb4a83cef71f9c120225dc55a1cfee07695261c566d76a",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:aac2618d33608d5c2a1be7612435db73b4f8d6def4c8ad42a8b6763aff5bc9f7",
+          "name": "styles.css",
+          "size": 9362
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Rename plugin: LLM Wiki → AI Wiki (id: llm-wiki → ai-wiki).",
+      "draft": false,
+      "name": "0.1.76",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T18:29:15Z",
+      "tag": "0.1.76"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:adc87cc12b3f0e5c0b9c5b4c8b239f104a040f495138441a158ecbfcfc3ae724",
+          "name": "main.js",
+          "size": 1312608
+        },
+        {
+          "digest": "sha256:7ef41eaccceb2af638608715275f5863729d15abc295a7860d080a6d37b9b2d5",
+          "name": "manifest.json",
+          "size": 318
+        },
+        {
+          "digest": "sha256:e0c80738ff666d954906aef7352332cfcc26fb5f433e536d088935600ab5ddd5",
+          "name": "styles.css",
+          "size": 9459
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Fix ObsidianReviewBot Required violations: path-browserify replaces node:path, vault adapter replaces node:fs, sentence case fixes.",
+      "draft": false,
+      "name": "0.1.75",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T17:38:32Z",
+      "tag": "0.1.75"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dffbec7171c438a3adce44f1b8d2cacd384c0e9faccb2c11c1e60c38eb895aac",
+          "name": "main.js",
+          "size": 1312535
+        },
+        {
+          "digest": "sha256:51bb100e92de8ae23b3fd6ae120393adccc891f4277802d6fcf955fa18e78206",
+          "name": "manifest.json",
+          "size": 318
+        },
+        {
+          "digest": "sha256:e0c80738ff666d954906aef7352332cfcc26fb5f433e536d088935600ab5ddd5",
+          "name": "styles.css",
+          "size": 9459
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Path-browserify migration complete\n\nRefactored the plugin to use path-browserify instead of Node.js-specific fs/path imports:\n\n- Migrated simple files (source-paths.ts, phases/*) to use path-browserify\n- Refactored claude-cli-client.ts to use async callbacks for temp file operations instead of direct fs calls\n- Updated controller.ts with static path-browserify import and vault adapter integration\n- Added eslint-disable /skip comments for product name \"LLM Wiki\"\n\nAll tests passing (251 tests). Build verified.",
+      "draft": false,
+      "name": "v0.1.74",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T17:25:36Z",
+      "tag": "v0.1.74"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0186eeced9f70c517ea83ea359e38e003008308102e10b7ad4a0fe02321c633a",
+          "name": "main.js",
+          "size": 472246
+        },
+        {
+          "digest": "sha256:d197d59b039e94649a517558edad1cc25ab05771a2918869c82190745f556f1c",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:c9eb11a5a953220b17712450d7cbcf77d2021c73715042dbe092c8100d1a59fa",
+          "name": "styles.css",
+          "size": 7823
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.58",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T17:44:36Z",
+      "tag": "0.1.58"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e32f45a26d4ee6f2379395cb892acb007a340a214dbbfb5b76266638f44826ec",
+          "name": "main.js",
+          "size": 467463
+        },
+        {
+          "digest": "sha256:ff10de74fa76d7a428fc738dc07b56cf97e025f6b04484d50c59dd5168eacdd3",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:c9eb11a5a953220b17712450d7cbcf77d2021c73715042dbe092c8100d1a59fa",
+          "name": "styles.css",
+          "size": 7823
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.55",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T04:55:45Z",
+      "tag": "0.1.55"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c255a0f5f5b66314787fd6f55c1b0815e63927f9842107af0651fcbe79e92adf",
+          "name": "main.js",
+          "size": 468722
+        },
+        {
+          "digest": "sha256:bdbedc29223c937b9c1a18876725918ce5c2fe2e9d7e66f0f1c5e0185ae52f28",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:c9eb11a5a953220b17712450d7cbcf77d2021c73715042dbe092c8100d1a59fa",
+          "name": "styles.css",
+          "size": 7823
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.54",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T21:03:07Z",
+      "tag": "0.1.54"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b6314ea94a0a45c98e5386f09efa9873cbb6cf2b415c29c5912608f614809351",
+          "name": "main.js",
+          "size": 468680
+        },
+        {
+          "digest": "sha256:b518995ff55fc22da4cbe6983438fa22a63d1e9a3016842bb3f59411f9f0cd7a",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:c9eb11a5a953220b17712450d7cbcf77d2021c73715042dbe092c8100d1a59fa",
+          "name": "styles.css",
+          "size": 7823
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.53",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T11:01:13Z",
+      "tag": "0.1.53"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c1ac46684db97dc0bb6842d023028a549f77b5ceaaa951e7fa31e0974a7bb123",
+          "name": "main.js",
+          "size": 461653
+        },
+        {
+          "digest": "sha256:03037014d150d5a5dcdc71aebdde4fad5748c1e5736e29ea967dede9ee729e7c",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:87ab6f5d0df81466c0a832115827e81439851c0695acc1e364e0c6b68df7cfc6",
+          "name": "styles.css",
+          "size": 7332
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.50",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T04:31:20Z",
+      "tag": "0.1.50"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4bbceca9431a98cb8f924e0cc02af98a5013587bd73ced6011a396f8c20efe1c",
+          "name": "main.js",
+          "size": 461302
+        },
+        {
+          "digest": "sha256:ed40ad35c2a01baa8991414a2eacc00e2839128a49354bd071c30c88c4fcd90f",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:87ab6f5d0df81466c0a832115827e81439851c0695acc1e364e0c6b68df7cfc6",
+          "name": "styles.css",
+          "size": 7332
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "## Что нового\n\n- Форма создания домена: поля source paths с автодополнением по папкам vault (FolderSuggest)\n- При создании домена с источниками — подсчёт .md файлов и диалог подтверждения перед запуском init\n- Расширенный init: фаза 1 — LLM анализирует источники → entity_types + language_notes; фаза 2 — создание wiki-страниц из каждого файла\n- Диалог ошибки при обработке файла: Skip / Retry / Stop\n- Прогресс-бар в боковой панели во время инициализации\n- Исправлен плейсхолдер wiki folder (убран лишний префикс vaults/...)",
+      "draft": false,
+      "name": "0.1.49",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T04:11:17Z",
+      "tag": "0.1.49"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:aedc411df6c428c221675b221c5a37afd50db83893c8e24c687b8e2b209ca6a7",
+          "name": "main.js",
+          "size": 392250
+        },
+        {
+          "digest": "sha256:2100cb1e4e9193cdedb2d8b807ceb6732a7aac409b666591a64e526039cc72ea",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:3ef63c666ee260cff5b1570a86ffb3065d9124f52a10ac4075c04f7f8529c945",
+          "name": "styles.css",
+          "size": 3643
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.17",
+      "prerelease": false,
+      "publishedAt": "2026-04-30T19:15:33Z",
+      "tag": "0.1.17"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c371a9e6dfe4b892fd1cf6c054af2504d5c6fe741dea78ea1a86a5c5ce25a9e0",
+          "name": "main.js",
+          "size": 375681
+        },
+        {
+          "digest": "sha256:7627d851c25986ad4702275803175e39858db63ed3de019001536fe238d0d326",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:ac33ac7ad9d33d27c1d0409baf65130d10a9cf557250042892dff039dbe3993b",
+          "name": "styles.css",
+          "size": 3580
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.15",
+      "prerelease": false,
+      "publishedAt": "2026-04-30T04:33:15Z",
+      "tag": "0.1.15"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6dc8718f3f80ae39ff39089e2fdf01c60b16c082bcc6e4ce6525f27df7ea1c10",
+          "name": "main.js",
+          "size": 375389
+        },
+        {
+          "digest": "sha256:ae3871e337362cb35d337781f4f6fa2f7e3f19e1bfe54a33c76c48ab6f61f825",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:ac33ac7ad9d33d27c1d0409baf65130d10a9cf557250042892dff039dbe3993b",
+          "name": "styles.css",
+          "size": 3580
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Fix code quality issues flagged by ObsidianReviewBot:\n- Use Setting().setHeading() instead of createEl headings\n- Replace inline styles with CSS classes\n- Fix onunload Promise/async signature\n- Use vault.configDir instead of hardcoded .obsidian\n- Fix redundant string | \"all\" union types\n- Remove unused imports",
+      "draft": false,
+      "name": "v0.1.14",
+      "prerelease": false,
+      "publishedAt": "2026-04-29T16:10:12Z",
+      "tag": "v0.1.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6dc8718f3f80ae39ff39089e2fdf01c60b16c082bcc6e4ce6525f27df7ea1c10",
+          "name": "main.js",
+          "size": 375389
+        },
+        {
+          "digest": "sha256:ae3871e337362cb35d337781f4f6fa2f7e3f19e1bfe54a33c76c48ab6f61f825",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:ac33ac7ad9d33d27c1d0409baf65130d10a9cf557250042892dff039dbe3993b",
+          "name": "styles.css",
+          "size": 3580
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Fix code quality issues flagged by ObsidianReviewBot",
+      "draft": false,
+      "name": "0.1.14",
+      "prerelease": false,
+      "publishedAt": "2026-04-29T16:27:49Z",
+      "tag": "0.1.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c25710dbea722f01667f8c409e97903cf0e49388cad1a09666d9b1af1158c6e8",
+          "name": "main.js",
+          "size": 375385
+        },
+        {
+          "digest": "sha256:867c002aebb09d3497aed81077d9de36d04d5950f1acdc6bcaa68a8542394420",
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:2a2a20bbf07f55958387ebd4cc899137f8fd8dc1a65be1bf5fd38a98a4273f13",
+          "name": "styles.css",
+          "size": 3512
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "## What's new\n\n### Per-operation model configuration\n\nEach operation (ingest, query, lint, init) can now use a different model, maxTokens, and temperature — independently for both **claude-agent** and **native-agent** backends.\n\n**Settings toggle** — enable «Per-operation models» in plugin settings to switch from a single global model to per-operation configuration. When enabled:\n- Global model and maxTokens fields are hidden\n- Four sections appear (Ingest / Query / Lint / Init) each with model + max tokens (+ temperature for native-agent)\n\n**Default per-operation presets for claude-agent:**\n| Operation | Model  | Max tokens |\n|-----------|--------|-----------|\n| ingest    | haiku  | 4096       |\n| query     | sonnet | 4096       |\n| lint      | haiku  | 4096       |\n| init      | sonnet | 8192       |\n\nSettings migrate automatically — existing configurations are unaffected.",
+      "draft": false,
+      "name": "0.1.13",
+      "prerelease": false,
+      "publishedAt": "2026-04-29T15:08:18Z",
+      "tag": "0.1.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e2dda3e171408c860c4d59e3b80f8a58257387be9bd2de444701aa8183e762cf",
+          "name": "main.js",
+          "size": 359696
+        },
+        {
+          "digest": "sha256:5cf5fa0d18b354582c3aabe89eb41579de5bad584b87e5e1a525aeb4100cc161",
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:4edac630ecda99dbd024cf0ac6c7e78660f1b8501f58ca4432470b16dc1fd290",
+          "name": "styles.css",
+          "size": 3473
+        }
+      ],
+      "author": "ikeniborn",
+      "description": null,
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T20:31:36Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9eab8390d8439ece592aa227c34e5598b258d513b34fae0c3c2547af30e0ca41",
+          "name": "main.js",
+          "size": 55179
+        },
+        {
+          "digest": "sha256:1d45ac40121158c38b6bec54ce2883bab2514b2985088a75c120c1e2a95b174d",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:b82a30fda5a7fc99bbf750a61c59493b1c416006750de33dde3ed3c017a22bdb",
+          "name": "styles.css",
+          "size": 3223
+        }
+      ],
+      "author": "ikeniborn",
+      "description": "Initial release",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T17:45:31Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "ikeniborn/obsidian-llm-wiki"
+}

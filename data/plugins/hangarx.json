@@ -1,0 +1,857 @@
+{
+  "author": "3-elements-design",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Shared AI memory for your vault. Claude, Cursor, and any MCP agent can query and update your notes through a knowledge graph",
+  "errors": [],
+  "id": "hangarx",
+  "lastChangedAt": "2026-06-01T19:00:58.834Z",
+  "lastFetchedAt": "2026-06-01T19:00:58.834Z",
+  "manifest": {
+    "author": "HangarX",
+    "authorUrl": "https://hangarx.ai",
+    "description": "Shared AI memory for your vault. Claude, Cursor, and any MCP agent can query and update your notes through a knowledge graph.",
+    "id": "hangarx",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "HangarX",
+    "version": "1.0.30"
+  },
+  "name": "HangarX",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:a151397aadb6c118719edaa964cddfe1224596029d44b8deaef88fc800dbfb88",
+          "name": "main.js",
+          "size": 343127
+        },
+        {
+          "digest": "sha256:9ed64a20b16441d76052bb639189ea6a3b91066a0ecfffec8bcc1e269fd7b756",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:c55c6a9709a3c47c4050e05d306d28688debcf93cb93b3ada19f2b1551c144f4",
+          "name": "styles.css",
+          "size": 143114
+        }
+      ],
+      "author": "levid",
+      "description": "## HangarX v1.0.31\n\n### Async vault sync\nLarge vault imports no longer time out at Cloud Run's request cap. The plugin now opts every ingest call into the server's new **async mode**: the server returns 202 + a `syncJobId` immediately and runs harmonization in the background. The plugin tracks progress via the existing `/jobs/:id` polling endpoint. Vaults that previously 504-killed at ~15 minutes now complete cleanly regardless of size.\n\n### Credit-exhausted upgrade prompt\nWhen you hit your plan's credit limit mid-sync, the modal now shows a clear \"Credits exhausted\" banner with an **Open billing settings** link straight to your account. The sync stops cleanly instead of bombing through the rest of the queue with 429s — and the Notice surfaces the server's actual `upgradeMessage` so you know exactly what to upgrade to.\n\n### Typed errors (developer-facing)\n`CortexClient.req()` now throws a typed `CortexError` carrying HTTP status, error code, body, and the structured `upgradeUrl` / `upgradeMessage` / `creditsRemaining` from the server response. Method `isCreditsExhausted()` lets callers branch on 429s without parsing error strings.\n\n### Other\n- Internal: reranker provider config (Cohere / Jina) removed — those rerankers were no longer wired into the active extraction pipeline.\n\n### Compatibility\n- Min Obsidian: 1.5.0\n- Requires cortex-api v1.0.3+\n\nSee repo CHANGELOG for full history.",
+      "draft": false,
+      "name": "v1.0.31",
+      "prerelease": false,
+      "publishedAt": "2026-05-22T19:21:22Z",
+      "tag": "1.0.31"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3fb2e2a9d84bc61b562ae4e3db1f37468a5c7877672b23ca090b178b1385dba9",
+          "name": "main.js",
+          "size": 341615
+        },
+        {
+          "digest": "sha256:8aeef4048947841077b78d551d6ba442de8b90c13c5a8069f049862402e100c6",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:c55c6a9709a3c47c4050e05d306d28688debcf93cb93b3ada19f2b1551c144f4",
+          "name": "styles.css",
+          "size": 143114
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.30",
+      "draft": false,
+      "name": "1.0.30",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T20:50:35Z",
+      "tag": "1.0.30"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:225ac86b2fc8e2a44d221d574b9aeeaf4e64c928aa372c8b1de82dd828085116",
+          "name": "main.js",
+          "size": 336759
+        },
+        {
+          "digest": "sha256:1f186cff8d27868571e25a7bd3670ba722320cc52d28b82718e1cbfb7c1549b7",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:c55c6a9709a3c47c4050e05d306d28688debcf93cb93b3ada19f2b1551c144f4",
+          "name": "styles.css",
+          "size": 143114
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.29",
+      "draft": false,
+      "name": "1.0.29",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T20:39:25Z",
+      "tag": "1.0.29"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c699984ea6303e0e256d960b1256db84c37102b4631eb828e1dcd9fddc69fc38",
+          "name": "main.js",
+          "size": 334085
+        },
+        {
+          "digest": "sha256:c302d57f62ff8a6079a736e054aa6a009330ab1bc58f92bf05d3200bb817ceff",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:d1fae9474bfa894fb5f32ef310567f6ab8ef7a640d51f8dea10d7ddd92d6823f",
+          "name": "styles.css",
+          "size": 139918
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.28",
+      "draft": false,
+      "name": "1.0.28",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T20:12:47Z",
+      "tag": "1.0.28"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:223c1468443ac49b1a1b3689c792331a80608c525e72767c229be5947ff74b26",
+          "name": "main.js",
+          "size": 332664
+        },
+        {
+          "digest": "sha256:4a2b4fb0c3300d4a080ca4fe8d6b9349fbc84f008ec2837aad36229d1755956f",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.27",
+      "draft": false,
+      "name": "1.0.27",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T19:58:56Z",
+      "tag": "1.0.27"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:01e7274dcfbd54bcfad02d532f39d5ce10ec30db9a88082723b96ed079bbbc17",
+          "name": "main.js",
+          "size": 328574
+        },
+        {
+          "digest": "sha256:2ef4fa09b34ea7bb410c33f8de3a625ca599ff24ff16d8a828b173766e5cc7f8",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.26",
+      "draft": false,
+      "name": "1.0.26",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T17:43:52Z",
+      "tag": "1.0.26"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a183385a5881e2a89f069958c95955027362b3eb57e087af45c32d54c79c65f9",
+          "name": "main.js",
+          "size": 328574
+        },
+        {
+          "digest": "sha256:a605f918b9c462e75cb2d8d73f2f494d5ac3ba4cae5317c1cbd6f6e4f6655f9f",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.25",
+      "draft": false,
+      "name": "1.0.25",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T16:54:20Z",
+      "tag": "1.0.25"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:30d6c2c40e7a8cbcfa20ab3cf78e65cc1c7e9f58f3713e437a8bfdc97c744550",
+          "name": "main.js",
+          "size": 328386
+        },
+        {
+          "digest": "sha256:8def655a972e07dfc78bcea706f4b8011c313292042e14ff1f5d0db8f33f6e06",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.24",
+      "draft": false,
+      "name": "1.0.24",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T21:10:14Z",
+      "tag": "1.0.24"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1f1524e7caf76d9d32eda9f48f7f6c25d1e7547ea05d39705434833add1f4b81",
+          "name": "main.js",
+          "size": 326912
+        },
+        {
+          "digest": "sha256:d7449994f59b226f53cef89c34aaf027b8cf8bf2ab9385f26ce9338a6a08f068",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.23",
+      "draft": false,
+      "name": "1.0.23",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T21:00:41Z",
+      "tag": "1.0.23"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0004f812ce383726d8b42f5fd1472dbef1cf9318e0296b8f788e2b994fc9d712",
+          "name": "main.js",
+          "size": 326383
+        },
+        {
+          "digest": "sha256:9070141206a886a0a78a241e8168dbe041e7a87920a27247c0bb3c42388eefe8",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.22",
+      "draft": false,
+      "name": "1.0.22",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T17:07:01Z",
+      "tag": "1.0.22"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8eb1f1a78661164ac2a1fb180c69268153f07afe83e9d6af87e79271cd39e680",
+          "name": "main.js",
+          "size": 324699
+        },
+        {
+          "digest": "sha256:2d425e3a4eff3f1b89fa85a67813713a88253975683a8ae4e6358f34becca751",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.21",
+      "draft": false,
+      "name": "1.0.21",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T16:29:14Z",
+      "tag": "1.0.21"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fb93154e7ec3801dc1132037e10a2dd4af022665e6e3637e623cb4f7aa55fe54",
+          "name": "main.js",
+          "size": 322325
+        },
+        {
+          "digest": "sha256:78b744eb0a0231fc8922fdc0febf1ec9bef853c5d87ba5180b8bdedf0c849a30",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.20",
+      "draft": false,
+      "name": "1.0.20",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T16:10:22Z",
+      "tag": "1.0.20"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9551f149ecd5af6b708427a75624168905f04a3882ff4d795bf9c40cf71b10de",
+          "name": "main.js",
+          "size": 321245
+        },
+        {
+          "digest": "sha256:91bf5b5097f537910dfd1aa7f14a03f3dde5a13ec0368920333faa9969f7b8c3",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.19",
+      "draft": false,
+      "name": "1.0.19",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T15:38:49Z",
+      "tag": "1.0.19"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6271dca42de60ffedabf3f3e7227852c5ea2ab772cc66401ecd9cbf0f22c643d",
+          "name": "main.js",
+          "size": 320339
+        },
+        {
+          "digest": "sha256:7be3e2614ac2ae69865f0be3507467942773e8f806796271d302199e6c1462da",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.18",
+      "draft": false,
+      "name": "1.0.18",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T15:15:36Z",
+      "tag": "1.0.18"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:44d5faa3b934bdfa957c98f2c6f026ed472e41f2bb4d4f0f9957291d025b1a87",
+          "name": "main.js",
+          "size": 319026
+        },
+        {
+          "digest": "sha256:480ce46f2d3c6654b6c618cfaf465ff4e03b06473a911193a5f1338345e1f5ab",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.17",
+      "draft": false,
+      "name": "1.0.17",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T13:37:06Z",
+      "tag": "1.0.17"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:075bb9081ca91242095930b5fd7680c22306b2559e9c97cc48ee6dbd56870d17",
+          "name": "main.js",
+          "size": 314372
+        },
+        {
+          "digest": "sha256:8a3d519618514ac4b123ab5aae340b9a78dccc87eb4fc150f123f51c3baf6841",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:49dc1e44f63e318e18786608a3d120f0c17f0e14c772c8681fb960d848398e34",
+          "name": "styles.css",
+          "size": 138719
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.16",
+      "draft": false,
+      "name": "1.0.16",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T13:12:22Z",
+      "tag": "1.0.16"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8469a1ca457f816f2fc37149b7c7b54eaeea40e4fe9d1a030e63e2c4a8a896ad",
+          "name": "main.js",
+          "size": 312425
+        },
+        {
+          "digest": "sha256:29e5dfb3984d9fde6ed02e6215d8c905c882bba8758108a8dfab9e18cc6b014b",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:1df33eacbef94ae8deeab91d62a1663a2b57b9d91fba5227bef3080a3b77178b",
+          "name": "styles.css",
+          "size": 137851
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.15",
+      "draft": false,
+      "name": "1.0.15",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T12:41:46Z",
+      "tag": "1.0.15"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6da8193e63dd489ac156a853c080b57b17d20edae1c393e04e7f800ec2a1696d",
+          "name": "main.js",
+          "size": 312014
+        },
+        {
+          "digest": "sha256:37b252b35c09da3a7c1cdf29fcc75aee0e2c014e1ff5f556b4732097e928eaf5",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:1df33eacbef94ae8deeab91d62a1663a2b57b9d91fba5227bef3080a3b77178b",
+          "name": "styles.css",
+          "size": 137851
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.14",
+      "draft": false,
+      "name": "1.0.14",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T12:30:17Z",
+      "tag": "1.0.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7a98983406d5a1065f7d5f6f9e53f96bda50dae292d1035e0ea195b89a02bb53",
+          "name": "main.js",
+          "size": 311915
+        },
+        {
+          "digest": "sha256:1890b6b760c5da828b53457ced0c1334c9ec2be4529c4ee9002a3ea7b63c908d",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:1df33eacbef94ae8deeab91d62a1663a2b57b9d91fba5227bef3080a3b77178b",
+          "name": "styles.css",
+          "size": 137851
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.13",
+      "draft": false,
+      "name": "1.0.13",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T12:10:23Z",
+      "tag": "1.0.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f1f22f9140b180a93a54cb8814ee580072d0818a4ca7c03711eee49fd4654c33",
+          "name": "main.js",
+          "size": 311645
+        },
+        {
+          "digest": "sha256:265a4198d21012dddb40e33bcc565fbcddbb7fc66bb359f9daa311f640c28dda",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.12",
+      "draft": false,
+      "name": "1.0.12",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T04:41:47Z",
+      "tag": "1.0.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9908a824b6e5b58cd83e86d00c156827e9855acc4b4a6e6b5960917e83559220",
+          "name": "main.js",
+          "size": 310627
+        },
+        {
+          "digest": "sha256:03b4dc3756374137064e4043c8033541d367ac5d24299d0a7491271a94c7c134",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "HangarX v1.0.11\n\n## Highlights since the last release\n- Streaming agent chat with phase-pill animation, sub-agent rendering, and replay link\n- Skill packs (vault-qa, obsidian-chat, multi-hop) with tunable bounds\n- Multi-provider web search (OpenAI / Anthropic / Gemini native) with Perplexity fallback\n- Local cron / schedules dashboard\n- Settings IA refresh: 5 task-oriented sections, status badges, progressive disclosure, search filter\n- Diagnostics & overrides — clearer \"default ok\" / \"auto\" / \"ignored in local mode\" pills\n\nSee repo CHANGELOG for the full list.",
+      "draft": false,
+      "name": "v1.0.11",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T04:01:05Z",
+      "tag": "1.0.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:111b10610f353c4dac94bcaa211c33701a1ba12d7268b5a23cfb19d0bd1e6d8b",
+          "name": "main.js",
+          "size": 310617
+        },
+        {
+          "digest": "sha256:e6106dba7d866e7fe5f5a8513cf13788f93d81c89e388c5192213686d808d74a",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "HangarX v1.0.10\n\n## Highlights since the last release\n- Streaming agent chat with phase-pill animation, sub-agent rendering, and replay link\n- Skill packs (vault-qa, obsidian-chat, multi-hop) with tunable bounds\n- Multi-provider web search (OpenAI / Anthropic / Gemini native) with Perplexity fallback\n- Local cron / schedules dashboard\n- Settings IA refresh: 5 task-oriented sections, status badges, progressive disclosure, search filter\n- Diagnostics & overrides — clearer \"default ok\" / \"auto\" / \"ignored in local mode\" pills\n\nSee repo CHANGELOG for the full list.",
+      "draft": false,
+      "name": "v1.0.10",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T03:22:53Z",
+      "tag": "1.0.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:111b10610f353c4dac94bcaa211c33701a1ba12d7268b5a23cfb19d0bd1e6d8b",
+          "name": "main.js",
+          "size": 310617
+        },
+        {
+          "digest": "sha256:a31a774e363a23c55c8c89606cb2fb6b530443dee4334c4d560c70faa26b7101",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.9",
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T13:58:59Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2fa932b92ee4210c106031ab94e8b67d05cfe671e47038de81a7af64cd77383c",
+          "name": "main.js",
+          "size": 304317
+        },
+        {
+          "digest": "sha256:46ff350ec53939311ee872feb8f194143cdecb0c4b59c3bf547537aecc0e995b",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.8",
+      "draft": false,
+      "name": "1.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T05:04:15Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19b9f1b4af588381860ed27ff66ac4c0df4c0f82acbf9d14d3af270f65546582",
+          "name": "main.js",
+          "size": 304362
+        },
+        {
+          "digest": "sha256:6940ba0b06af6910d5fc6ce520570cb5bbb12e0df32becbf7608f1bdbfce844c",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.7",
+      "draft": false,
+      "name": "1.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T04:06:27Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:93202a34ec53734088a555a795e84ed6de4ea6549f5e3d84219b3d51c9aa4b71",
+          "name": "main.js",
+          "size": 303707
+        },
+        {
+          "digest": "sha256:7d9ce0888f87770097b1397315a5c99870373590b20cd88290d45ad859356848",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:d503643429ec33919aaa6f4ee2896e7d0c6a256a74254a951876d07941d178f7",
+          "name": "styles.css",
+          "size": 137590
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.6",
+      "draft": false,
+      "name": "1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T03:47:28Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:93202a34ec53734088a555a795e84ed6de4ea6549f5e3d84219b3d51c9aa4b71",
+          "name": "main.js",
+          "size": 303707
+        },
+        {
+          "digest": "sha256:2b57b7ae6c4f7dc6d08e4ce3be4da569316340604c00de5b52cccdc6895b1cd8",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:807368d0eb47c1ad7335ab40086031afb005f130def234b6a772f1194356e459",
+          "name": "styles.css",
+          "size": 137858
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/compare/1.0.4...1.0.5",
+      "draft": false,
+      "name": "1.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T02:17:37Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:067e85adffb43bb57e8d613fc24acadc33a6581bbf2e6459c706a057af0d88ab",
+          "name": "main.js",
+          "size": 303823
+        },
+        {
+          "digest": "sha256:052c495cdd158d6209e6b8baab6650bcbc0bd9df712068e7c6a38442f74f16d5",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:d33967cbf26c05a8cab7f95d8c47c360b1922cc6f2f6366203e1a0025f24e706",
+          "name": "styles.css",
+          "size": 142910
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/commits/1.0.4",
+      "draft": false,
+      "name": "1.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T01:43:06Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2c171eead1c014f684525868a50da7ec615d6341ca4e26c7f3d56f4e4e5733b9",
+          "name": "main.js",
+          "size": 303133
+        },
+        {
+          "digest": "sha256:f333948e9c09a5a818fe325a47c7023fffd373ef5717779c02149baadaf9e750",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:d33967cbf26c05a8cab7f95d8c47c360b1922cc6f2f6366203e1a0025f24e706",
+          "name": "styles.css",
+          "size": 142910
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/commits/1.0.3",
+      "draft": false,
+      "name": "1.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T15:40:20Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9afd5bcddad2d7e2b7c785e0529995c9d9a12bb81a5ee80f31ef163642afc647",
+          "name": "main.js",
+          "size": 302880
+        },
+        {
+          "digest": "sha256:fda006529145fd1f3328b78e5a3b2d0c06cdd66ba2ba4f22229471ff41ab1992",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:d33967cbf26c05a8cab7f95d8c47c360b1922cc6f2f6366203e1a0025f24e706",
+          "name": "styles.css",
+          "size": 142910
+        }
+      ],
+      "author": "levid",
+      "description": "**Full Changelog**: https://github.com/3-Elements-Design/hangarx-obsidian/commits/1.0.2",
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T06:29:47Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e5e13e83a38da3cc7fe5574ba2d75c561f43b4ba192ad7bf49fd8fcbd7047346",
+          "name": "main.js",
+          "size": 302702
+        },
+        {
+          "digest": "sha256:dab1a21eebc3616fad6f6b21de8bb2fb47624e1a93f79af5d8d7578bdc08bef2",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:d33967cbf26c05a8cab7f95d8c47c360b1922cc6f2f6366203e1a0025f24e706",
+          "name": "styles.css",
+          "size": 142910
+        }
+      ],
+      "author": "levid",
+      "description": "HangarX v1.0.1\n\n## Highlights since the last release\n- Streaming agent chat with phase-pill animation, sub-agent rendering, and replay link\n- Skill packs (vault-qa, obsidian-chat, multi-hop) with tunable bounds\n- Multi-provider web search (OpenAI / Anthropic / Gemini native) with Perplexity fallback\n- Local cron / schedules dashboard\n- Settings IA refresh: 5 task-oriented sections, status badges, progressive disclosure, search filter\n- Diagnostics & overrides — clearer \"default ok\" / \"auto\" / \"ignored in local mode\" pills\n\nSee repo CHANGELOG for the full list.",
+      "draft": false,
+      "name": "v1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T05:59:57Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e93115192ccf5d0c9166f85936456693a75c862ee755d206f45ec6ffac59291b",
+          "name": "main.js",
+          "size": 302214
+        },
+        {
+          "digest": "sha256:8100488c97efc2ca4e290dd1b97a5c7eb98ca9c730a5e05ad8c6c7875a0dfb98",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:470b8ebfc8560db97a835493bdd34cf47c437a6f625cbf1f8c074b257fb4bd06",
+          "name": "styles.css",
+          "size": 143276
+        }
+      ],
+      "author": "levid",
+      "description": "Initial public release. See repo README for what HangarX does.",
+      "draft": false,
+      "name": "v1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-05T03:31:08Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "3-elements-design/hangarx-obsidian"
+}
