@@ -1,0 +1,180 @@
+{
+  "author": "hkcanan",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Run Claude Code with inline diff editing, academic research skills, and MCP support.",
+  "errors": [],
+  "id": "katmer-code",
+  "lastChangedAt": "2026-06-01T17:04:58.895Z",
+  "lastFetchedAt": "2026-06-01T17:04:58.895Z",
+  "manifest": {
+    "author": "hkcanan",
+    "description": "Multi-provider AI chat (Claude, Gemini, Codex, Antigravity) with per-tab providers, inline diff editing, academic research skills, and MCP support.",
+    "id": "katmer-code",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "KatmerCode",
+    "version": "0.5.2"
+  },
+  "name": "KatmerCode",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:bdfa4fdca30f4da58b24d5c9b9c15ce587c690e8e589662401a43d6b1c94a3c9",
+          "name": "main.js",
+          "size": 1065228
+        },
+        {
+          "digest": "sha256:9eaf28b095d512060f98ff61dca43978fd52d519bc6778c98caf5dde4d5aa13a",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:c70404dc0242e4b1dd8df3a7f3386dab5869fd81095455f9805d016e217ae35e",
+          "name": "styles.css",
+          "size": 73463
+        }
+      ],
+      "author": "hkcanan",
+      "description": "Cleans up the warnings flagged by the Obsidian community plugin automated review. The plugin already passed in 0.5.1; this just clears the warning list.\n\n## Changes\n- Removed `builtin-modules` package — replaced with Node's `module.builtinModules`.\n- Pinned all dependency versions exactly (no `^` / `~` ranges).\n- Committed `package-lock.json` so the automated review can verify the bundle.\n- Replaced 7 of 8 `!important` CSS rules with `.claude-native-root` specificity.\n- Dropped the `:has()` selector for the diff line-border indicator (perf warning).\n- Refreshed the top README screenshot showing the new Modern Sharp picker with multi-provider tabs and reasoning-effort selector.\n\nNo functional changes.",
+      "draft": false,
+      "name": "0.5.2 — Review hygiene + refreshed screenshot",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T11:54:39Z",
+      "tag": "0.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bdfa4fdca30f4da58b24d5c9b9c15ce587c690e8e589662401a43d6b1c94a3c9",
+          "name": "main.js",
+          "size": 1065228
+        },
+        {
+          "digest": "sha256:d8c3f5f094800c20a6cc58ba9208e7fcdabf4d17a499b4859782c86ee8ab1907",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:851283c998d2c076c99c2ee8ce6af1345ba8ca7291cc7e0b932c3993d398bbe5",
+          "name": "styles.css",
+          "size": 73450
+        }
+      ],
+      "author": "hkcanan",
+      "description": "Fixes the automated plugin-check errors so the community directory check passes.\n\n## Changes\n\n- **minAppVersion: 1.4.0 → 1.8.7** — plugin uses APIs introduced after 1.4.0 (`Workspace.revealLeaf` from 1.7.2, `Notice.noticeEl` from 1.8.7). The previous minimum was incorrect.\n- **codemirror deps declared** — `@codemirror/state` and `@codemirror/view` were used transitively; now in `dependencies`.\n- **Removed unused imports** (`rejectAllChanges`, `type InlineChange`).\n- **Replaced Element.innerHTML with textContent** in CodeMirror hover widgets — addresses Obsidian's XSS guidance.\n\nNo functional changes for users — same multi-provider sidebar as v0.5.0, just plumbing fixes.\n\nSee [CHANGELOG.md](https://github.com/hkcanan/katmer-code/blob/main/CHANGELOG.md) for the full v0.5.0 multi-provider feature list.",
+      "draft": false,
+      "name": "0.5.1 — Community plugin compliance",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T11:32:43Z",
+      "tag": "0.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9840dd369b2b9c7ea3463ee29aa9732298d7831a6167af802f6a8896fb15b276",
+          "name": "main.js",
+          "size": 1065224
+        },
+        {
+          "digest": "sha256:8a7e74148931dbd8fbf4539f6df2a2e5ec2218447b96270ae930dd01c36446f2",
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:851283c998d2c076c99c2ee8ce6af1345ba8ca7291cc7e0b932c3993d398bbe5",
+          "name": "styles.css",
+          "size": 73450
+        }
+      ],
+      "author": "hkcanan",
+      "description": "Plugin is no longer Claude-only. Pick a provider per tab, run them side-by-side, and consult any model from another model's reply — all in the same conversation.\n\n## Why this rebuild\n\nAnthropic's June 15 billing change moved Agent SDK and programmatic use off the Pro/Max subscription pool onto separately metered credits at full API rates. The plugin (which uses the SDK) effectively became a metered API client overnight. Rebuilt so it can drive your ChatGPT Plus and Google AI Pro plans too — three subscriptions you may already pay for, one sidebar.\n\n## What's in it\n\n**Four providers, per-tab routing**\n- **Claude Code** — Anthropic SDK + Pro/Max subscription\n- **Gemini** — `gemini` CLI + Google AI Pro / One OAuth\n- **Codex** — `codex exec --json` + ChatGPT Plus/Pro OAuth, reasoning effort wired through `model_reasoning_effort`\n- **Antigravity** — `agy --print` (chat only, until agy exposes structured output)\n\nEach chat tab pins its own provider and model independently. New tabs inherit the active tab's provider. Tab strip shows a small provider-colored dot per tab.\n\n**Same-tab consult**\nEvery assistant reply gets a small `Consult` button. Pick a provider (and optionally a specific model from the inline submenu) → that provider runs in the background → its response renders as a consultation card → active model synthesizes the two views — all without leaving the conversation.\n\n**In-plugin login**\nProvider chips with three states: ✓ ready / ⚠ login required / ✗ not installed. Click an amber chip:\n- Claude / Codex: plugin spawns `claude auth login` / `codex login` itself, polls auth status until completion\n- Gemini / Antigravity: plugin opens Terminal.app with the right command (these are interactive TUIs)\n\n**CLAUDE.md auto-mirror**\nToggle in settings. Mirrors both global (`~/CLAUDE.md` → `~/.gemini/GEMINI.md` + `~/.codex/AGENTS.md`) and vault scope (`<vault>/CLAUDE.md` → vault GEMINI.md + AGENTS.md). Watched with `fs.watch`. Only files written by the plugin (tagged with a header) are overwritten — your hand-written ones are left alone.\n\n**Mid-conversation switch markers**\nHorizontal divider when you flip provider or model. Provider switches add a warning that prior conversation context isn't carried across CLIs.\n\n**Per-model context tracking**\nReal input tokens against the model's actual window: Claude 200K–1M, Gemini 2.5/3.x ≈1M, Codex GPT-5.x 400K (mini 128K), Antigravity 1M. Catalog-driven, not a generic 200K fallback.\n\n**Skills run on every provider**\n`/peer-review`, `/cite-verify`, `/lit-search` etc. Native on Claude via `~/.claude/commands/`; on other providers the plugin reads the skill markdown and prepends it to your prompt as system context.\n\n**Modern Sharp UI redesign**\nMono brand header, segmented tab control, brand-color rails on tool calls and trigger, Raycast-style picker with sliding underline indicator, compact message footer (Copy + Consult), bottom-anchored \"is thinking…\" placeholder.\n\n## Bug fixes\n\n- Tab switch was re-pushing already-accepted diffs to the editor — fixed by suppressing inline-diff replay during re-render. `changeRegistry` StateField now also dedupes by id as defense-in-depth.\n- Gemini's `[Thought: true]` reasoning markers stripped from text.\n- Tool calls that never receive a result event no longer hang on \"Running\" — marked as stalled when turn completes.\n- 429 / capacity-exhausted responses surface a friendly hint instead of a Gaxios stack trace.\n- Antigravity no longer hangs in \"Thinking\" — stdin closed immediately + `TERM=dumb` so output flushes.\n- Codex flag corrections: `--json` (not `--experimental-json`), `--config web_search=\"live\"` (not `--search`), `--sandbox workspace-write` so edits actually apply.\n- Codex auth detection falls back to `auth.json` when `codex login status` returns empty stdout in Electron's non-TTY context.\n- Provider switch no longer rewrites the global default.\n\n## Known limitations\n\n- Antigravity is text chat only until `agy` adds structured output. No tool calls, no inline diff.\n- Gemini 3.x has `thinking_level` in the API but Gemini CLI hasn't exposed the flag yet (see google-gemini/gemini-cli#25122). Effort slider hidden on Gemini.\n- Gemini 3.x preview models hit Google capacity limits frequently — fallback to 2.5 Pro is one click in the picker.\n- Switching provider mid-conversation works but loses context (each CLI has its own session state). The divider warns you about this.\n- xhigh effort on Codex is only reachable by editing `~/.codex/config.toml` directly; plugin maps \"max\" → \"high\" for broad model compatibility.\n\n## Install\n\n1. Install at least one provider CLI:\n   - \\`npm install -g @anthropic-ai/claude-code && claude\\`\n   - \\`npm install -g @google/gemini-cli && gemini\\`\n   - \\`npm install -g @openai/codex && codex login\\`\n   - \\`curl -fsSL https://antigravity.google/cli/install.sh | bash && agy\\`\n2. Download \\`main.js\\`, \\`manifest.json\\`, \\`styles.css\\` from this release.\n3. Copy them into \\`<your-vault>/.obsidian/plugins/katmer-code/\\`.\n4. Enable **KatmerCode** in Obsidian → Settings → Community Plugins.\n5. (Optional) Settings → KatmerCode → toggle **Auto-mirror CLAUDE.md to other providers**.\n\nSee [CHANGELOG.md](https://github.com/hkcanan/katmer-code/blob/main/CHANGELOG.md) for the full list.",
+      "draft": false,
+      "name": "0.5.0 — Multi-provider: Claude + Gemini + Codex + Antigravity",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T11:01:21Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:daeb755700d45b7fc0a3ccb3644d78bf6e51051650597c497c46a8e328752ffd",
+          "name": "main.js",
+          "size": 967009
+        },
+        {
+          "digest": "sha256:97db990e5f5e828819a2d42fdcb129f9572e8297ab091a250a2b37d5eb4850e7",
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:423728b19546234cfaa04cff235a1cb1942c746f7a106540d9ebbe02ddf2b6d8",
+          "name": "styles.css",
+          "size": 33994
+        }
+      ],
+      "author": "hkcanan",
+      "description": "## What's New\n\n### SDK Type Compatibility (fixes #2)\n- Removed unsafe type casts for `BetaUsage` — direct property access instead of `Record<string, number>` cast\n- Added intermediate `unknown` cast for `stream_event` to satisfy stricter TypeScript definitions\n- Upgraded `@anthropic-ai/claude-agent-sdk` to `^0.2.86`\n\n### Permission Handling\n- MCP tools now auto-allowed without permission prompt\n- Abort signal support in `canUseTool` — prevents dangling permission promises\n- Permission prompts dismissed automatically on session abort\n\n### Editor Stability\n- Fixed decoration ordering in `RangeSetBuilder` (collect-sort-build pattern)\n- Inline diffs suppressed during session resume replay — no ghost diffs on reopen\n- Button placement improved: appears after last visual change, not end of range\n\n### Full Changelog\nhttps://github.com/hkcanan/katmer-code/compare/0.2.0...0.3.0",
+      "draft": false,
+      "name": "0.3.0 — SDK Compatibility & Stability Fixes",
+      "prerelease": false,
+      "publishedAt": "2026-03-30T09:44:31Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6d3a5f367601a25d27ad8ab288fe6715f206e5e77bf21d5a510118fcf6221de2",
+          "name": "main.js",
+          "size": 626418
+        },
+        {
+          "digest": "sha256:969cf956f7bd9f0ff3ad4c2698885cacbc85957653ed50827f69fbc31011f645",
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:423728b19546234cfaa04cff235a1cb1942c746f7a106540d9ebbe02ddf2b6d8",
+          "name": "styles.css",
+          "size": 33994
+        }
+      ],
+      "author": "hkcanan",
+      "description": "## What's New\n\n### 1M Context Window Fix\n- Opus 4.6 now correctly gets 1M context (was stuck at 200K)\n- CLI handles `[1m]` suffix natively — removed unnecessary beta flag splitting\n\n### Semantic Diff (diff-match-patch)\n- Word-level diffing instead of prefix/suffix — only actually changed words are highlighted\n- Unchanged words in a rewritten paragraph stay normal (no more wall of red/green)\n\n### Multi-Change Tracking\n- Multiple edits in one turn now all persist and can be individually accepted/rejected\n- Content-based re-anchoring — changes survive external file reloads\n\n### Diff Bar\n- Navigation bar above input: `◀ 1/3 ▶` to jump between changes\n- Per-change Accept/Undo + bulk \"✓ All\" from one place\n- Auto-hides when no pending changes\n\n### UI Improvements\n- Always-visible colored ✓/✕ buttons on each change in the editor\n- Compact chat cards (navigation moved to diff bar)\n- Stable click handlers via CM6 widget `eq()`\n- Yellow left-border on lines with pending changes",
+      "draft": false,
+      "name": "0.2.0 — Semantic Diff & Multi-Change Tracking",
+      "prerelease": false,
+      "publishedAt": "2026-03-23T19:35:22Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a86ac780a7112d5ab44398e279238ece6adfad425039fb2c4299c2539bac3ca6",
+          "name": "main.js",
+          "size": 557272
+        },
+        {
+          "digest": "sha256:1fdfeb2473810ba9b570d0a0531ba4d628ce7c94378b3583f5db50fc860fba3a",
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:c505057f27fdcc00bff758795a589fa7a38e62a300fec3775fe9af568c003144",
+          "name": "styles.css",
+          "size": 31186
+        }
+      ],
+      "author": "hkcanan",
+      "description": "Initial release",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-03-23T14:10:19Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "hkcanan/katmer-code"
+}

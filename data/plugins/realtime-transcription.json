@@ -1,0 +1,338 @@
+{
+  "author": "garetneda-gif",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Real-time speech-to-text powered by SenseVoice-Small. Supports Chinese, English, Japanese, Korean, and Cantonese with auto-translation, AI summarization, and text polishing.",
+  "errors": [],
+  "id": "realtime-transcription",
+  "lastChangedAt": "2026-06-01T17:04:58.895Z",
+  "lastFetchedAt": "2026-06-01T17:04:58.895Z",
+  "manifest": {
+    "author": "garetneda-gif",
+    "authorUrl": "https://github.com/garetneda-gif",
+    "description": "Real-time speech-to-text powered by SenseVoice-Small. Supports Chinese, English, Japanese, Korean, and Cantonese with auto-translation, AI summarization, and text polishing.",
+    "id": "realtime-transcription",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.4.0",
+    "name": "Realtime Transcription",
+    "version": "1.4.2"
+  },
+  "name": "Realtime Transcription",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:a52c399f4bc8763b48e72ea663c45fc5453c64ed9a03e5abf0735bca42dfba9d",
+          "name": "main.js",
+          "size": 106573
+        },
+        {
+          "digest": "sha256:9fe9f34a532eb174067a298b91490d1fdc4ae32e2ac0cf7ddd126aceabe8d990",
+          "name": "manifest.json",
+          "size": 421
+        },
+        {
+          "digest": "sha256:246e421ebc12048a96c5e6fcecacb6e412373fceaf3b3111e8a083bec9b8eccd",
+          "name": "styles.css",
+          "size": 11874
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## Bug Fixes\n\n- **修复腾讯云 ASR 连续说话时不分段的问题**\n  - 云端模式下 `showStreaming=true` 时 flush timer 未启动，导致文本永远堆积在一个卡片里\n  - 新增 `cloudCommittedLength` 去重游标：flush 后从累积式 partial 中剥离已提交前缀，后续文本自动开新段\n  - 云端 `final`（`slice_type=2`）不再与前一段合并，每个句子独立成条目\n- **修复本地模型实时预览无效的问题**\n  - 后端 `_is_similar`：文本增长时（旧文本是新文本前缀）不再被误判为\"过于相似\"而跳过发送\n  - 前端 `shouldResetNoisyPartial`：降低重置门槛（`+4/×2` → `+2/×1.5`），允许模型修正早期短文本识别错误",
+      "draft": false,
+      "name": "v1.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-01T11:48:23Z",
+      "tag": "1.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4d783ad7f65ad1665d13f19c284bb07c15675e0abdc9bcb0f074ce0468e0525b",
+          "name": "main.js",
+          "size": 105764
+        },
+        {
+          "digest": "sha256:390d6b9e49aa1bda6961ab8ab5bdacb98e25d8f19dca92457793f313ba6fa17a",
+          "name": "manifest.json",
+          "size": 421
+        },
+        {
+          "digest": "sha256:246e421ebc12048a96c5e6fcecacb6e412373fceaf3b3111e8a083bec9b8eccd",
+          "name": "styles.css",
+          "size": 11874
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## Bug Fixes\n\n- **修复腾讯云 ASR 模式下转写条目重复的问题**\n  - 跳过 `committedPartialTexts` 前缀去重（云端发送累积式文本，非增量式）\n  - 跳过 `stabilizePartialText`（云端已管理文本稳定性，标点变化不应被拒绝）\n  - 云端 partialOnly 不提前提交，等 `slice_type=2` 句子结束后才生成条目\n- **改进本地模式去重工具**（`partialStability`、`transcriptDedup` 抽取为独立模块并添加测试）",
+      "draft": false,
+      "name": "v1.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-03-28T17:05:43Z",
+      "tag": "1.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:007f5a94f95cd66de8546dfe88923a53ab5ca22f8a7e63691be63e3d95bceb63",
+          "name": "main.js",
+          "size": 94557
+        },
+        {
+          "digest": "sha256:d10ecb585849ee6eb59d37aa3e06cbd526523dfc19d9dae62e17d26b440e3a4f",
+          "name": "manifest.json",
+          "size": 422
+        },
+        {
+          "digest": "sha256:246e421ebc12048a96c5e6fcecacb6e412373fceaf3b3111e8a083bec9b8eccd",
+          "name": "styles.css",
+          "size": 11874
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "Release 1.4.0 - Updated plugin name and description to English for Obsidian community submission",
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-03-20T15:56:41Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:007f5a94f95cd66de8546dfe88923a53ab5ca22f8a7e63691be63e3d95bceb63",
+          "name": "main.js",
+          "size": 94557
+        },
+        {
+          "digest": "sha256:d824b8c9cb0e744648c385656c99ffeba5f186595d3ded772f945cf5b7a000bf",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:14ea7716f43b99e789c28dd5e2ea63165604a95e0b74240ef93d0902f677e051",
+          "name": "realtime-transcription-v1.4.0-macOS.zip",
+          "size": 40316
+        },
+        {
+          "digest": "sha256:2f02b01c258a87abac5308a4415346c0de5aaac8a07867b26bc6ce0927459923",
+          "name": "realtime-transcription-v1.4.0-Windows.zip",
+          "size": 40082
+        },
+        {
+          "digest": "sha256:246e421ebc12048a96c5e6fcecacb6e412373fceaf3b3111e8a083bec9b8eccd",
+          "name": "styles.css",
+          "size": 11874
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## New Feature\n\n- **Multi-language UI support (i18n)**: The plugin now supports both **Simplified Chinese** and **English** interfaces. A new \"Language / 语言\" dropdown has been added as the first option in the settings page. All user-facing strings — settings, notices, button labels, status messages, and error messages — are fully translated.\n\n### How to switch language\nOpen plugin settings → select **English** or **简体中文** from the \"Language / 语言\" dropdown at the top. The settings page will re-render immediately in the selected language.\n\n### Notes\n- AI system prompts (for summarization, title generation, and text polishing) remain in Chinese, as they instruct the AI model rather than the user.\n- Default language is Chinese (zh) to maintain backward compatibility.\n\n### Install\nExtract the platform-specific zip and place the `realtime-transcription/` folder into `.obsidian/plugins/`, then restart Obsidian.",
+      "draft": false,
+      "name": "v1.4.0 — Multi-language UI (Chinese & English)",
+      "prerelease": false,
+      "publishedAt": "2026-03-17T09:18:08Z",
+      "tag": "v1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:64ca7c16944016169e888e6258f0d9be9ade785442b13ccecb136d560414ee54",
+          "name": "realtime-transcription-v1.3.1-macOS.zip",
+          "size": 35476
+        },
+        {
+          "digest": "sha256:8ac045e624a5e73595352b22cfb96c9c4bacad7c95d473690c092eae776e2ad4",
+          "name": "realtime-transcription-v1.3.1-Windows.zip",
+          "size": 35242
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## 修复\n\n- **修复 AI 摘要 API 返回错误时无限重试导致通知刷屏**：`maybeRunSummary` 中，API 调用失败后 `catch` 块将文本放回 `summaryBuffer`，`finally` 之后的递归检查立即重新触发调用，形成死循环。修复方式为在 `catch` 块末尾 `return`，失败后不递归重试，等下次新转录文本追加时再自然触发摘要。\n\n### 触发场景\n摘要 API 端点不可达或返回 500 时，设置页面被大量 \"AI 摘要失败: Request failed, status 500\" 通知覆盖。\n\n### 安装\n解压对应平台的 zip，将 `realtime-transcription/` 文件夹放入 `.obsidian/plugins/` 目录，重启 Obsidian。",
+      "draft": false,
+      "name": "v1.3.1 — 修复 AI 摘要失败时无限重试",
+      "prerelease": false,
+      "publishedAt": "2026-03-17T07:39:59Z",
+      "tag": "v1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:91f24cf606918323a4e52e98fa9b17216ebbe6a399d1e6c903eee085803da50a",
+          "name": "realtime-transcription-v1.3.0-macOS.zip",
+          "size": 31414
+        },
+        {
+          "digest": "sha256:611d3086d5e543cf9a30bfe399ea59d166cd3e9cdf0e070a3234fbca3446d0f3",
+          "name": "realtime-transcription-v1.3.0-Windows.zip",
+          "size": 31165
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## 修复\n\n- **修复连续说话时转录卡片重复上句内容**：将 `lastCommittedPartialText`（单字符串，只记最后一次 flush）改为 `committedPartialTexts`（数组），跟踪同一 VAD 段内所有已 flush 的 partial 文本。去重时将数组拼接后与 final 文本做前缀重叠匹配，解决多次 flush 后去重失效的问题。\n\n### 触发场景\n连续说话超过 6 秒不停顿（课堂常见），导致 partial flush 多次触发，VAD 最终输出的 final 文本与 `lastCommittedPartialText` 无法匹配，去重失败，产生重复卡片。\n\n### 安装\n解压对应平台的 zip，将 `realtime-transcription/` 文件夹放入 `.obsidian/plugins/` 目录，重启 Obsidian。",
+      "draft": false,
+      "name": "v1.3.0 - 修复转录卡片重复",
+      "prerelease": false,
+      "publishedAt": "2026-03-16T11:35:28Z",
+      "tag": "v1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f46245395c5a01da3ccc701330e3443ee038268b31ad3f898c604bca6b92b444",
+          "name": "realtime-transcription-v1.2.1-macOS.zip",
+          "size": 31304
+        },
+        {
+          "digest": "sha256:b63b1d6953fe989607bab52025abb87ee81b1f373525e5d9416109749df250d2",
+          "name": "realtime-transcription-v1.2.1-Windows.zip",
+          "size": 31055
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "修复 .status-bar 选择器过于宽泛导致 Obsidian 全局状态栏被隐藏的问题。\r\n将选择器限定为 .transcription-view .status-bar。\r\n",
+      "draft": false,
+      "name": "v1.2.1 — 修复全局状态栏被隐藏",
+      "prerelease": false,
+      "publishedAt": "2026-03-12T07:05:39Z",
+      "tag": "v1.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:748de581a9ec2ecc33691956c996c7e11e7f0eeb0467ef602a84dc8137fa6234",
+          "name": "realtime-transcription-v1.2.0-macOS.zip",
+          "size": 31351
+        },
+        {
+          "digest": "sha256:ef0ca03c7fe12eb8b0f6943fcb0d7b4d5ec0a497d15a264dfed86f54d01ba926",
+          "name": "realtime-transcription-v1.2.0-Windows.zip",
+          "size": 31102
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## 新功能\r\n\r\n### GPU 加速支持\r\n- **macOS**: 支持 CoreML 加速（利用 Apple Neural Engine / GPU），显著提升推理速度\r\n- **Windows**: 支持 CUDA 加速（需要 NVIDIA 显卡 + CUDA Toolkit）\r\n\r\n### 使用方法\r\n在插件设置 → 模型设置 → GPU 加速中选择对应选项：\r\n- macOS 用户选择 **CoreML**\r\n- Windows NVIDIA 用户选择 **CUDA**\r\n- 无 GPU 或不确定时保持 **CPU（默认）**\r\n\r\n### 注意事项\r\n- CoreML 加速需要 macOS 12+ 和支持的 Apple Silicon / Intel Mac\r\n- CUDA 加速需要安装 [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) 和兼容的 NVIDIA 驱动\r\n- 如果选择 GPU 加速后出错，请切回 CPU 模式\r\n\r\n## 下载\r\n- `realtime-transcription-v1.2.0-macOS.zip` — macOS 版本\r\n- `realtime-transcription-v1.2.0-Windows.zip` — Windows 版本",
+      "draft": false,
+      "name": "v1.2.0 GPU 加速支持",
+      "prerelease": false,
+      "publishedAt": "2026-03-09T14:56:07Z",
+      "tag": "v1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f41c259fdb39092969e7a842aff896f39b16a7394d830c3743093009879a780b",
+          "name": "realtime-transcription-v1.1.0-macOS.zip",
+          "size": 30886
+        },
+        {
+          "digest": "sha256:5d9000948347c3cf00f2b6b1820436c8a8ae161504adc7c1b534774e842b9c60",
+          "name": "realtime-transcription-v1.1.0-Windows.zip",
+          "size": 30637
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## v1.1.0 更新内容\n\n### 新增\n- **一键安装脚本**：`setup.command`（macOS/Linux）和 `setup.bat`（Windows），自动创建虚拟环境并安装所有依赖\n- **双平台构建**：`build.sh` 一键生成 macOS 和 Windows 两个可部署包\n- **模型下载修复**：下载按钮现在根据「使用 Int8 量化模型」设置正确选择下载 `model.onnx` 或 `model.int8.onnx`\n\n### 修复\n- 修复 macOS 上 `pip3 install` 报 `externally-managed-environment` 错误的问题（改用虚拟环境）\n- 修复关闭 Int8 选项后下载按钮仍然只下载 `model.int8.onnx` 的问题\n\n### 安装说明\n1. 下载对应系统的 zip 文件\n2. 解压后将 `realtime-transcription/` 文件夹复制到 Vault 的 `.obsidian/plugins/` 目录\n3. 进入 `backend/` 目录运行安装脚本：\n   - macOS/Linux：`bash setup.command`\n   - Windows：双击 `setup.bat`\n4. 脚本会输出 Python 路径，复制到插件设置中即可\n",
+      "draft": false,
+      "name": "v1.1.0 · macOS + Windows 统一版",
+      "prerelease": false,
+      "publishedAt": "2026-03-05T03:36:35Z",
+      "tag": "v1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0b05308efa3612ac083bc5d64819642142481a52381dbc8fc8348f901f879a5a",
+          "name": "main.js",
+          "size": 69831
+        },
+        {
+          "digest": "sha256:0af3392a3da8ed167b432b04f9fa09033479c9fa6999f0ab44bc27bfe02373e0",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:4a2411d627385724854e2eafe81312b311f4df2fd5d67d1861ba17751f9da146",
+          "name": "realtime-transcription.zip",
+          "size": 29031
+        },
+        {
+          "digest": "sha256:2875edddb6fe5d9780156aa7a5cbb4943a2d2009a47947b2089a3afcb3245ea7",
+          "name": "styles.css",
+          "size": 11854
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## ⚠️ 平台说明\n\n> **本版本仅适用于 Windows 用户。**\n> macOS / Linux 用户请使用 [v1.0.2](https://github.com/garetneda-gif/obsidian-realtime-transcription/releases/tag/v1.0.2)。\n\n---\n\n## 2026-03-04 补丁：修复模型下载按钮\n\n- 修复 Python 3.9 兼容性问题（`str | None` 语法导致脚本启动即崩溃）\n- 下载脚本加入 60 秒连接超时，防止网络卡住后永久挂起\n- 替换失效的 GitHub 镜像（ghgo.xyz → ghproxy.net / mirror.ghproxy.com）\n- 修复下载前不检查脚本是否存在导致的静默失败\n- Python 进程改为无缓冲输出，下载进度实时显示\n\n---\n\n## Windows 平台全面适配\n\n本版本解决了插件在 Windows 系统上无法启动后端的问题，并优化了跨平台体验。\n\n### 修复内容\n\n- **后端启动失败修复**：Windows 下 `asyncio.add_signal_handler` 抛出 `NotImplementedError` 导致后端崩溃，改用 `signal.signal()` 兼容处理\n- **进程管理适配**：使用 `taskkill` / `wmic` 替代 Unix-only 的 `SIGKILL` / `pgrep`，确保 Windows 上能正确管理后端进程\n- **路径分隔符修复**：插件目录路径从硬编码 `/` 改为 `path.join()`，避免 Windows 路径拼接错误\n- **Python 默认路径优化**：Windows 下自动使用 `python`（而非 `python3`），减少首次配置成本\n- **提示信息本地化**：设置页面占位符和错误提示根据平台自动切换（`pip` vs `pip3`，路径格式等）\n\n### 安装方式\n\n**方式一（推荐）**：下载 `realtime-transcription.zip`，解压后将 `realtime-transcription` 文件夹整体复制到：\n```\n<你的笔记库>\\.obsidian\\plugins\\n```\n\n**方式二**：分别下载 `main.js`、`manifest.json`、`styles.css` 三个文件，手动放入：\n```\n<你的笔记库>\\.obsidian\\plugins\realtime-transcription\\n```\n然后将仓库中的 `backend/` 文件夹也复制到该目录。\n",
+      "draft": false,
+      "name": "v1.0.3 · Windows 专用版",
+      "prerelease": false,
+      "publishedAt": "2026-03-04T11:09:04Z",
+      "tag": "v1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0b05308efa3612ac083bc5d64819642142481a52381dbc8fc8348f901f879a5a",
+          "name": "main.js",
+          "size": 69831
+        },
+        {
+          "digest": "sha256:7614fbe795a4fd307518bdf90066f90e6f7b8ad008caa1f4b8712c09ad77da41",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:e1bac41f9d755fbe0be0cd02c1237821ea504e9dd3e6bd5e75366975df0323f3",
+          "name": "realtime-transcription.zip",
+          "size": 29384
+        },
+        {
+          "digest": "sha256:d60271f3a7362eb75626d65b17380424ed553250d106ba9364aa9f16627677bb",
+          "name": "styles.css",
+          "size": 11037
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## ⚠️ 平台说明\n\n> **本版本适用于 macOS 和 Linux 用户（推荐）。**\n> Windows 用户请使用 [v1.0.3](https://github.com/garetneda-gif/obsidian-realtime-transcription/releases/tag/v1.0.3)，其中包含 Windows 专项适配。\n\n---\n\n## 2026-03-04 补丁：修复模型下载按钮\n\n- 修复 Python 3.9 兼容性问题（`str | None` 语法导致脚本启动即崩溃）\n- 下载脚本加入 60 秒连接超时，防止网络卡住后永久挂起\n- 替换失效的 GitHub 镜像（ghgo.xyz → ghproxy.net / mirror.ghproxy.com）\n- 修复下载前不检查脚本是否存在导致的静默失败\n- Python 进程改为无缓冲输出，下载进度实时显示\n\n---\n\n## 修复\n\n- **修复后端进程累积**：添加 PID 文件机制，插件重载时自动清理孤儿 server.py 进程，防止多实例累积吃 CPU\n- **修复停止录制后 WebSocket 无限重连**：`stopRecording()` 现在会完整清理 WebSocket 连接和后端进程\n- **修复顶部控制栏滚动消失**：header 和 control-bar 设为 flex-shrink:0 + overflow:hidden 常驻固定\n- **智能自动滚动**：用 pinnedToBottom 标志替代阈值检测，浏览上方卡片时不自动滚动，点击箭头按钮或手动滚回底部才恢复\n\n## 安装方式\n\n下载 `main.js`、`manifest.json`、`styles.css`，放入：\n```\n<你的笔记库>/.obsidian/plugins/realtime-transcription/\n```\n然后将仓库中的 `backend/` 文件夹也复制到该目录。\n\n安装后端依赖：\n```bash\npip3 install -r backend/requirements.txt\n```\n",
+      "draft": false,
+      "name": "v1.0.2 · macOS / Linux 推荐版",
+      "prerelease": false,
+      "publishedAt": "2026-03-04T09:06:07Z",
+      "tag": "v1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6be86d42a7cf27b93d09cb17550414c35620025efa93f5d60d238e1a398a3e5c",
+          "name": "realtime-transcription-v1.0.1.zip",
+          "size": 25933
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## v1.0.1 修复更新\n\n### Bug 修复\n- **英文误判为中文**：修复 normalizeLanguage 对纯英文语音的语言标签判断\n- **后端启动崩溃**：补全 server.py 缺失的 --partial-profile 和 --recognition-mode 参数\n- **WebSocket 断连体验**：重连间隔缩短至 1.5s，增加重连进度提示\n- **卡字 bug**：修复 flushPendingTranscript 未重置 partial 状态\n- **课堂远距离不出字**：移除 energy_threshold 静音过滤\n- **realtimePreview 关闭时零输出**：partial 不再被丢弃，改为静默累积并定时提交\n- **防文本重复**：新增 flush_partial 后端命令，flush 后清空音频缓冲区\n- **flush 定时器无限延迟**：静默模式下定时器不再被后续 partial 重置\n- **摘要模式泄漏**：修复 commitStreamingTranscript 未移除 .streaming 类导致摘要模式仍显示转录卡片\n\n### 安装方法\n1. 下载 realtime-transcription-v1.0.1.zip 并解压\n2. 将文件夹复制到 <你的Vault>/.obsidian/plugins/ 目录\n3. pip3 install -r backend/requirements.txt\n4. 在插件设置中配置模型路径后启用\n\n详见 [README](https://github.com/garetneda-gif/obsidian-realtime-transcription#readme)",
+      "draft": false,
+      "name": "v1.0.1 · 稳定性修复",
+      "prerelease": false,
+      "publishedAt": "2026-03-04T03:20:43Z",
+      "tag": "v1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:586888b3f0f4506176e61f090d8b25a54b142be1987f7e6b95ef266695fbea77",
+          "name": "realtime-transcription-v1.0.0.zip",
+          "size": 25251
+        }
+      ],
+      "author": "garetneda-gif",
+      "description": "## 实时语音转写 v1.0.0\n\n基于 **SenseVoice-Small + Silero VAD + sherpa-onnx** 的本地实时语音转写 Obsidian 插件。\n\n### 功能\n- 实时语音转写（中/英/日/韩/粤语）\n- 边说边显示实时预览（稳态/极速两档）\n- 可选自动翻译（调用 OpenAI 兼容 API）\n- 可选 AI 文本润色\n- 可选自动摘要（按字数阈值触发）\n- 导出为 Obsidian 笔记（时间戳/AI/手动命名）\n- 历史记录持久化\n\n### 安装方法\n\n1. 下载 `realtime-transcription-v1.0.0.zip` 并解压\n2. 将文件夹重命名为 `realtime-transcription`\n3. 复制到 `<你的Vault>/.obsidian/plugins/` 目录\n4. `pip3 install -r backend/requirements.txt`\n5. 在插件设置中配置模型路径后启用\n\n详见 [README](https://github.com/garetneda-gif/obsidian-realtime-transcription#readme)\n\n---\n\n## Realtime Transcription v1.0.0\n\nFirst release. Local, offline Obsidian plugin for real-time speech recognition.\n\n### Installation\n\n1. Download and extract `realtime-transcription-v1.0.0.zip`\n2. Rename folder to `realtime-transcription`\n3. Copy to `<your-vault>/.obsidian/plugins/`\n4. `pip3 install -r backend/requirements.txt`\n5. Configure model path in plugin settings and enable\n\nSee [README](https://github.com/garetneda-gif/obsidian-realtime-transcription#readme) for full instructions.",
+      "draft": false,
+      "name": "v1.0.0 · 首个正式版本",
+      "prerelease": false,
+      "publishedAt": "2026-03-03T14:21:37Z",
+      "tag": "v1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "garetneda-gif/obsidian-realtime-transcription"
+}

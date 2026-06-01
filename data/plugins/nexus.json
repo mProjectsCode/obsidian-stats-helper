@@ -1,0 +1,3503 @@
+{
+  "author": "profsynapse",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Agentic AI for your vault. Use Claude, ChatGPT, Gemini, and local models to chat, search, create, and manage your notes with semantic memory, image generation, and MCP server integration.",
+  "errors": [],
+  "id": "nexus",
+  "lastChangedAt": "2026-06-01T17:04:58.895Z",
+  "lastFetchedAt": "2026-06-01T17:04:58.895Z",
+  "manifest": {
+    "author": "Synaptic Labs",
+    "authorUrl": "https://github.com/ProfSynapse",
+    "description": "Agentic AI for your vault. Use Claude, ChatGPT, Gemini, and local models to chat, search, create, and manage your notes with semantic memory, image generation, and MCP server integration.",
+    "id": "nexus",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.8.7",
+    "name": "Nexus",
+    "version": "5.9.9"
+  },
+  "name": "Nexus",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:93159de16b4da3cd37001b447138f8e7a9f7b9bb1cdfa9c3274500816179450e",
+          "name": "main.js",
+          "size": 4709348
+        },
+        {
+          "digest": "sha256:a4b7f34201268c4fba20b644cf9b8d50a97c941c723473ef12ee8171ef0c5bd0",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:8ac9053af187bd05bd61208830b04f3857e15e7acc1db0a9187f213a0aa71f95",
+          "name": "styles.css",
+          "size": 185386
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Add Claude Opus 4.8 model definitions by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/224\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.8...5.9.9",
+      "draft": false,
+      "name": "5.9.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-28T17:48:43Z",
+      "tag": "5.9.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:742ce55913bd64eeeceb0f2650ca90a86d877f92d61741f134ab80129682c564",
+          "name": "main.js",
+          "size": 4708811
+        },
+        {
+          "digest": "sha256:6d0e46eb3c949d97e7affb48a510d692fb45b367f884a44b504cfdfd544d5cdc",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:8ac9053af187bd05bd61208830b04f3857e15e7acc1db0a9187f213a0aa71f95",
+          "name": "styles.css",
+          "size": 185386
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* feat(workspaces): Wave 3 PR1 — BoxedSection + ConfirmModal foundation by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/220\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/v5.9.7...5.9.8",
+      "draft": false,
+      "name": "5.9.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T09:52:03Z",
+      "tag": "5.9.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71150cc6dd5b5bd330f2f38e7c388e907c6ae5681aefebf4a920868c0501bb7a",
+          "name": "connector.js",
+          "size": 6199
+        },
+        {
+          "digest": "sha256:41f4a325d6d55b57216114c8f0d56883e4dd8aff3da64c867010e434e8007260",
+          "name": "main.js",
+          "size": 4708173
+        },
+        {
+          "digest": "sha256:703652e6e9ecaa8bd59994f207921505ac3f3f022dac87be57921cb0a89efb1a",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:1b8a39377aa2ff53131dbe667df43f30c3ca08dde0281d8dcca9839d91e1a63c",
+          "name": "styles.css",
+          "size": 182438
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Bug Fix\n\nSurfaces `isArchived` from `MemoryService.getStates` for tagged states. The SQLite-metadata fast-path skipped the JSONL content fetch when `stateMeta.tags` was cached, and the skeleton return path never surfaced `isArchived` to consumers. As a result, archiving a tagged state in the workspace-settings UI did not remove it from the list, and the AI-facing `listStates` tool returned archived tagged states as if active (partially breaking the AI-archive-only read contract introduced in v5.9.6 / #215).\n\nSurgical 1-line fix: drop the `stateMeta.tags ? null :` shortcut at `MemoryService.ts:555`. Tool filter at `listStates.ts:106` inherits the fix automatically. Adds 3 regression tests covering tagged-archived surfacing, tags preservation, and explicit no-shortcut assertion.\n\n### What this affects\n- **UI** — Workspace settings → States section: archive icon now correctly removes tagged states from the list.\n- **AI** — `listStates` MCP tool now correctly respects the archive flag on tagged states.\n\n### Follow-up tech debt (not in this release)\nProper long-term fix is denormalizing `is_archived` into SQLite metadata so the fast-path can return a complete view (~80-120 LoC, v13 migration). The shortcut existed for perf — denormalization restores it without correctness cost. Tracked as a separate issue.\n\n**PR**: #218 (follow-up to #216 / #215 manual-test finding)\n\n## What's Changed\n* feat: state CRUA tools + states management UI (#215) by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/216\n* fix(memoryManager): surface isArchived from getStates for tagged states by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/218\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.6...v5.9.7",
+      "draft": false,
+      "name": "v5.9.7 — Fix archive visibility on tagged states",
+      "prerelease": false,
+      "publishedAt": "2026-05-26T21:23:01Z",
+      "tag": "v5.9.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f01d408b0d33672806a0e9e8c5751ecc107f2fbb73ec16ddd332ecec13eec5ee",
+          "name": "main.js",
+          "size": 4691255
+        },
+        {
+          "digest": "sha256:aec7a79022282bc112a10ffc093ff303f09455c56c1de0da6a2a24e8811716e2",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:f4fa4ea64c4c0867ed833a0fa8e3d577205b04b9798066c4b589736f2c4af47e",
+          "name": "styles.css",
+          "size": 179500
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.5...5.9.6",
+      "draft": false,
+      "name": "5.9.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-22T15:25:11Z",
+      "tag": "5.9.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:387dcff73265ac4cb1d510614a9773b77c7915dbd611462e807b9d5103b7e671",
+          "name": "main.js",
+          "size": 4686346
+        },
+        {
+          "digest": "sha256:5082472d3dfad25cc63f9636125e8019ad0c219eb1cb9d1960c472da3294c89f",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:f4fa4ea64c4c0867ed833a0fa8e3d577205b04b9798066c4b589736f2c4af47e",
+          "name": "styles.css",
+          "size": 179500
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* [codex] Prepare plugin store compliance release by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/213\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.4...5.9.5\n\n## What's Changed\n* [codex] Prepare plugin store compliance release by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/213\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.4...5.9.5",
+      "draft": false,
+      "name": "5.9.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T17:09:04Z",
+      "tag": "5.9.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:86bfc9fc9a00c52c9049f7711f879c8849b8843713dc3893c37c75f98cb5be93",
+          "name": "main.js",
+          "size": 4692256
+        },
+        {
+          "digest": "sha256:eb1e042cd0f1ab0021b76bca9b420a6d5d7426f760f61626f043bf1dd3875d3d",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:f4fa4ea64c4c0867ed833a0fa8e3d577205b04b9798066c4b589736f2c4af47e",
+          "name": "styles.css",
+          "size": 179500
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* fix(storage): self-heal stale \"verified\" cache-backend marker (#209) by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/210\n* feat(models): add Gemini 3.5 Flash by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/212\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.3...5.9.4",
+      "draft": false,
+      "name": "5.9.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T00:39:24Z",
+      "tag": "5.9.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:43c697611dfc684a81fc4bd52734c6797c305017efbc56648c7c533ac17b5f18",
+          "name": "main.js",
+          "size": 4691048
+        },
+        {
+          "digest": "sha256:e6510409693f6277a129690bb8b83b528bc819394d17f715f3b2180cc07fe09d",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:f4fa4ea64c4c0867ed833a0fa8e3d577205b04b9798066c4b589736f2c4af47e",
+          "name": "styles.css",
+          "size": 179500
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* [codex] Address Obsidian source review warnings by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/208\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.2...5.9.3",
+      "draft": false,
+      "name": "5.9.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T17:19:02Z",
+      "tag": "5.9.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7af82c6b75c12f7f8e3b0bb72697f5a7d30cb07d2f24650933ab5424d5d36408",
+          "name": "main.js",
+          "size": 4688963
+        },
+        {
+          "digest": "sha256:5a085d2cdd0f8fc886eda9b409e12295627722f4cc75ef0d39f5d2e30a6e463e",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.1...5.9.2",
+      "draft": false,
+      "name": "5.9.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T16:41:16Z",
+      "tag": "5.9.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7af82c6b75c12f7f8e3b0bb72697f5a7d30cb07d2f24650933ab5424d5d36408",
+          "name": "main.js",
+          "size": 4688963
+        },
+        {
+          "digest": "sha256:41ba2ef9685b8b473094f042c9a0d50d3f1ba29742462fe8e601591f8e47321b",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* [codex] Fix Obsidian release review issues by @ProfSynapse in https://github.com/ProfSynapse/nexus/pull/207\n\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.9.0...5.9.1",
+      "draft": false,
+      "name": "5.9.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T14:41:40Z",
+      "tag": "5.9.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:c7a45ba503f218b75962099bd5392a228fd34d3025562a00338011919c9f6311",
+          "name": "main.js",
+          "size": 17115965
+        },
+        {
+          "digest": "sha256:8ae69d16b57392e87d935f9b1af63f7eb5a9e0991849917bb501030a0f0646b2",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Pattern-anchored \\`content replace\\` (PR #206) — breaking schema change\n\n**Old shape** (≤ v5.8.x): \\`{path, oldContent, newContent, startLine, endLine}\\` — line-number anchored.\n**New shape** (v5.9.0+): \\`{path, start, end, content}\\` — 4-field, pattern-anchored. Both \\`ContentManager.replace\\` and \\`executePrompts.replace\\` migrated in lockstep. No compat shim — the old shape returns a clean validation error.\n\n\\`start\\` and \\`end\\` are independent globally-unique anchor strings. The tool deletes the byte range from the start of the line containing \\`start\\` through the end of the line containing \\`end\\`, then inserts \\`content\\`. Whole-line semantics absorb the matched lines so callers don't need to micro-target byte offsets. NFKC + CRLF normalization applies to the compare path only — file bytes outside the replacement range are written verbatim.\n\n**Why this design**: LLM clients have weaker priors about file position than file content. A line-number anchor that \\\"mostly works\\\" silently latches onto the wrong line when the file shifts; an anchor string that \\\"mostly works\\\" fails *loudly* — emitting an ambiguity error with the actual matching line numbers, which coaches the LLM to extend the anchor on retry. Globally-unique anchors (vs sed-style \\\"first end after start\\\") eliminate the silent latch-onto-wrong-end failure mode at the cost of one additional uniqueness check.\n\n**Migration**: any caller passing the old 5-field shape gets a validation error. Update to the 4-field shape; the new error messages name the exact violation (anchor not found / ambiguous with line list / whitespace-only / order reversed / empty content).\n\n46/46 jest green, \\`tsc --noEmit\\` clean. Reviewer verdicts: architect APPROVED, test GREEN, backend GREEN.\n\n## Install\n\nDownload \\`main.js\\`, \\`connector.js\\`, \\`manifest.json\\`, and \\`styles.css\\` into your vault's \\`.obsidian/plugins/nexus/\\` folder, then reload the plugin.",
+      "draft": false,
+      "name": "5.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-11T21:23:36Z",
+      "tag": "5.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:fce3d2eef330b09b667ab60b4b207c6e81feecbff11d809bf387d4b565d8e10c",
+          "name": "main.js",
+          "size": 17120455
+        },
+        {
+          "digest": "sha256:8598bfdf66ca806cbc1c5c497fa85e2527281399306ccadb5249beb5ff4826e2",
+          "name": "manifest.json",
+          "size": 403
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **DeepSeek models now appear in dropdown**: PR #205 (v5.8.14) added the DeepSeek adapter and `DEEPSEEK_MODELS` array but missed the two central registries that feed the model dropdown UI, so DeepSeek models never surfaced even with a valid API key. This release wires DeepSeek into `StaticModelsService` (import, `providerModels` array, switch case in `getModelsForProvider`, and the `getAvailableProviders` whitelist) and `ModelRegistry` (`AI_MODELS` and `DEFAULT_MODELS` records).\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.15",
+      "prerelease": false,
+      "publishedAt": "2026-05-11T14:18:01Z",
+      "tag": "5.8.15"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:d35731d3d8764cf064a69979f15a5562add39a6fc6019347e123203dc022559c",
+          "name": "main.js",
+          "size": 17120203
+        },
+        {
+          "digest": "sha256:c8bac3d4ec87c4eb1454ba4d42544576818d38857b8f4cc042d0a073247e49f3",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **DeepSeek as first-class cloud provider** (#205, resolves #204): adds direct DeepSeek API support alongside OpenAI / Anthropic / Google / Mistral / Groq / OpenRouter. Four model entries: \\`deepseek-v4-flash\\` and \\`deepseek-v4-pro\\` (each with a \\`-thinking\\` variant), 1M context, 384K max output. \\$0.14/\\$0.28 per 1M tokens for flash; \\$0.435/\\$0.87 for pro (75% off until 2026-05-31). Thinking mode plugs into the existing reasoning UI — DeepSeek's \\`reasoning_content\\` blocks render the same way Claude / Gemini / o-series / Groq reasoning does. Mobile-compatible (uses Obsidian's \\`requestUrl\\`). 18/18 new tests passing.\n\n  ⚠️ **Untested in production** — author does not use DeepSeek; this provider was added in response to community request. Please report any issues at https://github.com/ProfSynapse/nexus/issues.\n\n## Install\n\nDownload \\`main.js\\`, \\`connector.js\\`, \\`manifest.json\\`, and \\`styles.css\\` into your vault's \\`.obsidian/plugins/nexus/\\` folder.",
+      "draft": false,
+      "name": "5.8.14",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T13:17:57Z",
+      "tag": "5.8.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:4d7ed210d8ca99f94584001872b4d92181f7b8e3a1bb7894d9fc292e606da175",
+          "name": "main.js",
+          "size": 17113834
+        },
+        {
+          "digest": "sha256:926bbe816cfebd8f6865bd52e8532c0010a0aa3fb035596dd05b8c7524105409",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Hotfix for v5.8.12 (cloud-sync cache backend) regression discovered post-deploy on Windows.\n\n## What was wrong\n\nAfter v5.8.12 shipped, Windows users with an existing cache.db saw the migration run on every Obsidian restart with the same log signature each time:\n```\n[CacheBackendMigration] READ_LEGACY ok\n[CacheBackendMigration] WRITE_IDB ok\n[CacheBackendMigration] VERIFY ok\n[CacheBackendMigration] MARK_VERIFIED ok\n[CacheBackendMigration] JANITOR done (removed=0, failed=1)\n```\n\n## Root cause\n\n`PluginScopedStorageCoordinator.saveState` was unconditionally replacing `pluginData.pluginStorage` on every boot during storage-plan preparation, wiping the `cacheBackend` field that the migration FSM had just persisted. On the next boot the migration saw no persisted verified state and ran the full FSM again.\n\nOn macOS, JANITOR successfully deletes cache.db on the fire-and-forget pass after MARK_VERIFIED, so the next boot's legacyExists check returns false and the migration short-circuits via the fresh-install fast-path — the saveState clobber bug is invisible. On Windows, the Obsidian filesystem watcher holds a transient handle on cache.db and JANITOR's single-shot adapter.remove fails — legacyExists stays true and the full FSM re-runs every boot.\n\n## What changed\n\n1. `PluginScopedStorageCoordinator.saveState` now merges existing `cacheBackend` into the new state before saveData.\n2. `CacheBackendMigration.runJanitor` now retries the literal cache.db delete with 100/250/500ms backoff (3 attempts, 850ms total budget). Per spec §5.4 JANITOR is still fire-and-forget — failure never blocks startup.\n3. New regression tests pin the saveState preservation contract; existing JANITOR retry test rewritten.\n\n## Quality\n\n- 99/99 cache-backend tests green\n- Build clean\n- 3 new regression tests in PluginScopedStorageCoordinator.cacheBackendPreservation.test.ts\n\nPR: #203",
+      "draft": false,
+      "name": "v5.8.13 — Cache backend re-run loop hotfix",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T20:03:46Z",
+      "tag": "v5.8.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:397fdedc3a3ec4ee9d3b4bc86306002fe39332f44c80be64c397ff312b9f7bca",
+          "name": "main.js",
+          "size": 17103275
+        },
+        {
+          "digest": "sha256:58a61d095fd23d8c3180c28d29de6d77afbdb3ca5405eb200d186c1ccb65035f",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Patch release for PR #202.\n\n## What's fixed\nResolves the GDrive Shared Drive boot-hang incident where the SQLite cache file (`cache.db`) was being conflict-copied by cloud-sync clients, corrupting handle state and producing indefinite hangs in the Task Board (\"waiting for services\") and MCP `getTools`/`useTools` calls.\n\n## What changed\n- **Storage backend swap on desktop**: file-based SQLite cache replaced with IndexedDB via new `CacheBlobStore` interface seam. Desktop now uses `IndexedDBCacheBlobStore`; mobile keeps `VaultAdapterCacheBlobStore`. SQLite itself is untouched — the in-memory `sqlite3_deserialize` path is preserved; only the persistence backend changes.\n- **One-time migration on first boot**: every existing desktop install with an on-disk `cache.db` triggers a foreground-blocking migration FSM (DETECT → READ_LEGACY → WRITE_IDB → VERIFY → MARK_VERIFIED → JANITOR → DONE). Migration is idempotent and verified; legacy `cache.db` and any conflict-copy siblings (`cache (N).db`, `cache N.db`, `cache (Conflict).db`) are janitored after VERIFY.\n- **Sticky restart Notice on first migration boot**: papers over a transient `waitForQueryReady` race during post-migration reconciliation. Restart skips the bad path permanently. Root-cause investigation tracked as a follow-up.\n- **New command**: `Nexus: Rebuild cache` — re-entrancy-guarded `rebuildCache()` for manual cache rebuild from JSONL source-of-truth.\n\n## Mobile\nUnchanged. `isDesktopOnly: false` preserved. Mobile keeps the existing `vault.adapter` file backend via `VaultAdapterCacheBlobStore`.\n\n## Quality\n- 99/99 cache-backend tests green (53 new tests across 6 unit + 7 integration files, on top of 32 smoke tests)\n- Full suite: 2724 passed, 1 pre-existing unrelated failure (ModelAgentManager, predates this PR)\n- 0 Blocking findings; all 7 Minor remediated pre-merge (3 code fixes + 7 test additions)\n- Runtime-verified on Synaptic Labs vault (Google Drive Shared Drive) — original conflict-copy hang resolved on second boot\n\n## Known follow-ups\n- `CONFLICT_COPY_PATTERNS` regex doesn't match Dropbox's canonical `cache (User's conflicted copy YYYY-MM-DD).db` form — tracked for post-merge regex widening\n- First-boot transient `waitForQueryReady` race during post-migration reconciliation — papered over with the restart Notice; root-cause investigation deferred\n\n## Artifacts\n`main.js`, `connector.js`, `manifest.json`, `styles.css`",
+      "draft": false,
+      "name": "v5.8.12 — Cloud-sync-aware cache.db backend",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T18:54:18Z",
+      "tag": "v5.8.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:afa0634e00457bfcf597afb87f1121382c5f5bb4981407ed3f67ef099ccc2b2f",
+          "name": "main.js",
+          "size": 17078158
+        },
+        {
+          "digest": "sha256:b8ec250678656bc38469276d06835e19e033c397afe9a1e389230256b271e0cb",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **CLI tool array-bracket fix** ([#201](https://github.com/ProfSynapse/nexus/pull/201), fixes [#200](https://github.com/ProfSynapse/nexus/issues/200)) — `useTools` calls like `content set-property --value \"[[[A]],[[B]],[[C]]]\"` no longer corrupt frontmatter wikilinks into garbage like `['[[A','[[B]]','C]]']`. `ToolCliNormalizer` now applies a depth-counting, quote-aware `stripOuterArrayBrackets` helper on the CSV-fallback path of both the `array<X>` and `oneOfArray` flag branches when the inner content fails `JSON.parse`. Bare CSV (`[[A]],[[B]]`) is left untouched, and the documented JSON-array workaround (`[\"[[A]]\",\"[[B]]\"]`) still works. 170/170 `ToolManagerCliSyntax` tests pass with three new repro tests covering the triple-bracket wikilink case on both code paths and the bare-CSV counter-case. Patch authored by @gcp007-ops.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.11",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T11:16:39Z",
+      "tag": "5.8.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:4851b9848814dcf7b6f0fc70a681a6f5b1c3e082cf9ee3bc905a95b5c7181dc3",
+          "name": "main.js",
+          "size": 17077329
+        },
+        {
+          "digest": "sha256:2443689fbf164fde2c82227ea65f1db5ceca08ba0773c5d4b20fecdedd119ef9",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's Fixed\n\n- **Sync-safe storage reconcile (Phase 1)** — fixes the GDrive Shared Drive multi-device task-revert incident where collaborator edits silently reverted on sync. Three layers ship together:\n  1. **Conflict-copy regex relaxation** in the shard reader and JSONL watcher so `[Conflict]`, `(N)`, `_conf(N)`, Dropbox-style and iCloud sibling files are no longer dropped silently.\n  2. **New `ReconcilePipeline`** with three-layer idempotency (cursor `lastEventId` tail-match fast-path + `applied_events` PK dedupe + INSERT OR REPLACE) — handles the silent-overwrite mode (full-file replacement, no conflict sibling) that was the actual incident pattern.\n  3. **v11→v12 additive `shard_cursors` migration** — per-file cursor keyed by full shardPath (canonical and conflict-sibling shards never collapsed).\n\n- **Wire-up**: `HybridStorageAdapter.handleExternalJsonlChange` now invokes scoped per-shard reconcile on external mtime change (additive — full-rebuild path preserved). Manual `Nexus: Refresh synced data` Notice now reads `Reconciliation complete.`\n\n- **Test coverage**: 73 new Jest tests green including the architect §6 silent-overwrite green-bar that reproduces the user incident; perf gate 13ms warm @ 10K events.\n\n- **Mobile**: `isDesktopOnly: false` preserved — static AST sweep enforces no top-level Node.js built-in imports across new code.\n\nPhase 2 (cache.db relocation outside the vault, byte-offset cursor) deferred — this release ships on the three-layer idempotency that was load-bearing for the actual incident pattern.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.10",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T22:22:54Z",
+      "tag": "5.8.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:57359eee3b8546d16641c62def9f31ba3c93c3583be8c1c136ee9719fe6dc524",
+          "name": "main.js",
+          "size": 17056015
+        },
+        {
+          "digest": "sha256:9d47a7164f8b2b2bb03e80232d8efa48fc1583d16cb7403532be045da7005725",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **CLI tool slug tightening (PR #198)**: Removed redundant agent-name repetition from 26 tool slugs to reduce token usage (e.g., `search search-content` → `search content`, `task create-task` → `task create`, `ingest ingest` → `ingest run`). `webTools` agent shortened to `web`. Discovery listing now uses CLI aliases. ~16% reduction in command-name token overhead.\n- **Workspace `\"default\"` resolution fix**: `workspaceId: \"default\"` no longer fails in task tools — passes through as partition key instead of attempting workspace name lookup.\n- **`load-workspace` parameter clarity**: Positional parameter renamed from `id` to `workspace` to avoid confusion with the context-level `workspaceId` field.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.9",
+      "prerelease": false,
+      "publishedAt": "2026-04-30T11:58:15Z",
+      "tag": "5.8.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:afb19180a9f760758230972ec31c0d8e3d388ebfcf30e54383a148b2dfa1e754",
+          "name": "main.js",
+          "size": 17054111
+        },
+        {
+          "digest": "sha256:d9c6623f2241fe0019ccb153b054035b0fb859922101c8850b6b82d12582a6e4",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Highlights\n\n**Workspace/memory/search batch + hydration race fix.** Six PRs since 5.8.7. The headline fix is **#197** (issue #190): `loadWorkspace` no longer returns `Workspace not found` and `listStates` no longer silently returns `[]` when called immediately after `Cmd+P → Reload`. Thanks to @gcp007-ops for the empirical hydration-race diagnosis with `withReadableBackend` telemetry.\n\n## Bug fixes\n\n- **#197 / #190** — `HybridStorageAdapter.waitForQueryReady` is now event-based (settled by the existing `complete`/`clear`/`fail` phase transitions) instead of polling every 250ms. `withReadableBackend` awaits `waitForQueryReady()` once before falling through to the legacy backend, closing the 1–3s warm hydration window (30–60s on cold boot) where reads silently hit a stale legacy view. The 60s timeout is demoted to a safety net for stuck hydration only.\n\n## Workspace + session\n\n- **#192** — Threads `workspaceId` through the session handle pipeline. `sessionHandleMap` is now partitioned per workspace and evicted on session delete, so sessions no longer leak across workspace boundaries. Adds `moveSessionToWorkspace` for explicit reassignment.\n- **#193** — `WorkspaceFolderWatcher` observes vault folder changes for the active workspace. `WorkspaceContextBuilder` is expanded to assemble richer context for `loadWorkspace`. `recordActivityTrace` is deduped against the explicit `getSession` path.\n- **#195** — `displaySessionId` and `sessionName` are plumbed through the tool batch executor, request handlers, and connector. The internal corrected UUID stays internal (`correctedId === originalSessionId`); only the human-readable label crosses the wire.\n\n## Search + memory\n\n- **#194** — `MemorySearchProcessor` gains CLI-trace pretty-printing and `useTools` result expansion (`expandUseToolsTraceMatches`, `formatUseToolsResultContent`, `parseCliSegmentArgs`, etc.). The file is now 914 LoC; tracked as Phase 2 extraction candidate (split into `TraceMatchExpander` + `UseToolsResultFormatter` when next functionally touched).\n\n## Eval harness\n\n- **#196** — Eval harness in `tests/eval/` gains retry-on-transient-error, structured YAML config, broader scenario coverage, and a `/nexus-eval-harness` skill for reproducible invocation.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.8",
+      "prerelease": false,
+      "publishedAt": "2026-04-29T18:41:26Z",
+      "tag": "5.8.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:319769535b23d86f994b1ea1c92170335128e0d09ced5c789762a3ddf7ca6808",
+          "name": "main.js",
+          "size": 17005605
+        },
+        {
+          "digest": "sha256:d1341d21d3a2150bbe7e4675bdbd3ed6d86dd151f7f9791846e246fd675aff12",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New / Fixes\n\n- **Workspace/state memory tools**: Workspace names now work as handles across workspace create/load/update and state create/list/load flows, so agents do not need to recover UUIDs for normal follow-up commands.\n- **State/session linkage**: Saved states now use the current runtime session ID instead of default session placeholders, and state listing/loading preserves the metadata needed for verification.\n- **Workspace settings UX**: Workspace settings refresh when workspaces change externally and deletion uses a normal confirmation modal.\n- **Tool response cleanup**: Create responses stay thin and use nudges to explain name-based follow-up; ToolManager no longer echoes full normalized params in successful results.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.7",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T20:15:02Z",
+      "tag": "5.8.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:c323074bfd237fea0b32959531509166d23c7361ba701f2aeb912bbc0939dfb8",
+          "name": "main.js",
+          "size": 16991853
+        },
+        {
+          "digest": "sha256:facbc5ac6def751fd814536d214eb34600e447372ef5915c76fb8c6c6fdc393d",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New / Fixes\n\n- **Content safety and replacement matching**: `content replace` now tolerates NFC/NFKC normalization drift, preserves untouched bytes, and has hardened Unicode regression fixtures.\n- **Frontmatter write guards**: Content writes now reject malformed or non-mapping leading Obsidian frontmatter before rewriting files.\n- **GPT-5.5 support**: Added GPT-5.5 / GPT-5.5 Pro to OpenAI and OpenRouter, added GPT-5.5 to Codex defaults/fallbacks, and added a reusable live provider smoke test.\n- **Windows Claude Code auth**: CLI discovery now prefers `.cmd`/`.bat` npm wrappers, includes `%APPDATA%\\npm`, and routes Claude headless spawning through the wrapper-aware process path.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.\n",
+      "draft": false,
+      "name": "5.8.6",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T12:08:50Z",
+      "tag": "5.8.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:b1e0b51e6a9ae4fa0ae6b3f592645b1eea19dd70f39a52d11c245047a8335342",
+          "name": "main.js",
+          "size": 16987165
+        },
+        {
+          "digest": "sha256:4cb06e72f0efff5b0e6cfb45c866ab6fff0678e318468a36a87d18c42f4bce5d",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **CLI parser — comma separator is whitespace-gated** (PR #181, fixes carry-over from #163): `splitTopLevelSegments` no longer treats every unquoted comma as a command separator. A comma is structural only when followed by whitespace/EOF (canonical `cmd1, cmd2` form). Glued commas (`a,b,c`) stay textual, so CSV array flag values like `--paths a,b,c` no longer explode into pseudo-commands (`Unknown agent \"b\"`). 9 regression tests added.\n\n- **CLI parser — phantom backslash dropped for non-canonical escapes** (PR #180, fixes #179): `unescapeQuotedContent` default branch was re-emitting the backslash for any `\\X` outside the canonical set (`\\n \\r \\t \\\" \\' \\\\ \\uXXXX`), silently corrupting backticks, fenced code blocks, `$`, `#`, `(`, `)` and any shell-ish character an LLM might defensively escape. Now aligns with POSIX-shell double-quoted semantics: `\\X` with no special meaning becomes `X`. Literal `\\X` is still reachable via `\\\\X`. 11 regression cases added.\n\n- **Task Board auto-refresh on storage external-sync** (PR #176): the Task Board view now subscribes to storage external-sync events and routes refreshes through the existing `TaskBoardSyncCoordinator` so open boards reload when task streams change. Note-link mutations also emit board update notifications so card metadata stays live without reopening the view.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.8.5 — Tool Manager CLI parser hardening + Task Board liveness",
+      "prerelease": false,
+      "publishedAt": "2026-04-25T18:09:38Z",
+      "tag": "v5.8.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:5b93e29c5ae9370770ab87b151c7ed51d7a1ffe17085ec4f056cd3ee58dfad7f",
+          "name": "main.js",
+          "size": 16984152
+        },
+        {
+          "digest": "sha256:1478de7a42d4feaa45901158d9d1fca12884389c05c107817a275ddf87797334",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **Dynamic tool registry**: App agents installed at runtime (WebTools, Composer) are now discoverable via `getTools` and executable via `useTools`. Previously `GetToolsTool.description` was built once at startup from the initial agent map, so apps registered after startup were invisible to the MCP surface. `AgentRegistrationService` now wraps `AppManager` register/unregister callbacks to sync with `ToolManagerAgent`, which calls `GetToolsTool.refreshDescription()` on each mutation. Test: `tests/unit/ToolManagerDynamicRegistry.test.ts`.\n- **setProperty lint carry-over (#173)**: Added typed `isUnknownArray` predicate so `Array.isArray` narrowing yields `unknown[]` instead of `any[]` at the scalar-into-array merge branch. No behavior change — all 21 merge-decision tests pass.\n\n## Tooling\n\n- **New skill `nexus-tool-schemas`**: Export live CLI-first tool schemas as JSON via `npm run schemas:tools`. Supports `--selector` (getTools selector grammar) and `--output -` for stdout. Synced across `.claude/`, `.cline/`, `.codex/`, `.skills/`.\n\n## Known Follow-ups\n\n- `ToolManagerAgent.registerDynamicAgent` overwrites via `Map.set()` while `AgentManager.registerAgent` throws on duplicate. Real-world flow always unregisters first on re-enable, so not triggered — worth tightening in a future minor.\n- If a second dynamic registrar ever appears beyond `AppManager`, evolve `AgentManager` to emit `agent:registered` / `agent:unregistered` events instead of the current callback-wrap pattern.\n\n## Install\n\nDownload \\`main.js\\`, \\`connector.js\\`, \\`manifest.json\\`, and \\`styles.css\\` into your vault's \\`.obsidian/plugins/nexus/\\` folder.",
+      "draft": false,
+      "name": "5.8.4 — Dynamic tool registry for app agents",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T10:47:29Z",
+      "tag": "5.8.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:b9c9f2b6b713136a9c8de5bbf41435ec224358781110c3e577a476a791c51883",
+          "name": "main.js",
+          "size": 16981804
+        },
+        {
+          "digest": "sha256:5551b9db2a2198076f487beac0afc474cb209ddeb298dac24f9ee85ef635a39a",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **Codex assistant text after tool calls**: The OpenAI Codex Responses API was silently dropping the final assistant text reply after tool execution rounds. The adapter now handles three additional SSE finalization events (`response.content_part.added`, `response.output_text.done`, `response.output_item.done`) with deduplication guards.\n- **Codex stateless continuation**: `ProviderMessageBuilder` now properly replays prior tool-role messages as `function_call_output` items in the stateless Codex input array, fixing multi-turn tool continuations.\n\n## Added\n\n- Live debug test for end-to-end Codex tool flow verification (env-gated)\n- `generate-tool-schemas.mjs` rewritten for live TS transpilation\n- npm scripts: `sync:skills`, `schemas:tools`\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.8.3 — Codex post-tool text fix",
+      "prerelease": false,
+      "publishedAt": "2026-04-21T12:26:31Z",
+      "tag": "v5.8.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:dfd8d03b705ddbec1d896e9342fbda55e8c534d369d2bc4164b298b00b70b65e",
+          "name": "main.js",
+          "size": 16979303
+        },
+        {
+          "digest": "sha256:473abe19070da391574aec07fef6cc1e4153c6d95c7b8cb013d43977a4595ad2",
+          "name": "manifest.json",
+          "size": 428
+        },
+        {
+          "digest": "sha256:5b0bb978b2dc3d9a176ea2047c7b9ab84272f3305e5e93e0040a913b238e00bd",
+          "name": "styles.css",
+          "size": 189662
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New / Fixes\n\n- **ToolManager CLI-first contract finalized** (#170): `useTools`/`getTools` now accept only the top-level CLI shape — legacy nested `{context, calls}` and `{request}` arrays rejected with a clear error. LLMs fetch the schema dynamically; no user-facing migration needed.\n- **CLI Unicode escape fix** (#170): `\\uXXXX` escapes inside quoted strings now decode correctly (e.g., `\"\\u2014\"` → `—`); double-escaped `\\\\u2014` stays literal.\n- **executePrompts action alignment** (#170): `replace` action accepts `oldContent` + `startLine` + `endLine` for line-range edits; `position` deprecated (still accepted, normalized internally). `append`/`prepend` route to `insert`. `position < 1` now rejected (was `< 0`).\n- **Test coverage**: 10 new tests in `ExecutePromptsActionAlignment.test.ts`; existing ToolManager/ExecutePrompts suites updated.\n- **Repo hygiene** (#169): LF normalization via `.gitattributes`; `.codex-temp/` and `.vscode/` added to `.gitignore`.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-20T20:00:34Z",
+      "tag": "5.8.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:f718f1a9a4ad79b98e16ff6786bcd543d631e11b56a7042bbb77770aeea58774",
+          "name": "main.js",
+          "size": 16972155
+        },
+        {
+          "digest": "sha256:b7a77cd03d6e97d232a0f55093e57445732f0c41b2ea2c68e8e98125e74dee29",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's Fixed\n\n### CLI parser polish (PR #168)\n- **Chat bubble params display correctly in streaming phase** — `parseCliForDisplay` had drifted from the execution parser after the 5.8.0 CLI-first migration; now handles `--flag=value`, `--no-foo` negation, flag-occupied positionals, and bool `true`/`false` peek. Execution path was always correct — this fixes the streaming-phase preview only.\n- **Stricter boolean validation** — boolean flags now throw a canonical-literal error on inputs other than `true`/`false` instead of silently passing the string through. Applies to both scalar boolean flags and `array<boolean>` CSV items.\n- **Reject `--flag=` with empty inline value** for required non-bool flags (previously accepted `\"\"`).\n- **`array<X>` JSON-parse fallback** restructured so per-item canonical-literal throws surface correctly instead of being swallowed by the outer try/catch.\n- **Drift-prevention tests added** so the display parser stays in sync with `parseCommandSegment` going forward.\n\nBuild green; ToolManagerCli suite 131/131 pass (+14 new tests).\n\n## Install\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-19T18:35:06Z",
+      "tag": "5.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:226ba3d20bb7ec339a7c967a04ea071050107d797488a8588abd2026523a440b",
+          "name": "main.js",
+          "size": 16966433
+        },
+        {
+          "digest": "sha256:de1bb9b9f86f77b55a6c92f9252ab6ddce414e762fd10f7613470edc27bb9a91",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:00b63d57da8e7bbcea9fc3b842f24bfd4f63b3bfa1ecb4a4cc4b63bc3ee4f79c",
+          "name": "styles.css",
+          "size": 181249
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Chat UI — Glass Chrome Redesign\nMajor overhaul of chat rendering:\n- New **ToolStatusBar** with a race-free state machine (`ToolCallStateManager`), replacing ad-hoc tool status patches.\n- New **ContextBadge** showing live context budget.\n- New **ThinkingLoader** animated loader that stays mounted through tool execution.\n- New **ToolInspectionModal** for drilling into tool call details (rAF-throttled scroll).\n- Faux-glass pivot with theme-aware glass tokens and accent-tinted gradients.\n- Message bubble glass redesign; mobile button sizing tightened (44→32px); edit UI redesigned with icon-swap pattern; branch-nav chevron clustering; user-action icon repositioning.\n- Reliability: `ManagedTimeoutTracker` plugs setTimeout leaks, `ChatKeyboardViewportController` extracted, component lifecycle cleanup, dead `addEventListener` fallbacks removed, a11y sweep (`:focus-visible`, `aria-live`).\n\n### CLI-First MCP Tool Calling (PR #157)\nThe public MCP contract for `getTools`/`useTools` now takes a flat shape:\n```\n{ workspaceId, sessionId, memory, goal, constraints?, tool: \"<agent> <tool> --flag value, <agent> <tool> ...\" }\n```\nCentral `ToolCliNormalizer` is the single source of truth. System prompt now teaches CLI syntax and ships the tool catalog in CLI shape. Legacy `params.calls[]` path retained as a migration fallback for the WebLLM/Nexus Quark adapter.\n\n### New Models\n- **Claude Opus 4.7** — added to Anthropic direct (200K + 1M context variants), OpenRouter, and Claude Code registries.\n- **OpenRouter additions**: `openai/gpt-5.4`, `openai/gpt-5.4-pro`, `google/gemini-3-*` / `gemini-3.1-*` preview family (reaffirmed), `minimax/minimax-m2.7`, `qwen/qwen3.5-27b`, `xiaomi/mimo-v2-omni`, `xiaomi/mimo-v2-pro`, `z-ai/glm-5.1`, `z-ai/glm-5v-turbo`.\n\n### LLM Pipeline\n- **Azure fix**: Preserve `tool_call_id` through pipeline remaps — resolves `Missing required parameter: 'input[N].call_id'` (PR #142).\n- Preserve latent fields (`reasoning_details`, `thought_signature`, `name`) for providers that use them.\n- Drop redundant `LLMService.generateResponseStream` remap (Phase 3 of canonical message pipeline, PR #143).\n- `getStatusLabel` overrides across ~30 tools; tool status labels colocated on `BaseTool`; `toolDisplayFormatter` extended with ~30 missing tool handlers.\n- Eval harness tuned for 90% pass rate across Sonnet 4.6, GPT 5.4-mini, GPT 5.4, Gemini 3 Flash.\n\n### Infrastructure\n- **SQLite-from-JSONL sync trigger** (PR #138): cache.db now auto-rebuilds when JSONL files change via Obsidian Sync — keeps multi-device vaults consistent.\n- **Branch management fixes** (PR #136): paginated branch fetch, context inheritance, error handling.\n- **Chat media model settings** now persist (PR #137).\n- Logger: unified warning/info logging paths.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-17T20:40:00Z",
+      "tag": "5.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:8dd011e9e8e6d02394acd184d3321d255ca18fbd507782a9aaba3f01100b1124",
+          "name": "main.js",
+          "size": 16873793
+        },
+        {
+          "digest": "sha256:51876975c3211c107b58971e2d1a55c276d80db603741860c3af87b9a747e4f9",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:9d619b0a62255c318183b77abdecf6fa851d882ae7d1655b7119a5272be05884",
+          "name": "styles.css",
+          "size": 164918
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Vault-root storage**: Relocatable, sharded event-stream storage with VaultRootResolver, VaultEventStore, and ShardedJsonlStreamStore\n- **Storage root migration**: VaultRootMigrationService and VaultRootRelocationService for safe migration between storage roots\n- **Data tab UI**: Change storage root path from settings with validation and relocation flow\n- **StorageRouter**: Centralized dual-path routing replacing scattered conditionals in JSONLWriter\n- **System guides workspace**: Built-in assistant documentation with GitHub fetch and offline fallback, accessible via `__system_guides__` workspace\n- **DualBackendExecutor**: Query-readiness routing for phased hydration\n- **Defense-in-depth**: Path traversal rejection in event stream IDs, data orphaning guard, query timeout protection\n\n## Fixes\n\n- Settings deep merge for storage defaults (prevents loss of schemaVersion/maxShardBytes)\n- HybridStorageAdapter `relocateVaultRoot` implementation for DataTab folder change\n- Lenient JSONL parsing (skip malformed lines instead of crashing)\n- NamedLocks cleanup after release (memory leak fix)\n- 60s timeout on `waitForQueryReady` (prevents hung UI)\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.7.4",
+      "prerelease": false,
+      "publishedAt": "2026-04-14T11:55:20Z",
+      "tag": "5.7.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:e5205f214382ac2322f0aac54e88598fe7be578ea0978db8d58dc3280ba9285d",
+          "name": "main.js",
+          "size": 16781396
+        },
+        {
+          "digest": "sha256:eea75d0f5d17e9d394726f3aa69a6c3dcd60ee02a3e26ff4cf4a8c99f7f7ff9d",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:9d619b0a62255c318183b77abdecf6fa851d882ae7d1655b7119a5272be05884",
+          "name": "styles.css",
+          "size": 164918
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- Fixes Claude Desktop setup on macOS by reusing the shared desktop binary resolver for Node.js path detection.\n- Includes the 5.7.3 patch version bump and regenerated connector bundle.\n\n## Install\n\nDownload main.js, connector.js, manifest.json, and styles.css into your vault's .obsidian/plugins/nexus/ folder.",
+      "draft": false,
+      "name": "5.7.3 - Mac binary path resolution fix",
+      "prerelease": false,
+      "publishedAt": "2026-04-13T23:38:22Z",
+      "tag": "5.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:72193ab888c850b6e7c545c2b36507769dc8a12df6d563a532bbd9bb5fa35c5a",
+          "name": "main.js",
+          "size": 16781257
+        },
+        {
+          "digest": "sha256:84d60612ed66a74a4ff2f0a43db60ad415f719bc1d77dc4c181c5c4211843308",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:9d619b0a62255c318183b77abdecf6fa851d882ae7d1655b7119a5272be05884",
+          "name": "styles.css",
+          "size": 164918
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's new\n\n- Reduced redundant conversation persistence work by skipping unchanged message writes and eliminating JSONL write amplification during updates.\n- Made provider settings saves failure-aware so the modal and OAuth flows no longer report success before persistence actually succeeds.\n- Restored a clean production build on main by marking provider modal config writes as intentional fire-and-forget async calls.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.7.2 - Persistence and provider save reliability",
+      "prerelease": false,
+      "publishedAt": "2026-04-09T16:12:56Z",
+      "tag": "5.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:4aab6545985e4db41270a5afa05c271d9bad5f586f277b92c31b307bcbd88312",
+          "name": "main.js",
+          "size": 16764729
+        },
+        {
+          "digest": "sha256:aa2678cc097496c1b7f46d737d97f813fcb0f13889913a868ee3e53be4289a1d",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:9d619b0a62255c318183b77abdecf6fa851d882ae7d1655b7119a5272be05884",
+          "name": "styles.css",
+          "size": 164918
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n- Fix Claude Code provider status/login checks on desktop by replacing renderer-incompatible dynamic Node imports with the shared desktop process helpers\n- Align desktop CLI auth loading across Claude Code and Gemini CLI auth services\n\n## Install\nDownload main.js, connector.js, manifest.json, and styles.css into your vault's .obsidian/plugins/nexus/ folder.",
+      "draft": false,
+      "name": "5.7.1 — Claude Code auth status fix",
+      "prerelease": false,
+      "publishedAt": "2026-04-08T17:54:46Z",
+      "tag": "v5.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:c810ffce4455d705b4650e9214e42486e20187b57509628bbdd8fdd3397e7d60",
+          "name": "main.js",
+          "size": 16764827
+        },
+        {
+          "digest": "sha256:d0d23802c3036da5610d6219b6a68097fc8accddbf9a9a083e98a446c9b3a439",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:9d619b0a62255c318183b77abdecf6fa851d882ae7d1655b7119a5272be05884",
+          "name": "styles.css",
+          "size": 164918
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Plugin-Scoped Storage Migration\n- Data moved from `.nexus/` to `.obsidian/plugins/<plugin-folder>/data/` — enables Obsidian Sync across devices\n- **Migration is automatic**: on first launch after updating, data is copied from `.nexus/` to the plugin directory. Your original `.nexus/` folder is preserved as a read-only fallback.\n- If your vault finishes syncing after Nexus loads on mobile, run **Nexus: Refresh synced data** from the command palette\n\n### Mobile Support (Experimental)\n- Native chat now works on iOS and Android\n- Fixed crash-on-launch caused by top-level Node.js imports\n- Desktop-only features (MCP clients, semantic search, ingestion, composer, web tools) gracefully skip loading on mobile\n- **Mobile is experimental and may have bugs** — please [report issues](https://github.com/ProfSynapse/claudesidian-mcp/issues)\n\n### Major Refactors\n- ChatView split into 4 focused coordinators (session, send, branch, subagent) — PR #119\n- SQLiteCacheManager split into 6 collaborators — PR #113\n- ModelAgentManager split into 5 collaborators — PR #112\n- TaskBoardView split into focused collaborators (1008 → 453 lines) — PR #117\n- MessageBubble split with branch/streaming/image helpers — PR #115\n- All refactors include unit test coverage; public APIs preserved\n\n### Provider Updates\n- Perplexity adapter reworked with updated model support and pricing\n- Fixed CORS error when streaming from LM Studio/Ollama — PR #111\n\n### Fixes\n- Removed context guard that blocked workspace selection — PR #107\n- Fixed SQLite WASM alias resolution in production builds — PR #118\n- Fixed type errors in WorkflowRunService and ModelAgentManager — PR #114\n- Task board page scrolling restored\n- Embedding init now awaits storage adapter ready\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-08T11:47:11Z",
+      "tag": "5.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:b205f8420a83ba01cdfe1d654fab5ea1d8fc8449fd07a2c3b81aef969dfe1b7d",
+          "name": "main.js",
+          "size": 16712668
+        },
+        {
+          "digest": "sha256:e78bee6fc93653356b4de890990d087b1954838939f10023f5d6e152a03c2170",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:386f3c57484d9e58672299faff60690ff15f2e984f365f582417ccc5f8c2556b",
+          "name": "styles.css",
+          "size": 163404
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Mistral Adapter Improvements\n- **Tool calling fix**: Normalized message format for Mistral API — tool call ID sanitization (9-char alphanumeric), role ordering, content coercion (fixes #100)\n- **Model catalog update**: April 2026 catalog — Mistral Large now 256K context, added Devstral, Codestral, Pixtral, Magistral models\n- **ProviderHttpClient**: node:http/https streaming fallback with proper timeout handling\n- **ToolContinuationService**: Fixed duplicate context in recursive tool continuation\n\n### Mobile Compatibility\n- **EventEmitter → Obsidian Events**: Replaced Node.js EventEmitter with cross-platform Obsidian Events class (IndexingQueue, MessageQueueService)\n- **Lazy Node.js imports**: Converted top-level imports of `node:fs`, `node:http`, `node:url`, `node:crypto`, `node:path`, `net` to lazy `desktopRequire()` in desktop-only code paths\n- **Dynamic npm imports**: mammoth, xlsx, jszip, yaml now use `await import()` inside async functions instead of top-level imports\n- **New utility**: `desktopRequire.ts` — shared helper for ESLint-compatible lazy Node.js module loading\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.6.10",
+      "prerelease": false,
+      "publishedAt": "2026-04-06T22:17:49Z",
+      "tag": "5.6.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:296877e2a32ca77d72f016a7bbc7c25cdbd834035996c4f9154a5bba3f19624f",
+          "name": "main.js",
+          "size": 16543128
+        },
+        {
+          "digest": "sha256:658fb52e404063fd83b3d9e6bb3b0e2cd73816bf95e5df5b09822483a6e617d5",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:386f3c57484d9e58672299faff60690ff15f2e984f365f582417ccc5f8c2556b",
+          "name": "styles.css",
+          "size": 163404
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Conversation list pagination**: \"Load More\" button replaces the hardcoded 50-conversation limit. Conversations load in pages of 20 with explicit hasNextPage from the backend.\n- **FTS title search**: Search input in the sidebar header filters conversations by title using SQLite FTS5. 300ms debounced, replaces the list while active, clears back to paginated browse.\n- **Race condition guard**: Generation counter prevents stale async responses from overwriting fresh data during rapid search/pagination interactions.\n\n## Bug Fixes\n\n- Thread `page` parameter through ConversationService → ConversationQueryService → ChatService\n- Add `count()` method to ConversationService for accurate pagination metadata\n- Fix search results losing real `created` timestamps\n- Prevent empty search results from resetting the welcome state\n- Fix sort mutation of internal conversation array\n- Preserve FTS5 relevance ordering in search results\n- Fix invisible action buttons stealing clicks from Load More at narrow widths\n- Fix search input overflowing sidebar at narrow widths\n\n## Tests\n\n- 63 new tests across ConversationManager (93.7% coverage) and ConversationList (59.2%)\n- Shared test helper extracted to `tests/unit/helpers/conversationTestHelpers.ts`\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.9 — Conversation List Pagination + Search",
+      "prerelease": false,
+      "publishedAt": "2026-04-06T21:30:20Z",
+      "tag": "v5.6.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:92dc3398d9a0c7755a90cd08843ed81d73dcd2655dcaa697287bd090055b89f7",
+          "name": "main.js",
+          "size": 16533065
+        },
+        {
+          "digest": "sha256:575fba18e733539c3beb880e228f2fc84cc1e6ab7b433087eb2a9d00f0d1e22d",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f4a10d4b600a049c80a41241d2ac72142d9d09d6aa8cfbfb4b69d08b11294d71",
+          "name": "styles.css",
+          "size": 162071
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n13 chat UI bug fixes identified during community PR #97 audit, plus dead code removal and CSS cleanup.\n\n### Bug Fixes\n- **Click-blocking pill**: Invisible `.message-actions-external` element no longer intercepts clicks on message text\n- **Text selection**: Message content is now selectable (`user-select: text`)\n- **Branch copy**: Copy button now returns the currently displayed branch content, not the latest stream\n- **Input auto-resize**: Chat input no longer shrinks while typing multi-line messages (JS/CSS height mismatch)\n- **Tool accordion**: In-place DOM reconciliation eliminates layout thrashing during streaming\n- **Chat title reset**: Header resets to \"Chat\" after deleting the last conversation\n- **Context bar refresh**: Context progress bar updates when switching back to chat tab\n- **Branch switch race**: Eliminated double-render corruption when switching message branches\n- **Timer leak**: Conversation list delete-undo timer now cleaned up on panel close\n- **Event accumulation**: BranchHeader skips redundant re-renders with JSON equality check\n- **Interval leak**: Loading animation no longer leaks intervals on double-call\n- **Image model save**: Image provider/model selection in chat settings now actually persists\n- **Model fallback**: No longer hardcodes OpenAI/GPT-4o when no default model is configured\n\n### Code Quality\n- Removed dead `escapeHtml()` methods and unused `ContentProcessor.ts`\n- CSS: consolidated duplicate rules, removed orphaned selectors, added missing `.csr-temp-value`\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.8 — Chat UI Bug Fixes",
+      "prerelease": false,
+      "publishedAt": "2026-04-06T20:10:35Z",
+      "tag": "v5.6.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:0db16f7e933f2bcca90ee282d177a8d4965072a314e1a695224628953085591b",
+          "name": "main.js",
+          "size": 16527931
+        },
+        {
+          "digest": "sha256:ef2622cf255d5b1f222b125f3464db857d45e952765c40ba94d699d39e7003bd",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Multi-provider transcription**: Expanded from OpenAI Whisper-only to 5 providers / 7 models — OpenAI, Groq, Mistral, Deepgram, and AssemblyAI. All models verified live with timestamp support.\n- **Shared transcription service layer**: Extracted transcription from IngestManager into standalone `src/services/llm/TranscriptionService` with provider-specific adapters, shared `WhisperResponseParser`, `AudioChunkingService`, and `MultipartFormDataBuilder`\n- **Dynamic provider discovery**: IngestTool derives available transcription providers from the adapter registry — no more hardcoded lists\n- **TranscriptionService caching**: Cached with settings-hash invalidation instead of re-instantiating per execution\n\n## Fixes\n\n- **Task board issues #92, #93, #94**: Dropdown behavior, task counts, cache invalidation, JSONL→SQLite sync\n- **Task board audit findings**: H1 (type safety), M1-M3 (error handling, query safety)\n- **Mistral multipart format**: Fixed `timestamp_granularities` array handling for Mistral's Pydantic backend\n- **AssemblyAI model IDs**: Replaced synthetic `best` meta-selector with real API model IDs (`universal-3-pro`, `universal-2`)\n- **MultipartFormDataBuilder**: CRLF injection prevention on field names and content types\n- **AudioChunkingService**: Duration estimation for single-chunk files (was returning 0)\n- **AssemblyAI adapter**: Cancellable polling via AbortSignal, sanitized error messages\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.7 — Transcription Adapter Expansion + Task Board Fixes",
+      "prerelease": false,
+      "publishedAt": "2026-04-05T11:44:50Z",
+      "tag": "v5.6.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:267958eca48af6f804df52ec6a84db5ca27d0df16665751c41859c7c248a4160",
+          "name": "main.js",
+          "size": 16500771
+        },
+        {
+          "digest": "sha256:3761205c85785f3f562fbe34bd1060fccd6a16704e250b31aa0f1fb52940293b",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **CustomPromptStorageService dual-write desync** (#88): Removed early returns in `createPrompt`, `updatePrompt`, and `deletePrompt` that skipped the `data.json` write path after SQLite operations. `data.json` is now always written as the source of truth for cross-device sync, preventing prompt loss on restart, ghost prompts, and MCP vs UI desync.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.6 — Fix CustomPromptStorageService dual-write desync",
+      "prerelease": false,
+      "publishedAt": "2026-04-02T23:42:45Z",
+      "tag": "v5.6.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:eafb2896985ad22b1386dd15a04b51be1dce4a7ccbeb8a18bc351db6f1269192",
+          "name": "main.js",
+          "size": 16500934
+        },
+        {
+          "digest": "sha256:7ece1e209716213c162a246ddc6ae2b141a4f48ebf8867f18428f6783c3ff749",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's Changed\n\nFix all ~190 lint violations flagged by the obsidian-releases bot scanner on [PR #11597](https://github.com/obsidianmd/obsidian-releases/pull/11597).\n\n- **require-await**: Removed unnecessary `async` from 162 methods that had no `await` expression\n- **Sentence case**: Fixed UI text casing in 5 component/settings files, configured project acronyms and brand names\n- **VaultOperations**: Replaced `vault.delete()`/`vault.trash()` with `app.fileManager.trashFile()` — respects user's deletion preference\n- **ESLint config**: Updated for bot parity — `require-await` enabled, `prefer-file-manager-trash-file` escalated to error, Node.js imports exempted at config level\n- **Cleanup**: Removed 28 banned inline `eslint-disable` comments, deprecated type re-exports, and dynamic console dispatch\n\n134 files changed. Build and lint pass clean.\n\n**Full Changelog**: https://github.com/ProfSynapse/nexus/compare/5.6.4...5.6.5\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.6.5 — Fix obsidian-releases bot lint violations",
+      "prerelease": false,
+      "publishedAt": "2026-04-01T19:23:02Z",
+      "tag": "5.6.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:3e703707289d980492b39071d40b8a65d7822221b2bf5c96007c7bb9af19ce63",
+          "name": "main.js",
+          "size": 16498940
+        },
+        {
+          "digest": "sha256:b8a5c786e728e9742aa6f2b4a5e515b3a9b498d9f8018b65d11725deed9d0c3f",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Type safety**: Full `any`→`unknown` migration across the entire codebase — stricter runtime guarantees throughout\n- **ESLint v9 + obsidianmd linter**: Upgraded to ESLint v9 flat config with the official Obsidian team plugin (`eslint-plugin-obsidianmd`), enforcing Obsidian-specific best practices\n- **Anthropic multi-tool fix**: Fixed a regression where streaming responses with multiple tool calls would lose all but one — tool call accumulation now works correctly\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.6.4 — Type Safety, ESLint v9 & Obsidianmd Linter",
+      "prerelease": false,
+      "publishedAt": "2026-04-01T15:09:28Z",
+      "tag": "5.6.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:34feca7183fd702ec7ff0476b2c1bced6e50924f8a87089cff586677c9d1d0cc",
+          "name": "main.js",
+          "size": 16434277
+        },
+        {
+          "digest": "sha256:20248adb9a578812450bcdfce22a420a2b1ee5c50c05f408ffdff16548b3a5f5",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **DOCX ingestion**: Drag `.docx` files onto chat — extracted and converted to structured Markdown notes via mammoth\n- **PPTX ingestion**: Drag `.pptx` files — slide text and speaker notes extracted to Markdown via fast-xml-parser + jszip\n- **XLSX ingestion**: Drag `.xlsx` files — spreadsheet data converted to Markdown tables via xlsx\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "5.6.3",
+      "prerelease": false,
+      "publishedAt": "2026-03-31T11:23:05Z",
+      "tag": "5.6.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:adde4a60efa7f842a7ecd554e11440ee213ddb9dd21b2745b1c9ffab0acf9d28",
+          "name": "main.js",
+          "size": 14560073
+        },
+        {
+          "digest": "sha256:7d24223b571a77a36d0b49fb585f9ce6543b4bc0a7fbe67590a71598464e2d6b",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n> ⚠️ **Experimental**: Composer, Web Tools, and Nexus Ingester are still experimental.\n\n### Ingester — auto and manual vault conversion\n\nIngestion is no longer tied to the chat window. You can now convert PDFs and audio files directly from the vault:\n\n- **Manual**: Right-click any supported file in the vault file browser → **Convert to Markdown**\n- **Auto**: Enable \"Auto-convert new files\" in **Settings → Defaults → Ingestion** — any supported file added to your vault is automatically converted to a sibling `.md` note\n\nBoth modes use your configured default OCR and transcription provider/model from Settings → Defaults. Auto mode is off by default.\n\n### PDF.js fix\n\nSwitched to the pdfjs-dist legacy build (`/legacy/build/pdf.mjs`) with a shared loader that registers the worker on `globalThis` before creating documents. Fixes PDF extraction failures in the Obsidian/Electron renderer with pdfjs-dist v5.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.2 — Vault ingestion modes and PDF.js fix",
+      "prerelease": false,
+      "publishedAt": "2026-03-30T11:46:16Z",
+      "tag": "v5.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:475565aa2f63e58cd17f88876144bade4501c707960813d030a425e13b609071",
+          "name": "main.js",
+          "size": 11793643
+        },
+        {
+          "digest": "sha256:da91802455e2f4ccfad289bb406febd6b75553456a80379728e92de5ec319932",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n> ⚠️ **Experimental**: Composer, Web Tools, and Nexus Ingester are still experimental. Please [report issues](https://github.com/ProfSynapse/claudesidian-mcp/issues).\n\n### Ingestion — expanded provider support\nAudio transcription now supports more providers and models beyond Whisper:\n- **OpenAI**: Whisper 1, GPT-4o Transcribe, GPT-4o Mini Transcribe\n- **Groq**: Whisper Large v3, Whisper Large v3 Turbo\n- **Google**: Gemini 2.5 Flash and Gemini 3.0 Flash Preview (multimodal audio)\n- **OpenRouter**: Gemini multimodal models\n\nThe ingest confirmation modal now shows provider **and** model dropdowns. Default OCR and transcription models are configurable in Settings → Defaults. Added an **Enable Ingestion** toggle to hide the drag-drop UI and ingest-only model settings when not in use.\n\n### App settings UX\n- Apps now install as **disabled** — configure credentials first, then toggle on\n- App cards show real descriptions from the manifest (not just \"Configured\"/\"Setup required\")\n- Apps can now customize or hide the validation button via manifest\n\n### Mistral\n- Multi-turn conversations now work correctly (conversation history passed through)\n- `supportsImages` set to `true`\n\n## Fixes\n\n- `TranscriptionService`: cleaned up provider validation and model routing\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.1 — Ingestion multi-provider, app UX, Mistral fixes",
+      "prerelease": false,
+      "publishedAt": "2026-03-29T20:06:47Z",
+      "tag": "v5.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:5f0a56a94120832f8163bf0a804f31d589aea484578f5e4791ef5445a82b506e",
+          "name": "main.js",
+          "size": 11769244
+        },
+        {
+          "digest": "sha256:bc3053c16f7ab7c33121c235e29ffe8f7d9f91f0b0782acc2bd0d472403a9bf9",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f0e2d256a9e37fc0a61b5c07851cd88b7489c76fd6e22b324a37cc6d0df18ed2",
+          "name": "styles.css",
+          "size": 163401
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n> ⚠️ **Experimental**: Composer, Web Tools, and Nexus Ingester are new and experimental. Expect rough edges — please report issues on GitHub.\n\n- **Composer App**: Compose multiple files into one — merge PDFs, concat markdown, mix/concat audio tracks. Supports WAV, WebM/Opus, and MP3 (via WASM) output formats with per-track volume, offset, and fade controls.\n- **Web Tools Agent** *(desktop only)*: 5 tools for web page capture — `openWebpage`, `capturePagePdf`, `capturePagePng`, `captureToMarkdown` (strips boilerplate, converts to Markdown), and `extractLinks` (full link inventory).\n- **Nexus Ingester**: Drag PDF or audio files onto the chat to extract/transcribe them into structured Markdown notes. PDF modes: text extraction (pdfjs-dist) and vision OCR. Audio: Whisper API via OpenAI or Groq.\n\n## Fixes\n\n- **CRLF line endings**: `contentManager.replace` now correctly handles Windows-style CRLF files by normalizing `\\r` at read time.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.6.0 — Composer, Web Tools & Nexus Ingester",
+      "prerelease": false,
+      "publishedAt": "2026-03-29T19:23:10Z",
+      "tag": "v5.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:6d5d3fda01df238b03e76fb3ef6a7f231e94c4dc9d87fbc0d0a1593ef25e70f8",
+          "name": "main.js",
+          "size": 8686293
+        },
+        {
+          "digest": "sha256:7a24779471eb65f75241744c9d332c642759f2599a10b336fe0a4fb6ab0a9d10",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:7af08d834ce1ac7c86c2c4d5fb9fda43fe3c4da3243509550de11bbc4baa6944",
+          "name": "styles.css",
+          "size": 157944
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Semantic note search**: Typing in the task board's \"Add note link\" field now shows real-time suggestions powered by your vault's embeddings — surfaces conceptually relevant notes, not just filename matches\n- **Chat [[ picker upgraded**: The `[[` note suggester in the chat view also gets semantic search, with automatic fuzzy fallback when embeddings are unavailable or on mobile\n- **Shared `searchNotes` utility** (`src/utils/noteSearch.ts`): Centralized semantic → fuzzy → recent-files search logic, reusable by any future note pickers\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.7 — Semantic Note Search",
+      "prerelease": false,
+      "publishedAt": "2026-03-29T12:20:34Z",
+      "tag": "v5.5.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:0eab87b5958d8fef96cadaba36e00bbc080adec99a15879cdb0e704b1fb31a06",
+          "name": "main.js",
+          "size": 8677886
+        },
+        {
+          "digest": "sha256:32e9367158611dda54dd1890dce9e1d74c6b58f70e2ca731872f0eaec9ab19cb",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:f7997a7139ca4bb1a49618cd3abbceef498e31b739f9c011dcdd95dbca59f322",
+          "name": "styles.css",
+          "size": 156247
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **Column scrolling**: Each kanban column now scrolls independently when tasks overflow. A classless wrapper div was breaking the flex height chain, preventing `overflow-y: auto` from activating.\n- **Startup loading**: The board no longer flashes \"Task board unavailable\" when opened before the database is ready. It now shows a spinner and automatically retries every 750ms for up to 30 seconds, then renders the board as soon as services are available.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.6 — Task Board Polish",
+      "prerelease": false,
+      "publishedAt": "2026-03-27T11:38:18Z",
+      "tag": "v5.5.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:124fd29455adef7684bf51cdf96f332626d63dbc093d5e9c3444a70407e8a3a1",
+          "name": "main.js",
+          "size": 8677401
+        },
+        {
+          "digest": "sha256:e7654483d76267f525548abe2dd85cac79a3837a330cf3d5d96aadbae6d5ec47",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:7f0c3bb3d19216883800f71e400c8e94d18ade2b6d6d0ddb0cc0729682c2f939",
+          "name": "styles.css",
+          "size": 155663
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Task Board swimlanes**: The kanban task board now uses a polished swimlane layout with sort/filter controls, search, and live refresh via pub/sub events — manage tasks visually across Todo, In Progress, Done, and Cancelled columns\n- **Task Board edit modal**: Fixed the blank/unstyled edit modal that appeared when clicking a task card. It now uses native Obsidian form components (dropdowns, text inputs, text areas, buttons) and matches the visual style of the rest of the settings UI\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.4 — Task Board Swimlane Polish",
+      "prerelease": false,
+      "publishedAt": "2026-03-27T11:18:50Z",
+      "tag": "v5.5.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:4518663df6230d2872fa38a77d6a56f66c51a01c50b63e6d8b465e2600636611",
+          "name": "main.js",
+          "size": 8666424
+        },
+        {
+          "digest": "sha256:7b31867bc57f56e4d63ec0a10a68261fa058166b72798a5ab1c7149d8003eadf",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:baa7c01f5cc02f43130014c64f84df3622a92469061bd19d2753fa3716f669e4",
+          "name": "styles.css",
+          "size": 155094
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **Task Board data recovery**: Historical tasks and projects created before the Task Board feature now appear correctly. The JSONL→SQLite sync was previously skipping task files entirely; `TaskEventApplier` now rebuilds task/project tables from JSONL on startup and after cache.db deletion.\n- **Workspace name resolution**: `createProject` and `createTask` now accept workspace names (e.g. `\"Website Redesign\"`) in addition to UUIDs — the UUID is resolved transparently at runtime.\n- **Ambiguous workspace names**: If two workspaces share the same name, the tool call fails with a clear nudge listing all matching UUIDs so you can retry with the specific one.\n\n## Upgrade Notes\n\nAfter updating, **reload the plugin once** (disable → enable in Community Plugins). On first load, the plugin will automatically reconcile any missing task data from your JSONL files — no manual steps needed.\n\n> If you previously deleted `cache.db` to recover conversation data, your task/project data will now be restored from JSONL on the next reload as well.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.3 — Task Board sync fix",
+      "prerelease": false,
+      "publishedAt": "2026-03-26T21:14:32Z",
+      "tag": "v5.5.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:0e8ff611d9fe425b8a24ef892788ac6b54e483a59d1df104a39e312f116ed907",
+          "name": "main.js",
+          "size": 8650232
+        },
+        {
+          "digest": "sha256:d3416096d0ab25f31a8e5c15f19b66b2cdc8b6aba85c8596a634a083facb7e60",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:baa7c01f5cc02f43130014c64f84df3622a92469061bd19d2753fa3716f669e4",
+          "name": "styles.css",
+          "size": 155094
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **GitHub Copilot gpt-5.4**: Fixed HTTP 400 error — `gpt-5.4` now correctly routes to the OpenAI Responses API endpoint (`/responses`) instead of `/chat/completions`. Routing is data-driven from Copilot's `/models` response (`supported_endpoints` per model), with a `gpt-5*` heuristic fallback. All other Copilot models (Claude, Gemini, etc.) are unaffected.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.2 — GitHub Copilot gpt-5.4 fix",
+      "prerelease": false,
+      "publishedAt": "2026-03-26T21:12:07Z",
+      "tag": "v5.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:995caddaccdd2a27159d693299e11b09b71e10194f7d2837ecf471ec605f33c9",
+          "name": "main.js",
+          "size": 8642649
+        },
+        {
+          "digest": "sha256:fb39e9590bf3f2d65a64c5c7a31aa55b9e7cd1171e791556bf2096cdbba04fc7",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:baa7c01f5cc02f43130014c64f84df3622a92469061bd19d2753fa3716f669e4",
+          "name": "styles.css",
+          "size": 155094
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's Fixed\n\n- **System prompt via temp file** (PR #73): The system prompt is now written to a temp file and passed via `--append-system-prompt-file` instead of inline on the command line. This completes the Windows argv fix from v5.5.0 — large workspaces with long system prompts no longer risk hitting the 32,767-char `CreateProcess` limit.\n\n- **Clearer error message**: The `REQUEST_TOO_LARGE` error now accurately says \"the local CLI command was too long\" rather than blaming the system prompt specifically.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.5.1 — System Prompt File Fix (Windows)",
+      "prerelease": false,
+      "publishedAt": "2026-03-26T10:19:37Z",
+      "tag": "v5.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:294424d16429a2d1e2ad9274653883094cd8b28ff7cb4c3ffedf2266b5baf4ff",
+          "name": "main.js",
+          "size": 8642517
+        },
+        {
+          "digest": "sha256:0111ddcf23c930ed15f754e73d2738ce9252f209dd86e363fc5f852219ecc6ba",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:baa7c01f5cc02f43130014c64f84df3622a92469061bd19d2753fa3716f669e4",
+          "name": "styles.css",
+          "size": 155094
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### 🗂️ Task Board UI\nNative Obsidian kanban view for your workspace tasks. Open it with the **Open Task Board** command or via the new `openTasks` agent tool. Columns: Todo / In Progress / Done. Filters by workspace and project. Live-updates via `TaskBoardEvents` when tasks change.\n\n### 🧠 Context Compaction — Frontier Stack\n`CompactionFrontierService` replaces the single `previousContext` field with a bounded stack of compacted context records. Long conversations now compact incrementally; the full ancestry chain is injected into the system prompt. Pre-send compaction shows a spinner in the chat input.\n\n### 📊 Context Budget Service\n`ContextBudgetService` centralises context window budget tracking and compaction thresholds across all providers. CLI providers (Claude Code, Gemini CLI, Copilot, Codex) now get a conservative 200K soft cap.\n\n### 🔧 Tool Display Refactor\n`toolDisplayNormalizer` and `toolDisplayFormatter` extracted from `ProgressiveToolAccordion`. Single, typed `ToolDisplayGroup`/`ToolDisplayStep` model for all tool rendering — single, batch, reasoning, and discovery groups.\n\n### ⚡ Tool Execution Refactor\n`ToolBatchExecutionService` extracted from `useTools` (430 → 122 lines). Serial and parallel batch execution, workspace validation, and per-step event emission now live in a dedicated service. `DirectToolExecutor` enriched with batch metadata for richer traces.\n\n### 🔌 Provider Updates\n- **New models**: GPT-5.4 Mini and GPT-5.4 Nano (400K context)\n- **GitHub Copilot**: live `/models` endpoint for real model IDs in chat settings\n- **StreamingOrchestrator**: persists OpenAI/Codex `responseId` per conversation for stateful continuations\n- **ModelDropdownRenderer**: fixed provider fallback stomping user selection during async load\n\n### 🐛 Bug Fixes\n- Claude Code + Gemini CLI: prompts now passed via **stdin** instead of argv (fixes Windows command-line length issues and shell escaping)\n- Windows argv safety guard: throws early if combined args exceed 24K chars\n- `QueryCache.invalidateById`: fixed regex to correctly match all key formats\n- Better user-visible error messages when CLI providers fail\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` and place them in `.obsidian/plugins/nexus/` (or `.obsidian/plugins/claudesidian-mcp/` for legacy installs).",
+      "draft": false,
+      "name": "v5.5.0 — Task Board, Compaction Frontier, Tool Refactors, Provider Updates",
+      "prerelease": false,
+      "publishedAt": "2026-03-25T19:54:51Z",
+      "tag": "v5.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:516c4087037fb0f4b1e60c8d2d6e9c57d4a68f046e337ad3d19299ca9701249f",
+          "name": "main.js",
+          "size": 8517779
+        },
+        {
+          "digest": "sha256:c2fd4c1c83784c110ec0db4485cf2a1d9dc23c4c51c28a95782604e8aa53d140",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:ea6aac743bf6741ec424af3aac96604c6379424d531577b3839c4295bb196f6e",
+          "name": "styles.css",
+          "size": 147599
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **GitHub Copilot**: Connect your Copilot subscription via OAuth device flow — a code appears in the modal, enter it at GitHub, and you're in. Models load dynamically from the Copilot API. Requires an active GitHub Copilot subscription. Experimental.\n- **Gemini CLI**: Use Gemini models through the local CLI — no API key needed if you already have Gemini CLI installed and signed in on your machine. Shows as a sub-section under Google AI.\n- **Codex (ChatGPT)**: Connect your ChatGPT Plus/Pro account via OAuth to access GPT-5 models through the Responses API. Shows as a sub-section under OpenAI. Experimental.\n\n## Fixes\n\n- GitHub Copilot OAuth token now saves immediately on connect (previously the 500ms debounce was cancelled when the modal closed)\n- GitHub Copilot provider card now appears in the Providers tab\n- GitHub Copilot modal shows \"Authentication\" section only — no confusing API key input\n- Device code display uses CSS class instead of inline style (Obsidian guidelines compliance)\n\n## Documentation\n\n- README updated with setup instructions for all subscription-based providers\n- Provider table added to the Native Chat guide\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` (or `.obsidian/plugins/claudesidian-mcp/`) folder and reload Obsidian.",
+      "draft": false,
+      "name": "v5.4.1 — GitHub Copilot, Gemini CLI & Codex Providers",
+      "prerelease": false,
+      "publishedAt": "2026-03-24T14:33:50Z",
+      "tag": "v5.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:e2a8c22ecdcb52729f74ce222c0c26f03622108ad415491f5b4f0d01fc780d1f",
+          "name": "main.js",
+          "size": 8468284
+        },
+        {
+          "digest": "sha256:ed89007155d0ffa9ef186646a54d7e9bb152b01d6c556bd1f599fae807387387",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:6420c4dce7c99245aed1dd784ce536a808ac69be1f16f5858a556cbc3c3c235f",
+          "name": "styles.css",
+          "size": 145874
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Claude Code as a Native Chat Provider\n\nUse your Claude subscription directly in Nexus — no API key needed. If you have [Claude Code](https://claude.ai/download) installed and authorized on your desktop:\n\n1. Go to **Settings → Providers → Anthropic**\n2. Click **Connect** under \"Claude Code\"\n3. Select a model labeled **(Claude Code)** in chat settings\n\nMessages route through your local Claude CLI using your existing subscription limits. Desktop only.\n\n- Haiku 4.5, Sonnet 4.6, and Opus 4.6 available via Claude Code\n- Tool call traces and reasoning displayed in chat accordions\n- Headless runner with binary discovery for macOS\n\n### Replace + Insert Tools\n\nReplaced the monolithic `update` tool with two focused tools:\n\n- **replace**: validates `oldContent` at specified lines before writing. If content has shifted, searches the full note and tells you where it moved. Handles both replace and delete operations.\n- **insert**: adds content at a position. Use `startLine=1` to prepend, `-1` to append, or any line number to insert.\n\nInspired by community feedback in #56.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.4.0 — Claude Code Integration",
+      "prerelease": false,
+      "publishedAt": "2026-03-23T12:32:04Z",
+      "tag": "v5.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:751d74b5dc7cd79b9cdee222ffc5809df341ca142544e30098c2eab90eb73a62",
+          "name": "main.js",
+          "size": 8422039
+        },
+        {
+          "digest": "sha256:ebc0d14e6db16ddf32914bd14046f7c8597e89008656c3abf530bd4986a3756b",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:bdb8dd092477d0eeb6ebe34bb09f7b31d4e420a6857fd4c392eac71420bdf0c5",
+          "name": "styles.css",
+          "size": 144242
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n- **Replace tool**: New `contentManager.replace` tool validates `oldContent` at specified lines before writing. On mismatch, searches the full note and reports where the content actually is (single match, multiple matches, or not found). Handles both replace and delete (`newContent=\"\"`) operations.\n- **Insert tool**: New `contentManager.insert` tool adds content at a position (`startLine=N`), prepends (`startLine=1`), or appends (`startLine=-1`). No overwrite validation needed.\n- **Removed**: Unified `update` tool replaced by the above two focused tools.\n\n## Why\n\nThe old `update` tool combined 5 modes (insert, replace, delete, append, prepend) into one tool with complex mode detection. Splitting into `replace` and `insert` gives LLMs a clear decision: \"Am I changing existing content or adding new content?\" The replace tool's `oldContent` validation prevents silent overwrites when line numbers shift between read and write operations.\n\nInspired by community feedback in #56.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.3.2 — Replace + Insert Tools",
+      "prerelease": false,
+      "publishedAt": "2026-03-22T11:05:28Z",
+      "tag": "v5.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:b203ac66ebb3c5ec03aff0ba958b1008a712e5d74d08df5db974421337f7e74e",
+          "name": "main.js",
+          "size": 8411537
+        },
+        {
+          "digest": "sha256:6e59b4953e42cce43ad559acb03a96f9ef745aa45be0aaab050e530cbccddc24",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:d6675da1ea30bee715c6d6a1e8655c95e89416ad28804c67299f15898ac28a9e",
+          "name": "styles.css",
+          "size": 143541
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Startup Fix\n\nFixes a startup hang when `cache.db` is missing or needs rebuilding (e.g., first install, or after clearing cache).\n\n**What happened**: The JSONL→SQLite sync could take very long on vaults with large conversation history, blocking the entire UI from loading.\n\n**Fix**: The plugin now initializes immediately and syncs data in the background. The UI is usable right away while workspace and conversation data populates incrementally.",
+      "draft": false,
+      "name": "v5.3.1 — Startup Fix",
+      "prerelease": false,
+      "publishedAt": "2026-03-16T23:21:25Z",
+      "tag": "5.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:8d247598da1080f21898676e548f6488dabbecc46c863fe42538674e4e8f3cbc",
+          "name": "main.js",
+          "size": 8410228
+        },
+        {
+          "digest": "sha256:421e46080714357b38a3d6fb2c5c431df808d1a7822a782cda17c92e911b28ab",
+          "name": "manifest.json",
+          "size": 486
+        },
+        {
+          "digest": "sha256:d6675da1ea30bee715c6d6a1e8655c95e89416ad28804c67299f15898ac28a9e",
+          "name": "styles.css",
+          "size": 143541
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Features\n\n- **Settings UI Redesign** (#42): CSS spacing token system (7 tokens, 4px base unit), new `SearchableCardManager` component with search/filter + group headers, BreadcrumbNav with chevron icon separators, card hover transitions using theme-aware background colors, cross-platform button fixes. All 4 card tabs (Workspaces, Providers, Apps, Prompts) migrated to shared components. 110 new tests.\n- **Unified Diff from Update Tool** (#53): The `update` tool now returns a unified diff with context lines after each edit, so LLMs can see new line numbers in `@@` headers and target subsequent edits without re-reading the file. LCS-based diff algorithm with configurable context lines. 42 new tests.\n- **GPT-5.4 Model Support** (#54): Added GPT-5.4 and GPT-5.4 Pro to the OpenAI model registry. GPT-5.4 is the new default. Background polling for GPT-5.4 Pro. Fixed dropdown merging so OpenAI and ChatGPT variants with the same model ID both remain visible.\n\n## Bug Fixes\n\n- **Workspace Archive Persistence** (#55): Archive state now persists correctly through the hybrid repository, sync applier, and SQLite schema/migration paths. Regression tests added.\n- **Transport Reconnection Race** (#52): Proactive transport cleanup prevents a reconnection race condition where crashed connectors could permanently wedge the protocol.\n- **Plugin Store Compliance** (#43): Removed all 16 `as any` casts, fixed SQL injection risk (sortBy column whitelists), replaced unsafe innerHTML with DOM cloning, removed 33 console.log statements, fixed timer and timeout leaks, added mobile compatibility guards for Node.js imports, converted raw addEventListener to registerDomEvent. 29 files changed.\n- **ActionExecutor Tool Migration + Ghost Workspace Defense** (#41): Remapped deprecated ContentManager tools to current CRUA API, preventing file corruption from findReplace. Multi-layer defense against ghost workspaces from legacy JSONL migration.\n\n## Refactoring\n\n- **Large File DRY Consolidation** (#44): 8 shared module extractions — DualBackendExecutor, ModelDropdownRenderer, OAuthBannerComponent, OAuthFlowManager, ProjectsManagerView, ConversationTypeConverters, WorkspaceNormalizer, WorkspaceTypeConverters. Key file size reductions: ChatSettingsRenderer −31%, GenericProviderModal −28%, WorkspacesTab −31%, WorkspaceService −20%, ConversationService −27%. 30 characterization tests added.\n\n## Documentation\n\n- Added user guide and updated README (#4d46802e)\n\n## Stats\n\n- 1,170 tests passing\n- 8 PRs merged since v5.2.1\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.3.0 — Settings Redesign, DRY Consolidation & Compliance",
+      "prerelease": false,
+      "publishedAt": "2026-03-14T13:34:58Z",
+      "tag": "v5.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:134b1e8c4ca31a27b7b909312bf04f6060d73cda674477934df1563ef45445e3",
+          "name": "connector.js",
+          "size": 6185
+        },
+        {
+          "digest": "sha256:b203ac66ebb3c5ec03aff0ba958b1008a712e5d74d08df5db974421337f7e74e",
+          "name": "main.js",
+          "size": 8411537
+        },
+        {
+          "digest": "sha256:daaf42b290249b2f488073eb7c46bf06a343c6ca047f38011b1e71a1ebb10fd7",
+          "name": "manifest.json",
+          "size": 418
+        },
+        {
+          "digest": "sha256:d6675da1ea30bee715c6d6a1e8655c95e89416ad28804c67299f15898ac28a9e",
+          "name": "styles.css",
+          "size": 143541
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## v5.3.0 — Settings Redesign, DRY Consolidation & Startup Fix\n\n### Settings UI Redesign\n- CSS spacing token system, SearchableCardManager, BreadcrumbNav\n- All 4 card tabs migrated + GetStartedTab\n- WorkspacesTab decomposed (1,611 → 855 lines)\n\n### DRY Consolidation\n- DualBackendExecutor, ModelDropdownRenderer, OAuthBannerComponent\n- Service decomposition: type converters + normalizers extracted\n\n### Startup Fix\n- Fixed startup hang when cache.db is missing or rebuilt from large JSONL files\n- HybridStorageAdapter now initializes immediately, syncs data in background",
+      "draft": false,
+      "name": "5.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-03-16T23:20:01Z",
+      "tag": "5.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:f093baa91edea944451264afddcca713b3b3d3d74c7b13e29caea03ef4f89b9c",
+          "name": "main.js",
+          "size": 8387409
+        },
+        {
+          "digest": "sha256:4ff0365682b4a27698121ee9719aeafd561a79c1c5ec559930279b90a954d9e5",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:384e513c01c1aef2d8365fe79be4fbc759f1a3676163454f0bb1e7a02c2ebe5a",
+          "name": "styles.css",
+          "size": 142407
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixes\n\n- **findReplace action fix**: `executePrompts` findReplace actions silently returned `success: true` without modifying files. Root cause: `App` instance was never threaded from `AgentInitializationService` → `PromptManagerAgent` → `ExecutePromptsTool`. Now uses a lazy getter resolved at runtime.\n- **ActionExecutor tool migration**: Remapped from deprecated ContentManager tools (`createContent`, `appendContent`, etc.) to current CRUA API (`read`, `write`, `update`). Critical: `findReplace` uses `ContentOperations.readContent()` for raw file access (no line numbers) to prevent file corruption.\n- **Ghost workspace defense**: Multi-layer guards against ghost workspaces from legacy JSONL migration — `isValidWorkspaceId()` in `WorkspaceEventApplier`, generalized ID validation in `SyncCoordinator`, orphaned JSONL skip in rebuild, filtering in `WorkspaceService` and `FileSystemService`.\n\n## Install\n\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v5.2.1 — ActionExecutor + Ghost Workspace Fixes",
+      "prerelease": false,
+      "publishedAt": "2026-03-13T11:30:56Z",
+      "tag": "v5.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:d8bd6500d61e5a317a8b3fb3a574b5fa7b6876b12bdd0e55832987e465c23ff3",
+          "name": "main.js",
+          "size": 8384004
+        },
+        {
+          "digest": "sha256:e69f1dae7b864b67a2156c1b7745243045a3d19af8cd5bf1a2e43bac694f01cf",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:384e513c01c1aef2d8365fe79be4fbc759f1a3676163454f0bb1e7a02c2ebe5a",
+          "name": "styles.css",
+          "size": 142407
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Workflow Execution System\n- New `RunWorkflowTool` to execute workspace workflows and manage conversation creation\n- `WorkflowRunService` for workflow execution logic including prompt resolution and conversation management\n- `WorkflowScheduleService` for periodic scheduled workflow execution based on defined schedules\n- New types for workflow requests/results with utility functions for schedule formatting and run titles\n\n### Task & Project Deletion + UI Enhancements\n- `deleteProject` and `deleteTask` methods in TaskService\n- New `BreadcrumbNav` component for improved settings navigation\n- Enhanced task management UI styles\n- Unit tests for WorkspacesTab project/task management\n\n---\n\n**Full Changelog**: https://github.com/ProfSynapse/claudesidian-mcp/compare/v5.1.1...v5.2.0",
+      "draft": false,
+      "name": "v5.2.0 — Workflow Execution & Task Management",
+      "prerelease": false,
+      "publishedAt": "2026-03-10T14:41:24Z",
+      "tag": "v5.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:c3e411a96a4082647d755dde1f34989520dcd4809d5d511e6da7f1337a48daf1",
+          "name": "main.js",
+          "size": 8347554
+        },
+        {
+          "digest": "sha256:dd3dbec59b0cbcfad745c964ecd902bdaa4f4aa1c699641b422249b12cf4e6e7",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:93a7887d16540d33aff36d0316a8b66ea0de5ba62b9e319d57ceb94a274b62b5",
+          "name": "styles.css",
+          "size": 140001
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fix\n\n- Fixed Google Gemini image generation after SDK migration",
+      "draft": false,
+      "name": "v5.1.1 — Google Image Generation Fix",
+      "prerelease": false,
+      "publishedAt": "2026-03-10T11:49:31Z",
+      "tag": "v5.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:a35a08bfe7b81591b120a0115ed8eb4a0d8a7cbb0836a8923e0114302b7f0a6d",
+          "name": "main.js",
+          "size": 8300867
+        },
+        {
+          "digest": "sha256:8708b662b953600a186c3263fba581498768419d653bb5393adb6407b8b1d0a4",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:6fb6654ec69aa40ca9301b77985c51146a1806a87df864b2d2b3c5ceba3cd03a",
+          "name": "styles.css",
+          "size": 139587
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### SDK→HTTP Migration\nAll LLM provider SDKs (OpenAI, Anthropic, Google, Groq, Mistral) replaced with direct HTTP via a shared `ProviderHttpClient`. Smaller bundle, no SDK dependency conflicts.\n- **Desktop**: Real wire-level streaming via Node.js `https` module\n- **Mobile**: Buffered fallback via Obsidian's `requestUrl`\n\n### TaskManager Agent (10 new tools)\nWorkspace-scoped project and task management with DAG dependency tracking.\n- **Projects**: createProject, listProjects, updateProject, archiveProject\n- **Tasks**: createTask, listTasks, updateTask, moveTask, queryTasks\n- **Links**: linkNote (bidirectional vault note linking)\n- Priority, assignee, due dates, subtask hierarchy\n- Query next actions (ready to start) and blocked tasks (waiting on deps)\n- Auto-loads task summary when loading a workspace\n\n### ElevenLabs App Enhancements\n- Dynamic model loading from API (no more hardcoded model lists)\n- Improved error handling and vault support\n\n### Architecture Cleanup\n- Deleted unused agent factory system (-409 lines)\n- Single initialization path for adding new agents (2 files instead of 4+)\n- Self-documenting tool schemas with full result object definitions\n\n**Full Changelog**: https://github.com/ProfSynapse/claudesidian-mcp/compare/v5.0.1...v5.1.0",
+      "draft": false,
+      "name": "v5.1.0 — SDK→HTTP Migration, TaskManager Agent, ElevenLabs Enhancements",
+      "prerelease": false,
+      "publishedAt": "2026-03-08T21:03:05Z",
+      "tag": "v5.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:4472abf8aaccaa34e66ab0ab6a8f1e4af63e56d4d7287d621e95ede5be4295a2",
+          "name": "main.js",
+          "size": 12355335
+        },
+        {
+          "digest": "sha256:ce45b7c7cc822742a7c22eba28a4c8bc20abb3daaacac0b58c09d5f79c8561bc",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:e0a2b4186f34be3742a3502b99cf66b9376f4366944bff9c06e9298060b454e5",
+          "name": "styles.css",
+          "size": 139322
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Apps Framework\nNexus now supports **Apps** — downloadable tool domains that extend your vault with third-party integrations. Install apps, enter credentials, and validate permissions directly from Settings → Apps.\n\n- **Generic app architecture**: Manifest-driven agents with auto-generated settings UI\n- **Credential validation**: Per-endpoint permission checking with clear diagnostics\n- **Vault file saving**: Apps can save binary and text files directly to your vault\n- **Developer guide**: [Building Apps](docs/BUILDING_APPS.md) — an agentic prompt for creating new apps\n\n### ElevenLabs Integration\nThe first app ships built-in:\n\n| Tool | What It Does |\n|------|--------------|\n| **textToSpeech** | Convert text to speech audio, saved to vault |\n| **listVoices** | Browse available ElevenLabs voices |\n| **soundEffects** | Generate sound effects from text descriptions |\n| **generateMusic** | Generate music from text prompts |\n\n- Audio files save directly to your vault (configurable output path)\n- Permission-aware validation — shows which API key permissions are active/missing\n- Proper HTTP error handling with diagnostic logging\n\n### Bug Fixes\n- Fixed build error: missing `hasSettings` type guard in `AgentRegistrationService`\n- Fixed App Manager showing \"not available\" in settings (wired AppManager through to AppsTab)\n- Fixed ElevenLabs validation failing for restricted API keys (switched from `/v1/user` to `/v1/voices`)\n\n### Contributing Apps\nHave an idea for a new app? [Open an issue](https://github.com/ProfSynapse/claudesidian-mcp/issues) with the `app-request` label. Want to build your own? See [Building Apps](docs/BUILDING_APPS.md) for the full guide.\n\n**Full Changelog**: https://github.com/ProfSynapse/claudesidian-mcp/compare/v4.4.6...v5.0.1",
+      "draft": false,
+      "name": "v5.0.1 — Apps Framework & ElevenLabs Integration",
+      "prerelease": false,
+      "publishedAt": "2026-03-08T13:05:09Z",
+      "tag": "v5.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:967b4906efaab40ae2b10e448fea9df2b2c51b5d4b6acfe1ed98fdb43a74e261",
+          "name": "main.js",
+          "size": 12302313
+        },
+        {
+          "digest": "sha256:7c662ed6b7faeb0540968cbcd598348aec7b75ccfe7da88c2d59f686b9d017eb",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Bug Fixes (Issue #32)\n\n### Focus Trap Fix\n- **New chat dialog now properly focuses** the title input when all conversations have been deleted\n- **Cursor no longer gets permanently stuck** — fixed missing focus restoration in modal close, eliminating the need to reboot Obsidian\n- Replaced fragile nested setTimeout/requestAnimationFrame focus hack with clean single-pass approach\n\n### Default Settings Sync\n- **Chat temperature now loads from your defaults** — previously hardcoded to 0.5, now correctly reads your configured default temperature\n- **Prompt selector persists selection** — fixed dropdown using prompt name instead of ID as the option key; selections now survive save/reopen\n- **Workspace prompt sync fixed** — `syncWorkspacePrompt()` was also saving name instead of ID\n\n### Files Changed\n- `src/ui/chat/components/ConversationTitleModal.ts`\n- `src/ui/chat/services/ModelAgentManager.ts`\n- `src/components/shared/ChatSettingsRenderer.ts`",
+      "draft": false,
+      "name": "v4.4.6 — Nexus Chat Bug Fixes",
+      "prerelease": false,
+      "publishedAt": "2026-03-04T22:35:25Z",
+      "tag": "v4.4.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:bdfde2cb8b85ca1dd9151e0751c976f13c2013e0ad98fc7d864f7d82fa94b005",
+          "name": "main.js",
+          "size": 12302376
+        },
+        {
+          "digest": "sha256:c3e42d66ba2d0566f132da4825a4d918919fb889e5a60531d434ba2772bd4072",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### New Models Added\n- **Claude Sonnet 4.6** (`claude-sonnet-4-6`) — 200K + 1M beta context, 64K max output\n- **Gemini 3.1 Pro Preview** (`gemini-3.1-pro-preview`) — 1M context, 65K max output\n- **Gemini 3.1 Flash Lite Preview** (`gemini-3.1-flash-lite-preview`) — 1M context, 64K max output, most cost-effective Google model\n- **GPT-5.3 Chat** (`gpt-5.3-chat-latest`) — 128K context, latest ChatGPT improvements\n- **GPT-5.3 Codex** (`gpt-5.3-codex`) — 128K context, agentic coding model\n\n### Legacy Models Removed\n- Claude 4 Opus (`claude-opus-4-0`) — superseded by 4.5/4.6\n- Claude 4 Sonnet (`claude-sonnet-4-0`) — superseded by 4.5/4.6\n\n### Bug Fix\n- Fixed Gemini 2.5 Flash `supportsThinking` flag in OpenRouter (was incorrectly `false`)",
+      "draft": false,
+      "name": "v4.4.5 — New Model Definitions + Legacy Cleanup",
+      "prerelease": false,
+      "publishedAt": "2026-03-04T22:27:11Z",
+      "tag": "v4.4.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:8a214d401bbd30a9ed241f139738e028bec3442bd6cf8c4ce1306dc329709a47",
+          "name": "main.js",
+          "size": 12297722
+        },
+        {
+          "digest": "sha256:3c49310856840f5a359a00375f11ed1920ff36699ee778dbe90b1b6f1365f10d",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Dynamic Image Model Defaults\n\nImage generation tools no longer hardcode provider/model defaults. Defaults now resolve dynamically from user settings.\n\n### Changes\n- **Resolution priority**: explicit param > user settings > first available provider/model > hardcoded fallback\n- `generateImage`: new `resolveDefaults()`, dynamic schema descriptions and validation error messages\n- `executePrompts` / `promptParser` / `RequestExecutor`: removed hardcoded model lists and google-only provider restriction\n- `ImageGenerationService`: added `getInitializedProviders()`\n- `executeTypes`: provider now optional + accepts `openrouter`, model widened to `string`\n\n### Files changed\n- `src/agents/promptManager/tools/generateImage.ts`\n- `src/services/llm/ImageGenerationService.ts`\n- `src/agents/promptManager/tools/executePrompts/executePrompts.ts`\n- `src/agents/promptManager/tools/executePrompts/types/executeTypes.ts`\n- `src/agents/promptManager/tools/executePrompts/utils/promptParser.ts`\n- `src/agents/promptManager/tools/executePrompts/services/RequestExecutor.ts`",
+      "draft": false,
+      "name": "v4.4.4",
+      "prerelease": false,
+      "publishedAt": "2026-03-01T15:39:31Z",
+      "tag": "v4.4.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:d7f618692259a229af80061b2986be9f0fcc0cd26a3375b6edfc24aa51876bb3",
+          "name": "main.js",
+          "size": 12295861
+        },
+        {
+          "digest": "sha256:13d3f174054db9ed18bdd55f9a8b1bff1c916665bf6778eb10d0520e52c97aad",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Improvements\n\n### Dynamic Image Model Selection\n- Image model dropdowns in settings now load dynamically from adapters instead of a hardcoded list\n- The `generateImage` tool schema builds its model enum at runtime from configured providers\n- **Adding a new image model to an adapter now automatically populates UI dropdowns and MCP tool schemas** — no more updating 5 separate files\n\n### New Methods\n- `ImageGenerationService.getModelsForProvider()` — returns full model info (id, name, pricing) per provider\n- `ImageGenerationService.getSupportedModelIds()` — returns model ID list per provider\n\nThis release eliminates the hardcoded `IMAGE_MODELS` constant that previously required manual updates whenever new models were added.",
+      "draft": false,
+      "name": "v4.4.3 — Dynamic Image Model Loading",
+      "prerelease": false,
+      "publishedAt": "2026-02-26T19:59:31Z",
+      "tag": "v4.4.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:9f980581f51838166daa1d60a9385591a8dc1c6ae8c5f1f6352cd84c4f61a5a9",
+          "name": "main.js",
+          "size": 12294355
+        },
+        {
+          "digest": "sha256:33bb7b55b3eff36f7dd690f67c49ce6fa30135086996c1257d713bd6d4e8b928",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## New Image Models\n\n### Gemini 3.1 Flash Image Preview (Nano Banana 2)\n- API ID: `gemini-3.1-flash-image-preview`\n- Pro-level visual quality at Flash speed\n- Resolutions: 512px, 1K, 2K, 4K\n- Up to 14 reference images\n- New aspect ratios: 1:4, 4:1, 1:8, 8:1\n- Available via Google direct and OpenRouter\n\n### GPT-5 Image (OpenRouter)\n- API ID: `gpt-5-image` (OpenRouter: `openai/gpt-5-image`)\n- GPT-5 combined with GPT Image 1 capabilities\n- Context: 400K tokens\n- OpenRouter only\n\n## Bug Fixes\n\n- **Fix: FLUX model validation** — `flux-2-pro` and `flux-2-flex` were missing from `supportedModels` and `ImageModel` type, causing validation failures. Models were in `modelMap` and `listModels()` but the base adapter's validation rejected them.",
+      "draft": false,
+      "name": "v4.4.2 — Gemini 3.1 Flash Image + GPT-5 Image",
+      "prerelease": false,
+      "publishedAt": "2026-02-26T17:17:58Z",
+      "tag": "v4.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:114fa74cdf44de998dac49d16af66a606a3abcb408402e4ca29c2a5f9fd59b3f",
+          "name": "main.js",
+          "size": 12290755
+        },
+        {
+          "digest": "sha256:652e50a5539db5fff6e6c58cbde46c880c39cbe31282e3fddb68291fb96caba6",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Bug Fixes\n\n- **Fix: Workspace settings not showing all workspaces** — The Workspaces settings tab was displaying only the default workspace (JSONL fallback data) instead of all workspaces. Root cause: `renderWorkspacesTab()` passed a stale prefetch result to `WorkspacesTab` before SQLite finished loading (~3–5s after startup). The tab now always loads fresh data, correctly awaiting both `workspaceService` and the SQLite adapter before querying.",
+      "draft": false,
+      "name": "v4.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-02-23T20:40:46Z",
+      "tag": "v4.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:d41f5abaa4163eed87a59b04d73b67b2989f5cbacd35d8bafaae5099ed75501b",
+          "name": "main.js",
+          "size": 12287417
+        },
+        {
+          "digest": "sha256:889cd658de2f39e8d68b2a22f03b88d894e35e11315f79ee87f9b9c46f6e6314",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:fd6f3e639ed881e9ebc267a973114eb7bfa5fbdec8a3fbfadf4a6fa182d84746",
+          "name": "styles.css",
+          "size": 139259
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's Changed\n\n### New Features\n- **Connect your ChatGPT account directly** — OAuth connect button for OpenAI Codex lets you link your ChatGPT account and use Codex models inside Nexus without manually copying API keys\n- **Connect OpenRouter** — OAuth connect button for OpenRouter, giving you access to hundreds of models through a single account connection\n\n### Bug Fixes\n- **Fix: API key validation** — Fixed stale model validation probes that were causing incorrect \"invalid API key\" errors for valid keys (affected OpenAI and Anthropic providers)\n- **Fix: Tool calls not shown in conversation history on reopen** — Three defensive fixes for the pipeline where tool calls went missing when reopening a conversation in Nexus chat:\n  - Post-loop safety net in `MessageStreamHandler` ensures `state=complete` and accumulated tool calls are persisted even when the streaming loop exits without reaching `isFinalComplete`, preventing a second stale save from overwriting correct data\n  - Defensive `try-catch` around `JSON.parse(tc.function.arguments)` in `ConversationService` — malformed JSON in a single tool call silently crashed the entire conversation load\n  - Defensive `try-catch` in `MessageRepository.rowToMessage()` for `toolCallsJson`, `metadataJson`, and `alternativesJson` — corrupt SQLite columns no longer crash `getMessages()`\n\n### Notes\nIf you have existing conversations where tool calls are missing, delete `.nexus/cache.db` (in your vault root). Nexus will rebuild it from the JSONL source of truth and tool calls will reappear.",
+      "draft": false,
+      "name": "v4.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-02-22T22:35:15Z",
+      "tag": "v4.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:83378da00da6225f43786b62f80c35684c250c9bc4b19c65c66bcff9ad3e89a3",
+          "name": "main.js",
+          "size": 12235380
+        },
+        {
+          "digest": "sha256:9a1ad13ff56bd2dcda7b0d40ae92b1700e5a8e65f81806727a3b490a2623bbc6",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:960783379184928fb5dca1400c6d6456de43a3031a0b6a43ce95f44426593329",
+          "name": "styles.css",
+          "size": 137378
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Fix missing release assets from v4.3.2. Attaches main.js, connector.js, styles.css, and manifest.json for installation.",
+      "draft": false,
+      "name": "v4.3.3",
+      "prerelease": false,
+      "publishedAt": "2026-02-21T19:08:36Z",
+      "tag": "v4.3.3"
+    },
+    {
+      "assets": [],
+      "author": "ProfSynapse",
+      "description": "## Bug Fixes\n\n### IPC Socket Lifecycle Fix\nPreviously, when a connector process died unexpectedly, the MCP transport slot was never released. This left `Protocol._transport` permanently set, causing all subsequent reconnection attempts to be silently rejected with \"Already connected\" while file descriptors continued to leak.\n\nThe fix wires the raw socket's `close` and `end` events to `transport.close()`, so the SDK's Protocol resets properly when a client disconnects. Sockets are also destroyed on failed `connect()` calls to prevent FD accumulation.\n\nThis means Claude Code, Claude Desktop, and other MCP clients now reconnect cleanly after a crash or restart without requiring an Obsidian plugin reload.\n\n**Credit**: Thanks to [@DylanLacey](https://github.com/DylanLacey) for identifying and fixing this bug.",
+      "draft": false,
+      "name": "v4.3.2 - IPC Transport Fix",
+      "prerelease": false,
+      "publishedAt": "2026-02-21T13:36:00Z",
+      "tag": "v4.3.2"
+    },
+    {
+      "assets": [],
+      "author": "ProfSynapse",
+      "description": "## New Models\n\n### Claude Sonnet 4.6\n- API ID: `claude-sonnet-4-6`\n- Context: 200K tokens (1M beta)\n- Max output: 64K tokens\n- Pricing: $3.00 / $15.00 per MTok\n\n### Gemini 3.1 Pro Preview\n- API ID: `gemini-3.1-pro-preview`\n- Context: 1M tokens\n- Max output: 65K tokens\n- Pricing: $2.00 / $12.00 per MTok\n\nBoth models available in Anthropic, Google, and OpenRouter adapters.",
+      "draft": false,
+      "name": "v4.3.1 — Claude Sonnet 4.6 + Gemini 3.1 Pro Preview",
+      "prerelease": false,
+      "publishedAt": "2026-02-20T11:31:42Z",
+      "tag": "v4.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:672e0592d58579986413311f7e6d88260f06be1f177f1d875126b18360668d8e",
+          "name": "main.js",
+          "size": 12200210
+        },
+        {
+          "digest": "sha256:141d506ae977714270dfacd2d181764a1c4d64ada3ac21a5c689f3d856d8c65c",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:cf5951040aa21e2c5f0cd94b9c47fb60dd4d8d157e0bcf77f12766479675e3e4",
+          "name": "styles.css",
+          "size": 137269
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## What's New\n\n### Conversation Memory Search\nSemantic search across conversation turns and tool call traces via the `searchMemory` tool.\n\n- **Two modes**: Discovery (workspace-scoped) and Scoped (session-filtered, N-turn window)\n- QA pair model with content chunking (500-char/100-overlap) + sqlite-vec KNN + multi-signal reranking\n- Real-time indexing via ConversationEmbeddingWatcher + background backfill\n- Actionable error feedback, enhanced descriptions, optional workspaceId\n\n### Bug Fixes\n- **Default settings not applied to new chats**: Agent model and context notes from Defaults tab now correctly apply when creating a new chat, and persist per-conversation\n- **Debug logging cleanup**: Removed 45 stray `console.log` statements\n- **TraceIndexer N+1 query**: Fixed performance issue in trace indexing\n\n### Refactoring\n- EmbeddingService refactored: facade pattern (1034→199 lines) + 3 domain services\n- MemorySearchProcessor (824→553 lines) and IndexingQueue (822→497 lines) split into extracted modules\n\n### Tests\n- 351 tests passing (205 new for conversation memory search)\n- Comprehensive coverage for all refactored modules",
+      "draft": false,
+      "name": "v4.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-02-11T19:39:20Z",
+      "tag": "v4.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:41245d900f48980746d15b5b3b922f3d56d691c437eee75ddb0e03a13850b1fd",
+          "name": "main.js",
+          "size": 11872919
+        },
+        {
+          "digest": "sha256:ac7c7b93b4805f9fca16acf4c237f4c9e16e9dfe35ac0c8e4ea46326bdef46b6",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3f1336f6bd39e08c7f92354c10011f62b48c42f73c587b445a1506119584845c",
+          "name": "styles.css",
+          "size": 140811
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## Fixed\n\n- Workspace dedicated agent selection now persists correctly after restart\n- Fixed missing `dedicatedAgentId` field in `WorkspaceService.getAllWorkspaces()` mapping\n- Fixed `updateWorkspace` to properly pass through `dedicatedAgentId` to storage layer\n\n## Technical Details\n\n**Root Cause**: The workspace settings UI loads workspace data via `getAllWorkspaces()`, which was manually mapping storage adapter results but omitting the `dedicatedAgentId` field. This caused the field to be missing when the form was initialized, resulting in the dropdown showing \"None\" even though the agent was saved in the database.\n\n**Fix**: Added `dedicatedAgentId: w.dedicatedAgentId` to the field mapping in `getAllWorkspaces()` (WorkspaceService.ts line 215).\n\n## Installation\n\nDownload and extract the release files to your vault's `.obsidian/plugins/nexus/` directory, then reload Obsidian.",
+      "draft": false,
+      "name": "v4.1.1 - Workspace Dedicated Agent Persistence Fix",
+      "prerelease": false,
+      "publishedAt": "2026-02-02T22:55:48Z",
+      "tag": "v4.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f81267c33a76b99d5513b8fb6aaba9e270d5b14693b4995b89e8d1b9f41098e",
+          "name": "connector.js",
+          "size": 6672
+        },
+        {
+          "digest": "sha256:c46e8fa0453f557c45359023c16bc6ab2c0820843420331786dea1add14d74d8",
+          "name": "main.js",
+          "size": 11855272
+        },
+        {
+          "digest": "sha256:35da4f59363ca507d6f789c87d13930b685e0b6f98f0fe97cbb9646510352ff1",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3f1336f6bd39e08c7f92354c10011f62b48c42f73c587b445a1506119584845c",
+          "name": "styles.css",
+          "size": 140811
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "## 🔇 Silent MCP Connector\n\n### Fixed\n- **MCP connector now operates silently** - No more error notifications in Claude Desktop when vaults are closed\n- Connector silently retries with exponential backoff (1s → 2s → 4s → 8s → 16s → 30s max)\n- MCP servers show as \"disconnected\" in Claude Desktop until vault opens\n- Automatic reconnection when vault opens\n\n### Changes\n- Removed all stderr logging from connector to prevent Claude Desktop error notifications\n- Version bump: 4.0.5 → 4.0.6\n\n### Installation\nDownload `main.js`, `connector.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/nexus/` folder.",
+      "draft": false,
+      "name": "v4.0.6 - Silent MCP Connector",
+      "prerelease": false,
+      "publishedAt": "2026-01-30T14:23:56Z",
+      "tag": "4.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:31d3082a069869b8a9e13022f378e7162126c63597239ca9c9093c39eb0ee9b2",
+          "name": "connector.js",
+          "size": 7186
+        },
+        {
+          "digest": "sha256:96ea878328ecce6b48aab6d6b8510ee79fee9601f36a4fc6e9ffce291aad7d9e",
+          "name": "main.js",
+          "size": 11855797
+        },
+        {
+          "digest": "sha256:b4930676f19a7d9d42b85ec774409679373bcc92329539c598c15892cdb135d1",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3f1336f6bd39e08c7f92354c10011f62b48c42f73c587b445a1506119584845c",
+          "name": "styles.css",
+          "size": 140811
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Release v4.0.5\n\n## What's New\n- Enhanced image generation with reference images support\n- Improved connection handling with exponential backoff\n- Enhanced workspace context builder with recursive file collection\n- Bug fixes and stability improvements",
+      "draft": false,
+      "name": "v4.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-01-29T13:05:22Z",
+      "tag": "v4.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:98af8486bc3e3b622665e64a5ef613ba43252c84277fb46ac32e120e75c07ae7",
+          "name": "connector.js",
+          "size": 7093
+        },
+        {
+          "digest": "sha256:a2d528563759af4c9df77769c871c76a2977526190c053cff4dd7ce0304a624a",
+          "name": "main.js",
+          "size": 11850120
+        },
+        {
+          "digest": "sha256:36ef41d076220f85d18b21eea2174d80d075de411a25862444a185c07853ba3c",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3f1336f6bd39e08c7f92354c10011f62b48c42f73c587b445a1506119584845c",
+          "name": "styles.css",
+          "size": 140811
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "removed annoying failure to connect by just having it ping forever so if you open your vault it will connect.",
+      "draft": false,
+      "name": "4.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-01-23T11:54:33Z",
+      "tag": "4.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f516625de9022461c07d82c415680f4199db4705b73af8f22a019c2cf237d498",
+          "name": "connector.js",
+          "size": 7911
+        },
+        {
+          "digest": "sha256:2f07588d523127f850ac3fdf61a84cc355663f2f5f0288f7592959a395e44600",
+          "name": "main.js",
+          "size": 11851288
+        },
+        {
+          "digest": "sha256:10d60b7ddd507e83a3622225540a4481a67e22b0836a1c657c1526535b14c11f",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:3f1336f6bd39e08c7f92354c10011f62b48c42f73c587b445a1506119584845c",
+          "name": "styles.css",
+          "size": 140811
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "",
+      "draft": false,
+      "name": "4.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-01-12T17:00:59Z",
+      "tag": "4.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f516625de9022461c07d82c415680f4199db4705b73af8f22a019c2cf237d498",
+          "name": "connector.js",
+          "size": 7911
+        },
+        {
+          "digest": "sha256:c5cdd090636cf1fa0e9488a206f24a4dfcbdd0a47a93bba9ed0a872954a046f3",
+          "name": "main.js",
+          "size": 11852743
+        },
+        {
+          "digest": "sha256:f0051afa5ff376ee8eb16b52b889dffc9e9f608c238501abd6eae3fa32786748",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:5c2945b23e458d8b1ae851c8c9f47933fe423f01a300797405633d90452088b8",
+          "name": "styles.css",
+          "size": 139907
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- more fixes to update the...update content\r\n- fixed recent activity",
+      "draft": false,
+      "name": "4.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-01-09T20:27:40Z",
+      "tag": "4.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f516625de9022461c07d82c415680f4199db4705b73af8f22a019c2cf237d498",
+          "name": "connector.js",
+          "size": 7911
+        },
+        {
+          "digest": "sha256:afe38816b2e1d18ff3eba4856570ec79f7d5cfd807c47fcf8ee11b55c547d90d",
+          "name": "main.js",
+          "size": 11845809
+        },
+        {
+          "digest": "sha256:f0051afa5ff376ee8eb16b52b889dffc9e9f608c238501abd6eae3fa32786748",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:5c2945b23e458d8b1ae851c8c9f47933fe423f01a300797405633d90452088b8",
+          "name": "styles.css",
+          "size": 139907
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed the prompts and workspace editor not loading\r\n- fixed the update tool so it understands the line changes after making edits\r\n- fixed the get tools in directexecutor to work properly",
+      "draft": false,
+      "name": "4.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-01-09T16:49:05Z",
+      "tag": "4.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f516625de9022461c07d82c415680f4199db4705b73af8f22a019c2cf237d498",
+          "name": "connector.js",
+          "size": 7911
+        },
+        {
+          "digest": "sha256:5cdf7e746a4d113c4d6dcdf656d2ea529562ad0d073f13ee4c35e4d58da8ca8f",
+          "name": "main.js",
+          "size": 11843926
+        },
+        {
+          "digest": "sha256:ff059a2035cb2ca90d2adac558a53161c34a44ef7ad670a806803b31c5feb3a8",
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:86a7cca3ffcf1f1cc2675d1e73067d8e231389aa9d285e2ad86a08b4f2b0fdcf",
+          "name": "styles.css",
+          "size": 139488
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- major refactor\r\n- moved to a sqlite database for conversations and memories\r\n- transitioned to a 2-tool architecture with progressive tol discovery\r\n- generally cleaned up tool schemas\r\n- added a canvas manager, removed command manager\r\n- several improvements to the internal chat interface (although still definitely in beta)",
+      "draft": false,
+      "name": "4.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-01-05T12:50:10Z",
+      "tag": "4.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f516625de9022461c07d82c415680f4199db4705b73af8f22a019c2cf237d498",
+          "name": "connector.js",
+          "size": 7911
+        },
+        {
+          "digest": "sha256:861723e1e9b76a9e50d1aedccbdd019a0a9160720872971369ae361788afc635",
+          "name": "main.js",
+          "size": 7799646
+        },
+        {
+          "digest": "sha256:8060f8323f23b4c2412d057990886085b605e0bbeff09242d3886249acef2210",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:0c8d1961a666fc794635cbe5d39ca0875a67d56ee90529f35fde0c82de00cb98",
+          "name": "styles.css",
+          "size": 76586
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- paved the way for nexus fine tuned model (using webllm)\r\n- fixed various bugs, especially with the internal chat",
+      "draft": false,
+      "name": "3.2.0",
+      "prerelease": false,
+      "publishedAt": "2025-12-01T19:55:28Z",
+      "tag": "3.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:e1819afe08363c40a1e8b8a69bd6cb8416c5b835cd0813868a7a886025913e95",
+          "name": "main.js",
+          "size": 7687122
+        },
+        {
+          "digest": "sha256:f5ce5f11b43f1bb1123f3d609f4f0c12f3c330d674905462ece0305394c3772d",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:bf725858a3e54b56581c4dfa98c4f67682c293febe46d267528a0f23601dfee1",
+          "name": "styles.css",
+          "size": 72984
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed retry mechanism (i hope)\r\n- added lm studio as provider\r\n- added back in executeprompt/batch tools and made minor qol fixes to them\r\n- added web search for gemini\r\n- cleaned up conversation json",
+      "draft": false,
+      "name": "3.1.3",
+      "prerelease": false,
+      "publishedAt": "2025-11-24T13:54:40Z",
+      "tag": "3.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:412f6f46fdc013af511b88103ef2326b2f0023aaa9cfca385247c6b7af5d063d",
+          "name": "main.js",
+          "size": 7652741
+        },
+        {
+          "digest": "sha256:fb4558cc7a68bd7e178b595f00deb1d16b2489f2372c20cae85cbf95be296dbc",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:bf725858a3e54b56581c4dfa98c4f67682c293febe46d267528a0f23601dfee1",
+          "name": "styles.css",
+          "size": 72984
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed bug with openrouter tool calling getting in a recursive loop",
+      "draft": false,
+      "name": "3.1.2",
+      "prerelease": false,
+      "publishedAt": "2025-11-17T20:02:44Z",
+      "tag": "3.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:96630e3d5426aa28e989defb1bac7ea3e03bf3c67c39f3543369c7d9ba9fe09e",
+          "name": "main.js",
+          "size": 7650273
+        },
+        {
+          "digest": "sha256:10cebdc8cc853a9a6cb825bbfa0ca1670bc2dd152230f68445dbaf3da7b14921",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:bf725858a3e54b56581c4dfa98c4f67682c293febe46d267528a0f23601dfee1",
+          "name": "styles.css",
+          "size": 72984
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- got anthropic, google, openrouter, and openai working better\r\n- updated get_tools to be able to precisely grab the tools it needs\r\n- general code optimization and bug fixes",
+      "draft": false,
+      "name": "3.1.1",
+      "prerelease": false,
+      "publishedAt": "2025-11-17T13:14:13Z",
+      "tag": "3.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:0105a76a7c5641c9918beb0887c25cdf9116b7911ed1c0a3d92ee17eff4e320c",
+          "name": "main.js",
+          "size": 7602931
+        },
+        {
+          "digest": "sha256:1ac24fe0a801304319c8a34ec02e99b300f2f6a5266772a56e025b01b998d79b",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:bf725858a3e54b56581c4dfa98c4f67682c293febe46d267528a0f23601dfee1",
+          "name": "styles.css",
+          "size": 72984
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed loading session bug\r\n- general bugs\r\n- incorporated the \"Bounded Context Protocol\" design for tools in the chatview (1 meta tool)",
+      "draft": false,
+      "name": "3.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-11-01T15:47:10Z",
+      "tag": "3.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:2e6174e0e4148c02e741962e6f6c0375cc71eb97d735580372167e4e343e56bb",
+          "name": "main.js",
+          "size": 7216072
+        },
+        {
+          "digest": "sha256:dfe674e0ec9b416978ac1aa1dddb7bc9954185bf5fd0aed19a0b6826e6bbc2a9",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:bf725858a3e54b56581c4dfa98c4f67682c293febe46d267528a0f23601dfee1",
+          "name": "styles.css",
+          "size": 72984
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed abort\r\n- fixed tokens not counting properly when using default model\r\n- fixed retry functionality and design",
+      "draft": false,
+      "name": "3.0.7",
+      "prerelease": false,
+      "publishedAt": "2025-10-31T16:19:11Z",
+      "tag": "3.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:34fbe5a42a03e309ed64eab3159d8633c1f9b755c29e978c2a1e58a1aa12c0e4",
+          "name": "main.js",
+          "size": 7179094
+        },
+        {
+          "digest": "sha256:2261ec8dc5cc8ae887958757f1658310f796a7c9341564f91e6426b3af2b36c7",
+          "name": "manifest.json",
+          "size": 370
+        },
+        {
+          "digest": "sha256:a03100c863fda9d3c821635587f5b93bed2a0b38747b92da4c289e356e28a473",
+          "name": "styles.css",
+          "size": 77549
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- improved UI in the chatview (better copy/retry/edit buttons, styling of message bubbles, include hotkeys in the message bubble",
+      "draft": false,
+      "name": "3.0.6",
+      "prerelease": false,
+      "publishedAt": "2025-10-22T18:23:45Z",
+      "tag": "3.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:14226161171e227b6784785bc69b6f7b14b34640247c13c276195289f49e2aff",
+          "name": "main.js",
+          "size": 7178290
+        },
+        {
+          "digest": "sha256:6e92b604eed4a74bfeb45787a90f1c07176e9286e2d9137676a25955ea35f383",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:0cbccf5663426b29f5626e54a364bcefdbb3fc499f7e519881c9793a9465f5bc",
+          "name": "styles.css",
+          "size": 72022
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed save state issues",
+      "draft": false,
+      "name": "3.0.5",
+      "prerelease": false,
+      "publishedAt": "2025-10-22T12:20:01Z",
+      "tag": "3.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:d7c8140d180ef584af43f7055952d2037919980b365f1c46e4b9e6d669179dff",
+          "name": "main.js",
+          "size": 7166265
+        },
+        {
+          "digest": "sha256:46a0563f6c5021b308b07fa6738164f9591802a9ea3d2550505c22bd3cbf7130",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:0cbccf5663426b29f5626e54a364bcefdbb3fc499f7e519881c9793a9465f5bc",
+          "name": "styles.css",
+          "size": 72022
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- various bug fixes\r\n- updated some models\r\n- added hotkeys to the chat (@ for agents, / for tools, [[ for files) to include things inline for the chat",
+      "draft": false,
+      "name": "3.0.4",
+      "prerelease": false,
+      "publishedAt": "2025-10-21T12:14:23Z",
+      "tag": "3.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:6eb848b6ecdf52efb581c2ea3d9cd12a63bc1bfe0d864b7fc8e65afd43888dd1",
+          "name": "main.js",
+          "size": 7051731
+        },
+        {
+          "digest": "sha256:efebbe7e9ebaffe8d69fac7df858ca78e2209042bc317e723ac586c51a62fdc5",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:b01029e294291b39ef2dc8a42fafd222946215009c7c62b6c8981b29d19fba26",
+          "name": "styles.css",
+          "size": 66511
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed binding sessions and workspace in a conversation",
+      "draft": false,
+      "name": "3.0.3",
+      "prerelease": false,
+      "publishedAt": "2025-10-09T14:55:20Z",
+      "tag": "3.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:687d0c96c52d76e3ad42dad883a38f6c0ac319bbf5606939f2ac9e7157bd6b50",
+          "name": "main.js",
+          "size": 7044075
+        },
+        {
+          "digest": "sha256:65598cd0acc41a262ce90492d4fb2732ca94f6e76497bac0333614821599ab73",
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:b01029e294291b39ef2dc8a42fafd222946215009c7c62b6c8981b29d19fba26",
+          "name": "styles.css",
+          "size": 66511
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- removed a few providers from the available native chat due to api complexity",
+      "draft": false,
+      "name": "3.0.2",
+      "prerelease": false,
+      "publishedAt": "2025-10-09T11:57:54Z",
+      "tag": "3.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:9b03b4e41f1934634c679ecbd86faf5dbc03f3d6699eb1b38b7b4cba8dc5e50b",
+          "name": "main.js",
+          "size": 7036098
+        },
+        {
+          "digest": "sha256:cb37d14f9108fc75976a7269f90b65bb7e8fcd0a0e80e5600fa075170ef74d1c",
+          "name": "manifest.json",
+          "size": 370
+        },
+        {
+          "digest": "sha256:705258ef3462246ae33cf5d63de5df0b088b224a0460b4b3426a3e082e46d4dc",
+          "name": "styles.css",
+          "size": 69880
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed Anthropic adapter for the chat/agentic actions",
+      "draft": false,
+      "name": "3.0.1",
+      "prerelease": false,
+      "publishedAt": "2025-10-08T16:27:13Z",
+      "tag": "3.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:9995f6c2932f77b3036731c4ce50ea03f6810e1eab57cfa4c366af9d4b4dea14",
+          "name": "main.js",
+          "size": 7030205
+        },
+        {
+          "digest": "sha256:534ea32d735a223006c301e3883b7a78170b5c967563735eb8a7ea86f10fdad9",
+          "name": "manifest.json",
+          "size": 370
+        },
+        {
+          "digest": "sha256:705258ef3462246ae33cf5d63de5df0b088b224a0460b4b3426a3e082e46d4dc",
+          "name": "styles.css",
+          "size": 69880
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- general clean up of code base\r\n- removal of all embeddings functionality, now just using fuzzy/keyword search\r\n- new data structure for workspaces (migration), and settings for managing workspaces\r\n- addition of a native agentic chatbot with all the tools you'd have in claude",
+      "draft": false,
+      "name": "3.0.0",
+      "prerelease": false,
+      "publishedAt": "2025-10-08T14:31:13Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:a24e367b212ee076263dce12e3305b530f66f5f47d3b1c6fe3d1116c0282c6ac",
+          "name": "main.js",
+          "size": 4685212
+        },
+        {
+          "digest": "sha256:dec1d8a9f13dc44cab1a94ae53acb334d6dc5a2e751be8e4e5f27120ecde4ed6",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:8dc3c2093caa6c8dd202bd5ece8e568048a66eca184586e0f3716436454cb530",
+          "name": "styles.css",
+          "size": 30978
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- code cleanup for validation and common parameter\r\n- fixed bugs  in image generation",
+      "draft": false,
+      "name": "2.7.6",
+      "prerelease": false,
+      "publishedAt": "2025-08-22T12:38:35Z",
+      "tag": "2.7.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:5adc746f2319946e2d0047db5b820802607c6952ffe50151b16ae026a123d441",
+          "name": "main.js",
+          "size": 4666902
+        },
+        {
+          "digest": "sha256:db0740685145e9d2b194e6dd64446e10e8cf4e21950bbde607236f8f6909f8de",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:8dc3c2093caa6c8dd202bd5ece8e568048a66eca184586e0f3716436454cb530",
+          "name": "styles.css",
+          "size": 30978
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed a lot of inconsistent common schema implementations in modes\r\n- fixed issues with sessions not saving properly and creating new ones\r\n- fixed workspace loading not correctly grabbing the right sessions/states",
+      "draft": false,
+      "name": "2.7.5",
+      "prerelease": false,
+      "publishedAt": "2025-08-21T23:04:21Z",
+      "tag": "2.7.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:3f6107c6186f87b6283f520c5cb2fde0007c9f9f2d6e5bd1eca66014505702ca",
+          "name": "main.js",
+          "size": 4656058
+        },
+        {
+          "digest": "sha256:449418fb69507a24f73a7d70d3dc39124b9e91d0273fc02ca24593c3b3f70a04",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:8dc3c2093caa6c8dd202bd5ece8e568048a66eca184586e0f3716436454cb530",
+          "name": "styles.css",
+          "size": 30978
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- Added tool \"nudges\" to help with better tool use\r\n- fixed api key validation \r\n- cleaned up some of the code\r\n- various bug fixes",
+      "draft": false,
+      "name": "2.7.4",
+      "prerelease": false,
+      "publishedAt": "2025-08-18T23:41:42Z",
+      "tag": "2.7.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:ba7606e7000938142936254ab702b43cf16ed5e963c6fa414a04e1d82d4726ff",
+          "name": "main.js",
+          "size": 4639349
+        },
+        {
+          "digest": "sha256:f2262aea513ce8d791705b3488efacdfbc61ee3457386225761f5014416a9e3a",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:c98fc7e0df1d3c123748be39d24b033fc8933e5946c2b666fee1163eb004c7ba",
+          "name": "styles.css",
+          "size": 30810
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- improving memorymanager schemas and functionality\r\n- various bug fixes",
+      "draft": false,
+      "name": "2.7.3",
+      "prerelease": false,
+      "publishedAt": "2025-08-14T15:27:37Z",
+      "tag": "2.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:2998831e70bfbd2d289cfa3b127a53ea9e39041af4d81548cb5e04d32965308d",
+          "name": "main.js",
+          "size": 4631107
+        },
+        {
+          "digest": "sha256:fcd92b16f061f20804ade606e92a9a7d3906779337a16aa6e7727c273023eaac",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:c98fc7e0df1d3c123748be39d24b033fc8933e5946c2b666fee1163eb004c7ba",
+          "name": "styles.css",
+          "size": 30810
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- added image generation with google imagen\r\n- fixed context parameters not being required",
+      "draft": false,
+      "name": "2.7.2",
+      "prerelease": false,
+      "publishedAt": "2025-08-11T16:48:15Z",
+      "tag": "2.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:d0756f616f0e1c3d01f9538ed887fe255069d50ead7d070c391e1d26c53e425a",
+          "name": "main.js",
+          "size": 4560565
+        },
+        {
+          "digest": "sha256:84121bbfb00c6a235ccb466b508a90868d4be3995897106c6344cab4870de906",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:c98fc7e0df1d3c123748be39d24b033fc8933e5946c2b666fee1163eb004c7ba",
+          "name": "styles.css",
+          "size": 30810
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Too many updates to name:\r\n- removed hnsw indexing, replaced with RFF reranking\r\n- fixed agentManager not sending note content\r\n- significant code refactor to clean things up\r\n- fixed lots of bugs related to embeddings\r\n- simplified Memory Management Menu\r\n- added new models\r\n- much more...",
+      "draft": false,
+      "name": "2.7.1",
+      "prerelease": false,
+      "publishedAt": "2025-08-10T20:33:00Z",
+      "tag": "2.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:44a1ca66a71044d392f1005a473f6496308d80059d9654b3aa5cb6740a6a4fff",
+          "name": "main.js",
+          "size": 3631120
+        },
+        {
+          "digest": "sha256:3bcc5bda120b1ed0e84977b4fefd1554515fcaa11db9bb866e15c3d74e2a7c94",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:578c4ce525acb77e6df74141fe9f2f6b526d6e5ca7ae039a4315cb371361b977",
+          "name": "styles.css",
+          "size": 23417
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed listfile and listfolders",
+      "draft": false,
+      "name": "2.6.2",
+      "prerelease": false,
+      "publishedAt": "2025-07-07T18:21:58Z",
+      "tag": "2.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:1cbb4a023b9adf4bb03efaa7b370612150c82a04359cf4f772e622c6fff97cc7",
+          "name": "main.js",
+          "size": 3628478
+        },
+        {
+          "digest": "sha256:249d6062acd80c9e7501faa42b2d1119394c755d9245fc583d0bbef65e50a9ec",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:578c4ce525acb77e6df74141fe9f2f6b526d6e5ca7ae039a4315cb371361b977",
+          "name": "styles.css",
+          "size": 23417
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed bugs, primarily around search\r\n- added ability for claude to make it's own api calls (parallel, sequence, still perform actions like creating notes)",
+      "draft": false,
+      "name": "2.6.1",
+      "prerelease": false,
+      "publishedAt": "2025-07-04T11:32:16Z",
+      "tag": "2.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:fedd30161ddfe6009c35f49bc826e42fa73bf952aabc66670d11470b2457092a",
+          "name": "main.js",
+          "size": 2290715
+        },
+        {
+          "digest": "sha256:f3df9676bf57ba8ad89c7d7d31c0e917ca985beb8929d716a62e0c6b66e02c2f",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:50118f6d44fefff5bc3603bf4be8a05a956f3ba1b4656a8d9349fff5b3536e7b",
+          "name": "styles.css",
+          "size": 23114
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- added an agentsManager to more systematically write and leverage prompts for specific tasks\r\n- cleaned up unecessary console logs\r\n- further improved search, specifically for searching memory\r\n- included more context for memory traces",
+      "draft": false,
+      "name": "2.6.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-30T18:54:00Z",
+      "tag": "2.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:71de51652b2362f8ad7cd06ed85d9d5ef0f03fd920a313599cbafbe9bef4dd34",
+          "name": "main.js",
+          "size": 2222673
+        },
+        {
+          "digest": "sha256:4158b4ec26af01613c8c26490e0be2db2a10e199bbaa3b5d4577aa01b14fc645",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:03b6f9dc63e32db122c6efff07478e628a29ae71349969e1ced676e3679a4d9a",
+          "name": "styles.css",
+          "size": 18783
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- greatly improved search and embeddings\r\n- fixed bugs with the listfiles and folders to accept different paths for root\r\n- lots of refactoring bigger files into more modular ones\r\n- fixed bugs related to the embedding setting and using ollama",
+      "draft": false,
+      "name": "2.5.1",
+      "prerelease": false,
+      "publishedAt": "2025-06-24T19:35:22Z",
+      "tag": "2.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:c8167f8de9ec903ae406baebe5ea79308b24026b7a96f049b3d9492ea27aef77",
+          "name": "main.js",
+          "size": 1313360
+        },
+        {
+          "digest": "sha256:96292a798ec1f8320e36abe049f24e8f16d0dbe062223d4b90fcb85144b78e52",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:03b6f9dc63e32db122c6efff07478e628a29ae71349969e1ced676e3679a4d9a",
+          "name": "styles.css",
+          "size": 18783
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- removed the projectmanager and vectormanager agents (they weren't really being used, taking up valuable context)\r\n- simplified search to be universal and more organized\r\n- improved workspace tooling, so now you can add additional notes, it provides the full directory structure, and is generally better organized\r\n- added an update notification, so user's know when a new version is available",
+      "draft": false,
+      "name": "2.5.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-17T00:57:04Z",
+      "tag": "2.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:b1ad35ab4407041b1dcc274317e8a79665e950400766c3fc707c92ea316c8aea",
+          "name": "main.js",
+          "size": 1448623
+        },
+        {
+          "digest": "sha256:5df0298d9309b010eedcebb4d6535b78c842fd6fa4a04f749c68a41249add635",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:cc80f89651cf17658ea86674fecdf0eb4d15c0ca15250c03af5fb8ce3cafa220",
+          "name": "styles.css",
+          "size": 18039
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- added lots of embedding providers AND ollama for local\r\n- fixs some embedding bugs",
+      "draft": false,
+      "name": "2.4.0",
+      "prerelease": false,
+      "publishedAt": "2025-06-10T18:01:20Z",
+      "tag": "2.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:1e8e66138b4866f330144635296d959d1e92b23e74cb7cb40ce74063dd41ecee",
+          "name": "main.js",
+          "size": 2577109
+        },
+        {
+          "digest": "sha256:219ea5408b4e817eb466e9fd6f0f25c068c9f3c9892a99a9ccf4034a967df9f4",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:1027b0cfdcf2b8f84ab50e07bfe571311d211b40d38ec3be1a4ac9aa6d179dda",
+          "name": "styles.css",
+          "size": 17004
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed embedding scheduler when set to \"On Startup\"",
+      "draft": false,
+      "name": "2.3.4",
+      "prerelease": false,
+      "publishedAt": "2025-06-10T10:25:37Z",
+      "tag": "2.3.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:ce6a5f87487cdb15071889bf891ed4e37c9abe0072cd7001230c244d1d95c5c2",
+          "name": "main.js",
+          "size": 2547272
+        },
+        {
+          "digest": "sha256:8ca986d9d6283b1590004f4f72e5b46ff9fb767051ec3dd9da4bf69b051ce01b",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:7240b4a5f65d823cae2173ed976138d1858705e2652b54662ec194aaa5b7a630",
+          "name": "styles.css",
+          "size": 16597
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- added open note\r\n- fixed database sizing to only be related to memories/snapshots",
+      "draft": false,
+      "name": "2.3.3",
+      "prerelease": false,
+      "publishedAt": "2025-06-04T17:05:21Z",
+      "tag": "2.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bcadc6a856188d66435e3bbd755118ff1e9865ac342f63b9bd66b0a53bf8694c",
+          "name": "connector.js",
+          "size": 7973
+        },
+        {
+          "digest": "sha256:9526009fcfc9697858eaed224741959a06a3f7a796e04ac7074c44841df84995",
+          "name": "main.js",
+          "size": 2536862
+        },
+        {
+          "digest": "sha256:8ca986d9d6283b1590004f4f72e5b46ff9fb767051ec3dd9da4bf69b051ce01b",
+          "name": "manifest.json",
+          "size": 355
+        },
+        {
+          "digest": "sha256:7240b4a5f65d823cae2173ed976138d1858705e2652b54662ec194aaa5b7a630",
+          "name": "styles.css",
+          "size": 16597
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "Major upgrade\r\n- included vector embedding functionality\r\n- created memory manager\r\n- added handoff functionality\r\n- fixed lots of bugs\r\n- added folder search",
+      "draft": false,
+      "name": "2.3.2",
+      "prerelease": false,
+      "publishedAt": "2025-06-02T13:52:08Z",
+      "tag": "2.3.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 343191
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 3122
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- Cleaned up settings tab",
+      "draft": false,
+      "name": "1.1.1",
+      "prerelease": false,
+      "publishedAt": "2025-04-24T12:08:56Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 342128
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 3122
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- Removed console logs\r\n- Improved settings tab\r\n- Added ability to update",
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-04-24T11:21:36Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 324318
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 1982
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- completely refactored architecture to be \"agent\" based\r\n- improved all back functions\r\n- improved reliability of tool use",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2025-04-14T12:10:25Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 553185
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 1982
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- cleaned up settings tab",
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2025-03-28T12:52:45Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 554189
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 1982
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- fixed metadata searched\r\n- updated projectManager to stop after plan/checkpoint",
+      "draft": false,
+      "name": "0.5.0",
+      "prerelease": false,
+      "publishedAt": "2025-03-27T10:50:42Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 548089
+        },
+        {
+          "name": "manifest.json",
+          "size": 438
+        },
+        {
+          "name": "styles.css",
+          "size": 1982
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- improved tools\r\n- cleaned up codebase",
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2025-03-22T09:57:10Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 1980
+        },
+        {
+          "name": "main.js",
+          "size": 548214
+        },
+        {
+          "name": "manifest.json",
+          "size": 455
+        },
+        {
+          "name": "styles.css",
+          "size": 2095
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2025-03-09T16:57:09Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 610
+        },
+        {
+          "name": "main.js",
+          "size": 594293
+        },
+        {
+          "name": "manifest.json",
+          "size": 431
+        },
+        {
+          "name": "styles.css",
+          "size": 1982
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "- Conslidated all tools\r\n- Added perplexity to available models for websearch\r\n- Improved search to include metadata, and weighting",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2025-01-19T11:48:29Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "connector.js",
+          "size": 610
+        },
+        {
+          "name": "main.js",
+          "size": 588249
+        },
+        {
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "name": "styles.css",
+          "size": 3589
+        }
+      ],
+      "author": "ProfSynapse",
+      "description": "alpha release",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2024-12-29T19:56:14Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "profsynapse/nexus"
+}

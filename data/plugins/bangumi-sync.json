@@ -1,0 +1,2677 @@
+{
+  "author": "threeyang3",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Sync your Bangumi collections to notes with episode tracking, control panel, and batch editing.",
+  "errors": [],
+  "id": "bangumi-sync",
+  "lastChangedAt": "2026-06-01T17:04:58.895Z",
+  "lastFetchedAt": "2026-06-01T17:04:58.895Z",
+  "manifest": {
+    "author": "threeyang",
+    "authorUrl": "https://github.com/threeyang3",
+    "description": "Sync your Bangumi collections to notes with episode tracking, control panel, and batch editing.",
+    "id": "bangumi-sync",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.8.7",
+    "name": "Bangumi Sync",
+    "version": "6.9.6"
+  },
+  "name": "Bangumi Sync",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ddbc5533292460ea7e4d3ffb32d08fef4abaf782dc83166add1b509f2652a294",
+          "name": "main.js",
+          "size": 633669
+        },
+        {
+          "digest": "sha256:e8203754da905497de80da2efd58cc0e5cb327cdd9142a7e098f3e16ce98b5e2",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:3baaaf8435c3c021a7a696f997ab30e7072fac431dd5e54350dbe23825ff359e",
+          "name": "styles.css",
+          "size": 73279
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 修复有 SP/OP/ED 集数的条目（例如 https://bgm.tv/subject/369304 ）在云端 → 本地同步时集数信息丢失的问题。`parseEpisodes` 此前会过滤掉 `type !== 0` 的章节，导致正文 `.ep-box` 中根本没有 SP 元素，云端状态无法落盘，进而每次状态同步都显示集数状态存在差异。\n- 修复\"检查并同步状态\"流程中 SP 状态被永久丢失的 bug。`applyEpisodeStatusUpdates` 在清空 frontmatter `ep_statuses` 后只覆盖已有 `.ep-box`，云端新出现的 SP 状态如果本地没有对应元素会直接被清空；现在清空后会按云端数据重建 frontmatter。\n- 修复右键菜单单条更新会顺手清空其他集状态的副作用。`updateLocalStatus` 改为走细粒度 `updateEpStatusInContent`，避免触发\"先清空再重建\"流程。\n",
+      "draft": false,
+      "name": "v6.9.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-01T15:56:34Z",
+      "tag": "6.9.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fb9aba0111765ace5422edef90d962cd4132c9e33b0b46ee713deb8150548370",
+          "name": "main.js",
+          "size": 632247
+        },
+        {
+          "digest": "sha256:62c590d0c8fb12527ff93ac4dbf2a38cc9c5a1afdd2dcbe13695a43766c1e7c1",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:d8d8308360166d1613096bbf1830df03d031a5182363bf0bf51bda8077be19f4",
+          "name": "styles.css",
+          "size": 72546
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 设置面板中硬编码的\"模板语法\"标题改为走 i18n 国际化",
+      "draft": false,
+      "name": "v6.9.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-30T10:46:40Z",
+      "tag": "6.9.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:99c0dae3dd6228af91439f3790357b9289b959560769137830bae7cafaf81525",
+          "name": "main.js",
+          "size": 632154
+        },
+        {
+          "digest": "sha256:f58dd79ee4d6f1b9389574b1dcea60d31f0c01335cde8ee7cb70df489cc6a333",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:ef51c7b3cc14dc756d468e44873d9961b12657e456e76e04c73a4687e7fef898",
+          "name": "styles.css",
+          "size": 71200
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 将状态同步内部拆分为快照构建、后台补全、执行写回和门面服务，降低控制面板与弹窗的业务耦合。\n- 新增会话级本地条目快照缓存，让控制面板预热、状态同步和批量编辑复用同一份本地解析结果。\n- 将批量编辑的 frontmatter 解析、显示值格式化和草稿值转换收口到文档层，减少重复实现。\n\n## 修复\n- 修复批量编辑逐项编辑模式下普通字符串 frontmatter 属性可能显示为空的问题。\n- 为文档层 frontmatter 工具补充测试 stub 与显示值测试，提升 Node 测试环境稳定性。\r\n",
+      "draft": false,
+      "name": "v6.9.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T14:56:44Z",
+      "tag": "6.9.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d93b9120d00c78bf1edad35ca4e70be885681a7cec6c2063ea6331e2e8918606",
+          "name": "main.js",
+          "size": 626932
+        },
+        {
+          "digest": "sha256:6ad7e25cf43b77349ea850bfcb5080d33e033f0dd56e9fcbcad5e8664843891b",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:ef51c7b3cc14dc756d468e44873d9961b12657e456e76e04c73a4687e7fef898",
+          "name": "styles.css",
+          "size": 71200
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 重构批量编辑窗口桌面端布局，改为更大的专属 modal 和清晰的上下卡片分段\n- 优化逐项编辑的属性选择、已选属性和编辑表格层次，提升长标题与多属性场景下的可读性\n- 优化统一操作区的操作列表与新增操作输入布局，减少原先控件堆叠造成的拥挤感\n\n## 样式\n- 为批量编辑窗口补充独立的 `header / body / footer` 结构样式与桌面端尺寸规则\n- 调整移动端批量编辑卡片、按钮和表格退化布局，使其与新的 DOM 结构一致\n\n## 测试\n- `npm run lint`\n- `npm run test`\n- `npm run build`\n",
+      "draft": false,
+      "name": "\"v6.9.4\"",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T13:09:22Z",
+      "tag": "6.9.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c5929ea8fedcadfa66edce1d5a45bf01ef4f665a2454aebe900b912211a1c35e",
+          "name": "main.js",
+          "size": 623540
+        },
+        {
+          "digest": "sha256:b032ebb74571059ec6b28426abd44722e708ef3adcad6cb0a97e53459e97b0ee",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:ba9977bf86ef8084b50c745101366718b3645b046d54d459f4098c211b2f4fb9",
+          "name": "styles.css",
+          "size": 61375
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 修复统一“同步状态”第二步差异弹窗在部分输入结构下渲染中断、打开后变成空白的问题\n- 为 `StatusSyncModal` 增加字段选择归一化、差异数据归一化和安全渲染兜底，避免单个条目结构异常导致整张弹窗失败\n- 在弹窗渲染失败时改为在窗口内展示错误信息并输出更完整的调试日志，便于继续定位问题\n\n## 测试\n- `npm run lint`\n- `npm run test`\n- `npm run build`\n",
+      "draft": false,
+      "name": "\"v6.9.3\"",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T11:27:39Z",
+      "tag": "6.9.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b73bc4c9cc7d325e2d6a2526c5563a33850a249097ac520b9d0549d96ab63c16",
+          "name": "main.js",
+          "size": 620319
+        },
+        {
+          "digest": "sha256:d5ef5d370bd8e534c0dade96e8439d16d82894dc2ddb5f2a2d701a60d2fbcfe7",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:ba9977bf86ef8084b50c745101366718b3645b046d54d459f4098c211b2f4fb9",
+          "name": "styles.css",
+          "size": 61375
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 修复状态同步范围选择弹窗在旧/残缺字段选择结构下渲染中断的问题，避免出现 `Cannot read properties of undefined (reading 'rate')`\n- 为范围选择弹窗增加字段选择归一化与分区安全渲染，避免单个分区异常导致整张弹窗后半段消失\n- 清理 `StatusSyncScopeModal` 文件头部重复导入，消除构建与运行时不稳定因素\n\n## 测试\n- 增加残缺字段选择结构的归一化测试，覆盖缺失 `user` / `platform` 分支的场景\n",
+      "draft": false,
+      "name": "v6.9.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T10:17:42Z",
+      "tag": "6.9.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ea4564638340c5e08e6449c54d6af91b38b077d3182efab1b4d1442d3b562e73",
+          "name": "main.js",
+          "size": 618814
+        },
+        {
+          "digest": "sha256:ad04c2a76d354b22a125ddee0cf511052442d9f79a0b29bc11f4ec28d614dbf7",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:ba9977bf86ef8084b50c745101366718b3645b046d54d459f4098c211b2f4fb9",
+          "name": "styles.css",
+          "size": 61375
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 修复“同步状态范围选择”弹窗只显示部分内容的问题，恢复完整的标题、双栏字段卡片和底部操作按钮\n- 调整范围选择弹窗的 modal 容器、滚动区域和 footer 布局，避免在 Obsidian 中出现内容裁切和按钮缺失\n\n## 改进\n- 范围选择弹窗改为更稳定的 header/body/footer 结构，继续保持之前确认过的桌面双栏、移动端单栏样式方向\n",
+      "draft": false,
+      "name": "v6.9.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T09:54:13Z",
+      "tag": "6.9.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fcad5fa3114607374ccee221a84414f78e0a7be39ab967b734847dadb3e61891",
+          "name": "main.js",
+          "size": 619023
+        },
+        {
+          "digest": "sha256:61bdb69722f487e6444a0e97575676ed5d6c9e6f98bab900e416eaab119358d5",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:50530b16b8b67ebc9d9bf04577ef2cf14eafc9c77e18c8fc447b4779acfe5765",
+          "name": "styles.css",
+          "size": 59776
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增\n- 同步状态恢复为统一入口，执行前先弹出字段范围选择窗口，可分别勾选用户数据和平台数据字段\n\n## 改进\n- 控制面板功能栏重构为默认态/选中态两套固定 8 键布局，移动端继续 4x2，桌面端继续单行\n- 同步状态差异弹窗支持按本轮勾选字段增量展示与执行，不再绑定用户/平台二选一模式\n\n## 清理\n- 移除旧的短评同步、标签同步与平台专用状态同步入口残留\n- 删除只为旧拆分方案服务的翻译键、字段预设与临时清理脚本\n",
+      "draft": false,
+      "name": "v6.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T06:17:52Z",
+      "tag": "6.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bde4fe7cc000b34438c75d150c64ef4fec8b3c9a509aafdf547dfa5ee6330e4f",
+          "name": "main.js",
+          "size": 600760
+        },
+        {
+          "digest": "sha256:0e2cd8aabece1ee8d735ae916ddc23eda34413cbea9ab162d42b26b6fe4963cc",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 将“同步状态”拆分为“同步用户数据”和“同步平台数据”两个独立入口，控制面板按钮与命令可分别触发。\n\n## 改进\n- 默认模板、模板文档和平台 frontmatter 写回中移除 `连载状态` 字段。\n- 平台同步不再基于本地完结状态跳过候选，统一对支持的平台字段进行比较。\n\n## 测试\n- 通过 `npm run lint`、`npm run test`、`npm run build`。\n- Sandbox 中完成控制面板打开、用户数据同步命令执行与 `dev:errors` 检查。",
+      "draft": false,
+      "name": "v6.8.11",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T18:02:29Z",
+      "tag": "6.8.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c14de3e9e9f48e6f50abdaa5a346a2f0df06ead77eb03b43a0b53d0085d8481b",
+          "name": "main.js",
+          "size": 598845
+        },
+        {
+          "digest": "sha256:b11bd61060c1998324b6df3ce69f63b7d32e283487200206d5d8a9667ae9c5cf",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 动画和三次元平台状态解析兼容 `播放开始 / 播放结束`，修复已完结条目在状态同步中被误判为 `连载中`\n- 平台数据差异默认选择云端，执行状态同步时会默认回写云端平台字段修正\n\n## 改进\n- 抽出平台字段 diff helper，减少状态同步 service 中重复对象拼装\n- 新增 infobox 媒体起止日期解析回归测试和平台字段默认决策测试，纯逻辑测试扩展到 30 项",
+      "draft": false,
+      "name": "v6.8.10",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T17:34:18Z",
+      "tag": "6.8.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:be9a7d384cde1ea94d1f24d2847517aed3acb4159973f79732c1c8e64889895d",
+          "name": "main.js",
+          "size": 598835
+        },
+        {
+          "digest": "sha256:6c3872ffb79c93ef5edb5bb3f71358846de6444fc2b20f0aa082fcfaa338d071",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 抽出 `src/document/` 文档服务层，统一短评、frontmatter、section、平台字段与单集状态快照读写\n- 抽出 `StatusSyncService`，把状态同步的 diff 构建、后台补全、默认决策和执行写回从 UI 编排层收口\n- 新增 frontmatter 访问与 markdown section 读写测试，纯逻辑测试扩展到 26 项\n\n## 修复\n- `statusSyncModal` 不再回退到全局 `window`，继续符合 Obsidian 的 popout window 兼容规范\n- 补齐架构、开发、版本历史与 README，确保文档和发布元信息同步到 6.8.9",
+      "draft": false,
+      "name": "v6.8.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T11:38:23Z",
+      "tag": "6.8.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:677151b918712094fdd6b75301174186d228499ab88aae1f104c75106c3e6741",
+          "name": "main.js",
+          "size": 592426
+        },
+        {
+          "digest": "sha256:a0090f01432e1c9bab8ff894187bfee0714dae4e9b8d3086ca5cfd6d8600d6a1",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 同步状态改为快速首屏 + 后台补全：用户数据差异先展示，单集状态与平台数据后台增量加载。\n- 打开控制面板后自动预热本地已同步条目的用户数据快照，状态同步时复用缓存，减少重复文件读取。\n- 无缓存首开后也会继续触发检查并同步状态，自动同步入口不再漏跑。\n- 平台数据对比继续按本地完结状态前置排除，对比阶段不再请求章节列表。\n\n## 修复\n- 修复正文 callout 中多段短评读取/写入不一致的问题，统一短评提取模块。\n\n## 验证\n- npm run build\n- Obsidian Sandbox 重载插件并检查 dev:errors\n- Sandbox 150 个已同步条目状态同步首屏约 31-77ms 打开，后台补全约 6.5-6.9s",
+      "draft": false,
+      "name": "v6.8.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T09:49:00Z",
+      "tag": "6.8.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bc1c7e5e9841b585e848efcbde159d43fa9a40b6fa7e5d2b22c364831e7bbeed",
+          "name": "main.js",
+          "size": 575792
+        },
+        {
+          "digest": "sha256:f1e3cc185d7bbdaf86c375fc4f8c4bee8d9c3c5909298824afc5eb72a0caa622",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 同步状态拆分为用户数据与平台数据两段流程，在同一弹窗内分组展示。\n- 平台数据同步新增连载状态、集数、话数、卷数/册数对比，并仅对本地未明确完结的条目请求云端。\n\n## 改进\n- 本地未完结但云端已完结时，会一并回写完结状态、结束信息和最新平台计数。\n- 默认模板补齐连载状态、开始、结束、进度等字段，漫画模板补充卷数。\n- 动画、三次元和漫画的 infobox 解析补齐平台进度字段。\n\n## 修复\n- 短评提取逻辑模块化，统一用于状态同步、控制面板和用户数据提取，修复多段短评只读取第一段的问题。",
+      "draft": false,
+      "name": "v6.8.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T06:15:53Z",
+      "tag": "6.8.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d4dfc92adf7e0a4b53a2d50d60949e75ad03ede79e8b4ed624c048a34f9a002",
+          "name": "main.js",
+          "size": 560663
+        },
+        {
+          "digest": "sha256:5ee0447ae062ead0dfbc2da205eee9cdcd379acc55a26c5b0159f416f7465e7b",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增\n- 模板设置支持按 category 单独配置，可分别为 TV、剧场版、漫画、小说、画集等指定模板来源\n\n## 改进\n- 未单独设置模板的 category 现在自动继承所属大类模板，例如 TV/OVA/WEB/剧场版 继承动画模板，绘本/公式书/写真继承画集模板\n- 模板设置页新增 category 级模板入口，并在未覆盖时明确显示继承来源",
+      "draft": false,
+      "name": "v6.8.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-15T16:59:05Z",
+      "tag": "6.8.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:52423d9dce5db6a6f2c96a3f2f7fc346a7dd6c365d3b7cec5f801c0131844016",
+          "name": "main.js",
+          "size": 551206
+        },
+        {
+          "digest": "sha256:00be779c02baf727b6b33cbb9fa6d9f8ef4c0182a5c591e22dc9bb5082e1b2e5",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:f44f83f692a28ab3bf1a786f69a4b099ac95f2f7d6dc16c81eb19394d6658290",
+          "name": "styles.css",
+          "size": 55381
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\r\n- 批量编辑新增逐项编辑模式，可先选属性再按条目逐格修改。\r\n- 批量编辑保留统一操作模式，并支持自定义属性加入编辑表格。\r\n\r\n## 改进\r\n- 批量编辑底层改用 processFrontMatter 写回，逐项编辑只提交实际改动。\r\n- 批量编辑窗口扩大并优化为更适合连续审查的原生表格布局。",
+      "draft": false,
+      "name": "v6.8.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T11:30:44Z",
+      "tag": "6.8.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d337c62d2b37b160c9167bcca1b21d46fef547b659e3741951b1c8cece2174b1",
+          "name": "main.js",
+          "size": 533949
+        },
+        {
+          "digest": "sha256:ea2cbded50c4004a504d2f1e1a88a00ffc19f4fac620472bbc907a1273fec7d3",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:0c20e970fe6e024804e87b2718ece6334ab16bb985dc6e9bd591ad5167c07151",
+          "name": "styles.css",
+          "size": 51602
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 导入字段差异比较窗口新增“全部智能合并”操作，便于批量处理冲突字段。\n- 智能合并规则统一为：列表类属性合并去重，文本直接拼接，其余类型默认覆盖导入值。\n\n## 修复\n- 修复导入字段对比时本地“短评”提取错误的问题，不再误吞后续“简介”等 callout 内容。\n- 同步修正导出链路中的短评提取边界，保持导出与导入比较逻辑一致。",
+      "draft": false,
+      "name": "v6.8.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T10:37:46Z",
+      "tag": "6.8.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f57f2c575aa00899501c8e5bf38df7b063a79dfc7dbad28904f13eb76abedd0f",
+          "name": "main.js",
+          "size": 533736
+        },
+        {
+          "digest": "sha256:b6518ec3af0b9dd2844177a61798fb73e30e22e991049e77d4c979a5d1aba798",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:0c20e970fe6e024804e87b2718ece6334ab16bb985dc6e9bd591ad5167c07151",
+          "name": "styles.css",
+          "size": 51602
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 导出用户数据时改为单个备份文件，按条目的 category 在文件内分组保存。\n- 导入用户数据时同时支持新的单文件备份格式和旧版多文件备份格式。\n- 控制面板新增排序依据和排序方向，可按收藏时间、标题、状态、评分排序。\n\n## 改进\n- 导出时会从正文短评 callout 提取短评，并在导入时继续按正文短评进行对比和写回。\n- 导入字段差异比较窗口扩大显示区域，并增强条目分组与差异表格的可读性。\n\n## 修复\n- 解决短评导入时被误判为本地缺少 frontmatter 属性的问题。\n- 优化单文件备份相关文案与导入提示，明确新旧格式兼容关系。",
+      "draft": false,
+      "name": "v6.8.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T09:57:32Z",
+      "tag": "6.8.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:00f27cb7d405d4a91d05ca992e6540efc6201e7f8aad3ad73399a0b1a1dfeab8",
+          "name": "main.js",
+          "size": 528246
+        },
+        {
+          "digest": "sha256:5ebfcacbb835347deae1aa905f0d3dac4ba47a05f8843b108ace72b9b75ccdcf",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:77a5bb1f41075d3b2d8015db5a59cc1a73ebf5c0badbaa7b375f8a8b9a46fd58",
+          "name": "styles.css",
+          "size": 47322
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 控制面板增加按收藏时间、标题、状态、评分排序。\n- 控制面板样式回归为更接近 Obsidian 原生的布局与交互。\n\n## 改进\n- 排序条件与筛选状态会一并持久化。\n- 构建产物已同步更新。\r\n",
+      "draft": false,
+      "name": "v6.8.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T08:28:21Z",
+      "tag": "6.8.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c0006487f34e98e5f09c33d1ac546233613e678108fdc621cbf4c349b476a8e5",
+          "name": "main.js",
+          "size": 523169
+        },
+        {
+          "digest": "sha256:382407569a707f8dd28d607834a93e0b06ecb5fecf58ed478f4c10a068f7e881",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:19a015a940f8c23cf90de2cc0567a0e1e8f6e5c1015b87d9990a73241832a5ec",
+          "name": "styles.css",
+          "size": 46409
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 导出与导入新增“用户信息 / 自定义属性 / 正文内容”分层开关，可按层选择备份或回导。\n- 新增按属性逐项审查导入模式，支持逐属性处理冲突、缺失字段和别名映射。\n\n## 改进\n- 旧版 legacy 导出兼容增强，评分明细拆分后归入自定义属性。\n- 自定义属性识别改为排除法，未知本地属性也能稳定参与导出导入。\n- 对多值字段和短评等内容的比较与合并规则进一步优化。\n\n## 修复\n- 修复缺失字段界面当前决策不够直观的问题。\n- 修复导出数据与导入功能不对称的问题，提升回导一致性。",
+      "draft": false,
+      "name": "v6.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T06:35:57Z",
+      "tag": "6.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d73d0c045f8f39af32d32bafd138c1c43c2f9ff88bff0254c229f17cfbada7ed",
+          "name": "main.js",
+          "size": 482911
+        },
+        {
+          "digest": "sha256:4f9f2e8060fa9f3ff1d3dfbe413f6d985be1b15e61cbd1e89032258e7dcd3a5e",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 新增\n- 导入用户数据前弹出属性管理弹窗，可批量忽略或设置别名自定义属性\n- 导入时自动对比本地与导入数据的差异：本地为空 + 导入非空自动导入，有差异的属性展示对比列表供用户逐条选择保留本地/导入/跳过\n- 支持批量操作：全部保留本地 / 全部保留导入 / 全部跳过\n\n### 修复\n- 导入功能不再跳过全部条目：区分\"本地无文件\"与\"无差异\"，修复 `smart` 策略始终跳过已有值条目的问题",
+      "draft": false,
+      "name": "v6.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T18:26:40Z",
+      "tag": "6.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cc7c45435fef1bde5c618b0cc3132a9559ec623a9d3f082039da9bd96ff91c5b",
+          "name": "main.js",
+          "size": 466254
+        },
+        {
+          "digest": "sha256:6ac250d90aec185610fbd41fd66b2a010c41231dad6d5146599962f48cfcf9aa",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 修复\n- 多段短评覆盖本地时末尾重复：`findCommentBlock` 遇到无 `>` 前缀的空行时不再提前截断，而是向前看判断是否仍有 callout 内容",
+      "draft": false,
+      "name": "v6.7.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T18:07:01Z",
+      "tag": "6.7.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f4df09123578e19fa75580730e19924a9d315831830a9888a6677bbf3dc9088",
+          "name": "main.js",
+          "size": 465915
+        },
+        {
+          "digest": "sha256:e689bed0306436aaadf350557d67e5649cec2be8d1b014dd32935b799597b67f",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 修复\n- 多段短评同步到本地时只保留第一段：修复 `findCommentBlock` 在 callout 内遇到无 `>` 前缀的空行时提前截断，以及 `normalizeComment` 和模板渲染未将 Bangumi 单换行段落分隔转为 Markdown 双换行",
+      "draft": false,
+      "name": "v6.7.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T18:02:29Z",
+      "tag": "6.7.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:46ec205e909899117bc6bc020ae437676f11bd3af1abcc84b2ae9f1072bacde2",
+          "name": "main.js",
+          "size": 465490
+        },
+        {
+          "digest": "sha256:0e3e5f50e27d7bb7d55f1ce155533b92c84029f99fd54b6580b3056513df38f5",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 修复\n- 从云端同步单集状态到本地时增加 episode 字段空值检查，防止 API 返回畸形数据时崩溃\n- 同步本地单集状态到云端全部失败时正确抛出错误，不再静默成功",
+      "draft": false,
+      "name": "v6.7.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T17:44:51Z",
+      "tag": "6.7.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a4cd795d2070543f9e4e8d35178f51ed67cfc88767555d449c7dbbb3886fa05d",
+          "name": "main.js",
+          "size": 465256
+        },
+        {
+          "digest": "sha256:662aebf09923d840c2a85f02fba6d3f6816b67babde70f4a4045506a560ae343",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 修复\n- \"对比状态\"单个条目获取章节状态失败时不再中断整个对比流程，改为跳过该条目继续处理\n- 云端章节状态获取增加空值保护，防止 API 返回畸形数据时崩溃",
+      "draft": false,
+      "name": "v6.7.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T17:33:21Z",
+      "tag": "6.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fa5c0964b9a78f77e9050396d16ef5cf239997e42db1f906799aa4fd671fb12d",
+          "name": "main.js",
+          "size": 464617
+        },
+        {
+          "digest": "sha256:ed708d21c8d5bd9905afcd2ee4166e08cb49e14c4ecf8a13393b6d886c5a7c45",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 数据保护/导出/导入时 Real 类型的国家、语言、每集长、电视台、主演、编剧字段不再被误判为自定义属性\n\n## 改进\n\n- 并发同步错误信息包含条目 ID，便于排查",
+      "draft": false,
+      "name": "v6.7.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T15:55:12Z",
+      "tag": "6.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1bfefcdafea09a965f84b6af8fb8a13113ca1c99bf9bc65db6196991010b9fde",
+          "name": "main.js",
+          "size": 464470
+        },
+        {
+          "digest": "sha256:7aa5dc9c5b6ac6f17d2d3e41654620fc07f9f4f8ccfe86c958912db1dce9cd12",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 内置作者模板 `作品大类` 属性从硬编码改为 `{{typeLabel}}` 变量，保持与代码逻辑一致",
+      "draft": false,
+      "name": "v6.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T13:37:11Z",
+      "tag": "6.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:14fb024972ba6145cb35cca873e31360be4b4342c09dd98217c843e0f2e47552",
+          "name": "main.js",
+          "size": 464429
+        },
+        {
+          "digest": "sha256:2a20d81367da353ad310e82dbac04dd7f4ebcaa67a082845c452ab0c0fc7cd5f",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- Real 类型（电影/日剧/欧美剧/华语剧/电视剧/演出/综艺）内置模板重设计，支持导演、编剧、主演、国家、语言、每集长、电视台、IMDb 等字段解析\n- Real 类型支持章节获取与显示\n\n## 改进\n\n- 从 infobox 提取别名（支持字符串和数组格式）\n- 模板渲染统一 YAML 转义，修复特殊字符（引号、反斜杠、换行）导致 frontmatter 损坏\n- 官网字段多个链接只取第一个，避免多行 YAML 问题\n- `name_cn_with_type` 加入自动填充变量列表\n\n## 修复\n\n- 控制面板全选复选框再次点击可正确取消全选\n- Real 作者自用模板未被使用的配置问题",
+      "draft": false,
+      "name": "v6.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T10:00:54Z",
+      "tag": "6.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:62e5941c36443271ac8627c2e4649e8e8f8220fd3788f829dcd581e7725f8685",
+          "name": "main.js",
+          "size": 461505
+        },
+        {
+          "digest": "sha256:86d40dc782e9b7ab1705d9534e413a042d4f678682ab5f4ab3caa468f9877667",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- 书籍大类新增 画集/绘本/公式书/写真 细分类别\n- 三次元大类新增 日剧/欧美剧/华语剧/电视剧/电影/演出/综艺/其他 细分类别\n\n## 改进\n\n- 模板选择改为按 category 查找，每个 category 可独立配置模板\n- `{{type}}` 统一为大类（book/anime/music/game/real）\n- `name_cn_with_type` 使用 category 作为后缀\n- CustomTemplates 改为 category 键值对结构\n\n## 修复\n\n- 修复三次元作者自用模板未生效的问题\n- 修复三次元\"其他\"分类使用了动画模板的问题\n- 修复无 platform 的三次元条目未匹配自定义模板的问题",
+      "draft": false,
+      "name": "v6.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-10T07:14:45Z",
+      "tag": "6.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9293486387979d9fb654fe5eeb890a1ac5a86d128e8115f52ace784f4c69db24",
+          "name": "main.js",
+          "size": 462102
+        },
+        {
+          "digest": "sha256:4348cbd8c563d0214943c92b52665654bafc5246fb9872ea1c832abaf9d0200a",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "### 新增\n- 新增 `{{platform}}` 模板变量，可直接使用 Bangumi API 的平台/具体类型字段（如\"公式书\"、\"TV\"、\"电影\"），适用于模板内容和路径模板\n\n### 修复\n- 修复已同步条目再次同步时\"具体类型\"等 API 衍生属性不更新的问题",
+      "draft": false,
+      "name": "v6.5.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T19:46:30Z",
+      "tag": "6.5.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ff846dcba3a069f09346600bc3f1e76b0b51a738e7d6d3c8486a53c2f062ef08",
+          "name": "main.js",
+          "size": 461942
+        },
+        {
+          "digest": "sha256:e5c8fb06c13e517f2ceee774b36d7f2d1ea00e0d0c374dd1bec329dfc55c60a9",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 画集类型的\"具体类型\"改为优先使用 `platform` 字段（如\"公式书\"），回退到 infobox `类型` 字段\n- 确保所有调用 `parseAlbumInfo` 的路径都传递 `platform` 参数",
+      "draft": false,
+      "name": "v6.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T19:16:10Z",
+      "tag": "6.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:290b873d53e463dfcea4723c8d6e93f9fed8b958cb91af43ed6a777efd7e37a7",
+          "name": "main.js",
+          "size": 461890
+        },
+        {
+          "digest": "sha256:2dfe47a60ec81782d646b9a564c016e933e24d2c92123c3f510e142f8c8a276b",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 三次元条目的\"具体类型\"（如电视剧/电影/纪录片）改为从 `platform` 字段获取，修复了之前错误显示为类型标签（如\"剧情、喜剧、爱情\"）的问题\n\n## 新增\n- 三次元类型新增作者自用模板，包含剧情/演技/制作评分、精彩片段、存储、资源属性、相关等自定义属性\n- 三次元模板新增集数展示、记录、感想部分，与动画模板对齐",
+      "draft": false,
+      "name": "v6.5.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T18:04:40Z",
+      "tag": "6.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:690e4f2b077783ab23bfb78e530760ec468f77e59edaa3483947828dd74f4c8c",
+          "name": "main.js",
+          "size": 460078
+        },
+        {
+          "digest": "sha256:ca6fd6b4313a4f6c3170b82519fcaf1456c2116cef7ed89cb441fb20ae09ac40",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n- 允许每个条目类型（动画/小说/漫画/画集/游戏/音乐/三次元）分别设置同步到本地的路径模板，留空则使用默认模板",
+      "draft": false,
+      "name": "v6.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T17:43:35Z",
+      "tag": "6.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d1585acd456cf3bc5320a26148ad9a752930d8d168b9f6d156b978d6d84e69d5",
+          "name": "main.js",
+          "size": 457274
+        },
+        {
+          "digest": "sha256:3eff7a14520dee7e6a7f4065e2ed7230643264747e63bf2206b1007751064205",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:bdb5f947d521fb871e30e17e9631d59ffdc8b1c818f67751c9522e364946fb8e",
+          "name": "styles.css",
+          "size": 46112
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 自定义属性填写弹窗布局紧凑化：字段改为水平排列（标签左、输入框右），固定 4 列网格，每个条目独立卡片分隔\n- 移动端自定义属性弹窗改为 2 列布局，触控区域保持 44px 高度",
+      "draft": false,
+      "name": "v6.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T13:43:09Z",
+      "tag": "6.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4423eadbd01b32e0a7af8d5ea16f1eefe3582692921990932c2c39613e6b4337",
+          "name": "main.js",
+          "size": 456833
+        },
+        {
+          "digest": "sha256:7d546466e965957788b6eadc65f30ff97793e2c63e263489e04d13b36fd7c00f",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- \"扫描并关联相关条目\"完成后弹窗展示更新详情，列出每个修改条目新增的关联链接",
+      "draft": false,
+      "name": "v6.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T12:38:17Z",
+      "tag": "6.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0754c523ebe5d474a06ff919d2954afff5f18d53a6acdbfc0408370fb3981141",
+          "name": "main.js",
+          "size": 455939
+        },
+        {
+          "digest": "sha256:493009142faa7da8b5b6d1b3591935e9543c00726619994a2be12181952efba2",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- \"扫描并关联相关条目\"完成后弹窗显示异常，改为在 modal 中展示完整统计信息（检查 N 个条目，更新 N 个，跳过 N 个，失败 N 个）",
+      "draft": false,
+      "name": "v6.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T12:11:03Z",
+      "tag": "6.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:864435e3b4e07eab51037eafb5c6dc5c5dd95fa6a9c540f100578e83bc4db762",
+          "name": "main.js",
+          "size": 454893
+        },
+        {
+          "digest": "sha256:1d57363e70754b8e2f9ad732580040690a9946278d7ef4ce33eb7daf559643f2",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- \"扫描并关联相关条目\"使用并查集查找连通分量，确保同系列所有条目互相关联（如间谍过家家1/2/3全部互链，即使 Bangumi API 只返回直接关联）",
+      "draft": false,
+      "name": "v6.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T11:55:30Z",
+      "tag": "6.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d39b5f1e362201c6a4e7052c4d6b97c69cfb97299d66798ba5e4f7452dd32b46",
+          "name": "main.js",
+          "size": 453361
+        },
+        {
+          "digest": "sha256:a3674027eba672ef59e4c260522a17494e7cc7c52b3e2f023bf58521076c63ef",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- \"扫描并关联相关条目\"和\"批量下载封面\"命令中 syncModal 可能为 null 导致崩溃",
+      "draft": false,
+      "name": "v6.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T11:29:18Z",
+      "tag": "6.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2ab2a93935deaa74da9cf64d162d4d19f87289cea3a4d560de30f752812eca12",
+          "name": "main.js",
+          "size": 453281
+        },
+        {
+          "digest": "sha256:458478b66fb6d3abf295e589fb8b0eb231286590d9c64444752a16a8acca1c1a",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- \"扫描并关联相关条目\"命令增加详细调试日志，便于排查扫描路径、条目匹配等问题",
+      "draft": false,
+      "name": "v6.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T11:12:36Z",
+      "tag": "6.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:97bc16291b5bc4733953283d39dcb87d3d6643be725bb9f920abc7c925652978",
+          "name": "main.js",
+          "size": 451755
+        },
+        {
+          "digest": "sha256:a3981c6984800916d8db9c6728b2f2d0a884f0d1f1f2bfdec122d972090a825b",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- \"扫描并关联相关条目\"命令的扫描路径与控制面板不一致，导致部分本地条目未被扫描到",
+      "draft": false,
+      "name": "v6.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T11:06:07Z",
+      "tag": "6.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:49218d75568f6584e39446a557acc741613afb6d1be803e113461e2b70606dee",
+          "name": "main.js",
+          "size": 451649
+        },
+        {
+          "digest": "sha256:20082d15df859fff8214e5626c568074f5b9d250b56dd6679305475604de91c4",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增\n- 命令\"扫描并关联相关条目\"：扫描所有本地已同步条目，为相关条目补充双向链接，支持进度显示和去重",
+      "draft": false,
+      "name": "v6.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T10:57:41Z",
+      "tag": "6.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8678675a687f23f764bd897b479c94f879c1fc78dc304bd03bcb5a0a2a7953c3",
+          "name": "main.js",
+          "size": 446597
+        },
+        {
+          "digest": "sha256:b2ae10954bd7e4a46e3e787f1a74d7620c9232eeef985e87c7e918095e214de5",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 批量同步时同批次相关条目（如同一系列的两季）无法互相检测到对方，现在会在批量同步完成后补充双向链接\n\n## 改进\n- 内置模板 frontmatter 中的\"相关\"属性改为常驻显示，即使为空也会出现在属性中",
+      "draft": false,
+      "name": "v6.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T09:57:25Z",
+      "tag": "6.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:009d7a4a8c517c3512d27ed99fcf300bb5948341f27337d149f0d3177714fedb",
+          "name": "main.js",
+          "size": 443760
+        },
+        {
+          "digest": "sha256:93c1b2834d58c4b606912758ef53035f0dc6615605f1d656c030ad633fee20fe",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 条件渲染块（`{{#if}}`）内的模板变量（如 `{{staff}}`）不再残留为原始文本\n- 简介中包含 `---` 等分隔线符号时不再打断 callout 块格式\n\n## 改进\n- 批量同步超过 10 条时跳过自定义属性弹窗，直接使用模板默认值，提升大批量同步效率",
+      "draft": false,
+      "name": "v6.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T08:35:43Z",
+      "tag": "6.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4994b826f088ce11ce030780aa98b6983d66ad57ac00ee9c6a6ac518fee884aa",
+          "name": "main.js",
+          "size": 443422
+        },
+        {
+          "digest": "sha256:d40ca7641290624152031b5982bffa2bf39cd4bbb5cc55126cb2602d0b7dbbdb",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 修复动画条目\"动画公司\"属性几乎无法获取的问题，当 infobox 中没有 `动画制作` 字段时，现在会从关联人物数据中提取 `relation === \"动画制作\"` 的公司名称作为回退",
+      "draft": false,
+      "name": "v6.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T07:06:57Z",
+      "tag": "6.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8c4deccdb73ed6c3ba9d1cd99a215b87880119849b391b7617fbbf0309f7d178",
+          "name": "main.js",
+          "size": 443044
+        },
+        {
+          "digest": "sha256:bbffa0956acd847e20ef060872450d2da384590c60ce807abb3eb63184477afb",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:989c55f272cd949376c31cd19196b2fe662d5851f697cf91bbc340d2dc7f3496",
+          "name": "styles.css",
+          "size": 45427
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 帮助链接区域改用原生按钮，去除 Setting 组件包裹，按钮现在填满卡片宽度",
+      "draft": false,
+      "name": "v6.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T06:10:39Z",
+      "tag": "6.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5732cdacf3c4de96faea95c9794c5fb5c8eb5133f2a59a3fc03492340c7ffb72",
+          "name": "main.js",
+          "size": 443035
+        },
+        {
+          "digest": "sha256:dd140b4c3a2a8badcfb81adfb80562cf86f640153298a278a0144446836551cd",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:5024b8b5c9ec98254ccb4f7d80ecf411438fa801a435196a07e9d64f529d5875",
+          "name": "styles.css",
+          "size": 45785
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 修复帮助链接按钮未填满卡片宽度的问题，通过更精确的选择器覆盖 Obsidian 默认样式",
+      "draft": false,
+      "name": "v6.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T06:05:28Z",
+      "tag": "6.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5732cdacf3c4de96faea95c9794c5fb5c8eb5133f2a59a3fc03492340c7ffb72",
+          "name": "main.js",
+          "size": 443035
+        },
+        {
+          "digest": "sha256:b5aabb26ed7f289b82a6fa04eed20a0e59ca9272a2b74244f63ef6c88808dcd5",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:9e808ead4a369ca20236c83f9d3f1762ead5ea7e4f154dd8a05cef27d0388729",
+          "name": "styles.css",
+          "size": 45693
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 优化通用设置页帮助链接区域样式，按钮填满卡片宽度，移动端堆叠显示",
+      "draft": false,
+      "name": "v6.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T06:01:07Z",
+      "tag": "6.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5732cdacf3c4de96faea95c9794c5fb5c8eb5133f2a59a3fc03492340c7ffb72",
+          "name": "main.js",
+          "size": 443035
+        },
+        {
+          "digest": "sha256:b5681f737644f674357c3d97df33edb2585ac7a09b14c4b19d6d6ecbbb09bdf8",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 精简通用设置页帮助链接区域，去掉重复标题，只保留按钮",
+      "draft": false,
+      "name": "v6.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T05:54:46Z",
+      "tag": "6.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9fcf905d12c207760be307c8794a4474971819076ff13dd4ecd82b67f1d28ff2",
+          "name": "main.js",
+          "size": 443156
+        },
+        {
+          "digest": "sha256:9016a1858f7493d46b359a5b16afe140c5a56b45a5f3e0cc542ba2341dd20db3",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 修复自定义属性弹窗中模板变量（如 `{{rating_music}}`）显示为原始文本的问题，现在有回退值时显示回退值，无回退值时显示为空",
+      "draft": false,
+      "name": "v6.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T05:42:56Z",
+      "tag": "6.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2f5e39441e8ee3c592cf176a848788c8aabd003dbe1c9c0a6dba5d39ac3a9fa6",
+          "name": "main.js",
+          "size": 443148
+        },
+        {
+          "digest": "sha256:773a92f866257fbd6fc495b0fa19b14ac1537c3be6a92b3e75ee07533ac9c90f",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 修复控制面板导入时自定义属性弹窗无字段仍弹出的问题，无自定义属性时自动跳过\n- 修复条目中文名为空时生成空文件名路径（如 `ACGN/novel/小说/.md`）导致 \"File already exists\" 报错，现在依次回退到原名和条目 ID",
+      "draft": false,
+      "name": "v6.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-09T05:32:22Z",
+      "tag": "6.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b2d2cbfc1004312ef1bc3717366ce81e557406a747f11840fe4504269c1ccdf7",
+          "name": "main.js",
+          "size": 442073
+        },
+        {
+          "digest": "sha256:4ef936c36d59d25a4f3ea7a2eb51395d6d44e788df248a155d7d2a2d7c0f5fdd",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 自定义属性弹窗在同步预览后始终出现，不再依赖模板预检（无自定义属性时可点\"跳过\"）\n- CRLF 换行的模板文件 frontmatter 属性提取兼容\n- 图片文件名中特殊 Unicode 字符不再被误识别为路径分隔符\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v6.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T18:03:42Z",
+      "tag": "6.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:eea68fee19167c1d353b05a6a23a1de41f203f43d38deb0c91df735d1987e434",
+          "name": "main.js",
+          "size": 442271
+        },
+        {
+          "digest": "sha256:2048108a865a76078b8e63d07a12d6ff0692e8f8562411c4c4fd4a1654072589",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 同步预览流程网络波动时弹窗不出现：SyncModal 保持打开并显示\"Preparing preview...\"直到预览弹窗就绪\n- 预览流程增加 try-catch，异常不再静默消失\n- 新增统一的 `cleanupSyncState()` 清理方法，消除多处重复的资源清理代码\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v6.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T17:08:42Z",
+      "tag": "6.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e44fada8b034344f2df5a6989747ab68b2e24578220e786cb22b4ec5433b8cd9",
+          "name": "main.js",
+          "size": 441393
+        },
+        {
+          "digest": "sha256:2067638f6a6b0060cf9b398adc2bcd531ec7455603c6001e38daf2b831ca0045",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:e7fe27d1d94523d2889d6baf62164ced74eecde661ab7960aedef371c892076c",
+          "name": "styles.css",
+          "size": 45726
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- 设置面板改为分页布局（通用 / 路径 / 模板 / 同步 / 高级 / 字段），提升浏览效率\n- 新增「字段」标签页，按类别展示所有可用模板变量及示例\n- 同步流程的自定义属性请求增加 15s 超时保护，网络波动时不阻塞后续弹窗\n\n## 修复\n\n- 云端多段短评写入 YAML frontmatter 时自动转义换行（`\\n` → `\\n`），避免属性显示异常\n- 新增 `{{my_comment_raw}}` 变量供正文 callout 使用，保留原始多行格式\n- `my_comment_raw` 加入自动填充变量集合，确保模板属性分类正确\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v6.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T16:36:45Z",
+      "tag": "6.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:76c45d3ca50704f0e42731bc96f470c8f994a9e512ccfc24ddb2e7e8a06b8537",
+          "name": "main.js",
+          "size": 432992
+        },
+        {
+          "digest": "sha256:5b7c750c88d9ed4b7dc33816da1348b632ca575646a9c06b7192ed6b905a3994",
+          "name": "manifest.json",
+          "size": 321
+        },
+        {
+          "digest": "sha256:4279467367a7418909556b25c2c1197ef47a46c61d6fed3ff6b3f1a0e2fa7d51",
+          "name": "styles.css",
+          "size": 44661
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 设置面板分页样式优化：去除容器背景和边框，改用 Obsidian 原生风格的底部指示线，整体更简洁、更贴近 Obsidian 原生 UI 风格\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v5.10.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T14:56:25Z",
+      "tag": "5.10.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:76c45d3ca50704f0e42731bc96f470c8f994a9e512ccfc24ddb2e7e8a06b8537",
+          "name": "main.js",
+          "size": 432992
+        },
+        {
+          "digest": "sha256:61ff5cad30a9ae1567605ecc7389e0080ec4b37cc0a2c0413c9f9122902caf4b",
+          "name": "manifest.json",
+          "size": 321
+        },
+        {
+          "digest": "sha256:c991475e8ad58e76783826fbdcbfa050a96e64018bd7dc05a8c2b5763f4b6d8d",
+          "name": "styles.css",
+          "size": 44845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- 设置面板改为分页布局（通用 / 路径 / 模板 / 同步 / 高级），提升设置页面的可浏览性和组织性\n\n## 改进\n\n- 移动端标签页头支持横向滚动，适配窄屏幕\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v5.10.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-08T13:25:28Z",
+      "tag": "5.10.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ae5a36c26b14e4a35a23ee01847f5399487ddc5578453f439c34baa21b601b4a",
+          "name": "main.js",
+          "size": 430797
+        },
+        {
+          "digest": "sha256:7abc2f4d9ee8d160266e432255d49d847c67a5cc123d74464e9278163adec773",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:954875c41d7aa725a7841c15b135700fe7302c8d72a16e3969b577bd4e07b38f",
+          "name": "styles.css",
+          "size": 41124
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 全局样式全面采用 Obsidian 原生视觉风格，移除自定义主题（渐变、衬线字体、装饰阴影）\n- bangumi-info callout 改用 flex-wrap 响应式布局，替代硬编码宽屏断点，图片和表格按空间自动换列\n- 表格列宽按内容自适应（table-layout: auto），首列标签收缩不扩张\n\n## 修复\n\n- 桌面端控制面板外层多余纵向滚动条\n- popout 窗口兼容性：`window` → `activeWindow`（mobile.ts / timing.ts）\n- 批量编辑器移除按钮补充 `aria-label`\n\n## 代码质量\n\n- 通过 Obsidian ESLint 规范审查（零错误）\n- 无 `innerHTML`、无 `fetch()`、无 `as any`、无 lookbehind 正则",
+      "draft": false,
+      "name": "v5.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T17:31:33Z",
+      "tag": "5.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ae5a36c26b14e4a35a23ee01847f5399487ddc5578453f439c34baa21b601b4a",
+          "name": "main.js",
+          "size": 430797
+        },
+        {
+          "digest": "sha256:a03a249e965539509fa5bcc9184c02705d00285fa81bca263018f60966842225",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:cce6ee8a52396fb8e46d90bd64750946b99bcf7c93b9b73ada6d15fae9315c7e",
+          "name": "styles.css",
+          "size": 42719
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- 移除自定义主题样式（渐变、衬线字体、装饰性阴影），全面采用 Obsidian 原生视觉风格\n- 深色模式自动适配，无需额外适配代码\n- 减少视觉干扰，保持高信息密度\n- 按钮、输入框、表格等控件样式与 Obsidian 核心 UI 一致\n- 保留全部布局、响应式和无障碍功能",
+      "draft": false,
+      "name": "v5.8.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-07T06:24:56Z",
+      "tag": "5.8.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8fdaebfbbf11f211d54a3cfe407bd517ce6f56772c05f711259d7ce0114d5ec",
+          "name": "main.js",
+          "size": 430633
+        },
+        {
+          "digest": "sha256:e3974892f1ae5e07a8d5c95691a6a2c210d811f4e0dbcbb0b3dcc3638ac30945",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:e0f8bb81bfb52ab70ee479f0c841857c82333f80733e0d91184bda6e3b1e07d1",
+          "name": "styles.css",
+          "size": 67313
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n- 修复 callout 内表格因 table-layout: auto 导致宽度溢出产生滚动条\n- 修复宽屏布局 flex 子项 min-height: auto 阻止缩小，导致 callout 固定高度时内容溢出\n\n## 改进\n- 补充 release targetCommitish 发布规范文档\n- 新增 AGENTS.md 发布流程检查项",
+      "draft": false,
+      "name": "v5.8.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T07:37:27Z",
+      "tag": "5.8.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8fdaebfbbf11f211d54a3cfe407bd517ce6f56772c05f711259d7ce0114d5ec",
+          "name": "main.js",
+          "size": 430633
+        },
+        {
+          "digest": "sha256:65bf5efbf1d581905663fa408870b171638547c37074232f68da51821dca006f",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:b754a3acb86eadd8f5b1c674fdbb4ed3d4baf3a576830c7a7da2048b5a0cb286",
+          "name": "styles.css",
+          "size": 68040
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v5.8.1\r\n\r\n### 改进\r\n- 深度优化桌面端 UI 审美：通过统一背景色调与边框风格，消除了面板“分层感”和“套娃”视觉。\r\n- 修复桌面端 double scrollbars 问题：锁定弹窗外层溢出，仅允许内容区域（列表/表格）滚动。\r\n- 优化弹窗呼吸感：调整桌面端内边距，使布局更加美观、一体化。\r\n",
+      "draft": false,
+      "name": "v5.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T04:13:50Z",
+      "tag": "5.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8fdaebfbbf11f211d54a3cfe407bd517ce6f56772c05f711259d7ce0114d5ec",
+          "name": "main.js",
+          "size": 430633
+        },
+        {
+          "digest": "sha256:6869c86ccddf000c44bf7915149cbce5ad91ede72f7765d9cad4d084a7536e22",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:73f7b36afd532ef46894531a0376e31af06380cf073f1829545b2ef6bdda2802",
+          "name": "styles.css",
+          "size": 68088
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v5.8.0\r\n\r\n### 改进\r\n- 深度优化移动端搜索界面：搜索输入框与搜索、清空按钮实现单行并排显示，类型与排序选择器位于第二行并排显示，布局严格参考 `preview-v2.html`。\r\n",
+      "draft": false,
+      "name": "v5.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:17:20Z",
+      "tag": "5.8.0"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.9\r\n\r\n### 改进\r\n- 优化移动端控制面板底栏布局，状态文本与分页信息同列显示，翻页按钮跨行居中\r\n- 优化移动端搜索弹窗，类型和排序选择器支持同行显示\r\n- 清理冗余的移动端媒体查询样式\r\n",
+      "draft": false,
+      "name": "v5.7.9",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:51Z",
+      "tag": "5.7.9"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.8\r\n\r\n### 改进\r\n- 移除控制面板和搜索界面的双层边框嵌套，只保留单层面板\r\n- 桌面端底栏改为 flex 单行布局：翻页按钮与状态文本同行显示\r\n- 移动端底栏翻页按钮跨两行垂直居中，与中间文本总高度对齐\r\n- 无分页时状态文本居中显示\r\n",
+      "draft": false,
+      "name": "v5.7.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:45Z",
+      "tag": "5.7.8"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.7\r\n\r\n### 改进\r\n- 底栏 Grid 布局优化\r\n- 桌面端操作栏改为单排 flex-wrap\r\n- 搜索栏输入框与筛选控件统一在一行\r\n",
+      "draft": false,
+      "name": "v5.7.7",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:41Z",
+      "tag": "5.7.7"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.6\r\n\r\n### 改进\r\n- 移动端操作栏恢复两行四列 grid 布局\r\n- 底栏翻页与状态文本同行显示\r\n",
+      "draft": false,
+      "name": "v5.7.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:36Z",
+      "tag": "5.7.6"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.5\r\n\r\n### 改进\r\n- 移动端控制面板布局优化\r\n",
+      "draft": false,
+      "name": "v5.7.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:32Z",
+      "tag": "5.7.5"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.4\r\n\r\n### 改进\r\n- 筛选栏、操作栏、状态栏、分页布局重构\r\n",
+      "draft": false,
+      "name": "v5.7.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:29Z",
+      "tag": "5.7.4"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.3\r\n\r\n### 改进\r\n- 控制面板与搜索界面紧凑布局优化\r\n",
+      "draft": false,
+      "name": "v5.7.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:25Z",
+      "tag": "5.7.3"
+    },
+    {
+      "assets": [],
+      "author": "threeyang3",
+      "description": "## v5.7.2\r\n\r\n### 改进\r\n- 移动端与插件样式优化\r\n",
+      "draft": false,
+      "name": "v5.7.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T03:16:20Z",
+      "tag": "5.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8fdaebfbbf11f211d54a3cfe407bd517ce6f56772c05f711259d7ce0114d5ec",
+          "name": "main.js",
+          "size": 430633
+        },
+        {
+          "digest": "sha256:69179359ec85055eaebebbc4a8375dfc1a3341a6c58ee1c411d66db007448282",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:82e8d1c54033e10ca1614352b34954274854a9344c16c3144d459201dfeb8bf6",
+          "name": "styles.css",
+          "size": 66829
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v5.8.3\r\n\r\n### 改进\r\n- 全局 UI 主题大统一：将“添加收藏”弹窗、标签、状态角标等所有遗留组件统一为纸张感暖色主题及 12px/999px 圆角。\r\n- 搜索界面画龙点睛：移动端“添加”按钮改为自适应宽度并右对齐，增强了 Sticky 顶栏的遮挡质感与清晰度。\r\n- 优化移动端卡片间距与对齐逻辑，视觉体验更加精致。\r\n",
+      "draft": false,
+      "name": "v5.8.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T05:31:34Z",
+      "tag": "5.8.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8fdaebfbbf11f211d54a3cfe407bd517ce6f56772c05f711259d7ce0114d5ec",
+          "name": "main.js",
+          "size": 430633
+        },
+        {
+          "digest": "sha256:9174e13a291efbc4df80ad524b582e1531f50c9e4c2fd728e372999e5e9e99a9",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:44b75fa07be70d20c1d7d7954ad0c26cf401fb2b2ba12b2f16a40b1ee941305e",
+          "name": "styles.css",
+          "size": 66895
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v5.8.2\r\n\r\n### 改进\r\n- 深度优化搜索界面审美：统一搜索框、选择器与按钮的圆角及色调，强制继承“纸张感”暖色主题，消除视觉补丁感。\r\n- 精修搜索结果卡片：优化标题层级显示（中文加粗，原名缩小），使列表视觉更加轻盈、信息重心更明确。\r\n- 对齐控件规格：修复移动端搜索栏控件高度不一致的问题，增强触控友好度。\r\n",
+      "draft": false,
+      "name": "v5.8.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-06T04:53:49Z",
+      "tag": "5.8.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:173d9545c4db09d9a2cf81745dfec5d221802a7017da747af3da01d084e71ff7",
+          "name": "main.js",
+          "size": 427848
+        },
+        {
+          "digest": "sha256:1f9b39d5bdd721384242e1dc0b809b43fa622159ef0bc66c506c633857b52282",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:5e0a187421bd4ec8b37d3a183c36953cf2c30c34210ca4699b206de328603bba",
+          "name": "styles.css",
+          "size": 45860
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n- **同步数量\"全部\"选项**：同步选项弹窗和设置页的同步数量旁新增\"全部\"按钮，点击后不限制同步数量，一次同步所有条目",
+      "draft": false,
+      "name": "v5.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T15:37:34Z",
+      "tag": "5.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ca2a803db4469340beccb62a601f828b91860269a5c89d00c7e21e18b3f8b78",
+          "name": "main.js",
+          "size": 427095
+        },
+        {
+          "digest": "sha256:0c9af1e61e2cbedbb5db6b83c894d0fdbdd42fb14bd3ae25f26bc23ef928b2c0",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:5e0a187421bd4ec8b37d3a183c36953cf2c30c34210ca4699b206de328603bba",
+          "name": "styles.css",
+          "size": 45860
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n- **API 重试机制**：请求遇到 429 或 5xx 错误时自动重试 3 次（指数退避 1s→2s→4s）\n- **错误详情展示**：同步完成后可折叠查看每个失败条目的具体错误信息\n- **同步并发数可配置**：设置页新增并发数滑块（1-5），控制同时处理的条目数量\n- **新增 11 个模板变量**：`from`（原作）、`musicMake`（音乐制作）、`audioDirector`（音响监督）、`artDirector`（美术监督）、`animeChief`（总作画监督）、`start`（开始日期）、`end`（结束日期）、`script`（剧本）、`art`（原画）、`producer`（制作人）、`price`（售价）\n\n## 改进\n- **并发同步统一**：控制面板同步和手动同步均已支持并发处理\n- **双向链接批量更新**：相关条目链接按目标文件分组，每个文件只读写一次\n- **路径查找索引**：扫描本地文件夹后构建 id→path 反转索引，路径解析从 O(N) 降至 O(1)\n- **分页动态间隔**：收藏列表获取前 5 页间隔 50ms，之后 100ms，支持取消信号\n- **路径模板渲染统一**：8 次独立替换合并为单次正则匹配\n- **清理幽灵变量**：移除 `voice1`~`voice9`（已被 `characterCV` 替代）",
+      "draft": false,
+      "name": "v5.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T14:35:33Z",
+      "tag": "5.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:987636fdb6417716535c6a4a1f7c41a4ab69cc1175c503a96c3cbe4b75d64d06",
+          "name": "main.js",
+          "size": 420639
+        },
+        {
+          "digest": "sha256:c66f026e095bccf160601f9514312475bb8d1b554df0f42b7beccb90915b1294",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:5e0a187421bd4ec8b37d3a183c36953cf2c30c34210ca4699b206de328603bba",
+          "name": "styles.css",
+          "size": 45860
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- **性能优化**：文件扫描优先使用 metadataCache，减少不必要的文件读取\n- **路径解析优化**：相关条目路径解析避免遍历所有文件\n- **模板渲染优化**：使用单次正则匹配，减少匹配次数\n- **并发同步**：批量同步支持并发处理，默认并发数为 3\n\n## 改进\n\n- **类型标签修复**：书籍类型现在显示具体分类（小说、漫画、画集），而非统一显示\"书籍\"\n- **其他类型优化**：音乐、游戏、三次元类型也优先使用细分类别\n- **代码质量**：符合 Obsidian 插件规范，通过 lint 和 build 检查",
+      "draft": false,
+      "name": "v5.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T12:34:42Z",
+      "tag": "5.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ab63331f30dcfb31bcfdd4cb4316e2419746746b9f10e9ad5180143583bb625",
+          "name": "main.js",
+          "size": 416193
+        },
+        {
+          "digest": "sha256:0f7ce0bd6283c1a0fa1580ddcf6791a9460bfc742a5b5bdd97e1a6704c06f90a",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:5e0a187421bd4ec8b37d3a183c36953cf2c30c34210ca4699b206de328603bba",
+          "name": "styles.css",
+          "size": 45860
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- 同步弹窗新增暂停/恢复、取消按钮\n- 取消同步后可回滚本次新建的文件（移到回收站而非永久删除）\n- 关闭弹窗后同步继续后台运行，状态栏显示实时进度\n\n## 改进\n\n- 合并三个重复的 `processCollection` 方法，减少约 220 行重复代码\n- 提取 `prepareSyncData()` 共享逻辑\n- 修复 `syncManager` 中的硬编码中文字符串，统一走 i18n",
+      "draft": false,
+      "name": "v5.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T09:29:43Z",
+      "tag": "5.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:702392bae8f975564f635cc0282d7c4cc1a28644f25120484efdcd19052e8f8a",
+          "name": "main.js",
+          "size": 412244
+        },
+        {
+          "digest": "sha256:5952dda434095c6baa64749e44282cc6135d39f160e0957d890f6b0a345257b5",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:fe93f080a4a30556d13b287f6e4e86d75c3b279a95d527921930df8d85c9cb95",
+          "name": "styles.css",
+          "size": 43870
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n\n- **批量下载封面图片**：新增命令\"批量下载封面图片\"，一键扫描所有本地条目，将 `封面` 属性中的网络链接下载到本地封面路径，并替换 frontmatter 和正文中的链接为本地路径\n",
+      "draft": false,
+      "name": "v5.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-02T15:17:45Z",
+      "tag": "5.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dd507ffbffbad4df2376130010792357330dfac04a490d0961475a03eeeaeb49",
+          "name": "main.js",
+          "size": 406243
+        },
+        {
+          "digest": "sha256:fffe9840069e0f6ece90e7857560be6a2923f57b82cde49cbaadb9353be094f8",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:99649f822b0b52553dc59b6275612312f7194ffd74a11eaef27bdcc73af77f76",
+          "name": "styles.css",
+          "size": 41773
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n\n- **国际化完善**：修复集数右键菜单、条目笔记管理、控制面板、同步管理器、主入口等 6 个模块中 20+ 处硬编码中文，统一走 i18n 翻译\n- **项目文档更新**：CLAUDE.md 项目结构补充 `src/note/`、`src/utils/`、`common/utils/` 等目录\n",
+      "draft": false,
+      "name": "v5.3.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-02T14:44:39Z",
+      "tag": "5.3.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:83804c79abe0130460917e738b8740145d516d503f1446eb9a91bc338e0dfa93",
+          "name": "main.js",
+          "size": 399772
+        },
+        {
+          "digest": "sha256:3920bb74a9877e3002bec1f26fa2f38ea7a4a7cd9cef4ae89c94e884c4613eab",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:19a45f4ac501cde1df750c63f52a4cea8f0ea3b693a323e68fe485bfffd08aae",
+          "name": "styles.css",
+          "size": 25853
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 自定义属性填写窗口改为更宽的布局，并加强选择器优先级，避免被 Obsidian 默认 modal 样式覆盖\n- 短字段在窗口中会以更紧凑的网格方式排列，减少单个条目填写时的纵向占用\n\n## 修复\n- 修复控制面板同步到本地前，单个条目详情请求失败会导致整批同步中断的问题\n- 修复几处 lint / TypeScript 规范问题，确保当前代码可通过 npm run lint 与 npm run build",
+      "draft": false,
+      "name": "v5.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-29T11:19:23Z",
+      "tag": "5.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:80afc165e633505cac47902ef42b7aa0f38e3b16b23b0dbf9e803a6618446f83",
+          "name": "main.js",
+          "size": 389544
+        },
+        {
+          "digest": "sha256:dca9704d7cb5d31e507920797a3d8bb4c0732dc91a85629920f8c3d4fe38514c",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:fcc8fccde9fe7bf476f7f1420bd7d7fe45846ef174cd01f60a5dd275a2bb4d2a",
+          "name": "styles.css",
+          "size": 24238
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n- 新增按需创建/追加共享条目笔记功能，可通过命令面板或控制面板按钮触发。\n- 新增共享笔记管理器，支持将相关条目归并到同一笔记文件，并为当前条目写回锚点笔记链接。\n\n## 改进\n- 共享笔记的 笔记ID 改为多行列表属性格式，更适合 Obsidian 属性气泡渲染和手动增删。\n- 共享笔记 ID 汇聚逻辑改为基于本地 相关 属性链接图递归收集，不再依赖逐条网络探测，创建速度更快。\n- 共享笔记检索逻辑改为扫描本地笔记的 笔记ID 属性值，追加时更容易命中已存在的共享笔记。\n- 笔记路径模板与共享笔记模板迁移逻辑已补齐，旧设置会自动升级到新的 笔记ID 格式。\n\n## 修复\n- 修复共享笔记仍可能写出旧 id 字段的问题。\n- 修复相关条目双向链接和 相关 属性在部分已同步条目上补全不稳定的问题。\n- 修复创建共享笔记时控制台刷出大量 /collections/... 404 噪音的问题。",
+      "draft": false,
+      "name": "5.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T15:04:33Z",
+      "tag": "5.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9fa0c94fd9e1aa62d85cda0135013b712d6c417abb8fa68673a3160af3e0907d",
+          "name": "main.js",
+          "size": 372074
+        },
+        {
+          "digest": "sha256:27c9dba875cafa95a83f791b233595304cc19315884ec73e71d5457f9ef4a80a",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:fcc8fccde9fe7bf476f7f1420bd7d7fe45846ef174cd01f60a5dd275a2bb4d2a",
+          "name": "styles.css",
+          "size": 24238
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 改进\n- 统一本地模板、控制面板、搜索弹窗和状态同步弹窗的收藏状态文案，按条目类型自动区分看 / 读 / 玩 / 听。\n- 统一五种收藏状态的显示风格，全部使用“文字 + 图标”的一致格式，避免不同界面风格不一致。\n\n## 修复\n- 修复本地 frontmatter 状态在写回带符号文案后，双向同步解析可能失配的问题。\n- 修复状态同步与搜索结果中部分状态文案和本地笔记显示不一致的问题。",
+      "draft": false,
+      "name": "4.9.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T13:03:47Z",
+      "tag": "4.9.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3f74c2f3b36996b3f66c81fdcf17b710d9879a64c2c743296ab6638f2054e315",
+          "name": "main.js",
+          "size": 370848
+        },
+        {
+          "digest": "sha256:18c8bc906a42696497641f637923e3c9c7ef4b30aed3202aff81d8eabf285abd",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:fcc8fccde9fe7bf476f7f1420bd7d7fe45846ef174cd01f60a5dd275a2bb4d2a",
+          "name": "styles.css",
+          "size": 24238
+        }
+      ],
+      "author": "threeyang3",
+      "description": "- 修复 Bangumi 收藏更新接口在返回 `2xx + 空响应体` 时被误判为失败的问题，搜索并添加已收藏条目时不再出现假报错。\n- 修复用户数据导出时 `记录` 和 `感想` 多段正文只导出首行的问题，现在会完整导出整段内容。\n- 调整用户数据导出筛选逻辑，改为基于“全部本地 frontmatter 属性减去 Bangumi 可重建字段”的负面过滤，兼容自定义模板里的自定义属性。\n- 收敛 frontmatter 解析、定时器辅助和同步/导出路径中的重复实现，降低后续维护成本。",
+      "draft": false,
+      "name": "4.9.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T12:38:51Z",
+      "tag": "4.9.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:067e9a366f6d1cbff020a2cf5a9f63e5e628cc60b91bf290f11439ffff407581",
+          "name": "main.js",
+          "size": 372214
+        },
+        {
+          "digest": "sha256:30f0b3bb641422e3a5a460228125ff9873032dcf187a72f90fb47d601f975a1d",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:4439bc5119bb11b16cc6a8891e3970a2be26100e004d4bf95bf1433661e31314",
+          "name": "styles.css",
+          "size": 24059
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- **设置界面帮助链接**：在设置面板添加帮助文档区块\n  - 模板设计指南（本地文件）\n  - GitHub 仓库链接\n  - 获取 Access Token 链接\n- **新命令**：检查并同步状态\n  - 打开控制面板后自动触发状态同步\n\n## 改进\n\n- 增强用户引导，方便查阅文档\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T11:05:28Z",
+      "tag": "4.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:78fe31d64e7fc0ebcd1a59ccb8db2a20d085d3860cfa080696ad6f7f019018e9",
+          "name": "main.js",
+          "size": 370244
+        },
+        {
+          "digest": "sha256:d93da63f182d19da44d484a7a88451da8767fca8ea38541ba4e6c03f4029748c",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:4439bc5119bb11b16cc6a8891e3970a2be26100e004d4bf95bf1433661e31314",
+          "name": "styles.css",
+          "size": 24059
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- **单集评论管理**: 新增 episode 模块，支持单集吐槽评论\n- **右键菜单**: 在单集框上右键可添加评论、标记观看状态\n- **单集状态同步**: 支持云端同步单集观看进度\n\n## 改进\n\n- 增量同步冲突处理优化\n- 状态同步面板 UI 改进\n- 新增状态同步踩坑文档 (docs/STATUS_SYNC_PITFALLS.md)\n- ESLint 配置更新以符合 Obsidian 插件标准\n\n## 修复\n\n- 多项 bug 修复和代码清理\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T10:25:05Z",
+      "tag": "4.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b4d5f30ed43e65b42fa39a9242e04312c1f515c30af7d6def46b68033c381bd6",
+          "name": "main.js",
+          "size": 334412
+        },
+        {
+          "digest": "sha256:0e1564301a7651ce77b8bf2ce51ee0dfa6fad39a1341be0459ecb954c5d6d4d5",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:0999d3a4c25f0e68bc96bd1ecffad3301a78f56ff22eec37f9d5f6693b5716b3",
+          "name": "styles.css",
+          "size": 19364
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 代码清理与功能增强版本\n\n### 新增功能\n- **导出模板**：一键将当前所有模板保存到指定文件夹\n\n### 改进\n- 打开本地文件时自动关闭控制面板\n- 删除约 1100 行冗余代码，代码更精简\n\n### 删除的冗余代码\n- 未使用的 V3 版本别名\n- 未使用的函数和类型\n- 未使用的弹窗文件（功能已被 statusSyncModal 整合）\n\n### 技术改进\n- 合并 `src/file/fileManager.ts` 到 `common/file/fileManager.ts`\n- 使用推荐的 `vault.process` API\n\n**完整更新日志**: https://github.com/threeyang3/bangumi-sync/compare/4.7.2...4.7.3",
+      "draft": false,
+      "name": "v4.7.3",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T05:25:34Z",
+      "tag": "4.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8e9b3426fca0c8551d3524ffe71b354789b537239880e90e5f9d95841b6b61da",
+          "name": "main.js",
+          "size": 348224
+        },
+        {
+          "digest": "sha256:76df53c5d8287480acd006a4836ad82cb6e31e66953e3636eef6983e4e5caad0",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:0999d3a4c25f0e68bc96bd1ecffad3301a78f56ff22eec37f9d5f6693b5716b3",
+          "name": "styles.css",
+          "size": 19364
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v4.7.2 ESLint 问题修复版本\n\n### 修复内容\n- 修复模板字符串中 unknown 类型错误（5 处）\n- 移除无 await 的 async 方法（handleAddComplete）\n- 移除未使用的导入和变量（t, typeLabel, sortLabel, error）\n- 更新 tsconfig.json lib 为 ES2017（支持 Object.entries）\n- 移除已弃用的 baseUrl 配置\n\n### 技术细节\n- `catch (error)` 改为 `catch (error: unknown)` 并使用 `error instanceof Error` 检查\n- 移除 `async` 关键字从不需要 await 的方法\n- 清理未使用的导入和变量声明",
+      "draft": false,
+      "name": "v4.7.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-28T03:46:03Z",
+      "tag": "4.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2f70af469968af559803105d7c9538ff2873a51644cd2d449c2a59ef1804eaea",
+          "name": "main.js",
+          "size": 347988
+        },
+        {
+          "digest": "sha256:856629da30c3ebebba9b5ffc73edaa0191d2f6f579cedaf687a5ba068e6c01cb",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:0999d3a4c25f0e68bc96bd1ecffad3301a78f56ff22eec37f9d5f6693b5716b3",
+          "name": "styles.css",
+          "size": 19364
+        }
+      ],
+      "author": "threeyang3",
+      "description": "代码质量优化版本\n\n- 修复 UI 文本国际化问题：批量编辑器、短评同步、标签同步弹窗\n- 修复状态同步弹窗中硬编码的中文收藏状态文本\n- 迁移 vault.modify 到 vault.process（共 11 处）\n- 启用 TypeScript 严格模式（strict: true）\n- 修复 strictPropertyInitialization 和 strictFunctionTypes 错误",
+      "draft": false,
+      "name": "v4.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T17:17:33Z",
+      "tag": "4.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6cbc95ec164953fd75947d97de809695042a9629d7420929d09050123911dc8b",
+          "name": "main.js",
+          "size": 343742
+        },
+        {
+          "digest": "sha256:b9994b96a5db6ff1e32c45a56bc93bcd8d7c931711649ccc71b0aa1800270663",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:0999d3a4c25f0e68bc96bd1ecffad3301a78f56ff22eec37f9d5f6693b5716b3",
+          "name": "styles.css",
+          "size": 19364
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n### 搜索条目\n\n- 新增「搜索条目」命令，可通过命令面板或控制面板按钮打开搜索弹窗\n- 支持关键词搜索 Bangumi 条目\n- 支持按类型筛选（动画、游戏、书籍、音乐、三次元）\n- 支持多种排序方式（匹配度、热度、排名、评分）\n- 分页加载搜索结果\n\n### 状态显示\n\n- 显示条目的本地同步状态（已同步/未同步）\n- 显示条目的云端收藏状态（想看/在看/看过/搁置/抛弃/未收藏）\n- 已收藏条目显示「编辑」按钮，未收藏显示「添加」按钮\n\n### 添加/编辑收藏\n\n- 支持设置收藏状态、评分、标签、短评\n- 支持填写评分明细（音乐、人设、剧情、美术等）\n- 支持选择是否同步到云端、是否创建本地文件\n- 编辑已收藏条目时自动填充现有数据\n\n## 修复\n\n- 修复添加新条目到收藏时返回 404 错误的问题\n- 修复通过搜索添加条目时集数信息缺失的问题\n- 修复搜索弹窗宽度不足的问题\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T16:05:24Z",
+      "tag": "4.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:08ab49ad8d36aa69d669101df0c4322bc38909fdece43036832912d5de28d953",
+          "name": "main.js",
+          "size": 313486
+        },
+        {
+          "digest": "sha256:9a45eb0c7564c42bbd5d256262144fd15d4330c82c4d0500a7e141b356c41a19",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d1278dbf7c6e8f1fab5a97f38387a045fe7b8e68d8448d1971ea6bdf81993265",
+          "name": "styles.css",
+          "size": 13625
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n### 修复\n- 修复 `safeStringify` 函数中对象字符串化问题\n- 简化逻辑：所有非基本类型统一使用 `JSON.stringify`\n- 避免 `[object Object]` 问题\n\n## 安装方式\n\n下载 `main.js`、`manifest.json`、`styles.css` 三个文件，放入 Obsidian 库的 `.obsidian/plugins/bangumi-sync/` 目录即可。",
+      "draft": false,
+      "name": "v4.6.5",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T13:03:08Z",
+      "tag": "4.6.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6ab7dcfd31a48e2599c4105575b58684dbf279c4eb0e3c08ff5f7025755c9635",
+          "name": "main.js",
+          "size": 313752
+        },
+        {
+          "digest": "sha256:3cc41c2988811abe5cc6ec0992513a33c0365e2c0321c68216c88f50b97f605b",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d1278dbf7c6e8f1fab5a97f38387a045fe7b8e68d8448d1971ea6bdf81993265",
+          "name": "styles.css",
+          "size": 13625
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n### 新功能\n- 新增状态同步弹窗（统一同步评分、短评、标签、状态）\n- 新增 `{{name_cn_with_type}}` 路径模板变量，生成带类型后缀的文件名（如 `金牌得主(动画)`）\n\n### 修复\n- 修复动画类型获取问题：使用 `platform` 字段获取具体类型（TV、OVA、剧场版、WEB）\n- 修复 popout 窗口兼容性问题：\n  - `setTimeout` 改为 `activeWindow.setTimeout`\n  - `document.createElement` 改为 `activeDocument.createElement`\n  - `window.clearInterval` 改为 `activeWindow.clearInterval`\n- 路径模板自动迁移：将 `{{name_cn}}` 替换为 `{{name_cn_with_type}}`\n\n## 安装方式\n\n下载 `main.js`、`manifest.json`、`styles.css` 三个文件，放入 Obsidian 库的 `.obsidian/plugins/bangumi-sync/` 目录即可。",
+      "draft": false,
+      "name": "v4.6.4",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T11:29:55Z",
+      "tag": "4.6.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:925a9b32ff64b6c38cc4f0d1985228a130a022f5437d26e403f802c768a68eb9",
+          "name": "main.js",
+          "size": 287622
+        },
+        {
+          "digest": "sha256:72ba50b4838613507bf1a63e1fe0a08ced3ed4f0180fc800991cb7180097ff18",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d1278dbf7c6e8f1fab5a97f38387a045fe7b8e68d8448d1971ea6bdf81993265",
+          "name": "styles.css",
+          "size": 13625
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Summary\n\n- Fix object stringification issues to avoid `[object Object]` errors\n\n## Changes\n\n### Bug Fixes\n\n- Add `safeStringify` helper function to safely convert any value to string\n- Replace inline type checks with `safeStringify` for consistency\n- Fix ESLint warnings about potential `[object Object]` stringification\n\n## Test plan\n\n- [x] Build succeeds without TypeScript errors\n- [x] No ESLint warnings for object stringification\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.6.3",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T05:57:23Z",
+      "tag": "4.6.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:03f36cb7ac93b9ce82ac8567b7f3a9f30153a280d653dff550262abe2d1e2777",
+          "name": "main.js",
+          "size": 286992
+        },
+        {
+          "digest": "sha256:68312e7326fe0566180f508e3b9c377249f956c2b0ae108bc79107c638fb4bb2",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d1278dbf7c6e8f1fab5a97f38387a045fe7b8e68d8448d1971ea6bdf81993265",
+          "name": "styles.css",
+          "size": 13625
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Summary\n\n- Add `{{name_cn_with_type}}` path template variable for unique file names with type suffix\n- Fix Obsidian plugin review issues\n\n## Changes\n\n### New Features\n\n- **Path template variable**: `{{name_cn_with_type}}` generates file names with type suffix (e.g., `金牌得主(动画)`, `金牌得主(漫画)`)\n- **Default path template**: Updated to `ACGN/{{type}}/{{name_cn_with_type}}.md`\n- **Related links**: Display name now uses file name with type suffix\n\n### Bug Fixes\n\n- Fix enum type comparison issue\n- Fix object stringification issue (avoid `[object Object]`)\n- Fix async method without await expression\n- Remove unused variables and imports\n\n## Test plan\n\n- [x] Build succeeds without TypeScript errors\n- [x] Path template preview shows correct format\n- [x] Related links use correct display names\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.6.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-27T05:08:10Z",
+      "tag": "4.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:39f20574ab45a05a322e5cee4b6e2bddb7169ea0abbb0d3ea312eb363342ab01",
+          "name": "main.js",
+          "size": 285692
+        },
+        {
+          "digest": "sha256:d9dd463e173ba28236cad2d8d4e494cca0e972ba49be77ecfa0cb409145f2710",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d1278dbf7c6e8f1fab5a97f38387a045fe7b8e68d8448d1971ea6bdf81993265",
+          "name": "styles.css",
+          "size": 13625
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## What's New\n\n### User Data Protection\n- **Force sync data protection**: User-custom data (rating details, custom properties, records, thoughts) is now preserved during force sync\n- **User data export**: Export local user data to JSON files, one file per subject type (anime/novel/comic/game/music/real)\n- **User data import**: Import user data from backup files with missing field handling\n\n### Bug Fixes\n- **Critical fix**: Fixed body content loss when updating related links (the `updateRelated`, `updateTags`, `removeTags` methods now correctly preserve content after frontmatter)\n- Fixed YAML parsing error when \"相关\" field is empty (using conditional rendering in templates)\n- Fixed popout window compatibility (using `activeWindow` for timers)\n- Added CSS `:focus-visible` styles for better keyboard navigation\n\n### New Commands\n- `Export user data` - Export local user-custom data\n- `Import user data` - Import user data from backup files\n\n### Settings\n- Added \"Data protection\" settings section with toggles for:\n  - Preserve rating details\n  - Preserve custom properties\n  - Preserve records\n  - Preserve thoughts\n\n## Full Changelog\nhttps://github.com/threeyang3/bangumi-sync/compare/4.5.3...4.6.1",
+      "draft": false,
+      "name": "v4.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-26T16:30:22Z",
+      "tag": "4.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4d7e47e7585e720cf8aec735da7d6596ca3378d4462d0a797f9a21b87090ceac",
+          "name": "main.js",
+          "size": 239219
+        },
+        {
+          "digest": "sha256:0bb16eacb96c6593ea44ecc286969d65e65b746d890d6548e5feddf4b3709c61",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 相关条目双向链接优化\n\n### 新功能\n- **同批次同步实时关联**：同步时实时更新已同步状态，同一批次同步的相关条目可正确关联\n- **双向链接**：同步条目时自动更新相关条目的链接属性\n- **链接格式优化**：相关链接用双引号包围，确保 YAML frontmatter 格式正确\n- **自动去重**：避免重复添加相同链接（如条目删除后重新同步）\n\n### 问题修复\n- 修复 UI 文本大小写问题，符合 Obsidian 插件规范\n\n## 安装方法\n\n1. 下载 `main.js`、`manifest.json` 和 `styles.css`\n2. 复制到 `你的Vault/.obsidian/plugins/bangumi-sync/` 目录\n3. 重启 Obsidian 或重新启用插件\n\n## 相关链接\n\n- [Bangumi API 文档](https://bangumi.github.io/api/)\n- [获取 Access Token](https://next.bgm.tv/demo/access-token)",
+      "draft": false,
+      "name": "v4.5.3",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T12:57:57Z",
+      "tag": "4.5.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:89564a4539c3a7616981c10bbde4dadc146e530a57a773e63be53a00f772e400",
+          "name": "main.js",
+          "size": 232968
+        },
+        {
+          "digest": "sha256:c0b7d5330758b99c92926dab8e7181c6eb4e9a0ee103c5b4382c109ae467d2f9",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 问题修复\n\n- 修复封面本地链接未正确传递的问题\n- 修复模板中\"相关\"字段未使用 `{{related}}` 变量的问题\n- 修复开启\"下载封面图片\"且选择\"本地链接\"时，封面仍显示网络链接的问题\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T10:53:30Z",
+      "tag": "4.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e04b7446932fa001184b4116df416d27381cd7b5df84d02255cb9b272ad7e402",
+          "name": "main.js",
+          "size": 232871
+        },
+        {
+          "digest": "sha256:d189ec628eb1acba7801b59a6a84f0de49f8c8e5108f232a85ef1fd3c7b7cc89",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新概要\n\n- 新增相关条目自动关联功能\n- 修复 UI 文本大小写问题，符合 Obsidian 插件规范\n\n## 新功能\n\n### 相关条目自动关联\n- 新增设置项：自动关联相关条目（默认启用）\n- 同步条目时，自动获取相关条目（前传、续集、衍生、改编等）\n- 已同步的相关条目自动添加双向链接\n- 新增模板变量：`{{related}}`（YAML 数组格式）\n\n## 问题修复\n\n- 修复 UI 文本大小写问题（如 \"Access Token\" → \"Access token\"）\n- 修复控制面板标题大小写\n- 移除未使用的导入\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.5.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T10:23:27Z",
+      "tag": "4.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b9ea9c694f318630218cb43fc930869a018af557dfabdbb2b6a4bac22255ffee",
+          "name": "main.js",
+          "size": 228044
+        },
+        {
+          "digest": "sha256:896d7b3e485ee70ceaf5889d54882bd0ad36ffc159d7e2d6198c5c0d0cf53a42",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "多语言支持：插件 UI 现支持中英文双语，自动跟随 Obsidian 语言设置。",
+      "draft": false,
+      "name": "v4.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T06:21:34Z",
+      "tag": "4.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:37434fed787c7ecf84f0899ca0a40106fced42f82c07cd0054ec4d7840612ed2",
+          "name": "main.js",
+          "size": 205151
+        },
+        {
+          "digest": "sha256:1ce6f02c6525e2d06c68cb8d1c84e74c0b966e712bb03f639cee56a9dc48c40a",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v4.4.2 Plugin Review Fixes\n\n### Fixes\n\n- **Object stringification**: Fixed potential `[object Object]` issue in infobox parser\n- **Sentence case**: All UI text now uses English sentence case (Obsidian requirement)\n- **Type assertions**: Removed unnecessary type assertions\n- **Async method**: Removed `async` from method with no `await`\n- **Unused imports**: Cleaned up unused imports\n- **Settings heading**: Removed plugin name from settings heading\n\n### Upgrade Notes\n\nThis version changes all UI text to English to comply with Obsidian community plugin guidelines. No functional changes.",
+      "draft": false,
+      "name": "v4.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T05:23:01Z",
+      "tag": "4.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5699ce79a7cfc87e2d960eb17585e6f063b0d38dd8217f4867373490790b831c",
+          "name": "main.js",
+          "size": 207963
+        },
+        {
+          "digest": "sha256:2724ea5d76f3db0ce7a7fa82ab49189682f4d592d0d867611cbd2df4a601acc4",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## v4.4.1 代码质量修复版本\n\n### 修复内容\n\n- **Promise 处理**：修复事件监听器中的 async 调用未处理的问题\n- **类型安全**：移除不必要的 `as any` 类型断言\n- **代码规范**：新增代码规范参考文档\n\n### 详细变更\n\n- `src/panel/controlPanel.ts`: 6 个 async 方法调用添加 `void` 操作符\n- `src/panel/commentSyncModal.ts`: `executeSync()` 添加 `void`\n- `src/panel/tagSyncModal.ts`: `executeSync()` 添加 `void`\n- `src/panel/batchEditorModal.ts`: 移除不必要的 `as any` 断言\n- `docs/CODE_STANDARDS.md`: 新增 Obsidian 插件代码规范参考文档\n\n### 升级说明\n\n此版本为代码质量修复，无功能变更，可直接升级。",
+      "draft": false,
+      "name": "v4.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-23T04:43:56Z",
+      "tag": "4.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2816c94dd32f3ec544257788f231cf710d55aedfae15142b5fe08f8f5a531d5a",
+          "name": "main.js",
+          "size": 207721
+        },
+        {
+          "digest": "sha256:24bdc5836b93a47a937dd879b7ba800a3a5a081180e64d1f63b2650270ca5494",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n### 封面链接优化\n- 封面属性改为纯链接格式，不再包含 Markdown 图片语法\n- 新增\"封面链接类型\"设置，可选择网络链接或本地链接\n- 选择本地链接时，封面属性使用下载到本地的图片相对路径\n\n### 其他改进\n- 优化封面图片处理逻辑，支持按设置选择链接类型\n\n## 安装方法\n\n1. 下载 `main.js`、`manifest.json`、`styles.css`\n2. 复制到 `你的Vault/.obsidian/plugins/bangumi-sync/` 目录\n3. 重启 Obsidian\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T16:55:38Z",
+      "tag": "4.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:13dc1ac5644213d8a67c7ef769b545d15a3e112140399f99d8ddff41abfc71de",
+          "name": "main.js",
+          "size": 206814
+        },
+        {
+          "digest": "sha256:40bf652c939fd3eef2cc4904458d1d6522689b86e100d0a3d83c6841548222c3",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:d3e56708981dbd3d6b8e9edf99554d2a152bb500a9617520bdbce16d8bb8c340",
+          "name": "styles.css",
+          "size": 12845
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n本次版本修复了 ObsidianReviewBot 在 PR #12202 中提出的代码质量问题：\n\n### 修复的问题\n\n- **枚举类型比较问题**：使用 SubjectType 枚举代替数字字面量进行比较\n- **case 块词法声明**：用花括号包裹包含词法声明的 case 块\n- **Promise 处理**：为异步回调添加 void 操作符\n- **异步事件监听器**：使用 void IIFE 模式包装异步事件处理\n- **ConfirmModal**：更新以正确处理异步回调\n\n## 安装方式\n\n1. 下载 main.js、manifest.json、styles.css\n2. 放入 Obsidian 库的 .obsidian/plugins/bangumi-sync/ 目录\n3. 重启 Obsidian 并启用插件\n\n🤖 Generated with Claude Code",
+      "draft": false,
+      "name": "v4.3.4 修复代码质量问题",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T13:44:19Z",
+      "tag": "4.3.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b70b34f08f7c47ef16673be6d6d63ff0d4108508f76defd2a8f09420ec7767ef",
+          "name": "main.js",
+          "size": 202475
+        },
+        {
+          "digest": "sha256:6c44906c54c67c368bc56dc03850584bc827ed4fc295018e6f8b8950a40166c9",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:67eb4016b03b128d31ae7b0f615c2d1dcb9e4ac8aa8b5dd5c812a371a06a24aa",
+          "name": "styles.css",
+          "size": 12784
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n\n### 两套模板系统\n- **标准模板**：只含 Bangumi 数据，适合普通用户\n- **作者自用模板**：含自定义变量（评分明细、存储、版本等），适合资源管理\n- 模板设置支持选择：标准模板、作者自用模板、从文件选择、自定义内容\n\n### 响应式布局\n- bangumi-info callout 支持宽屏并排显示（图片在左，表格在右）\n- 窄屏时上下排列，保持良好的阅读体验\n\n### 笔记路径模板\n- 新增笔记路径模板设置\n- 支持自定义笔记链接路径，如 `ACGN/笔记/`\n- 生成格式：`[[ACGN/笔记/《进击的巨人》笔记|《进击的巨人》笔记]]`\n\n### 动画公司字段改进\n- 改进动画公司字段获取逻辑\n- 支持从 Copyright 字段提取动画公司信息\n- 提高动画公司数据的获取成功率\n\n## 更新文档\n- 更新模板设计指南，添加自定义变量说明\n- 更新 CLAUDE.md 和 README.md\n\n## 安装方式\n\n### 从社区插件市场安装（推荐）\n在 Obsidian 设置中进入\"社区插件\"，搜索 \"Bangumi Sync\" 并安装。\n\n### 手动安装\n下载 `main.js`、`manifest.json` 和 `styles.css`，复制到 `你的Vault/.obsidian/plugins/bangumi-sync/` 目录。",
+      "draft": false,
+      "name": "v4.3.3 模板系统优化版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T11:36:36Z",
+      "tag": "4.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ae4dd3dc447adc3ef42bba599b624afaec048e03af6d4a4e79d05f03f4e03bd",
+          "name": "main.js",
+          "size": 191003
+        },
+        {
+          "digest": "sha256:0724d4f1b81ed347c1963e0d4609081d475a3115c8c4c77b79d1bc0dc1416efc",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:ca3d5b7e5737b80c2a1b2e49543e40a235dd2d670e92c5bdc22b53ecc107d439",
+          "name": "styles.css",
+          "size": 11611
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n### 代码质量优化\n- 移除默认快捷键，避免与用户设置冲突\n- 将 console.log 替换为 console.debug\n- 修复 Promise 未处理的问题\n- 使用 CSS 类代替内联样式\n- 使用 fileManager.trashFile 代替 vault.trash\n- 移除无 await 的 async 方法\n\n### 修复\n- 修复 Obsidian 插件提交检查发现的问题",
+      "draft": false,
+      "name": "v4.3.2 代码质量优化版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T09:12:41Z",
+      "tag": "4.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:40342cc4f13336555f09a34f770a5c7f4cda19a29bdedc5455c0d3fe2dc58219",
+          "name": "main.js",
+          "size": 191072
+        },
+        {
+          "digest": "sha256:1eb01b0f9d8a394f8b09d07df7659b13a1062c50dae28f68cd2fdfb6aecc2a17",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:23273a3ed9efc6095c7d35a48ab59cecbf33f9ee73dba6d7c23cf04f0ea561db",
+          "name": "styles.css",
+          "size": 11490
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n- 移除所有模板中的别名属性\n- 优化属性顺序：用户个人数据移到 Bangumi 评分和链接前面\n- 漫画模板移除冗余的连载状态属性\n- 小说、漫画、游戏、画集模板添加 ##记录、##感想 部分\n- 扩展动画公司字段备选名称，提高获取成功率",
+      "draft": false,
+      "name": "v4.3.1 模板细节优化版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T08:13:45Z",
+      "tag": "4.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1cc8696d8d8c8e255a1281995d4387718bcd69cc42f6cabea9188a0a19b9c0db",
+          "name": "main.js",
+          "size": 191092
+        },
+        {
+          "digest": "sha256:a9132045cdd512c8532c8d1dce5c8963fda7b29049d8c809934c4d493bbe0119",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:23273a3ed9efc6095c7d35a48ab59cecbf33f9ee73dba6d7c23cf04f0ea561db",
+          "name": "styles.css",
+          "size": 11490
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n- 控制面板数据缓存 10 分钟，减少加载延迟\n- 新增默认属性值设置，批量同步时自动填充\n- README 添加 Dataview 插件依赖说明\n- 修复 API 返回 204 状态码时的 JSON 解析错误",
+      "draft": false,
+      "name": "v4.3.0 性能与体验优化版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-22T08:13:28Z",
+      "tag": "4.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fae88e074f155865b3bf403558a55d42925e92147d1de53368408dffeade280c",
+          "name": "bangumi-sync-v4.2.0.zip",
+          "size": 38242
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n- **标签格式优化**：标签改为 YAML 数组格式，兼容新版 Obsidian 标签识别\n- **标签双向同步**：在控制面板中对比本地与云端标签差异\n  - 保留本地版本\n  - 保留云端版本\n  - 合并本地和云端标签\n\n## 修复\n\n- 修复 API 返回 204 状态码时的 JSON 解析错误\n\n## 安装\n\n下载 `bangumi-sync-v4.2.0.zip` 解压后将文件复制到 `你的Vault/.obsidian/plugins/bangumi-sync/` 目录。\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "draft": false,
+      "name": "v4.2.0 标签优化版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-21T05:00:03Z",
+      "tag": "v4.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3e5545b0ba0e81d6ff4011255cac6bb8c7b8bec8adf16aff3e990cfe1b9bfa23",
+          "name": "bangumi-sync-v4.1.0.zip",
+          "size": 36923
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新增功能\n\n- **模板设计指南**: 新增 docs/TEMPLATE_GUIDE.md 文档\n- **模板高级语法**: 支持条件渲染 {{#if}} 和默认值 {{var|default}}\n- **默认快捷键**: Ctrl+Shift+B（控制面板）、Ctrl+Shift+S（同步）、Ctrl+Shift+Q（快速同步）\n- **键盘导航**: 控制面板支持方向键、PageUp/PageDown、Enter、Escape\n- **冲突检测**: 同步时检测本地与云端数据冲突，提供解决选项\n- **图片管理**: 支持选择图片质量（小/中/大），可选更新已存在图片\n\n## 改进\n\n- **项目结构重构**: 删除多版本目录，统一为单一版本结构\n- **代码简化**: 移除 V3/V4 版本标识，统一日志前缀\n- **漫画模板**: 作画字段支持条件渲染，无作画时自动隐藏\n\n## 安装\n\n下载 bangumi-sync-v4.1.0.zip，解压到 .obsidian/plugins/bangumi-sync/ 目录。",
+      "draft": false,
+      "name": "v4.1.0 用户体验增强版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-20T16:07:07Z",
+      "tag": "v4.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d54e1d6095475699cde884f92ba0594ef7ff83c080cceeca8bf5fc3183cc723f",
+          "name": "bangumi-sync-v4.0.0.zip",
+          "size": 34923
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 新功能\n\n### V4 集数追踪\n- 动画：显示所有集数，以数字框形式展示\n- 小说：显示卷数信息\n- 漫画：显示话数信息\n- 观看状态同步：已看集数高亮显示\n- 悬浮提示：显示集数标题、放送日期、时长\n\n## 修复\n- 漫画模板选择问题：正确识别漫画类型并应用漫画模板\n- 小说字段解析：书系、册数、官网字段正确导入\n- 支持从版本信息中提取书系和册数\n- 支持链接数组格式的官网字段\n\n## 安装\n1. 下载 bangumi-sync-v4.0.0.zip\n2. 解压到 Obsidian 插件目录\n3. 重启 Obsidian 并启用插件",
+      "draft": false,
+      "name": "v4.0.0 集数追踪版本",
+      "prerelease": false,
+      "publishedAt": "2026-04-20T08:47:04Z",
+      "tag": "v4.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:51efad964dcf628839d45ba1cb9e3a8699208c880bf7f2a6d81a47f8a923aa57",
+          "name": "bangumi-sync-v3.3.0.zip",
+          "size": 33031
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 更新内容\n\n- 修复动画元数据获取问题，支持多种备选字段名（导演/监督、动画制作/制作、音乐/音乐制作等）\n- 所有模板添加 `Bangumi链接` 属性\n- 短评保留换行符（放在正文 callout 中）\n- 动画模板新增\"精彩片段\"属性\n- 控制面板新增短评列\n- 新增短评双向同步功能\n\n## 安装\n\n下载 `bangumi-sync-v3.3.0.zip`，解压后将 `main.js`、`manifest.json`、`styles.css` 复制到 Obsidian 插件目录：\n```\n你的Vault/.obsidian/plugins/bangumi-sync-v3/\n```",
+      "draft": false,
+      "name": "v3.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-19T16:23:28Z",
+      "tag": "v3.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1b9e3803c50f631876651077d383b9aaad90c4501394e2b78ea49930f0d6ed23",
+          "name": "bangumi-sync-v3.1.0.zip",
+          "size": 30557
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Bangumi Sync V3.1.0\n\n### 新增功能\n\n- **标签列显示**：控制面板表格中新增标签列，显示用户标签（最多3个）\n- **强制同步**：新增\"强制同步\"按钮，可覆盖已存在的本地文件\n- **删除本地文件**：新增\"删除选中\"功能，可删除已同步的本地文件（移动到回收站）\n\n### 改进\n\n- **面板尺寸优化**：控制面板宽度调整为 1440px\n- **syncByCollections 支持 overwrite 参数**\n\n### 安装方法\n\n1. 下载 \\`bangumi-sync-v3.1.0.zip\\` 并解压\n2. 将文件复制到 \\`你的Vault/.obsidian/plugins/bangumi-sync-v3/\\`\n3. 重启 Obsidian 并启用插件",
+      "draft": false,
+      "name": "v3.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-18T17:56:34Z",
+      "tag": "v3.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:749e1f6b92f097d4e455d48939acbed7d2653a199256d302676c5840f92ee56c",
+          "name": "bangumi-sync-v3.zip",
+          "size": 29454
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Bangumi Sync V3\n\n### 新特性\n- **控制面板**: 展示所有收藏条目，标记同步状态\n- **批量编辑**: 统一新增/修改/删除 frontmatter 属性\n- **撤销支持**: 批量编辑后可撤销\n- **打开文件**: 直接打开已同步的本地文件\n- **筛选持久化**: 记住上次的筛选条件\n\n### 安装\n1. 下载 bangumi-sync-v3.zip\n2. 解压到 .obsidian/plugins/bangumi-sync-v3/ 目录\n3. 在 Obsidian 设置中启用插件\n\n### 命令\n- 打开收藏管理面板 - 打开控制面板\n- 同步 Bangumi 收藏 (V3) - 打开同步选项弹窗\n- 快速同步 V3 - 使用默认设置同步",
+      "draft": false,
+      "name": "V3.0.0 - Bangumi Sync V3",
+      "prerelease": false,
+      "publishedAt": "2026-04-18T11:03:20Z",
+      "tag": "v3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9d3da0ea1e0f96f85936059415efbc3f87c611513eaad529e9e292b965320ac8",
+          "name": "bangumi-sync-v2.zip",
+          "size": 23391
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Bangumi Sync V2\n\n### 新特性\n- **扫描本地文件夹检测已同步条目**（不依赖缓存）\n- **使用用户自己的标签**\n- **智能数量限制**\n- **手动同步预览**：导入前可预览并勾选条目\n- **评分明细输入**：手动同步时可填写评分明细\n\n### 安装\n1. 下载 bangumi-sync-v2.zip\n2. 解压到 .obsidian/plugins/bangumi-sync-v2/ 目录\n3. 在 Obsidian 设置中启用插件\n\n### 完整更新日志\n查看 [CLAUDE.md](https://github.com/threeyang3/bangumi-sync/blob/main/CLAUDE.md)",
+      "draft": false,
+      "name": "V2.0.0 - Bangumi Sync V2",
+      "prerelease": false,
+      "publishedAt": "2026-04-18T06:33:39Z",
+      "tag": "v2.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7deda1803f27646c7fc9d80c60aa262554097a1451b1932b67e21bda3d738448",
+          "name": "bangumi-sync-v1.zip",
+          "size": 20711
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## Bangumi Sync V1\n\n### 功能\n- 从 Bangumi 同步收藏数据到 Obsidian\n- 支持动画、游戏、书籍、音乐、三次元等条目类型\n- 增量同步（基于缓存）\n- 自定义模板\n- 自动同步\n\n### 安装\n1. 下载 bangumi-sync-v1.zip\n2. 解压到 .obsidian/plugins/bangumi-sync/ 目录\n3. 在 Obsidian 设置中启用插件",
+      "draft": false,
+      "name": "V1.0.0 - Bangumi Sync",
+      "prerelease": false,
+      "publishedAt": "2026-04-18T06:26:10Z",
+      "tag": "v1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "threeyang3/bangumi-sync"
+}

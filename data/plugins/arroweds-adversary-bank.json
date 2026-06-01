@@ -1,0 +1,285 @@
+{
+  "author": "arrowedisgaming",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Manage and run Daggerheart TTRPG encounters with searchable adversary stat blocks, condition tracking, and instance management.",
+  "errors": [],
+  "id": "arroweds-adversary-bank",
+  "lastChangedAt": "2026-06-01T17:04:58.895Z",
+  "lastFetchedAt": "2026-06-01T17:04:58.895Z",
+  "manifest": {
+    "author": "Arrowed",
+    "authorUrl": "https://github.com/arrowedisgaming",
+    "description": "Manage and run Daggerheart TTRPG encounters with searchable adversary stat blocks, condition tracking, and instance management.",
+    "id": "arroweds-adversary-bank",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.9.14",
+    "name": "Arroweds Adversary Bank",
+    "version": "1.8.1"
+  },
+  "name": "Arroweds Adversary Bank",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a1ffe73514900bbe52b672bb06603865be7e87f8d9bb8eeefa6024afc97fe15",
+          "name": "main.js",
+          "size": 226122
+        },
+        {
+          "digest": "sha256:12a9d75b1646bb2fa4f09f18342ecfb7d6b40d91fbcc2c9f84231d019290f43e",
+          "name": "manifest.json",
+          "size": 368
+        },
+        {
+          "digest": "sha256:d8f57bd78de7261d37f39d377cd419b15897277d555ddf15745b92ce6a95787b",
+          "name": "styles.css",
+          "size": 10311
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Changelog — Arroweds Adversary Bank\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/),\nand this project adheres to [Semantic Versioning](https://semver.org/).\n\n## [Unreleased]\n\n## [1.8.1] - 2026-05-27\n\n### Changed\n\n- Renamed plugin to \"Arroweds Adversary Bank\" (removed the apostrophe from \"Arrowed's\") to comply with Obsidian community directory naming guidelines, which prohibit punctuation other than hyphens. The plugin `id` (`arroweds-adversary-bank`) is unchanged, so existing installs keep all settings, customizations, and tracked instance state.\n\n## [1.8.0] - 2026-05-14\n\n### Added\n\n- Stat block overrides. Each rendered adversary card has a pencil icon in the top-right corner that opens an edit modal for adjusting Max HP, Max Stress, Thresholds, Attack, Difficulty, Weapon, Range, Damage, and Motives & Tactics mid-session without editing the YAML in the code block. Overrides are stored in plugin state — the library entry is never mutated — and survive vault reloads. Overridden values replace the library values in-place in the card header and are marked with a dotted underline. HP/Stress marks are clamped across all instances when the effective max drops (either by setting a lower override or by clearing an override that previously raised the max). A \"Reset all customizations\" button in the modal footer reverts every overridden field back to the library value.\n- Per-instance reset button. Each instance's stat bar has a small reset icon at the top-right that clears that instance's HP marks, stress marks, conditions, feature uses, and feature countdowns. Customizations stay intact (they reset only from inside the edit modal), so a GM can fully refresh one creature in a multi-instance encounter without disturbing the rest.\n\n## [1.7.5] - 2026-05-13\n\n### Changed\n\n- Rewrote `README.md` to lead with GM-facing utility rather than fork-vs-original framing: replaced the \"What's New\" / \"Original BeastVault Features\" split with a single Features section organized around library, live tracking, and interactive stat blocks; added hero and per-feature screenshots under `docs/images/`; reduced Installation to a single sentence pointing at the Obsidian community plugin directory; removed the BRAT install option; moved manual install and release-provenance instructions into collapsed `<details>` blocks below the Reference section. BeastVault attribution preserved in the Attributions section per the MIT License.\n\n## [1.7.4] - 2026-05-12\n\n### Fixed\n\n- Replaced boolean `.every()` callbacks in `asStringOrStringArray` and `asThresholds` (`src/utils.ts`) with type-predicate callbacks so `Array.isArray` narrowing flows through to the return value, eliminating two `@typescript-eslint/no-unsafe-return` warnings.\n\n## [1.7.3] - 2026-05-12\n\n### Fixed\n\n- Release tag format now matches the manifest version exactly (e.g. `1.7.3`, not `v1.7.3`), per the repo's existing convention and Obsidian's plugin guidelines. Updated the release workflow trigger and tag-verification accordingly. The previous `v1.7.2` tag and release were removed; this metadata-only `1.7.3` republishes the same content under the correct tag.\n\n## [1.7.2] - 2026-05-12\n\n### Changed\n\n- Added GitHub Actions release automation that builds release assets in CI, generates GitHub artifact attestations, and uploads `main.js`, `manifest.json`, and `styles.css`.\n- Added local and CI checks for TypeScript, Obsidian ESLint rules, and CSS review guardrails.\n\n### Fixed\n\n- Replaced deprecated `builtin-modules` dependency usage with the native Node.js module list already used by the build.\n- Tightened YAML, JSON, frontmatter, Fantasy Statblocks, dice-roller, and saved-state typing to avoid unsafe `any` flows.\n- Marked intentional fire-and-forget promises, improved popout-window compatibility, and removed unused imports.\n- Reworked CSS underlines and overrides to avoid unsupported `text-decoration` declarations and `!important`.\n- Preserved brand-name and acronym capitalization (`Arrowed's Adversary Bank`, `Fantasy Statblocks`, `FSB`, `SRD`) in user-facing settings and ribbon labels by extending the sentence-case lint allowlist.\n- Continued to accept quoted numeric stat fields (e.g. `hp: \"8\"`) in homebrew YAML, JSON, and frontmatter, restoring parity with prior loose-typed behavior.\n\n## [1.7.1] - 2026-05-12\n\n### Fixed\n\n- Metadata-only release to align the Obsidian plugin manifest version with the Git tag name.\n\n## [1.7.0] - 2026-05-04\n\n### Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n### Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.\n\n## [1.6.0] - 2026-04-12\n\n### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback\n\n## [1.5.1] - 2026-04-04\n\n### Added\n\n- \"Hide built-in library\" setting — optionally hide the bundled SRD adversaries and environments from the search modal, showing only your homebrew entries\n- Markdown body parsing for frontmatter-based entries — description, motives & tactics, experience, and features are now extracted from the note body when not present in frontmatter\n\n## [1.5.0] - 2026-04-04\n\n### Added\n\n- Multiple library folder support — add as many homebrew folder paths as you need in settings, each scanned independently for adversary YAML/JSON/MD files\n- Folder picker modal — click \"Choose folders\" to visually browse and select vault folders with search and checkboxes, replacing the old single text field\n- Frontmatter adversary loading — markdown notes with adversary stats in YAML frontmatter (name, hp, stress, difficulty, etc.) are now recognized as library entries, with field mapping for common third-party formats (role→type, atk_bonus→attack, weapon_name→weapon, etc.)\n\n## [1.4.0] - 2026-04-04\n\n### Added\n\n- Dice-roller plugin integration — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with tooltips and click-to-reroll\n\n### Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings\n\n## [1.3.0] - 2026-04-03\n\nForked from [BeastVault](https://github.com/ly0va/beastvault) 1.2.3 by Lyova Potyomkin.\n\n### Added\n\n- Auto-suffix duplicate adversary names on insert (e.g. \"Bladed Guard 2\", \"Bladed Guard 3\")\n- Inline rename on rendered adversary cards (double-click the name to edit)\n- Condition tracking badges per adversary instance (Vulnerable, Restrained, Frightened, Disoriented, Weakened, Hidden, Empowered, Slowed)\n- Custom conditions via YAML `conditions` field and ad-hoc \"+\" button on condition bar\n- Per-instance naming for multi-count adversaries (click to rename \"Chimera 1\", \"Chimera 2\", etc.)\n- Clickable \"Mark a Stress\" text in feature descriptions — auto-marks stress on single instances, shows picker for multi-count\n- Per-stat +/- and clear buttons for HP and Stress slot rows\n- Summon buttons on features with a `summon` field — inserts the named adversary at end of document\n\n### Fixed\n\n- Removed unnecessary type assertions flagged by Obsidian eslint plugin\n- Replaced `as any` casts with proper typed access to card/instance state\n\n## [1.2.3] - 2025-11-30\n\n### Note\n\nLast upstream release from original BeastVault. See [upstream repository](https://github.com/ly0va/beastvault) for prior history.\n",
+      "draft": false,
+      "name": "1.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T17:41:06Z",
+      "tag": "1.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3e3efd99187aabb1adaef704a50c0272d4811717a6341bd2e50a26bcdd5f5b23",
+          "name": "main.js",
+          "size": 226123
+        },
+        {
+          "digest": "sha256:799cf45dce8381650f4eb9f5e02a884a5564b7b446a4c2f4ffe0b58a84b589ad",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:d8f57bd78de7261d37f39d377cd419b15897277d555ddf15745b92ce6a95787b",
+          "name": "styles.css",
+          "size": 10311
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Changelog — Arrowed's Adversary Bank\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/),\nand this project adheres to [Semantic Versioning](https://semver.org/).\n\n## [Unreleased]\n\n## [1.8.0] - 2026-05-14\n\n### Added\n\n- Stat block overrides. Each rendered adversary card has a pencil icon in the top-right corner that opens an edit modal for adjusting Max HP, Max Stress, Thresholds, Attack, Difficulty, Weapon, Range, Damage, and Motives & Tactics mid-session without editing the YAML in the code block. Overrides are stored in plugin state — the library entry is never mutated — and survive vault reloads. Overridden values replace the library values in-place in the card header and are marked with a dotted underline. HP/Stress marks are clamped across all instances when the effective max drops (either by setting a lower override or by clearing an override that previously raised the max). A \"Reset all customizations\" button in the modal footer reverts every overridden field back to the library value.\n- Per-instance reset button. Each instance's stat bar has a small reset icon at the top-right that clears that instance's HP marks, stress marks, conditions, feature uses, and feature countdowns. Customizations stay intact (they reset only from inside the edit modal), so a GM can fully refresh one creature in a multi-instance encounter without disturbing the rest.\n\n## [1.7.5] - 2026-05-13\n\n### Changed\n\n- Rewrote `README.md` to lead with GM-facing utility rather than fork-vs-original framing: replaced the \"What's New\" / \"Original BeastVault Features\" split with a single Features section organized around library, live tracking, and interactive stat blocks; added hero and per-feature screenshots under `docs/images/`; reduced Installation to a single sentence pointing at the Obsidian community plugin directory; removed the BRAT install option; moved manual install and release-provenance instructions into collapsed `<details>` blocks below the Reference section. BeastVault attribution preserved in the Attributions section per the MIT License.\n\n## [1.7.4] - 2026-05-12\n\n### Fixed\n\n- Replaced boolean `.every()` callbacks in `asStringOrStringArray` and `asThresholds` (`src/utils.ts`) with type-predicate callbacks so `Array.isArray` narrowing flows through to the return value, eliminating two `@typescript-eslint/no-unsafe-return` warnings.\n\n## [1.7.3] - 2026-05-12\n\n### Fixed\n\n- Release tag format now matches the manifest version exactly (e.g. `1.7.3`, not `v1.7.3`), per the repo's existing convention and Obsidian's plugin guidelines. Updated the release workflow trigger and tag-verification accordingly. The previous `v1.7.2` tag and release were removed; this metadata-only `1.7.3` republishes the same content under the correct tag.\n\n## [1.7.2] - 2026-05-12\n\n### Changed\n\n- Added GitHub Actions release automation that builds release assets in CI, generates GitHub artifact attestations, and uploads `main.js`, `manifest.json`, and `styles.css`.\n- Added local and CI checks for TypeScript, Obsidian ESLint rules, and CSS review guardrails.\n\n### Fixed\n\n- Replaced deprecated `builtin-modules` dependency usage with the native Node.js module list already used by the build.\n- Tightened YAML, JSON, frontmatter, Fantasy Statblocks, dice-roller, and saved-state typing to avoid unsafe `any` flows.\n- Marked intentional fire-and-forget promises, improved popout-window compatibility, and removed unused imports.\n- Reworked CSS underlines and overrides to avoid unsupported `text-decoration` declarations and `!important`.\n- Preserved brand-name and acronym capitalization (`Arrowed's Adversary Bank`, `Fantasy Statblocks`, `FSB`, `SRD`) in user-facing settings and ribbon labels by extending the sentence-case lint allowlist.\n- Continued to accept quoted numeric stat fields (e.g. `hp: \"8\"`) in homebrew YAML, JSON, and frontmatter, restoring parity with prior loose-typed behavior.\n\n## [1.7.1] - 2026-05-12\n\n### Fixed\n\n- Metadata-only release to align the Obsidian plugin manifest version with the Git tag name.\n\n## [1.7.0] - 2026-05-04\n\n### Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n### Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.\n\n## [1.6.0] - 2026-04-12\n\n### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback\n\n## [1.5.1] - 2026-04-04\n\n### Added\n\n- \"Hide built-in library\" setting — optionally hide the bundled SRD adversaries and environments from the search modal, showing only your homebrew entries\n- Markdown body parsing for frontmatter-based entries — description, motives & tactics, experience, and features are now extracted from the note body when not present in frontmatter\n\n## [1.5.0] - 2026-04-04\n\n### Added\n\n- Multiple library folder support — add as many homebrew folder paths as you need in settings, each scanned independently for adversary YAML/JSON/MD files\n- Folder picker modal — click \"Choose folders\" to visually browse and select vault folders with search and checkboxes, replacing the old single text field\n- Frontmatter adversary loading — markdown notes with adversary stats in YAML frontmatter (name, hp, stress, difficulty, etc.) are now recognized as library entries, with field mapping for common third-party formats (role→type, atk_bonus→attack, weapon_name→weapon, etc.)\n\n## [1.4.0] - 2026-04-04\n\n### Added\n\n- Dice-roller plugin integration — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with tooltips and click-to-reroll\n\n### Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings\n\n## [1.3.0] - 2026-04-03\n\nForked from [BeastVault](https://github.com/ly0va/beastvault) 1.2.3 by Lyova Potyomkin.\n\n### Added\n\n- Auto-suffix duplicate adversary names on insert (e.g. \"Bladed Guard 2\", \"Bladed Guard 3\")\n- Inline rename on rendered adversary cards (double-click the name to edit)\n- Condition tracking badges per adversary instance (Vulnerable, Restrained, Frightened, Disoriented, Weakened, Hidden, Empowered, Slowed)\n- Custom conditions via YAML `conditions` field and ad-hoc \"+\" button on condition bar\n- Per-instance naming for multi-count adversaries (click to rename \"Chimera 1\", \"Chimera 2\", etc.)\n- Clickable \"Mark a Stress\" text in feature descriptions — auto-marks stress on single instances, shows picker for multi-count\n- Per-stat +/- and clear buttons for HP and Stress slot rows\n- Summon buttons on features with a `summon` field — inserts the named adversary at end of document\n\n### Fixed\n\n- Removed unnecessary type assertions flagged by Obsidian eslint plugin\n- Replaced `as any` casts with proper typed access to card/instance state\n\n## [1.2.3] - 2025-11-30\n\n### Note\n\nLast upstream release from original BeastVault. See [upstream repository](https://github.com/ly0va/beastvault) for prior history.\n",
+      "draft": false,
+      "name": "1.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T20:35:16Z",
+      "tag": "1.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5f536761143ebe0b4b5be7172a37a6664a6aac01d0cdbf62c6b503f325c9005a",
+          "name": "main.js",
+          "size": 220347
+        },
+        {
+          "digest": "sha256:a76ad0bab00c782aad8067eaf7196e1ab65ce7a7222cbe3161333d4626b58da7",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:83a5d51653a6a1f598037f901ab1ddfb1c535ac756b197b5834e8b4a28998824",
+          "name": "styles.css",
+          "size": 7429
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Changelog — Arrowed's Adversary Bank\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/),\nand this project adheres to [Semantic Versioning](https://semver.org/).\n\n## [Unreleased]\n\n## [1.7.5] - 2026-05-13\n\n### Changed\n\n- Rewrote `README.md` to lead with GM-facing utility rather than fork-vs-original framing: replaced the \"What's New\" / \"Original BeastVault Features\" split with a single Features section organized around library, live tracking, and interactive stat blocks; added hero and per-feature screenshots under `docs/images/`; reduced Installation to a single sentence pointing at the Obsidian community plugin directory; removed the BRAT install option; moved manual install and release-provenance instructions into collapsed `<details>` blocks below the Reference section. BeastVault attribution preserved in the Attributions section per the MIT License.\n\n## [1.7.4] - 2026-05-12\n\n### Fixed\n\n- Replaced boolean `.every()` callbacks in `asStringOrStringArray` and `asThresholds` (`src/utils.ts`) with type-predicate callbacks so `Array.isArray` narrowing flows through to the return value, eliminating two `@typescript-eslint/no-unsafe-return` warnings.\n\n## [1.7.3] - 2026-05-12\n\n### Fixed\n\n- Release tag format now matches the manifest version exactly (e.g. `1.7.3`, not `v1.7.3`), per the repo's existing convention and Obsidian's plugin guidelines. Updated the release workflow trigger and tag-verification accordingly. The previous `v1.7.2` tag and release were removed; this metadata-only `1.7.3` republishes the same content under the correct tag.\n\n## [1.7.2] - 2026-05-12\n\n### Changed\n\n- Added GitHub Actions release automation that builds release assets in CI, generates GitHub artifact attestations, and uploads `main.js`, `manifest.json`, and `styles.css`.\n- Added local and CI checks for TypeScript, Obsidian ESLint rules, and CSS review guardrails.\n\n### Fixed\n\n- Replaced deprecated `builtin-modules` dependency usage with the native Node.js module list already used by the build.\n- Tightened YAML, JSON, frontmatter, Fantasy Statblocks, dice-roller, and saved-state typing to avoid unsafe `any` flows.\n- Marked intentional fire-and-forget promises, improved popout-window compatibility, and removed unused imports.\n- Reworked CSS underlines and overrides to avoid unsupported `text-decoration` declarations and `!important`.\n- Preserved brand-name and acronym capitalization (`Arrowed's Adversary Bank`, `Fantasy Statblocks`, `FSB`, `SRD`) in user-facing settings and ribbon labels by extending the sentence-case lint allowlist.\n- Continued to accept quoted numeric stat fields (e.g. `hp: \"8\"`) in homebrew YAML, JSON, and frontmatter, restoring parity with prior loose-typed behavior.\n\n## [1.7.1] - 2026-05-12\n\n### Fixed\n\n- Metadata-only release to align the Obsidian plugin manifest version with the Git tag name.\n\n## [1.7.0] - 2026-05-04\n\n### Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n### Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.\n\n## [1.6.0] - 2026-04-12\n\n### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback\n\n## [1.5.1] - 2026-04-04\n\n### Added\n\n- \"Hide built-in library\" setting — optionally hide the bundled SRD adversaries and environments from the search modal, showing only your homebrew entries\n- Markdown body parsing for frontmatter-based entries — description, motives & tactics, experience, and features are now extracted from the note body when not present in frontmatter\n\n## [1.5.0] - 2026-04-04\n\n### Added\n\n- Multiple library folder support — add as many homebrew folder paths as you need in settings, each scanned independently for adversary YAML/JSON/MD files\n- Folder picker modal — click \"Choose folders\" to visually browse and select vault folders with search and checkboxes, replacing the old single text field\n- Frontmatter adversary loading — markdown notes with adversary stats in YAML frontmatter (name, hp, stress, difficulty, etc.) are now recognized as library entries, with field mapping for common third-party formats (role→type, atk_bonus→attack, weapon_name→weapon, etc.)\n\n## [1.4.0] - 2026-04-04\n\n### Added\n\n- Dice-roller plugin integration — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with tooltips and click-to-reroll\n\n### Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings\n\n## [1.3.0] - 2026-04-03\n\nForked from [BeastVault](https://github.com/ly0va/beastvault) 1.2.3 by Lyova Potyomkin.\n\n### Added\n\n- Auto-suffix duplicate adversary names on insert (e.g. \"Bladed Guard 2\", \"Bladed Guard 3\")\n- Inline rename on rendered adversary cards (double-click the name to edit)\n- Condition tracking badges per adversary instance (Vulnerable, Restrained, Frightened, Disoriented, Weakened, Hidden, Empowered, Slowed)\n- Custom conditions via YAML `conditions` field and ad-hoc \"+\" button on condition bar\n- Per-instance naming for multi-count adversaries (click to rename \"Chimera 1\", \"Chimera 2\", etc.)\n- Clickable \"Mark a Stress\" text in feature descriptions — auto-marks stress on single instances, shows picker for multi-count\n- Per-stat +/- and clear buttons for HP and Stress slot rows\n- Summon buttons on features with a `summon` field — inserts the named adversary at end of document\n\n### Fixed\n\n- Removed unnecessary type assertions flagged by Obsidian eslint plugin\n- Replaced `as any` casts with proper typed access to card/instance state\n\n## [1.2.3] - 2025-11-30\n\n### Note\n\nLast upstream release from original BeastVault. See [upstream repository](https://github.com/ly0va/beastvault) for prior history.\n",
+      "draft": false,
+      "name": "1.7.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T01:50:17Z",
+      "tag": "1.7.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5f536761143ebe0b4b5be7172a37a6664a6aac01d0cdbf62c6b503f325c9005a",
+          "name": "main.js",
+          "size": 220347
+        },
+        {
+          "digest": "sha256:9cc80abbc8ce35a9add51a56891f7d7e420336280c00f55e8799c293ee6a7dba",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:83a5d51653a6a1f598037f901ab1ddfb1c535ac756b197b5834e8b4a28998824",
+          "name": "styles.css",
+          "size": 7429
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Changelog — Arrowed's Adversary Bank\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/),\nand this project adheres to [Semantic Versioning](https://semver.org/).\n\n## [1.7.4] - 2026-05-12\n\n### Fixed\n\n- Replaced boolean `.every()` callbacks in `asStringOrStringArray` and `asThresholds` (`src/utils.ts`) with type-predicate callbacks so `Array.isArray` narrowing flows through to the return value, eliminating two `@typescript-eslint/no-unsafe-return` warnings.\n\n## [1.7.3] - 2026-05-12\n\n### Fixed\n\n- Release tag format now matches the manifest version exactly (e.g. `1.7.3`, not `v1.7.3`), per the repo's existing convention and Obsidian's plugin guidelines. Updated the release workflow trigger and tag-verification accordingly. The previous `v1.7.2` tag and release were removed; this metadata-only `1.7.3` republishes the same content under the correct tag.\n\n## [1.7.2] - 2026-05-12\n\n### Changed\n\n- Added GitHub Actions release automation that builds release assets in CI, generates GitHub artifact attestations, and uploads `main.js`, `manifest.json`, and `styles.css`.\n- Added local and CI checks for TypeScript, Obsidian ESLint rules, and CSS review guardrails.\n\n### Fixed\n\n- Replaced deprecated `builtin-modules` dependency usage with the native Node.js module list already used by the build.\n- Tightened YAML, JSON, frontmatter, Fantasy Statblocks, dice-roller, and saved-state typing to avoid unsafe `any` flows.\n- Marked intentional fire-and-forget promises, improved popout-window compatibility, and removed unused imports.\n- Reworked CSS underlines and overrides to avoid unsupported `text-decoration` declarations and `!important`.\n- Preserved brand-name and acronym capitalization (`Arrowed's Adversary Bank`, `Fantasy Statblocks`, `FSB`, `SRD`) in user-facing settings and ribbon labels by extending the sentence-case lint allowlist.\n- Continued to accept quoted numeric stat fields (e.g. `hp: \"8\"`) in homebrew YAML, JSON, and frontmatter, restoring parity with prior loose-typed behavior.\n\n## [1.7.1] - 2026-05-12\n\n### Fixed\n\n- Metadata-only release to align the Obsidian plugin manifest version with the Git tag name.\n\n## [1.7.0] - 2026-05-04\n\n### Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n### Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.\n\n## [1.6.0] - 2026-04-12\n\n### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback\n\n## [1.5.1] - 2026-04-04\n\n### Added\n\n- \"Hide built-in library\" setting — optionally hide the bundled SRD adversaries and environments from the search modal, showing only your homebrew entries\n- Markdown body parsing for frontmatter-based entries — description, motives & tactics, experience, and features are now extracted from the note body when not present in frontmatter\n\n## [1.5.0] - 2026-04-04\n\n### Added\n\n- Multiple library folder support — add as many homebrew folder paths as you need in settings, each scanned independently for adversary YAML/JSON/MD files\n- Folder picker modal — click \"Choose folders\" to visually browse and select vault folders with search and checkboxes, replacing the old single text field\n- Frontmatter adversary loading — markdown notes with adversary stats in YAML frontmatter (name, hp, stress, difficulty, etc.) are now recognized as library entries, with field mapping for common third-party formats (role→type, atk_bonus→attack, weapon_name→weapon, etc.)\n\n## [1.4.0] - 2026-04-04\n\n### Added\n\n- Dice-roller plugin integration — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with tooltips and click-to-reroll\n\n### Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings\n\n## [1.3.0] - 2026-04-03\n\nForked from [BeastVault](https://github.com/ly0va/beastvault) 1.2.3 by Lyova Potyomkin.\n\n### Added\n\n- Auto-suffix duplicate adversary names on insert (e.g. \"Bladed Guard 2\", \"Bladed Guard 3\")\n- Inline rename on rendered adversary cards (double-click the name to edit)\n- Condition tracking badges per adversary instance (Vulnerable, Restrained, Frightened, Disoriented, Weakened, Hidden, Empowered, Slowed)\n- Custom conditions via YAML `conditions` field and ad-hoc \"+\" button on condition bar\n- Per-instance naming for multi-count adversaries (click to rename \"Chimera 1\", \"Chimera 2\", etc.)\n- Clickable \"Mark a Stress\" text in feature descriptions — auto-marks stress on single instances, shows picker for multi-count\n- Per-stat +/- and clear buttons for HP and Stress slot rows\n- Summon buttons on features with a `summon` field — inserts the named adversary at end of document\n\n### Fixed\n\n- Removed unnecessary type assertions flagged by Obsidian eslint plugin\n- Replaced `as any` casts with proper typed access to card/instance state\n\n## [1.2.3] - 2025-11-30\n\n### Note\n\nLast upstream release from original BeastVault. See [upstream repository](https://github.com/ly0va/beastvault) for prior history.\n",
+      "draft": false,
+      "name": "1.7.4",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T19:53:14Z",
+      "tag": "1.7.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5f536761143ebe0b4b5be7172a37a6664a6aac01d0cdbf62c6b503f325c9005a",
+          "name": "main.js",
+          "size": 220347
+        },
+        {
+          "digest": "sha256:75b3a8ffd08ef69a7e6b4d342fa9b9efba872746cf1829ad321cc300eec2cd1f",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:83a5d51653a6a1f598037f901ab1ddfb1c535ac756b197b5834e8b4a28998824",
+          "name": "styles.css",
+          "size": 7429
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Changelog — Arrowed's Adversary Bank\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/),\nand this project adheres to [Semantic Versioning](https://semver.org/).\n\n## [1.7.3] - 2026-05-12\n\n### Fixed\n\n- Release tag format now matches the manifest version exactly (e.g. `1.7.3`, not `v1.7.3`), per the repo's existing convention and Obsidian's plugin guidelines. Updated the release workflow trigger and tag-verification accordingly. The previous `v1.7.2` tag and release were removed; this metadata-only `1.7.3` republishes the same content under the correct tag.\n\n## [1.7.2] - 2026-05-12\n\n### Changed\n\n- Added GitHub Actions release automation that builds release assets in CI, generates GitHub artifact attestations, and uploads `main.js`, `manifest.json`, and `styles.css`.\n- Added local and CI checks for TypeScript, Obsidian ESLint rules, and CSS review guardrails.\n\n### Fixed\n\n- Replaced deprecated `builtin-modules` dependency usage with the native Node.js module list already used by the build.\n- Tightened YAML, JSON, frontmatter, Fantasy Statblocks, dice-roller, and saved-state typing to avoid unsafe `any` flows.\n- Marked intentional fire-and-forget promises, improved popout-window compatibility, and removed unused imports.\n- Reworked CSS underlines and overrides to avoid unsupported `text-decoration` declarations and `!important`.\n- Preserved brand-name and acronym capitalization (`Arrowed's Adversary Bank`, `Fantasy Statblocks`, `FSB`, `SRD`) in user-facing settings and ribbon labels by extending the sentence-case lint allowlist.\n- Continued to accept quoted numeric stat fields (e.g. `hp: \"8\"`) in homebrew YAML, JSON, and frontmatter, restoring parity with prior loose-typed behavior.\n\n## [1.7.1] - 2026-05-12\n\n### Fixed\n\n- Metadata-only release to align the Obsidian plugin manifest version with the Git tag name.\n\n## [1.7.0] - 2026-05-04\n\n### Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n### Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.\n\n## [1.6.0] - 2026-04-12\n\n### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback\n\n## [1.5.1] - 2026-04-04\n\n### Added\n\n- \"Hide built-in library\" setting — optionally hide the bundled SRD adversaries and environments from the search modal, showing only your homebrew entries\n- Markdown body parsing for frontmatter-based entries — description, motives & tactics, experience, and features are now extracted from the note body when not present in frontmatter\n\n## [1.5.0] - 2026-04-04\n\n### Added\n\n- Multiple library folder support — add as many homebrew folder paths as you need in settings, each scanned independently for adversary YAML/JSON/MD files\n- Folder picker modal — click \"Choose folders\" to visually browse and select vault folders with search and checkboxes, replacing the old single text field\n- Frontmatter adversary loading — markdown notes with adversary stats in YAML frontmatter (name, hp, stress, difficulty, etc.) are now recognized as library entries, with field mapping for common third-party formats (role→type, atk_bonus→attack, weapon_name→weapon, etc.)\n\n## [1.4.0] - 2026-04-04\n\n### Added\n\n- Dice-roller plugin integration — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with tooltips and click-to-reroll\n\n### Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings\n\n## [1.3.0] - 2026-04-03\n\nForked from [BeastVault](https://github.com/ly0va/beastvault) 1.2.3 by Lyova Potyomkin.\n\n### Added\n\n- Auto-suffix duplicate adversary names on insert (e.g. \"Bladed Guard 2\", \"Bladed Guard 3\")\n- Inline rename on rendered adversary cards (double-click the name to edit)\n- Condition tracking badges per adversary instance (Vulnerable, Restrained, Frightened, Disoriented, Weakened, Hidden, Empowered, Slowed)\n- Custom conditions via YAML `conditions` field and ad-hoc \"+\" button on condition bar\n- Per-instance naming for multi-count adversaries (click to rename \"Chimera 1\", \"Chimera 2\", etc.)\n- Clickable \"Mark a Stress\" text in feature descriptions — auto-marks stress on single instances, shows picker for multi-count\n- Per-stat +/- and clear buttons for HP and Stress slot rows\n- Summon buttons on features with a `summon` field — inserts the named adversary at end of document\n\n### Fixed\n\n- Removed unnecessary type assertions flagged by Obsidian eslint plugin\n- Replaced `as any` casts with proper typed access to card/instance state\n\n## [1.2.3] - 2025-11-30\n\n### Note\n\nLast upstream release from original BeastVault. See [upstream repository](https://github.com/ly0va/beastvault) for prior history.\n",
+      "draft": false,
+      "name": "1.7.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T19:34:45Z",
+      "tag": "1.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:47f39d8c4083a45092152a1172808c5645a4ffaf7ef9dfeaebec2606006bf300",
+          "name": "main.js",
+          "size": 217731
+        },
+        {
+          "digest": "sha256:0db8854b10f2c14ee697d23d38197a94ccff96c729ab3e8d224bb8022744aab7",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:c701d0181920c583eed1e3711ef8a6e7ada05c2ab923197a250a39493ad9bbbe",
+          "name": "styles.css",
+          "size": 7279
+        }
+      ],
+      "author": "arrowedisgaming",
+      "description": "Metadata-only release to align the Obsidian plugin manifest version with the Git tag name. No functional changes from 1.7.0.",
+      "draft": false,
+      "name": "1.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-12T16:25:48Z",
+      "tag": "1.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:47f39d8c4083a45092152a1172808c5645a4ffaf7ef9dfeaebec2606006bf300",
+          "name": "main.js",
+          "size": 217731
+        },
+        {
+          "digest": "sha256:35f57adeb7b440d574186b47da01a1a9f2f5aa09d876e792c5cf2225faabc190",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:c701d0181920c583eed1e3711ef8a6e7ada05c2ab923197a250a39493ad9bbbe",
+          "name": "styles.css",
+          "size": 7279
+        }
+      ],
+      "author": "arrowedisgaming",
+      "description": "## Added\n\n- Configurable stat block button color for threshold and HP/Stress controls.\n\n## Changed\n\n- Restyled embedded stat block buttons with softer themed backgrounds, centered labels, and larger HP/Stress icon controls.",
+      "draft": false,
+      "name": "1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-04T16:21:04Z",
+      "tag": "v1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:312e2d3a784acae89bc323fd4ac5e1d65d56b8920345f78300c2fa36c08760d3",
+          "name": "main.js",
+          "size": 217190
+        },
+        {
+          "digest": "sha256:053b8567d29c62b52e02033c67158a0d36f3d53d28ea8df7c4086ecb3b3954c1",
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:d4d7a06f6af516585faff164c265933ee8de3a2c650fe565f5a482d9d1f171ee",
+          "name": "styles.css",
+          "size": 5854
+        }
+      ],
+      "author": "arrowedisgaming",
+      "description": "### Added\n\n- Mobile support — plugin now installs and runs on Obsidian Mobile (iOS/Android)\n- Touch-friendly interactions: long-press to rename adversary titles, mark/clear damage menu on threshold buttons\n- `:active` CSS states on all interactive elements for touch press feedback",
+      "draft": false,
+      "name": "1.6.0 — Mobile Support",
+      "prerelease": false,
+      "publishedAt": "2026-04-12T20:45:30Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:370e0993e218cded6d1a30fa12baed67db2abd1e487736956179b0472d42ff5b",
+          "name": "main.js",
+          "size": 212778
+        },
+        {
+          "digest": "sha256:72715c4f2d46fb4ec60683238563f67663a195e748bef25c55c0c8ff56968a3e",
+          "name": "manifest.json",
+          "size": 368
+        },
+        {
+          "digest": "sha256:0bda499af0bb884500199df8a870670591cdbf8f30493fff92ea38e9f6a7ab3c",
+          "name": "styles.css",
+          "size": 4428
+        }
+      ],
+      "author": "arrowedisgaming",
+      "description": "## Added\n\n- **Dice-roller plugin integration** — when [dice-roller](https://github.com/Obsidian-TTRPG-Community/dice-roller) is installed, dice formulas in statblocks (attack, damage, feature descriptions) render as interactive dice-roller elements with 3D dice, tooltips, and dice log integration. Falls back to built-in rolls when dice-roller is not available.\n\n## Fixed\n\n- Dice pattern regex `lastIndex` bug that could cause alternating match failures on damage strings",
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-04T15:23:31Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f146a0acbe73e93e9d129b54317cb6cde75586eb7f389ca4aeb1d825fce5f169",
+          "name": "main.js",
+          "size": 211904
+        },
+        {
+          "digest": "sha256:a6bedf4921566b20f7e0e0a3c9d7aad66c90c71768d6d30602f680c2b088c289",
+          "name": "manifest.json",
+          "size": 368
+        },
+        {
+          "digest": "sha256:18568a559c268c57d6badfd221f11d65cbb8be17bf978da95c34b8d3526ed1e3",
+          "name": "styles.css",
+          "size": 4338
+        }
+      ],
+      "author": "arrowedisgaming",
+      "description": "Initial community plugin release. See CHANGELOG.md for details.",
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-04-03T20:54:41Z",
+      "tag": "1.3.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "arrowedisgaming/arroweds-adversary-bank"
+}

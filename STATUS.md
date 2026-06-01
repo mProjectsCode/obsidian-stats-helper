@@ -1,7 +1,7 @@
 # Status
 
-- Last harvest update: 2026-06-01T15:03:58.582Z
-- Current pass: in progress (2000/4348, 46.0%)
-- Indexed plugins: 2000 (2000 present, 0 removed)
-- Plugin detail files: 2000
-- HTTP cache entries: 6093
+- Last harvest update: 2026-06-01T17:04:58.895Z
+- Current pass: in progress (3000/4348, 69.0%)
+- Indexed plugins: 3000 (3000 present, 0 removed)
+- Plugin detail files: 3000
+- HTTP cache entries: 9101
