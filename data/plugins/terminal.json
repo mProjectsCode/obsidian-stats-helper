@@ -1,0 +1,1553 @@
+{
+  "author": "polyipseity",
+  "defaultBranch": "main",
+  "description": "Integrate consoles, shells, and terminals.",
+  "errors": [],
+  "id": "terminal",
+  "lastChangedAt": "2026-06-01T13:03:58.602Z",
+  "lastFetchedAt": "2026-06-01T13:03:58.602Z",
+  "manifest": {
+    "author": "polyipseity",
+    "authorUrl": "https://github.com/polyipseity",
+    "description": "Integrate consoles, shells, and terminals.",
+    "fundingUrl": {
+      "Buy Me a Coffee": "https://buymeacoffee.com/polyipseity",
+      "GitHub Sponsors": "https://github.com/sponsors/polyipseity"
+    },
+    "id": "terminal",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.4.11",
+    "name": "Terminal",
+    "version": "3.25.0"
+  },
+  "name": "Terminal",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:6093f35a078e913b805f9aa2fb68a6c8b4722f02fc0422c44c937705b0260d28",
+          "name": "main.js",
+          "size": 2623544
+        },
+        {
+          "digest": "sha256:9630544769d27370ff314a72cbb373bdc49d7f3ededbcfd8702b923bda8df699",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:8d29774481e7f9268dd0b7b56996ab4b3e64e3afc97f9f6804b774a49f66cc6e",
+          "name": "obsidian-terminal.tgz",
+          "size": 692299
+        },
+        {
+          "digest": "sha256:715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+          "name": "styles.css",
+          "size": 5727
+        }
+      ],
+      "author": "polyipseity",
+      "description": "A rolling release that contains the build artifacts for the latest commit. See [readme § installation](README.md#installation) for more information.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": true,
+      "publishedAt": "2023-03-28T04:19:48Z",
+      "tag": "rolling"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:89c90582ab1f9d30cdaa7bcbeffc361ef4e9cc5bee522dc9d9e825bf9f7da1fc",
+          "name": "main.js",
+          "size": 2562994
+        },
+        {
+          "digest": "sha256:9630544769d27370ff314a72cbb373bdc49d7f3ededbcfd8702b923bda8df699",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:d8db0dc507bbcd17bf564e21750489041904e3f4078a1ef0918005a5df54c5dd",
+          "name": "obsidian-terminal.tgz",
+          "size": 676471
+        },
+        {
+          "digest": "sha256:715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+          "name": "styles.css",
+          "size": 5727
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.25.0\r\n\r\n### Minor Changes\r\n\r\n- 21bc805: Add custom keymappings system for iTerm2-style key remapping. Users can define key combos and what the terminal sends when pressed (ignore, passthrough, escape sequence, hex code, or text), with optional per-platform targeting (macOS, Linux, Windows, or all platforms). Ships with built-in default mappings: standard scroll keys (Page Up/Down, Home/End for viewport navigation) on all platforms, macOS Natural Text Editing bindings (Option+Arrow word navigation, Option+Backspace word deletion, etc.), and a Shift+Enter → ESC CR mapping for all platforms (useful for TUI apps such as Claude Code). The reset button restores these factory defaults rather than clearing all mappings. Also fixes a bug where two `attachCustomKeyEventHandler` calls silently overwrote each other, and a bug where the passthrough action did not suppress the corresponding keyup event. ([GH#118](https://github.com/polyipseity/obsidian-terminal/pull/118) by [@ryanbbrown](https://github.com/ryanbbrown))\r\n- 7f8be34: Add Ukrainian localization. ([GH#160](https://github.com/polyipseity/obsidian-terminal/pull/160) by [@Xarakternuk](https://github.com/Xarakternuk))\r\n- d671acd: Refactor profile list modal to use base ListModal class ([GH#109](https://github.com/polyipseity/obsidian-terminal/pull/109) by [@taisau](https://github.com/taisau))\r\n\r\n  Refactored ProfileListModal to extend the base ListModal class instead of\r\n  reimplementing list UI logic, reducing code duplication and improving\r\n  maintainability. The modal now integrates seamlessly with the library's\r\n  generic list modal framework while preserving profile-specific UI features\r\n  like preset selection and default profile management.\r\n\r\n- 63dd9e1: Add scroll action keybindings (scrollLines, scrollPages, scrollToTop, scrollToBottom)\r\n- 0f61c86: Add manual tab rename via pane context menu and command palette.\r\n\r\n  Terminal tabs previously showed only the static profile name, making\r\n  multiple sessions indistinguishable. Users can now right-click a\r\n  terminal tab and choose \"Rename\", or invoke the \"Rename Terminal\"\r\n  command, to set a custom title that persists across sessions. Clearing\r\n  the title restores the automatic name (profile name, executable, or\r\n  shell-set title). Fixes [GH#94](https://github.com/polyipseity/obsidian-terminal/issues/94). ([GH#141](https://github.com/polyipseity/obsidian-terminal/pull/141) by [@niwo-gh](https://github.com/niwo-gh))\r\n\r\n- 2096c16: Add AltScreenExitAddon to auto-scroll when exiting alt-screen mode\r\n\r\n### Patch Changes\r\n\r\n- 272e8b8: Ensure all executable spawn calls use consistent environment variable handling for better PATH inheritance. Fixes external terminal emulator spawning (was completely missing environment), improves system PATH discovery commands (`getconf`, `reg`) which were passed empty environment, and unifies environment handling across all spawn contexts. Renames `sanitizedEnv()` → `sanitizeEnv()`, `applyFixedPtyEnv()` → `applyFixedEnv()`, and `FIXED_PTY_ENV` → `FIXED_ENV` for clarity and consistency since these apply to all spawned processes, not just PTY.\r\n- 850db0a: Add translations for scroll action keybindings in all languages\r\n- 83a0f6b: Fix the donate button and \"open documentation (donate)\" command failing with an error on Obsidian 1.12.7+ due to a private API change. The plugin now finds the donation button directly from the community plugins list and falls back to opening the donation URL when that is not possible. ([GH#157](https://github.com/polyipseity/obsidian-terminal/issues/157) by [@janah01](https://github.com/janah01))\r\n- 30caf9d: Resolve system PATH and sanitize inherited environment variables for embedded terminals. Fixes missing user-installed tools (in `/usr/local/bin`, `/opt/homebrew/bin`, Windows user Python, etc.) that fail with \"command not found\" inside the integrated terminal when Obsidian is launched via Finder, Start Menu, or desktop launcher. Also prevents terminal misdetection by tools like Claude Code that triggered scroll-to-top issues during streaming. ([#144](https://github.com/polyipseity/obsidian-terminal/pull/144) by [@ahmadelafify](https://github.com/ahmadelafify))\r\n\r\n  On first PTY spawn, queries the canonical system PATH from the OS (`/usr/libexec/path_helper` on macOS, `/etc/environment` with `getconf` fallback on Linux, registry `HKLM`+`HKCU` on Windows) and merges missing entries into the PTY environment. Strips parent-app variables (`TMUX`, `STY`, `TERM_PROGRAM`, `VSCODE_*`, `ZED_*`) that cause misdetection, and sets `TERM_PROGRAM=obsidian-terminal` on all spawn contexts (Unix PTY, Windows shell, Windows resizer).\r\n\r\n- dcac2c2: Fix scroll viewport reset during AI coding agent streaming output. Fixes [GH#70](https://github.com/polyipseity/obsidian-terminal/issues/70). (Hopefully?)\r\n\r\n  Adds `SynchronizedOutputScrollAddon` to address the scroll yank caused by AI\r\n  coding agents (pi, Claude Code) that use DEC 2026 synchronized output blocks\r\n  with `\\x1b[2J` (clear-screen) inside each redraw frame.\r\n\r\n  xterm.js 6.x buffers row renders during a synchronized output block but does\r\n  not guard `ydisp`. When the terminal buffer is full and the user is scrolled\r\n  up, `Buffer.scroll()` decrements `ydisp` on every scroll call during content\r\n  writes — the render at block-end sees this drifted value and paints \"topmost\r\n  content\" for one frame (scroll yank).\r\n\r\n  The addon saves `viewportY` and `baseY` at block entry (`\\x1b[?2026h`) and\r\n  restores the equivalent position at block exit (`\\x1b[?2026l`) via\r\n  `queueMicrotask`. Microtasks run after all synchronous processing in the\r\n  current task but before the next animation frame, so the ydisp correction\r\n  lands before xterm's buffered render fires and no visible flash occurs.\r\n\r\n  Workaround for xterm.js [#5801](https://github.com/xtermjs/xterm.js/issues/5801)\r\n  (partially addressed in xterm.js [#5770](https://github.com/xtermjs/xterm.js/pull/5770)\r\n  targeting 7.x, not yet available in the 6.x release line used by this plugin).\r\n\r\n- 706d22e: Reload ribbon icon when default profile changes\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-05-24T16:28:54Z",
+      "tag": "3.25.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e0e21cff9e6300d660fb8ef383c0f214ff9aee335b73122bfd8ed7903e428ded",
+          "name": "main.js",
+          "size": 2552467
+        },
+        {
+          "digest": "sha256:34e1dd8e36e9c3dc0ad7c7b8c1eb64150118ea59aa94acc0002ae07e22eac576",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:79b6bf972aff731d617724c1b61a9adde8c68926fd60dbe54d5916664fb99f39",
+          "name": "obsidian-terminal.tgz",
+          "size": 674724
+        },
+        {
+          "digest": "sha256:715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+          "name": "styles.css",
+          "size": 5727
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.24.0\r\n\r\n### Minor Changes\r\n\r\n- 1d94d0f: Consolidate terminal command and menu registration: add \"default\" to PROFILE_TYPES\r\n  for unified handling of default profiles alongside other profile types. Extract\r\n  helper functions (`openSelectProfile`, `openDefaultOrSelectProfile`,\r\n  `openDefaultProfileOfType`) to reduce duplication and improve code clarity.\r\n  Remove separate `defaultContextMenu` function and deduplicate profile lookup\r\n  logic into `getDefaultProfile` and `getDefaultProfileOfType`.\r\n- e09b3b1: Simplify CWD command types: remove empty string from CWD_TYPES and EXCLUDED_TYPES filter. Removes the `open-terminal-` translation key for the empty working directory option.\r\n- 15e8bfd: Restore standalone \"Default profile\" dropdown setting in the settings tab for\r\n  direct profile selection. Provides an alternative to managing default profiles\r\n  through the profile list modal, allowing users to quickly set or clear the\r\n  default profile without opening the profile management dialog.\r\n- 689b9fb: Enhance ribbon icon and context menus with default profile and modifier-key support. Ribbon tooltip now displays the default profile name when configured. Holding Ctrl or Meta while clicking the ribbon opens the profile selector instead of the default profile. File and editor context menus now include a direct 'Open in Terminal: Default' option when a default profile exists.\r\n  ([GH#108](https://github.com/polyipseity/obsidian-terminal/pull/108) by [@taisau](https://github.com/taisau))\r\n- 83ff482: Override WebLinksAddon's default regex so `obsidian://` URIs (in addition to\r\n  `https?://`) are recognized as clickable links in the terminal view.\r\n\r\n  The addon's built-in pattern from v0.12.0 only covered http(s), which meant\r\n  custom-protocol links were ignored. This wider regex keeps existing behavior\r\n  for standard URLs while fixing #88. ([GH#114](https://github.com/polyipseity/obsidian-terminal/pull/114) by [@joe-king-sh](https://github.com/joe-king-sh))\r\n\r\n### Patch Changes\r\n\r\n- 4abb2c9: Fix terminal theme not updating on existing terminals when the Obsidian\r\n  theme or accent color changes (#124, #135). Threads `profileSourceId`\r\n  through terminal state so the `onMutate` watcher can react to live\r\n  profile changes and trigger `FollowThemeAddon.refresh()`.\r\n  ([GH#136](https://github.com/polyipseity/obsidian-terminal/pull/136) by [@janah01](https://github.com/janah01))\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-05-13T07:41:47Z",
+      "tag": "3.24.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:031b6832d706517fd40744b62ad4a6ab211d8cb7bc927839558d1f8cfffc600a",
+          "name": "main.js",
+          "size": 2480905
+        },
+        {
+          "digest": "sha256:5e106b4d3e5a62cfc359857c94fd8fdd2f88ac058f20e46b354166ae4e593060",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:7415fe339d71a0d0b9db18f4aefed8a0f6e042d8a9a6f07e334d07c392c6d615",
+          "name": "obsidian-terminal.tgz",
+          "size": 651685
+        },
+        {
+          "digest": "sha256:715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+          "name": "styles.css",
+          "size": 5727
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.23.0\r\n\r\n### Minor Changes\r\n\r\n- b66f9d4: Document and require Python 3.9 or above; use 3.9 for development (macOS ships 3.9 by default).\r\n  - Update README badge and install instructions to state Python 3.9 or above.\r\n  - Lower minimum Python version in plugin requirements (magic.ts) from 3.10 to 3.9 so\r\n    the settings UI and checks reflect the same minimum.\r\n  - Use Python 3.9 for development: `.python-version`, Pyright `pythonVersion` in\r\n    `pyproject.toml`; runtime and `requires-python` remain 3.9 or above.\r\n  - Add Python version sync notes in AGENTS.md and comments in pyproject.toml.\r\n\r\n### Patch Changes\r\n\r\n- e023673: Complete macOS Option key handling and migrate to public xterm.js API.\r\n  - Add Option+Arrow word navigation\r\n  - Add Option+Backspace/Delete word deletion\r\n  - Replace internal `_core.coreService.triggerDataEvent()` with public `terminal.input()`\r\n  - Fix Shift+Enter regression caused by `attachCustomKeyEventHandler` conflict\r\n  - Consolidate all custom key handlers into `MacOSOptionKeyPassthroughAddon`\r\n\r\n  ([GH#106](https://github.com/polyipseity/obsidian-terminal/pull/106) by [@janah01](https://github.com/janah01))\r\n\r\n- 58bda3d: Use Python 3.9-compatible type annotations in unix_pseudoterminal.py.\r\n\r\n  Commit ab83e53 introduced `from typing import Self` (Python 3.11) and\r\n  `type[X] | None` (Python 3.10) in a refactor. The plugin runs on the user's\r\n  system Python, which on macOS defaults to 3.9.6 (Command Line Tools).\r\n  Both Python 3.9 and 3.10 crash with ImportError at startup.\r\n\r\n  Replace with `from __future__ import annotations` and forward-reference\r\n  class name. Three lines changed, zero behavioral impact.\r\n\r\n  ([GH#107](https://github.com/polyipseity/obsidian-terminal/pull/107) by [@janah01](https://github.com/janah01))\r\n\r\n- 3785050: Rename `MacOSOptionKeyPassthroughAddon` to `CustomKeyEventHandlerAddon`.\r\n\r\n  The addon handles multiple custom key behaviors (macOS Option key passthrough,\r\n  Shift+Enter, Option+Arrow/Backspace/Delete); the new name reflects its role as\r\n  the single custom key event handler addon. The addon slot is renamed from\r\n  `macOptionKeyPassthrough` to `customKeyEventHandler`. The `macOSOptionKeyPassthrough`\r\n  setting (and its behavior) is unchanged.",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-03-08T16:33:24Z",
+      "tag": "3.23.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71b367cee9695a5951c89eee8fda803357527653a826840cdddba1a3c4270f4a",
+          "name": "main.js",
+          "size": 2478684
+        },
+        {
+          "digest": "sha256:a9897c876d465f797bce6ce4032ca756107c925bb79a00c0348b981e3291385a",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:e5a8825c562464baaf68314f0d7a6a42c22495832b5bca576b6653d2da75fdd9",
+          "name": "obsidian-terminal.tgz",
+          "size": 649975
+        },
+        {
+          "digest": "sha256:715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+          "name": "styles.css",
+          "size": 5727
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.22.0\r\n\r\n### Minor Changes\r\n\r\n- 7dd4079: Add Python packaging (`pyproject.toml`, `uv.lock`) and Python tests.\r\n  - Provide a reproducible Python environment for tests and tools.\r\n  - Add unit tests: `tests/test_docstrings.py` and\r\n    `tests/test_module_exports.py`.\r\n  - Ensure CI runs the new Python tests and update related files.\r\n\r\n- 64a2f23: Fix Option key for Scandinavian/German keyboards on macOS by adding macOptionKeyPassthrough setting. ([GH#92](https://github.com/polyipseity/obsidian-terminal/pull/92) by [@jsade](https://github.com/jsade))\r\n- 25a8a10: Introduce a new **global Font Family** setting that acts as a fallback for\r\n  all terminal profiles. Per‑profile `terminalOptions.fontFamily` still\r\n  overrides this value. Changes propagate immediately to any open terminal\r\n  instances. ([GH#102](https://github.com/polyipseity/obsidian-terminal/pull/102) by [@ChornyiDev](https://github.com/ChornyiDev))\r\n- 939b1bd: Add a new \"Profile defaults\" settings section and store global\r\n  `terminalOptions` that apply to every terminal instance unless a\r\n  profile overrides them. A modal is used for editing options, and real-time\r\n  updates propagate to open terminals. The previous single `fontFamily` setting\r\n  has been removed in favor of this more flexible system.\r\n- ab83e53: Refactor `src/terminal/unix_pseudoterminal.py` to replace ad-hoc selector callbacks\r\n  with small, well-documented context-manager handler classes and tighten type\r\n  annotations.\r\n  - Introduce `_SelectorHandler`, `_PipePty`, `_PipeStdin`, and `_ProcessCmdIO` to\r\n    centralize FD registration/unregistration and improve EOF handling.\r\n  - Add type hints, docstrings, and safer unregister logic — improves maintainability\r\n    and robustness without changing public behavior.\r\n\r\n- ee93ddb: Restore focus to previous non-terminal pane when unfocusing terminal.\r\n\r\n  When using the toggle focus hotkey or unfocus command, focus now returns to the last active non-terminal pane (e.g., your note) instead of just blurring the terminal. This improves the workflow when using the terminal in a side panel. ([GH#85](https://github.com/polyipseity/obsidian-terminal/pull/85) by [@Mendi23](https://github.com/Mendi23))\r\n\r\n- 54f5990: Add a default profile setting and command to open a selected profile directly from the ribbon button or command palette. ([GH#83](https://github.com/polyipseity/obsidian-terminal/pull/83) by [@archedark](https://github.com/archedark))\r\n\r\n### Patch Changes\r\n\r\n- c922f59: Fix profile name display in profile list\r\n\r\n  Updated `profile-name-formats` and `profile-list.namer-` in all translation files to use `{{info.nameOrID}}` for proper fallback to profile ID when name is empty. Improved format to \"Type: Name\" style for better readability. Resolves [GH#63](https://github.com/polyipseity/obsidian-terminal/issues/63).\r\n\r\n- 89eea3e: Added helper to apply shallow diffs to xterm options and wire live\r\n  updates when terminal options change. Includes tests.\r\n- 2d95186: Emit ESC+CR when the user presses Shift+Enter in the terminal emulator. This\r\n  matches the behavior expected by Claude Code and other TUI applications and\r\n  prevents modified enters from being interpreted as plain CR. ([GH#89](https://github.com/polyipseity/obsidian-terminal/pull/89) by [@davidszp](https://github.com/davidszp))\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-03-03T07:06:08Z",
+      "tag": "3.22.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3f8c59f001460ceee818f80b71b559087a3a679144f0ef178c6da38372dda0d9",
+          "name": "main.js",
+          "size": 1976386
+        },
+        {
+          "digest": "sha256:44665222c6b4b0ef1a902f19cca01a1edae6e3bf58764b73856c13fd28b96b08",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:cb8bc8ea7d13e20e27cc3ad94ed9c03f3b07dab7a0b320d5427a0452b8321e72",
+          "name": "obsidian-terminal.tgz",
+          "size": 491203
+        },
+        {
+          "digest": "sha256:27d53bc365f2299e80f3d37bf54cb45ed8503e80116af2317d79a64e59e59c7c",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.21.0\r\n\r\n### Minor Changes\r\n\r\n- 51872cb: Add a new \"Follow theme\" option that makes the terminal automatically match Obsidian's colors and update when switching themes. ([GH#74](https://github.com/polyipseity/obsidian-terminal/pull/74) by [@davidszp](https://github.com/davidszp))\r\n- 7fe1a14: Start integrated `zsh`, `bash`, and Git Bash sessions as login shells so user config files load properly and PATH behaves as expected. ([GH#75](https://github.com/polyipseity/obsidian-terminal/pull/75) by [@liuhedev](https://github.com/liuhedev))\r\n- 7fe1a14: Improve the profile picker by showing only terminal profiles compatible with your current OS, reducing clutter and avoiding unusable options. ([GH#75](https://github.com/polyipseity/obsidian-terminal/pull/75) by [@liuhedev](https://github.com/liuhedev))\r\n- 5486c6a: Preserve terminal scroll position across state saves and tab switches by adding a single `scrollLine` field with a bottom sentinel. ([GH#71](https://github.com/polyipseity/obsidian-terminal/pull/71) by [@mokasz](https://github.com/mokasz))\r\n\r\n### Patch Changes\r\n\r\n- 6a6dbd8: Add Japanese translation ([GH#68](https://github.com/polyipseity/obsidian-terminal/pull/68) by [@oimus1976](https://github.com/oimus1976))\r\n\r\n  Added Japanese translation file and updated locales configuration.\r\n\r\n- 39f6fd5: Fix invalid JSON in translation files: ([GH#66](https://github.com/polyipseity/obsidian-terminal/pull/66) by [@HNIdesu](https://github.com/HNIdesu))\r\n\r\n  - `assets/locales/zh-Hans/translation.json`\r\n  - `assets/locales/zh-Hant/translation.json`\r\n\r\n  The entry `components.select-profile.item-text-temporary` contained unmatched brackets, which caused parsing errors and broke localization loading. This patch corrects the brackets so the JSON validates properly.\r\n\r\n- eae27fd: Widen modals to ensure they are usable on all themes by disabling `dynamicWidth`. This makes the profile editor and list modals have a width that can be set by theme CSS. ([GH#60](https://github.com/polyipseity/obsidian-terminal/pull/60) by [@haydenholligan](https://github.com/haydenholligan))\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T12:00:02Z",
+      "tag": "3.21.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b35b0b0959735ffd88b0b11217f19d16005b427266c986c3db98c074dc0ded99",
+          "name": "main.js",
+          "size": 1959043
+        },
+        {
+          "digest": "sha256:210e6d901611c3c2b78371270671357cd75211da4b840a1949085b7d78057f9b",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:fc478bfd7b30cdc190c5d70f20494e5b5e369c22981b5e1ed0b2cd1b0e967804",
+          "name": "obsidian-terminal.tgz",
+          "size": 485109
+        },
+        {
+          "digest": "sha256:27d53bc365f2299e80f3d37bf54cb45ed8503e80116af2317d79a64e59e59c7c",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.20.0\r\n\r\n### Minor Changes\r\n\r\n- abd992c: Add Korean translation support for the terminal plugin. ([GH#55](https://github.com/polyipseity/obsidian-terminal/pull/55) by [@BongSangKim](https://github.com/BongSangKim))\r\n- 2824807: Add `$.history` and `$.results` in `DeveloperConsoleContext`.\r\n- 8438d3a: Add right click to copy or paste.\r\n- 5a8d545: Allow customizing right click action.\r\n\r\n### Patch Changes\r\n\r\n- c5c31ee: Fix escaping on Windows once and for all. Fixes [GH#41](https://github.com/polyipseity/obsidian-terminal/issues/41).\r\n- d8b26e5: Fix terminal disappearing after moving to a new window.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-08-18T01:00:07Z",
+      "tag": "3.20.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1e93e24548b398ce98d231a80fa9c324f6b917e053e5d578fce1dc7c974028d7",
+          "name": "main.js",
+          "size": 1956252
+        },
+        {
+          "digest": "sha256:530d7832972d3b22add8672e0b36c527ea87c387aeac3d93c3037bff82397053",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:728180f1cd746ba427a7e26f65acc40881c4f3544dd1784fe948cb8e17ea3ac6",
+          "name": "obsidian-terminal.tgz",
+          "size": 476164
+        },
+        {
+          "digest": "sha256:27d53bc365f2299e80f3d37bf54cb45ed8503e80116af2317d79a64e59e59c7c",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.19.0\r\n\r\n### Minor Changes\r\n\r\n- 2eb93aa: Add temporary profile to select profile modal.\r\n- 384c2d8: Add \"Copy\" to pane menu to copy the terminal tab.\r\n\r\n### Patch Changes\r\n\r\n- e9bd36e: Update `translation.json`. ([GH#49](https://github.com/polyipseity/obsidian-terminal/pull/49) by [@cuberwu](https://github.com/cuberwu))\r\n- 99313ca: Fix broken section links in builtin documentation.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-06-28T06:12:16Z",
+      "tag": "3.19.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b244e05a2cfabbbcc098f3668b463d645bfbb7701024d03ea8283638ea00272c",
+          "name": "main.js",
+          "size": 1952574
+        },
+        {
+          "digest": "sha256:e106062199019c6c3f60c5f653325997a55ada884a7f2fd67ce2df1090f86dd8",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:7622969a50f761d4093ed9442a34e7490d82aa20f3c6947029d7db4bc5c00a76",
+          "name": "obsidian-terminal.tgz",
+          "size": 475224
+        },
+        {
+          "digest": "sha256:27d53bc365f2299e80f3d37bf54cb45ed8503e80116af2317d79a64e59e59c7c",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.18.0\r\n\r\n### Minor Changes\r\n\r\n- 5fe79df: Make terminal hotkeys customizable. Default keyboard shortcuts have changed.\r\n- 680139b: Press \"Ctrl\" to edit before use in select profile modal.\r\n\r\n### Patch Changes\r\n\r\n- 612d42f: Add instructions in select profile modal.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-06-19T03:08:26Z",
+      "tag": "3.18.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a1d7c6cbe17e1c3700396874cde96c47abb2f3fc45f579d96ba8bc93e21670ba",
+          "name": "main.js",
+          "size": 1926505
+        },
+        {
+          "digest": "sha256:a349b3b488882db2d83c2d81fc837b977e2f929671074d756057b0ffc422ef0e",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:a35a95c8aff4790529014d503470204159a9def3624da436137fd4f5d1798b92",
+          "name": "obsidian-terminal.tgz",
+          "size": 472898
+        },
+        {
+          "digest": "sha256:8be1ccc262e07836679083da341c7ba12cd31408086f176f0909eeee8908b9c7",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.17.1\r\n\r\n### Patch Changes\r\n\r\n- 83328b6: Re-release of v3.17.0 to fix plugin loading error.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-06-13T11:15:46Z",
+      "tag": "3.17.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7078de99a42c5b5b9e04b5862fe19cabd9d438b12571f97d329e16334437fd55",
+          "name": "main.js",
+          "size": 1928144
+        },
+        {
+          "digest": "sha256:7c2dc03bb9465f7f95b1efe99aca698879a18ca2b32ea22e8a861f88e57cc6bd",
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "digest": "sha256:e5455778f366767044eb4dbc1827c0449116ce15a0f5f889af46f5ef154b418b",
+          "name": "obsidian-terminal.tgz",
+          "size": 472658
+        },
+        {
+          "digest": "sha256:8be1ccc262e07836679083da341c7ba12cd31408086f176f0909eeee8908b9c7",
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.17.0\r\n\r\n### Minor Changes\r\n\r\n- 38188e8: Do not save terminal history by default. Fixes [GH#48](https://github.com/polyipseity/obsidian-terminal/issues/48).\r\n- f783af0: Do not save terminal history if restore history is disabled. Fixes [GH#48](https://github.com/polyipseity/obsidian-terminal/issues/48).\r\n\r\n### Patch Changes\r\n\r\n- 58324a0: Fix terminal history not being restored across Obsidian restarts.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-06-13T07:58:49Z",
+      "tag": "3.17.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1918563
+        },
+        {
+          "name": "manifest.json",
+          "size": 414
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 472192
+        },
+        {
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.16.0\r\n\r\n### Minor Changes\r\n\r\n- 8e35613: Update template, and Obsidian API to 1.4.11.\r\n\r\n### Patch Changes\r\n\r\n- 0869147: Use a script to launch the terminal instead of via the command line. This may help with escaping arguments. (Escaping quotes on Windows is a clusterfuck...) Partially fixes [GH#41](https://github.com/polyipseity/obsidian-terminal/issues/41).\r\n- f17338f: Update dependencies.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2025-03-22T11:47:00Z",
+      "tag": "3.16.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1881621
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 457727
+        },
+        {
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.15.1\r\n\r\n### Patch Changes\r\n\r\n- 82ec350: Fix default terminal options not setting `documentOverride` to `null`.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2024-06-23T12:11:04Z",
+      "tag": "3.15.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1881038
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 457249
+        },
+        {
+          "name": "styles.css",
+          "size": 4633
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.15.0\r\n\r\n### Minor Changes\r\n\r\n- d6c3203: Add keyboard shortcut for closing the terminal. Fixes [GH#37](https://github.com/polyipseity/obsidian-terminal/issues/37).\r\n- 66177c1: Add option `Intercept logging`. Fixes [GH#38](https://github.com/polyipseity/obsidian-terminal/issues/38).\r\n\r\n### Patch Changes\r\n\r\n- 88f22cf: (63711193053ae1b850d816b84244f9152b53a407) Fix requiring `@capacitor`.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2024-06-06T12:10:17Z",
+      "tag": "3.15.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1898302
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 461818
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.14.0\r\n\r\n### Minor Changes\r\n\r\n- 20cd669: Check Python and package versions as well after pressing the \"Check\" button in the \"Python executable\" settings. Resolves [GH#22](https://github.com/polyipseity/obsidian-terminal/issues/22).\r\n- 9a2a89b: Change focus and defocus hotkey to `Ctrl`+`Shift`+`` ` `` for macOS as well. Fixes [GH#31](https://github.com/polyipseity/obsidian-terminal/issues/31).\r\n\r\n### Patch Changes\r\n\r\n- 959915a: Add profile preset `iTerm2: External`. Helps with [GH#32](https://github.com/polyipseity/obsidian-terminal/issues/32).\r\n- 30198e0: Fix the macOS terminal profiles not setting the cwd properly. To fix your macOS terminal profiles, add `\"$PWD\"` (including `\"`) as the only argument of the profile.\r\n- a619365: Fix terminal finder broken when its width is small. (34e11eaf89813215290a25daf76c680be53dff1f)\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2023-10-29T05:33:57Z",
+      "tag": "3.14.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1869871
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 451869
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.13.0\r\n\r\nDebloating `data.json` and bugfixes.\r\n\r\n### Minor Changes\r\n\r\n- 9afd2d0: Move settings `recovery` and `lastReadChangelogVersion` to `localStorage`. (6d612c570926387ee6b5991475cb993517a39d45)\r\n\r\n### Patch Changes\r\n\r\n- 0879e6d: Fix `layout-change` loop freezing Obsidian if another plugin calls `getViewState` in a `layout-change` listener. An example is `obsidian-image-toolkit` (https://github.com/sissilab/obsidian-image-toolkit/blob/c59bfa18c5cdb267a5f5a62637ff8e3b663cbb0f/src/main.ts#L39-L55). Fixes [GH#26](https://github.com/polyipseity/obsidian-terminal/issues/26).\r\n- e0b40c0: Fix caret scrolling the editor to make itself visible every second. (0879e6d0a8a6c1eebef730376bd7df58fdfba4a5)\r\n- 14bfcb1: Remove debug statements. (+f9fc1874e2c0b0b6c486ae6a13e52bf09cef588d)\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2023-09-22T02:08:10Z",
+      "tag": "3.13.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1831994
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 441727
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.12.3\r\n\r\n### Patch Changes\r\n\r\n- 01942f8: Fix Python resizer not working with the latest Python packages.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2023-09-01T01:44:35Z",
+      "tag": "3.12.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1831942
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 441640
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.12.2\r\n\r\n### Patch Changes\r\n\r\n- 7981fe3: Prefix source map location with plugin ID.\r\n- 8452b18: Respect existing source maps when source mapping.\r\n- 9751bc9: Limit console history to 1024 entries.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2023-08-27T04:06:55Z",
+      "tag": "3.12.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1814491
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 435408
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.12.1\r\n\r\n### Patch Changes\r\n\r\n- 9441f4b: Fix plugin potentially failing to load. This may happen if `Community plugins > Debug startup time` is disabled. When it is disabled, Obsidian removes source maps, which erraneously removes JavaScript strings intentionally containinig source map-like content.\r\n",
+      "draft": false,
+      "name": "3.12.1",
+      "prerelease": false,
+      "publishedAt": "2023-08-13T11:47:28Z",
+      "tag": "3.12.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1823461
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 435490
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.12.0\r\n\r\n### Minor Changes\r\n\r\n- eab5420: Implement source mapping. Inputs are mapped to `<stdin>`.\r\n",
+      "draft": false,
+      "name": "3.12.0",
+      "prerelease": false,
+      "publishedAt": "2023-08-12T14:32:35Z",
+      "tag": "3.12.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1800744
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 427294
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.11.1\r\n\r\n### Patch Changes\r\n\r\n- 8bdd430: Make the `require` patch more compatible with other `require` patches.\r\n- 7155fd4: Simplify `DeveloperConsolePseudoterminal#eval` even further.\r\n- 0a3e545: Fixes significant regression of plugin loading performance.\r\n- d7918a9: Simplify code for evaluating code inputted via the developer console pseudoterminal.\r\n",
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2023-07-25T12:43:23Z",
+      "tag": "3.11.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1800328
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 427211
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.11.0\r\n\r\n### Minor Changes\r\n\r\n- 289ec4e: Add command \"Open developer console\".\r\n- d22f7bf: Add setting `Expose internal modules`.\r\n\r\n### Patch Changes\r\n\r\n- 53e76ca: Add settings sections.\r\n\r\n### Pre-changesets Changelog\r\n\r\n- Upgrade minimum Obsidian version to v1.2.8. (`85d498d7cecf28b07e0562c4d9c1c793bf0344c0`)\r\n\r\n**Fixes**\r\n\r\n- Fix the command to export settings to clipboard. (`993dff6c94b7e70e53c42afdad3fa8e56324a3aa`)\r\n- Fix lifecycle management. (`993dff6c94b7e70e53c42afdad3fa8e56324a3aa`, `46771b52d6db6c1523a959d8204bc921bd7121ca`, `30377ac69a596a1e38fab881510f840fe66a5afc`)\r\n- Fix terminal throttling. (`993dff6c94b7e70e53c42afdad3fa8e56324a3aa`, `279c7ff8ca187e4efdb583cbac4a1d931c93713e`..`bcd569e156a7637a90e7cfbd8cba3610ef6752d6`)\r\n- Fix `updateView` not updating the inner title. (`45603f33109f10be0bc7c040fa1addc42153d92f`)\r\n- Fix failing to load the plugin if settings are malformed. (`45603f33109f10be0bc7c040fa1addc42153d92f`)\r\n\r\n**Full changelog**: [`3.10.0...3.11.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.10.0...3.11.0)\r\n",
+      "draft": false,
+      "name": "3.11.0",
+      "prerelease": false,
+      "publishedAt": "2023-07-22T12:51:07Z",
+      "tag": "3.11.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1781798
+        },
+        {
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 424263
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.10.0 (2023-07-10)\r\n\r\n__Features__\r\n- Add font terminal options. Closes [GH#20](https://github.com/polyipseity/obsidian-terminal/issues/20). (`ed9077348755cc863958a39a5cf45d4b55720d0d`..`f3145847ff37a438e090e33d399943e4461ad381`)\r\n\r\n__Fixes__\r\n- Fix typing into the find textbox not working. (`629143c952181524a886b07b4602290a207bf1fa`)\r\n- Fix wrong find results when no matches. (`691f1a2aa8dc759486f610ea3e7a7f83bc7e865a`)\r\n\r\n__Improvements__\r\n- Show when the profile is invalid in the `Type` setting. (`46c8598cb2e14dafd1e6266366e6479cb10e036c`)\r\n\r\n__Full changelog__: [`3.9.2...3.10.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.9.2...3.10.0)\r\n",
+      "draft": false,
+      "name": "3.10.0",
+      "prerelease": false,
+      "publishedAt": "2023-07-10T14:28:00Z",
+      "tag": "3.10.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1743489
+        },
+        {
+          "name": "manifest.json",
+          "size": 412
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 421362
+        },
+        {
+          "name": "styles.css",
+          "size": 4479
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.9.2 (2023-07-01)\r\n\r\n__Improvements__\r\n- Improve Python code. (`977dd978b3acb3ae272407d9112f1c88433f0c4a`, `1757d54dee038cb35f8aca4e3e44b601d3ac6c4e`, `5d7c6a92aee1a7c07c88da611d457ec6bd00becd`)\r\n- Update npm packages to remove vulnerabilities. (`5d7c6a92aee1a7c07c88da611d457ec6bd00becd`..`aa2e327b6abdf91f93f8bb7c9db7e00d52a829b7`)\r\n\r\n__Full changelog__: [`3.9.1...3.9.2`](https://github.com/polyipseity/obsidian-terminal/compare/3.9.1...3.9.2)\r\n",
+      "draft": false,
+      "name": "3.9.2",
+      "prerelease": false,
+      "publishedAt": "2023-07-01T10:30:46Z",
+      "tag": "3.9.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1748014
+        },
+        {
+          "name": "manifest.json",
+          "size": 412
+        },
+        {
+          "name": "obsidian-terminal.tgz",
+          "size": 420984
+        },
+        {
+          "name": "styles.css",
+          "size": 3955
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.9.1 (2023-05-25)\r\n\r\n__Improvements__\r\n- Large refactoring of the code base. There may (or may not) be new bugs. (`8f910b554e97d2bb819575b59f9af3b85c8ac7b0`..`1a6476a9b67beb1083b7cabaf4a9d0782c7f49e2`)\r\n- Add support for `pnpm`. (`ed08a97ee2f50bd1869580f8b9f46e945be80093`..`621e8b56b91c5570fa7f628a27b6a7a6834c2b50`)\r\n- Remove confusing \"Malformed data\" notice. Fixes [GH#19](https://github.com/polyipseity/obsidian-terminal/issues/19). (`4d8a0fa459c5d982160bdfedc5e09ac9f9dd19f3`)\r\n\r\n__Full changelog__: [`3.9.0...3.9.1`](https://github.com/polyipseity/obsidian-terminal/compare/3.9.0...3.9.1)\r\n",
+      "draft": false,
+      "name": "3.9.1",
+      "prerelease": false,
+      "publishedAt": "2023-05-25T00:17:51Z",
+      "tag": "3.9.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1696060
+        },
+        {
+          "name": "manifest.json",
+          "size": 382
+        },
+        {
+          "name": "styles.css",
+          "size": 3927
+        },
+        {
+          "name": "terminal.zip",
+          "size": 412608
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.9.0 (2023-05-10)\r\n\r\n- The minimum Obsidian version has been increased to v1.2.5. (`dbc26a396f3d97cb625e577d10ebc537f5548493`)\r\n- Add donation options. (`15ef8207a3df00b23fc54d1a75ec842925f602ef`..`58df51d64977e93cd98b44f58f0f246e37953214`, `b59e915611f2ce6de83f5eab68165ac06726bcdc`, `420ee154c526298387fb52fb4c40b432486793b3`)\r\n\r\n__Features__\r\n- Implement top-level `await` in the developer console. (`7d2219e9bceef8459504c820099ff3c61bd737bd`)\r\n- Inject context variable `$$` into the developer console. It can be used to dynamically change terminal options. The API is available in [`sources/@types/obsidian-terminal.d.ts#DeveloperConsoleContext`](sources/%40types/obsidian-terminal.d.ts). (`557fd14fc31f0da351d1690852d387f2fd600fac`)\r\n- Add setting `Open changelog on update`. (`881f39889974a543bac876f933e1e330bfff6f27`)\r\n\r\n__Improvements__\r\n- Cleanup documentation view. Extra useless functions are removed. (`7c3e4dae5112f6d95780c610219a3c5dd4098364`)\r\n\r\n__Full changelog__: [`3.8.0...3.9.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.8.0...3.9.0)\r\n",
+      "draft": false,
+      "name": "3.9.0",
+      "prerelease": false,
+      "publishedAt": "2023-05-10T05:18:24Z",
+      "tag": "3.9.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1569361
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5577
+        },
+        {
+          "name": "terminal.zip",
+          "size": 377165
+        }
+      ],
+      "author": "polyipseity",
+      "description": "## 3.8.0 (2023-04-29)\r\n\r\n__Features__\r\n- Patch `require` so that `require(\"obsidian\")` works in the developer console. (`89cf2cc34a64f8cd373c8e3dd8da1e7b3f020f5c`)\r\n- Add internal support for custom terminal options. (`80df07f698450947b04ef2f5b69e11ce52f5d9dc`)\r\n- Add raw data editing for profiles like the one for settings. You can use this to configure terminal options (refer to [`xterm.js` documentation](https://github.com/xtermjs/xterm.js/blob/2fdb46919ce7a329afe65fe69bcf948d310a2b8a/typings/xterm.d.ts#L26)). An UI for terminal options will be added shortly. Address [GH#11](https://github.com/polyipseity/obsidian-terminal/issues/11) and [GH#16](https://github.com/polyipseity/obsidian-terminal/issues/16). (`fbe2de717c5e46436c929240c8450839139ce7c1`)\r\n\r\n__Fixes__\r\n- Fix re-enabling plugin overwriting history due to unloaded CSS. (`e02e43918c82dcb8f9641dc2ca2be208e23a3caa`)\r\n\r\n__Improvements__\r\n- Improve the icon for `whole words` in find in terminal. (`dfb3da51878bd8b7e9004afffc9097e3e01c79a8`)\r\n- Decrease loading time by ~20%. (`c4ea4912e5f9b412d31df70b3881570a47faebae`)\r\n\r\n__Full changelog__: [`3.7.0...3.8.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.7.0...3.8.0)\r\n",
+      "draft": false,
+      "name": "3.8.0",
+      "prerelease": false,
+      "publishedAt": "2023-04-28T18:04:47Z",
+      "tag": "3.8.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1545744
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5523
+        },
+        {
+          "name": "terminal.zip",
+          "size": 369979
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Features__\r\n- Add 3 profile presets: 'powershell: External', 'powershell: Integrated', and 'pwsh: External'. `powershell` stands for Windows PowerShell while `pwsh` stands for PowerShell Core. (`1767d2d9f80a269ba24eecd0c45fd8bf0ed9050c`)\r\n- Color messages in developer console. (`107826a45b255367f336e00e0cb518f1851a8306`)\r\n\r\n__Improvements__\r\n- Speed up (re)starting a new developer console significantly. (`5a407cc9ed9b3e985f63d56aa7aed4a3b17e33ae`)\r\n- Improve developer console messages significantly. (`e6b5ae83c448398105ec11444722852a6a1b11b4`)\r\n\r\n__Full changelog__: [`3.6.0...3.7.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.6.0...3.7.0)\r\n",
+      "draft": false,
+      "name": "3.7.0",
+      "prerelease": false,
+      "publishedAt": "2023-04-11T02:29:03Z",
+      "tag": "3.7.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1537420
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5754
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Features__\r\n- Add 'root directory' button next to working directory when editing a terminal view. (`4991ccb8548b3034f8f753924f1fbd95523259be`)\r\n- Add 'focus on new instance' setting. (`c7db57e1328da5883a3587d0d812905bc30f58e1`)\r\n- Add 'restore history' profile setting. (`c1b3a69dbd71d7fecc080e5b6791b81260dc6ccf`)\r\n- Add 'success exit codes' profile setting. (`3d9aaca914837df324200307e634d1f7f4cd42da`)\r\n\r\n__Improvements__\r\n- Developer console history can be kept now. (`7ced419b9762ff92a28cadf0355a54f0200b6209`)\r\n\r\n__Full changelog__: [`3.5.1...3.6.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.5.1...3.6.0)\r\n",
+      "draft": false,
+      "name": "3.6.0",
+      "prerelease": false,
+      "publishedAt": "2023-04-04T07:38:22Z",
+      "tag": "3.6.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1522193
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5757
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Fixes__\r\n- mobile: Fix 'Save to HTML'. It no longer does nothing on Android and soft locks Obsidian on iOS. (`b1201a089a3f3447e09249651434995b11bb283b`)\r\n\r\n__Features__\r\n- The latest commit for the plugin can now be installed using [Obsidian42 - BRAT](https://obsidian.md/plugins?id=obsidian42-brat). (`5f263690e80d6298eb02ffade41a10beedd4ce1f`..`bda61d4ee1a82c7b9694912ae0353e178f0f0756`)\r\n\r\n__Improvements__\r\n- Use CSS to hide the status bar, making the hiding customizable. (`84c55993db3d3e8a86d283e83df0c58dfa4d8eaf`)\r\n\r\n__Full changelog__: [`3.5.0...3.5.1`](https://github.com/polyipseity/obsidian-terminal/compare/3.5.0...3.5.1)\r\n",
+      "draft": false,
+      "name": "3.5.1",
+      "prerelease": false,
+      "publishedAt": "2023-03-28T13:23:03Z",
+      "tag": "3.5.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1501988
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5705
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Features__\r\n- Add 6 external profile presets. Helps with [GH#16](https://github.com/polyipseity/obsidian-terminal/issues/16). (`c9a51249d35fe429d5cc4eb8a307612177de896e`)\r\n- Automatically pin new terminal tabs to avoid accidentally terminating terminals. Configurable in settings. (`beb24cc25802750b1681358e42fd74ccbe51f83a`)\r\n- Add support for dragging and dropping files into the terminal to paste their filepaths. See [GH#16](https://github.com/polyipseity/obsidian-terminal/issues/16). (`7c5e4617072d1b77a7d9f11b0e886c8e9d051f91`)\r\n\r\n__Fixes__\r\n- Fix invalid regex crashing find in terminal. (`9da6bb9494fa0079fb1b60a8140277e1dbff9860`)\r\n\r\n__Full changelog__: [`3.4.1...3.5.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.4.1...3.5.0)\r\n",
+      "draft": false,
+      "name": "3.5.0",
+      "prerelease": false,
+      "publishedAt": "2023-03-20T13:25:46Z",
+      "tag": "3.5.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1511391
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5705
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Fixes__\r\n- Fix error opening documentation. (`df085f2a505983592f7d50e31bdc3d52a89f29f3`)\r\n\r\n__Full changelog__: [`3.4.0...3.4.1`](https://github.com/polyipseity/obsidian-terminal/compare/3.4.0...3.4.1)\r\n",
+      "draft": false,
+      "name": "3.4.1",
+      "prerelease": false,
+      "publishedAt": "2023-03-14T04:30:26Z",
+      "tag": "3.4.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1512147
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5705
+        }
+      ],
+      "author": "polyipseity",
+      "description": "This update focuses on performance of plugin loading. The loading time has been decreased significantly, making it more viable for slow platforms (like mobile).\r\n\r\n__Features__\r\n- Add Git Bash preset. Helps with [GH#15](https://github.com/polyipseity/obsidian-terminal/issues/15). (`4b2b63cf2ab0477a4dcd22e78db7e4103c6b0d8c`..`d9543e88c407b19180a3f25371de7391f0160857`)\r\n\r\n__Improvements__\r\n- Throttle terminal resizing to reduce flickering. (`04899b5f6ae3eef1a4561ba022db5ebbab9f785f`..`f947c780c7c38f8bb4e2f02c163de0b72024dfe8`)\r\n- Compress JSON and text files, decreasing bundle size from ~1.8 MB to ~1.45 MB. (`ed2e4b671518ec79c6de8f11e3889cae574ea9cb`, `1e98d9429e788e472dc83caa61824a1338e54586`)\r\n- Reduce startup time by ~80%. (`fe93210ffd44ccf1b1e48d625963140f008fea83`, `a199af9baf212a419d3ff503878bd6b835e762f4`..`ddd3f3a16e67d29b4ba3a07beeeae05cfcb36fc4`)\r\n\r\n__Miscellaneous__\r\n- Add npm commands to install the plugin. (`854e1338072f325b6e450817b568244f89693dce`)\r\n\r\n__Internals__\r\n- Make monkey patches more resilient to errors. (`af35b0176e1f11e32be5764ff17f93a2a01e8f7f`)\r\n\r\n__Full changelog__: [`3.3.0...3.4.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.3.0...3.4.0)\r\n",
+      "draft": false,
+      "name": "3.4.0",
+      "prerelease": false,
+      "publishedAt": "2023-03-14T03:41:49Z",
+      "tag": "3.4.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1474878
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5705
+        }
+      ],
+      "author": "polyipseity",
+      "description": "Just a small release to push out the unpublished changes.\r\n\r\n__Features__\r\n- Add Windows Subsystem for Linux preset as suggested in [GH#14](https://github.com/polyipseity/obsidian-terminal/issues/14). (`7a787996ddf96403ee29dfb13c0f9a9961853474`..`720388c0fdf0833137df479e43f24524939252c2`)\r\n\r\n__Improvements__\r\n- Improve startup time significantly by initializing developer console on demand. (`c023f15e48c04cda8ecd3e4a4cf9f258e86f4a5e`)\r\n- Stablize CSS class names for custom Svelte components. This should make it way easier to maintain custom CSS for them. (`d9e306563c8b8396c79c4b57e69287af45b604b3`)\r\n- Rewrite developer console paging algorithm. It should fix most (if not all) bugs with it, including resizing. (`8a94ef19610e2d4b689dde4ae5bc5843d55b264f`)\r\n\r\n__Fixes__\r\n- Fix creating instances near existing ones in left and right leaves. (`f055a3b8e77e0349eacbf66a55a21f7784280061`)\r\n\r\n__Full changelog__: [`3.2.0...3.3.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.2.0...3.3.0)\r\n",
+      "draft": false,
+      "name": "3.3.0",
+      "prerelease": false,
+      "publishedAt": "2023-03-06T09:44:29Z",
+      "tag": "3.3.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1534248
+        },
+        {
+          "name": "manifest.json",
+          "size": 257
+        },
+        {
+          "name": "styles.css",
+          "size": 5705
+        }
+      ],
+      "author": "polyipseity",
+      "description": "Emulating a text area in a terminal is insane...\r\n\r\n__Notices__\r\n- The minimum API version has been bumped to v1.1.13. Please update your app to the latest version. (`e2733c5c36003db5556819088b50bad29671d4e0`)\r\n\r\n__Features__\r\n- Developer console terminal is now interactive. You can evaluate code like the normal developer console now. (Spent too much time on this.) (`bcdd8dbff0d652c8eb9a389f734db2c3a5891323`...`e2d8690767f81958b1a0d95ac412a12ac3ab0c33`)\r\n- You can set custom title of the terminal from the shell (if your shell supports it). (`3718829159b1c5960dec430df78ed5d70c4a9abb`)\r\n- Four new options for 'New instance behavior'. They are 'New left tab', 'New left split', 'New right tab', and 'New right split'. (`bcdd8dbff0d652c8eb9a389f734db2c3a5891323`)\r\n\r\n__Improvements__\r\n- All settings should have an icon representing it. (`eb1a647d0336041a7f705a3476f18bd5ed738913`)\r\n- Improve find in terminal.\r\n  - Autofocus on the find input when you activate it. (`7d0c857e9bd68e4b15028dc0e5e9cc5e187ac5f5`)\r\n  - Pressing `Esc` when focused on find in terminal closes it. (`2ce8bdcd182c3abaf20bddacf925a84693cb8e50`, `7f13dd47fd5dab814bf9028a12f5e91c2bbdf67d`)\r\n  - Add ARIA labels. (`c747a490a158c7891effb24642d790ca58699de9`)\r\n- Improve working directory handling to reduce confusion like in [GH#12](https://github.com/polyipseity/obsidian-terminal/issues/12). (`55b917052b371eb566976af7d13b6345c64554ef`, `985b6100ef14e9f0933de0859dd0e8872e217490`)\r\n- Add double confirm dialog hint. (`0f043376fb6f2528b826066128666baa855c774d`)\r\n- Make terminal resizing extremely responsive. (`73a7836522d56e92b064a76a09bf18fc87d7ec42`)\r\n- Find in terminal now has intro and outro transitions. (`bcdd8dbff0d652c8eb9a389f734db2c3a5891323`...`ef39cb1177af6cc108f8e61d179eff89056b48f8`)\r\n- Add 'Clear' button to terminal context menu. (`1a2f3104b6034065b1f7e1a0e5cd410254eef52c`)\r\n\r\n__Fixes__\r\n- Fix some translation strings. (`88cbcf603ff0429d26f1616b7af67bf4cf27f3f9`, `2a4a4cfe45f4ffd787feb134ef0545af7a832fb5`)\r\n- Unfocusing terminal also works when find in terminal is focused. (`f7cde90970128bd4bbf1578fb2e1d3249451a628`)\r\n- Improve compatibility with pop-out windows. (`798b2988875e0688f7602efb20fbd6702edf00f9`..`59955f4ee1e9102dd956537464e53b88cc1a6d12`, `f38d0082a0fc9cccbb75c7383aa6c35810b1e9b8`..`7b8364086873ebeee11fd506c2f139708be6e740`)\r\n\r\n__Internals__\r\n- Load translations on demand. (`268c684ec97f858d5a6ef030130b834eda305442`)\r\n- Delay removing exit code temp file to print less warnings to the console. (`6923553979451e1da6200c7ac01e637f2f2563ae`)\r\n- Avoid using non-standard functions. (`44dcfaf89f7638e77e7e0c0306c12c14ac613e00`, `8de1c59e2e6ca6afebf4c7f0fd676077d1a07502`)\r\n- Only create one `ConsolePseudoterminal`. (`bd97d08b1186584d607a8530b116c1aad1d9a761`)\r\n- Use reference-counted `RefPseudoterminal` in preparation for duplicating terminals. (`02249373db897a683628cd8363199ba512d55686`)\r\n\r\n__Full changelog__: [`3.1.0...3.2.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.1.0...3.2.0)\r\n",
+      "draft": false,
+      "name": "3.2.0",
+      "prerelease": false,
+      "publishedAt": "2023-02-27T06:14:22Z",
+      "tag": "3.2.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1357580
+        },
+        {
+          "name": "manifest.json",
+          "size": 256
+        },
+        {
+          "name": "styles.css",
+          "size": 7518
+        }
+      ],
+      "author": "polyipseity",
+      "description": "This update focuses on quality of life improvements.\r\n\r\n__Notices__\r\n- You can actually download the plugin on mobile now. Somehow this has not been caught for a long time.\r\n- Settings will probably be broken again. The plugin will attempt to fix it without changing it as much as possible. In case it goes wrong, you can recover the previous setting from the plugin itself now.\r\n\r\n__Features__\r\n- Add settings recovery. It can recover settings that are valid JSON but not completely valid for plugin settings (like settings from a previous version). (`a8d702240730e4a50c22787b718409a948dd0bca`)\r\n- Add importing settings and exporting settings from the command palette. Using a file requires navigating to a markdown file first. (`e76949eb6694fcc4655a3b0d269116e199dc17b1`)\r\n- Add raw editing of settings. You can import and export settings there as well. (`6b8314252451d42c4de5a0d0e9218a9617e3cca8`)\r\n- Make history navigation buttons of the terminal view work. Using the `Edit` context menu item will add history. (`69c49596b289b9de8d91f4315ed1d719c8a5a189`)\r\n- Read readme and changelog (this very file you are reading now) from the plugin itself. They can be accessed from the command palette or the settings UI. (`3d0c514231585a40bea5f8baf2a6e246d6ab9e35`)\r\n- Open changelog on plugin update. (`29baeb4914ace485c6f3f3d4b489f1fdd876af87`)\r\n- Intercept all key when the terminal is focused. (`4e18bdc49320b8230dec5ad155e67692cd79b40d`)\r\n- Add keys to clear terminal (&lt;Ctrl+Shift+K&gt;; macOS: &lt;Cmd+K&gt;), start find in terminal (&lt;Ctrl+Shift+F&gt;; macOS: &lt;Cmd+F&gt;), and toggle focus of terminal (&lt;Ctrl+Shift+\\`&gt;; macOS: &lt;Cmd+\\`&gt;). Closes GH#7. (`9a384ff055709300069386258ff447fd27affbe9`)\r\n- Add 2 settings to control where to open terminal. Closes GH#3. (`ba871ff161d536ea8d6576d8f7467f4425797370`)\r\n- Add Python executable checking button in profile settings. It checks and prints the version in a notice. Could help with GH#9. (`dce6ead590417c2df470f327388f8f67bae2f5a5`..`1521bd5fd5d59012f94ca35aeb21e48c0c9b9929`)\r\n- Open readme on first install of the plugin. (`0e89d05b0269f9e912094f3364a33f6a1f65b3e6`)\r\n\r\n__Improvements__\r\n- Improve typing negative numbers in settings. (`e89f36a8f957524b685452d4c7cd1221e1595839`)\r\n- Make settings UI &lt;Tab&gt;-friendly. (`196f1230e0e3e8a2411318d822fbf2f94880a81e`..`19c3fa8cc3f34e00fc874bcbbafe96ab1466c4ea`)\r\n- Various minor improvements to UIs.\r\n- Ribbons translate automatically. (`22a299013504439aecd78db4456a6866c47ebd67`..`f58cbff9ff941b67072f64eae9ed2674bd4400fe`)\r\n- No more empty terminal tab name (`Terminal: `). (`535aa52a46fe67ffed93cd84d7903bfe1442c493`)\r\n- More information about profiles are displayed. (`eb73553fb53e8292b9e73088567bc1dfcc61f322`, `8b45a6e420a1b3130351c964f3240c5cbecd398c`..`5f59ab6d60d51635214f54123e34d61b7aa87cc3`)\r\n\r\n__Fixes__\r\n- Fix a setting reset button. (`555001371e16562bb34a92291571d1d2f82d5b7e`)\r\n- Mobile: Fix unclickable modal close button. (`e9fc80f68a353bb1c60d29c45ccd5f5baaf058ac`)\r\n- Fix spawning terminal notice spam. (`d8a69103629340970589a23e2d71120ef2111052`)\r\n- Make plugin downloadable on mobile by downgrading minimum app version. (`165b414e68e26027bcf677795bdc5d2d01380680`)\r\n- Fix empty Python executable not disabling Python. Fixes GH#8. (`09f2b3d1b0ae23867827977f2dbbba6b6f4f6460`)\r\n- Windows: Fix pressing &lt;Ctrl+C&gt; exiting the terminal resizer. (`5bff3f0749f16be80bfeb8a3ba903b0f8c6f79c4`)\r\n- Mobile: Fix bottom of terminal view covered by navbar. (`3230ca61defe56429358fcf368fade77abb6991d`, `dc875923e67300e2a0826d4e9332c51c2f42c19b`)\r\n\r\n__Internals__\r\n- Improve UI code using `UpdatableUI`.\r\n- Potentially invalid data are validated. If invalid, they are fixed and logged. (`ad9e9bf0c2def5e4bcb999fdff05b776e988d11b`, `1d4cc6abd5ab0bba1a74d9c7aa1854d5e949aecf`, `d6c1b5b298114cd267e2d7101a053e2dfb60a1e1`)\r\n- Rewrite translation files to use vocabularies. (`c5ba24d8707fc814a3d5d87f0e9ace97124ffd2e`)\r\n- Handle missing translation keys and interpolation. (`575cbfeb4293f7d602124f6470f5fb95ccf3b99c`)\r\n- Improve plugin loading. (`71f2e948c8dcee77ced2f772aeac204ab7f8dcf5`)\r\n\r\n__Miscellaneous__\r\n- Change license from \"MIT\" to \"AGPL-3.0-or-later\". (`77d9d9477b0dc1d56ab3b0cd36d3ba53ef5e52ff`)\r\n- Improve documentation. Closes GH#4 and GH#6. (`57a85254e1fd7bf9ed5a6feab08784b26d983090`, `25df148d992056b8378ff42d459120f4c48b52f3`)\r\n\r\n__Full changelog__: [`3.0.0...3.1.0`](https://github.com/polyipseity/obsidian-terminal/compare/3.0.0...3.1.0)\r\n",
+      "draft": false,
+      "name": "3.1.0",
+      "prerelease": false,
+      "publishedAt": "2023-02-20T14:05:23Z",
+      "tag": "3.1.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 991909
+        },
+        {
+          "name": "manifest.json",
+          "size": 256
+        },
+        {
+          "name": "styles.css",
+          "size": 7239
+        }
+      ],
+      "author": "polyipseity",
+      "description": "A major version bump as there are many shiny new features this time! ✨\r\n\r\n__Notices__\r\n- Please reconfigure your settings. Old settings will likely be overwritten.\r\n- Now usable and useful on mobile! (You can only open developer console, however...)\r\n\r\n__Features__\r\n- Implement terminal profiles! Comes with several presets. (`dda444885bd032fc4c85e9d9b95ace90be706d68`)\r\n- Implement editing arguments. (`dda444885bd032fc4c85e9d9b95ace90be706d68`)\r\n- Allowing specifying Python executable per profile. (`dda444885bd032fc4c85e9d9b95ace90be706d68`)\r\n- Add buttons to undo and reload all settings. (`d12898142b16a3daed0b1e4826b5f759fecaffc2`)\r\n- Add commands and context menus to select terminal profile. (`804a3448f58d44a6bea9cccfde579fb1fc7ed4cd`)\r\n- Add a ribbon to select terminal profile. (`9ea5c140102342e6916c596257ce32c16c440b87`)\r\n- New terminal type: Console. It prints messages from the developer console. Works on mobile. (`3619f5865d054269819095cbad912184377e66e8`)\r\n- Implement editing terminal. You can change terminal profile and working directory. (`c9909513604d5b2b2f15cbe9dbeb9936a7c85018`)\r\n\r\n__Fixes__\r\n- Fix unable to find after terminal restart. (`5586baa16320da28acb6c3a64f4b73c58e760013`)\r\n- Fix escaping arguments. (`a4fd03d737fe86b1d2ccd9bb59aa0429445a4fb0`)\r\n- Make context menu usable on mobile by keeping `contentEl`. (`0ec66b4e632a272e199b7c506189ef303a5b5b97`)\r\n- Fix updating terminal tab name. (`1e7adcc23abeef98fb96ac587aaf4912209af10d`)\r\n- Fix find in terminal styling on mobile. (`7de6c2a69715882e076fae5b42940daa7c28add6`..`35e8e5f6fdeb90986b193a4bfcab952788faa1ff`)\r\n\r\n__Internals__\r\n- Improve code, as always.\r\n- Improve build scripts.\r\n- Settings are validated and fixed on loading. (`5b78d4d10f1dff36abfc30c6695ac2755eb8045d`)\r\n- Freeze `as const`-ed objects. (`5023e90fd54a9457d1182526e4d5d18e22311049`)\r\n- Update npm packages.\r\n\r\n__Full changelog__: [`2.11.0...3.0.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.11.0...3.0.0)\r\n",
+      "draft": false,
+      "name": "3.0.0 ✨",
+      "prerelease": false,
+      "publishedAt": "2023-02-12T06:32:18Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 915692
+        },
+        {
+          "name": "manifest.json",
+          "size": 251
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Features__\r\n- Add GPU acceleration! Now scrolling the terminal is super smooth. (`078c36818bfbb038501bd4302e5c45ead53f12ba`)\r\n- Improve settings UI. (`e3790ae02a7839aca2ef8659a16fcacebbc02d52`)\r\n- Add setting to specify terminal renderer. (related to GPU acceleration) (`e029c710f3cda5b9dd209c517702ad1360754f20`)\r\n- Add find in terminal function! Right-click terminal tab header to access it. (`925328b32c11470ae195b5061afe05b84d0f0d1b`)\r\n\r\n__Fixes__\r\n- Fix unable to unfocus from terminal. (`22cd684673b69860f442d86cac5d2ae9546c85a2`)\r\n- Fix reset all settings not resetting all settings. Again... (`270530dde452ef0db5a0bf5ee813dc6d7072fa79`)\r\n- Decrease the chance that the terminal resizer fails to initialize. (`ba9c34f4be014d641670ba1b01d53ec6d1723c18`, `781a4ec764628439aca519d7cc31e69f84e7f00e`)\r\n- Improve accuracy of terminal resizer. (`76c85dffda284e95a1deb234198bbf4db2e7fb8a`)\r\n\r\n__Internals__\r\n- Housekeeping.\r\n- Handle more uncaught errors.\r\n- Add several minor terminal addons. (`9d3e38acf096517f5425fd2dd7c53a45ed5bbfaf`..`6ab523fbe7f328e758c7e6d88e149ba95b769d7a`)\r\n- Log discarded errors. (`ab836e6bc692cd3806ee0ab77aa78a01d2211f4b`)\r\n- Fix encoding of Python stdios. (`8fbb087d6f00798434118bc86c46a4f15ad6b37b`)\r\n- Make `win32_resizer.py` report inability to find the correct window. (`028cde8159a12e7f346db74a472bdcb8c0fed907`)\r\n\r\n__Full changelog__: [`2.10.0...2.11.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.10.0...2.11.0)",
+      "draft": false,
+      "name": "2.11.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-27T17:02:28Z",
+      "tag": "2.11.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 504134
+        },
+        {
+          "name": "manifest.json",
+          "size": 251
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Notices__\r\n- Updating the plugin starting from this version to a newer version will no longer close all active terminal views. (Does not include updating from a previous version to this version.)\r\n- Please reset your settings and reconfigure it.\r\n- Linux, macOS: Please specify a terminal emulator (not a shell) for external terminal, and a shell (not a terminal emulator) for internal terminal.\r\n- macOS: This is not necessary if you have only used the release versions. But just in case, you might need to reset settings to apply the external terminal cwd fix.\r\n- macOS: The external terminal cwd fix is implemented by passing `$PWD` as the first argument to the external terminal. This might cause issues with non-default terminals. You may need to edit `executables.darwin.extArgs` in `.obsidian/plugins/terminal/data.json` to remove the first argument. Also see the hint.\r\n- mobile: You can only change settings on mobile for now.\r\n- Hint: There are hidden settings to set the launching arguments in `.obsidian/plugins/terminal/data.json`. Search for `intArgs` and `extArgs`. I still need to figure out how to present the hidden settings in the settings UI well.\r\n\r\n__Features__\r\n- Terminal view no longer closes when the underlying process terminates. (`934eb24e2c7106e1122c8c29e4160ca5d55749ef`)\r\n- Add terminal restoration message in the format of ` * Restored history at (time)`. (`5dd1efb5709af6d5f7dae7ee5d4b813fc4156612`)\r\n- Add menu to restart terminal and resizer. Access by right-clicking terminal tab header. (`313b4b8f0c2ec2f71d79fd519925aab71cfff910`)\r\n- Add settings to disable annoying notices. (`602954ee0ee619368ffb770310262656ee1a1551`)\r\n- Add settings to specify external terminal separately. (`a80466f309483f6971c29b85d5825449ab93c448`)\r\n\r\n__Fixes__\r\n- Terminal view persists when updating the plugin. (`934eb24e2c7106e1122c8c29e4160ca5d55749ef`)\r\n- Windows: Pressing `Ctrl-C` will no longer close the resizer sometimes. (`fc95167374d3174ce94ce47ecc8bb41709b2c535`)\r\n- Fix \"reset all\" not resetting all settings. (`133a141e10b09f9bf29c59ed5ffaa6cde5594b72`)\r\n- (See notices) Mobile: Fix plugin not loading. (`3b55de2c48bb5bbcb35f7a4d5a533b58d520670d`..`63c99375fbf29ef9fa6cbf27dd527071987a13fd`)\r\n- (See notices) Linux, macOS: Fix external terminal not opening by separating external and internal terminal executable. (`a80466f309483f6971c29b85d5825449ab93c448`)\r\n- (See notices) macOS: Fix external terminal not starting in the specified cwd. Might not work with non-default terminals. (`0b66970f065160e713067bb930bedf97f7f71793`)\r\n\r\n__Internals__\r\n- Housekeeping.\r\n- Refactor terminal files.\r\n- Handle more uncaught errors. Less errors in the developer console!\r\n- Update npm packages. (`02f455b7c8b196116d45d98dd8fe51f750671b59`)\r\n- Improve build scripts. (`02b0174ec8b6252dcd98fbc1925069db41d5ab23`)\r\n\r\n__Full changelog__: [`2.9.0...2.10.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.9.0...2.10.0)",
+      "draft": false,
+      "name": "2.10.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-23T15:44:33Z",
+      "tag": "2.10.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 492008
+        },
+        {
+          "name": "manifest.json",
+          "size": 234
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "After lots of hard work, v2.9.0 is finally ready! 😅\r\n\r\n__Fixes__\r\n- Fix integrated terminals on Linux and macOS (more generally, Unix). Python 3.10/+ is required but Python packages `psutil` and `pywinctl` are no longer required on Unix platforms. This should address the problem with integrated terminals of [GH#2](https://github.com/polyipseity/obsidian-terminal/issues/2). (`7812e8f148a0f52c2f576dded17266de07e3cebc`..`5dbea610f75dbadce28d54b90c8549fb6c24fc6e`)\r\n- Change default Python executable to `python3` to avoid starting Python 2. (`ba931427b1e5e2dd4a716ff90946e7a855eb5aea`)\r\n- Fix error handling. (`905d52e06eb83c6f915c9bb4fa4fcb2afece7327`..`8ac982e97ab32249135ffe36cc7ffc03548af059`)\r\n\r\n__Internals__\r\n- Validate language files. (`e919a7cf4fa165a92dc9c91f40f448ef9ae999c5`..`29fdad08527e7b798277d0aed4b231aedf77105e`)\r\n- Housekeeping.\r\n\r\n__Miscellaneous__\r\n- Allow plugin to be enabled on mobile. It does nothing though. (`cb40072e533b1dc20d441485817bced1b49b55ea`..`b400a4412f29fda901e579b7b2968305579ac4f1`)\r\n- Add all languages available in Obsidian (untranslated except for 2). (`29fdad08527e7b798277d0aed4b231aedf77105e`)\r\n- Update translations.\r\n- Update `README.md`.\r\n\r\n__Known bugs__\r\n- Opening external terminals is still broken on Linux and macOS.\r\n\r\n__Full changelog__: [`2.8.1...2.9.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.8.1...2.9.0)",
+      "draft": false,
+      "name": "2.9.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-21T15:49:07Z",
+      "tag": "2.9.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 439116
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Fixes__\r\n- Fix failing to load plugin. (`fc07030d02699323f103b9609590ca5f6d6245ef`)\r\n- Housekeeping.\r\n\r\n__Full changelog__: [`2.8.0...2.8.1`](https://github.com/polyipseity/obsidian-terminal/compare/2.8.0...2.8.1)",
+      "draft": false,
+      "name": "2.8.1",
+      "prerelease": false,
+      "publishedAt": "2023-01-14T01:50:47Z",
+      "tag": "2.8.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 438820
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Features__\r\n- Add 2 new plugin settings.\r\n  - Hide status bar (`86c6602bd2b6b2e93f13e182ae11daa413a28cf3`)\r\n  - Enable Windows 'conhost.exe' workaround (`e2710eca0e38570e812cd7beb467b71223a4696c`)\r\n\r\n__Improvements__\r\n- Log error and notify user if terminal resizer fails to start. (`5be0367243ad9a4655f9b09575d6a17ee317a707`)\r\n\r\n__Fixes__\r\n- Fix terminal not starting if terminal resizer fails to start. (`459ac226e08bc8898885731a41de6406af10c322`)\r\n- Fix text escaping unnecessarily in notice messages. (`0dc8152517d29f896021beeafd355c4f2b8d2907`)\r\n\r\n__Full changelog__: [`2.7.0...2.8.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.7.0...2.8.0)",
+      "draft": false,
+      "name": "2.8.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-14T00:52:27Z",
+      "tag": "2.8.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 434629
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 6425
+        }
+      ],
+      "author": "polyipseity",
+      "description": "The plugin has just been [accepted](https://github.com/obsidianmd/obsidian-releases/pull/1472) into community plugins! 🥳\r\n\r\nYou can now get the plugin here instead: https://obsidian.md/plugins?id=terminal\r\n\r\nNo, there is no celebration for this. 😞\r\n\r\n__Features__\r\n- Add setting to configure or disable Python terminal resizer.\r\n\r\n__Fixes__\r\n- Fix integrated terminal not resizing when the terminal is not focused.\r\n- Fix integrated terminal window not hidden when Python terminal resizer is unavailable.\r\n- Fix potential issues with `cmd.exe` argument escaping.\r\n- Housekeeping.\r\n\r\n__Others__\r\n- The view type of terminal is changed from `terminal:terminal-view` to `terminal:terminal`. Existing views will break unless you know how to modify `.obsidian/workspace.json` to fix it.\r\n- Improve `README.md` significantly.\r\n- Create `CHANGELOG.md` (the file you are viewing now).\r\n\r\n__Full changelog__: [`2.6.1...2.7.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.6.1...2.7.0)",
+      "draft": false,
+      "name": "2.7.0 🥳",
+      "prerelease": false,
+      "publishedAt": "2023-01-12T15:08:17Z",
+      "tag": "2.7.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 432358
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Fix 2 bugs.\r\n- Housekeeping.\r\n\r\n**Full Changelog**: [`2.6.0...2.6.1`](https://github.com/polyipseity/obsidian-terminal/compare/2.6.0...2.6.1)",
+      "draft": false,
+      "name": "2.6.1",
+      "prerelease": false,
+      "publishedAt": "2023-01-06T09:57:44Z",
+      "tag": "2.6.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 432357
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Add the `Save as HTML` functioin to the tab context menu.\r\n\r\n**Full Changelog**: [`2.5.1...2.6.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.5.1...2.6.0)",
+      "draft": false,
+      "name": "2.6.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-05T14:24:14Z",
+      "tag": "2.6.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 431662
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- No user-facing changes.\r\n- Fix tiny memory leak sources.\r\n- Less errors in the developer console.\r\n- Housekeeping.\r\n\r\n**Full Changelog**: [`2.5.0...2.5.1`](https://github.com/polyipseity/obsidian-terminal/compare/2.5.0...2.5.1)",
+      "draft": false,
+      "name": "2.5.1",
+      "prerelease": false,
+      "publishedAt": "2023-01-02T12:42:30Z",
+      "tag": "2.5.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 431203
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Implement terminal history restoration.\r\n- Change default Linux terminal executable to ``xterm-256color``.\r\n- Housekeeping.\r\n\r\n**Full Changelog**: [`2.4.2...2.5.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.4.2...2.5.0)",
+      "draft": false,
+      "name": "2.5.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-02T06:07:43Z",
+      "tag": "2.5.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 419417
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Change icons of reset buttons to icons that represent the corresponding settings.\r\n- Improve a setting translation.\r\n- Housekeeping.\r\n\r\n**Full Changelog**: [`2.4.1...2.4.2`](https://github.com/polyipseity/obsidian-terminal/compare/2.4.1...2.4.2)",
+      "draft": false,
+      "name": "2.4.2",
+      "prerelease": false,
+      "publishedAt": "2023-01-01T15:51:14Z",
+      "tag": "2.4.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 419097
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- No user-facing changes.\r\n- Various minor code improvements.\r\n\r\n**Full Changelog**: [`2.4.0...2.4.1`](https://github.com/polyipseity/obsidian-terminal/compare/2.4.0...2.4.1)",
+      "draft": false,
+      "name": "2.4.1",
+      "prerelease": false,
+      "publishedAt": "2023-01-01T12:28:51Z",
+      "tag": "2.4.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 419197
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Add language settings.\r\n  - Translated text are dynamically updated when language is changed.\r\n- Add support for 2 locales: `简体中文` (`zh-Hans`), `繁體中文` (`zh-Hant`)\r\n- Fix various bugs.\r\n- Improve code.\r\n\r\n**Full Changelog**: [`2.3.3...2.4.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.3.3...2.4.0)",
+      "draft": false,
+      "name": "2.4.0",
+      "prerelease": false,
+      "publishedAt": "2023-01-01T07:26:24Z",
+      "tag": "2.4.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 412647
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Fix terminal persistence across Obsidian restarts.\r\n\r\n**Full Changelog**: [`2.3.2...2.3.3`](https://github.com/polyipseity/obsidian-terminal/compare/2.3.2...2.3.3)",
+      "draft": false,
+      "name": "2.3.3",
+      "prerelease": false,
+      "publishedAt": "2022-12-31T12:06:54Z",
+      "tag": "2.3.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 412650
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- No user-facing changes.\r\n- Improve code.\r\n\r\n**Full Changelog**: [`2.3.1...2.3.2`](https://github.com/polyipseity/obsidian-terminal/compare/2.3.1...2.3.2)",
+      "draft": false,
+      "name": "2.3.2",
+      "prerelease": false,
+      "publishedAt": "2022-12-31T11:17:38Z",
+      "tag": "2.3.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 411837
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Configure esbuild to build an even smaller `main.js`.\r\n- Fix status bar hiding and error ignoring.\r\n- Improve code.\r\n\r\n**Full Changelog**: [`2.3.0...2.3.1`](https://github.com/polyipseity/obsidian-terminal/compare/2.3.0...2.3.1)",
+      "draft": false,
+      "name": "2.3.1",
+      "prerelease": false,
+      "publishedAt": "2022-12-30T18:32:29Z",
+      "tag": "2.3.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 682016
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4719
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Hide status bar when the terminal is focused to avoid obstruction.\r\n- Improve terminal resizing.\r\n- Change internal structure of settings data. (You may need to reset or delete settings.)\r\n- Potentially reduce plugin loading time.\r\n- Code improvement.\r\n\r\n**Full Changelog**: [`2.2.0...2.3.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.2.0...2.3.0)",
+      "draft": false,
+      "name": "2.3.0",
+      "prerelease": false,
+      "publishedAt": "2022-12-30T14:00:15Z",
+      "tag": "2.3.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 678652
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4710
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Commands now work outside of editing mode (i.e. reading mode).\r\n- Improve reporting exit code of terminals.\r\n- Fix web links in terminal view not opening.\r\n- The backing terminal is automatically resized with Python 3.\r\n  - Makes the terminal more usable generally, especially TUIs.\r\n  - Tested on Windows only.\r\n  - Python 3 is only required for this enhancement, otherwise it remains optional.\r\n  - Run `pip install psutil pywinctl` before using.\r\n- Code improvement.\r\n\r\n**Full Changelog**: [`2.1.0...2.2.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.1.0...2.2.0)",
+      "draft": false,
+      "name": "2.2.0",
+      "prerelease": false,
+      "publishedAt": "2022-12-29T10:29:34Z",
+      "tag": "2.2.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 668159
+        },
+        {
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "name": "styles.css",
+          "size": 4710
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Add `Notice timeout` setting.\r\n- Various minor quality-of-life changes.\r\n- Implement internationalization and localization.\r\n- Fix various bugs.\r\n- Optimize code.\r\n\r\n**Full Changelog**: [`2.0.0...2.1.0`](https://github.com/polyipseity/obsidian-terminal/compare/2.0.0...2.1.0)",
+      "draft": false,
+      "name": "2.1.0",
+      "prerelease": false,
+      "publishedAt": "2022-12-27T14:52:30Z",
+      "tag": "2.1.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 431097
+        },
+        {
+          "name": "manifest.json",
+          "size": 242
+        },
+        {
+          "name": "styles.css",
+          "size": 4565
+        }
+      ],
+      "author": "polyipseity",
+      "description": "- Add functionality to embed terminals inside Obsidian.\r\n\r\n**Full Changelog**: [`1.0.0...2.0.0`](https://github.com/polyipseity/obsidian-terminal/compare/1.0.0...2.0.0)",
+      "draft": false,
+      "name": "2.0.0",
+      "prerelease": false,
+      "publishedAt": "2022-12-27T00:05:23Z",
+      "tag": "2.0.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 21714
+        },
+        {
+          "name": "manifest.json",
+          "size": 261
+        }
+      ],
+      "author": "polyipseity",
+      "description": "Initial release.\r\n\r\n**Full Changelog**: [`0.0.1...1.0.0`](https://github.com/polyipseity/obsidian-terminal/compare/0.0.1...1.0.0)",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2022-12-26T10:50:45Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 3773
+        },
+        {
+          "name": "manifest.json",
+          "size": 262
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Full Changelog__: [`0.0.0...0.0.1`](https://github.com/polyipseity/obsidian-terminal/compare/0.0.0...0.0.1)\r\n",
+      "draft": false,
+      "name": "0.0.1",
+      "prerelease": true,
+      "publishedAt": "2023-02-23T06:01:47Z",
+      "tag": "0.0.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 3773
+        },
+        {
+          "name": "manifest.json",
+          "size": 381
+        }
+      ],
+      "author": "polyipseity",
+      "description": "__Full Changelog__: [`717c0adec4eca8744da20e9d10a504f5edd95a3a...0.0.0`](https://github.com/polyipseity/obsidian-terminal/compare/717c0adec4eca8744da20e9d10a504f5edd95a3a...0.0.0)\r\n",
+      "draft": false,
+      "name": "0.0.0",
+      "prerelease": true,
+      "publishedAt": "2023-02-23T06:01:45Z",
+      "tag": "0.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "polyipseity/obsidian-terminal"
+}

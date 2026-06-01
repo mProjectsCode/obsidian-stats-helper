@@ -1,0 +1,1105 @@
+{
+  "author": "ryanc",
+  "defaultBranch": "master",
+  "description": "Turn any code block into an advanced calculator. Evaluate math expressions on each line of a code block, including units, currency, and optional TeX rendering.",
+  "errors": [],
+  "id": "numerals",
+  "lastChangedAt": "2026-06-01T13:03:58.602Z",
+  "lastFetchedAt": "2026-06-01T13:03:58.602Z",
+  "manifest": {
+    "author": "RyanC",
+    "authorUrl": "https://github.com/gtg922r",
+    "description": "Turn any code block into an advanced calculator. Evaluates math expressions on each line of a code block, including units, currency, and optional TeX rendering.",
+    "id": "numerals",
+    "isDesktopOnly": false,
+    "minAppVersion": "0.16.0",
+    "name": "Numerals",
+    "version": "1.10.2"
+  },
+  "name": "Numerals",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:41807c9e8cf43511e2416133bd2b1fea534523ad03ff206ae7300c4f441642e4",
+          "name": "main.js",
+          "size": 808912
+        },
+        {
+          "digest": "sha256:1e6159e215e32bb260faadce8d910af507d7b7b87fc5d5f615841d5677eca420",
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:c289ff08e9e00f9c61d9d95f529b905515d9b77195895064ca495e511c262d8a",
+          "name": "styles.css",
+          "size": 9310
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 🎉 Numerals 1.10.2  🎉 \r\n**The first new Numerals release in a year, with major new features as well as behind-the-scenes clean-up!**\r\n\r\nBig additions are inline calculations, cross-note references, better note-wide variables, inline suggestions, click-to-edit rendered blocks, and a refreshed README for users discovering Numerals through Obsidian.\r\n\r\n### Highlights\r\n\r\n- 🧮 **Inline calculations** - Use Numerals directly in normal sentences with inline code:\r\n  - `` `#: 3ft * 4ft` `` -> `12 ft^2`\r\n  - `` `#=: 2 * (3ft + 4ft)` `` -> `2 * (3 ft + 4 ft) = 14 ft`\r\n\r\n- 🔗 **Cross-note references** - Reference frontmatter and Dataview metadata from other notes:\r\n  - `[[Client Settings]].hourlyRate * 8hr`\r\n  - `[[config]].rates.hourly * [[invoice]].hours`\r\n\r\n- 🧾 **Better note-wide variables** - `$` variables now work across math blocks and inline expressions:\r\n  - Define `$rate = $150/hr` once\r\n  - Use it later with `` `#: $rate * 40hr` ``\r\n\r\n- ⏮️ **Inline `@prev` support** - Chain inline calculations together:\r\n  - `` `#: 100 * 1.2` ``\r\n  - `` `#: @prev * 1.08` ``\r\n\r\n- ✨ **Inline auto-complete** - Suggestions now work inside inline Numerals expressions, including variables, functions, constants, cross-note properties, and Greek letters.\r\n\r\n- 🖱️ **Click rendered blocks to edit** - In Live Preview, click or tap rendered Numerals math blocks to jump back to the matching source line.\r\n\r\n- 🛠️ **Large reliability pass** - This release includes major internal cleanup, stricter TypeScript, Obsidian community review fixes, better lifecycle cleanup, and a modernized release workflow.\r\n\r\n### Inline Numerals\r\n\r\nYou can now calculate directly in prose:\r\n\r\n```markdown\r\nThe total cost is `#: $150/hr * 8hr`.\r\n```\r\n\r\nOr show the equation and result:\r\n\r\n```markdown\r\nThe room perimeter is `#=: 2 * (12ft + 10ft)`.\r\n```\r\n\r\nInline calculations work in Live Preview and Reading mode, and support the same units, currencies, functions, frontmatter values, Dataview values, and formatting behavior as math blocks.\r\n\r\n### Cross-note references\r\n\r\nUse another note metadata inside calculations:\r\n\r\n````markdown\r\n```math\r\nhours = 12 hr\r\nsubtotal = [[Client Settings]].rates.hourly * hours\r\ntax = subtotal * [[Client Settings]].taxRate\r\ntotal = subtotal + tax =>\r\n```\r\n````\r\n\r\nNested properties are supported with dot notation:\r\n\r\n```text\r\n[[config]].rates.hourly\r\n```\r\n\r\nCross-note references work in math blocks and inline calculations, and rerender when referenced metadata changes.\r\n\r\n### Complete change list\r\n\r\nAdded:\r\n- Inline calculation support with `` `#:` `` result mode and `` `#=:` `` equation mode.\r\n- Inline calculations in Live Preview and Reading mode.\r\n- Inline auto-complete suggestions.\r\n- Inline `@prev`.\r\n- Note-global `$` variables shared between math blocks and inline expressions.\r\n- Cross-note references using `[[note]].property`.\r\n- Nested cross-note property access.\r\n- Setting to enable or disable cross-note references.\r\n- Settings tab icon for newer Obsidian versions.\r\n\r\nChanged:\r\n- Refreshed the README around the stable feature set, with glanceable examples for Obsidian users.\r\n- Upgraded mathjs to `15.2.0`.\r\n- Changed license to MIT.\r\n- Refactored the rendering and evaluation pipeline.\r\n- Enabled TypeScript strict mode.\r\n- Migrated to ESLint flat config with Obsidian plugin rules.\r\n- Stopped bundling Dataview and now use the runtime Dataview API when available.\r\n- Modernized beta and production release workflows.\r\n- Moved the legacy source colocated Numerals test into the Jest-covered `tests/` directory.\r\n\r\nFixed:\r\n- Dataview phantom metadata keys causing undefined symbol errors.\r\n- Currency setting changes requiring restart.\r\n- Inline widgets briefly appearing in Source mode.\r\n- Tiny non-zero values rendering as `0` or `-0`.\r\n- Large numbers in syntax-highlighted input rendering in scientific notation.\r\n- Result insertion targeting the wrong editor in split panes.\r\n- Event listener leaks and double rendering.\r\n- Hidden frontmatter evaluation errors.\r\n- Re-enable/reload issues around custom math units.\r\n- Obsidian Community Plugin review warnings.\r\n\r\nRemoved:\r\n- One-off agent planning and architecture documents, unused config stubs, and unreferenced PR screenshots from the repository.\r\n- Legacy beta manifest flow in favor of modern BRAT release assets.\r\n\r\n### 🙏 Acknowledgements\r\nHat tip to @andersfischernielsen for the suggestion and initial implementation of click-through on math blocks!",
+      "draft": false,
+      "name": "1.10.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-19T06:34:42Z",
+      "tag": "1.10.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:41807c9e8cf43511e2416133bd2b1fea534523ad03ff206ae7300c4f441642e4",
+          "name": "main.js",
+          "size": 808912
+        },
+        {
+          "digest": "sha256:325a4af6d423cc4be0f55c54baba7bcaead47c6da4dd6685c732e7e33b4f81ce",
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:c289ff08e9e00f9c61d9d95f529b905515d9b77195895064ca495e511c262d8a",
+          "name": "styles.css",
+          "size": 9310
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals 1.10.1 Beta — Obsidian Review Readiness\n\n> **Beta release** — install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) for testing.\n\nThis patch release focuses on Obsidian Community Plugin review feedback for the 1.10 beta line. There are no new calculator features here; the goal is a cleaner, more reproducible, and more review-friendly build before promoting the cross-note reference release toward stable.\n\n## ✅ Obsidian Review Cleanup\n\n### Manifest Metadata\n\nThe plugin manifest now follows current community review guidance:\n\n- The description no longer starts with the plugin name\n- `authorUrl` now points to the author profile instead of the plugin repository\n\n### Source Compatibility\n\nSeveral review warnings were cleaned up in the source:\n\n- Replaced global DOM access with owner-document aware code for better popout window behavior\n- Replaced unqualified timers with owner-window timers\n- Avoided newer `ButtonComponent.setDisabled()` and `setTooltip()` calls so the existing `minAppVersion` remains accurate\n- Replaced direct `hasOwnProperty()` calls with a safe helper for metadata/frontmatter objects\n\n### CSS Lint Fixes\n\nThe stylesheet now avoids the patterns flagged by the dashboard:\n\n- Removed `!important` from MathJax layout rules\n- Replaced partially supported `text-decoration` error styling with a dotted border\n- Consolidated duplicate selectors for math tokens and layout rows\n\n## 📦 Reproducible Builds\n\nThis release also tightens the build inputs:\n\n- Runtime dependencies are pinned to exact versions\n- `package-lock.json` is now committed\n- The old `builtin-modules` dev dependency was replaced with Node's built-in module metadata\n- The CodeMirror language package now uses the npm registry package instead of a git dependency\n\nThese changes should make local, CI, and community review builds resolve the same dependency graph.\n\n## 🔐 Release Assets\n\nGitHub releases now publish only the files Obsidian downloads:\n\n- `main.js`\n- `manifest.json`\n- `styles.css`\n\nThe release workflow still attests those assets, and zip packaging remains available locally with `INCLUDE_RELEASE_ZIP=true` when needed for manual testing.\n\n## 🧪 Testing\n\n- **362 unit tests**, all passing\n- Lint clean\n- Production build clean\n- Mathjs symbol check clean\n- GitHub release workflow completed successfully\n- Release contains only Obsidian-supported assets\n\n## 📦 Install via BRAT\n\n1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) if you haven't already\n2. Add `gtg922r/obsidian-numerals` as a beta plugin\n3. Enable *Numerals* in your community plugins list\n\n## 🐛 Feedback\n\nPlease test the 1.10 beta features, especially cross-note references and Live Preview click-to-edit behavior, in a real vault. If something regresses in rendering, settings, or popout windows, [open an issue](https://github.com/gtg922r/obsidian-numerals/issues/new) with the Obsidian version, platform, and a small example note.\n\n---\n\n**PR**: #151  \n**Full changelog**: https://github.com/gtg922r/obsidian-numerals/compare/1.10.0...1.10.1\n",
+      "draft": false,
+      "name": "Numerals 1.10.1 Beta — Obsidian Review Readiness",
+      "prerelease": true,
+      "publishedAt": "2026-05-15T17:10:49Z",
+      "tag": "1.10.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f6b426e83444dd5792fffcd8bba19c8a22fcd9c802f00bbfe3ae716023679cfb",
+          "name": "main.js",
+          "size": 808871
+        },
+        {
+          "digest": "sha256:ef25ffecc958398f9ff6260e733d0569ed1b98c1679b977f7cdc629e14a39f5d",
+          "name": "manifest.json",
+          "size": 390
+        },
+        {
+          "digest": "sha256:52d56248c7da209bfca8ac2610a95b9422b9524edf0f97c2b6ff835f52f39e1e",
+          "name": "styles.css",
+          "size": 9566
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals 1.10.0 Beta — Cross-Note References, Click-to-Edit, and Release Hardening\r\n\r\n> **Beta release** — install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) for testing.\r\n\r\nThis beta makes Numerals more useful across a connected vault. Math blocks and inline expressions can now read values from other notes, rendered math blocks are easier to jump back into for editing, and the release pipeline has been modernized for safer BRAT prereleases.\r\n\r\n## ✨ What's New\r\n\r\n### Cross-Note References\r\n\r\nReference frontmatter and Dataview metadata from another note directly inside a Numerals expression:\r\n\r\n```math\r\nhourly = [[Rates]].hourly\r\nhours = 12\r\nprojectTotal = hourly * hours\r\n```\r\n\r\nNested properties work too:\r\n\r\n```math\r\ncontractorRate = [[config]].rates.contractor\r\ntaxRate = [[config]].tax.local\r\ntotal = contractorRate * 8 * (1 + taxRate)\r\n```\r\n\r\nCross-note references also work in Inline Numerals:\r\n\r\n```markdown\r\nToday’s budget is `#: [[budget]].dailyLimit - [[budget]].spent`.\r\n```\r\n\r\n- Supports `[[note name]].property` and nested paths like `[[config]].rates.hourly`\r\n- Reads frontmatter and Dataview metadata values\r\n- Works in both `math` code blocks and inline expressions\r\n- Auto-complete suggests available properties after typing `[[note]].`\r\n- Referenced notes trigger rerenders when their metadata changes\r\n- Can be disabled with the new **Enable cross-note references** setting\r\n\r\n### Click Rendered Math Blocks to Edit\r\n\r\nRendered Numerals math blocks in Live Preview can now be clicked or tapped to focus the matching source line for editing.\r\n\r\nThis should make rendered blocks feel much less static: click the result you want to adjust, edit the underlying expression, and stay in the normal Live Preview flow. This addresses long-standing editing friction in #50 and #59.\r\n\r\n## 🔧 Improvements\r\n\r\n- Updated mathjs from `^14.5.3` to `^15.2.0`, including the April 2026 security fixes\r\n- Refreshed mathjs auto-complete data so newly supported functions and constants appear in suggestions\r\n- Tiny non-zero values no longer display as `0` or `-0`; very small values now use scientific notation when needed to avoid overly wide results\r\n- Syntax-highlighted results no longer show values like `226000` as `2.26e+5`\r\n- Replaced the bundled Dataview import with runtime Dataview API lookup, reducing the production bundle and avoiding bundled Dataview transitive dependencies\r\n\r\n## 📦 Release Pipeline\r\n\r\nThe beta release flow now generates tag-matched `manifest.json` assets for BRAT and future stable promotion. Release assets also include signed GitHub Artifact Attestations.\r\n\r\nThis release includes:\r\n\r\n- `main.js`\r\n- `manifest.json`\r\n- `styles.css`\r\n- `numerals-1.10.0.zip`\r\n\r\n## 🧪 Testing\r\n\r\n- **357 unit tests**, all passing\r\n- Production build completed successfully\r\n- GitHub release workflow completed successfully and published prerelease assets\r\n\r\n## 📦 Install via BRAT\r\n\r\n1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) if you haven't already\r\n2. Add `gtg922r/obsidian-numerals` as a beta plugin\r\n3. Enable *Numerals* in your community plugins list\r\n\r\n## 🐛 Feedback\r\n\r\nPlease test cross-note references with real frontmatter and Dataview metadata in your vault. If you find a case that does not resolve or rerender correctly, [open an issue](https://github.com/gtg922r/obsidian-numerals/issues/new) with the expression, the referenced note metadata shape, and whether it happened in Live Preview or Reading mode.\r\n\r\n## 🙏 Acknowledgements\r\nHat tip to @andersfischernielsen for the suggestion and initial implementation of click-through on math blocks!\r\n\r\n---\r\n\r\n**Full changelog**: https://github.com/gtg922r/obsidian-numerals/compare/1.9.3...1.10.0\r\n",
+      "draft": false,
+      "name": "Numerals 1.10.0 Beta — Cross-Note References, Click-to-Edit, and Release Hardening",
+      "prerelease": true,
+      "publishedAt": "2026-05-15T15:35:53Z",
+      "tag": "1.10.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5955be69cc72431c29871ec2e123e44e98a275c30bd719bece94cc6306b741d5",
+          "name": "main.js",
+          "size": 908217
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:973f4e1fabc673a802e57d80ca04b8ed2ab040ce79d1bda427fe57a36e4ace74",
+          "name": "numerals-1.9.3.zip",
+          "size": 257562
+        },
+        {
+          "digest": "sha256:34ad08b92361c8d9781265749e0bcb752fb6e9e3f33d57bf3dc5237b45cfefb7",
+          "name": "styles.css",
+          "size": 9512
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals 1.9.3 Beta — Inline `@prev` & Note-Global `$` Variables\n\nThis beta extends inline Numerals expressions with two powerful new capabilities, bringing them much closer to feature parity with math code blocks.\n\n## ✨ New Features\n\n### `@prev` Directive in Inline Expressions\n\nChain inline calculations through your prose by referencing the result of the previous inline expression:\n\n```markdown\nThe base price is `#: 100 * 1.2` and after tax it becomes `#: @prev * 1.08`.\n```\n\n> Renders as: \"The base price is **120** and after tax it becomes **129.6**.\"\n\n- Works in both **Live Preview** and **Reading mode**\n- Case-insensitive: `@prev`, `@Prev`, `@PREV` all work\n- Errors propagate cleanly — if an expression fails, the next `@prev` also shows an error\n- Combine with other features: `@prev * $taxRate`, `@prev to USD`, etc.\n\n### Note-Global `$` Variables in Inline Expressions\n\n`$`-prefixed variable assignments in inline code now act as **page-wide globals**, exactly like they do in math code blocks:\n\n```markdown\nI bought `#: $apples = 100` apples at `#: $pricePerApple = $0.50` each.\n\nThe total was `#: $apples * $pricePerApple`.\n```\n\nThis works **bidirectionally** — define variables inline and use them in code blocks, or vice versa:\n\n````markdown\n`#: $basePrice = 120`\n\n```math\ntax = $basePrice * 0.08\ntotal = $basePrice + tax\n```\n\nAfter tax, the price is `#: $basePrice * 1.08`.\n````\n\n- **Inline → Math block**: Variables defined inline are available in subsequent `math` blocks\n- **Math block → Inline**: Variables from `math` blocks are available in inline expressions  \n- **Inline → Inline**: Chaining works within the same section and across sections\n- **Auto-complete**: Inline-defined `$` variables automatically appear in suggestions — no extra setup needed\n\n## 🔧 How to Test\n\n1. Install this beta via [BRAT](https://github.com/TfTHacker/obsidian42-brat) (`gtg922r/obsidian-numerals`)\n2. Try `@prev` chaining in inline expressions\n3. Try defining `$` variables inline and using them in math blocks (and vice versa)\n4. Verify auto-complete shows your `$` variables\n\n## ⚠️ Known Limitations\n\n| Limitation | Detail |\n|---|---|\n| `@prev` scope | Chains within the current section (Reading mode) or visible viewport (Live Preview) — consistent with all inline features |\n| `$` variable ordering | Variables must be defined *before* they are used (top-to-bottom), matching math code block behavior |\n\n## 📊 Quality\n\n- **288 unit tests** (27 new), all passing\n- Build clean, lint clean\n- No new dependencies\n\n---\n\n**PR**: #131  \n**Full changelog**: https://github.com/gtg922r/obsidian-numerals/compare/1.9.2...1.9.3",
+      "draft": false,
+      "name": "Numerals 1.9.3 Beta — Inline @prev & Note-Global Variables",
+      "prerelease": true,
+      "publishedAt": "2026-02-20T01:48:30Z",
+      "tag": "1.9.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:efd775fa80ee29ffb30e0520f82901fad9aa2f3d3bdcd973ffd7ff737c991c53",
+          "name": "main.js",
+          "size": 907358
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:47408e460668356025856c931f78356d2a86dbc164759f9f4c719406503e9244",
+          "name": "numerals-1.9.2.zip",
+          "size": 257242
+        },
+        {
+          "digest": "sha256:34ad08b92361c8d9781265749e0bcb752fb6e9e3f33d57bf3dc5237b45cfefb7",
+          "name": "styles.css",
+          "size": 9512
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals 1.9.2 — Inline Auto-Complete Suggestions\n\n> **Beta release** — install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) for testing.\n\n## ✨ What's New\n\n### Auto-Complete in Inline Numerals\n\nThe auto-complete suggestor that works inside `math` code blocks now also works inside **Inline Numerals** code spans. Start typing inside `` `#: `` or `` `#=: `` and you'll get the same suggestion popup you know from math blocks:\n\n- **Variables** — page-level and frontmatter variables from your note\n- **Functions & constants** — `sqrt()`, `sin()`, `pi`, `avogadro`, etc. (when enabled in settings)\n- **Greek letters** — type `:alpha` to insert `α`, `:theta` for `θ`, etc.\n\nSuggestions respect all existing settings — if you have *\"Include functions and constants\"* or *\"Greek auto-complete\"* enabled for math blocks, they'll also appear in inline expressions.\n\n### New Setting: Toggle Inline Suggestions\n\nA new **\"Provide auto-complete suggestions in Inline Numerals\"** toggle has been added to the Inline Numerals settings section. Defaults to **on**, but can be turned off independently of math block suggestions if you prefer a quieter inline editing experience.\n\n## 🔧 Minor Changes\n\n- Capitalized \"Inline Numerals\" consistently as a proper feature name throughout the settings UI and codebase.\n\n## ⚡ Performance\n\nThe inline suggestor detection runs on every keystroke (as all `EditorSuggest` implementations do), but the check is lightweight — it only scans the current line for backtick pairs, which is O(line-length). The existing 200ms debounce on suggestion list computation applies to both block and inline contexts.\n\n## 🧪 Testing\n\n- 23 new unit tests for inline code span detection\n- All 261 tests passing\n- Works on desktop and mobile (uses Obsidian's `EditorSuggest` API)\n\n## 📦 Install via BRAT\n\n1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) if you haven't already\n2. Add `gtg922r/obsidian-numerals` as a beta plugin\n3. Enable *Numerals* in your community plugins list\n\n## 🐛 Feedback\n\nFound a bug or have feedback? Please [open an issue](https://github.com/gtg922r/obsidian-numerals/issues/new) — beta testing reports are especially valuable!",
+      "draft": false,
+      "name": "Numerals 1.9.2 — Inline Auto-Complete Suggestions",
+      "prerelease": true,
+      "publishedAt": "2026-02-19T22:21:39Z",
+      "tag": "1.9.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:706198a13fd6dcef86e62576035de9f499d73c4b3bafdb96f34948f27e973d19",
+          "name": "main.js",
+          "size": 905775
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:4bc8c0d27184e41deba63bc9632793e96b0c7188910f5625b259ca39b76dcce1",
+          "name": "numerals-1.9.1.zip",
+          "size": 256825
+        },
+        {
+          "digest": "sha256:34ad08b92361c8d9781265749e0bcb752fb6e9e3f33d57bf3dc5237b45cfefb7",
+          "name": "styles.css",
+          "size": 9512
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 🧹 Dev Tooling & Lint Cleanup\r\n\r\nThis beta is a maintenance release focused on code quality, developer tooling, and compliance with Obsidian community plugin guidelines. No user-facing feature changes.\r\n\r\n### What's new\r\n\r\n**Obsidian ecosystem alignment**\r\n- Added `eslint-plugin-obsidianmd` with the recommended ruleset — the official linter for Obsidian plugins\r\n- Resolved all **172 lint errors** down to **0 errors, 0 warnings**\r\n- Added settings tab icon (`calculator`) for the upcoming Obsidian settings icon feature\r\n- Settings UI text converted to sentence case per Obsidian style guidelines\r\n- Replaced inline styles with CSS classes for better theming compatibility\r\n\r\n**Developer tooling**\r\n- Added `AGENTS.md` for AI coding assistant guidance (conventional commits, CHANGELOG maintenance, project conventions)\r\n- Migrated ESLint from legacy `.eslintrc` to flat config (`eslint.config.mjs`, ESLint v9)\r\n- Added `npm run lint` script\r\n\r\n**Dependency updates**\r\n- TypeScript 5.4 → 5.8\r\n- esbuild 0.25 → 0.27\r\n- tslib 2.4 → 2.8\r\n- @types/node 16 → 22\r\n\r\n**Code quality**\r\n- Added type safety to untyped API boundaries (loadData, Dataview, mathjs)\r\n- Fixed floating promises, unused imports, unnecessary type assertions\r\n- Cleaned up documentation: moved `ARCHITECTURE.md` to `doc/`, removed stale planning files\r\n\r\n### Testing\r\n\r\n- ✅ All 238 tests pass\r\n- ✅ Build verified\r\n- ✅ 0 lint errors, 0 warnings\r\n\r\nInstall via [BRAT](https://github.com/TfTHacker/obsidian42-brat) for beta testing.",
+      "draft": false,
+      "name": "1.9.1 — Dev Tooling & Lint Cleanup",
+      "prerelease": true,
+      "publishedAt": "2026-02-18T07:51:01Z",
+      "tag": "1.9.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6811bd0b42ccb66815d4506dac36c28696a698ad9299fd9b993aae810553bb4a",
+          "name": "main.js",
+          "size": 905267
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:9dc858ef9cda9723fe4375de7939012f3282de1c65a39d995d8f9571a4ad1d23",
+          "name": "numerals-1.9.0.zip",
+          "size": 256734
+        },
+        {
+          "digest": "sha256:75a1d4993969bc53d0f12c60e12b919964479a0c153f095bc7d3e68a842b0054",
+          "name": "styles.css",
+          "size": 9009
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "> ⚠️ **Beta release** — Install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) for testing. Feedback welcome!\r\n\r\n## ✨ New: Inline Calculations\r\n\r\nEvaluate math expressions **right in your sentences** — no code block needed. Just use inline code with a trigger prefix:\r\n\r\n```markdown\r\nThe room is `#: 12ft in meters` long and the area is `#=: 8ft * 12ft * 10ft`.\r\n```\r\nwhich will render as:\r\n```markdown\r\nThe room is `3.658 meters` long and the area is `8ft * 12ft * 10ft = 960 ft^3`\r\n```\r\n\r\n| Syntax | Renders | Use when… |\r\n|--------|---------|-----------|\r\n| `` `#: 3ft * 4ft` `` | **12 ft²** | You just want the answer |\r\n| `` `#=: 3 + 2` `` | **3 + 2 = 5** | You want to show your work |\r\n\r\n### Use cases\r\n- 📝 **Reports & documentation** — embed live calculations in prose\r\n- 🍳 **Recipe scaling** — `` `#: 1.5 cups * (6/4)` `` right in the instructions\r\n- 🏠 **Unit conversions** — `` `#: 12ft in meters` `` without interrupting your flow\r\n- 📊 **Variable references** — define `$rate` in a math block, frontmatter, or dataview inline fields, use `` `#: $rate * 40hr` `` anywhere on the page\r\n\r\n### How it works\r\n- **Works in both Live Preview and Reading mode**\r\n- Inline expressions have access to **note-global variables** (`$`-prefixed), **frontmatter properties**, and all the same units, currencies, and functions available in math blocks\r\n- Styled to match your theme's inline code appearance, with accent-colored results\r\n- Errors display the raw expression with a wavy red underline\r\n- **New settings**: enable/disable toggle, configurable trigger prefixes (`#:` and `#=:` by default), and equation separator\r\n\r\n### Architecture\r\nTwo independent rendering paths share common pure-function core logic:\r\n- **Reading mode**: Markdown post-processor walks `<code>` elements\r\n- **Live Preview**: CM6 ViewPlugin with `Decoration.replace` widgets; cursor guard reveals raw source for editing\r\n- **Source mode**: No-op — inline expressions are not rendered\r\n\r\n## 🐛 Bug Fixes\r\n\r\n- **Dataview phantom key errors**: When `numerals: all` is set, Dataview's internal key canonicalization (e.g., `f(x)` → `fx`) created phantom keys that caused \"Undefined symbol\" errors. Now automatically filtered.\r\n- **Source mode flash on load**: Inline widgets briefly appeared in source mode when the plugin loaded. Fixed by adding a Live Preview check to the ViewPlugin constructor.\r\n- **Currency setting changes ignored**: Changing currency symbol mappings in settings had no effect until restart. Pre-processors are now resolved dynamically.\r\n- **Editor extensions race condition**: `numberFormat` is now initialized before editor extensions are registered.\r\n\r\n## 📊 Testing\r\n\r\n- **238 tests** across 9 test suites, all passing\r\n- 3 new test files for inline functionality (`inline.test.ts`, `inlineLivePreview.test.ts`, `inlinePostProcessor.test.ts`)\r\n- New markdown fixture exercising all inline features\r\n\r\n---\r\n\r\n*Full changelog: [CHANGELOG.md](https://github.com/gtg922r/obsidian-numerals/blob/feat/inline-numerals/CHANGELOG.md)*\r\n*PR: [#125](https://github.com/gtg922r/obsidian-numerals/pull/125)*\r\n",
+      "draft": false,
+      "name": "Numerals 1.9.0 — Inline Calculations",
+      "prerelease": true,
+      "publishedAt": "2026-02-17T23:03:45Z",
+      "tag": "1.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:72b0043ad7cddb9cf1fe6bcf8b1b522dbc719bd6df22f96f1c26a0bf5641dd59",
+          "name": "main.js",
+          "size": 897096
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:918b0391a2267fc19d078802ac0ac797f0124affbacf97160e2acdddd314313f",
+          "name": "numerals-1.8.0.zip",
+          "size": 254224
+        },
+        {
+          "digest": "sha256:327cf72a86807e3b3e78d354013c5a5222c0ba04d68a8c1b47b4cc946547f766",
+          "name": "styles.css",
+          "size": 8117
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "> ⚠️ **Beta release** — Install via [BRAT](https://github.com/TfTHacker/obsidian42-brat). No user-facing feature changes; this release focuses on stability, performance, and code quality.\r\n\r\n## 🐛 Bug Fixes\r\n\r\n- **Fix flickering / double rendering** — Math blocks were being evaluated and rendered twice on every display. Added deduplication so each block renders exactly once. ([#108](https://github.com/gtg922r/obsidian-numerals/issues/108))\r\n- **Fix memory leak** — Every time a math block was displayed, a metadata change listener was registered on the Plugin and never cleaned up. Over time this caused unbounded listener accumulation. Listeners are now scoped to the block's lifecycle and properly cleaned up on navigation.  ([#108](https://github.com/gtg922r/obsidian-numerals/issues/108))\r\n- **Fix result insertion in split panes** — The `@[variable::result]` write-back feature could target the wrong file when multiple editor panes were open. Now correctly finds the editor for the source file.\r\n- **Fix plugin re-enable without restart** — Currency unit creation (`math.createUnit`) no longer throws if the plugin is disabled and re-enabled. ([#90](https://github.com/gtg922r/obsidian-numerals/issues/90))\r\n- **Surface frontmatter errors** — Errors evaluating frontmatter values (e.g. bad expressions) are now shown as warnings in the math block instead of silently swallowed.\r\n- **Fix settings migration** — An old settings migration path had a bug (`in` operator on array) that prevented it from ever executing.\r\n- **Fix suggestor accumulation** — Toggling \"Provide Suggestions\" on/off in settings no longer registers duplicate suggestors.\r\n- Plugin now cleans up scope cache when unloaded.\r\n\r\n## ⚡ Performance\r\n\r\n- Math blocks render **once** instead of twice (2× improvement).\r\n- TeX currency regexes pre-compiled at module load (were re-created per line, per render).\r\n- Mathjs symbol list cached as a constant (was re-allocated on every keystroke).\r\n- Renderer instances cached via singleton pattern (were re-created per block).\r\n\r\n## 🏗️ Architecture\r\n\r\n- **TypeScript 4.7 → 5.4** with full `strict` mode enabled.\r\n- **Module split**: The 976-line `numeralsUtilities.ts` has been decomposed into 6 focused modules:\r\n  - `processing/scope.ts` — frontmatter & metadata handling\r\n  - `processing/preprocessor.ts` — directive replacement\r\n  - `processing/evaluator.ts` — mathjs evaluation pipeline\r\n  - `rendering/orchestrator.ts` — block rendering pipeline\r\n  - `rendering/linePreparation.ts` — line data extraction\r\n  - `rendering/displayUtils.ts` — TeX, currency, MathJax utilities\r\n- New `NumeralsError` class for structured error handling.\r\n- All 150 existing tests pass with zero regressions.\r\n",
+      "draft": false,
+      "name": "Numerals 1.8.0 — Architecture Refactor",
+      "prerelease": true,
+      "publishedAt": "2026-02-16T06:54:58Z",
+      "tag": "1.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0c95fda328c757461ce3f83c05848f7a761575930a79a0a37a604461b5a565e6",
+          "name": "main.js",
+          "size": 894481
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:7b5d473cf25f9fa7e7ee003f104b2b47b731fde4d78a7cb5739e7d8af24939c4",
+          "name": "numerals-1.7.0.zip",
+          "size": 253325
+        },
+        {
+          "digest": "sha256:327cf72a86807e3b3e78d354013c5a5222c0ba04d68a8c1b47b4cc946547f766",
+          "name": "styles.css",
+          "size": 8117
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals refs/tags/1.7.0\r\n- Significant architecture refactor - no feature differences",
+      "draft": false,
+      "name": "1.7.0",
+      "prerelease": true,
+      "publishedAt": "2025-10-02T05:05:32Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ecd9d61dfaeaff4ec1c9db623a03120feddfecfa4a57242aca0d50fd4c31ad84",
+          "name": "main.js",
+          "size": 887339
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:ded783355f2e28a41600d44dedaf42b3b1e61ed77eca3ba139e723fe6db3a9ac",
+          "name": "numerals-1.6.0.zip",
+          "size": 251302
+        },
+        {
+          "digest": "sha256:327cf72a86807e3b3e78d354013c5a5222c0ba04d68a8c1b47b4cc946547f766",
+          "name": "styles.css",
+          "size": 8117
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Numerals 1.6.0 (Beta)\r\n- Update `mathjs` library to latest\r\n\r\n### Changed\r\n- Upgraded mathjs from `^11.3.3` to `^14.5.3` for latest features and security fixes.\r\n### Fixed  \r\n- Updated `math.Unit.isValidAlpha` function call to match new single-parameter signature\r\n- mathjs upgrade fixes [#106](https://github.com/gtg922r/obsidian-numerals/issues/106) as mathjs now handles alternate white space ",
+      "draft": false,
+      "name": "1.6.0",
+      "prerelease": true,
+      "publishedAt": "2025-07-12T09:06:03Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:33972830cb8e045d77ebc6710e412937dcab7ed20276a9c953bd4435fa0a3180",
+          "name": "main.js",
+          "size": 859304
+        },
+        {
+          "digest": "sha256:c1cbaeccb995ac0d6cca855c1aff2072e272949502a1128197c171fc3778cd89",
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "digest": "sha256:0d33c1e2f3cfb102dcf53eb9b44559e12c6f1cc407c12fc007b67df36c7e1a6e",
+          "name": "numerals-1.5.6.zip",
+          "size": 243669
+        },
+        {
+          "digest": "sha256:327cf72a86807e3b3e78d354013c5a5222c0ba04d68a8c1b47b4cc946547f766",
+          "name": "styles.css",
+          "size": 8117
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🧪 Numerals 1.5.6 - New Beta 🧪\r\n### Added\r\n- Added a CHANGELOG to project\r\n### Fixed\r\n- [#101](https://github.com/gtg922r/obsidian-numerals/issues/101): Global functions not working across math blocks\r\n- [#77](https://github.com/gtg922r/obsidian-numerals/issues/77): Error description not visible in a block with result annotation\r\n- Build scripts fixed from previous cleanup\r\n",
+      "draft": false,
+      "name": "1.5.6",
+      "prerelease": true,
+      "publishedAt": "2025-05-31T07:57:27Z",
+      "tag": "1.5.6"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1894817
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "styles.css",
+          "size": 7973
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# **🚀 Numerals 1.5.5 - May '25 Update 🚀**\r\n🎉  Restarting development after a bit of a hiatus! \r\n\r\n1.5.5 adds two new features, `@hideRows` and `@prev`!\r\n- `@prev`: Refer to the result in the preview row (similar to the `prev` token in *[Numi](https://github.com/nikolaeu/numi/wiki#previous-result)*)\r\n  - Plays nice with `@sum` or `@total`\r\n- Adds `@hideRows`, a new \"directive\" (i.e. a _Numerals_-specific command starting with `@`)\r\n  - A `math` block with @hideRows on a row (with nothing else), will only render lines that have `=>` at the end of them (\"result annotation\")\r\n \r\n![image](https://github.com/gtg922r/obsidian-numerals/assets/1195174/d75deada-01e6-410a-a4b1-babcef418c64)",
+      "draft": false,
+      "name": "1.5.5",
+      "prerelease": false,
+      "publishedAt": "2025-05-27T07:29:10Z",
+      "tag": "1.5.5"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1725769
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "numerals-1.5.3.zip",
+          "size": 318771
+        },
+        {
+          "name": "styles.css",
+          "size": 7973
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🧪 Numerals 1.5.3 - New Beta 🧪\r\n- ✨ Adds a new \"magic variable\", `@prev` which references the result on the previous line\r\n  - #93 / #94 - Thanks to @jorundoa \r\n- ⚒️ Under the hood: remove references to global `app`\r\n- ⚒️ Under the hood: Better release scripts\r\n\r\n",
+      "draft": false,
+      "name": "1.5.3",
+      "prerelease": true,
+      "publishedAt": "2025-05-27T07:03:47Z",
+      "tag": "1.5.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "entities-1.5.1.zip",
+          "size": 318753
+        },
+        {
+          "name": "main.js",
+          "size": 1728757
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "styles.css",
+          "size": 7973
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🧪 Numerals 1.5.1 - New Beta 🧪\r\n- Adds a new \"directive\" (i.e. a _Numerals_-specific command): `@hideRows` (#31)\r\n  - A `math` block with @hideRows on a row (with nothing else), will only render lines that have `=>` at the end of them (\"result annotation\")\r\n \r\n![image](https://github.com/gtg922r/obsidian-numerals/assets/1195174/d75deada-01e6-410a-a4b1-babcef418c64)\r\n",
+      "draft": false,
+      "name": "1.5.1",
+      "prerelease": true,
+      "publishedAt": "2024-06-17T06:20:10Z",
+      "tag": "1.5.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "entities-1.5.0.zip",
+          "size": 318613
+        },
+        {
+          "name": "main.js",
+          "size": 1728049
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "styles.css",
+          "size": 7973
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# **🚀 Numerals 1.5 - Biggest Update Yet! 🚀**\r\nIntroducing some of the most requested features including the ability to:\r\n- sum previous lines with `@sum` or `@total`\r\n- reference note frontmatter properties\r\n- use global variables between blocks\r\n- insert calculation results directly into your notes\r\n\r\nAlso new convenience features such as Greek letter auto-completion and custom currency support. Upgrade now and take your note-taking calculations to the next level!\r\n\r\n## Detailed Updates\r\n### ⭐️ Sums and Totals of Previous Lines\r\n- New feature and syntax for summing a group of lines: `@sum` or `@total` (closes #18, #49, #36)\r\n- When Numerals encounters `@total` or `@sum` it inserts the sum of all previous lines up until the last blank line or comment\r\n- Can use in a calculation or unit conversion\r\n\r\n![2024-06-11 Sum and Totals Example](https://github.com/gtg922r/obsidian-numerals/assets/1195174/73ecea7a-456b-4cc6-8d26-19d121edc524)\r\n\r\n\r\n### ⭐️ Values in Note Frontmatter\r\nNumerals can now reference note frontmatter or dataview inline values. Set the `numerals` property on a page to share specific properties with all math blocks on a page.\r\n\r\n In order to access metadata, you need to tell Numerals to make the value available by:\r\n1. Set the `numerals` metadata value (either frontmatter or dataview inline property) to the name of the value you want to include, or a list of values\r\n    - Frontmatter of `numerals: other_metadata_name`, or `numerals: [metadata_1, metadata_2]`\r\n    - inline value: `[numerals:: other_metadata_name]`\r\n2. Set the metadata value of `numerals` to `all`: will index all metadata and make it available to dataview\r\n3. Enable \"Always Process All Frontmatter\" in the _Numerals_ settings\r\n\r\n![2024-06-11 Note Properties Available Example](https://github.com/gtg922r/obsidian-numerals/assets/1195174/6fef55ed-1a74-4f59-8660-77a348c3f9c0)\r\n\r\nNumerals is able to write back to dataview values, through use of Result Insertion\r\n\r\n### ⭐️ Note-wide Global Variables\r\nAny variable name preceeded by an `$` symbol will be made available to all math blocks on a page (closes #34)\r\n![2024-06-11 Numerals Global Scope Example](https://github.com/gtg922r/obsidian-numerals/assets/1195174/2a359fb9-ab13-4d12-9969-64f2fcb29b6f)\r\n\r\n### ⭐️ Result Insertion - Store Results in Raw Text\r\nUsing the new `@[...]` syntax (for example: `@[profit]`), Numerals will insert the results of a calculation into the raw text of your notes. (closes #22)\r\n![2024-06-11 Numerals Result Insertion Example](https://github.com/gtg922r/obsidian-numerals/assets/1195174/7c36f5c1-77d0-4f41-ab37-cc120dcdc703)\r\n\r\n\r\n### ⭐️ Greek Letter Auto-complete\r\n- Add greek letter auto-completion after typing `:`. e.g. `:mu` in a math block will offer `μ` as an auto-complete suggestion (closes #69)\r\n- Greek letters can be used in any variable name. They also work with subscripting when in `math-tex` block.\r\n\r\n### ⭐️ Custom Currency Support\r\n- Add custom currency support. In Numerals setting, user can set a currency symbol and name. (closes #54, #52, #61)\r\n- Allows for example: `₿100 / day * 3 hours → 12.5 BTC` if you set ₿ as the custom currency:\r\n![2024-05-24 Numerals Custom Currency Mapping Screenshot](https://github.com/gtg922r/obsidian-numerals/assets/1195174/05749263-1cd7-479a-85ba-2a803bfd3926)\r\n\r\n",
+      "draft": false,
+      "name": "1.5.0",
+      "prerelease": false,
+      "publishedAt": "2024-06-12T06:52:28Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1668032
+        },
+        {
+          "name": "manifest-beta.json",
+          "size": 389
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "styles.css",
+          "size": 8925
+        }
+      ],
+      "author": "gtg922r",
+      "description": "## 🧪 Beta Release 1.4.1 🧪 (Bug fix only)\r\n- Fixes bug with result insertion. Result insertion can now be used on the same line as initial assignment to a variable:\r\n```\r\na = 1\r\nb = 2\r\n@[result] = a + b\r\n```\r\nOnce rendered, will become: \r\n```\r\na = 1\r\nb = 2\r\n@[result::3] = a + b\r\n```",
+      "draft": false,
+      "name": "1.4.1",
+      "prerelease": true,
+      "publishedAt": "2024-03-02T09:57:17Z",
+      "tag": "1.4.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1668030
+        },
+        {
+          "name": "manifest-beta.json",
+          "size": 389
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "styles.css",
+          "size": 8925
+        }
+      ],
+      "author": "gtg922r",
+      "description": "# 🧪  Beta Release 1.4 🧪 \r\n### Support for frequently requested features!\r\n- \"Sum\" (or \"Total\") feature\r\n- Page \"Globals\" (i.e. shared variables)\r\n- Result Insertion: Calculation result added to note source using dataview syntax\r\n\r\n🚧 _Note to Beta Testers: Supporting sums/totals requires some additional pre-processing by Numerals. \"Globals\" is dependent on when blocks get rendered. Please report any bugs you see as I may have missed some corner cases!_ 🚧\r\n\r\nNumerals 1.4 (Beta) includes support for one of the most commonly requested features: The ability to quickly sum previous lines. Numerals now offers a magic variable `@sum` or `@total`, which will always be populated with the sum of all previous lines up to a blank line or header/comment. As a magic variable it can be used in equations, conversions, or assignment to other variables. \r\n\r\n![Numerals 1 4 Beta Screenshot Sum-Total](https://github.com/gtg922r/obsidian-numerals/assets/1195174/b99d0716-7bdd-4986-afa9-99d56b7162f1)\r\n\r\nNumerals 1.4 (Beta) includes support for \"globals\" - variable values that keep their value across code blocks. _This should be considered experimental - please report any issues!_ In a code block, create a new variable prefixed with a `$`. That variable will be available in later `math` codeblocks.\r\n\r\n**Warning:** Numerals can't ensure a consistent ordering of math block evaluation. If you assigned a value to a global in multiple code blocks you may get unexpected results. Its best to only assign the value in one place. \r\n\r\n![Numerals 1 4 Beta Screenshot - Globals](https://github.com/gtg922r/obsidian-numerals/assets/1195174/5cc5bd3d-48ae-456a-a633-1723bb394f01)\r\n\r\nNumerals 1.4 (Beta) has 🚨 **experimental** 🚨 support for \"result insertion\". Wrapping a variable name in `@[...]` (e.g. `@[result]`), will tell Numerals to insert the value of the variable into the source of the note itself using dataview notation (e.g. `variable::value`). This allows you to ensure calculation results are saved to the source of the note (in case you ever use outside of Obsidian), as well as setting dataview values using Numerals. \r\n\r\n![Numerals 1 4 Beta Screenshot - Result Insertion](https://github.com/gtg922r/obsidian-numerals/assets/1195174/acbb390e-eac4-495d-baaf-b90624e16988)\r\n\r\nNumerals 1.4 (Beta) also adds a convenience feature for autocomplete of greek characters, by typing `:` in a `math` block and then starting to type the name of the character. Greek characters are fully supported by Numerals' math engine, so you can name your variables using math characters. This includes in `-tex` mode, where subscript support is also included, and `ω_n` will render as $ω_n$\r\n![Numerals 1 4 Beta Screenshot Greek](https://github.com/gtg922r/obsidian-numerals/assets/1195174/b4b26d7c-c1eb-4ce4-afb0-33a198e1b5c5)\r\n*Note: this feature can be disabled in settings if it conflicts with any autocomplete tools you already have*\r\n\r\n\r\n",
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": true,
+      "publishedAt": "2024-03-01T18:37:35Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1553004
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.3.1.zip",
+          "size": 292893
+        },
+        {
+          "name": "styles.css",
+          "size": 7915
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Beta Release\r\n- Fixes annoying `math-tex` rendering bug for some users (#60, #57, #45)",
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": true,
+      "publishedAt": "2023-09-14T09:36:50Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1554036
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.3.0.zip",
+          "size": 293611
+        },
+        {
+          "name": "styles.css",
+          "size": 7915
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🧪 Beta Release 1.3  \r\n- Access frontmatter or dataview inline variables inside code blocks\r\n- Math code block auto-update after metadata or settings change\r\n- Render subscripts in TeX mode",
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": true,
+      "publishedAt": "2023-09-03T06:55:02Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1295570
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.2.1.zip",
+          "size": 238722
+        },
+        {
+          "name": "styles.css",
+          "size": 7915
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Beta release\r\n- Switch font colors to be based on `--code-` variants. Should allow for better consistency with themes\r\n- Please open an issue if this negatively affects any styling",
+      "draft": false,
+      "name": "1.2.1",
+      "prerelease": true,
+      "publishedAt": "2023-03-13T14:25:56Z",
+      "tag": "1.2.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1295570
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.2.0.zip",
+          "size": 238729
+        },
+        {
+          "name": "styles.css",
+          "size": 7849
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 🎉 Numerals 1.2\r\n- Adds auto-completion to all variables with an option to auto-complete on all functions and constants!\r\n- Adds user setting to specify rendered number formatting\r\n- Fixes bugs with comma decimal separators: #19, #23, #28 \r\n- Fixes a bug causing issues on iOS\r\n\r\n### Auto-completion Suggestions\r\nBy default, _Numerals_ will provide auto-completion suggestions for variables that have been defined in a particular `math` codeblock. Turning on _Include Functions and Constants in Suggestions_ will also provide suggestions for all functions, math constants, and physical constants supported in _Numerals_.\r\n\r\n![Auto-completion of Functions](https://user-images.githubusercontent.com/1195174/215416147-68110298-0e10-44e5-9351-83efc3a17bba.png)\r\n\r\n### Formatting Options\r\n- **System Formatted**: Use your local system settings for number formatting\r\n- **Fixed**: No thousands separator and full precision\r\n-  **Exponential**: Always use exponential notation.\r\n- **Engineering**: Exponential notation with exponent a multiple of 3.\r\n-  **Formatted**: Forces a specific type of formatted notation. \r\n  - Formatted: 100,000.1\r\n  - Formatted: 100.000,1\r\n  - Formatted: 100 000,1\r\n  - Formatted: 1,00,000.1\r\n- *Note:* <code>math-tex</code> mode will always use period as decimal separator, regardless of locale.",
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2023-03-12T08:00:40Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1295570
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.10.zip",
+          "size": 238731
+        },
+        {
+          "name": "styles.css",
+          "size": 7849
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\r\n### Release Changes\r\n- Adds user setting to specify rendered number formatting\r\n- Fixes bugs with comma decimal separators: #19, #23, #28 \r\n \r\n\r\n### Formatting Options\r\n- **System Formatted**: Use your local system settings for number formatting\r\n- **Fixed**: No thousands separator and full precision\r\n-  **Exponential**: Always use exponential notation.\r\n- **Engineering**: Exponential notation with exponent a multiple of 3.\r\n-  **Formatted**: Forces a specific type of formatted notation. \r\n  - Formatted: 100,000.1\r\n  - Formatted: 100.000,1\r\n  - Formatted: 100 000,1\r\n  - Formatted: 1,00,000.1\r\n\r\n_Note:  math-tex  mode will always use period as decimal separator, regardless of locale._",
+      "draft": false,
+      "name": "1.0.10",
+      "prerelease": true,
+      "publishedAt": "2023-03-12T07:29:49Z",
+      "tag": "1.0.10"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1286018
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.9.zip",
+          "size": 236508
+        },
+        {
+          "name": "styles.css",
+          "size": 7849
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Rewrite result annotation regex which was crashing _Numerals_ on iOS",
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": true,
+      "publishedAt": "2023-02-04T08:42:14Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1285934
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.8.zip",
+          "size": 236497
+        },
+        {
+          "name": "styles.css",
+          "size": 7849
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Add support for auto-completion suggestions (#15)",
+      "draft": false,
+      "name": "1.0.8",
+      "prerelease": true,
+      "publishedAt": "2023-01-19T15:58:59Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1271983
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.7.zip",
+          "size": 233326
+        },
+        {
+          "name": "styles.css",
+          "size": 7622
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Renamed \"emitted\" syntax to \"Result Annotation\"\r\n\r\nResult Annotation:\r\n`=>` at the end of a line (but before a comment) will tell Numerals that a result should be highlighted. Any line in that code block without a `=>` annotation will be rendered faintly (or hidden depending on settings).",
+      "draft": false,
+      "name": "1.0.7",
+      "prerelease": false,
+      "publishedAt": "2022-12-10T08:06:11Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1271959
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.6.zip",
+          "size": 233308
+        },
+        {
+          "name": "styles.css",
+          "size": 7622
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Fixed bug in settings loading for all new users",
+      "draft": false,
+      "name": "1.0.6",
+      "prerelease": false,
+      "publishedAt": "2022-12-08T20:25:58Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1271875
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.5.zip",
+          "size": 233298
+        },
+        {
+          "name": "styles.css",
+          "size": 7622
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- Code cleanup to address PR comments for community plugin list\r\n- Adds initial support for [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) (#13)\r\n- Adds initial support for [Calca](http://calca.io/) style result annotation (#4). Add `=>` after a line to hide (or dim) all other lines in the block\r\n- includes a bugfix for syntax highlighting as well as resetting settings when upgrading from older versions\r\n\r\n",
+      "draft": false,
+      "name": "1.0.5",
+      "prerelease": false,
+      "publishedAt": "2022-12-08T19:53:39Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 1253394
+        },
+        {
+          "name": "manifest.json",
+          "size": 388
+        },
+        {
+          "name": "obsidian-numerals-1.0.4.zip",
+          "size": 228847
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Minor tweaks to fix TypeScript errors and avoid potential bugs",
+      "draft": false,
+      "name": "1.0.4",
+      "prerelease": false,
+      "publishedAt": "2022-11-15T08:18:29Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5229078
+        },
+        {
+          "name": "manifest.json",
+          "size": 389
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Manifest tweak",
+      "draft": false,
+      "name": "1.0.3",
+      "prerelease": false,
+      "publishedAt": "2022-11-14T07:52:18Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5229078
+        },
+        {
+          "name": "manifest.json",
+          "size": 398
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Update description in manifest",
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2022-11-14T07:38:29Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5229078
+        },
+        {
+          "name": "manifest.json",
+          "size": 372
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Minor settings tweak and metadata updates for plugin submission",
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2022-11-14T07:14:06Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5229100
+        },
+        {
+          "name": "manifest.json",
+          "size": 347
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Initial 1.0 release, ready for plugin store submission",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2022-11-14T06:48:46Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5228724
+        },
+        {
+          "name": "manifest.json",
+          "size": 351
+        },
+        {
+          "name": "styles.css",
+          "size": 4635
+        }
+      ],
+      "author": "gtg922r",
+      "description": "## Numerals now supports TeX style rendering and Syntax Highlighting of math blocks!\r\n\r\nEither go to settings to change the default render style, or force the render style for a specific math block by using `math-plain`, `math-tex`, or `math-highlight`\r\n\r\n![Numerals Render Style Comparison](https://user-images.githubusercontent.com/1195174/201515258-e155fdee-7d61-479e-9f1a-94f4b3ac19d5.png)\r\n\r\n## Better Error Messages\r\nError messages are now reported in the line where the error occurred to better troubleshoot any issues. \r\n![Numerals Error Reporting](https://user-images.githubusercontent.com/1195174/201515432-ae4b22c9-b4e3-4cfb-9598-f293021298f5.png)\r\n\r\n**_This is the last major release before 1.0 and submitted to plugin store!_**\r\n\r\n",
+      "draft": false,
+      "name": "0.0.12: TeX Rendering and Syntax Highlighting! Also better error messages",
+      "prerelease": true,
+      "publishedAt": "2022-11-13T09:42:49Z",
+      "tag": "0.0.12"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5207602
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2421
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Add support for:\r\n- € => EUR\r\n- £ => GBP\r\n- ¥ => JPY\r\n\r\nIn a future feature will allow user to define custom mapping of currency code to currency symbol, if for example you want redefine `$` to map to `AUD`, or if you want to add `₹` mapping to `INR`, etc",
+      "draft": false,
+      "name": "0.0.9: Additional currency support",
+      "prerelease": true,
+      "publishedAt": "2022-11-08T07:54:46Z",
+      "tag": "0.0.9"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5205416
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2421
+        }
+      ],
+      "author": "gtg922r",
+      "description": "",
+      "draft": false,
+      "name": "0.0.8 Final tweaks before initial beta",
+      "prerelease": true,
+      "publishedAt": "2022-11-06T18:05:54Z",
+      "tag": "0.0.8"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5205410
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2387
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Lost a styles.css update somewhere along the line",
+      "draft": false,
+      "name": "0.0.7: Fix styling bug from rename",
+      "prerelease": true,
+      "publishedAt": "2022-11-06T16:31:20Z",
+      "tag": "0.0.7"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5205570
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2408
+        }
+      ],
+      "author": "gtg922r",
+      "description": "Add simple error handling to the rendered view",
+      "draft": false,
+      "name": "0.0.6: Simple Error Handling",
+      "prerelease": true,
+      "publishedAt": "2022-11-06T15:51:53Z",
+      "tag": "0.0.6"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5205396
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2297
+        }
+      ],
+      "author": "gtg922r",
+      "description": "- Comment lines bold and faint\r\n- Several tweaks to layout and styles\r\n- First README",
+      "draft": false,
+      "name": "0.0.5",
+      "prerelease": true,
+      "publishedAt": "2022-11-06T09:15:05Z",
+      "tag": "0.0.5"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5205909
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2346
+        }
+      ],
+      "author": "gtg922r",
+      "description": "- Cleaned up styling CSS and added alternating row color option",
+      "draft": false,
+      "name": "0.0.4",
+      "prerelease": true,
+      "publishedAt": "2022-11-03T07:47:19Z",
+      "tag": "0.0.4"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5204297
+        },
+        {
+          "name": "manifest.json",
+          "size": 350
+        },
+        {
+          "name": "styles.css",
+          "size": 2280
+        }
+      ],
+      "author": "gtg922r",
+      "description": "- Add 3 display types\r\n- Update plugin name",
+      "draft": false,
+      "name": "0.0.3",
+      "prerelease": true,
+      "publishedAt": "2022-11-01T07:00:26Z",
+      "tag": "0.0.3"
+    },
+    {
+      "assets": [
+        {
+          "name": "main.js",
+          "size": 5201576
+        },
+        {
+          "name": "manifest.json",
+          "size": 307
+        },
+        {
+          "name": "styles.css",
+          "size": 628
+        }
+      ],
+      "author": "gtg922r",
+      "description": "",
+      "draft": false,
+      "name": "Initial pre-alpha release with base functionality working",
+      "prerelease": true,
+      "publishedAt": "2022-10-18T19:19:19Z",
+      "tag": "0.0.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "gtg922r/obsidian-numerals"
+}
