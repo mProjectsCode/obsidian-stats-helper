@@ -1,0 +1,113 @@
+{
+  "author": "akhmialeuski",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Advanced audio recording with input device and folder configuration.",
+  "errors": [],
+  "id": "advanced-audio-recorder",
+  "lastChangedAt": "2026-06-01T18:00:58.581Z",
+  "lastFetchedAt": "2026-06-01T18:00:58.581Z",
+  "manifest": {
+    "author": "Anatol Khmialeuski",
+    "authorUrl": "https://coff.ee/akhmelevskiy",
+    "description": "Advanced audio recording with input device and folder configuration.",
+    "id": "advanced-audio-recorder",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.6.6",
+    "name": "Advanced Audio Recorder",
+    "version": "1.3.3"
+  },
+  "name": "Advanced Audio Recorder",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:4cf98a4f9e4b19546af05e4c5919363b2b394d6378ff5f6948ee4d01f18d57c1",
+          "name": "main.js",
+          "size": 1306720
+        },
+        {
+          "digest": "sha256:e31d152cccde221151c4652a2633180c6ff744c92ce2927e6fbf6e37cfc8fa14",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:cf0ac8623a2b0343cd9717a0ab3ea9acaa9265fb054c3c08b0c2b9f376290c4b",
+          "name": "styles.css",
+          "size": 2939
+        }
+      ],
+      "author": "akhmialeuski",
+      "description": "Maintenance release that addresses all feedback from the Obsidian community plugin validator. No user-visible feature changes.\n\n## Compatibility\n\n- `minAppVersion` bumped from `0.15.0` to `1.6.6` to match the actual API surface used by the plugin (`Vault.createFolder`, `Menu.showAtPosition`, `FileManager.trashFile`). Users on older Obsidian versions stay on `1.3.2`.\n\n## Improvements\n\n- Popout-window compatibility: replace global `setTimeout` / `document` usage with Obsidian's `activeWindow.setTimeout` / `activeDocument`, and switch `document.createElement` calls to the Obsidian `createEl` helper.\n- Build: replace the deprecated `builtin-modules` npm package with Node's built-in `node:module.builtinModules`.\n- Release workflow: add `actions/attest-build-provenance@v2` so future `v*`-tagged release assets get GitHub-issued build provenance attestations.\n\nFull Changelog: https://github.com/akhmialeuski/advanced-audio-recorder/compare/1.3.2...1.3.3",
+      "draft": false,
+      "name": "1.3.3",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T17:45:08Z",
+      "tag": "1.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b628eef3cf7d98b3d18ef6925b0594885fd793e33ca7d76f4d4e7275c736382a",
+          "name": "main.js",
+          "size": 97265
+        },
+        {
+          "digest": "sha256:ddea2c249d479a56252e0695fcf5d256e76f59fc0195806ae273d600481fcbc1",
+          "name": "manifest.json",
+          "size": 312
+        },
+        {
+          "digest": "sha256:cf0ac8623a2b0343cd9717a0ab3ea9acaa9265fb054c3c08b0c2b9f376290c4b",
+          "name": "styles.css",
+          "size": 2939
+        },
+        {
+          "digest": "sha256:f61d5f6d06b95d527f184d7edec61505f100fbe385686ba3636930d65ee87685",
+          "name": "versions.json",
+          "size": 282
+        }
+      ],
+      "author": "akhmialeuski",
+      "description": "v1.3.2 is a reliability and usability release focused on making recording sessions easier to control, ensuring long WAV recordings save safely, and tightening overall code quality across the entire project.\r\n\r\n## New Features\r\n\r\n- **Recording controls in the status bar**: when a recording is active, the status bar now displays clickable **pause/resume** and **stop** buttons next to the recording status label. This allows you to control the session instantly without using hotkeys or searching the command palette. Buttons use native Obsidian icons and include accessibility attributes (`role`, `aria-label`, `tabindex`) for keyboard and screen-reader support.\r\n- **Save progress indicator with progress bar**: during the save phase of longer recordings, the status bar now displays a labeled progress bar while the ribbon icon animates to indicate activity. This provides clear feedback while buffers are flushed, audio is assembled, the file is written, and temporary files are cleaned up.\r\n\r\n## Improvements\r\n\r\n- **Direct PCM capture for desktop WAV recordings**: desktop WAV recording now captures raw PCM audio in real time using `ScriptProcessorNode`, streaming interleaved `int16` chunks directly to disk. This replaces the previous approach that decoded and re-encoded the entire recording in memory, which could consume large amounts of RAM during long sessions.\r\n- **Segment-based streaming to disk**: recordings are now written as small segment files (5-second chunks) instead of continuously modifying a single growing temporary file. Final assembly occurs when recording stops, preventing progressive slowdowns and improving resilience during long sessions.\r\n\r\n## Bug Fixes\r\n\r\n- **Duplicate “Audio file info” in context menu**: fixed an issue where the menu item could appear twice because both `editor-menu` and `file-menu` events modified the same menu instance. A `WeakSet` is now used to ensure the item is added only once per menu.\r\n- **Context menu items scattered across sections**: Advanced Audio Recorder menu items are now grouped under a dedicated `aar` section so they appear together instead of being spread across default and danger sections.\r\n- **Save progress text wrapping**: fixed an issue where the status bar save message could wrap to multiple lines on narrow layouts.\r\n- **Long WAV recordings failing to save**: resolved failures affecting long WAV recordings that previously occurred due to memory exhaustion during post-processing.\r\n\r\nFull Changelog: [https://github.com/akhmialeuski/advanced-audio-recorder/compare/v1.3.1...v1.3.2](https://github.com/akhmialeuski/advanced-audio-recorder/compare/v1.3.1...v1.3.2)",
+      "draft": false,
+      "name": "Release Notes 1.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-18T17:38:22Z",
+      "tag": "1.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:032650a0837cfa9fb1e7eb91f0342a916c0f759444fce70904a4ca7aab299c69",
+          "name": "main.js",
+          "size": 63682
+        },
+        {
+          "digest": "sha256:14d8129f3e117be92513a5a5d302d7694b78f8ea308233a1e3e034e81f3a9c21",
+          "name": "manifest.json",
+          "size": 312
+        },
+        {
+          "digest": "sha256:7e40ca26cfbd4c5a0c701fa856ccbadc0f7dfb6f4e8cfaa96c4da91d9e25cd54",
+          "name": "styles.css",
+          "size": 1001
+        },
+        {
+          "digest": "sha256:0f9e1f58e4c0025daec1e1ee46b5adca6c3be29a047ce11b264bdca2a1bb304b",
+          "name": "versions.json",
+          "size": 242
+        }
+      ],
+      "author": "akhmialeuski",
+      "description": "v1.3.0 is a major stability and UX release focused on making recording sessions _predictable_, _recoverable_, and _clean_ inside your Vault. The core theme is: fewer surprises during long sessions, fewer broken links after insertion, and far fewer leftover temporary artifacts after interruptions.\r\n\r\n## New Features\r\n- **Context-aware save location (next to active note)**: you can now record directly \"beside\" the currently open note, so audio ends up in the most relevant folder context without manual moves or post-cleanup. This significantly reduces friction for meeting notes, daily notes, and project logs where the recording should live close to the note that references it.\r\n- **Visual recording indicator on ribbon icon**: the ribbon icon now reflects recording state (recording/paused/idle) and provides immediate feedback that the plugin is actively capturing audio. This helps prevent the classic \"am I actually recording?\" moment, especially when Obsidian is not in focus.\r\n- **Native recording deletion via context menus (Explorer, Editor, and Player)**: you can now delete recordings directly from the file explorer, from audio links inside the editor, or from embedded audio players, with proper respect for Vault trash settings via `FileManager.trashFile`. The context menu logic was refactored into a dedicated `ContextMenu` class and is fully covered by unit tests, making deletion flows safer, more consistent, and easier to maintain.\r\n\r\n## Improvements\r\n\r\n- **Long-recording efficiency via streaming chunks to disk**: recording data is now streamed instead of being kept entirely in memory, which makes multi-hour sessions much more stable and reduces the chance of slowdowns on memory-constrained systems. Additional buffering behavior was added for mobile scenarios to improve resilience.\r\n- **Strict adherence to settings (Output Format + bitrate)**: the recorder output now reliably matches configured **Output Format** and **bitrate**. The goal is \"what you set is what you get\" across the full lifecycle, including multi-track paths and finalization.\r\n- **More robust device handling and ordering**: multi-track device selection became more reliable, including deterministic ordering and correct mapping of devices to tracks. Switching microphones should behave consistently and should not silently drift to an unintended device.\r\n- **Clearer and more actionable error reporting**: error handling was upgraded so failures are explained in plain language when possible (for example, permission-denied and common browser Media APIs cases), while still keeping enough diagnostic detail for troubleshooting.\r\n- **Recording lifecycle hardening**: stop/finalize flows are more resilient, ensuring cleanup happens even when save/finalize fails, state resets correctly, and microphone resources are released (e.g., stopping `MediaStreamTrack`) to avoid \"stuck mic\" situations after errors.\r\n\r\n## Bug Fixes\r\n\r\n- **Cleanup of orphaned `.partial` artifacts on finalize**: fixed a class of issues where interrupted or failed finalization could leave temporary `.partial` files behind. The finalize path now performs cleanup reliably, and if cleanup cannot be completed safely, the flow supports rollback behavior to avoid leaving a half-broken final output while preserving temporary artifacts for recovery.\r\n- **Fixed broken inserted links by using basename-only in `WikiLink`**: inserted references now use only the file basename rather than a full path, preventing link resolution breakage in common Vault setups. Tests were added to verify both default and context-aware save paths.\r\n- **Fixed `ArrayBuffer` append error in chunk handling**: resolved a runtime failure in `handleChunk` that could break recording mid-session under certain chunking conditions.\r\n- **Fallback for missing device constraint (`OverconstrainedError` / `NotFoundError`)**: when a previously saved device ID is no longer available, the plugin now falls back to a working default device instead of failing recording startup, improving resilience after OS/device changes.\r\n- **Stability fixes for unexpected stop / save failures**: addressed rare edge cases where recordings could stop unexpectedly or fail to save while leaving inconsistent internal state; cleanup and state reset logic is now stricter and more defensive.\r\n- **Test and lint noise reduction**: silenced expected warnings in tests and resolved minor linter warnings (notably in `SettingsTab`) to keep CI and local runs clean and signal-focused.\r\n\r\n## Documentation\r\n\r\n- **README and settings tooltips aligned with real behavior**: updated docs so UI wording matches what the plugin actually does (especially around device selection, output behavior, and save location).\r\n- **Pause/resume guidance clarified**: improved the explanation of `pause` / `resume` behavior so users understand what to expect during session control.\r\n- **GitHub Markdown rendering fixes + asset refactor**: adjusted documentation formatting so images render correctly on GitHub and reorganized assets for easier maintenance and navigation.\r\n\r\nFull Changelog: [https://github.com/akhmialeuski/advanced-audio-recorder/compare/v1.1.0...v1.3.0](https://github.com/akhmialeuski/advanced-audio-recorder/compare/v1.1.0...v1.3.0)",
+      "draft": false,
+      "name": "Release Notes v1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-02-11T20:52:05Z",
+      "tag": "1.3.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "akhmialeuski/advanced-audio-recorder"
+}

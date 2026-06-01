@@ -1,0 +1,754 @@
+{
+  "author": "David V. Kimball",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Insert, rename, and sort images within your notes.",
+  "errors": [],
+  "id": "image-manager",
+  "lastChangedAt": "2026-06-01T18:00:58.581Z",
+  "lastFetchedAt": "2026-06-01T18:00:58.581Z",
+  "manifest": {
+    "author": "David V. Kimball",
+    "authorUrl": "https://davidvkimball.com",
+    "description": "Insert, rename, and sort images within your notes.",
+    "fundingUrl": "https://patreon.com/davidvkimball",
+    "id": "image-manager",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.11.0",
+    "name": "Image Manager",
+    "version": "0.3.8"
+  },
+  "name": "Image Manager",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c7e286ad43ce3d46b850a27658e8f1124656d68ca8084d97cb9385edae5099fa",
+          "name": "main.js",
+          "size": 189761
+        },
+        {
+          "digest": "sha256:70823a4c65212692cba227e4d31548a31f190269432559fb8bc137116e861413",
+          "name": "manifest.json",
+          "size": 323
+        },
+        {
+          "digest": "sha256:d90f43020da86ed4c5b0a814789e77f3c8a6399ca5790f71d52c609f1ec7c016",
+          "name": "styles.css",
+          "size": 13718
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Migrate settings to Obsidian 1.13 declarative API; fix multi-window banner apply\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-image-manager/compare/0.3.6...0.3.8",
+      "draft": false,
+      "name": "0.3.8",
+      "prerelease": false,
+      "publishedAt": "2026-05-30T19:45:56Z",
+      "tag": "0.3.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b6f7901836820a0a0f1941e27a3ea09ecd07c467d6d9908db38f451f3584ec42",
+          "name": "main.js",
+          "size": 159308
+        },
+        {
+          "digest": "sha256:0b6dd52515d0aca73b5166ed78955119639977817a5e7782549811f88622b966",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:d90f43020da86ed4c5b0a814789e77f3c8a6399ca5790f71d52c609f1ec7c016",
+          "name": "styles.css",
+          "size": 13718
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Disable the noisy sentence-case lint rule instead of maintaining per-rule exception lists\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-image-manager/compare/0.3.5...0.3.6",
+      "draft": false,
+      "name": "0.3.6",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T05:29:48Z",
+      "tag": "0.3.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6024873a2a3adc512ef7eb2ed8810727034832203bc2d1a8b664c990f4f28206",
+          "name": "main.js",
+          "size": 159297
+        },
+        {
+          "digest": "sha256:f597e6fd28ee3d37d39495562a99790b3a674e571ef83435bb1e62e5a5a04f52",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:d90f43020da86ed4c5b0a814789e77f3c8a6399ca5790f71d52c609f1ec7c016",
+          "name": "styles.css",
+          "size": 13718
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Scorecard cleanup pass for 0.3.5\n\n- Replace bare `document` references with `activeDocument` and bare\n  `setTimeout`/`clearTimeout` with the `window.*` forms for\n  popout-window compatibility; swap `document.createElement` /\n  `createElementNS` / `createEl('span')` for the Obsidian\n  `createDiv` / `createSpan` / `createSvg` helpers; use\n  `.instanceOf(...)` instead of `instanceof` for cross-window\n  checks. Most autofixed by obsidianmd 0.3.0.\n- `console.info` migration messages downgraded to `console.debug`\n  (only warn/error/debug are allowed).\n- editor-paste / editor-drop handlers: add the genuine\n  `evt.defaultPrevented` early-return guard. preventDefault is\n  already called conditionally inside PasteHandler only when an image\n  is actually handled, so the obsidianmd/editor-drop-paste heuristic\n  (which can't see across the delegate) is suppressed with a precise\n  rationale rather than calling preventDefault unconditionally, which\n  would swallow normal text paste / drag-and-drop.\n- Type the nested-property walker in mdx-frontmatter.ts so indexing is\n  guarded by a runtime object check instead of implicit any.\n- Reword UI strings flagged by obsidianmd/ui/sentence-case (which can't\n  be disabled): brand-name and URL descriptions rephrased to clean\n  sentence case or naturally path-skippable forms, placeholders\n  capitalized. No behavioral change.\n- styles.css: merge the duplicate `.image-inserter-container\n  .container` block, drop the dead non-Chromium `background`\n  fallback (Obsidian is Chromium so the -webkit- value always wins),\n  and remove four override flags on the static-banner rules by raising\n  selector specificity with the doubled-class trick.\n- Add `pnpm.overrides` for the minimatch / picomatch /\n  brace-expansion / ajv / flatted / yaml chain, upgrade\n  eslint-plugin-obsidianmd 0.1.9 -> 0.3.0 scoped to TypeScript, drop\n  the broken preinstall script, and move `obsidian` from a\n  `\"latest\"` runtime dependency to a pinned devDependency.\n- Gate the esbuild sourcemap on build mode: production ships\n  `sourcemap: false` so the release main.js is byte-reproducible and\n  passes build verification; dev/watch keeps the inline sourcemap.\n- Add a portable CONTRIBUTING.md and the canonical release workflow\n  (manifest-version read, build provenance attestation, commit-message\n  release notes, workflow_dispatch recovery).\n\nBump to 0.3.5.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-image-manager/compare/0.3.4...0.3.5",
+      "draft": false,
+      "name": "0.3.5",
+      "prerelease": false,
+      "publishedAt": "2026-05-17T05:01:37Z",
+      "tag": "0.3.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b1544d7e6c57ed7ad05712e10eb550b2e8420febebc9a35a7ee1e68aaf1c2a7b",
+          "name": "main.js",
+          "size": 577599
+        },
+        {
+          "digest": "sha256:f816baaee59e6977415bc9dc6058c14594419995fa198abf3a7eb8aeeca03954",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Improved nested property support.",
+      "draft": false,
+      "name": "0.3.4",
+      "prerelease": false,
+      "publishedAt": "2026-04-30T22:24:47Z",
+      "tag": "0.3.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6d86a9d5dae487a78246a0c41a7496fc29fad8bdeb1bd5cee056f479b603ce3d",
+          "name": "main.js",
+          "size": 574124
+        },
+        {
+          "digest": "sha256:da72b6128397431928e5e06c38db1d834136e91513c2fcf8a430e27fe3a9b69c",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Bug fix with banner, reported by user.",
+      "draft": false,
+      "name": "0.3.3",
+      "prerelease": false,
+      "publishedAt": "2026-04-15T20:09:50Z",
+      "tag": "0.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e7b045b35e7c2696b03cacab4a43254705f11d5105a3498572a42fc73a4e4d75",
+          "name": "main.js",
+          "size": 575481
+        },
+        {
+          "digest": "sha256:b7faa1bbb4c814f808c72ce55847324e979b0dd1f0a4c4493dbc6fbdeab8de24",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed bug with space character in description. Normalizes to hyphen now.",
+      "draft": false,
+      "name": "0.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-04-07T19:37:45Z",
+      "tag": "0.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1a29fbf58ba30528a07e46104feadce3212ba06474b4ccd15359be41d0e97a29",
+          "name": "main.js",
+          "size": 575465
+        },
+        {
+          "digest": "sha256:dfeaff05fda7a6004bcdb8ed346bb6d1c751b6516643cb4866616bc434780c16",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed strange bug where banner would stop showing up if an image was viewed in the same leaf.",
+      "draft": false,
+      "name": "0.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-04-02T06:53:29Z",
+      "tag": "0.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1581495367a033bfb89f156c94a32920e32c6c048b9ae688b2f699d2d0f21613",
+          "name": "main.js",
+          "size": 574258
+        },
+        {
+          "digest": "sha256:61fbff9cfbd73c0934e185855ca7af47c86dff01386a681bcfa3f01d0bd6b346",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Removed AI-sounding language.",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-03-24T23:22:38Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b398a5ddfada0383a1c35d16102fb1236a39e2df815d8587912112c277501ec",
+          "name": "main.js",
+          "size": 574270
+        },
+        {
+          "digest": "sha256:611fbe92371b2c423aba265d30f98d1dee74ed819028e4da5025b43bd9e85f98",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Corrected version number.",
+      "draft": false,
+      "name": "0.2.9",
+      "prerelease": false,
+      "publishedAt": "2026-03-20T23:07:25Z",
+      "tag": "0.2.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b398a5ddfada0383a1c35d16102fb1236a39e2df815d8587912112c277501ec",
+          "name": "main.js",
+          "size": 574270
+        },
+        {
+          "digest": "sha256:611fbe92371b2c423aba265d30f98d1dee74ed819028e4da5025b43bd9e85f98",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Resolve absolute banner image paths via Vault CMS public path API.",
+      "draft": false,
+      "name": "0.2.8",
+      "prerelease": false,
+      "publishedAt": "2026-03-20T22:05:42Z",
+      "tag": "0.2.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8769f070ff633be5e21187ac8d8e994a20c4943bb895d6eed0e7c1790f60ff3d",
+          "name": "main.js",
+          "size": 572364
+        },
+        {
+          "digest": "sha256:c292b25b982c82899bfc275c5a09892a8ad47b131b38c9322b5396d8c894b3a4",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:4b437dcd774baf18f1fb6ad88df69f4bb627e8b94d8b5ed87d8348aad52a5022",
+          "name": "styles.css",
+          "size": 13979
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Update minimum version to 1.11.0 and remove backwards compatibility for SettingGroup.",
+      "draft": false,
+      "name": "0.2.7",
+      "prerelease": false,
+      "publishedAt": "2026-03-03T07:24:40Z",
+      "tag": "0.2.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5cc8be6475ec53149a5310786131cf79310a4da2fe7e05da213801dc19bf7160",
+          "name": "main.js",
+          "size": 579799
+        },
+        {
+          "digest": "sha256:e1b482ee927ec10c5ac01970fddd43ef49d3db2e40d6a380e99a63eea964b424",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:e2b2737b0d553d07cb23dab4dd61b013add3d462ed5ecea98c0f1e47bfffd62e",
+          "name": "styles.css",
+          "size": 14263
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Can now optionally specify a property name for alt text for the images you insert into the image property.",
+      "draft": false,
+      "name": "0.2.6",
+      "prerelease": false,
+      "publishedAt": "2026-02-08T06:43:37Z",
+      "tag": "0.2.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a33752f82b8734397036ffbf7e694475fe3aa7974cb2cf4e4b931195f541cbca",
+          "name": "main.js",
+          "size": 575666
+        },
+        {
+          "digest": "sha256:0d8bfe9a6983a4c67e020b207f5aecf793b8b20eee15e1061b7345f760de3a84",
+          "name": "manifest.json",
+          "size": 332
+        },
+        {
+          "digest": "sha256:e2b2737b0d553d07cb23dab4dd61b013add3d462ed5ecea98c0f1e47bfffd62e",
+          "name": "styles.css",
+          "size": 14263
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "### Core Architecture & Refactoring\r\n- Observer Pattern Implementation: Introduced a SettingsObservable in src/main.ts. All services (e.g., BannerService, ImageProcessor, PasteHandler) now subscribe to this observable to receive settings updates. This has eliminated redundant updateSettings() boilerplate across src/main.ts.\r\n- API Key Migration: Added a secure migration process in src/main.ts that moves API keys (Pexels, Pixabay) from plaintext settings to Obsidian's secretStorage (for Obsidian versions 1.11.4+).\r\n\r\n### Dependency & Project Cleanup\r\n- Removed jiti: The jiti dependency has been removed from package.json.\r\n- .gitignore Updates: Refined to better manage project artifacts.",
+      "draft": false,
+      "name": "0.2.5",
+      "prerelease": false,
+      "publishedAt": "2026-02-04T21:09:05Z",
+      "tag": "0.2.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a540ead808050079123f5be1c57d03fdea510b32bad488d190a9cc13d66059bf",
+          "name": "main.js",
+          "size": 569521
+        },
+        {
+          "digest": "sha256:293eb29e50309d8305141f296c55447ae132a79a2a41945b5598fda811dbe832",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:e2b2737b0d553d07cb23dab4dd61b013add3d462ed5ecea98c0f1e47bfffd62e",
+          "name": "styles.css",
+          "size": 14263
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed bug where clicking next and previous wouldn't work in picking a remote image.",
+      "draft": false,
+      "name": "0.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-01-31T18:46:03Z",
+      "tag": "0.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c2373b9c71ca315d58742b2e6c266376d234622db19b413af77b8d3d2ad383d",
+          "name": "main.js",
+          "size": 569420
+        },
+        {
+          "digest": "sha256:0991cc784315aa6f90301dbee5a1ccd2437488328c06c4260caf4ed01923fdda",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:9c9994975e8889779b7c2f2ecf0aef9dfe3dd4cd93837c468367b820a98451a3",
+          "name": "styles.css",
+          "size": 14263
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "- Banner and icon changes are now real-time.\r\n- Improved descriptive rename feature where hitting enter inserts it.\r\n- Fixed issue with background task / git-based images \"popping in\" with tons of new modals appearing - on by default. Can disable if causing issues.\r\n- Image name template works as a prefix.\r\n- Using new OpenSkills format for agents.",
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-01-20T21:44:09Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:078d82631ffefdb48ce2c8b00f4ed675d5c277f426897ddfb7f42aa40a4c3d1b",
+          "name": "main.js",
+          "size": 560362
+        },
+        {
+          "digest": "sha256:2695184d249591def303837fa1c16c3392eb108c330d703fabf162411f16b445",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:844925f368d6b9bba25e70fee46ff71f4d8d48a335f3490eb5bfab66874f8c98",
+          "name": "styles.css",
+          "size": 13639
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed auto-convert on save and reorganized rename settings options.",
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-01-14T00:09:04Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bb70f5df17e398fdc64adfc3b36d1f18a5b46190597570fb0af6588da103470a",
+          "name": "main.js",
+          "size": 556447
+        },
+        {
+          "digest": "sha256:81e86d412a0dfd8d7ef625daf3eb0f514f9d1fbbdb5dedd481e0fd04ed042e1f",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:844925f368d6b9bba25e70fee46ff71f4d8d48a335f3490eb5bfab66874f8c98",
+          "name": "styles.css",
+          "size": 13639
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Additional es lint fixes.",
+      "draft": false,
+      "name": "0.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-01-08T19:35:13Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bb70f5df17e398fdc64adfc3b36d1f18a5b46190597570fb0af6588da103470a",
+          "name": "main.js",
+          "size": 556447
+        },
+        {
+          "digest": "sha256:b6589eb2f7887d1bf55bee7c3b5ba9a26fe30b12b0da72177c3f40e428848bba",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:844925f368d6b9bba25e70fee46ff71f4d8d48a335f3490eb5bfab66874f8c98",
+          "name": "styles.css",
+          "size": 13639
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed linting errors.",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-01-08T19:20:49Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:945bd0e9d7086c262a7d988ac6f39a4d566851d1f968759cddc5e4162fcda833",
+          "name": "main.js",
+          "size": 557181
+        },
+        {
+          "digest": "sha256:779d7338b00b5ab49b6fd2d88a90d727bb41eaf528d8fe6b96a3b8ae49e49544",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:844925f368d6b9bba25e70fee46ff71f4d8d48a335f3490eb5bfab66874f8c98",
+          "name": "styles.css",
+          "size": 13639
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Added Secrets API for Pexels and Pixabay.",
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-01-08T18:37:14Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fd92cc536b22b6a50537979519e45da8928955143e1727b0dd20a2fae728a4d9",
+          "name": "main.js",
+          "size": 539567
+        },
+        {
+          "digest": "sha256:ae56b298f8d8c2329f95ce4e5ab716bb4c15b6b90beb368aa0dc077fa2da1096",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:844925f368d6b9bba25e70fee46ff71f4d8d48a335f3490eb5bfab66874f8c98",
+          "name": "styles.css",
+          "size": 13639
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "## Version 0.1.8\r\n\r\n### Features\r\n- Add icon property commands for inserting remote and local images to icon properties\r\n- Add default icon property name setting\r\n- Improve descriptive image modal to accept suggested descriptions from search terms\r\n- Enhance remote image conversion with URL verification using HEAD requests before downloading\r\n\r\n### Improvements\r\n- Pass search terms as suggested names when inserting remote images from search\r\n- Add Content-Type validation as safety net in image conversion\r\n- Update code comments and documentation",
+      "draft": false,
+      "name": "0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-01-08T00:47:17Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c30a5bdb574b04a03ca4dbe20174ffcb8c36b014263229468f998aef88a82b57",
+          "name": "main.js",
+          "size": 530116
+        },
+        {
+          "digest": "sha256:d2a95af8a2fb286f365986f774a415c49c7a9c8a7f6889f67b213f6bddba1de9",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:b816201038d0f742216b8a5fa235607469eeaa787ef766caa223c3487bd254df",
+          "name": "styles.css",
+          "size": 13651
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Use \"properties\" instead of \"frontmatter.\"",
+      "draft": false,
+      "name": "0.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-01-08T00:02:46Z",
+      "tag": "0.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ae85ad98819d0b31786dc5c3c99c017ac88988126f4381246a0b2c7b70e4a905",
+          "name": "main.js",
+          "size": 530169
+        },
+        {
+          "digest": "sha256:129ce129863f0660b63cf7e715c22e6f0fe7cc6d47850d4805d1a6d97edf6ed6",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:b816201038d0f742216b8a5fa235607469eeaa787ef766caa223c3487bd254df",
+          "name": "styles.css",
+          "size": 13651
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Removed rounded corners from banner images.",
+      "draft": false,
+      "name": "0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-01-05T07:39:20Z",
+      "tag": "0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1d104fd17bc7c8985dedafbc7a27d75e5868ffc2ae01e9471254840ddef15192",
+          "name": "main.js",
+          "size": 530169
+        },
+        {
+          "digest": "sha256:bbae8fea8d4ca1c36810e728e138d75839c8e540af51d544347b232a1f1fd9a2",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:000f7cc0beb9dd74efcefe07c6c606ab34dc4c3b2f6d07f30b5760f373753e15",
+          "name": "styles.css",
+          "size": 13651
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Additional bot-requested changes.",
+      "draft": false,
+      "name": "0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T06:09:22Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8069369df6b328aff09de6f3fd3d77660314e0e45779580c7ec930f507c327e0",
+          "name": "main.js",
+          "size": 531904
+        },
+        {
+          "digest": "sha256:4112110e862b24471193bacf674c7808141546e49472f148ab8e0a68896c46f7",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:000f7cc0beb9dd74efcefe07c6c606ab34dc4c3b2f6d07f30b5760f373753e15",
+          "name": "styles.css",
+          "size": 13651
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "FIxed Obsidian bot errors.",
+      "draft": false,
+      "name": "0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T05:52:56Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:519c916f41c649751b7b38cb75e63697a1564a670a5443ac792a35d13487b3cf",
+          "name": "main.js",
+          "size": 526036
+        },
+        {
+          "digest": "sha256:96fc95c2ce2111a18d60230080bed492d7b8ecd97bee4ea75784f61514b7fc8d",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:000f7cc0beb9dd74efcefe07c6c606ab34dc4c3b2f6d07f30b5760f373753e15",
+          "name": "styles.css",
+          "size": 13651
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Scoped settings container to avoid affecting other plugins.",
+      "draft": false,
+      "name": "0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T04:35:22Z",
+      "tag": "0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:95904ff6a1c6796ffc698f0ddac7b6320a9c38be8f25dea55701b4eae346c8c6",
+          "name": "main.js",
+          "size": 517225
+        },
+        {
+          "digest": "sha256:aaa8bd5f6b3c1609d291b02639bcdaf3890490f87aba8271f86d97d266a87ab5",
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:2e218cc95720601303d71632e2d59f1e075c959559d293f5933e2e3a646c2358",
+          "name": "styles.css",
+          "size": 13243
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "### What's New\r\n\r\n- **Banner Images**: Display banner images from properties with device-specific settings (desktop, tablet, phone). Customize height, padding, border radius, fade effects, and optional icons. Courtesy of Simple Banner plugin.\r\n- **Obsidian Default Link Format**: New \"Obsidian default\" option for property links that automatically respects your Obsidian settings (`useMarkdownLinks`, `newLinkFormat`).\r\n\r\n### Improvements\r\n\r\n- Default property name changed to `\"banner\"` to align with banner feature\r\n- Fixed double border issue in settings view\r\n- Improved compatibility with older Obsidian versions\r\n- Various bug fixes and improvements",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-01-02T06:47:16Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1d8146e13c4338fa45f5d6277e40ad71ba6ca9d5e5ce8c3aae0693ca55052325",
+          "name": "main.js",
+          "size": 375108
+        },
+        {
+          "digest": "sha256:aedee85be7c7922f00fd381ba131de935f74964cb22022420cce143d039ba2ff",
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:e026fe282741fea9b88f8addc62e2a1cd8232d9554ab1e574048d15f9630e706",
+          "name": "styles.css",
+          "size": 5034
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed issues with pasting into property.",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-01-01T00:37:28Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:46bd13a9adcd7577ba83abc258775bc8a423c58e9ad659bf1549186388e808eb",
+          "name": "main.js",
+          "size": 364305
+        },
+        {
+          "digest": "sha256:5a1e4ceff98b49469e9820dc14ffa0f57d4a872c70354be6a7a7132108e24526",
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:e026fe282741fea9b88f8addc62e2a1cd8232d9554ab1e574048d15f9630e706",
+          "name": "styles.css",
+          "size": 5034
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Initial release.",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-01-01T00:08:17Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "davidvkimball/obsidian-image-manager"
+}

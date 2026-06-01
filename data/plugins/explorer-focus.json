@@ -1,0 +1,439 @@
+{
+  "author": "David V. Kimball",
+  "defaultBranch": "master",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Focus on a specific file or folder in the file explorer.",
+  "errors": [],
+  "id": "explorer-focus",
+  "lastChangedAt": "2026-06-01T18:00:58.581Z",
+  "lastFetchedAt": "2026-06-01T18:00:58.581Z",
+  "manifest": {
+    "author": "David V. Kimball",
+    "authorUrl": "https://davidvkimball.com",
+    "description": "Focus on a specific file or folder in the file explorer.",
+    "fundingUrl": "https://patreon.com/davidvkimball",
+    "id": "explorer-focus",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.11.0",
+    "name": "Explorer Focus",
+    "version": "0.2.2"
+  },
+  "name": "Explorer Focus",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:7bec7744567764b969d82e04bcb8b729e6541f558563581012847c25f0a1ec1f",
+          "name": "main.js",
+          "size": 33905
+        },
+        {
+          "digest": "sha256:fde980a20fdca8a5f300344bb713d246a320b400c54881c870b69c8f2740859e",
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:224d099c746f41079fa9e295c1b229daaae636c44f391b7aeb5bc3a6f14d624d",
+          "name": "styles.css",
+          "size": 62
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Migrate settings to Obsidian 1.13 declarative API\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-explorer-focus/compare/0.2.1...0.2.2",
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-30T19:45:46Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1dc2f8c5d609fc42bbd158203985e9fccf3a05f2e3738537960bec99ff386317",
+          "name": "main.js",
+          "size": 29652
+        },
+        {
+          "digest": "sha256:d89433ca4b1299b4c452fd447d5c31f5381e1599b67983aad3678a3b5d6dcabe",
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:224d099c746f41079fa9e295c1b229daaae636c44f391b7aeb5bc3a6f14d624d",
+          "name": "styles.css",
+          "size": 62
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Drop the inline sourcemap from production builds for reproducibility\n\n0.2.0 cleared every scorecard warning except \"Build verification\nfailed: main.js built from source does not match the release\nartifact\". The cause was `sourcemap: \"inline\"` in esbuild.config.mjs:\nan inline sourcemap base64-embeds the build machine's absolute file\npaths into main.js, so the CI build (/home/runner/work/...) and the\nscorecard's reproducer build (a different path) produce\nbyte-different output even from identical source.\n\nGate the sourcemap on build mode: production (`pnpm build` /\n`node esbuild.config.mjs production`) now ships `sourcemap: false`,\nwhile the dev/watch build keeps `sourcemap: \"inline\"` for local\ndebugging. Production main.js is now deterministic given the locked\ndependency tree, so the reproducer matches and build verification\npasses. As a bonus the shipped main.js is smaller and no longer\nleaks build paths.\n\nBump to 0.2.1.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-explorer-focus/compare/0.2.0...0.2.1",
+      "draft": false,
+      "name": "0.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T05:52:00Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b36f75796ee525accdf2fed14a3e9331b22c7de01aefb876125ba4be6cec2ce4",
+          "name": "main.js",
+          "size": 107163
+        },
+        {
+          "digest": "sha256:0bdb073fb1f93953cf5a1ed65fbdd88c08d2f20f4f02b9f5a4ead10d08a2a9f4",
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:224d099c746f41079fa9e295c1b229daaae636c44f391b7aeb5bc3a6f14d624d",
+          "name": "styles.css",
+          "size": 62
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Scorecard cleanup pass for 0.2.0\n\n- Replace bare `document` references with `activeDocument` for\n  popout-window compatibility (10 sites in settings-tab.ts and\n  file-explorer.ts).\n- Swap `document.createElement('div')` for `createDiv()`,\n  `document.createElementNS(...)` SVG calls for `createSvg(...)`,\n  `document.createDocumentFragment()` for `createFragment()`, and\n  `el.createEl('div', { text: ... })` for `el.createDiv({ text: ... })`\n  — all autofixed by `obsidianmd` 0.3.0.\n- Swap bare `setTimeout` calls for `window.setTimeout` for popout\n  compatibility (autofixed).\n- Type the file-explorer prototype access in\n  `file-explorer-patch.ts` instead of leaving it as `any`. The\n  runtime `typeof getSortedFolderItems === 'function'` check still\n  validates the cast before `around()` patches it.\n- Prefix the unused `plugin` parameter in file-explorer.ts with `_`\n  (autofixed).\n- Add `pnpm.overrides` for the minimatch / picomatch /\n  brace-expansion / ajv / flatted / yaml chain pulled in transitively\n  by eslint and the obsidianmd plugin.\n- Upgrade `eslint-plugin-obsidianmd` 0.1.9 -> 0.3.0 and scope its\n  recommended config to TypeScript files only so the type-aware\n  rules don't choke on `.mjs` files.\n- Drop the broken `preinstall` script and fill in the package author.\n- Add a portable CONTRIBUTING.md.\n- Replace the old release workflow with the canonical one: pulls\n  the version from manifest.json, attaches build provenance\n  attestations to main.js / styles.css / manifest.json, builds the\n  release notes from the latest commit message plus a Full\n  Changelog link, and exposes a workflow_dispatch trigger as a\n  recovery path. The previous workflow pointed at `dist/` for the\n  output assets, which doesn't exist (build emits to repo root),\n  so the previous releases never uploaded the right artifacts.\n\nBump to 0.2.0.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-explorer-focus/compare/0.1.9...0.2.0",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-16T05:31:22Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:55495253abd33e2299df10d2637edc64b6895501ff046e5d39babab3aa4eb605",
+          "name": "main.js",
+          "size": 108306
+        },
+        {
+          "digest": "sha256:cd307285d472128f357057105c3395573fdcaafb52b210c59b56694c4c450c45",
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:224d099c746f41079fa9e295c1b229daaae636c44f391b7aeb5bc3a6f14d624d",
+          "name": "styles.css",
+          "size": 62
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed bug where adding a new folder would add another row of save and cancel buttons.",
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-03-12T22:51:55Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:88a7e4dfeff64c71fe75649b59812192bbf2e94ca2b53003775aa36c7e8da6c9",
+          "name": "main.js",
+          "size": 107994
+        },
+        {
+          "digest": "sha256:48047ba15ad77fd2cc6b40b6dc4b5ede94a38d9d4fe4f3839e55373f9931609e",
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:224d099c746f41079fa9e295c1b229daaae636c44f391b7aeb5bc3a6f14d624d",
+          "name": "styles.css",
+          "size": 62
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Added option to hide folders from file explorer.\r\nAutocomplete for folder fields added.",
+      "draft": false,
+      "name": "0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-03-12T22:29:22Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f61759b48b015591bfb25a80673b6b4d20e9931a6883fcdb8ac413e21bc4106e",
+          "name": "main.js",
+          "size": 89059
+        },
+        {
+          "digest": "sha256:f86bf4c0a8ce69d7c8cee25b01912556c5b4bbdb0739a3f9729e6c8c25dab152",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Update minimum version to 1.11.0 and remove backwards compatibility for SettingGroup.",
+      "draft": false,
+      "name": "0.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-03-03T07:24:33Z",
+      "tag": "0.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2948e632f7d696bdf1ab87d880be14c65683da21e1e5e51b1969f18cf1f2b247",
+          "name": "main.js",
+          "size": 95987
+        },
+        {
+          "digest": "sha256:fe24aa23de9239c5062ebd94b68f9cf10086b705eca0f9874690c9354cd63f68",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Disabled aggressive patching on mobile.",
+      "draft": false,
+      "name": "0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-02-08T09:12:16Z",
+      "tag": "0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:46c82992cc3be7ec5539dda57393b5351c9ec01d9583fde61f9d0cfd04c08e33",
+          "name": "main.js",
+          "size": 95437
+        },
+        {
+          "digest": "sha256:2c92d5252e823fc93a140a470a51d9c3df0ca3f5ae07c0d985a0d3d120f0afdc",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "refactor: remove i18n, optimize performance, and update agent skills\r\n\r\n- Remove i18n support and lang/ directory; move to hardcoded English\r\n- Optimize refreshFileExplorerVisibility for large vaults using Set-based lookups\r\n- Add graceful degradation and error handling for file explorer monkey-patches\r\n- Standardize .agent/skills structure and add platform/CSS guidelines\r\n- Document internal Obsidian types in types.d.ts\r\n- Update .gitignore to exclude package-lock.json",
+      "draft": false,
+      "name": "0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-02-05T23:15:29Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b8f2e559a364baf2f34ef821f94930c2abe298877c1cca47aa7550ee47419ceb",
+          "name": "main.js",
+          "size": 94394
+        },
+        {
+          "digest": "sha256:9cf1a79d1ac2c4b302608a4970f9f475cf292b2e540f58925d340ea3e8e98e8a",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed minor bug where settings modal would close when plugin activated.",
+      "draft": false,
+      "name": "0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-01-11T05:54:37Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3612a550ebe57956e4d58337324a4c16042e35440b6f02711a96ff1605c58b72",
+          "name": "main.js",
+          "size": 94650
+        },
+        {
+          "digest": "sha256:067cb6beced3fe6814d94a92b0c4ddd8f243c4f3980264b5ea9e04de1abd9d02",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Scoped settings container to avoid affecting other plugins.",
+      "draft": false,
+      "name": "0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-01-03T23:36:33Z",
+      "tag": "0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:452fa0b50dfdf015583952befeef89c24034a755a069ff74cfb58d9042f9e2d3",
+          "name": "main.js",
+          "size": 94007
+        },
+        {
+          "digest": "sha256:1f3a79389408bc67e14e3308679c36a0241f8fbbadbe985cc897fb4025621261",
+          "name": "manifest.json",
+          "size": 330
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed Obsidian bot-identified issues.",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2025-12-26T07:09:43Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:12300e1ffe627d0e1919cd3cad922da8444d382f582a9eb0bb031eb5a0c2a9dd",
+          "name": "main.js",
+          "size": 94004
+        },
+        {
+          "digest": "sha256:c2e8cb02d819ea6984e91f8885977f5a0e719f0af425bb775c7e93079f5a6875",
+          "name": "manifest.json",
+          "size": 340
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Migrate from npm to pnpm and update dependencies\r\n\r\n- Switch package manager from npm to pnpm with packageManager field\r\n- Add preinstall script for npm/pnpm compatibility\r\n- Update dependencies (esbuild 0.17.3 → 0.25.5, TypeScript 4.8.4 → 5.8.3)\r\n- Add migration scripts (switch-to-pnpm.mjs, npm-proxy.mjs, upgrade.mjs)\r\n- Update documentation to reference pnpm instead of npm\r\n- Remove npm-specific files (package-lock.json, .npmrc)",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2025-12-24T21:02:31Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5fdb9cedae5133a9e864705a63de2eaf3a559c9946d35ed1eface65619d49808",
+          "name": "main.js",
+          "size": 93913
+        },
+        {
+          "digest": "sha256:331cfafd267673adc71071905439cb4dfffe6dbc4ae43ae9131ef737b4e6f95b",
+          "name": "manifest.json",
+          "size": 339
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Migrate to Explorer Focus with agents system and SettingGroup support\r\n\r\n- Rename plugin from Simple Focus to Explorer Focus (all classes, CSS, identifiers)\r\n- Add .agents system with reference repositories (Simple Focus, UI Tweaker)\r\n- Set up ESLint 9 with flat config\r\n- Implement SettingGroup compatibility utility for Obsidian 1.11.0+\r\n- Update settings tab to use SettingGroup pattern\r\n- Transform README to match UI Tweaker format\r\n- Update AGENTS.md with comprehensive project context",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2025-12-23T06:27:29Z",
+      "tag": "0.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:86e570a0f7fa2973394f7b717cfeb099b88ea3896c0030c6b88ca698c3dbffa6",
+          "name": "main.js",
+          "size": 13778
+        },
+        {
+          "digest": "sha256:b9324ac7d49ab722dad4cc6e281340b2553f899f4d754748bea2b660cbe2eeac",
+          "name": "manifest.json",
+          "size": 269
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Fixed hover-cursor treatment on file explorer icon on desktop and mobile.",
+      "draft": false,
+      "name": "0.0.9",
+      "prerelease": false,
+      "publishedAt": "2025-12-08T04:17:36Z",
+      "tag": "0.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e6a62bd77f8f81bd1f6b7cd4b9c0c702c5b1d91e808b29d1ecd7bf919b5ea369",
+          "name": "main.js",
+          "size": 13132
+        },
+        {
+          "digest": "sha256:932cde10c2e7d5707ec87bc552457ba8927dc6f8a56cf09c3be69305c238eee9",
+          "name": "manifest.json",
+          "size": 269
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Simple focus now works in mobile.\r\nstyles.css file generation is now optional.",
+      "draft": false,
+      "name": "0.0.8",
+      "prerelease": false,
+      "publishedAt": "2025-12-02T23:30:46Z",
+      "tag": "0.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:68857bc3267434ba28d86fad596b3fd763074e18db53b7b371506c60544ffd4f",
+          "name": "main.js",
+          "size": 11336
+        },
+        {
+          "digest": "sha256:cd56f9a44de29dfa15abf5d59d0850f46a89767a798d70b32051ee1857e1e568",
+          "name": "manifest.json",
+          "size": 269
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Replace DOM manipulation with virtual element patching\r\n\r\n- Migrate from MutationObserver-based DOM manipulation to patching\r\n  getSortedFolderItems method for stable file hiding\r\n- Remove all CSS and inline style manipulation code\r\n- Simplify focus logic to basic show/hide without indentation features\r\n- Add updateFocusModeClasses() for CSS class management\r\n- Export FileExplorerView type with containerEl property\r\n\r\nThis approach integrates with Obsidian's virtual scrolling system and eliminates scroll position issues that occurred with DOM manipulation.",
+      "draft": false,
+      "name": "0.0.7",
+      "prerelease": false,
+      "publishedAt": "2025-11-26T22:30:46Z",
+      "tag": "0.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:08602c9b8baa93973b03b1282a2379b3089c2f5d33b3d9223b7583c6bb69177d",
+          "name": "main.js",
+          "size": 10419
+        },
+        {
+          "digest": "sha256:da10f5c45385aa67cae493503d1314c6a2b979d706e15fa091229ba0427184ea",
+          "name": "manifest.json",
+          "size": 269
+        },
+        {
+          "digest": "sha256:5e9ac6c882616d26e15ab0fb0cd7cd695268437ff9477dd594ce0600e2b7b220",
+          "name": "styles.css",
+          "size": 42
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Refactor via agents.md.",
+      "draft": false,
+      "name": "0.0.6",
+      "prerelease": false,
+      "publishedAt": "2025-11-20T23:40:40Z",
+      "tag": "0.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1fc9168b31c3974d26c58606569ce992d2832d047a17d1cb0d92b4692db45d76",
+          "name": "main.js",
+          "size": 10574
+        },
+        {
+          "digest": "sha256:cd61f87bb5a13b075b010bf4b3a8b007b35a5317bf4baf32474186670d5d199d",
+          "name": "manifest.json",
+          "size": 269
+        },
+        {
+          "digest": "sha256:5e9ac6c882616d26e15ab0fb0cd7cd695268437ff9477dd594ce0600e2b7b220",
+          "name": "styles.css",
+          "size": 42
+        }
+      ],
+      "author": "davidvkimball",
+      "description": "Add toggle command, settings panel, file explorer icon, and focus level options\r\n\r\n- Replace separate enter/exit commands with single toggle command\r\n- Add settings panel with options for right-click menu, file explorer icon visibility, and focus level\r\n- Add file explorer icon button in nav-buttons-container with is-active state highlighting\r\n- Add focus level options: file, parent folder, grandparent folder, great grandparent folder, and custom folder path\r\n- Fix virtual scrolling bug by adding MutationObserver for dynamically loaded file tree items\r\n- Update build config to output files to root directory instead of dist/\r\n- Update language files with new translation strings\r\n- Bump version to 0.0.5",
+      "draft": false,
+      "name": "0.0.5",
+      "prerelease": false,
+      "publishedAt": "2025-11-20T23:27:04Z",
+      "tag": "0.0.5"
+    }
+  ],
+  "removedAt": null,
+  "repo": "davidvkimball/obsidian-explorer-focus"
+}
