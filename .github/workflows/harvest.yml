@@ -1,0 +1,115 @@
+name: Harvest plugin metadata
+
+on:
+  schedule:
+    - cron: "17 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      plugin_id:
+        description: "Optional single plugin id"
+        required: false
+      chunk_index:
+        description: "Optional chunk index for debugging"
+        required: false
+      chunk_count:
+        description: "Total chunk count when chunk_index is set"
+        required: true
+        default: "8"
+      max_plugins:
+        description: "Maximum plugins to process this run"
+        required: true
+        default: "250"
+      max_runtime_minutes:
+        description: "Maximum runtime before committing progress"
+        required: true
+        default: "25"
+      attestation_budget:
+        description: "Maximum new attestation checks"
+        required: true
+        default: "50"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: harvest-plugin-metadata
+  cancel-in-progress: false
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+
+      - name: Test
+        run: bun test
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Update from default branch
+        run: git pull --rebase origin "$GITHUB_REF_NAME"
+
+      - name: Harvest
+        shell: bash
+        env:
+          INPUT_PLUGIN_ID: ${{ inputs.plugin_id }}
+          INPUT_CHUNK_INDEX: ${{ inputs.chunk_index }}
+          INPUT_CHUNK_COUNT: ${{ inputs.chunk_count || '8' }}
+          INPUT_MAX_PLUGINS: ${{ inputs.max_plugins || '250' }}
+          INPUT_MAX_RUNTIME_MINUTES: ${{ inputs.max_runtime_minutes || '25' }}
+          INPUT_ATTESTATION_BUDGET: ${{ inputs.attestation_budget || '50' }}
+        run: |
+          args=(
+            --daily
+            --max-plugins "$INPUT_MAX_PLUGINS"
+            --max-runtime-minutes "$INPUT_MAX_RUNTIME_MINUTES"
+            --attestation-budget "$INPUT_ATTESTATION_BUDGET"
+          )
+
+          if [[ -n "$INPUT_PLUGIN_ID" ]]; then
+            args=(
+              --plugin-id "$INPUT_PLUGIN_ID"
+              --chunk-count "$INPUT_CHUNK_COUNT"
+              --max-plugins "$INPUT_MAX_PLUGINS"
+              --max-runtime-minutes "$INPUT_MAX_RUNTIME_MINUTES"
+              --attestation-budget "$INPUT_ATTESTATION_BUDGET"
+            )
+          fi
+
+          if [[ -n "$INPUT_CHUNK_INDEX" ]]; then
+            args=(
+              --chunk-index "$INPUT_CHUNK_INDEX"
+              --chunk-count "$INPUT_CHUNK_COUNT"
+              --max-plugins "$INPUT_MAX_PLUGINS"
+              --max-runtime-minutes "$INPUT_MAX_RUNTIME_MINUTES"
+              --attestation-budget "$INPUT_ATTESTATION_BUDGET"
+            )
+          fi
+
+          bun run harvest -- "${args[@]}"
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          if git diff --quiet -- data; then
+            echo "No data changes"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git commit -m "Update plugin metadata"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push
