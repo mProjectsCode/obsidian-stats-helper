@@ -66,7 +66,7 @@ describe("selectPlugins", () => {
 
 describe("normalizeDailyState", () => {
   const fallback = {
-    day: null,
+    day: "2026-06-02",
     cursorIndex: 0,
     completed: false,
     pluginCount: 3,
@@ -98,7 +98,31 @@ describe("normalizeDailyState", () => {
     });
   });
 
-  test("starts a new pass after the previous pass completed", () => {
+  test("chills after the current day's pass completed", () => {
+    expect(
+      normalizeDailyState(
+        {
+          day: "2026-06-02",
+          cursorIndex: 3,
+          completed: true,
+          pluginCount: 3,
+          startedAt: "2026-06-02T00:00:00Z",
+          updatedAt: "2026-06-02T23:00:00Z",
+        },
+        fallback,
+        3,
+      ),
+    ).toEqual({
+      day: "2026-06-02",
+      cursorIndex: 3,
+      completed: true,
+      pluginCount: 3,
+      startedAt: "2026-06-02T00:00:00Z",
+      updatedAt: "2026-06-02T23:00:00Z",
+    });
+  });
+
+  test("starts a new pass after a previous day's pass completed", () => {
     expect(
       normalizeDailyState(
         {

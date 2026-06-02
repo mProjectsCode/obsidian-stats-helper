@@ -53,6 +53,7 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
   validateOptions(options);
 
   const fetchedAt = new Date().toISOString();
+  const day = formatLocalDay(new Date());
   const httpCache = await readJsonFile<HttpCacheFile>(httpCachePath, { entries: {} });
   const github = new GitHubClient({
     token: process.env.GITHUB_TOKEN,
@@ -61,7 +62,7 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
 
   const allPlugins = parseCommunityPlugins(await fetchCommunityPlugins());
   const useDailyState = options.mode === "daily" && !options.pluginId;
-  const dailyState = useDailyState ? await readDailyState(fetchedAt, allPlugins.length) : null;
+  const dailyState = useDailyState ? await readDailyState(fetchedAt, day, allPlugins.length) : null;
   const selectedPlugins = selectPlugins(allPlugins, options, dailyState ?? undefined);
   const summaries: IndexPluginSummary[] = [];
   const startedAtMs = Date.now();
@@ -263,6 +264,8 @@ async function harvestPlugin(
   const comparableExisting = existing ? { ...existing, lastFetchedAt: fetchedAt } : null;
   if (!comparableExisting || stableStringify(stripVolatile(next)) !== stableStringify(stripVolatile(comparableExisting))) {
     next.lastChangedAt = fetchedAt;
+  } else if (existing) {
+    next.lastFetchedAt = existing.lastFetchedAt;
   }
 
   return { data: next, rateLimitRemaining: rateLimitRemaining ?? null };
@@ -357,7 +360,7 @@ async function updateIndex(
     await markPluginRemoved(id, removedAt, fetchedAt);
   }
 
-  await writeJsonFile("data/index.json", {
+  const next = {
     generatedAt: fetchedAt,
     chunkCount,
     plugins: Array.from(byId.values())
@@ -368,7 +371,14 @@ async function updateIndex(
         removedAt: plugin.removedAt ?? null,
       }))
       .sort((left, right) => left.id.localeCompare(right.id)),
-  });
+  };
+
+  const comparableCurrent = { ...current, generatedAt: fetchedAt };
+  if (stableStringify(next) === stableStringify(comparableCurrent)) {
+    return;
+  }
+
+  await writeJsonFile("data/index.json", next);
 }
 
 async function markPluginRemoved(pluginId: string, removedAt: string, changedAt: string): Promise<void> {
@@ -389,9 +399,9 @@ async function markPluginRemoved(pluginId: string, removedAt: string, changedAt:
   );
 }
 
-async function readDailyState(fetchedAt: string, pluginCount: number): Promise<HarvestRunState> {
+async function readDailyState(fetchedAt: string, day: string, pluginCount: number): Promise<HarvestRunState> {
   const fallback: HarvestRunState = {
-    day: null,
+    day,
     cursorIndex: 0,
     completed: false,
     pluginCount,
@@ -408,6 +418,19 @@ export function normalizeDailyState(
   fallback: HarvestRunState,
   pluginCount: number,
 ): HarvestRunState {
+  const existingDay = existing.day;
+  const fallbackDay = fallback.day;
+
+  if (existing.completed && existingDay === fallbackDay) {
+    return {
+      ...fallback,
+      ...existing,
+      completed: true,
+      cursorIndex: pluginCount,
+      pluginCount,
+    };
+  }
+
   if (existing.completed || existing.cursorIndex >= pluginCount) {
     return fallback;
   }
@@ -419,6 +442,14 @@ export function normalizeDailyState(
     cursorIndex: Math.max(0, existing.cursorIndex),
     pluginCount,
   };
+}
+
+function formatLocalDay(date: Date): string {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 function describeSelection(

@@ -63,9 +63,14 @@ The Raspberry Pi runner in `scripts/harvest-pi.sh` pulls the current branch, run
 harvest, commits changes under `data/`, rebases again, and pushes. It uses `GITHUB_TOKEN`
 or `GITHUB_PAT` for both API requests and Git push authentication.
 
-The runner resumes its cursor from `data/state/harvest-run.json`. The cursor is kept across
-calendar days until the pass reaches the end of the plugin list; the next run then starts a
-new pass from the beginning.
+The hourly timer acts as a resumable worker for the current day's pass. The runner stores
+its local cursor in `data/state/harvest-run.json`, keeps working from that cursor until the
+pass reaches the end of the plugin list, then exits without work for the rest of the local
+calendar day. On the next local calendar day, it starts a new pass from the beginning.
+
+Runtime state and GitHub conditional-request cache files under `data/state/` are local to
+the runner and are not committed. Git history should mostly show actual metadata changes,
+not cursor movement or HTTP cache churn.
 
 The harvester uses conditional GitHub requests. Chunk mode remains available for manual
 debugging.

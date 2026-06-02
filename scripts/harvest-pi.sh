@@ -79,12 +79,12 @@ bun run harvest -- \
   --max-runtime-minutes "$max_runtime_minutes" \
   --rate-limit-floor "$rate_limit_floor"
 
-bun run status
-
-if git diff --quiet -- data STATUS.md; then
+if git diff --quiet -- data ':!data/state'; then
   echo "No data changes"
   exit 0
 fi
+
+bun run status
 
 git config user.name "${GIT_COMMITTER_NAME:-obsidian-stats-helper-pi}"
 git config user.email "${GIT_COMMITTER_EMAIL:-obsidian-stats-helper-pi@users.noreply.github.com}"
