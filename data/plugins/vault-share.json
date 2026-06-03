@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Share Obsidian vaults between devices and users through Google Drive.",
   "errors": [],
   "id": "vault-share",
-  "lastChangedAt": "2026-06-02T22:01:58.596Z",
-  "lastFetchedAt": "2026-06-02T04:02:58.925Z",
+  "lastChangedAt": "2026-06-03T07:03:58.592Z",
+  "lastFetchedAt": "2026-06-03T07:03:58.592Z",
   "manifest": {
     "author": "Bob Hyman",
     "authorUrl": "https://github.com/bobhy",
@@ -15,11 +15,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "Vault Share",
-    "version": "0.9.0"
+    "version": "1.0.1"
   },
   "name": "Vault Share",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ee7ade22bff55f05a9382b8d76d1b02e40fdf150fa0ae44ca9171268624e4239",
+          "name": "main.js",
+          "size": 94040
+        },
+        {
+          "digest": "sha256:bb450598788e5461a12b405162a5e0c7fc90e3262c2494d48ce9991a6a5bca66",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:07007893fc2cfcd0fa9efa722a18968bb19571a83e4733baad046b8b162b3e89",
+          "name": "styles.css",
+          "size": 5863
+        }
+      ],
+      "author": "bobhy",
+      "description": "## [1.0.1]\n\n### Added\n- `npm run test:e2e:scale` to verify correct operation with tens to hundreds of files.  Run it, but sparingly.\n\n### Changed\n- Handle Google Drive rate limiting (429 status) by backing off and retrying.  Core fix for several flaky sync bugs.\n- Use Obsidian `onDelete()` event to distinguish explicit delete from mysteriously vanished from local vault; \ndefer remote delete of just vanished local file; \nPause sharing if there are any such deferred deletes, user can manage in Sharing Status panel under Remote Deletes.\n\n### Fixed\n- fix dependabot nags - manual override version `serialize-javascript`\n- fix problem of bulk sync sometimes deleting local files because it thought the corresponding drive files were gone.\nBut real problem what that Google Drive 429 response truncated a (paged) drive file enumeration.\n- on startup, wait till Obsidian finishes indexing vault before first bulk sync.\nEnsures sharing doesn't think local files vanished since previous run.\n\n",
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T02:24:25Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f5e93790b28cd8e78b528768f7e21719c9ae45ab53a2b3fdd3c7b0dc50758e38",
+          "name": "main.js",
+          "size": 90713
+        },
+        {
+          "digest": "sha256:419ea8ff9d24346c5727f34e7c23e757c192f266d00c9dd44111ad645220c978",
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:07007893fc2cfcd0fa9efa722a18968bb19571a83e4733baad046b8b162b3e89",
+          "name": "styles.css",
+          "size": 5863
+        }
+      ],
+      "author": "bobhy",
+      "description": "## [1.0.0]\nRTM! Support available through github.\n\n### Added\n- `npm run dev` auto rebuild plugin after source change and autodeploy to designated test vaults; see CONTRIBUTING.md/#debugging for details.\n- schema version added to `data.json` and to group vault google drive folder (as app attribute of the folder, not a hidden file).  \nNow we can do definitive migrations on all persistent plugin data in upgrade scenarios.\n\n### Changed\n- Sharing Status panel now allows user to review all pending sharing operations and, case-by-case, decide to defer, allow or roll back the planned operation.\n- Sharing Status panel now shows separate counts of deferred and pending files queued for sharing.\n- Stop syncing vault trash folder (`.trash`) and plugin config dir (`.obsidian/plugins/vault-sync`) by default.\n\n### Fixed\n- Display a notice that sharing was paused (and a link to the Sharing status panel) when bulk sharing finds \"too many\" pending changes.\n- Avoid marking pairs of files as a conflict when they are content-identical (even if mtimes are different).  \n  Use sha256 hash, which Google Drive provides \"for free\".\n  Also in no-sync-history case, avoid declaring conflict when local and group files are actually content-identical.\n- Improved reliability of e2e testing in headless mode.  Should be usable in CI now.\n- Do an immediate bulk sharing pass when resuming from paused state (rather than wainting for next regularly scheduled pass).\n- Corrected stale e2e:single test (code is right, test was wrong)\n\n",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-02T15:16:38Z",
+      "tag": "1.0.0"
+    },
     {
       "assets": [
         {
@@ -151,6 +203,6 @@
       "tag": "0.1.3"
     }
   ],
-  "removedAt": "2026-06-02T22:01:58.596Z",
+  "removedAt": null,
   "repo": "bobhy/vault-share"
 }

@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-01T19:00:58.834Z",
-  "lastFetchedAt": "2026-06-02T04:02:58.925Z",
+  "lastChangedAt": "2026-06-03T07:03:58.592Z",
+  "lastFetchedAt": "2026-06-03T07:03:58.592Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Karpathy LLM Wiki",
-    "version": "1.14.0"
+    "version": "1.15.0"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:a12cc91cbd583d16f88727204f144f30c73c47fe51ebfede5359e64878401227",
+          "name": "main.js",
+          "size": 706075
+        },
+        {
+          "digest": "sha256:ab0aeabecefd330fef0f6c125326f3c467b2015f7df7ba0b1da9c4ec8147d57e",
+          "name": "manifest.json",
+          "size": 353
+        },
+        {
+          "digest": "sha256:f4b47f9b5b2a64cf2240fef9577866891fcee160b570f4bad3c69dbb096cec69",
+          "name": "styles.css",
+          "size": 7255
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Added\n- **Wiki auto-initialization UX (Issue #80)**: Wiki structure auto-creates on first successful LLM connection test. No more \"Generate Default Schema\" button doing nothing on a brand-new vault. Settings panel shows real-time wiki init status (✅/⚠️).\n- **Wiki initialization status indicator**: Real-time health check below LLM Ready status — at-a-glance visibility into whether the wiki folder structure is complete.\n- **`saveSummary` i18n**: Query-to-Wiki save dialog now uses localized summary strings across all 8 languages (EN, ZH, JA, KO, DE, FR, ES, PT).\n- **`isWikiInitialized` helper**: Extracted from duplicate code in `settings.ts` to provide a single source of truth for wiki folder structure check.\n\n### Fixed\n- **Issue #80 (empty vault)**: \"Generate Default Schema\" button silently failed because `schema/` folder didn't exist on a new vault. Now auto-creates the folder before writing config (`regenerateDefaultSchema` calls defensive `createFolder`).\n- **withRetry nesting**: Removed nested `withRetry` in truncation retry paths — reduced from max 9 calls to max 3 per client. Outer `withRetry` handles all network errors on the truncation path.\n- **Truncation warning log completeness**: Warning now includes the stop/finish reason (e.g., `(stop_reason=max_tokens)` or `(finish_reason=length)`) for production diagnostics.\n- **Dead code**: `promptIncludesConstraints` (zero callers) removed; `foundAliases` `Array.isArray` check simplified.\n\n### Changed\n- **`parseSSEEvents` shared parser**: Extracted to `src/core/sse-parser.ts` — pure function used by both `AnthropicCompatibleClient` and `OpenAICompatibleClient`. 11 tests covering both formats, CRLF normalization, malformed JSON tolerance, and the `[DONE]` terminator.\n- **`withTruncationRetry` shared helper**: Extracted to `src/core/truncation-retry.ts` — pure policy function unifying the 3 duplicate truncation-retry blocks across LLM clients. 7 tests covering cap behavior, error propagation, and warning logging.\n- **Test infrastructure growth**: +37 tests (446 total across 21 files). Includes `AnthropicClient` truncation retry tests (9 tests) and wiki initialization tests (10 tests using pure mock objects, no Obsidian runtime required).\n- **Constants centralization**: `PAGES_CACHE_TTL_MS` moved to `src/constants.ts`.\n- **Test setup**: Added `window` polyfill to `src/__tests__/setup.ts` so `withRetry`'s `window.setTimeout` works in Node test environment.\n- **Documentation**: TDD section evolved to \"Development Quality Closure\" with a 9-step loop and a real TDD violation example (2026-06-02).\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\nand click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\ndetailed usage and model recommendations.\n\n---\n\n## Contributors\n\nThanks to all contributors for this release:\n- **@green-dalii** — Wiki auto-init UX, SSE parser extraction, truncation-retry helper, test infrastructure growth, dead code cleanup, release maintenance\n\n---\n\n**Full Changelog**: [1.14.0...1.15.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.14.0...1.15.0)",
+      "draft": false,
+      "name": "1.15.0 — Wiki auto-init + architecture refinements",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T00:09:49Z",
+      "tag": "1.15.0"
+    },
     {
       "assets": [
         {
