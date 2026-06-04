@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Sync your vault bidirectionally with Google Drive.",
   "errors": [],
   "id": "air-sync",
-  "lastChangedAt": "2026-06-01T17:04:58.895Z",
-  "lastFetchedAt": "2026-06-02T02:00:58.570Z",
+  "lastChangedAt": "2026-06-04T03:04:58.576Z",
+  "lastFetchedAt": "2026-06-04T03:04:58.576Z",
   "manifest": {
     "author": "Takehito Gondo",
     "authorUrl": "https://github.com/takezoh",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "Air Sync",
-    "version": "0.1.18"
+    "version": "0.1.19"
   },
   "name": "Air Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:b0cd741b04e4b643cdfbd28096b42e16b2ff6983105f3686be771cec2c8c31ef",
+          "name": "main.js",
+          "size": 120437
+        },
+        {
+          "digest": "sha256:273f7de902e9cb3b2db9120062b090c993feddafd1c1facebb267dd591265390",
+          "name": "manifest.json",
+          "size": 261
+        },
+        {
+          "digest": "sha256:964b742c8672c28037c9a6b7ff7a9a86a4de3cd684a31b3e8625de5c5614f045",
+          "name": "styles.css",
+          "size": 844
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This release focuses on sync reliability — hidden files, interrupted syncs, and protecting your notes from wrong deletions.\n\n## Fixed\n\n- **Hidden / config files now sync reliably.** Dot-prefixed paths (`.obsidian`, `.airsync`, and nested folders like `foo/.bar`) are excluded from Obsidian's in-memory index, which made them get re-detected every cycle and never converge. They're now read and written through the raw adapter, so they sync to completion. (A hidden path still only syncs when you enable *Sync dot paths* and it isn't ignored.)\n- **Interrupted syncs recover instead of getting stuck on \"Synced\".** Quitting mid-sync — or a cycle with a failed action — could leave the vault half-synced while the status still read *Synced*. The delta cursor is now committed only after a fully successful cycle, and the next run forces a full reconcile to rediscover anything left behind.\n- **Folder renames no longer trigger spurious deletes.** Renaming a folder on the remote could strand the moved files and resurrect them on a later sync. Renames now rewrite baselines to the new path; if the destination is already occupied, the bulk rename is skipped and files converge one by one.\n- **Erroneous deletions are now prevented structurally.** The old volume-based safety check — which could silently drop a legitimate single-file deletion — is replaced by authoritative local-absence checks, gated on the workspace being fully loaded, so a file missing only from a half-loaded index is never deleted. Genuine deletions still propagate.\n\n## Added\n\n- **\"Rescan vault\" action** in settings to force a full reconcile on demand.\n\n## Internal\n\n- Hardened test harness (decision-table suite, convergence/conflict tests, coverage gates) and lint guards enforcing the architecture's design principles.\n",
+      "draft": false,
+      "name": "0.1.19",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T00:06:45Z",
+      "tag": "0.1.19"
+    },
     {
       "assets": [
         {
