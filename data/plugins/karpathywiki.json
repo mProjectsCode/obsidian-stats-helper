@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-03T07:03:58.592Z",
-  "lastFetchedAt": "2026-06-03T07:03:58.592Z",
+  "lastChangedAt": "2026-06-05T05:00:58.581Z",
+  "lastFetchedAt": "2026-06-05T05:00:58.581Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Karpathy LLM Wiki",
-    "version": "1.15.0"
+    "version": "1.16.0"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:e763d822b98c08f78f9041e52b000b056096ac0b3a4357c017a3f2e8cc0d9a34",
+          "name": "main.js",
+          "size": 731229
+        },
+        {
+          "digest": "sha256:7fa4c61fad4fe3c82bf6595ad852c5d2874e2bdb7787329c9afd9dbb01bb0645",
+          "name": "manifest.json",
+          "size": 353
+        },
+        {
+          "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
+          "name": "styles.css",
+          "size": 7376
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Added\n- **LM Studio provider**: New dedicated provider option with API key optional (LM Studio runs locally but supports key-based auth). Default URL `http://localhost:1234/v1`.\n- **Context Window setting**: Configurable cap on LLM output tokens to protect local models with limited context. Dropdown from 4K to 1M. Shown only for local/custom providers. Also caps truncation retry to prevent retry-timeout loops.\n- **Sources normalization (Issue #81)**: 6 pollution patterns (external paths, `.md`, `|alias`, duplicates, inline arrays, empty `[[]]` links) automatically normalized to canonical `[[sources/X]]`. Lint runs the fix before any LLM-dependent phases.\n- **Startup quick fixes**: The former \"Startup Health Check\" now actively repairs low-level format issues on plugin load. Detailed 10s Notice with cleanup stats. Default ON.\n\n### Fixed\n- **Issue #81**: YAML `sources:` field generated 3+ inconsistent formats from different code paths. Root cause was `wiki-engine.ts:646` passing `file.path` raw to `{{source_file}}`, and `normalizeSourcePath` only stripping `[[]]`. 572 files / 1616 entries cleaned on the largest reported vault.\n- **Issue #75**: LM Studio HTTP 400 on batch 2+ — `source-analyzer.ts:113` had a shadow `MAX_TOKENS = 16000` bypassing the centralized `MAX_TOKENS_BATCH`. Replaced. New Context Window setting provides explicit user control.\n- **Issue #76**: `TOKENS_DEDUP_RESOLUTION=300` caused \"empty JSON\" with thinking models (budget consumed by reasoning). Fixed: 300→1000. Also `TOKENS_QUERY_SAVE_DEDUP: 150→300`.\n- **Alias language**: Replaced hardcoded Chinese↔English translation rules with English-as-linker-language and a \"do NOT invent translations for established technical terms\" rule. Transformer no longer becomes the non-existent \"变换器\".\n- **Dead code**: Removed `TOKENS_PAGE_MERGE`, `TOKENS_RELATED_UPDATE` (zero callers). Removed `promptIncludesConstraints`.\n\n### Changed\n- **Settings UX redesign**: New \"LLM-Wiki Status\" section with inline indicators. \"LLM Provider Configuration\" → \"LLM Configuration\". \"Wiki Folder Configuration\" → \"Wiki Configuration\". LLM Concurrency and Batch Delay moved to LLM Configuration. Provider dropdown uses English names for non-Chinese languages.\n- **Token budget cleanup**: `TOKENS_DEDUP_RESOLUTION` 300→1000, `TOKENS_QUERY_SAVE_DEDUP` 150→300, deleted `TOKENS_PAGE_MERGE` and `TOKENS_RELATED_UPDATE`.\n- **withTruncationRetry retry cap**: Now respects the Context Window setting as `maxCap` instead of unconditionally using `MAX_TOKENS_BATCH=16000`.\n- **TDD standards**: Mandatory test quality rules documented — cover all production paths, assert content mutation, re-scan for idempotency verification.\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\nand click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, **LM Studio**, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama or LM Studio)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\ndetailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.15.0...1.16.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.15.0...1.16.0)",
+      "draft": false,
+      "name": "1.16.0 — Local model compatibility + data quality",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T11:12:55Z",
+      "tag": "1.16.0"
+    },
     {
       "assets": [
         {

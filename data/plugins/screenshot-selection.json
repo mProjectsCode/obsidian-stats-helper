@@ -4,22 +4,282 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Capture the currently selected content as a PNG and copy it to the clipboard.",
   "errors": [],
   "id": "screenshot-selection",
-  "lastChangedAt": "2026-06-04T05:02:59.189Z",
-  "lastFetchedAt": "2026-06-04T05:02:59.189Z",
+  "lastChangedAt": "2026-06-05T05:00:58.581Z",
+  "lastFetchedAt": "2026-06-05T05:00:58.581Z",
   "manifest": {
     "author": "HWY1dot0",
     "authorUrl": "https://github.com/HWY1dot0",
-    "description": "Capture the currently selected content as a PNG and copy it to the clipboard.",
+    "description": "Capture selected note content as a PNG. Copies to clipboard when possible, with a vault file fallback on mobile.",
     "fundingUrl": "https://buymeacoffee.com/hwy1dot0",
     "id": "screenshot-selection",
-    "isDesktopOnly": true,
+    "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Screenshot Selection",
-    "version": "0.1.4"
+    "version": "0.2.9"
   },
   "name": "Screenshot Selection",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8932b1162df065325571270a5625291fa2b04752c886fb07e4fa567e11513392",
+          "name": "main.js",
+          "size": 86854
+        },
+        {
+          "digest": "sha256:f63863a06dc4ecb92f2a686cd9b6be726cfb16237b34af58b4b11f429d2c2770",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Fix mobile content being wrong (0.2.8 regression follow-up).\n\n0.2.8 still rasterized blank on iOS and fell back to the text renderer, because it re-rendered the selection with MarkdownRenderer into an offscreen subtree — which iOS WKWebView cannot rasterize. 0.2.1 worked because it cloned the live, already-rendered Reading-view DOM.\n\n- **Mobile now clones the live rendered DOM** (range.cloneContents) first; the MarkdownRenderer re-render is only a fallback.\n- **Selection no longer lost on tap:** the last in-note selection is stashed continuously, so opening the menu/ribbon doesn't drop it.\n- **No false 'iOS could not rasterize':** blank detection now scans at full resolution instead of downscaling, which had wrongly flagged thin text as blank.\n\nBest results in Reading view.",
+      "draft": false,
+      "name": "0.2.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T14:52:37Z",
+      "tag": "0.2.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8088104cced98e19cd6badaf0c758e2b0901838303ce71066b672fe8f00d7b82",
+          "name": "main.js",
+          "size": 85349
+        },
+        {
+          "digest": "sha256:f5d578b678c9b79f07bd33248b15f2b033f8f0f7fc87cd27a252082bf5bf0b56",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Mobile capture fixes (the real render works on iOS — 0.2.1 proved it, then 0.2.6 broke it).\n\n- **Content correct again.** 0.2.6 had replaced the real themed rendering with a text-only canvas fallback, so mobile captures looked nothing like the note. Mobile now rasterizes the real themed DOM first.\n- **Blank-only fallback.** The text fallback now fires only when iOS actually returns a blank canvas (pixel-sampled), not unconditionally.\n- **No more trailing blank strip.** Whitespace-trimming now runs on mobile too (it had been desktop-only since 0.2.2).\n- **Visible diagnostics.** The capture notice shows whether the themed render or the text fallback was used.",
+      "draft": false,
+      "name": "0.2.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T14:39:24Z",
+      "tag": "0.2.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:98c32b1db0f648bc9c33996b61c3a1f57406a203537db49e6694a1268bb92034",
+          "name": "main.js",
+          "size": 83109
+        },
+        {
+          "digest": "sha256:430abb2ea42c06a80eb63a8dd6886201ab47d30e53805fb225d15d6fca72ebec",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Fixes mobile captures choosing the wrong content. Mobile capture now prefers explicit editor selection, then rendered DOM selection, then current editor block, instead of letting the current block override a rendered selection.",
+      "draft": false,
+      "name": "0.2.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T14:12:05Z",
+      "tag": "0.2.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:951968432d703d817c2872e2107a348e308828592475895f196c18746d23d51f",
+          "name": "main.js",
+          "size": 82594
+        },
+        {
+          "digest": "sha256:df3cf9bc6b55c51e4aedbb9ab78bd5c4710cbe45b709d0807a58f881f0bb0e28",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Adds a mobile canvas fallback renderer for selected markdown/current block captures. This bypasses DOM-to-image rendering on iOS WebView, which was producing blank screenshots, while keeping desktop DOM capture unchanged.",
+      "draft": false,
+      "name": "0.2.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:51:50Z",
+      "tag": "0.2.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e0cb19b42b09a1376364f1152acd1d0c92f9cb36e3005a25c20ca533375bd7f7",
+          "name": "main.js",
+          "size": 75176
+        },
+        {
+          "digest": "sha256:e8a7d3a71733e00c2305fbc90113417899537089ba57cb7a12d94e120d64841f",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Attempts to fix blank iOS captures by rendering the capture node visibly in the viewport before export and by generating the PNG before writing to the clipboard instead of using promise-style ClipboardItem data.",
+      "draft": false,
+      "name": "0.2.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:44:37Z",
+      "tag": "0.2.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:47a317ad0dfa03f3c3f9b87ec5b0cb32d6b51c436a60a33cb671fb37f1279591",
+          "name": "main.js",
+          "size": 75415
+        },
+        {
+          "digest": "sha256:f3879479a173c688b0d13a3965aa90f70c41038f4f3b21e9cb805beb6b13a684",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Avoids blank captures on iOS by keeping the mobile capture node inside the viewport, skipping forced content-height trimming on mobile, and waiting one animation frame before rendering the PNG.",
+      "draft": false,
+      "name": "0.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:37:34Z",
+      "tag": "0.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b52bb72cfcb696abdab46b03973c019db110bcfccf27b90a6edba40ec6a8b71",
+          "name": "main.js",
+          "size": 75153
+        },
+        {
+          "digest": "sha256:555acf331aabb4127b1946c54f33e85b81bec7c0a5cdfcb3bd23260f04d50046",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Fixes mobile capture cases where opening the editor menu or command UI collapses the current selection. Editor-menu captures now snapshot selected markdown/current block before iOS can clear it, and mobile block capture no longer depends on the MarkdownView mode string.",
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:29:45Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f0602aac0d52111e44fa6331372ea9d820421edf7d4e1cfbc626908bd9614c5",
+          "name": "main.js",
+          "size": 73498
+        },
+        {
+          "digest": "sha256:e3886f9f3c858fe32183d2d6c8a43c9b6826c463e22f00b401b67e79a79ea40a",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Tightens mobile screenshot captures by trimming extra rendered whitespace, avoiding slow whole-view fallback captures on mobile, lowering mobile render scale, shortening mobile asset waits, and showing immediate capture feedback.",
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:20:01Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b3f5cabcbf4ad0b28d3a5259413856d07b00c1623db4d9c4e720f097756789bc",
+          "name": "main.js",
+          "size": 71094
+        },
+        {
+          "digest": "sha256:2c8913961c165c72802f708d0c4fbb8f796667a9cba0e7907145ff2994be3dc8",
+          "name": "manifest.json",
+          "size": 401
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Improves the mobile screenshot workflow: mobile capture now tries to copy the PNG to the clipboard first, falls back to saving in the vault if iOS rejects clipboard image writing, and adds faster camera/ribbon and editor-menu entry points.",
+      "draft": false,
+      "name": "0.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T13:07:14Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5fabab8463582613120847c6104138eda44944ed1bd02dea47a9993c080b9206",
+          "name": "main.js",
+          "size": 68734
+        },
+        {
+          "digest": "sha256:1cf7ffb32736375ad83ca8c8f370d56f1881182d097d5b453639a6dd902a72ad",
+          "name": "manifest.json",
+          "size": 393
+        },
+        {
+          "digest": "sha256:03ed8a45895521c542ec95ee3c054ec0a0fb3384775ee1b93fbdfc2c7f66a3cf",
+          "name": "styles.css",
+          "size": 113
+        }
+      ],
+      "author": "HWY1dot0",
+      "description": "Adds mobile capture-to-file support while preserving desktop clipboard capture and optional watermark settings.",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T12:53:47Z",
+      "tag": "0.2.0"
+    },
     {
       "assets": [
         {
