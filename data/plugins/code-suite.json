@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. VS Code-quality code blocks: Shiki syntax highlighting with 65+ themes, code execution with live I/O, embedded file rendering, and custom VS Code theme import.",
   "errors": [],
   "id": "code-suite",
-  "lastChangedAt": "2026-06-05T03:04:58.585Z",
-  "lastFetchedAt": "2026-06-05T03:04:58.585Z",
+  "lastChangedAt": "2026-06-06T03:01:58.573Z",
+  "lastFetchedAt": "2026-06-06T03:01:58.573Z",
   "manifest": {
     "author": "Felix Leopold",
     "authorUrl": "https://github.com/felixleopold",
@@ -14,11 +14,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "CodeSuite",
-    "version": "1.5.2"
+    "version": "1.6.1"
   },
   "name": "CodeSuite",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:dea6f1a3679eaab21749f0ba69c91573fd627e5a3d780d678201fff2e6799d8f",
+          "name": "main.js",
+          "size": 4010032
+        },
+        {
+          "digest": "sha256:4a143f9080a3ed529606515719522280371db891b1be312139c0a40f4730ca0e",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:08a4040767a6ece8e1c225ef671cf137a92c4bc184f8afd30d9d630773d2ec93",
+          "name": "styles.css",
+          "size": 24586
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A code-quality release that clears all outstanding Obsidian plugin reviewer warnings with no change to behavior.\n\n## What's New\n\n- Cleared every source and CSS warning reported by the Obsidian plugin reviewer: timer and animation-frame calls now use `window` (instead of the `activeWindow.*` and bare-global forms), Node's `require` is reached through `window` instead of `globalThis`, and intentionally-ignored errors use optional `catch` bindings rather than unused `_e`/`_err` variables.\n- Reworked the soft-wrap hang-indent so it no longer relies on the `:has()` selector (broad style invalidation) or `text-indent` (only partially supported in older Obsidian). Wrapped code lines still align exactly with the code column via a renderer marker class and an absolutely-positioned line number.\n\n## Bug Fixes\n\n- None — this release is behavior-preserving cleanup.\n\n## Upgrade Notes\n\n- No action required. No settings, data, or rendering behavior changes.\n",
+      "draft": false,
+      "name": "1.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T13:31:06Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:00eb6c73b241bc9d172af4d1c8292c7abfe60e83b54537b48f92a73fe962f806",
+          "name": "main.js",
+          "size": 4010122
+        },
+        {
+          "digest": "sha256:ab4ad9c2e15e19a61e394b311ffe4a57f7926b02f7a2e7f6c75d4a3334213cf4",
+          "name": "manifest.json",
+          "size": 419
+        },
+        {
+          "digest": "sha256:b92ef8a8b67434aa58c262fef1f316b58e623ea564971aab7e063d3d94c1e27f",
+          "name": "styles.css",
+          "size": 24173
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Typed variable injection (fixing #16), plus an experimental way to use markdown tables as code variables.\n\n## What's New\n\n- **Typed `vars` injection** ([#16](https://github.com/felixleopold/obsidian-code-suite/issues/16)): values in `vars` blocks and `code_vars:` frontmatter are now injected as native, correctly-typed literals. `5` is an `int`, `True` is a `bool`, `0.85` is a `float`, and a quoted `\"https://x\"` is a clean string — no more manual casting or double-quoting.\n- **Live cross-language variables**: a shared variable changed by one block is now visible to later blocks in *any* language, in execution order. Set `count = 42` in Python and a later Bash block sees `42`; change it in Bash and the next Python block sees the new value (re-typed). Re-running a block no longer double-applies its own assignment. **Apply** on a `vars` block (or **Clear Session**) resets shared vars to their declared values.\n- **`:type` hints**: force a type with `port:str = 8080`, `ratio:float = 1`, or `ids:json = [1, 2, 3]`. Hints: `str`, `int`, `float`, `bool`, `json`.\n- **Multiline string vars**: triple-quoted (`\"\"\"` or `'''`) values can span multiple lines.\n- **Data tables (experimental)** — Settings → Experimental features → Data tables (off by default): a `%% codesuite: <name> as <shape> %%` directive above a markdown table exposes it to code as `records`, `dict`, `columns`, `matrix`, or `vars`. A `var | value` header is recognised automatically.\n\n## Bug Fixes\n\n- `vars` string values are no longer wrapped in an extra layer of quotes (e.g. `BASE_URL` was becoming `'\"https://…\"'`, breaking URL navigation).\n- Integers and booleans from `vars` blocks are no longer injected as strings, so comparisons like `if depth > CRAWL_DEPTH:` work without manual `int()`/`bool()` casting.\n\n## Upgrade Notes\n\n- Existing `vars` blocks keep working. If your code relied on every value being a string and you previously cast it (e.g. `int(MY_INT)`), those casts are now redundant but harmless. Add a `:str` hint if you specifically need a value kept as a string.\n- Shared variables are now a live cross-language namespace updated in execution order. If you relied on a `vars` value always resetting to its declared value on every run regardless of prior runs, use **Apply** / **Clear Session** to reset, or keep that variable read-only.\n- Data tables are experimental and off by default; their syntax may change in a future release.\n",
+      "draft": false,
+      "name": "1.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T13:10:58Z",
+      "tag": "1.6.0"
+    },
     {
       "assets": [
         {
