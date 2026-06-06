@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Visualise relationships between notes — for worldbuilding, fiction, TTRPG campaigns, genealogies, or any project where seeing how things connect matters.",
   "errors": [],
   "id": "relations",
-  "lastChangedAt": "2026-06-03T07:03:58.592Z",
-  "lastFetchedAt": "2026-06-03T07:03:58.592Z",
+  "lastChangedAt": "2026-06-06T05:00:58.700Z",
+  "lastFetchedAt": "2026-06-06T05:00:58.700Z",
   "manifest": {
     "author": "Obsidian TTRPG Community",
     "authorUrl": "https://github.com/Obsidian-TTRPG-Community",
@@ -14,11 +14,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "Relations",
-    "version": "0.15.4"
+    "version": "0.18.0"
   },
   "name": "Relations",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:b963dc6e74e21c0899832efedfb92747435b3b71aec4507ded9ff5542e020174",
+          "name": "main.js",
+          "size": 722580
+        },
+        {
+          "digest": "sha256:ff1205e5a595458b34524326cea883429babb79bc24eab08e20caf176d97f72c",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:78b3c2f2ed2e67249d24552c300a13751023122361591c54d917b305bbcb5208",
+          "name": "styles.css",
+          "size": 10040
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Obsidian-TTRPG-Community/Relations/compare/0.16.1...0.18.0\r\n\r\nfeat: node display customization - ring color and node badges\r\n\r\n0.17.0 - Ring color\r\n- New \"Ring color\" settings section: pick a frontmatter property and define\r\n  exact-match value-to-color rules. Notes whose property matches a rule\r\n  render with a colored outer ring.\r\n- Settings UI lets users add/remove rules with a color picker per rule.\r\n- Cache invalidation hooked up so settings changes rebuild affected nodes.\r\n- Ring color renders on every view mode (basic graph, family-graph,\r\n  family-tree) including the focus note itself.\r\n- Pure helper resolveRingColor() factored out for testing.\r\n- Settings panel preserves scroll position when adding/removing rules\r\n  (previously jumped to top on every change).\r\n\r\n0.18.0 - Node badges (corner icons + italic subtext)\r\n- New \"Node badges\" settings section: three optional frontmatter properties\r\n  drive a top-left icon, a top-right icon, and italic subtext beneath the\r\n  node. Whatever the user puts in the property renders as-is, so emoji is\r\n  the obvious primary use but short text also works.\r\n- DOM overlay layer (src/node-badges.ts) sits above the Cytoscape canvas\r\n  and pins badges to nodes. Listens to pan, zoom, resize, position, add,\r\n  remove, data, and layoutstop events with rAF-coalesced redraw.\r\n- Badges anchor to the ring's 45-degree diagonal (touching the circle's\r\n  visible edge, not the bounding-box corner) for a clean attached look.\r\n- Subtext sits below the node label.\r\n- Everything scales 1:1 with Cytoscape's zoom via transform: scale() with\r\n  corner-specific transform-origin, so badges remain proportional to the\r\n  portrait at every zoom level.\r\n- Respects the global \"Show node labels\" toggle - turning labels off\r\n  also disables badges, keeping minimal-portraits mode minimal.\r\n- Generic helper resolveFrontmatterString() factored out for testing.\r\n\r\nTests: 134 passing (105 before this release + 15 ring-color + 14\r\nfrontmatter-string).",
+      "draft": false,
+      "name": "0.18.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-06T00:01:27Z",
+      "tag": "0.18.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e7a8d442470f61d928c7c4b37b32e1e9f7273084bb1cfb9a5d0b7d488b62da5d",
+          "name": "main.js",
+          "size": 713190
+        },
+        {
+          "digest": "sha256:720694a81093e8f8c910d7befb116cfee7c45d9824285a14087319e52036d1da",
+          "name": "manifest.json",
+          "size": 402
+        },
+        {
+          "digest": "sha256:78b3c2f2ed2e67249d24552c300a13751023122361591c54d917b305bbcb5208",
+          "name": "styles.css",
+          "size": 10040
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/Obsidian-TTRPG-Community/Relations/compare/0.15.4...0.16.1\r\n\r\nfeat: affair-child layout, soft-adjacency for lovers, scope: connected\r\n\r\nLayout improvements for family-tree mode:\r\n\r\n- Affair-child rule: when a child has two parents, one with a spouse-\r\n  elsewhere and the other unmarried, the spouse-having parent is dropped\r\n  from the layout. The child renders cleanly under the lover-parent.\r\n  Biological data unchanged in the graph; only layout planning sees the\r\n  simplified parent set. Helper computeEffectiveParents in\r\n  src/family-parenting.ts, consumed by family-tree.ts and family-connectors.ts.\r\n\r\n- Soft-adjacency (step 9c in family-tree.ts): lover-only single-parent\r\n  units are pulled adjacent to their bloodline anchor in the partner row,\r\n  clearing the anchor's full canonical subtree to avoid collisions with\r\n  the anchor's own children. Multiple lovers stack outward in declaration\r\n  order. The lover's full subtree (parent + descendants) is shifted\r\n  together so children stay directly beneath their mother.\r\n\r\n- Generation propagation now uses raw declared parents (both), while\r\n  unit grouping uses the affair-filtered set. This fixes a regression\r\n  where an affair child who later married was placed one row above\r\n  their bloodline parent.\r\n\r\nNew code-block option scope: connected -- third scope alongside local\r\nand full. Walks every edge reachable from the focus note (undirected,\r\nany edge type, no depth limit). Shows the connected component containing\r\nthe focus, excluding disconnected islands.\r\n\r\nTests: 105 passing (+16 since 0.15.4).",
+      "draft": false,
+      "name": "0.16.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T14:34:48Z",
+      "tag": "0.16.1"
+    },
     {
       "assets": [
         {
