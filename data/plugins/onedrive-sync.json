@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Sync your Obsidian vault with OneDrive Personal/Consumer",
   "errors": [],
   "id": "onedrive-sync",
-  "lastChangedAt": "2026-06-06T06:02:58.592Z",
-  "lastFetchedAt": "2026-06-06T06:02:58.592Z",
+  "lastChangedAt": "2026-06-07T06:04:58.564Z",
+  "lastFetchedAt": "2026-06-07T06:04:58.564Z",
   "manifest": {
     "author": "Jeff Steinbok",
     "authorUrl": "https://github.com/jeffsteinbok",
@@ -14,11 +14,115 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.0",
     "name": "OneDrive Sync",
-    "version": "1.2.1"
+    "version": "1.3.2"
   },
   "name": "OneDrive Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:9344fdf6ba7a0b8997ac9f5863a9ac9343d24151940c4ea62d53ec1feca773c3",
+          "name": "main.js",
+          "size": 315427
+        },
+        {
+          "digest": "sha256:6a3ebac5dc6971e34ec2559a71717147d922348a732395d872a5e20538788e49",
+          "name": "manifest.json",
+          "size": 271
+        },
+        {
+          "digest": "sha256:7b906ef2e363f6d4c14febb78893e18379e920c8b0504d0cf1ba728ba7a2bd7f",
+          "name": "styles.css",
+          "size": 10488
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Bug Fixes\n\n- **Config file deletes from cloud now sync locally** — Cloud-side deletions of `.obsidian/` config files (e.g. removing a plugin from OneDrive) were silently ignored because the vault API can't see config paths. Now checks tracked state to properly delete config files via the adapter.\n\n- **Config folder cleanup after cloud delete** — Empty plugin folders (e.g. `.obsidian/plugins/calendar/`) were left behind after their files were deleted from cloud. Now falls back to adapter for config folder removal.\n\n- **404 on delete no longer aborts sync** — When deleting a remote item that's already gone (e.g. after a partial sync failure or 504 outage), the 404 error was treated as fatal and aborted the entire sync, preventing remaining operations from completing. Now treated as success since the item is already removed.",
+      "draft": false,
+      "name": "1.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T04:56:23Z",
+      "tag": "1.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5efd63b88abbcc47e2fd4f3dd8554f4a3f249bf15a75107352011dfddd410ee1",
+          "name": "main.js",
+          "size": 314437
+        },
+        {
+          "digest": "sha256:7a0e2382fa3519d78c2eceff2992b71dd5d3325ac5f1bca02eb8f5f26cd74323",
+          "name": "manifest.json",
+          "size": 271
+        },
+        {
+          "digest": "sha256:7b906ef2e363f6d4c14febb78893e18379e920c8b0504d0cf1ba728ba7a2bd7f",
+          "name": "styles.css",
+          "size": 10488
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 🗂️ Folder Sync Support\n\n### New Features\n- **Empty folder creates** now sync to OneDrive — creating an empty folder in your vault pushes it to the cloud\n- **Empty folder deletes** now sync to OneDrive — deleting an empty folder locally removes it from the cloud\n- **Cloud-deleted empty folders** are now removed locally when the delta API reports the deletion\n\n### Bug Fixes\n- Fixed `markInitialSyncDone()` not being called on zero-operation syncs, which blocked folder event detection\n- Fixed early return in sync flow that skipped `deleteCloudDeletedFolders` when no file operations were planned\n\n### Improvements\n- Replaced blanket `pruneAllEmptyFolders` with explicit folder event tracking — empty folders the user intentionally created are no longer auto-deleted\n- Narrowed remote folder pruning to config folders only (`.obsidian/plugins/*`) since regular folders now use explicit `FOLDER_DELETE` events\n- Added 7 new EventManager tests for TFolder create/delete/rename events (300 total tests)\n",
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T04:04:28Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ab2eafd1f5a4654ca3f9eabae34b55f3e1fb438860dd2f9b615b3795185d24ed",
+          "name": "main.js",
+          "size": 311929
+        },
+        {
+          "digest": "sha256:0b5df6a7dbf53c359f239f632e0bf2df66cabbf8e51a193a887a9ff4782884b2",
+          "name": "manifest.json",
+          "size": 271
+        },
+        {
+          "digest": "sha256:7b906ef2e363f6d4c14febb78893e18379e920c8b0504d0cf1ba728ba7a2bd7f",
+          "name": "styles.css",
+          "size": 10488
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's New in 1.3.0\n\n### Sync Reliability\n- **Plugin folder deletion now propagates correctly** — deleting a plugin locally removes its files and folder from OneDrive\n- **Chunked upload fix** — files >4MB (e.g. Excalidraw) no longer fail with `ERR_INVALID_ARGUMENT`. Chunk sizes are now aligned to 320 KiB multiples per Microsoft Graph spec\n- **ENOENT resilience** — files that vanish mid-sync no longer crash the entire sync batch; they're converted to remote deletes\n- **Config file deletion detection** — `.obsidian/` file deletions are now caught via raw events instead of being silently ignored\n- **Cloud-deleted folder safety** — incoming folder deletes only remove local folders if they're empty after file deletions (preserves untracked files like data.json)\n- **Reconcile ghost cleanup** — tracked state entries for previously-deleted files are now properly purged during reconcile\n- **No more false re-uploads** — undefined content hashes after reconcile are silently backfilled instead of triggering unnecessary uploads\n- **Settings toggles no longer reset sync** — toggling app/plugin sync settings no longer wipes delta cursors and tracked state\n\n### Logging Improvements\n- **Log level setting** — new dropdown (Off / Error / Warn / Info / Debug) replaces the old debug toggle. Default is Off\n- **Shorter log format** — `[2026-06-07T01:35:39Z] [DBG] message` instead of verbose plugin name and level\n- **Plugin version logged** at the start of each sync for easier troubleshooting\n\n### UI\n- **Sync Now button** moved into the Sync Status row for a cleaner layout\n- **Removed toast notifications** when toggling sync settings\n\n### Testing\n- **293 tests passing** with comprehensive deletion scenario coverage\n- 16 new deletion permutation tests (local→remote, remote→local, folder cleanup, reconcile)\n- Full test documentation in `tests/SYNC-TESTS.md`\n\n**Full Changelog**: https://github.com/JeffSteinbok/obsidian-onedrive/compare/1.2.2...1.3.0",
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T02:22:37Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b5d800ebd2e3efad29d826dec29e740e8b02caf458e1c014e2e0b1c9995a87a4",
+          "name": "main.js",
+          "size": 308627
+        },
+        {
+          "digest": "sha256:8b2ceda60454d1a05fa99f9dd918112fc9bedb93e1e4dc768403d41df9d83f56",
+          "name": "manifest.json",
+          "size": 271
+        },
+        {
+          "digest": "sha256:7b906ef2e363f6d4c14febb78893e18379e920c8b0504d0cf1ba728ba7a2bd7f",
+          "name": "styles.css",
+          "size": 10488
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\r\n* Restore mobile sync visibility and expose sync status in settings by @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/38\r\n\r\n\r\n**Full Changelog**: https://github.com/JeffSteinbok/obsidian-onedrive/compare/1.2.1...1.2.2",
+      "draft": false,
+      "name": "1.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-06T07:19:16Z",
+      "tag": "1.2.2"
+    },
     {
       "assets": [
         {
