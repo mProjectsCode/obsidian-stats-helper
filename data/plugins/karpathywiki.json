@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-07T05:02:58.557Z",
-  "lastFetchedAt": "2026-06-07T05:02:58.557Z",
+  "lastChangedAt": "2026-06-08T05:00:58.560Z",
+  "lastFetchedAt": "2026-06-08T05:00:58.560Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Karpathy LLM Wiki",
-    "version": "1.16.2"
+    "version": "1.16.3"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:f518592c843c2cd8cea49a4d1ab7f93f7d6a3a28afe16cfa2ae2b71514badd82",
+          "name": "main.js",
+          "size": 682360
+        },
+        {
+          "digest": "sha256:072aa6a4320ced88fd878d096a04357e7b197519704f6d3d8fd6b29d49b3f125",
+          "name": "manifest.json",
+          "size": 353
+        },
+        {
+          "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
+          "name": "styles.css",
+          "size": 7376
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Fixed\n- **Issue #94 (Lint cancel status bar) — regression fix**: v1.16.2 wired AbortSignal to the fix-runners, but the LintReportModal still called `this.close()` immediately on every fix-button click, firing `onClose` → `endLintOperation` and hiding the status bar before the user could cancel. The fix gives each fix phase its own lint-operation lifecycle: `startLintOperation` runs when the user clicks a fix button, `endLintOperation` runs when the fix finishes. Modal closes immediately (preserving the original UX); the user gets a top-right progress notice and the bottom-right status bar stays visible throughout the fix — click it to cancel.\n- **Issue #94 (batch count display)**: the duplicates-check progress Notice showed \"X/4\" (outer round counter) instead of \"1-4/16\" (inner batch range matching the console log). Now shows the actual inner-batch range so console and Notice stay in sync — no more confusion about progress.\n- **#243 thinkingControlCache key mismatch**: extracted `getThinkingControlCacheKey()` helper so read and write paths in main.ts use the same cache key. Previously, predefined providers without a baseUrl override caused cache writes to use `''` as key while reads used the predefined URL — the cache would forever-miss, triggering a wasted 400 round-trip on every call. Also skip writes when cacheKey is empty.\n- **#244 deleteEmptyStubs error handling**: now returns `{deleted, failed, errors}` instead of throwing on the first failure. Each file wrapped in try/catch so vault race conditions can't half-delete the wiki. Added `lintDeleteFailed` i18n key in 8 languages.\n- **#245 thinkingControlSupported cache after fallback**: `OpenAICompatibleClient.createMessage` and `createMessageStream` now set `this.thinkingControlSupported = false` after a successful 400-fallback, so subsequent calls to the same baseUrl skip the redundant 400 round-trip.\n- **#248 isThinkingControlError tightening**: now requires both an HTTP 400 status and a rejected-field/parameter keyword in the message. Was matching any error containing \"thinking\" — false positives on non-400 errors and on messages that mentioned thinking incidentally.\n- **i18n hardcoding cleanup** (#94 followup): 3 hardcoded English progress strings replaced with proper i18n keys (`lintCheckingDuplicatesProgress`, `lintFixingPolluted`, `lintModalFixPolluted`) in 8 locales.\n- **de.ts trailing-comma syntax error**: 6 other language files had the same issue (trailing spaces where commas should be) — all fixed in lockstep.\n\n### Changed\n- **endLintOperation made idempotent**: safe against double-call (e.g., modal close + a new per-phase lifecycle both calling it).\n- **Test rename** (#246): \"omits thinking for Gemini\" → \"sends thinking.type=disabled for Gemini baseUrl\" (assertion always asserted sent; old name misled future readers).\n- **CLAUDE.md Six-Gate framework strengthened** (developer hygiene): Gate 4 (No Performance Regression) was a brief checklist; now has a structured 5-dimension walkthrough with mandatory deliverable table. Gate 6 (Release clean) is now explicitly a superset of Gates 1-5 — the pre-release-gate must re-verify all prior gates, not trust commit-time cached state.\n\n### Tests\n- 549/549 passing. No new tests needed (changes are defensive correctness + UX).\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (#94 regression, #243-#248 cleanup, i18n + de.ts fixes, Six-Gate strengthening)\n- **@DocTpoint** — Bug report that exposed the #94 regression and drove the full P0 hotfix cycle\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.2...1.16.3](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.2...1.16.3)",
+      "draft": false,
+      "name": "1.16.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T11:40:33Z",
+      "tag": "1.16.3"
+    },
     {
       "assets": [
         {
