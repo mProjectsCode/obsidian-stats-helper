@@ -4,8 +4,8 @@
   "description": "Enables access to LLMs via remote providers (OpenAI, Claude, Gemini) and local LLMs via GPT4ALL.",
   "errors": [],
   "id": "large-language-models",
-  "lastChangedAt": "2026-06-07T01:04:58.575Z",
-  "lastFetchedAt": "2026-06-07T01:04:58.575Z",
+  "lastChangedAt": "2026-06-08T01:01:58.564Z",
+  "lastFetchedAt": "2026-06-08T01:01:58.564Z",
   "manifest": {
     "author": "eharris128, r-mahoney, & jsmorabito",
     "authorUrl": "https://github.com/eharris128/Obsidian-LLM-Plugin",
@@ -15,11 +15,229 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Large Language Models",
-    "version": "0.24.0"
+    "version": "0.24.9"
   },
   "name": "Large Language Models",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:59934a97bf877ff469beb9e93dd01881d4ea1e699d9f802b863cbc8eb0e2f0a5",
+          "name": "main.js",
+          "size": 3263722
+        },
+        {
+          "digest": "sha256:a35596c737800963b2407eb46b1ec82ebb2a6576c8ad95fad8cc1f347e410a04",
+          "name": "manifest.json",
+          "size": 566
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "## ONNX local embeddings — now working in-process\n\nVault search with the ONNX provider (no server required) is now fully functional. The model runs directly inside Obsidian using native CPU bindings.\n\n### How it works\n- **One-time download (~110 MB)** — `Xenova/all-mpnet-base-v2` weights are fetched from HuggingFace and cached to disk on first use\n- **Runs in-process** — uses `onnxruntime-node` native bindings already bundled with Obsidian, no subprocess or external server needed\n- **768-dimensional embeddings** — competitive with OpenAI `text-embedding-3-small` on semantic similarity benchmarks\n- **Fully offline after first download**\n\n### Also in this release\n- Fix model status label (was showing `nomic-embed-text-v1.5`, now correctly shows `all-mpnet-base-v2`)\n- Add `onnx-models/` to `.gitignore` to prevent accidental commit of downloaded model weights",
+      "draft": false,
+      "name": "0.24.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T15:47:20Z",
+      "tag": "0.24.9"
+    },
+    {
+      "assets": [],
+      "author": "jsmorabito",
+      "description": "## Bug Fixes\n\n- **Embedding provider switch now re-indexes automatically** — switching from Ollama to ONNX (or any provider change) clears the old index and rebuilds it immediately, preventing stale vectors from corrupting search results\n- **Short notes are now indexed** — files with fewer than 50 characters of content (e.g. a simple \"About me\" note) were silently skipped; they are now always included\n- **Vault search sources panel shows grep results** — the collapsible \"N sources\" panel after a response now tracks notes found via `grep_vault` in addition to `search_vault_semantic`\n- **Ollama/LM Studio model refresh fixed** — the Refresh button in provider settings now uses the same HTTP stack as chat requests, resolving failures that required an Obsidian restart to work around",
+      "draft": false,
+      "name": "0.24.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T15:36:54Z",
+      "tag": "0.24.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:658a0a83e9679b73cba547c582203b99ed98a21fc835769fdadfeb7726f5d63d",
+          "name": "main.js",
+          "size": 4497002
+        },
+        {
+          "digest": "sha256:2a84a9247b2aa8a4ce630d37cbaf02df643dcee750d9f66e234245c222323687",
+          "name": "manifest.json",
+          "size": 566
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "Fix: ONNX model download now works in Obsidian. Sets transformers.js cache dir to the plugin's OS path, forcing Node.js https (not browser fetch) — bypasses Obsidian's Content Security Policy that was blocking huggingface.co.",
+      "draft": false,
+      "name": "v0.24.7 — Fix ONNX model download (CSP bypass)",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T03:08:54Z",
+      "tag": "0.24.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:85512e35169f933e04f77d70e050b146108e49adc4419463ea46b0cf33cb0bdc",
+          "name": "main.js",
+          "size": 4496302
+        },
+        {
+          "digest": "sha256:f2bf0b70593b0f2ab823329274d0f554b4c4e83bc6b33015139678966d4ec2b8",
+          "name": "manifest.json",
+          "size": 566
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "Fix: restore missing `version` field in manifest.json that was dropped during a merge. This was preventing Obsidian from recognizing the plugin update.",
+      "draft": false,
+      "name": "v0.24.6 — Fix missing version in manifest.json",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T03:02:28Z",
+      "tag": "0.24.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:85512e35169f933e04f77d70e050b146108e49adc4419463ea46b0cf33cb0bdc",
+          "name": "main.js",
+          "size": 4496302
+        },
+        {
+          "digest": "sha256:9a66bd5dac06ac25dd1c42d4990c9c5e8d013ab30fc55d27f0a8e723bb52c94f",
+          "name": "manifest.json",
+          "size": 544
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "## What's New\n\n### Embedding provider choice\n\nVault Search now lets you pick your embedding backend. **ONNX remains the default** (no server, runs in-process), but you can switch to any of the original external providers in **Settings → Embeddings**.\n\n| Provider | Notes |\n|----------|-------|\n| **ONNX** (default) | Xenova/nomic-embed-text-v1.5, q8 quantized, ~90 MB download, fully offline after first use |\n| **Ollama** | Uses your configured Ollama host; model must be pulled (e.g. `ollama pull nomic-embed-text`) |\n| **OpenAI** | Uses your OpenAI API key; default model `text-embedding-3-small` |\n| **Gemini** | Uses your Gemini API key; default model `text-embedding-004` |\n| **LM Studio** | Uses your LM Studio host; load an embedding model in LM Studio first |\n\n### Settings UI\n\n- New **Embedding provider** dropdown in the Embeddings tab\n- ONNX selection shows model download status and a Download/Load button\n- External provider selections show an editable model name field and a prerequisite hint (which API key or server is used)\n\n### Migration\n\nNo re-indexing required when switching between 768-dim models (ONNX nomic-embed-text-v1.5, Ollama nomic-embed-text). Re-index if you switch to a different output dimension (e.g. OpenAI `text-embedding-3-small` = 1536-dim).",
+      "draft": false,
+      "name": "v0.24.5 — Multi-provider embeddings (ONNX + Ollama/OpenAI/Gemini/LM Studio)",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T02:57:21Z",
+      "tag": "0.24.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:51bba04bbda072cd3eab9c33dd1996b40ecc8e7893aa8c8d84b3082f573b4698",
+          "name": "main.js",
+          "size": 4487391
+        },
+        {
+          "digest": "sha256:9a66bd5dac06ac25dd1c42d4990c9c5e8d013ab30fc55d27f0a8e723bb52c94f",
+          "name": "manifest.json",
+          "size": 544
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "## What's New\n\n### ONNX Local Embeddings — Vault Search No Longer Requires Ollama\n\nVault Search (RAG) now runs its embedding model **entirely in-process** using [@huggingface/transformers](https://huggingface.co/docs/transformers.js). No external server needed.\n\n**Model:** Xenova/nomic-embed-text-v1.5 (q8 quantized, ~90MB)\n- 768-dim output — fully compatible with existing \\`rag-index.json\\` vectors (no re-index required)\n- Downloads once on first enable, then runs fully offline\n- Instant load on subsequent sessions once cached\n\n### Changes\n\n- **EmbeddingService** rewritten as an ONNX singleton; removed OpenAI/Gemini/Ollama/LM Studio provider routing\n- **Settings UI** — replaced provider/model dropdowns with a model status indicator and a Download/Load button with live progress reporting\n- **RAGSettings type** — removed \\`embeddingProvider\\`/\\`embeddingModel\\`, added \\`modelCached\\` flag\n- Plugin auto-warms the model on load when RAG is enabled and the model is cached\n\n### Upgrading\n\nExisting \\`rag-index.json\\` files created with \\`nomic-embed-text\\` via Ollama are **dimension-compatible** — no re-indexing required after upgrading.\n\nIf you previously used a different embedding model (non-768-dim), use the **Re-index Vault** button in settings after upgrading.",
+      "draft": false,
+      "name": "v0.24.4 — ONNX Local Embeddings (No Ollama Required)",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T02:50:51Z",
+      "tag": "0.24.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:38754f43649fe18ed67e7dcfaa88592739e47ef66d6e977c779f46716228085c",
+          "name": "main.js",
+          "size": 3247113
+        },
+        {
+          "digest": "sha256:0da6a839c13ed710b2847aebf3d34d45e50b62b1cdbd05406fb9b4a38728d09a",
+          "name": "manifest.json",
+          "size": 566
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "jsmorabito",
+      "description": "## What's Changed\n\n### Tool Category Disambiguation\nSmall models (especially local 9B-parameter models) were conflating `grep_vault`/`search_vault_semantic` with `web_search` — calling vault search tools to follow up on web search results. The system prompt now explicitly states that those tools are local-vault-only and directs the model to use `web_search` for anything internet-facing.\n\n### Learning Loop\nThe agent can now learn persistent user preferences mid-conversation. When a user says something like \"remember that\", \"always\", \"never\", \"from now on\", or \"I prefer\", the agent will update the configured agent guidance file with the new preference and confirm the update. If no guidance file is configured, the agent will prompt the user to set one in plugin settings. One-off or task-specific instructions are not written to the guidance file — only persistent preferences.",
+      "draft": false,
+      "name": "0.24.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T02:21:15Z",
+      "tag": "0.24.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b7fb36aa926fe2c029823e955e101f4d1adfcfa6ad1d2d438cd3fbe471d04f4c",
+          "name": "main.js",
+          "size": 3246005
+        },
+        {
+          "digest": "sha256:094739ee7e1fd55d407268d4622e678b2ee3f6731b0d3f4492cdae652d1d215e",
+          "name": "manifest.json",
+          "size": 567
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n\n### Fix: Context Window Budget Calculation\n\nThe \"Context token budget (%)\" setting was broken by design — the budget was calculated as `maxTokens × contextPercent / 100`, where `maxTokens` was the **response length** setting (defaulting to 300), not the model's actual context window. This meant only ~210 tokens were ever budgeted for injected context, regardless of whether the model supports 200,000.\n\n**Changes:**\n- Added `contextWindow` to the `Model` type and populated accurate values for all known models (Claude: 200k, GPT-4.1: 1M, Gemini: 1M, Mistral: 131k, GPT4All/Ollama: 8k fallback)\n- Context budget is now calculated from the model's true context window size\n- Ollama models: clicking **Refresh** in settings now queries `/api/show` for each model's `num_ctx` and persists it — so the budget reflects that model's actual loaded context size\n- Added `ContextBuilder.estimateTokens()` static helper (chars ÷ 4 heuristic) for reuse\n\n---\n\n### Feature: Smart Response Length\n\nThe \"Tokens\" setting was a flat cap (default 300) that truncated most meaningful cloud model responses. It now works intelligently based on model type.\n\n**Cloud models (OpenAI, Claude, Gemini, Mistral):**\n- By default, **no `max_tokens` cap is sent** — the model stops naturally when done\n- The model's `maxOutputTokens` acts as a safety ceiling if a user override is set\n- Claude's internal fallback raised from 4,096 → 64,000 (the API requires the field)\n\n**Local models (Ollama, GPT4All):**\n- Response cap is computed dynamically as `contextWindow − contextTokenBudget`, floored at 1,024\n- Prevents the model from running past its window while maximizing response space\n\n**User override:**\n- Set \"Max response tokens\" to **0** (default/recommended) for smart automatic behavior\n- Set a positive number to enforce a hard cap — for local models, the lower of your override and the dynamic cap wins; for cloud models, it's clamped to the model's maximum\n\n**Setting renamed:** \"Tokens\" → \"Max response tokens\" with an updated description.\n\n---\n\n**Full Changelog**: https://github.com/eharris128/Obsidian-LLM-Plugin/compare/0.24.1...0.24.2",
+      "draft": false,
+      "name": "0.24.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T01:55:54Z",
+      "tag": "0.24.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fa5c0aa30daed90001939f9292169e0ee708c72db8a485dba81da12f2f247c1e",
+          "name": "main.js",
+          "size": 3243275
+        },
+        {
+          "digest": "sha256:04cf66affb2fee84d077b554b7c3d7bc763e1f567ef8d0efc4cda177cea9c251",
+          "name": "manifest.json",
+          "size": 567
+        },
+        {
+          "digest": "sha256:92b738b151594db30f4543bf74fd9ba161ce09d1b012d9d6716585eb377642f5",
+          "name": "styles.css",
+          "size": 72967
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Fix plugin load crash (import.meta.url) + add local E2E suite by @eharris128 in https://github.com/eharris128/Obsidian-LLM-Plugin/pull/291\n\n\n**Full Changelog**: https://github.com/eharris128/Obsidian-LLM-Plugin/compare/0.23.3...0.24.1",
+      "draft": false,
+      "name": "0.24.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T01:25:01Z",
+      "tag": "0.24.1"
+    },
     {
       "assets": [
         {

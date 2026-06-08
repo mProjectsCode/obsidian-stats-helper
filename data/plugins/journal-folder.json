@@ -4,8 +4,8 @@
   "description": "Utilities for folder-based journaling.",
   "errors": [],
   "id": "journal-folder",
-  "lastChangedAt": "2026-06-07T01:04:58.575Z",
-  "lastFetchedAt": "2026-06-07T01:04:58.575Z",
+  "lastChangedAt": "2026-06-08T01:01:58.564Z",
+  "lastFetchedAt": "2026-06-08T01:01:58.564Z",
   "manifest": {
     "author": "Charl Fourie",
     "authorUrl": "https://github.com/chfourie",
@@ -16,13 +16,117 @@
     },
     "id": "journal-folder",
     "isDesktopOnly": false,
-    "minAppVersion": "0.15.0",
+    "minAppVersion": "1.7.2",
     "name": "Journal Folder",
-    "version": "3.0.1"
+    "version": "3.1.3"
   },
   "name": "Journal Folder",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:132c50ac862f343dfdcf2c4c91053e4840dbc1b786a5e57eeaac58b631e1f3e3",
+          "name": "main.js",
+          "size": 649415
+        },
+        {
+          "digest": "sha256:374951d3643d2c5e8ba42c8479f3e9c6e7a7275437b77eddc77c13a72acc9475",
+          "name": "manifest.json",
+          "size": 394
+        },
+        {
+          "digest": "sha256:0c358ca6e5eebf367c6c47425cb22c480b608c40c86fe4a114244817ad91c948",
+          "name": "styles.css",
+          "size": 67079
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Changed\r\n- Reworked how the task **scope** turns into a date filter. The anchor is now a\r\n  genuine date *range* — *Today* is a single day, *Current note* is the note's\r\n  whole period — and the selected **range** includes every calendar period of\r\n  that size that overlaps the anchor. This fixes wrong results when period\r\n  boundaries didn't line up (e.g. a monthly note viewed with range *Week* now\r\n  correctly includes every week the month touches). Category range caps are\r\n  measured the same way. No settings change is needed.\r\n\r\n",
+      "draft": false,
+      "name": "3.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T16:19:26Z",
+      "tag": "3.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:11d5bbeb3f5517dc460bc831d72ff3d90528408f3271e3ecca78c0c9a76dc21d",
+          "name": "main.js",
+          "size": 650162
+        },
+        {
+          "digest": "sha256:b48ed50458ef09bc81b0a9665e64ef615ceccf0f18221b95c60219cd040b1be4",
+          "name": "manifest.json",
+          "size": 394
+        },
+        {
+          "digest": "sha256:0c358ca6e5eebf367c6c47425cb22c480b608c40c86fe4a114244817ad91c948",
+          "name": "styles.css",
+          "size": 67079
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nMaintenance release — release-tooling and documentation work only. No new\nfeatures, no behaviour changes, and the shipped plugin (`main.js`) is unchanged\nfrom 3.1.1.\n\n### Internal\n- Added a **release verification report**: the end-to-end test suite now runs in a\n  `--report` mode that records each scenario and captures a screenshot from the\n  live Obsidian run, producing a committed, browsable document\n  (`docs/test-reports/`, linked from the README) — both evidence of what each\n  release verified and a guided tour of the plugin in action. Off by default, so\n  ordinary test runs stay fast.\n- Added a **local release pipeline** (`npm run release`) that runs lint, unit\n  tests, build, the E2E suite with the verification report, screenshots, the\n  version bump, deploy, and the tagged push in one halt-on-failure sequence; the\n  tag still produces a draft GitHub release to review and publish.\n- Hardened the E2E CLI transport against empty-stdout transients (a focus race the\n  screenshot step exposed), so the live suite runs green in report mode.\n\n",
+      "draft": false,
+      "name": "3.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T09:53:17Z",
+      "tag": "3.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:11d5bbeb3f5517dc460bc831d72ff3d90528408f3271e3ecca78c0c9a76dc21d",
+          "name": "main.js",
+          "size": 650162
+        },
+        {
+          "digest": "sha256:67035e10d916c58a1dc2f8058b54a56f3a93860651dcbb0a478e4fd6f1f2b070",
+          "name": "manifest.json",
+          "size": 394
+        },
+        {
+          "digest": "sha256:0c358ca6e5eebf367c6c47425cb22c480b608c40c86fe4a114244817ad91c948",
+          "name": "styles.css",
+          "size": 67079
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nMaintenance release — code-quality and tooling work, no new features and no\nbehaviour changes for users on a supported Obsidian.\n\n### Changed\n- **Raised `minAppVersion` to 1.7.2** to honestly reflect the Obsidian APIs the\n  plugin already uses (e.g. `Workspace.revealLeaf`). Installs on older Obsidian\n  were already relying on newer-than-declared APIs; this just makes the manifest\n  truthful.\n\n### Internal\n- Adopted **`eslint-plugin-obsidianmd`** — the same ruleset the community-review\n  scanner runs — as standard tooling (`npm run lint`), and cleaned the codebase\n  to **zero** lint problems. This addresses the automated-scan cautions on the\n  community plugins page.\n- Hardened against unhandled promise rejections (`void`/await on fire-and-forget\n  calls), and switched DOM access to `activeDocument` / `activeWindow` for\n  popout-window compatibility.\n- Introduced a typed `moment` wrapper so date code is fully type-checked.\n- Moved hard-coded inline styles (task-status icon shapes, checkbox swapping,\n  settings inputs, colour-swatch states) into stylesheet rules — rendering is\n  unchanged, verified in live Obsidian.\n\n",
+      "draft": false,
+      "name": "3.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T08:20:10Z",
+      "tag": "3.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:630106b11b2403624cc2e7778fcd2ad65d1ab4e34ae446678dc88dab70aa973e",
+          "name": "main.js",
+          "size": 650773
+        },
+        {
+          "digest": "sha256:f6bedb6ae5346d6a0b71b8c85ec1632273467105709c6a2e402b4b51540e468b",
+          "name": "manifest.json",
+          "size": 395
+        },
+        {
+          "digest": "sha256:e1eb7336048647144a2ca0954ada34aaa1fafabcf969c370071414eb13073a38",
+          "name": "styles.css",
+          "size": 65228
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **Templates are now notes, not settings text.** New-note templates live as\n  ordinary notes with standardized filenames — `daily-template.md`,\n  `weekly-template.md`, `monthly-template.md`, `quarterly-template.md`,\n  `yearly-template.md`, and `default-template.md` as a fallback — kept in a\n  configurable **template folder** (default `Templates/journal-folder`). A\n  per-journal **override subfolder** (default `Templates`, relative to each\n  journal folder) takes precedence for that folder. Template bodies are copied\n  verbatim, front matter included.\n- Legacy inline template text is **migrated automatically** into template notes\n  on first launch; the old `data.json` values are kept as a backup and\n  `journal-folder.md` bodies still work as a legacy template source.\n\n### Added\n- **Live template preview.** Opening a template note that contains a\n  `journal-header` block renders it as the current period's entry — header,\n  calendar, and signifiers — marked with a corner **TEMPLATE** ribbon. The\n  preview's navigation links and calendar cells are display-only (they resolve\n  to the template note itself instead of navigating to real journal notes).\n- **Create template files** button in the settings tab scaffolds any missing\n  standardized template notes.\n- **Re-populate note from template** — a new action in the sidebar **More...**\n  menu (shown only when the active note is a journal note in a\n  templating-enabled folder) re-applies the note's template, overwriting its\n  contents. It asks for confirmation first, since it's destructive.\n\n### Fixed\n- **Current-day calendar cell is readable on Sundays.** When the current note\n  fell on a Sunday, the cell kept the Sunday accent text colour on its accent\n  highlight background, making the date invisible. It now uses on-accent\n  (white) text like every other weekday, in both the in-note and sidebar\n  calendars.\n\n",
+      "draft": false,
+      "name": "3.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T05:22:12Z",
+      "tag": "3.1.0"
+    },
     {
       "assets": [
         {
