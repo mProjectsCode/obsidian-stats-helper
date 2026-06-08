@@ -1,0 +1,104 @@
+{
+  "author": "zaemyung",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Yunseul - sparkling ripples of clarity across your Obsidian vault. Chat with your notes using LM Studio or Claude Code.",
+  "errors": [],
+  "id": "yunseul",
+  "lastChangedAt": "2026-06-08T07:00:58.590Z",
+  "lastFetchedAt": "2026-06-08T07:00:58.590Z",
+  "manifest": {
+    "author": "zaemyung",
+    "authorUrl": "https://zaemyung.github.io/",
+    "description": "Chat with your notes through local LM Studio or the Claude Code CLI — Yunseul (윤슬), sparkling ripples of clarity in your vault.",
+    "fundingUrl": "https://buymeacoffee.com/zaemyung",
+    "id": "yunseul",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.13.0",
+    "name": "Yunseul",
+    "version": "0.1.2"
+  },
+  "name": "Yunseul",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:6491b2563a6c7f8af4ea12fcaa35952126b5b8cfb8bffd0a725974aa43bddd5f",
+          "name": "main.js",
+          "size": 101886
+        },
+        {
+          "digest": "sha256:ed3c3868ee1c5d21cf2f37221dd04aa52886c4b933bc66140bc9fc21d5edb58b",
+          "name": "manifest.json",
+          "size": 386
+        },
+        {
+          "digest": "sha256:5b819bdd4130c378764c645f7f9fad4d757bd2fa49b3d8ebbd5d49ec05530a91",
+          "name": "styles.css",
+          "size": 32870
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Patch release that clears the remaining deprecated-API warnings from the [community.obsidian.md](https://community.obsidian.md) review of 0.1.1.\n\n### Changed\n\n- **Minimum Obsidian version bumped to 1.13.0** (was 1.7.2). Reasonable for a brand-new plugin in mid-2026; most active users are on a more recent build.\n- Internal API swaps to use the current rather than the deprecated forms:\n  - \\`Notice#noticeEl\\` → \\`Notice#messageEl\\` (since 1.8.7)\n  - \\`ButtonComponent#setWarning()\\` → \\`ButtonComponent#setDestructive()\\` (since 1.13.0)\n\n### Retained as designed (with explicit justification at each call site)\n\n- Two \\`fetch()\\` usages in \\`src/lmstudio/client.ts\\`:\n  - **Streaming SSE** needs \\`ReadableStream\\`; \\`requestUrl\\` buffers the body and would defeat token streaming.\n  - **The \"Test connection\" probe** compares \\`fetch\\` (CORS-aware) against \\`requestUrl\\` (CORS-bypassing) so the failure mode \"server up but CORS off in LM Studio\" can be surfaced specifically. Substituting \\`requestUrl\\` here would silently degrade error messages to a generic \"offline\".\n\n- \\`PluginSettingTab#display()\\` as a re-render seam in the settings tab. The replacement \\`getSettingDefinitions\\` API (1.13.0+) would require rewriting the settings tab from imperative DOM-building to a declarative description — tracked as a future refactor.\n\n### No behavioral changes\n\n278 / 278 tests pass; build clean; lint clean. Both backends behave identically to 0.1.1.\n\n### Release artifacts signed\n\nProvenance attestations continue via \\`actions/attest-build-provenance@v1\\`. Verify with \\`gh attestation verify <file> --repo zaemyung/yunseul\\`.\n\n---\n\n*Where your notes catch the light.*",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T04:53:36Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4bdb659b87926ab2e4078c789584bcd28d891c4eb95f8faaebb0d0dd5f8ca64c",
+          "name": "main.js",
+          "size": 101881
+        },
+        {
+          "digest": "sha256:e3c79d378feef33f29a1644178bbf6e884e42177c2ee495449d405bbd72f0cea",
+          "name": "manifest.json",
+          "size": 385
+        },
+        {
+          "digest": "sha256:5b819bdd4130c378764c645f7f9fad4d757bd2fa49b3d8ebbd5d49ec05530a91",
+          "name": "styles.css",
+          "size": 32870
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Patch release that clears every finding from the [community.obsidian.md](https://community.obsidian.md) automated review of 0.1.0.\n\n### Changed\n\n- Manifest description rewritten to drop the redundant plugin name and the word \"Obsidian\" prefix per submission rules.\n\n### Cleaned up\n\n- All `eslint-disable` directives either carry a written justification or are replaced with scoped config overrides (`no-restricted-globals` for the SSE-streaming layer; `@typescript-eslint/no-deprecated` for the two settings-tab seams that intentionally use `noticeEl`/`messageEl`/`display()`/`setWarning()`/`setDestructive()`).\n- All unused catch bindings (`_e`, `_err`, `_renameErr`) removed — parameterless `catch {}` throughout.\n- All CSS `!important` rules removed in favour of higher selector specificity.\n- Inline justification comments added at every system-identity, filesystem, child-process, vault-enumeration, and clipboard call site so the reviewer can verify each use is intentional.\n\n### Releases\n\n- Release artifacts are now signed with GitHub artifact attestations via [`actions/attest-build-provenance@v1`](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify <file> --repo zaemyung/yunseul`.\n\n### No behavioral changes\n\n278 / 278 tests pass; both backends (LM Studio, Claude Code subprocess) behave identically to 0.1.0.\n\n---\n\n*Where your notes catch the light.*",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T04:32:12Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8c1137ea13bdd6e242c717562c0c7598c9fa72e400a73079b12d3d95b1bc823a",
+          "name": "main.js",
+          "size": 101937
+        },
+        {
+          "digest": "sha256:28ea66a43374140602369f5c156061671fd10e017f32d4af8265a6ffb380ac36",
+          "name": "manifest.json",
+          "size": 383
+        },
+        {
+          "digest": "sha256:dd1364f8dcd5638e193baff840d45bb2fead42bc11239d856ce243867b407413",
+          "name": "styles.css",
+          "size": 32416
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "First public release.\n\nYunseul (윤슬) is an Obsidian plugin for chatting with your vault. Two backends out of the box:\n\n- **LM Studio** (and any OpenAI-compatible local server — Ollama, llama.cpp, vLLM, LocalAI). Fully offline; prompts and vault content never leave your machine.\n- **Claude Code subprocess.** Rides your existing Claude Code authentication (Pro/Max OAuth, Console, Bedrock, Vertex). No API key managed by the plugin.\n\n### Highlights\n\n- Vault-aware retrieval (optional on-device BM25 search; clickable wikilinks back to retrieved notes).\n- Streaming responses with a Stop button; multi-turn conversations persist locally per session.\n- Each chat session binds to the active note so Append always lands where you started.\n- Provider-aware diagnostics (Test Connection + offline banner tell you exactly what went wrong).\n- Sanitized streaming render and sanitized writes to disk. External images, \\`data:\\` URIs, embed transclusions, and unsafe URL schemes in assistant output never silently fetch.\n\n### Installation\n\n**Manual install (until the community store listing is approved):**\n\n1. Download \\`main.js\\`, \\`manifest.json\\`, and \\`styles.css\\` from this release.\n2. Drop them into \\`<vault>/.obsidian/plugins/yunseul/\\`.\n3. Enable in **Settings → Community plugins → Yunseul**.\n\nAlternatively, use **BRAT** and add this repo URL to install the latest release automatically.\n\n### Compatibility\n\n- Obsidian **1.7.2** or newer.\n- Desktop only (the Claude Code provider spawns a subprocess; mobile is on the roadmap).\n\n### Privacy\n\n- **LM Studio path:** fully local; nothing leaves your machine.\n- **Claude Code path:** prompts + vault excerpts + retrieved chunks are sent to Anthropic via your authenticated \\`claude\\` CLI. See [Anthropic's privacy policy](https://www.anthropic.com/legal/privacy).\n- See README for full data-flow disclosure.\n\n---\n\n*Where your notes catch the light.*",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T02:11:30Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "zaemyung/yunseul"
+}
