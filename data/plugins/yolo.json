@@ -4,8 +4,8 @@
   "description": "Smart, snappy, and multilingual AI assistant for your vault.",
   "errors": [],
   "id": "yolo",
-  "lastChangedAt": "2026-06-01T17:04:58.895Z",
-  "lastFetchedAt": "2026-06-02T02:00:58.570Z",
+  "lastChangedAt": "2026-06-08T03:01:58.681Z",
+  "lastFetchedAt": "2026-06-08T03:01:58.681Z",
   "manifest": {
     "author": "Lapix0x0",
     "authorUrl": "https://github.com/Lapis0x0",
@@ -15,11 +15,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.0",
     "name": "YOLO",
-    "version": "1.5.10.1"
+    "version": "1.5.11"
   },
   "name": "YOLO",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:04b2d364c17e64d23f610666f3e2f6ddaf67bbf18fb5bf0fb5e35a9126575f81",
+          "name": "main.js",
+          "size": 11095433
+        },
+        {
+          "digest": "sha256:40ad823d498bf38dafb3bd8ab40745851435670990eac13a8a5119339fb78ea9",
+          "name": "manifest.json",
+          "size": 328
+        },
+        {
+          "digest": "sha256:87270284a1d81f2708536ea27bca46c7e11ceae8e2620e5ea67e74b0393e113d",
+          "name": "styles.css",
+          "size": 484886
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 1.5.11 Agent Capabilities: SubAgent & Bash Tools ✨\n\n### ✨ New Features\n\n- **SubAgent delegation**: Agent can asynchronously dispatch subagents for parallel work, with live streaming cards and token usage stats.\n- **Desktop Bash tool**: Run local commands with user approval — persistent sessions, background tasks, interactive input, polling, termination, and a configurable dangerous-command prefix blocklist.\n- **Hidden Skills folders (#384)**: Load Skills from `.obsidian/skills` and `.obsidian/yolo/skills` without polluting vault tasks, tags, or sync.\n- **Unified Agent API**: Internal features can reuse the YOLO Agent runtime with streaming output and tool status events.\n- **Live task streaming cards**: `delegate_subagent` and `terminal_command` show real-time progress during execution and retain expandable activity logs after completion.\n- **DeepSeek V4 (#391)**: Updated built-in DeepSeek config with V4 model recognition and Anthropic-compatible endpoint support.\n- **Web scrape on demand**: Removed automatic URL full-text injection on paste; models call the standalone `web_scrape` tool when needed. Optional Tavily/Jina provider API toggle for scraping.\n\n### 🎨 UX Polish\n\n- **Update toast**: First dismiss snoozes until next launch; second dismiss permanently ignores that version.\n- **Terminal & SubAgent cards**: Improved naming, collapsed headlines, streaming card styling, and async results backfilled into the original tool card instead of extra messages.\n- **Chat history \"Current\" badge**: Marks the session open in the main view, distinct from list navigation highlight.\n- **Connectivity test modal (#393)**: Delete failed/timeout models directly; truncate long errors with hover for full text; fixed stale model reappearing on consecutive deletes; fixed 56vh list height to prevent layout jumps.\n- **Context & scrolling**: Conversation compression refreshes system prompt so pre-compression memories stay visible; smarter system prompt freeze on Agent writes vs external edits (#386); higher virtualization threshold and better collapsed tool-card height estimates.\n- **Model timeout (#398)**: Main model request timeout raised from 600 s to 1 hour for slow local CPU models.\n\n### 🔧 Changes\n\n- **Lightweight model requests (#389)**: Tab completion and title generation no longer inherit model-level built-in tools or search, while preserving reasoning-disable metadata.\n- **Background completion wake-up**: Terminal background commands, subagents, and external CLI tasks now uniformly wake the main Agent via completion events; default terminal timeout is 120 s.\n- **Terminal log polling**: `tail_lines` / `tail_bytes` for latest session output.\n- Removed legacy `delegate_external_agent` tool.\n\n### 🐛 Bug Fixes\n\n- **Concurrent foreground terminals**: Fixed default session conflicts when multiple foreground commands run in the same turn; background commands remain parallel.\n- **Terminal output restore**: Reopening history now restores full terminal output from persisted background task results, not just startup-phase output.\n- **Terminal stdout/stderr**: Separated streams; background long tasks wake Agent when output enters a waiting state.\n- **Paste markdown (#389)**: Fixed syntax symbols being stripped when pasting markdown into the chat input.\n- **OpenAI-compatible requests (#389, #390)**: Stopped leaking internal `reasoningLevel`; only actual provider reasoning params are sent.\n\n---\n\n## 1.5.11 Agent 能力补全：SubAgent 与 Bash 工具 ✨\n\n### ✨ 新功能\n\n- **SubAgent 派遣**：Agent 可异步派遣 subagent 并行执行任务，支持实时流式卡片与 token 消耗统计。\n- **桌面端 Bash 工具**：在用户授权下执行本机命令，支持持久 session、后台任务、交互输入、轮询与终止，以及可配置的危险命令前缀黑名单。\n- **隐藏 Skills 目录（#384）**：支持从 `.obsidian/skills` 与 `.obsidian/yolo/skills` 加载 Skills，避免 Skill 内容污染知识库任务、标签与同步流程。\n- **统一 Agent API**：内部功能可复用 YOLO Agent 运行时，支持流式输出与工具状态事件。\n- **任务实时流式卡片**：`delegate_subagent` 与 `terminal_command` 执行期间实时展示进度与输出，完成后保留可展开的活动日志/终端输出卡片。\n- **DeepSeek V4（#391）**：更新内置 DeepSeek 配置，补充 V4 模型识别与 Anthropic-compatible 接口地址适配。\n- **按需网页抓取**：移除粘贴 URL 自动抓取全文注入，改由模型按需调用独立 `web_scrape` 工具；Tavily/Jina 增加可选 Provider 抓取 API 开关。\n\n### 🎨 体验优化\n\n- **更新提示**：同一版本第一次关闭后下次启动再提醒一次，第二次关闭才永久忽略，避免误关后错过更新内容。\n- **终端与 SubAgent 卡片**：优化命名、折叠态 headline、流式卡片样式；异步完成结果回填到原始工具卡片，对话流更简洁。\n- **聊天历史「当前」标签**：标记主界面正在查看的会话，避免与列表导航高亮混淆。\n- **连通性测试弹窗（#393）**：失败/超时模型可直接删除；长错误信息截断显示、悬停查看完整内容；修复连续删除时旧模型意外复现；列表区固定 56vh 高度，删除后弹窗不再跳动。\n- **上下文与滚动**：对话压缩后自动刷新 system prompt，确保压缩前记忆在新上下文中可见；Agent 写入时继续冻结 prompt cache，用户外部修改后自动刷新（#386）；提高虚拟化触发阈值并优化折叠态工具卡片高度估算。\n- **模型超时（#398）**：主模型请求超时上限从 600 秒提升至 1 小时，方便本地 CPU 等慢速模型场景。\n\n### 🔧 调整\n\n- **轻量模型请求（#389）**：Tab 补全与对话标题生成不再继承模型级内置工具与搜索能力，同时保留关闭推理所需的模型信息。\n- **后台完成唤醒**：终端后台命令、SubAgent 与外部 CLI 任务统一通过后台完成事件唤醒主 Agent；终端命令默认超时调整为 120 秒。\n- **终端日志轮询**：支持 `tail_lines` / `tail_bytes` 查看会话最新输出。\n- 移除过时的 `delegate_external_agent` 工具。\n\n### 🐛 Bug 修复\n\n- **并发前台终端**：修复同一轮并发执行多个前台终端命令时抢占默认 session 导致冲突的问题，后台终端命令仍保持并行。\n- **终端输出还原**：修复历史对话重新打开后终端卡片只展示启动阶段输出的问题，现从已持久化的后台任务结果还原完整输出。\n- **终端 stdout/stderr**：分离标准输出与错误输出；后台长任务在输出后进入等待状态时也能自动唤醒 Agent。\n- **粘贴 Markdown**：修复聊天输入框粘贴 markdown 文本时语法符号被剥离的问题。\n- **OpenAI-compatible 请求（#389、#390）**：修复误透传内部 `reasoningLevel` 字段，确保仅发送实际 provider 推理参数。",
+      "draft": false,
+      "name": "1.5.11",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T07:47:33Z",
+      "tag": "1.5.11"
+    },
     {
       "assets": [
         {
