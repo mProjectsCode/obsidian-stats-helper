@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Browse, solve, and note LeetCode problems inside your vault.",
   "errors": [],
   "id": "leetcode",
-  "lastChangedAt": "2026-06-08T05:00:58.560Z",
-  "lastFetchedAt": "2026-06-08T05:00:58.560Z",
+  "lastChangedAt": "2026-06-09T05:00:58.724Z",
+  "lastFetchedAt": "2026-06-09T05:00:58.724Z",
   "manifest": {
     "author": "Mo Xu",
     "authorUrl": "https://github.com/LikeSundayLikeRain",
@@ -14,11 +14,32 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.10.0",
     "name": "LeetCode",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "name": "LeetCode",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8f3c921fc8782643f690382a3b7aef838c872b2d1f96195c6df968820b879cee",
+          "name": "main.js",
+          "size": 162674
+        },
+        {
+          "digest": "sha256:fd0c9a9e4aa7e6cbf33098d9e63567baba7c40822fca2cfa24638a6ec15b54f9",
+          "name": "manifest.json",
+          "size": 270
+        }
+      ],
+      "author": "LikeSundayLikeRain",
+      "description": "## Bug fix release\n\nBackports the fix for #16 (embedded login captures cookies but plugin remains logged out) to the 1.0.x line.\n\n### What changed\n- `src/auth/BrowserWindowLogin.ts`: switch cookie capture from `cookies.get({ domain: '.leetcode.com' })` to `cookies.get({ url: 'https://leetcode.com/' })` so host-only `csrftoken` cookies are no longer dropped.\n- Add a 30s capture-timeout watchdog with a distinct user-facing Notice (\"Login appeared to succeed but cookies could not be captured — try the manual paste fallback in Settings.\") so the next silent-failure mode is visible instead of looking like a cancellation.\n- New unit test `tests/browser-window-login-filter.test.ts` regression-locks the filter shape.\n\n### Why\nLeetCode sometimes returns `csrftoken` as a host-only cookie (no `Domain` attribute → stored under `leetcode.com`, not `.leetcode.com`). The previous filter omitted it, the cookie pipeline returned null on every poll, and login silently failed with no usable error to the user.\n\nCloses #16.",
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-09T01:22:33Z",
+      "tag": "1.0.2"
+    },
     {
       "assets": [
         {
