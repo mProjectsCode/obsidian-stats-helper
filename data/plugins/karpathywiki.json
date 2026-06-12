@@ -4,21 +4,73 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-09T05:00:58.724Z",
-  "lastFetchedAt": "2026-06-09T05:00:58.724Z",
+  "lastChangedAt": "2026-06-12T05:04:58.564Z",
+  "lastFetchedAt": "2026-06-12T05:04:58.564Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
     "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query.",
     "id": "karpathywiki",
     "isDesktopOnly": false,
-    "minAppVersion": "1.6.6",
+    "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.17.0"
+    "version": "1.18.2"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f25d071f3070b1b497db4f42d199b8f8fb2cd68c9fc14de2c0d4b94557f8dc5",
+          "name": "main.js",
+          "size": 741315
+        },
+        {
+          "digest": "sha256:bc2ee9dba0db07f24c820891ae9b2bd2557ec97472a965e8c8e607d856534154",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:e021a414862bf587605b342d63f6404d2485c60c077eecb7aadb658c3d4d5957",
+          "name": "styles.css",
+          "size": 9859
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Fixed\n- **Custom extraction limits not hard-enforced (Issue #120).** When `extractionGranularity` was set to `custom`, the `customEntityLimit` and `customConceptLimit` settings were only enforced as soft prompt hints — the LLM routinely returned 12–25 items for a configured cap of 8, and every one of them was written to a wiki page. Two existing mechanisms were insufficient: (1) the prompt instruction \"Extract at most N…\" was routinely ignored; (2) the convergence detector only stopped *further batches* once both types reached the cap, which never fired on the common single-batch case (most notes). Fix: after all batches are accumulated and immediately before `buildSourceAnalysis()`, the plugin now slices both `accumulation.entities` and `accumulation.concepts` to the configured limits. The first N items in extraction order are preserved. The prompt instruction and convergence detector remain as complementary mechanisms (they guide the LLM and avoid unnecessary extra batches). No behavior change for `default` / `1-5` granularity modes. Closes #120.\n\nThis release also bundles two community contributions that landed in the same window:\n- **#115 (Issue #114) — Tags preservation on re-ingest.** Manually-set `tags:` no longer silently overwritten on re-ingest.\n- **#113 (Issue #111) — Configurable file-name casing.** New `File Name Casing` setting (`lower` / `preserve`) — useful for languages where lowercase changes meaning (e.g. German nouns).\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Anthropic Compatible, Gemini, OpenAI, DeepSeek, Kimi, GLM, MiniMax, LM Studio, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama / LM Studio)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n## Contributors\n\n- **@DocTpoint** — Issue #120 root-cause analysis, fix implementation (PR #121), tags preservation (PR #115 / Issue #114), configurable file-name casing (PR #113 / Issue #111)\n- **@green-dalii** — Code review, release preparation, all 8 interface language translations, regression test coverage\n\n---\n\n**Full Changelog**: [1.18.1...1.18.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.18.1...1.18.2)",
+      "draft": false,
+      "name": "1.18.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T04:00:25Z",
+      "tag": "1.18.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b4200fc649e60e97010c2d3d0648280db9217a6d787982b15548a7fc78418fbf",
+          "name": "main.js",
+          "size": 736368
+        },
+        {
+          "digest": "sha256:22469ff786a716c762216c8a5bbc56e9c782706392a70f362989fa2219e62253",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:e021a414862bf587605b342d63f6404d2485c60c077eecb7aadb658c3d4d5957",
+          "name": "styles.css",
+          "size": 9859
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Fixed\n- **Obsidian Community Plugin review compliance.** Removed `document` (bare global DOM reference) and all `eslint-disable` comments targeting `obsidianmd/prefer-active-doc` from production code. The `activeDocument` stub is now centralized in the test setup file, keeping all production code strictly compliant with Obsidian's multi-window `activeDocument` requirement. No user-visible behavior change.\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n## Contributors\n\n- **@green-dalii** — Code, release, compliance fix\n\n---\n\n**Full Changelog**: [1.18.0...1.18.1](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.18.0...1.18.1)",
+      "draft": false,
+      "name": "1.18.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-11T09:50:54Z",
+      "tag": "1.18.1"
+    },
     {
       "assets": [
         {
