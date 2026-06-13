@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. Advanced audio recording with input device and folder configuration.",
   "errors": [],
   "id": "advanced-audio-recorder",
-  "lastChangedAt": "2026-06-01T18:00:58.581Z",
-  "lastFetchedAt": "2026-06-02T03:02:58.917Z",
+  "lastChangedAt": "2026-06-13T04:04:58.574Z",
+  "lastFetchedAt": "2026-06-13T04:04:58.574Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
@@ -14,11 +14,37 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.6.6",
     "name": "Advanced Audio Recorder",
-    "version": "1.3.3"
+    "version": "1.4.0"
   },
   "name": "Advanced Audio Recorder",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:7380bcd808c96fb7c38b98a1a2411d09ba8b9f3f4e5eb3e209e8f66a7ad1ea8a",
+          "name": "main.js",
+          "size": 2589900
+        },
+        {
+          "digest": "sha256:d13b29f1ad7dcaf4336ca4958578056c93d5e4e5ef2d1a0139b607fe1f5eb120",
+          "name": "manifest.json",
+          "size": 311
+        },
+        {
+          "digest": "sha256:c3f4163eb9713811e88407dcb58aa806366092eb8768516e59e94c844390c8c4",
+          "name": "styles.css",
+          "size": 3037
+        }
+      ],
+      "author": "akhmialeuski",
+      "description": "Reliability hardening, crash recovery for interrupted recordings, and a major internal refactor — the full remediation of a codebase audit (#33), including all code review findings.\n\n## New: Crash recovery\n\nDesktop recordings now journal their temporary segment files (`recording-journal.json` in the plugin folder) while the session is active. If Obsidian crashes, the power is lost, or the plugin is disabled mid-recording, the next launch detects the interrupted session and offers **Recover audio** (PCM segments reassemble into a playable WAV, compressed segments byte-concatenate into the raw recorder container — no transcoding of truncated streams), **Discard**, or **Decide later**. Everything already flushed to disk is recoverable; only the in-memory tail below the flush threshold can be lost.\n\n## Reliability fixes\n\n- A failed disk write no longer silently drops all subsequent audio or produces unhandled rejections; data stays buffered and writing is retried while the recording continues.\n- The microphone is released when recording start fails partway — the device no longer stays locked with the indicator on until Obsidian restarts.\n- A watchdog timeout on MediaRecorder stop keeps the plugin from freezing in \"Saving\" forever when the audio subsystem dies.\n- A partial cleanup failure after a merged multi-track save now keeps the final file (the only complete copy of the audio) instead of rolling it back.\n- Tracks sharing one input device get unique file names and can no longer overwrite each other's segments.\n- Session-scoped settings (output format, output mode, bitrate, auto-split) are snapshotted at recording start; changing settings mid-recording no longer alters the active session.\n- The settings tab no longer overwrites other plugins' `devicechange` handlers, and the diagnostics test recording releases its stream on every path.\n- `mergeAudioTracks` closes its `AudioContext` on all paths (Chromium counts open contexts against a global limit).\n\n## Performance\n\n- WAV encoding routed through mediabunny — no more multi-second UI freezes when saving long recordings.\n- WAV assembly (including crash recovery) streams segments into a single allocation: peak memory is the final file plus one segment, instead of two full copies of the recording.\n- Multi-track WAV sessions mix directly from the on-disk track data in bounded windows (was ~1.2 GB of memory per hour-long stereo track).\n- Streaming format conversions run in a Web Worker with a transparent main-thread fallback; the bundle grows to ~2.6 MB because the worker carries its own mediabunny copy.\n\n## Internal\n\n- `RecordingManager` decomposed into `TrackWriteQueue`, `RecordingFinalizer`, and `PartRotationController`; split and conversion pipelines extracted into `SplitService`/`ConversionService`; the conversion flow now updates links vault-wide with a background progress notice, matching the split flow.\n- Dependencies modernized: mediabunny 1.46, ESLint 10 (eslint-plugin-obsidianmd 0.3), Jest 30, esbuild 0.28 with a minified es2022 production bundle.\n- 778 tests across 41 suites.\n\n## Compatibility\n\n- `minAppVersion` stays `1.6.6`; desktop-only as before. Crash recovery applies to desktop recordings (mobile flushes write final files directly and needs no recovery).\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/1.3.3...1.4.0",
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T15:59:51Z",
+      "tag": "1.4.0"
+    },
     {
       "assets": [
         {
