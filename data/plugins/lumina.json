@@ -1,0 +1,283 @@
+{
+  "author": "Lumina",
+  "defaultBranch": "main",
+  "description": "This plugin has not been manually reviewed by Obsidian staff. Your intelligent AI Agent for Obsidian with RAG and Multi-LLM support.",
+  "errors": [],
+  "id": "lumina",
+  "lastChangedAt": "2026-06-14T07:01:58.567Z",
+  "lastFetchedAt": "2026-06-14T07:01:58.567Z",
+  "manifest": {
+    "author": "Lumina",
+    "description": "Your intelligent AI Agent for your vault with RAG and Multi-LLM support.",
+    "fundingUrl": {
+      "GitHub Sponsor": "https://github.com/sponsors/lumina-apps",
+      "Ko-fi": "https://ko-fi.com/luminaapps",
+      "ctee": "https://ctee.kr/place/luminaapps"
+    },
+    "id": "lumina",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.11.4",
+    "name": "Lumina",
+    "version": "1.0.8"
+  },
+  "name": "Lumina",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c173b8364a571e3f5a575ca519906758434a3a33b3e8cb7b52cad32e784eb28e",
+          "name": "main.js",
+          "size": 2335435
+        },
+        {
+          "digest": "sha256:4e6579b00215eb1d12db7d57addb550e7399b0448446cb6c2446d05fd618bcf0",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Lumina Release Notes - v1.0.8\r\n\r\nWelcome to the Lumina v1.0.8 update! This release significantly improves support for reasoning models and greatly enhances user feedback regarding token limits and API errors during chat.\r\n\r\n### 🌟 Key Changes\r\n\r\n#### 1. 🤖 Reasoning Model & Tool Calling Optimization\r\n- **Structural Support for Gemini & Anthropic**: Enhanced the reliability of tool integrations by optimizing Google Gemini's reasoning process (`thoughtSignature`) and tool call structures.\r\n- **Robust Stream Chunk Parser**: Implemented a brace-matching-based stream parser (`readGeminiStreamChunks`) to resolve parsing errors caused by characters like newlines within Gemini's JSON streaming data.\r\n- **Preserved Thinking Context**: Ensured that local and text-based reasoning models maintain their thought process context to prevent hallucinations (such as infinite empty token generation) and avoided sending raw `<think>` blocks in cloud model contexts to prevent API errors.\r\n\r\n#### 2. ⚠️ Improved Handling of Max Output Token Limits\r\n- **Interruption Alerts**: When a model stops generating because it hits the \"Max Output Tokens\" limit (indicated by `finishReason` as `length` or `max_tokens`), Lumina now displays the text generated up to that point alongside a token limit warning (`tokenLimitHitWarning`), rather than showing an empty fallback screen.\r\n- **User Guidance**: Provides multilingual guidance to help users easily understand that the generation was cut off due to the token limit, allowing them to adjust it in settings immediately.\r\n\r\n#### 3. 🌐 Multilingual Localization for API & Network Errors\r\n- **Custom Status-specific Error Messages**: Parses errors commonly encountered during API communication and automatically converts them into user-friendly messages:\r\n  - **HTTP 429 (Rate Limit)**: Notifies of API quota limits or rate limits (especially for free tiers).\r\n  - **HTTP 401 (Unauthorized)**: Prompts to check invalid or expired API keys.\r\n  - **HTTP 403 (Forbidden)**: Alerts about insufficient permissions or regional restrictions.\r\n  - **HTTP 404 (Not Found)**: Warns of incorrect endpoint URLs or non-existent model names.\r\n  - **Network Error**: Notifies of network connection failures or offline local LLM servers.\r\n- **Full Localization for 10 Languages**: Added corresponding error messages and RAG folder/tag file prefixes to resource files for Korean, English, Japanese, Simplified/Traditional Chinese, Spanish, French, German, Italian, Russian, and Portuguese.\r\n\r\n---\r\n\r\nLumina v1.0.8 업데이트에 오신 것을 환영합니다! 이번 버전에서는 추론형 모델(Reasoning Model) 지원을 대폭 강화하고, 채팅 도중 발생할 수 있는 토큰 제한 및 API 에러에 대한 사용자 피드백을 크게 개선하였습니다.\r\n\r\n### 🌟 주요 변경 사항\r\n\r\n#### 1. 🤖 추론형 모델(Reasoning Model) 및 도구 사용(Tool Calling) 최적화\r\n- **Gemini & Anthropic 구조적 지원**: Google Gemini의 생각 과정(`thoughtSignature`) 및 도구 호출 관련 구조를 최적화하여 툴 연동의 안정성을 높였습니다.\r\n- **견고한 스트림 청크 파서 도입**: Gemini 스트리밍 중 JSON 데이터 내의 줄바꿈 문자 등으로 인해 파싱 에러가 발생하던 문제를 해결하기 위해 괄호 매칭 기반의 스트림 파서(`readGeminiStreamChunks`)를 새롭게 도입하였습니다.\r\n- **생각(Thinking) 문맥 유지**: 로컬 및 텍스트 기반 추론 모델이 자신의 사고 과정을 유지하여 환각(빈 토큰 무한생성 등)에 빠지지 않도록 처리하고, 불필요한 `<think>` 태그가 클라우드 모델 대화 문맥에 노출되거나 API 오류를 일으키는 현상을 방지하도록 개선하였습니다.\r\n\r\n#### 2. ⚠️ 최대 출력 토큰 제한(Max Output Tokens) 핸들링 개선\r\n- **끊김 현상 경고 안내**: 모델이 답변을 작성하다가 설정된 최대 출력 토큰(Max Output Tokens) 제한에 도달해 강제로 종료되는 경우(`finishReason`이 `length`, `max_tokens` 등인 경우), 이전처럼 단순한 빈 화면을 보여주는 대신 그동안 생성된 텍스트와 함께 토큰 한도 초과 경고 메시지(`tokenLimitHitWarning`)를 출력합니다.\r\n- **사용자 가이드**: 답변이 중간에 끊긴 원인이 토큰 한도 때문임을 쉽게 파악하고 설정에서 즉시 조절할 수 있도록 다국어 가이드를 안내합니다.\r\n\r\n#### 3. 🌐 API 에러 및 네트워크 예외 처리의 다국어 현지화\r\n- **상태별 커스텀 에러 문구 제공**: API 연동 중 흔히 발생하는 에러들을 파싱하여 사용자 친화적인 메시지로 자동 변환해 줍니다:\r\n  - **HTTP 429 (Rate Limit)**: API 호출 한도 초과 및 무료 티어 한도 안내\r\n  - **HTTP 401 (Unauthorized)**: 잘못되거나 만료된 API 키 안내\r\n  - **HTTP 403 (Forbidden)**: 권한 부족 또는 지역(Region) 제한 안내\r\n  - **HTTP 404 (Not Found)**: 잘못된 엔드포인트 URL 및 존재하지 않는 모델명 안내\r\n  - **Network Error**: 인터넷 연결 끊김 또는 로컬 LLM 서버 미동작 안내\r\n- **10개 국어 완벽 현지화**: 한국어를 포함한 영어, 일본어, 중국어 간체/번체, 스페인어, 프랑스어, 독일어, 이탈리아어, 러시아어, 포르투갈어 등 총 10개 언어 리소스 파일에 해당 에러 문구 및 RAG 관련 폴더/태그 파일의 상황별 접두사를 추가하였습니다.\r\n\r\n**Full Changelog**: https://github.com/lumina-apps/obsidian-lumina/compare/1.0.7...1.0.8",
+      "draft": false,
+      "name": "v1.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T03:41:16Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1034a42830a2c383b23087ea7b10ce93a318d515c6c9d745a1a46e570357e37c",
+          "name": "main.js",
+          "size": 2316005
+        },
+        {
+          "digest": "sha256:967cf13c3140ada881a968fbdaeb4b9d8b318fdb08bae6120af6f1b98d4ee0b3",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Release Notes - Lumina v1.0.7\r\n\r\nLocalization Key Fix: Resolved an issue where the description text for downloading/loading the RAG embedding model (settings.rag.init.loadingModelDesc) was displayed as a raw translation key path instead of the localized message.\r\n\r\n---\r\n수정 및 개선 사항\r\n\r\n번역 키 오류 수정: RAG 임베딩 모델 로드 및 다운로드 시 화면 상단에 로컬라이징 텍스트 대신 번역 키 경로(settings.rag.init.loadingModelDesc)가 날것으로 노출되던 문제를 수정했습니다.\n\n**Full Changelog**: https://github.com/lumina-apps/obsidian-lumina/compare/1.0.6...1.0.7",
+      "draft": false,
+      "name": "v1.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T02:04:51Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e9e31cd7ce4b75a633ae4693163945b3646e4d14f14d2101a9092ccf3c298808",
+          "name": "main.js",
+          "size": 2314145
+        },
+        {
+          "digest": "sha256:4973ead57ae0d0e0bbf24fd09c1112512f2681458289f1d27cd30d730f5c37dd",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Release v1.0.6\r\n\r\n🌐 Fixed Localized README Navigation Links\r\nFixed the navigation links between localized README files (English, Korean, Japanese, Chinese, Spanish, German, etc.) so that they open correctly in all environments, including the Obsidian plugin directory.\r\n\r\n---\r\n🌐 다국어 리드미(README) 링크 연결 개선\r\nObsidian 내부 플러그인 탐색기 등 다양한 환경에서 각 언어별 리드미(한국어, 영어, 일본어, 중국어, 스페인어, 독일어 등) 간의 언어 전환 링크가 정상적으로 작동하도록 경로를 개선했습니다.\n\n**Full Changelog**: https://github.com/lumina-apps/obsidian-lumina/compare/1.0.5...1.0.6",
+      "draft": false,
+      "name": "v1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T00:30:47Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:91f88a65a784872cb57d6834dbb10ce7d8082d8cdd1b7c354562e42161bda6c2",
+          "name": "main.js",
+          "size": 2302985
+        },
+        {
+          "digest": "sha256:8e0b54e5b4c0ccbe329eb1693cf478197dae52b7778967d7109cc61adcaa4316",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "### 🚀 Lumina v1.0.5 Release Notes\r\n\r\nThis release dramatically improves the loading mechanism of the RAG local embedding worker to eliminate network dependencies and improve startup reliability.\r\n\r\n#### 🌟 Key Changes\r\n\r\n* **Fully Embedded Embedding Worker**\r\n  * **Before:** The plugin had to dynamically download `embedding.worker.js` from GitHub Releases or read it from the local file system to run the RAG indexer.\r\n  * **Now:** The worker code is now compressed (Deflate) and base64-encoded directly into `main.js` at build time. At runtime, it is decompressed on the fly using the browser's native `DecompressionStream` API.\r\n  * **Impact:**\r\n    * Enables 100% offline startup of the local RAG embedding engine without needing internet connectivity.\r\n    * Substantially speeds up the plugin's initial activation.\r\n    * Prevents runtime worker download failures or GitHub API rate-limiting issues.\r\n\r\n* **Code Optimization & Cleanup**\r\n  * Removed legacy worker download utilities and unused imports (such as `requestUrl`) to keep the codebase clean, lightweight, and robust.\r\n\r\n---\r\n### 🚀 Lumina v1.0.5 릴리스 노트\r\n\r\n이번 업데이트에서는 RAG 로컬 임베딩 워커 로딩 방식을 획기적으로 개선하여, 네트워크 의존성을 완전히 제거하고 실행 안정성을 크게 향상시켰습니다.\r\n\r\n#### 🌟 주요 업데이트 사항\r\n\r\n* **RAG 로컬 임베딩 워커 완전 내장화 (Embedded Worker)**\r\n  * **기존 방식:** RAG 활성화 시 `embedding.worker.js` 파일을 GitHub Releases에서 동적으로 다운로드하거나 로컬에서 읽어와 실행했습니다.\r\n  * **개선 방식:** 이제 빌드 시점에 워커 코드가 압축(Deflate) 및 인코딩되어 `main.js` 내에 내장됩니다. 런타임에는 옵시디언이 지원하는 네이티브 `DecompressionStream`을 통해 메모리에서 즉시 압축이 해제되어 실행됩니다.\r\n  * **효과:** \r\n    * 완전히 오프라인 상태에서도 RAG 기능을 즉시 활성화할 수 있습니다.\r\n    * 플러그인 초기 설치 및 실행 속도가 대폭 향상되었습니다.\r\n    * 네트워크 상태 불안정으로 인한 워커 다운로드 실패 에러 및 GitHub API 호출 제한 문제를 원천적으로 해결했습니다.\r\n\r\n* **코드 최적화 및 경량화**\r\n  * 불필요해진 워커 원격 다운로드 관련 유틸리티 및 사용되지 않던 임포트(`requestUrl` 등)를 완전히 정리하여 플러그인 구동 안정성을 높였습니다.\r\n",
+      "draft": false,
+      "name": "v1.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T22:19:36Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7aed131f4b36fb677a3afaa961755a582c43faffaaf5183b1755ec3ca3b45468",
+          "name": "embedding.worker.js",
+          "size": 3111256
+        },
+        {
+          "digest": "sha256:dc78030c940771dea7254f9d56dd1acfc2efa3858291c7b996b83cebaa441fb6",
+          "name": "main.js",
+          "size": 1175902
+        },
+        {
+          "digest": "sha256:5b157134ba7278d649e77d861043a28a7c8273674210024a687e54821b688a45",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Lumina v1.0.4\r\nThis release focuses on optimizing performance, improving network compatibility, and restructuring core modules for security compliance.\r\n\r\n🛠️ Key Improvements\r\nNative Fetch Migration: Replaced LangChain with native fetch API for cloud providers (OpenAI, etc.), reducing bundle size and improving response streaming and control.\r\nEnhanced Security & Validation: Implemented secure JSON schema validation and replaced external dependencies with mocks to fully comply with plugin store security guidelines.\r\nImproved Type Safety & Quality: Replaced loose any types with explicit TypeScript interfaces across all LLM configurations.\r\nInitialization Fix: Resolved plugin startup errors in the main entry point.\r\nBetter Compatibility: Updated network requests to use window.fetch instead of globalThis.fetch to prevent errors in certain environments, and cleaned up unused helper code.\r\n\r\n---\r\n🚀 Lumina v1.0.4\r\n이번 업데이트는 코드 안정성 강화, 스트리밍 제어 개선, 그리고 보안 및 호환성 규정 준수를 위한 대대적인 내부 리팩토링과 최적화를 포함하고 있습니다.\r\n\r\n🛠️ 주요 변경 사항 (What's New)\r\n1. LangChain 제거 및 Native Fetch API 마이그레이션\r\nOpenAI 및 클라우드 LLM 프로바이더 연동을 무거운 LangChain 라이브러리 대신 Native Fetch API로 마이그레이션했습니다.\r\n이를 통해 번들 크기가 크게 감소했으며, 보다 정교하고 안정적인 AI 응답 스트리밍(Streaming) 제어가 가능해졌습니다.\r\n2. 보안 및 라이브러리 검증 강화\r\nObsidian 보안 가이드를 준수하기 위해 안전한 자체 JSON 스키마 검증기(JSON Schema Validator)를 도입했습니다.\r\n외부 의존성(External Dependencies)에 대한 Mock 대체 처리를 추가하여 런타임 보안을 더욱 개선했습니다.\r\n3. 안정성 개선 및 타입 안전성 확보\r\n메인 엔트리포인트에서 발생하던 플러그인 초기화 에러를 해결하여 안정적으로 실행되도록 수정했습니다.\r\n코드 전반에서 레거시 any 타입을 명시적인 타입과 인터페이스 구조로 대체하여 타입 안정성을 끌어올렸습니다.\r\n모바일 및 데스크톱 환경의 원활한 네트워크 통신을 위해 globalThis.fetch 호출을 window.fetch로 변경하고 불필요한 시스템 프롬프트 헬퍼 코드를 정리했습니다.",
+      "draft": false,
+      "name": "v1.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T12:34:50Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4f46426aaac71eb036232d36179cb906166a36f3a30e7c917e1e3e89911f550f",
+          "name": "embedding.worker.js",
+          "size": 877372
+        },
+        {
+          "digest": "sha256:649ba8bce187f6c995750f1290a70c99c95c7ff7809337fea1e18b5c46ff8a80",
+          "name": "main.js",
+          "size": 4755729
+        },
+        {
+          "digest": "sha256:47ac8cf451ced91d3646f672b66d8b10a0fb0b295282750ba1a7fcf1efc05029",
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:eae4600166946d34332b50ed475f235ab3256b8964f03912946aa725cefa55f7",
+          "name": "styles.css",
+          "size": 29751
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Lumina v1.0.3\r\nThis release introduces comprehensive refactoring of the Chat and Settings UI, enhances type safety and Obsidian API compatibility, and ensures reliable Local RAG deployment.\r\n\r\n🌟 Key Updates\r\n1. Modular Chat UI & Attachment Enhancements (feat)\r\nRefactored the chat interface into modular Svelte components for better performance and maintainability.\r\nImproved attachment utilities for smoother file/context handling in chat sessions.\r\n2. Redesigned Settings UI & Responsiveness (refactor)\r\nIntroduced a sticky settings navigation bar and modern toggle buttons.\r\nEnhanced responsive design for settings tabs and reorganized local MCP server configuration views.\r\n3. Stronger Type Safety & Obsidian Compatibility (refactor)\r\nPatched destructive button APIs to safely handle dynamic method lookups across different versions of Obsidian.\r\nReplaced legacy any assertions with structural compatibility interfaces to improve compilation checks.\r\nFixed unresolved promise handlers throughout the codebase.\r\n4. RAG ONNX WASM CDN Fallback Support (fix)\r\nAdded automatic CDN fallback logic for loading WASM binaries (ort-wasm-simd-threaded.jsep.wasm & .mjs). If the large WASM binaries are missing in the local plugin folder, they will be dynamically loaded from a public CDN, preventing RAG initialization errors.\r\n\r\n---\r\n🚀 Lumina v1.0.3\r\n이번 버전에서는 사용자 경험을 한 단계 높이기 위한 채팅/설정 UI 전면 리팩토링과 다양한 Obsidian 환경에서의 호환성 및 안정성 강화 작업이 진행되었습니다.\r\n\r\n🌟 주요 변경 사항\r\n1. 채팅 UI 컴포넌트화 및 파일 첨부 강화 (feat)\r\n채팅 인터페이스를 모듈화된 Svelte 컴포넌트로 재구현하여 렌더링 성능과 유지보수성을 극대화했습니다.\r\n파일 첨부 유틸리티가 개선되어 더욱 편리하게 컨텍스트 파일을 첨부하고 관리할 수 있습니다.\r\n2. 설정 화면(Settings UI) 반응형 개선 및 레이아웃 리디자인 (refactor)\r\n설정 네비게이션 바를 화면 상단에 고정(Sticky)시키고 토글 비주얼을 현대적으로 디자인했습니다.\r\n다양한 창 크기에서도 완벽하게 반응하는 모바일 친화적 CSS 그리드를 도입하고 불필요한 스타일 코드를 정리했습니다.\r\nMCP 서버 설정 카드를 컴팩트하게 정리하여 관리하기 쉬운 구조로 개편했습니다.\r\n3. Obsidian 호환성 및 타입 안정성 강화 (refactor)\r\nObsidian의 다양한 API 버전에 따른 파괴적/경고(Destructive/Warning) 버튼 메서드 감지 및 동적 처리를 지원하여 하위 호환성을 개선했습니다.\r\n레거시 any 타입 캐스팅을 구조적 호환 인터페이스 타입으로 대체하여 빌드 단계에서의 타입 안전성을 확보했습니다.\r\n비동기 프로미스 처리(Promise Handling) 관련 누수를 모두 차단했습니다.\r\n4. RAG 로컬 임베딩 WASM CDN 폴백 지원 (fix)\r\n사용자가 Community Plugins 또는 BRAT을 통해 플러그인을 설치했을 때 대용량 WASM 파일이 누락되어 발생하는 로컬 RAG 로딩 문제를 방지하기 위해 자동 CDN 백업 로드 로직을 도입했습니다. 로컬 파일이 없어도 즉시 임베딩 워커가 정상 초기화됩니다.",
+      "draft": false,
+      "name": "v1.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T10:37:20Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:806120b77a20d049deae7d2a19c9a3f47a88502c066d4bac97da5c990e343f2f",
+          "name": "embedding.worker.js",
+          "size": 773239
+        },
+        {
+          "digest": "sha256:812ab4c558d0d213736ebc8c5903ae73f55b88455a55af0b9a381201e344dc2f",
+          "name": "main.js",
+          "size": 4366243
+        },
+        {
+          "digest": "sha256:0a90c7fad03cf66320b8a7cb85d555a66f42eb55f2199bd82cf747e9f1c6939d",
+          "name": "manifest.json",
+          "size": 394
+        },
+        {
+          "digest": "sha256:99c6a31575079ca1fb91c5955ce73ab35f80f680b56585c88f8c6032346c847b",
+          "name": "styles.css",
+          "size": 27656
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 What's New in v1.0.2\r\nPlugin ID Update: Changed the official plugin ID from obsidian-lumina to lumina to comply with Obsidian's community plugin naming guidelines.\r\nUpdated internal cache and local storage paths to reflect the new plugin ID.",
+      "draft": false,
+      "name": "v1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T15:59:47Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:806120b77a20d049deae7d2a19c9a3f47a88502c066d4bac97da5c990e343f2f",
+          "name": "embedding.worker.js",
+          "size": 773239
+        },
+        {
+          "digest": "sha256:3bb86af4a4526d6bcc46fb71ab408b9d73bf980595930a06cb07c01c0f57753b",
+          "name": "main.js",
+          "size": 4366345
+        },
+        {
+          "digest": "sha256:8a8b43904c3916e1e44dcf31e85bb532cf7fc18718bdad0b20c36c92479e4051",
+          "name": "manifest.json",
+          "size": 403
+        },
+        {
+          "digest": "sha256:99c6a31575079ca1fb91c5955ce73ab35f80f680b56585c88f8c6032346c847b",
+          "name": "styles.css",
+          "size": 27656
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "🚀 Release Notes - v1.0.1\r\nThis update focuses on complying with Obsidian's Community Plugin Review guidelines and improving the installation experience for end-users.\r\n\r\n🛠 Fixes & Improvements\r\n[Critical] Auto-downloading Embedding Worker: Implemented an intelligent auto-downloader for embedding.worker.js. When users install the plugin via the Obsidian Community Store (which only downloads 3 core files by default), the plugin will now automatically fetch the required worker file from GitHub in the background. This ensures the RAG features work flawlessly out-of-the-box without any manual installation steps!\r\nDesktop-only Mode Enforced: Temporarily set isDesktopOnly: true in manifest.json to prevent crashes on Obsidian Mobile caused by local LLM/Node.js dependencies. We will gradually roll out stable mobile support in future updates.\r\nManifest Cleanups: Removed empty and unused fields in manifest.json to adhere to Obsidian's official review standards.\r\n\r\n📦 For Manual Installation\r\nIf you are installing manually, please download all 4 files (main.js, manifest.json, styles.css, embedding.worker.js) and place them in your .obsidian/plugins/obsidian-lumina/ folder.",
+      "draft": false,
+      "name": "v1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T15:05:23Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7e3ec5070fefae45221a0bf3ffd9a87dd0ee99def2084ff04b4024ba00bddff3",
+          "name": "main.js",
+          "size": 4365727
+        },
+        {
+          "digest": "sha256:dcd1a4dbfc9dac3277a993bbf020e1a194d403ddc508170fcb641230f6f13f20",
+          "name": "manifest.json",
+          "size": 422
+        },
+        {
+          "digest": "sha256:99c6a31575079ca1fb91c5955ce73ab35f80f680b56585c88f8c6032346c847b",
+          "name": "styles.css",
+          "size": 27656
+        }
+      ],
+      "author": "lumina-apps",
+      "description": "Initial release",
+      "draft": false,
+      "name": "v1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T14:22:20Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "lumina-apps/obsidian-lumina"
+}
