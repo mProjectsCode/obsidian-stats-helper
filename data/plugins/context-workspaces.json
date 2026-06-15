@@ -4,8 +4,8 @@
   "description": "This plugin has not been manually reviewed by Obsidian staff. A workspace toolkit to build focused, clutter-free zones for every task.",
   "errors": [],
   "id": "context-workspaces",
-  "lastChangedAt": "2026-06-14T04:02:58.559Z",
-  "lastFetchedAt": "2026-06-02T03:02:58.917Z",
+  "lastChangedAt": "2026-06-15T04:01:58.618Z",
+  "lastFetchedAt": "2026-06-15T04:01:58.618Z",
   "manifest": {
     "author": "Jinmu Go",
     "authorUrl": "https://github.com/JinmuGo",
@@ -13,13 +13,91 @@
     "fundingUrl": "https://github.com/sponsors/JinmuGo",
     "id": "context-workspaces",
     "isDesktopOnly": false,
-    "minAppVersion": "0.15.0",
+    "minAppVersion": "1.7.2",
     "name": "Context Workspaces",
-    "version": "0.1.2"
+    "version": "0.1.5"
   },
   "name": "Context Workspaces",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:720e6894c969a9548eca2027aa9976dbbc5e42cbd5d070cf4853411df87a5241",
+          "name": "main.js",
+          "size": 766289
+        },
+        {
+          "digest": "sha256:c09a8262fdc8bf010c7d832f2a1706efb34010cb2b78f0dda3777760c6367726",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:46542e1a3ca9825947ee904880468af7da267c6721b5c43d789587e1804fd8aa",
+          "name": "styles.css",
+          "size": 52766
+        }
+      ],
+      "author": "JinmuGo",
+      "description": "## What's Changed\n\n### Features\n- Add status bar space switcher (#12)\n- Add \"Activate on startup\" setting for the sidebar tab (#11)\n- Add settings button to the sidebar view header (#10)\n\n### Fixes\n- Make the settings button actually visible in the sidebar (#13)\n- Prevent emoji picker \"Illegal constructor\" crash on plugin reload (#9)\n\n**Full Changelog**: https://github.com/JinmuGo/obsidian-context-workspaces/compare/0.1.4...0.1.5\n",
+      "draft": false,
+      "name": "0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T13:25:40Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:94abb460ed07750ef0a05432dff213cca7847884ae1e0c10f08920b3b9fd5103",
+          "name": "main.js",
+          "size": 762726
+        },
+        {
+          "digest": "sha256:36885537bc2a5045d5d91f4c800c106e4de465706d90b04093d2286077ea8977",
+          "name": "manifest.json",
+          "size": 357
+        },
+        {
+          "digest": "sha256:8fc412635c839fff2d4a6993b6085db05c4589c12042a6072887c23201758b27",
+          "name": "styles.css",
+          "size": 52122
+        }
+      ],
+      "author": "JinmuGo",
+      "description": "## Changes\n\nFollow-up to the Obsidian community plugin review.\n\n**API compatibility**\n- `workspace.revealLeaf()` is awaited (it returns `Promise<void>` since Obsidian 1.7.2), so `minAppVersion` is raised `0.15.0` → `1.7.2` to match. Clears `obsidianmd/no-unsupported-api`.\n\n**Timers**\n- All 37 timer calls switched from `activeWindow.*` to `window.*` (`setTimeout` / `clearTimeout` / `setInterval` / `clearInterval`), per the linter's `window`-timer guidance.\n\n**CSS lint**\n- Dropped the standard `scrollbar-width` / `scrollbar-color` declarations (only partially supported in older Obsidian). The existing `::-webkit-scrollbar` rules already provide identical styling, so there is no visual change.\n\n**Full Changelog**: https://github.com/JinmuGo/obsidian-context-workspaces/compare/0.1.3...0.1.4",
+      "draft": false,
+      "name": "0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T04:20:07Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7ab035c29dc79949868c96b54e40081f97ff8db3a408e5d882c611feb4d4ae2a",
+          "name": "main.js",
+          "size": 762876
+        },
+        {
+          "digest": "sha256:e3b88050a3325f66b8fcdc3b10eb07831ade7ad6f6b61fe4b612e44e0fe883f1",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:878cccc55dc5c2479254628a3048f9c9b2cedd8cbca7066f2cf0be675f9d8409",
+          "name": "styles.css",
+          "size": 52235
+        }
+      ],
+      "author": "JinmuGo",
+      "description": "## Changes\n\nAddresses all items from the Obsidian community plugin review.\n\n**Suspicious behavior (`setInterval` + network)**\n- Removed telemetry entirely — this was the plugin's only network call, so the periodic background transmission and the bundled API key no longer ship.\n\n**Popout-window compatibility**\n- `setTimeout` / `setInterval` / `clearTimeout` / `clearInterval` → `activeWindow.*`, `document` → `activeDocument`\n- `document.createElement('div')` → `createDiv()`, `instanceof HTMLElement` → `.instanceOf(HTMLElement)`\n- `builtin-modules` → `node:module`'s `builtinModules`; removed unused `eslint-plugin-react`\n\n**Dependencies**\n- Dropped `vibe-tools` (dev tool, source of most transitive CVEs) and `swiper` (unused shipping dep). `pnpm audit --prod` is now clean.\n\n**CSS lint**\n- Removed all 83 `!important` declarations with the effective cascade preserved, and consolidated ~20 duplicate selectors.\n\n**Release**\n- Added build provenance attestation (`actions/attest-build-provenance`) for `main.js` and `styles.css`.\n\n**Full Changelog**: https://github.com/JinmuGo/obsidian-context-workspaces/compare/0.1.2...0.1.3\n",
+      "draft": false,
+      "name": "0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T11:25:26Z",
+      "tag": "0.1.3"
+    },
     {
       "assets": [
         {
@@ -125,6 +203,6 @@
       "tag": "0.0.1"
     }
   ],
-  "removedAt": "2026-06-14T04:02:58.559Z",
+  "removedAt": null,
   "repo": "jinmugo/obsidian-context-workspaces"
 }
