@@ -1,11 +1,11 @@
 {
   "author": "A.W. Alberts",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Export your notes to professional looking PDFs via Typst. Auto-adding a cover page, revision page, TOC and optional figure list.",
+  "description": "Export your notes to professional looking PDFs via Typst. Auto-adding a cover page, revision page, TOC and optional figure list. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "omd-to-typst",
-  "lastChangedAt": "2026-06-14T06:04:58.579Z",
-  "lastFetchedAt": "2026-06-14T06:04:58.579Z",
+  "lastChangedAt": "2026-06-16T06:00:58.683Z",
+  "lastFetchedAt": "2026-06-16T06:00:58.683Z",
   "manifest": {
     "author": "A.W. Alberts",
     "authorUrl": "https://github.com/tIsGoud",
@@ -14,11 +14,219 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Omd2Typst",
-    "version": "0.8.27"
+    "version": "0.8.35"
   },
   "name": "Omd2Typst",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:bd5cafbc881cc59f637b1ac6ba22d2ca1cb8934711e2a9aac2f959ee1cc65cc9",
+          "name": "main.js",
+          "size": 1847879
+        },
+        {
+          "digest": "sha256:7e238ffdadf97176f200c52d22accec202758e151361e46bd85c87e06d1d9cab",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:0e2513ef3a57cf9da915c9cbab037e53132a002fec30b645bbc9fdd757fab9c6",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Two consecutive figures (e.g. mermaid diagrams or images) and the text\nbetween them used to sit very tight against each other in the PDF. The\nbuilt-in template (bundled in the omd2typst WASM) and both shipped templates\n(`purple-template`, `tig-template`) now declare:\n\n```typst\n#show figure: set block(below: 1.5em)\n```\n\nThis adds 1.5em of vertical space *below* each figure block. The top of the\nblock is unchanged.\n\nBuilt on omd2typst v0.10.7 (core/wasm 0.5.4).\n\nUsers with custom templates can add the same `show` rule to their templates\nif they want matching behaviour.\n",
+      "draft": false,
+      "name": "0.8.35",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T18:32:10Z",
+      "tag": "0.8.35"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f2fdcc11478548b6f73b3a080064d0a56370a8709aeb9bb36dee022beb93db24",
+          "name": "main.js",
+          "size": 1847835
+        },
+        {
+          "digest": "sha256:b2977ccc56400e41b4bdfa57bfc73589b3ca27abc6cbbcf21585096d1df092fa",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:43681a3b356b06c6987a3d8fa836eaae399723006864426c2073aa8838336916",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "The flowchart node labels were still missing in v0.8.33 because mermaid v11's\n`flowchart-v2` renderer (used in Obsidian) emits node labels as `<foreignObject>`\ncontaining HTML *regardless of* the `htmlLabels: false` config — that setting\nonly affects edges. resvg (Typst's SVG renderer) ignores `<foreignObject>`, so\neven with v0.8.33 the boxes appeared empty.\n\nThis release adds a post-processing pass on the SVG returned by `mermaid.render`:\neach `<foreignObject>` is replaced with an SVG `<text>` element positioned at\nthe centre of the foreignObject's box. The inner HTML is stripped to plain text\n(so `<i class=\"fa fa-car\"></i> Car` becomes `Car`). Empty foreignObjects (e.g.\nplaceholder edge labels) are removed entirely.\n\nVerified end-to-end: `typst compile` now emits no `image contains foreign object`\nwarning, and all flowchart node text — `Christmas`, `Go shopping`, `Let me think`,\n`Laptop`, `iPhone`, `Car` — appears in the rendered PDF.\n",
+      "draft": false,
+      "name": "0.8.34",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T17:58:26Z",
+      "tag": "0.8.34"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d065a6f9e014ca8b8a15d82f2fe57d42dc43c4ede91aabf2b539561f9f6d2d3c",
+          "name": "main.js",
+          "size": 1846955
+        },
+        {
+          "digest": "sha256:fbc0b14617fd7fc0d0cfb255315b710bc6127ac66ef21ea55f6e57488c5f7e9a",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:bb0b19bda6ba32127f1e3b9a1e47cd0803569b95db869841fa441ec945e00aed",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Flowchart text labels were missing from exported PDFs because mermaid renders\nthem as `<foreignObject>` containing HTML — a format Typst's SVG renderer\n(`resvg`) cannot draw. Mermaid is now initialised with\n`flowchart: { htmlLabels: false }` so flowchart labels become plain SVG\n`<text>` elements, which Typst handles correctly.\n\nSide effect: Obsidian's editor preview also uses this setting until the app is\nrestarted, so flowchart labels in the preview will use SVG text (slightly\ndifferent wrapping behaviour) for the remainder of the session.\n\nDiagram types that already used SVG text (`gitGraph`, `mindmap`, `sequenceDiagram`,\netc.) are unaffected.\n",
+      "draft": false,
+      "name": "0.8.33",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T16:36:38Z",
+      "tag": "0.8.33"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f178157e50e89f4d868196d1665ebc811e035cc7dfda3fd6ed7b5ada46dbf06c",
+          "name": "main.js",
+          "size": 1846905
+        },
+        {
+          "digest": "sha256:7b0599dc38851ef2b5c5c174417b415c76e612812db25891575d4842aabe04af",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:a402e1e9d9adad587460480d7c2f3ea40a9a3cdd8278287d7672c9b8f41fbfe2",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Mermaid diagrams that declare a `title:` in their frontmatter now get a proper\nTypst figure caption underneath, which also appears in any auto-generated list\nof figures:\n\n```\n\\`\\`\\`mermaid\n",
+      "draft": false,
+      "name": "0.8.32",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T15:57:45Z",
+      "tag": "0.8.32"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b4a688267e99754ba08bfc9d7f31fbdcf43084a7352f66023e00547f43bbc942",
+          "name": "main.js",
+          "size": 1845883
+        },
+        {
+          "digest": "sha256:95e5a0736cba2574a708ce4d10f122b7f2ab4dd052f5521d1415b5b8068591b5",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:c8288fe15e747ab4f6909512c635a640805f0b2f58e2e5bf0edc39732759ca0e",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Matches Obsidian's UI behaviour of auto-hiding columns whose cells are null\nacross every row. Previously the PDF showed e.g. a `published` column full of\nthe literal text \"null\" even though Obsidian didn't display it.\n\nImplementation: each cell is checked via `Value.isTruthy()` — a missing\nproperty (`getValue` returns null) and a `NullValue` (which would\n`toString()` to \"null\") are both treated as empty. Columns whose every cell\nends up empty are dropped before the Markdown table is emitted.\n",
+      "draft": false,
+      "name": "0.8.31",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T09:18:35Z",
+      "tag": "0.8.31"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3b0ea3610f6d0f0ce319718090ab7a0f5cfbda0d6d686a2ecb57ce49041322ae",
+          "name": "main.js",
+          "size": 1845467
+        },
+        {
+          "digest": "sha256:daa0db9342ca7f1f171a7dc56e10383506117d48bae5dd4c744a998f1ca01219",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:ea576a7d493b39b960ad0556608bdc900ecc686426ddc86cbf59d5ef9d160daf",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "`obsidianmd/no-unsupported-api` can't be suppressed with `eslint-disable`\n(the review bot rejects it). The bases module now declares local structural\ninterfaces (`BasesViewConfigLike`, `BasesEntryLike`, …) instead of importing\nObsidian's typed Bases classes, so the linter no longer flags 1.10-era API\ncalls. Functionally identical to v0.8.29.\n\n`minAppVersion` stays at 1.7.2: users on older Obsidian can still install for\nmermaid / template-picker features; base embeds render the placeholder line\non those versions since the bases engine isn't present.\n",
+      "draft": false,
+      "name": "0.8.30",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T08:58:56Z",
+      "tag": "0.8.30"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3b0ea3610f6d0f0ce319718090ab7a0f5cfbda0d6d686a2ecb57ce49041322ae",
+          "name": "main.js",
+          "size": 1845467
+        },
+        {
+          "digest": "sha256:a39161fcfc613852807cd388148e98feacee2c8fffb997be9c1805fdb275c2eb",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:f36f9062ed409c5f954b493c8ed07e5221b80a40b8ba3f824e4ae726ffdbaf3a",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "The internal regex evaluator (v0.8.20–v0.8.28) is gone. It only supported a\nhandful of filter operators and quietly produced wrong results on anything else\n(a 323-page PDF on one test base because broad filters silently matched every\nfile in the vault).\n\nThe new implementation drives Obsidian's own bases engine: each `![[file.base]]`\nembed is loaded through Obsidian's embed registry, off-screen, in a temporary\n`Component`. Once the query result is ready we read it via the public types\n(`BasesViewConfig.getOrder` / `getDisplayName`, `BasesEntry.getValue`,\n`Value.toString`) and emit a Markdown pipe table. The full filter language\n(string, list, math, date, file, link, tag, formulas — about 50 operators) is\nsupported automatically because Obsidian is doing the evaluation.\n\nIf Obsidian's engine isn't available (older versions, or the query fails to\ncomplete in 5 s), a placeholder line is emitted instead of guessed data:\n`*[Base view 'name.base' not rendered]*`.\n\nRequires the Obsidian Bases plugin to be enabled (built into Obsidian 1.10+).\n",
+      "draft": false,
+      "name": "0.8.29",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T08:48:10Z",
+      "tag": "0.8.29"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6a5173988d38227f53ddfa72edba19ffc875b10292d9ead5cef9b9e1846a76b7",
+          "name": "main.js",
+          "size": 1852869
+        },
+        {
+          "digest": "sha256:d3cbc62db89fd223bad31c2cbdf021b8d996df0f35520d873f8e8933cff83e84",
+          "name": "manifest.json",
+          "size": 317
+        },
+        {
+          "digest": "sha256:63e3ea7a29b9b7cf448c1aff5cadafe67f4f95364ae36c915d6203b32758fd50",
+          "name": "omd2typst-examples.zip",
+          "size": 40268
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Three fixes to the internal bases evaluator:\n\n- **`file.name.endsWith()`, `file.name.contains()`, `file.path.endsWith()`, `file.path.contains()`** are now recognised. This is what unblocked the\n  common `!file.name.endsWith(\".pdf\")` exclusion filter.\n- **Unsupported filter expressions no longer silently exclude every file when negated.** Before, `!unknown.func()` evaluated to `false` and the\n  entire base returned zero results. Unsupported expressions now match-all\n  whether negated or not.\n- **Tables without an explicit `sort` now default to ASC by their first column**, matching Obsidian's own table-view default. Previously rows\n  appeared in vault scan order (often descending mtime).\n\nAlso: `file.name.startsWith` now uses the full filename (including extension),\nmatching Obsidian's convention. No effect on existing prefix matches.\n",
+      "draft": false,
+      "name": "0.8.28",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T08:16:04Z",
+      "tag": "0.8.28"
+    },
     {
       "assets": [
         {
