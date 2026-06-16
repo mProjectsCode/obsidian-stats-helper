@@ -1,11 +1,11 @@
 {
   "author": "Giuseppe De Martino",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Map and work through the contradictions in your vault: tensions, tradeoffs, and conflicting goals organized in 5 layers via frontmatter, with an AI Contradiction Hunter and PDF concept extraction. Works with cloud APIs or fully local models.",
+  "description": "Map and work through the contradictions in your vault: tensions, tradeoffs, and conflicting goals organized in 5 layers via frontmatter, with an AI Contradiction Hunter and PDF concept extraction. Works with cloud APIs or fully local models. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "antinomia",
-  "lastChangedAt": "2026-06-15T07:03:58.572Z",
-  "lastFetchedAt": "2026-06-15T07:03:58.572Z",
+  "lastChangedAt": "2026-06-16T07:01:58.693Z",
+  "lastFetchedAt": "2026-06-16T07:01:58.693Z",
   "manifest": {
     "author": "Giuseppe De Martino",
     "authorUrl": "https://github.com/demartinogiuseppe",
@@ -14,11 +14,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Antinomia",
-    "version": "1.7.4"
+    "version": "1.7.6"
   },
   "name": "Antinomia",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:dfaedbb0e92ed7a5f34ac25a72f6087b9838b60b5b5a62bbe333221c195310ae",
+          "name": "main.js",
+          "size": 845053
+        },
+        {
+          "digest": "sha256:fa7ab7d1d480852b10417fa74f7a042872d2683de88a62d40eefae8aaab4062e",
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:f94180918006ba163bf860000c0d28d64f2d6538483b89abba0e784800bb5bce",
+          "name": "styles.css",
+          "size": 90079
+        }
+      ],
+      "author": "demartinogiuseppe",
+      "description": "## Antinomia v1.7.6 — Fix: \"Mark as false positive\" button threw\n\n### Fixed\n- **Critical:** the \"Mark as false positive\" button in Hunter Results called a method that never existed (`dismissContradiction`) and threw at runtime. Implemented the missing method as the inverse mirror of `undismissContradiction`: it adds the peer basename to each note's `hunter_false_positives` frontmatter array (idempotent — clicking twice doesn't duplicate entries).\n- The Hunter \"Mark as false positive\" → \"Reincludi\" round-trip now fully works:\n  - **Mark:** peer basename added to both notes' `hunter_false_positives`, so the pair won't be proposed again.\n  - **Unmark** (Dismissed Pairs view): peer basename removed.\n\nThis was a latent bug surfaced during the v1.7.5 typing pass.\n\n### Install\n- **Community store:** Settings → Community plugins → Browse → \"Antinomia\".\n- **BRAT:** add `demartinogiuseppe/antinomia`.\n",
+      "draft": false,
+      "name": "1.7.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T17:00:49Z",
+      "tag": "1.7.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1423e5363e3c333f6445cbe71e9d3f5651c723cbf44c2caa55203d9a4ef5e480",
+          "name": "main.js",
+          "size": 844500
+        },
+        {
+          "digest": "sha256:eb030efb2843c6a807f9306bc038c60da9068f01cc57f3b6e3dda37d919d7412",
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:f94180918006ba163bf860000c0d28d64f2d6538483b89abba0e784800bb5bce",
+          "name": "styles.css",
+          "size": 90079
+        }
+      ],
+      "author": "demartinogiuseppe",
+      "description": "## Antinomia v1.7.5 — GraphView typing + residual unsafe-any cleanup\n\nCommunity-store linter pass (Batch 5): type tightening of the `any`-flow buckets. No user-visible changes, no `any` shortcuts, no `eslint-disable`.\n\n### What changed\n- **AntinomiaGraphView (56 sites):** new `AntinomiaNodeData` / `AntinomiaEdgeData` interfaces for the Cytoscape graph data shape. Every `.data()` access and `evt.target` handler (tap / mouseover / mouseout) is now typed; removed unnecessary assertions (`closest<HTMLElement>`, `this.cy.pan()`, `position()`).\n- **`loadSettings` migration:** typed via a new `LegacySettingsData` interface — `loadData()` returns `any`, so the whole v1→v2 profiles migration block was untyped.\n- **`SubstrateFields.contenuto`:** added the AI-extraction key that flows through prefill; clears the `NewSubstrateModal` accesses and the long-standing `contenuto` type errors in the free-input and YouTube flows.\n- **Misc:** typed a `String.replace` callback param (youtubeFetch); removed unnecessary type assertions across `frontmatter`, `renderNoteCard`, `AuditVaultView`, `ConceptsPreviewModal`, `parseResponse`.\n\n### Numbers\n- Lint total: **278 → 186** problems. Unsafe-any family: **99 → 7**.\n- `npx tsc --noEmit` source errors: **24 → 18**. Tests: **158/158**.\n\n### Known / out of scope\n- `core/utils.ts` `moment().format` (×6): Obsidian's `moment` re-export has an unresolvable type — a types/env gap, not fixable without `as any`.\n- Surfaced a latent bug: `HunterResultsView` calls a non-existent `dismissContradiction` plugin method. Left for a dedicated fix since it needs new logic, not typing.\n\n### Install\n- **Community store:** Settings → Community plugins → Browse → \"Antinomia\".\n- **BRAT:** add `demartinogiuseppe/antinomia`.\n",
+      "draft": false,
+      "name": "1.7.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T16:45:57Z",
+      "tag": "1.7.5"
+    },
     {
       "assets": [
         {

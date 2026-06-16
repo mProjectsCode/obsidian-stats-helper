@@ -1,14 +1,14 @@
 {
   "author": "Lumina",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Your intelligent AI Agent for your vault with RAG and Multi-LLM support.",
+  "description": "Language-Agnostic RAG & MCP Agent powered by Multilingual Embeddings for local AI semantic search. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lumina",
-  "lastChangedAt": "2026-06-16T02:04:58.556Z",
-  "lastFetchedAt": "2026-06-15T07:03:58.572Z",
+  "lastChangedAt": "2026-06-16T07:01:58.693Z",
+  "lastFetchedAt": "2026-06-16T07:01:58.693Z",
   "manifest": {
     "author": "Lumina",
-    "description": "Your intelligent AI Agent for your vault with RAG and Multi-LLM support.",
+    "description": "Language-Agnostic RAG & MCP Agent powered by Multilingual Embeddings for local AI semantic search.",
     "fundingUrl": {
       "Ko-fi": "https://ko-fi.com/luminaapps",
       "ctee": "https://ctee.kr/place/luminaapps"
@@ -17,11 +17,141 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Lumina",
-    "version": "1.0.15"
+    "version": "1.0.20"
   },
   "name": "Lumina",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8715a1d0869f31f4fff5910466d432e74b89f2c4c5be17de4e522c5302b84a9e",
+          "name": "main.js",
+          "size": 2373769
+        },
+        {
+          "digest": "sha256:3a802f6beb18616e6169719b0b673131353f3b2afa46cb9bc63c74d5b8e8c24d",
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:e319c0bbf52e1fe081269d5e9d30de99f256bc1feaca616d30eda8bb9afedc0d",
+          "name": "styles.css",
+          "size": 31449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lumina v1.0.20 — Release Notes\r\n\r\nBugfix",
+      "draft": false,
+      "name": "1.0.20",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T23:38:48Z",
+      "tag": "1.0.20"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4cf27fcca7799032055304b8469e548623f6ab77d607cf3254f685667b88440a",
+          "name": "main.js",
+          "size": 2373817
+        },
+        {
+          "digest": "sha256:1d1afbf5f9421eda84b3a57f72c6d5c6d4a9a86a59fa7349be1052a4727b2184",
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:e319c0bbf52e1fe081269d5e9d30de99f256bc1feaca616d30eda8bb9afedc0d",
+          "name": "styles.css",
+          "size": 31449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lumina v1.0.19 — Release Notes\r\n\r\n#### Refactoring & Improvements\r\n\r\n**Worker Bridge & Embedding Worker Refactored**\r\n- Embedded worker source code is now stored as a compressed (deflate) Base64 constant in `workerCode.ts`, reducing the plugin bundle size.\r\n- Decompression is handled at runtime using the browser-native `DecompressionStream` API, eliminating the need for a third-party decompression library.\r\n- The worker bridge (`EmbeddingWorkerBridge`) now imports the compressed code directly, simplifying the initialization logic in `main.ts`.\r\n\r\n**Improved ONNX WASM Loading Strategy**\r\n- Previously, the ONNX WASM files were always loaded from the local plugin directory. This caused failures when the plugin directory was unavailable (e.g., during certain development environments).\r\n- Now, the worker prioritizes the local plugin directory for WASM files, but falls back to CDN when the plugin directory is not provided. The CDN fallback is safe — esbuild's process polyfill prevents Node.js-specific code paths from executing in the Worker context.\r\n\r\n**Code Cleanup**\r\n- Removed inline worker code generation from `main.ts` and consolidated it into `workerBridge.ts`.\r\n- Simplified the `pluginDir` parameter handling — always passed to the worker, but optional fallback logic is now handled internally.\r\n\r\n---\r\n#### 리팩토링 및 개선\r\n\r\n**워커 브릿지 및 임베딩 워커 리팩토링**\r\n- 워커 소스 코드를 `workerCode.ts`에 Deflate 압축된 Base64 상수로 저장하여 플러그인 번들 크기를 줄였습니다.\r\n- 압축 해제는 브라우저 네이티브 `DecompressionStream` API를 사용하여 런타임에 처리되며, 서드파티 압축 해제 라이브러리가 더 이상 필요하지 않습니다.\r\n- `EmbeddingWorkerBridge`가 압축된 코드를 직접 가져오도록 변경되어, `main.ts`의 초기화 로직이 단순화되었습니다.\r\n\r\n**ONNX WASM 로드 전략 개선**\r\n- 이전에는 항상 로컬 플러그인 디렉토리에서 ONNX WASM 파일을 로드했으나, 플러그인 디렉토리를 사용할 수 없는 환경(예: 특정 개발 환경)에서는 로드에 실패하는 문제가 있었습니다.\r\n- 이제 워커는 로컬 디렉토리를 우선 사용하되, 플러그인 디렉토리 정보가 없으면 CDN으로 폴백합니다. CDN 폴백은 안전하게 동작하며, esbuild의 process 폴리필 덕분에 Worker 컨텍스트에서 Node.js 전용 코드 경로가 실행되지 않습니다.\r\n\r\n**코드 정리**\r\n- `main.ts`에 있던 인라인 워커 코드 생성 로직을 제거하고 `workerBridge.ts`로 통합했습니다.\r\n- `pluginDir` 파라미터 처리를 단순화하여 항상 워커에 전달하되, 폴백 로직은 내부에서 처리하도록 개선했습니다.",
+      "draft": false,
+      "name": "1.0.19",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T22:49:14Z",
+      "tag": "1.0.19"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fd26211eca6e9adbb292b5f412a9ed3496b433ac31c5386228eebdaf19f66542",
+          "name": "main.js",
+          "size": 2374013
+        },
+        {
+          "digest": "sha256:6338df4282bf4a82315ae3cd8b083605c7d0174e0f29332a61af95241eff6bfb",
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:e319c0bbf52e1fe081269d5e9d30de99f256bc1feaca616d30eda8bb9afedc0d",
+          "name": "styles.css",
+          "size": 31449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lumina v1.0.18 — Release Notes\r\n\r\n## 🔧 Improvements\r\n\r\n- **Embedding worker configuration** (`esbuild.config.mjs`, `embedding.worker.ts`)\r\n  - Added Node.js dynamic import stubs (`worker_threads`, `module`, `fs`, `path`) for browser Worker environment\r\n  - Prevents `failed to resolve module specifier` errors in ONNX Runtime WASM loading\r\n\r\n- **RAG error handling** (`src/main.ts`)\r\n  - Added fallback: if embedding worker initialization fails, automatically disables RAG toggle to prevent UI state inconsistency\r\n  - Improved user experience by keeping settings UI in sync with actual worker state\r\n\r\n---\r\n\r\n## 🔧 개선 사항\r\n\r\n- **임베딩 워커 설정 개선** (`esbuild.config.mjs`, `embedding.worker.ts`)\r\n  - 브라우저 Worker 환경에서 ONNX Runtime WASM 로드 시 발생하는 `failed to resolve module specifier` 오류 방지를 위해 Node.js 동적 import 스텁 추가 (`worker_threads`, `module`, `fs`, `path`)\r\n\r\n- **RAG 오류 처리 개선** (`src/main.ts`)\r\n  - 임베딩 워커 초기화 실패 시 RAG 토글을 자동으로 비활성화하여 UI 상태 불일치 방지\r\n  - 워커 상태와 UI 설정이 항상 일치하도록 개선",
+      "draft": false,
+      "name": "1.0.18",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T11:29:31Z",
+      "tag": "1.0.18"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:80468041c36961e69b43efdbea46227548b1b15a250d677b056c338cd44d51e3",
+          "name": "main.js",
+          "size": 2373906
+        },
+        {
+          "digest": "sha256:cdded5f4f8fb2bf10b5504094b2ce8bb95ad800314afc9cb185e28308d2d4009",
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:e319c0bbf52e1fe081269d5e9d30de99f256bc1feaca616d30eda8bb9afedc0d",
+          "name": "styles.css",
+          "size": 31449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lumina v1.0.17 — Release Notes\r\n\r\n#### New Modules\r\n- **`tagExtractor.ts`** — Pure function module for tag recommendation logic. Extracts tags from frontmatter, body text, cached metadata, and file paths, then scores them. Previously embedded in `updateContext()` (~60 lines), now reusable and testable.\r\n- **`DiscoveryCard.svelte`** — Reusable card component replacing ~30 lines of duplicated template code between Search mode and Context mode.\r\n- **`DiscoveryStagingArea.svelte`** — Extracted staging area (selected documents, token progress bar, chat start button) into an independent component.\r\n\r\n#### Performance Fixes\r\n- **Fixed `$effect` cleanup** — Timer cleanup functions were previously commented out, causing memory leaks and ghost state updates after component unmount. All `$effect` and `onMount` blocks now properly clean up timers on unmount.\r\n- **Deduplicated context searches** — Added `lastSearchedFilePath` guard to skip redundant API/vector search calls when switching between files rapidly.\r\n- **Separated `filterQuery` from context `$effect`** — `filterQuery` no longer triggers `updateContext()`. It only performs client-side filtering via `filterChunks()`, eliminating unnecessary full context refreshes while typing filters.\r\n- **Unified `isSearching` state** — Removed redundant store updates; local state is now the single source of truth.\r\n- **Removed unnecessary `node.empty()`** — Eliminated redundant DOM manipulation in the icon action.\r\n- **Cleaned up unused import** — Removed `settingsStore` import.\r\n\r\n---\r\n#### 새로운 모듈\r\n- **`tagExtractor.ts`** — 태그 추천 로직을 담은 순수 함수 모듈. 프론트매터, 본문, 캐시 메타데이터, 파일 경로에서 태그를 추출하고 점수를 계산합니다. 기존에는 `updateContext()`에 60라인으로 내장되어 있었으나, 이제 재사용 가능하고 테스트하기 쉬운 구조가 되었습니다.\r\n- **`DiscoveryCard.svelte`** — 검색 모드와 Context 모드에서 중복되던 약 30라인의 카드 템플릿을 단일 재사용 컴포넌트로 대체했습니다.\r\n- **`DiscoveryStagingArea.svelte`** — 스테이징 영역(선택된 문서, 토큰 진행바, 채팅 시작 버튼)을 독립 컴포넌트로 분리했습니다.\r\n\r\n#### 성능 개선\r\n- **`$effect` cleanup 수정** — 타이머 정리 함수가 이전에 주석 처리되어 있어 컴포넌트 언마운트 후 메모리 릭과 고스트 상태 업데이트가 발생했습니다. 모든 `$effect`와 `onMount` 블록이 이제 언마운트 시 타이머를 제대로 정리합니다.\r\n- **중복 context 검색 방지** — `lastSearchedFilePath` 가드를 추가하여 파일을 빠르게 전환할 때 불필요한 API/벡터 검색 호출을 건너뜁니다.\r\n- **`filterQuery`를 context `$effect`에서 분리** — `filterQuery`가 더 이상 `updateContext()`를 트리거하지 않습니다. `filterChunks()`를 통한 클라이언트 사이드 필터링만 수행하여 필터 타이핑 중 불필요한 전체 컨텍스트 갱신을 제거했습니다.\r\n- **`isSearching` 상태 단일화** — 중복된 스토어 업데이트를 제거하고 로컬 상태만 사용합니다.\r\n- **불필요한 `node.empty()` 제거** — icon 액션에서 불필요한 DOM 조작을 제거했습니다.\r\n- **사용하지 않는 import 정리** — `settingsStore` import를 제거했습니다.",
+      "draft": false,
+      "name": "1.0.17",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T10:34:42Z",
+      "tag": "1.0.17"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1e745de3a1be8f8880e3c99b3b10b2bd3cd952561f0b99d64696a95d1b18167f",
+          "name": "main.js",
+          "size": 2375124
+        },
+        {
+          "digest": "sha256:d366b7b72db8c62ae208a9ba5695b9e74c42133018546a5c56c4059ee16664d4",
+          "name": "manifest.json",
+          "size": 334
+        },
+        {
+          "digest": "sha256:e319c0bbf52e1fe081269d5e9d30de99f256bc1feaca616d30eda8bb9afedc0d",
+          "name": "styles.css",
+          "size": 31449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lumina v1.0.16 — Release Notes\r\n\r\n### 🐛 Bug Fixes\r\n\r\n- **Prevent accidental index wipe on startup**: Fixed an issue where a delayed Obsidian file cache could return an empty file list during initial index loading, causing the entire RAG index to be discarded. The indexer now detects this condition and preserves existing indexed data.\r\n- **Deleted file handling**: Files removed from the vault are now properly cleaned up from the RAG index during incremental updates.\r\n- **Embedding Worker SIMD + Multi-threading**: Added runtime detection of `SharedArrayBuffer` to enable multi-threaded WASM inference in environments that support it (Obsidian Electron). Falls back gracefully to single-threaded mode otherwise. SIMD WASM is now explicitly enabled for faster embeddings.\r\n\r\n### ⚡ Performance Improvements\r\n\r\n- **Parallel file reading**: Files are now read and chunked concurrently (up to 32 files at once), overlapping I/O wait times. This dramatically reduces total indexing time, especially for vaults with thousands of files.\r\n- **Content-hash skip optimization**: Changed files that have identical content but different `mtime` (e.g., touched without modification) are now detected via a content hash and skipped for re-embedding entirely.\r\n- **Batched embedding**: Chunks are now sent to the embedding worker in batches of 64, reducing the number of worker round-trips and improving throughput.\r\n- **Batched UI progress updates**: Store updates are batched (every 20 files) to prevent UI flooding during large indexing runs (10,000+ files).\r\n\r\n---\r\n### 🐛 버그 수정\r\n\r\n- **시작 시 인덱스 초기화 방지**: 옵시디언 파일 캐시 로딩 지연으로 인해 인덱스 로드 시점에 파일 목록이 비어있을 경우, 기존 RAG 인덱스 전체가 사라지는 버그를 수정했습니다. 이제 이런 상황을 감지하고 기존 인덱스를 보존합니다.\r\n- **삭제된 파일 정리**: 볼트에서 삭제된 파일이 증분 업데이트 시 RAG 인덱스에서도 올바르게 제거되도록 수정했습니다.\r\n- **임베딩 워커 SIMD + 멀티스레딩 지원**: `SharedArrayBuffer`를 런타임에 감지하여, 지원되는 환경(옵시디언 Electron)에서는 멀티스레드 WASM 추론을 활성화합니다. 지원되지 않는 환경에서는 자동으로 단일 스레드로 폴백됩니다. SIMD WASM이 명시적으로 활성화되어 임베딩 속도가 크게 향상됩니다.\r\n\r\n### ⚡ 속도 개선\r\n\r\n- **병렬 파일 읽기**: 파일 읽기와 청킹을 최대 32개까지 동시에 처리하여 I/O 대기 시간을 중첩시킵니다. 수천 개의 파일이 있는 볼트에서 전체 인덱싱 시간이 대폭 단축됩니다.\r\n- **콘텐츠 해시 기반 스킵**: `mtime`만 변경되고 실제 내용이 동일한 파일(예: 수정 없이 터치된 파일)을 콘텐츠 해시로 감지하여 임베딩을 완전히 건너뜁니다.\r\n- **배치 임베딩**: 청크를 64개 단위로 묶어 임베딩 워커에 전송하여 워커 왕복 횟수를 줄이고 처리량을 높였습니다.\r\n- **배치 UI 진행률 업데이트**: 대규모 인덱싱(10,000개 이상 파일) 시 UI 업데이트 폭주를 방지하기 위해 20개 파일 단위로 진행률을 업데이트합니다.",
+      "draft": false,
+      "name": "1.0.16",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T08:25:43Z",
+      "tag": "1.0.16"
+    },
     {
       "assets": [
         {
@@ -459,6 +589,6 @@
       "tag": "1.0.0"
     }
   ],
-  "removedAt": "2026-06-16T02:04:58.556Z",
+  "removedAt": null,
   "repo": "lumina-apps/obsidian-lumina"
 }
