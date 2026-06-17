@@ -4,8 +4,8 @@
   "description": "Visualise the hierarchy of your vault using a breadcrumb trail or matrix view.",
   "errors": [],
   "id": "breadcrumbs",
-  "lastChangedAt": "2026-06-14T22:00:58.567Z",
-  "lastFetchedAt": "2026-06-14T22:00:58.567Z",
+  "lastChangedAt": "2026-06-17T22:02:58.566Z",
+  "lastFetchedAt": "2026-06-17T22:02:58.566Z",
   "manifest": {
     "author": "MichaelPPorter",
     "authorUrl": "https://github.com/michaelpporter",
@@ -19,11 +19,89 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Breadcrumbs",
-    "version": "4.17.0"
+    "version": "4.19.0"
   },
   "name": "Breadcrumbs",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a1a04a66e5062ecac1819a3ca16fa430a31294ea70f8b3568ff20f6dc6dc88f",
+          "name": "main.js",
+          "size": 1892477
+        },
+        {
+          "digest": "sha256:bef95aa5d75e2d66d12286548acc4fbf78c30b3985f366ff2706989ce982bb5e",
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:eae0a43f03174b75d9100bcdab3c23c5a0d2b426966b4c6248e08f47cbb18da4",
+          "name": "styles.css",
+          "size": 4755
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Removed\n\n- Removed the **`type: graph`** codeblock and its **`exclude-folders`** option (both added in 4.18.0). A whole-vault graph quickly exceeds Mermaid's edge limit and freezes large vaults, so the feature needs a rethink before it returns. Existing `type: graph` blocks now report an invalid type — switch to `tree`, `mermaid`, or `markmap`.\n\n### Changed\n\n- Codeblock `from:` **folder queries now match case-insensitively** (e.g. `from: '\"projects\"'` matches a `Projects/` folder), mirroring Dataview.\n- `type: markmap` with `from:` now **keeps the map within the matched notes** instead of following edges out into the rest of the vault.\n- A `breadcrumbs` codeblock with no `depth:` now **defaults to depth `[0, 5]`** instead of unbounded, so traversals on large vaults no longer hang.\n\n### Performance\n\n- Codeblock tree traversal no longer clones its ancestor set at every node (O(n²) → O(n) allocations), speeding up deep or wide trees.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.18.1...4.19.0\n",
+      "draft": false,
+      "name": "4.19.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T13:01:44Z",
+      "tag": "4.19.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8de07375c7bf34daa377babc250d2c64910113ececaaeba2f4059b708cbc2d99",
+          "name": "main.js",
+          "size": 1893370
+        },
+        {
+          "digest": "sha256:089857f935d002c984a745a9b600e3d7579d80c8d11536238c69dd50e396d863",
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:eae0a43f03174b75d9100bcdab3c23c5a0d2b426966b4c6248e08f47cbb18da4",
+          "name": "styles.css",
+          "size": 4755
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Maintenance release — dependency updates and a security pin. No functional changes for end users.\n\n## Security\n\n- Pinned the transitive `vite` dev-dependency to **8.0.16**, clearing two advisories ([GHSA-v6wh-96g9-6wx3](https://github.com/advisories/GHSA-v6wh-96g9-6wx3), [GHSA-fx2h-pf6j-xcff](https://github.com/advisories/GHSA-fx2h-pf6j-xcff)) affecting `8.0.0`–`8.0.15`. Both are Windows dev-server issues; `vite` is only used to run the test suite and is never part of the shipped plugin, so **end users were never exposed**.\n\n## Build\n\n- Bumped JavaScript dev-dependencies (eslint, esbuild, vitest, tailwindcss, typescript-eslint and others) and the Rust/WASM crates (`itertools` 0.15, `smallvec`, `hashbrown`), and regenerated the committed `wasm/pkg/` bindings.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.18.0...4.18.1",
+      "draft": false,
+      "name": "4.18.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T12:01:14Z",
+      "tag": "4.18.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:80fd828ec46ce66b3a71a991a84d176fc221bea18da16d728daae24ad218c00e",
+          "name": "main.js",
+          "size": 1894337
+        },
+        {
+          "digest": "sha256:551727ff2b41b3153bb88489169457f3646bbcef0c59c901846e151e0b651c52",
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:7b7f8e2d52c76e4b389afc81281953a61319f28311366b2b68bf7d208a723402",
+          "name": "styles.css",
+          "size": 4755
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Features\n\n- **New codeblock `type: graph`** — renders the whole vault (or a `from:`-scoped subset) as one Mermaid graph, instead of traversing out from a single note. Useful for an overview MOC or seeing a folder/tag's structure at a glance.\n- **`exclude-folders`** option for `type: graph` — drop folders from the graph, additive to the global Excluded folders setting (no vault-wide config change needed).\n- **Dataview Notes** now have a settings page with a configurable default field, used when a note sets `BC-dataview-note-query` without `BC-dataview-note-field`.\n\n## Changed\n\n- The codeblock `dataview-from` field is renamed to **`from`**. The name is now misleading — the Dataview dependency was removed, and Breadcrumbs parses the `#tag` / `\"folder\"` / `[[link]]` query itself. The old `dataview-from` still works as a deprecated alias and logs a console warning.\n- The Edge fields **Hide in views** toggle is renamed **Hide in side views** (it only affects the Matrix and Tree side panels).\n- The **Self is sibling** control moved from the Edge fields page to the Implied relations page.\n\n## Removed\n\n- The unused `traverse_note` default-field setting and the dead `content` / `field-prefix` codeblock fields.\n\n## Fixed\n\n- Renaming or removing an edge field now updates *every* place that referenced it — including sibling-field defaults (tag/dendron/Johnny.Decimal) and date-note period fields — so no setting is left pointing at a renamed or deleted field.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.17.0...4.18.0",
+      "draft": false,
+      "name": "4.18.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T00:37:43Z",
+      "tag": "4.18.0"
+    },
     {
       "assets": [
         {
