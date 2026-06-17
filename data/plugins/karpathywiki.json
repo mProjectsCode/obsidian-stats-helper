@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-16T05:02:58.614Z",
-  "lastFetchedAt": "2026-06-16T05:02:58.614Z",
+  "lastChangedAt": "2026-06-17T05:03:58.689Z",
+  "lastFetchedAt": "2026-06-17T05:03:58.689Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.18.2"
+    "version": "1.19.0"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c6f08363d7d03f5d877198a71460e6fa6a2621c9896ecc8cadba7def320ac305",
+          "name": "main.js",
+          "size": 784552
+        },
+        {
+          "digest": "sha256:3bc88da755c0528e7d9aff2336a17c26023227f7ac85b1557a7c42b632c9c299",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:3c7b5d5d0c7b1385547612d0a9c91c4ea4b337fa7f65d0ad98d07e952fb0c6ec",
+          "name": "styles.css",
+          "size": 10322
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\n- **Advanced LLM parameter settings (Issue #128).** New Default/Custom mode selector in LLM Configuration. Default hides all advanced parameters and keeps disable-thinking on — the right choice for most users. Custom reveals: disable thinking toggle, extraction temperature (0–2), query temperature (0–2), and repetition penalty (0–2). Settings are only sent to the LLM when a value is set; cloud providers that ignore the field fall back to their own defaults. The `disableThinking` field name is preserved in `data.json` for backward compatibility.\n- **Quote-grounding lint scanner (Issue #126).** New `scanQuoteGrounding()` pure function (zero token cost) verifies every quote under `## Mentions in Source` against the linked source file. Supports both current `\"— [[sources/slug]]\"` format and historical bare quotes. Tier 1 = exact substring match; Tier 2 = normalized (case-fold, punctuation stripped). Contributed by @DocTpoint.\n- **Compact slug list in analyzeSource prompt (Issue #116).** `buildCompactSlugList()` injects a sorted slug-only list of existing wiki pages into the analyzeSource prompt so the LLM uses exact paths when creating `[[links]]`, reducing dead-link mismatches from the 50-page index cap. Contributed by @DocTpoint.\n- **Reasoning-only response detection (Issue #99).** When `disableThinking=true` but the model returns an empty response with high reasoning tokens, an actionable error is thrown directing the user to check the thinking toggle. Automatic 400 fallback to `chat_template_kwargs: {enable_thinking: false}` for providers that reject `thinking.type='disabled'`.\n- **Stage 4 no-op skip (Issue #131 Tier 1).** `PageFactory.updateRelatedPage` now skips the LLM call when the source only contains a fallback string — roughly 33% fewer Stage 4 LLM calls. Still updates frontmatter `sources` + `updated` programmatically. Contributed by @DocTpoint.\n- **Status bar mirrors popup during ingest and lint (PR #110).** All ingestion progress messages and lint checkpoints now update both the popup Notice and the Obsidian status bar simultaneously. Contributed by @dmarchevsky.\n\n### Added\n\n- **Auto Smart Fix setting (PR #109).** When enabled, lint automatically runs all Smart Fix phases after analysis completes without showing the report modal. Default: off — existing users see no behaviour change.\n- **Sources normalization in write path (PR #127).** `fixPollutedSources()` is called from the centralized write chokepoint (`WikiEngine.createOrUpdateFile()`), so every generated/merged page gets a normalized `sources:` field. Contributed by @DocTpoint.\n- **Lint report summary now includes ungroundedQuotes and tagViolations counts.** The report header line shows all current dimensions. `lintTagViolationSection` fully i18n'd in all 8 languages.\n\n### Changed\n\n- **Startup quick-fixes Notice simplified.** Removed heavy emoji icons and decorative separators; cleaner layout with plain text. Logs use English consistently.\n- **Language dropdown labels use native names only** (e.g. `中文`, `日本語`, `Deutsch`) without English sub-labels.\n- **Advanced settings dropdown now properly renders on mode switch.** The Custom option was missing `this.display()` in its onChange handler; choosing \"Custom\" now correctly reveals the thinking toggle, temperature, and penalty inputs.\n\n### Refactored\n\n- **lint-controller modularization.** Extracted `phases/preparation.ts`, `phases/programmatic.ts`, `report-builder.ts`, `types.ts` from the monolithic controller. lint-controller.ts reduced from 1069 to 897 lines. 17 new unit tests.\n- **schema-analyze moved to schema/ directory.** `src/wiki/schema-analyze.ts` moved to `src/schema/analyze.ts`.\n- **LintContext extracted to lint/types.ts.** Breaks the latent import cycle between `fix-runners.ts` and `lint-controller.ts`.\n- **lint-controller + lint-fixes moved into lint/ directory.** `src/wiki/lint/controller.ts`, `src/wiki/lint/fixer.ts`.\n\n### Fixed\n\n- **Misleading watchedFolders debug logs removed.** `loadSettings`/`saveSettings` no longer print `watchedFolders` content, preventing confusion when `autoWatchSources` is off.\n\n### Tests\n\n- 728 tests passing (34 files), 179 new tests since v1.17.0. 0 regressions.\n\n---\n\n## Contributors\n\n- **@DocTpoint** — Compact slug list (#116), quote-grounding lint scanner (#126), no-op Stage 4 skip (#131 Tier 1), sources normalization in write path (#127), tags preservation on re-ingest (#114), configurable slug casing (#111)\n- **@dmarchevsky** — Status bar mirroring during ingest and lint (#110), Auto Smart Fix setting (#109)\n- **@green-dalii** — Advanced LLM parameter settings (#128), reasoning-only detection (#99), lint report enhancements, i18n completion, internal refactoring and release preparation\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n---\n\n## Configuration\n\nFull usage documentation for the new features:\n- **Advanced LLM Settings**: Settings → LLM Configuration → \"Advanced parameter settings\" dropdown. Set to \"Custom\" to access the disable-thinking toggle, temperature, and repetition penalty controls.\n- **Quote-grounding Lint**: Run `Cmd+P` → \"Lint Wiki\". Any ungrounded quotes under `## Mentions in Source` will be reported in the \"Ungrounded quotes\" section.\n- **Auto Smart Fix**: Settings → Auto Maintenance → enable \"Auto Smart Fix\" to auto-apply all fixes without the report modal.\n\n---\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.18.2...1.19.0",
+      "draft": false,
+      "name": "1.19.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-16T05:23:46Z",
+      "tag": "1.19.0"
+    },
     {
       "assets": [
         {
