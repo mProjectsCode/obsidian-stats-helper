@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-17T05:03:58.689Z",
-  "lastFetchedAt": "2026-06-17T05:03:58.689Z",
+  "lastChangedAt": "2026-06-18T05:04:58.654Z",
+  "lastFetchedAt": "2026-06-18T05:04:58.654Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.19.0"
+    "version": "1.19.1"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ae9b5fa9a71dc27b223c266a739370e75443cc89f4d0f1f666dfc7babba035da",
+          "name": "main.js",
+          "size": 789463
+        },
+        {
+          "digest": "sha256:3bc88da755c0528e7d9aff2336a17c26023227f7ac85b1557a7c42b632c9c299",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:3c7b5d5d0c7b1385547612d0a9c91c4ea4b337fa7f65d0ad98d07e952fb0c6ec",
+          "name": "styles.css",
+          "size": 10322
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\n- **Gemini HTTP 400 on ingestion (Issue #137).** The `OpenAICompatibleClient` now uses a 3-tier thinking-control dialect fallback chain (anthropic → openai → none) to auto-discover the correct field name per baseUrl (`thinking.type='disabled'` vs `reasoning_effort='none'` vs none). The result is cached on the client and in `data.json` so subsequent requests skip the 400 probe round-trip. Gemini users should see fully working ingestion after running Test Connection once.\n- **Generic 400 field-strip retry.** Rejected field names (temperature, repetition_penalty, etc.) are extracted from Gemini-style error bodies and pre-stripped on subsequent requests via `unsupportedFields` Set. The strip-and-retry logic is now deduplicated across both non-stream and stream paths.\n- **Stream path field-strip fix.** `createMessageStream`'s inner catch block was missing — `unsupportedFields` was never populated on stream errors, making the generic field-strip retry dead code. Fixed.\n- **Settings tab no longer wipes `thinkingControlCache` on close.** The `LLMWikiSettingTab.hide()` and Save button used shallow `{ ...tempSettings }` spread that dropped `thinkingControlCache` (the form never tracks it). Fix: `commitTempSettings()` helper preserves probe-mutated fields; probe results are also synced back into `tempSettings` on Test Connection success.\n- **Fallback notices now localized.** `queueFallbackNotice()` was hard-coding `TEXTS.en` — the 3 i18n keys (`fallbackThinkingDialect`, `fallbackThinkingNone`, `fallbackParamStripped`) were present in all 8 locale files but never used. Fixed by wiring `client.language` via `createLLMClient`.\n\n### Simplified\n\n- **`IS_400` regex hoisted.** Eliminated 3 regex copies (`isThinkingControlError`, non-stream catch, stream catch).\n- **`retryBodyWithStrippedFields` helper.** Replaces the duplicated strip-and-`JSON.stringify`-change-detect pattern with a `changed` boolean loop.\n- **`applyThinkingDialectFallback` reuses `buildRequestBody`.** The retry now inherits `unsupportedFields` pre-strip, fixing a latent bug where stripped fields could leak back into the retry body.\n- **`commitTempSettings()` helper.** Deduplicates settings form merge logic across `hide()` and Save button.\n- **`testLLMConnection` cache write clarified.** Dead `detectedDialect !== undefined` branch removed; both success and failure now write to the cache.\n\n### Fixed\n\n- **`[DEBUG-400]` firing on 429 quota errors.** The `window.fetch` re-fetch and `console.error` diagnostics ran unconditionally on every 4xx. Limited to 400-class errors only.\n- **400-path diagnostic output demoted from `console.error` to `console.debug`.** The in-request dialect fallback expects one 400 per rejected tier (normal on Gemini). Only the \"no fallback tier succeeded\" path surfaces as a real error.\n\n### Tests\n\n- 744 tests passing (36 files), 16 new tests since v1.19.0 (new `llm-client-gemini-fallback` + `settings-thinkcache` suites). 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Issue #137 root cause analysis, 3-tier dialect fallback chain, settings tab cache persistence, generic field-strip retry, code simplifications, release preparation. Co-authored-by: Claude Code.\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**For existing users:** v1.19.1 is fully backward-compatible with v1.19.0. The only schema change (`thinkingControlCache` widened from boolean to dialect string) has a lazy migration — no action needed. Simply update the plugin in Obsidian and run Test Connection once (Settings → LLM Wiki → Test Connection).\n\n---\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.19.0...1.19.1\n",
+      "draft": false,
+      "name": "1.19.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T09:28:19Z",
+      "tag": "1.19.1"
+    },
     {
       "assets": [
         {
