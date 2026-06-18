@@ -4,8 +4,8 @@
   "description": "Turn Chinese notes into a learner-friendly comprehensible-input reading environment with dictionary-aware tokenization, exposure tracking, SRS, and optional AI-generated review stories. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "chinese-comprehensible-input",
-  "lastChangedAt": "2026-06-17T07:04:58.578Z",
-  "lastFetchedAt": "2026-06-17T07:04:58.578Z",
+  "lastChangedAt": "2026-06-18T07:02:58.553Z",
+  "lastFetchedAt": "2026-06-18T07:02:58.553Z",
   "manifest": {
     "author": "davadev",
     "description": "Turn Chinese notes into a learner-friendly comprehensible-input reading environment with dictionary-aware tokenization, exposure tracking, SRS, and optional AI-generated review stories.",
@@ -13,11 +13,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Chinese Comprehensible Input",
-    "version": "0.3.1"
+    "version": "0.3.3"
   },
   "name": "Chinese Comprehensible Input",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:f363fbcf23c626adddf1db931b697606cecbc5c4379942371c6495c2828cb220",
+          "name": "main.js",
+          "size": 467507
+        },
+        {
+          "digest": "sha256:84012dd85b632ad388c6bd151d40664d49beea51e9e23a590fbde692ab1a8d9b",
+          "name": "manifest.json",
+          "size": 390
+        },
+        {
+          "digest": "sha256:8051b5d28f3239fdbdd9ff08722fb1a032ebf9e3176938cf95ca37010ab5c155",
+          "name": "styles.css",
+          "size": 38947
+        }
+      ],
+      "author": "davadev",
+      "description": "## What's in 0.3.3\n\nHotfix. 0.3.2 shipped with `// eslint-disable-next-line @typescript-eslint/no-deprecated` comments, which the Obsidian community-plugin auto-review flagged as a hard Error (same meta-rule that bans disabling `no-console` and `no-explicit-any`). 8 Errors → delisting risk.\n\nThis release removes every disable AND silences the underlying deprecation without bumping `minAppVersion` past iOS Obsidian's 1.12.7 ceiling:\n\n- `setWarning()` calls swapped for `b.buttonEl.addClass(\"mod-warning\")` (4 sites). Visual result identical — same red destructive treatment.\n- `this.display()` self-calls routed through a new private `rerender()` method (4 sites). `display()` becomes a 1-liner that delegates; Obsidian still calls it from outside.\n\n`npm run lint` reports 0 errors / 0 warnings. `npm run check-release -- --with-build` is fully green.\n\niOS 1.12.7 + desktop both install cleanly.",
+      "draft": false,
+      "name": "0.3.3 — drop @typescript-eslint/no-deprecated disable comments",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T08:42:37Z",
+      "tag": "0.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:af518386efb87943e2ade547f8dc8021c2ae5316f1ab8003e8d08ed645911d63",
+          "name": "main.js",
+          "size": 467380
+        },
+        {
+          "digest": "sha256:e299028655b14ce164cfe07e22b421a3675869bc219a2d49c453c51e5e11b879",
+          "name": "manifest.json",
+          "size": 390
+        },
+        {
+          "digest": "sha256:8051b5d28f3239fdbdd9ff08722fb1a032ebf9e3176938cf95ca37010ab5c155",
+          "name": "styles.css",
+          "size": 38947
+        }
+      ],
+      "author": "davadev",
+      "description": "## What's in 0.3.2\n\nThree things in one release:\n\n### Zero lint warnings\n\n`npm run lint` (the local Obsidian-parity check from PR #9) now reports **0 errors / 0 warnings** across the production source. The typing pass that did the bulk:\n\n- Structural `PluginDataBlob` interface routes every `loadData()` site through one typed wrapper, killing the no-unsafe-* cluster at its root.\n- `App.plugins` and `Intl.Segmenter` get real types (the latter via `tsconfig.lib += ES2022.Intl`); two `@ts-ignore` lines disappear from `main.ts`, `TokenizerService` keeps the same behavior with a cleaner type.\n- JSON.parse callsites cast at source: LLM responses, the settings-mirror envelope, the token cache, the triage-context cache.\n- 35 Promise warnings cleared via `void` prefixes or sync arrow + IIFE wraps on `addEventListener` / dropdown `onChange` handlers.\n- 8 iOS-blocked deprecations (`setWarning` / `display`) carry per-line `eslint-disable @typescript-eslint/no-deprecated -- iOS Obsidian is on 1.12.7…` comments with the explicit 1.13.0 ceiling rationale.\n\nThe plugin is no longer at risk of regressing into a delisting cycle when the cloud auto-review runs.\n\n### Daily auto-story dedup across devices\n\nPreviously, three devices on the same vault would each generate a daily story because the \"did today\" flag lived in per-device `data.json`. `tickAutoStory` now:\n\n1. Scans the configured story folder for any file whose basename starts with `${today} - ` (the same prefix `commitPreviewAsNote` writes).\n2. If found → marks today complete in local state and exits.\n3. If not → marks the attempt, sleeps 3 minutes as a sync buffer (so a story written by another device has time to land via remotely-save / iCloud), then re-checks before generating.\n\nThree-device users get one story per day instead of three.\n\n### Stats dashboard checkboxes persist\n\nProgress chart series + HSK coverage bucket toggles previously lived as in-memory instance fields on `StatsView` — closing the tab wiped any non-default choice. They now live in `CciSettings.progressChartSeries` and `CciSettings.hskCoverageBuckets`, default to the old in-memory values, and route through `saveSettings()` so they survive a tab reopen *and* propagate through the settings mirror to other devices.\n\nCoverage: new `statsViewPersistence.test.ts` (3 tests) checks the defaults, a JSON save→reload roundtrip, and the settings-mirror filter.",
+      "draft": false,
+      "name": "0.3.2 — zero lint warnings, daily-story dedup, persisted Stats checkboxes",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T08:30:49Z",
+      "tag": "0.3.2"
+    },
     {
       "assets": [
         {
