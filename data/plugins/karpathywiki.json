@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-18T05:04:58.654Z",
-  "lastFetchedAt": "2026-06-18T05:04:58.654Z",
+  "lastChangedAt": "2026-06-19T05:01:58.603Z",
+  "lastFetchedAt": "2026-06-19T05:01:58.603Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,89 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.19.1"
+    "version": "1.20.2"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:58f34e11afa7b4c313fee277b6f3cf55390854e02e029393297e7f0eadf665cc",
+          "name": "main.js",
+          "size": 828238
+        },
+        {
+          "digest": "sha256:cc6db768d5aa78287b13dc3aaa368d68d85180cf9c103787c103ed3fe98d97eb",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
+          "name": "styles.css",
+          "size": 11779
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\n- **🔧 Anthropic fallback fix (PR #151).** Anthropic Messages API only accepts `user`/`assistant` roles in the messages array — system instructions must be a top-level field. Previous fallback retry paths (prefill rejection, thinking-control fallback) incorrectly injected `{role: 'system'}` into messages, causing a second 400 that masked the real fix. All 4 Anthropic fallback paths now correctly keep system as a top-level parameter. Contributed by @Indexed-Apogrypha.\n- **🔧 Anthropic prefill detection (Issues #141, #147).** Claude Opus 4.8, 4.7, 4.6, Sonnet 4.6, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview reject assistant message prefilling with 400. The plugin now detects this specific error and retries without prefill. Applied to both `AnthropicClient` and `AnthropicCompatibleClient`.\n\n### Fixed\n\n- Anthropic fallback retry injected `{role: 'system'}` into messages array — Anthropic API rejects non-user/assistant roles in messages; system must be top-level (PR #151)\n- AnthropicClient prefill rejection not detected — `requestUrl` discards response body on 4xx; now uses specific error string matching (#141, #147)\n- AnthropicCompatibleClient same prefill detection issue — both clients now share the same fix\n\n### Tests\n\n- **779 tests passing** (was 771), 52 test files, 0 regressions\n- New test suite: Anthropic API simulator — validates full fallback chain including system prompt handling, prefill rejection, thinking-control fallback\n\n### Contributors\n\n- **@green-dalii** — multiple hotfix iterations, throw:false investigation, revert for clean author PR merge\n- **@Indexed-Apogrypha** — reported Anthropic 400 regression (#141, #147), identified the system-role-in-messages root cause, contributed PR #151 with Anthropic API simulator tests\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the Assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nNo configuration changes required. The fix is automatic — Anthropic fallback paths now correctly keep system instructions as a top-level field.\n\n**Affected models:** Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview.\n\n**Unaffected models:** All non-Anthropic providers (DeepSeek, OpenAI, Gemini, OpenRouter, etc.) and Claude Opus 4.5 and earlier.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.0...1.20.2\n",
+      "draft": false,
+      "name": "1.20.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T03:23:08Z",
+      "tag": "1.20.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0b060dcd2321b025cd7d6be4a2ec27d53b49828c5e42dd92bd7a560ed76a1638",
+          "name": "main.js",
+          "size": 827705
+        },
+        {
+          "digest": "sha256:795d91759727ead8932d6115f7b00480e4d8fc1eb6f1b9a24168c2c0a3307bf4",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
+          "name": "styles.css",
+          "size": 11779
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\r\n\r\n### Fixed\r\n\r\n- **AnthropicClient prefill rejection on newer Claude models (Issues #141, #147).** Claude Opus 4.8, 4.7, 4.6, Sonnet 4.6, Claude Fable 5, Claude Mythos 5, and Claude Mythos Preview do not support assistant message prefilling. When `response_format=json_object` is requested, both `AnthropicClient` and `AnthropicCompatibleClient` previously added `{ role: 'assistant', content: '{' }` unconditionally — newer models return `400 \"Prefilling assistant messages is not supported for this model.\"` Fix: detect this specific 400, cache the rejection per-client, and auto-retry without prefill. Subsequent requests to the same client skip prefill entirely. The existing brace-prefix and `parseJsonResponse` repair logic handles non-prefill responses robustly. See [Anthropic API Errors](https://platform.claude.com/docs/en/api/errors#common-validation-errors) for the full list of affected models.\r\n\r\n### Tests\r\n\r\n- **775 tests passing** (was 771), 52 test files, 0 regressions\r\n- New test suite: `llm-client-anthropic-prefill` (4 tests)\r\n\r\n### Contributors\r\n\r\n- **@green-dalii** — implementation + 4 regression tests\r\n- **@Indexed-Apogrypha** — reported Anthropic 400 regression on Claude Opus 4.8 (#141, #147)\r\n\r\n---\r\n\r\n## Installation\r\n\r\n### From Community Plugins (Recommended)\r\n\r\n1. Open Obsidian → **Settings** → **Community plugins**\r\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\r\n3. Click **Install**, then **Enable**\r\n\r\n### Or from the Community Plugin Website\r\n\r\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\r\n\r\n### Manual Installation\r\n\r\nDownload `main.js`, `manifest.json`, and `styles.css` from the assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\r\n\r\n## Configuration\r\n\r\nNo configuration changes required. The fix is automatic — if your Anthropic model rejects assistant prefill, the plugin detects it and retries without prefill. No settings to toggle.\r\n\r\n**Affected models:** Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview.\r\n\r\n**Unaffected models:** Claude Opus 4.5 and earlier, Claude Sonnet 4.5 and earlier (prefill works as before).\r\n\r\n---\r\n\r\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.0...1.20.1\r\n",
+      "draft": false,
+      "name": "1.20.1",
+      "prerelease": true,
+      "publishedAt": "2026-06-18T16:15:45Z",
+      "tag": "1.20.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:849f18140e52fe59d17194c959b7622fd05bc54ca0fbf1f6331ec75293d60cd2",
+          "name": "main.js",
+          "size": 823597
+        },
+        {
+          "digest": "sha256:f338b8125a40f29f01da7dd44421672641ab454a6b876ec87d894a3c2c50f09e",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
+          "name": "styles.css",
+          "size": 11779
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\n- **🧠 Provider-first thinking control.** The plugin no longer sends provider-specific thinking-control fields by default (`disableThinking` defaults to `false`). The provider decides its own reasoning behavior. Users who explicitly want to suppress thinking can enable \"Disable thinking\" in Custom Advanced Settings, which triggers a 3-tier dialect fallback (thinking.type → reasoning_effort → none). This eliminates HTTP 400 errors on OpenAI, Gemini, Ollama, MiniMax, and other providers that reject thinking-control fields.\n- **💭 Collapsible thinking UI.** When thinking-capable models (DeepSeek, etc.) return reasoning content, it is displayed in a collapsed panel above the answer, ChatGPT/Claude.ai style. Users can expand to inspect reasoning steps. Fully localized in 8 languages.\n- **🔧 Anthropic baseUrl fix (Issues #141, #134).** `AnthropicClient` now normalizes `/v1` in the base URL, preventing 404 errors on Test Connection. Custom Anthropic-compatible endpoints work correctly.\n- **🔧 gpt-5 max_completion_tokens (Issue #143).** GPT-5 series models now use `max_completion_tokens` instead of `max_tokens`. Truncation retry also preserves the correct token key.\n- **💬 Query Wiki UX.** Respects user-configured `wikiFolder` (no longer hardcoded `wiki/`). Chat auto-scrolls to bottom on open. User message bubbles are right-aligned.\n\n### Added\n\n- `extractThinkingBlocks()` pure function — extracts think and thinking blocks from LLM responses\n- `wrapReasoningContent()` — encodes reasoning_content into think tags with nested-tag escaping\n- `renderThinkingBlocksUI()` — DOM construction for collapsible thinking panel\n- DeepSeek `reasoning_content` extraction in SSE parser (streaming + non-streaming paths)\n- `PROTECTED_FIELDS` whitelist (`model`, `messages`, `stream`) to prevent accidental stripping by `unsupportedFields`\n- v1.20.0 migration: old users automatically get `disableThinking=false` and `advancedSettingsMode=default`\n\n### Changed\n\n- Default `disableThinking` flipped from `true` to `false` (provider decides thinking behavior)\n- All 22 LLM call sites now use consistent `enableThinking` spread pattern\n- `isGpt5` prefix check tightened: exact match or `startsWith('gpt-5-')`\n- `.includes` guard for thinking tags is now case-insensitive\n- Settings UI: Default/Custom mode descriptions updated for new semantics\n\n### Fixed\n\n- Truncation retry `extractText` now preserves `reasoning_content` from retry responses\n- Streaming path missing final `renderMarkdownContent` call (thinking content was never rendered)\n- Non-streaming fallback missing `chatTemperature` parameter\n- `if (fullResponse)` dropping empty-string responses (changed to null guard)\n- `activeDocument` null guard in `renderThinkingBlocksUI`\n- `wrapReasoningContent` escaping of nested closing tags inside reasoning content\n\n### Tests\n\n- **771 tests passing** (was 728), 51 test files, 0 regressions\n- New test suites: llm-client-v120-default (12), llm-client-v120-fallback (5), thinking-blocks (10), query-thinking-ui (8), prompt-hardcode (4), llm-path (16), settings-thinkcache (8)\n\n### Contributors\n\n- **@green-dalii** — all v1.20.0 code (provider-first thinking, reasoning UI, hotfixes, 10 code-review fixes)\n- **@Indexed-Apogrypha** — reported Anthropic 400/404 errors (#141)\n- **@wwc559** — reported Anthropic 404 error (#134)\n- **@DocTpoint** — provided workaround diagnosis for Anthropic endpoint issue (#134)\n- **@artemn0va** — reported OpenAI gpt-5-mini/gpt-4o-mini 400 errors (#143)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nAfter enabling the plugin:\n\n1. Open **Settings** → **Karpathy LLM Wiki**\n2. Select a provider and enter your API key\n3. Click **Test Connection**, then **Save Settings**\n\n**New in v1.20.0:** The Default Advanced Settings mode sends no thinking-control fields — the provider decides its own behavior. Switch to Custom mode only if you need explicit control over thinking, temperature, or repetition penalty.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.19.1...1.20.0\n",
+      "draft": false,
+      "name": "1.20.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-18T08:32:46Z",
+      "tag": "1.20.0"
+    },
     {
       "assets": [
         {
