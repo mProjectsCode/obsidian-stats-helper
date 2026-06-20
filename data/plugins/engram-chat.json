@@ -4,8 +4,8 @@
   "description": "The AI that remembers you. A personal intelligence with persistent memory, multi-provider AI, and full vault access. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "engram-chat",
-  "lastChangedAt": "2026-06-17T07:04:58.578Z",
-  "lastFetchedAt": "2026-06-17T07:04:58.578Z",
+  "lastChangedAt": "2026-06-20T07:04:32.399Z",
+  "lastFetchedAt": "2026-06-20T07:04:32.399Z",
   "manifest": {
     "author": "PixelAnay",
     "authorUrl": "https://github.com/PixelAnay/Engram",
@@ -14,11 +14,110 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Engram Chat",
-    "version": "5.0.42"
+    "version": "5.0.46"
   },
   "name": "Engram Chat",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:3895023b1d5e5e06096159f7b7faba59e4f851e6dd4ca410b01f48ad47584665",
+          "name": "main.js",
+          "size": 3722891
+        },
+        {
+          "digest": "sha256:0bce8205b52028d752f58c1f609cd11971d555791f232f6974f47785e8269830",
+          "name": "manifest.json",
+          "size": 378
+        },
+        {
+          "digest": "sha256:3c26bf0cef1344b9792f3504ac13428321d15d8960081090b14343d62dc4e26f",
+          "name": "styles.css",
+          "size": 45949
+        }
+      ],
+      "author": "PixelAnay",
+      "description": "## What's Changed in 5.0.46\\n\\n### ⌨️ Autocomplete Selection via Enter / Tab\\n- Fixed an issue where navigating to files using the @ mention dropdown and pressing Enter or Tab did nothing. Selecting highlighted files keyboard-wise now behaves identically to clicking them.\\n\\n### 📄 Text and Markdown Attachments Support\\n- Enabled attaching external .txt, .md, .json, .js, .ts, and other text-based files using the attachment feature.\\n- Read files as plain text instead of base64 data URLs to prevent API crashes, and formatted their contents cleanly inline within the LLM prompt inside markdown code blocks.\\n\\n### 📥 Drag & Drop File Attachments\\n- Added full Drag & Drop support to the sidebar chat panel. Users can drag and drop any supported files (images, PDFs, text, markdown files) directly onto the panel to attach them.\\n- Included a beautiful, animated, pulse-glow overlay that appears when dragging files over the chat panel.",
+      "draft": false,
+      "name": "5.0.46 - Autocomplete Selection Fix, Text Attachments & Drag & Drop",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T20:17:29Z",
+      "tag": "5.0.46"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6765a7b9e7fe2b4a9caed4917b7f32ef3d4028cccf67220ffaf7244886afc6e9",
+          "name": "main.js",
+          "size": 3720123
+        },
+        {
+          "digest": "sha256:f8898acda96d8e6079b0f791c0337c51b849fdbbefd5636930eabe4563da1350",
+          "name": "manifest.json",
+          "size": 378
+        },
+        {
+          "digest": "sha256:bb5a37cf5a33e12e77429f844e160f55ed25df3127b538766e293849031433cd",
+          "name": "styles.css",
+          "size": 44916
+        }
+      ],
+      "author": "PixelAnay",
+      "description": "## What's Changed in 5.0.45 💾 Softened Memory Path Redirect for read_note\r\n- Allowed the AI to perform \r\nread_note on the memory path if it specifically needs to verify same-turn modifications (e.g. immediately after a save_memory or delete_memory call).\r\n- The tool output still includes an informational warning that memory is already loaded in the system context to deter unnecessary reads, but it now appends the live, current content of memory.md so lookup succeeds in the same turn.\r\n🔄 Stated Turn-Refreshing of Memory\r\n- Clarified in context.ts system prompt memory instructions that the memory block is reloaded fresh at the start of every message turn.",
+      "draft": false,
+      "name": "5.0.45 - Memory Read Softening & Turn Refresh Instruction",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T20:09:37Z",
+      "tag": "5.0.45"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:143fb3d9274bfeb370838972bf2b44c3de56482f4b4305d8b954b7222161129e",
+          "name": "main.js",
+          "size": 3719546
+        },
+        {
+          "digest": "sha256:f635892e9c8ad1bc4e92cccfe6a0188034eca6e99513d7e4a772b9db0bab71ca",
+          "name": "manifest.json",
+          "size": 378
+        },
+        {
+          "digest": "sha256:bb5a37cf5a33e12e77429f844e160f55ed25df3127b538766e293849031433cd",
+          "name": "styles.css",
+          "size": 44916
+        }
+      ],
+      "author": "PixelAnay",
+      "description": "## What's Changed\n\n### Memory Storage Guardrails (Stricter)\n- The AI is now explicitly told that memory.md is the **ONE AND ONLY** location for storing personal facts. It must never save memories to any other note or folder.\n- System prompt now contains a dedicated **Memory Rules** section with both storage and lookup rules clearly stated.\n- \read_note called on the memory file path now returns a redirect message instead of raw content, preventing redundant reads.\n\n### Memory-First Lookup (More Efficient)\n- The AI is instructed to check the **already-loaded memory block first** before calling search_vault or \read_note for any personal/preference queries.\n- search_vault tool description updated: explicitly states it should NOT be used for memory lookups.\n- \read_note tool description updated: explicitly states it should NOT be used to read the memory file or look up personal facts.\n- Memory block header now includes: *'This memory is already loaded — do NOT use search_vault or read_note to look up the memory file again.'*\n\nThese changes reduce unnecessary tool calls and prevent the AI from getting confused about where memories are stored.",
+      "draft": false,
+      "name": "5.0.44 - Stricter Memory Location Enforcement",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T20:03:03Z",
+      "tag": "5.0.44"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:94de588bb59fae2c0826ebe60daf9cfcdab46ca8ef646ec1110c63885e2f7af0",
+          "name": "main.js",
+          "size": 3711123
+        },
+        {
+          "digest": "sha256:7f08918e3d6c41838fd81e44ec216ed9d276a8a76872d088a24e5e47e863ad9d",
+          "name": "manifest.json",
+          "size": 378
+        }
+      ],
+      "author": "PixelAnay",
+      "description": "Fix 400 error on strict OpenAI-compatible providers (DeepSeek, Qwen, etc.) caused by assistant messages with null content after tool-only responses.",
+      "draft": false,
+      "name": "5.0.43",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T18:36:00Z",
+      "tag": "5.0.43"
+    },
     {
       "assets": [
         {

@@ -4,8 +4,8 @@
   "description": "Map and work through the contradictions in your vault: tensions, tradeoffs, and conflicting goals organized in 5 layers via frontmatter, with an AI Contradiction Hunter and PDF concept extraction. Works with cloud APIs or fully local models. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "antinomia",
-  "lastChangedAt": "2026-06-18T06:02:58.562Z",
-  "lastFetchedAt": "2026-06-17T07:04:58.578Z",
+  "lastChangedAt": "2026-06-20T07:04:32.399Z",
+  "lastFetchedAt": "2026-06-20T07:04:32.399Z",
   "manifest": {
     "author": "Giuseppe De Martino",
     "authorUrl": "https://github.com/demartinogiuseppe",
@@ -14,11 +14,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Antinomia",
-    "version": "1.7.7"
+    "version": "1.7.9"
   },
   "name": "Antinomia",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:3c3c32023e7e84a6f42f085815dbb8a5dc4d39a24947bea36e861b13ef8363d6",
+          "name": "main.js",
+          "size": 846511
+        },
+        {
+          "digest": "sha256:6114b4ff51c67287b70f73a9de2d9c5c900f31c4b29bb40574da49612f82766e",
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:f94180918006ba163bf860000c0d28d64f2d6538483b89abba0e784800bb5bce",
+          "name": "styles.css",
+          "size": 90079
+        }
+      ],
+      "author": "demartinogiuseppe",
+      "description": "## Antinomia v1.7.9 — Hotfix: restore store availability\n\n### Fixed\n- **Critical:** v1.7.8 used `ButtonComponent.setDestructive()`, which is newer than the declared `minAppVersion` (1.7.2). The community store's automated check flagged it as an unsupported-API error and the plugin disappeared from the public store. Reverted to `setWarning()` (deprecated but compatible with 1.7.2) on 5 buttons:\n  - Delete examples (`main.ts`)\n  - Reset onboarding (`main.ts`)\n  - Stop (`AIProgressModal`)\n  - Mark as undermined (`CollapseImpactModal`)\n  - Stop (`PdfAnalyzingModal`)\n\n### Note\n`setWarning()` is a soft Recommendation (deprecated) in the store scorecard — the same state as v1.7.7, the last version that passed the store check. Moving to `setDestructive()` would require bumping `minAppVersion`; deferred to keep Obsidian 1.7.2–1.12.x users supported.\n\n### Install\n- **Community store:** Settings → Community plugins → Browse → \"Antinomia\".\n- **BRAT:** add `demartinogiuseppe/antinomia`.\n",
+      "draft": false,
+      "name": "1.7.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-18T16:56:13Z",
+      "tag": "1.7.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c0ce0c5e738b5180369c768160650f4dbd9c87a2fee5f919d0fb8a1858b0f5a",
+          "name": "main.js",
+          "size": 846531
+        },
+        {
+          "digest": "sha256:5e8640c0dd6c6e5eae72be4c98abbf8d02ab0e1443f75327da3ce142fef84af8",
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:f94180918006ba163bf860000c0d28d64f2d6538483b89abba0e784800bb5bce",
+          "name": "styles.css",
+          "size": 90079
+        }
+      ],
+      "author": "demartinogiuseppe",
+      "description": "## Antinomia v1.7.8 — Residual store-warning cleanup\n\nInternal type / API / dependency tidy-up. No user-visible runtime changes.\n\n### Changed\n- `core/utils.ts`: `todayISO()` / `timestampId()` now use native `Date` instead of Obsidian's `moment` re-export — clears 6 unsafe-any warnings caused by `moment`'s unresolvable type. Local time, identical output.\n- Replaced the 2 remaining `window.confirm()` calls with `ConfirmModal` (clipboard YouTube-URL prompt, long-PDF truncation prompt). Added a backward-compatible promise helper `ConfirmModal.confirm()` so the flows stay linear.\n- Replaced deprecated `setWarning()` with `setDestructive()` (5 sites).\n- Removed an unnecessary regex escape in `parseResponse`.\n- Dependencies: dropped `builtin-modules` (esbuild now uses Node's native `node:module` builtins) and `js-yaml` (test-only; swapped to `yaml`). Shipped `main.js` unaffected.\n\n### Deliberately not changed\n- Deprecated `display()` settings API is kept: its replacement `getSettingDefinitions` requires Obsidian 1.13.0, while `minAppVersion` is 1.7.2 — Obsidian officially supports `display()` as the fallback for older versions.\n- The vault-enumeration and clipboard-access disclosures are intrinsic to the Contradiction Hunter and clipboard-substrate features.\n\n### Install\n- **Community store:** Settings → Community plugins → Browse → \"Antinomia\".\n- **BRAT:** add `demartinogiuseppe/antinomia`.\n",
+      "draft": false,
+      "name": "1.7.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-17T17:02:15Z",
+      "tag": "1.7.8"
+    },
     {
       "assets": [
         {
@@ -1483,6 +1535,6 @@
       "tag": "v1.2.0"
     }
   ],
-  "removedAt": "2026-06-18T06:02:58.562Z",
+  "removedAt": null,
   "repo": "demartinogiuseppe/antinomia"
 }
