@@ -1,0 +1,103 @@
+{
+  "author": "4arlz",
+  "defaultBranch": "main",
+  "description": "Generate and manage movie-related notes in Obsidian using IMDb identifiers or movie titles. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "popcorn-md",
+  "lastChangedAt": "2026-06-17T07:04:58.578Z",
+  "lastFetchedAt": "2026-06-17T07:04:58.578Z",
+  "manifest": {
+    "author": "4arlz",
+    "authorUrl": "https://github.com/VitaliiRomanenko",
+    "description": "Generate and manage movie-related notes using IMDb identifiers or movie titles.",
+    "id": "popcorn-md",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.5.0",
+    "name": "Popcorn MD",
+    "version": "0.2.0"
+  },
+  "name": "Popcorn MD",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ba9c66623f385a56d87d01c6a169f98ad8035d3b1a818657baf896b978056c41",
+          "name": "main.js",
+          "size": 24122
+        },
+        {
+          "digest": "sha256:46f16f6a452107197e83f01996d4e55167fa623919f5bdfd514f4e15a19014b0",
+          "name": "manifest.json",
+          "size": 294
+        },
+        {
+          "digest": "sha256:b07cd32508f0a0d52f64e9a0ebdf50d8968a393a044ed5f81c2390b9a24c4387",
+          "name": "styles.css",
+          "size": 2029
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Release v0.2.0\r\n\r\n### 🚀 New Features\r\n\r\n- **Default folder setting**: Added a setting to specify where movie notes are saved. Notes are now created in the configured folder instead of the vault root.\r\n- **Adult content filtering**: Added an \"Adult titles\" toggle in settings to include or exclude adult content in search results.\r\n- **Adult content indicator**: Search results now show a flame icon on movie cards that are marked as adult content.\r\n- **CI/CD pipeline**: Added a GitHub Actions workflow for automated releases. When a tag is pushed, it builds the plugin, creates a release, and attaches the artifacts (`main.js`, `manifest.json`, `styles.css`).\r\n\r\n### 🔧 Improvements\r\n\r\n- **Refactored settings tab**: Extracted individual setting components into separate files (`APIKeySetting.ts`, `AdultSetting.ts`, `DefaultFolder.ts`, `LangugeSetting.ts`, `TemplateFileSetting.ts`) for better code organization.\r\n- **Moved compiled output**: The build process now outputs files to a `release/` directory to keep the repository clean.\r\n- **Updated build script**: The production build now copies `manifest.json` and `styles.css` to the `release/` directory.\r\n- **Type improvements**: Replaced the separate `PluginsSettings` interface with the shared `PopcornMDSettings` interface across API service classes.\r\n- **UI polish**: Added relative positioning on movie cards and constrained overview text width for better layout.\r\n\r\n### 🐛 Bug Fixes\r\n\r\n- Fixed a typo in the event handler (removed unnecessary semicolons after if statements).",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T18:00:01Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e2936108b2f0e14a9909300d752a1260dfba75cb64700d19a316c9e3d573de9e",
+          "name": "main.js",
+          "size": 133622
+        },
+        {
+          "digest": "sha256:b41d9c1b2429cee9c53e4925db782a7efac5c5faaefa04172fb9248e4e77620b",
+          "name": "manifest.json",
+          "size": 294
+        },
+        {
+          "digest": "sha256:9856a13cf33d25e9abf7fe568d16a1796771db016a577454bde1edf19120ceba",
+          "name": "styles.css",
+          "size": 1876
+        }
+      ],
+      "author": "VitaliiRomanenko",
+      "description": "Release Notes — Bug Fixes\r\n\r\n**Version:** 0.1.1  \r\n**Date:** 2026-06-13  \r\n**Author:** Vitalii Romanenko\r\n\r\n---\r\n\r\n### Summary\r\n\r\nThis release fixes multiple security, typing, and Obsidian compatibility issues. The focus is on eliminating unsafe DOM operations, replacing direct network calls with Obsidian APIs, improving TypeScript types and validation, and moving inline styles into CSS classes. These changes increase safety, maintainability, and reliability across normal and popout windows.\r\n\r\n---\r\n\r\n### Fixed issues\r\n\r\n- **DOM safety**\r\n    \r\n    - Replaced unsafe `innerHTML` and direct HTML assignments with element creation via `document.createElement`and safe text insertion using `textContent`.\r\n        \r\n    - Ensured no unvalidated HTML is injected into the UI.\r\n        \r\n    - **Files affected:** `src/views/MovieCard.ts`.\r\n        \r\n- **Styles**\r\n    \r\n    - Removed direct style assignments and inline style mutations.\r\n        \r\n    - Introduced CSS classes and used `setCssProps` / `setCssStyles` where appropriate.\r\n        \r\n    - **Files affected:** `src/settings/settings.ts` (lines referenced previously).\r\n        \r\n- **ESLint directives and explicit any**\r\n    \r\n    - Removed undocumented directive comments and disallowed `eslint-disable` for `@typescript-eslint/no-explicit-any`.\r\n        \r\n    - Replaced `any` with concrete types or narrowed types with validation where possible.\r\n        \r\n    - Added explanatory comments for any remaining, narrowly scoped exceptions.\r\n        \r\n    - **Files affected:** `src/settings/suggester/suggest.ts`.\r\n        \r\n- **Network requests**\r\n    \r\n    - Replaced `fetch` usage with Obsidian `requestUrl` to align with platform expectations and improve error handling.\r\n        \r\n    - Added response validation and error handling for network calls.\r\n        \r\n    - **Files affected:** `src/api/tmdbAPIService.ts`.\r\n        \r\n- **Type safety and any usage**\r\n    \r\n    - Introduced interfaces for TMDB responses and other external data structures.\r\n        \r\n    - Added runtime checks before accessing properties on external responses.\r\n        \r\n    - Converted unsafe `any` usages to typed models or validated structures.\r\n        \r\n    - **Files affected:** `src/api/tmdbAPIService.ts`, `src/api/tmdbMovieService.ts`, `src/api/tmdbGenreService.ts`, `src/views/searchModal.ts`, `src/settings/suggester/suggest.ts`.\r\n        \r\n- **Obsidian compatibility**\r\n    \r\n    - Replaced global `document` usage with `activeDocument` or appropriate Obsidian APIs to support popout windows.\r\n        \r\n    - **Files affected:** `src/settings/settings.ts`, `src/views/MovieCard.ts`.\r\n        \r\n- **Async handling**\r\n    \r\n    - Ensured promises are awaited or explicitly handled with `.catch` or `void` where intentional.\r\n        \r\n    - Fixed functions that returned promises in contexts expecting `void`.\r\n        \r\n    - **Files affected:** `src/settings/settings.ts`, `src/settings/suggester/suggest.ts`, `src/views/searchModal.ts`.\r\n        \r\n- **API usage and suggestions**\r\n    \r\n    - Migrated custom TextInputSuggest implementation toward the recommended `AbstractInputSuggest` API.\r\n        \r\n    - Added tests and validation for suggestion behavior.\r\n        \r\n    - **Files affected:** `src/settings/suggester/suggest.ts`.\r\n        \r\n\r\n---\r\n\r\n### Changed files\r\n\r\n- `src/views/MovieCard.ts` — safe DOM updates, removed `innerHTML`, use of `activeDocument`.\r\n    \r\n- `src/settings/settings.ts` — moved inline styles to classes, fixed async usage, replaced `document` with `activeDocument`.\r\n    \r\n- `src/settings/suggester/suggest.ts` — removed undocumented ESLint disables, improved typing, migrated toward `AbstractInputSuggest`.\r\n    \r\n- `src/api/tmdbAPIService.ts` — replaced `fetch` with `requestUrl`, added response types and validation.\r\n    \r\n- `src/api/tmdbMovieService.ts` — added interfaces, safe mapping and field checks.\r\n    \r\n- `src/api/tmdbGenreService.ts` — added typing and validation.\r\n    \r\n- `src/views/searchModal.ts` — fixed promise handling and tightened types.\r\n    \r\n\r\n---\r\n\r\n### Developer notes\r\n\r\n- **API types:** New interfaces live in `src/types` or the designated types folder. Always validate external responses before accessing fields.\r\n    \r\n- **Styles:** New CSS classes are added to the plugin stylesheet. Avoid inline styles and prefer class-based styling or `setCssProps` / `setCssStyles`.\r\n    \r\n- **ESLint:** If an exception is required, scope it narrowly and include a clear comment explaining why the rule is disabled.\r\n    \r\n- **Obsidian APIs:** Use `requestUrl` for network requests and `activeDocument` for DOM access in popout contexts.\r\n    \r\n\r\n---\r\n\r\n### Testing and verification\r\n\r\n- **Unit tests:** Added tests for TMDB response parsing and suggestion component behavior.\r\n    \r\n- **Manual tests:** Verified UI behavior in both main and popout windows, confirmed no unvalidated HTML insertion, and tested error handling for network failures.\r\n    \r\n- **Security checks:** Confirmed removal of unsafe `innerHTML` usage and validated that user-provided content is never injected as raw HTML.\r\n    \r\n\r\n---\r\n\r\n### Known limitations\r\n\r\n- Some external responses remain loosely typed due to variability in third-party API payloads. Additional validation and stricter schemas will be added in future releases.\r\n    \r\n- Minor refactors remain to fully eliminate all legacy `any` usages across the codebase.\r\n    \r\n\r\n---\r\n\r\n**Summary**  \r\nThis release addresses critical security and compatibility issues, improves TypeScript safety, and aligns the codebase with Obsidian best practices to make the plugin safer and more robust.",
+      "draft": false,
+      "name": "0.1.1 BugFix",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T18:17:22Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8f62c9590f208409613ea3f445d7ae1a2f087a93fe2aa9f6847f7b3c6efd05b3",
+          "name": "main.js",
+          "size": 346815
+        },
+        {
+          "digest": "sha256:996049d352e44023a51b17fd2360a740b7a1851207012d9926f6dee6135c58d7",
+          "name": "manifest.json",
+          "size": 306
+        },
+        {
+          "digest": "sha256:4f8fbd74b1b2213454a337845fb6e0d2b4177e61427292f90166d064e5308c4e",
+          "name": "styles.css",
+          "size": 1838
+        }
+      ],
+      "author": "VitaliiRomanenko",
+      "description": "# 🎉 PopcornMD v0.1.0 — First Release\r\n\r\nWe’re excited to announce the very first release of **PopcornMD**, an Obsidian community plugin that brings your movie collection to life inside your notes.\r\n\r\nThis initial version focuses on core functionality: searching movies and TV shows via TMDb and generating structured notes directly in Obsidian.\r\n\r\n---\r\n\r\n## 🚀 Features\r\n\r\n- **Search by title or IMDb ID** — Quickly find any movie or show.\r\n    \r\n- **Auto-generated notes** — Create Obsidian notes pre-filled with metadata (title, year, genres, poster, synopsis, rating, cast, etc.).\r\n    \r\n- **Customizable templates** — Design your own note layout using placeholders.\r\n    \r\n- **Minimal UI** — Clean modal search interface for distraction-free workflow.\r\n    \r\n\r\n---\r\n\r\n## ⚙️ Installation\r\n\r\n### From Obsidian Community Plugins (coming soon)\r\n\r\n- Browse for **PopcornMD** in Obsidian’s Community Plugins list.\r\n    \r\n\r\n### Manual (developer preview)\r\n\r\n1. Download the latest release from Releases.\r\n    \r\n2. Extract `main.js`, `manifest.json`, and `styles.css` into: `<vault>/.obsidian/plugins/popcornmd/`\r\n    \r\n3. Reload Obsidian and enable the plugin in **Settings → Community plugins**.\r\n    \r\n\r\n---\r\n\r\n## 🛠 Getting Started\r\n\r\n1. Obtain a **TMDb API key** from [[themoviedb.org](https://www.themoviedb.org/signup)](https://www.themoviedb.org/signup).\r\n    \r\n2. Open **Settings → Popcorn MD**.\r\n    \r\n3. Select your **template file**.\r\n    \r\n4. Enter your **API key** and save.\r\n    \r\n5. Run the command **“Popcorn MD: Create new movie note”** from the palette or click the 🍿 ribbon icon.\r\n    \r\n6. Choose a movie by title or IMDb ID.\r\n    \r\n7. A new note is generated using your selected template.\r\n    \r\n\r\n---\r\n\r\n## 📋 Commands\r\n\r\n- **Popcorn MD: Create new movie note** — Opens the movie search modal.\r\n    \r\n\r\n---\r\n\r\n## ⚙️ Settings\r\n\r\n- **TMDb API Key** — Required for API access.\r\n    \r\n- **Default language** — Language for movie data.\r\n    \r\n- **Template path** — Path to your custom template file.\r\n    \r\n\r\n---\r\n\r\n## 🧩 Template System\r\n\r\nPopcornMD uses a flexible template system with placeholders (`{{variable}}`) to auto-populate metadata fields. Examples include: `{{title}}`, `{{genres}}`, `{{release_date}}`, `{{overview}}`, `{{poster_path}}`, and more.\r\n\r\nFuture versions will expand template configuration options (e.g., storing arrays as links, lists, or comma-separated strings).\r\n\r\n---\r\n\r\n## 🧑‍💻 Development\r\n\r\n- Node.js 18+\r\n    \r\n- npm\r\n    \r\n- Commands:\r\n    \r\n    - `npm run dev` — Development with watch mode\r\n        \r\n    - `npm run build` — Production build\r\n        \r\n    - `npm run lint` — Linting\r\n        \r\n\r\n---\r\n\r\n## 📜 License\r\n\r\nMIT License.\r\n\r\nThis plugin is not affiliated with TMDb or Obsidian. You must obtain your own API key from TMDb.\r\n\r\n---\r\n\r\n✨ _PopcornMD — Because your movie collection deserves better than plain text._",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T14:15:54Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "vitaliiromanenko/popcorn-md"
+}

@@ -1,0 +1,467 @@
+{
+  "author": "Johannes Kaindl",
+  "defaultBranch": "main",
+  "description": "View and edit JSON files with a Tree/Source toggle. Renders JSON code blocks in Markdown notes. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "json-editor",
+  "lastChangedAt": "2026-06-17T07:04:58.578Z",
+  "lastFetchedAt": "2026-06-17T07:04:58.578Z",
+  "manifest": {
+    "author": "Johannes Kaindl",
+    "authorUrl": "https://github.com/johannes-kaindl",
+    "description": "View and edit JSON files with a Tree/Source toggle. Renders JSON code blocks in Markdown notes.",
+    "id": "json-editor",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.5.7",
+    "name": "JSON Editor",
+    "version": "1.9.0"
+  },
+  "name": "JSON Editor",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2a90bd1e7c3d0993868478970552208695766b73cef79f287a6535710115c6eb",
+          "name": "main.js",
+          "size": 86935
+        },
+        {
+          "digest": "sha256:d8dcfaaec636cec1c7bbcd7305c2a85b3ce67aaea8a36559277424feb3ec3ea3",
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Eval-free JSON Schema validation + a clean community-review report.** Replaces the Ajv validator with the eval-free [`@cfworker/json-schema`](https://github.com/cfworker/cfworker), and drives the type-aware ESLint findings from the `community.obsidian.md` review to zero. The plugin bundle is ~52% smaller.\n\n### Changed\n- **JSON Schema validation now uses `@cfworker/json-schema` instead of Ajv.** It is an eval-free, tree-walking validator (no `new Function` / no `eval`), so the automated review's \"dynamic code execution\" disclosure no longer applies. The bundle drops from ~176 KB to ~85 KB. Supported drafts are a superset of before (draft-04/07/2019-09/2020-12 vs. draft-07-only); the public validation contract (inline row errors + the error-count banner) is unchanged.\n- **`format` keywords are now enforced.** The previous Ajv build ran without `ajv-formats`, so `format` (`email`, `uri`, `date-time`, …) was a no-op annotation. The new validator enforces formats in draft-07 mode, so a value that violates a `format` constraint in an (opt-in) companion schema now reports an error. A structurally malformed companion schema (e.g. `{\"type\": 123}`) is still rejected via draft-07 meta-validation; a merely cosmetic, non-URI `$id` no longer disables validation for the whole file.\n\n### Fixed\n- **The community-review ESLint warnings are now zero.** The review's type-aware linter resolved `obsidian` to the Vitest mock (via a `tsconfig.json` `paths` alias), so every Obsidian-typed expression was flagged as `no-unsafe-*` and one assertion as `no-unnecessary-type-assertion`. The mock alias is gone from `tsconfig.json` (real Obsidian types now resolve), the Vitest mock moved to `tests/__mocks__/`, and the redundant assertions were removed. None of this changes runtime behavior. A committed `npm run lint:portal` guard now mirrors the review so the warnings cannot silently come back.\n\n### Internal\n- Added `tsconfig.test.json` (editor typing of tests against the mock), `eslint.portal.config.mjs` + `npm run lint:portal`, and `src/core/draft07-meta-schema.ts`. The Vitest suite (601 tests) pins the new validator's error granularity and format behavior.",
+      "draft": false,
+      "name": "1.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-16T11:02:56Z",
+      "tag": "1.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8340a398e1a222215592cd3f40f0d5cf634a93e4dd6bc49ba9c82105c478ab56",
+          "name": "main.js",
+          "size": 179778
+        },
+        {
+          "digest": "sha256:a9ba7dc951f42ca9c117b85f57856f905d17c87759be17321882d4e819ff20f4",
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Lint follow-up.** Fixes a regression in 1.8.1's review cleanup.\n\n### Fixed\n- 1.8.1 silenced the `prefer-active-doc` warnings by using the `activeDocument` global, but the community-review's type-aware linter sees `activeDocument` as `any` (it doesn't load Obsidian's ambient global declarations), which cascaded into many `no-unsafe-*` warnings across the UI components. DOM access now goes through a typed `activeDoc(): Document` helper, so call sites stay type-safe (`prefer-active-doc` remains satisfied). Functionally identical; our own `tsc` against the real Obsidian types was clean throughout.",
+      "draft": false,
+      "name": "1.8.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T22:55:30Z",
+      "tag": "1.8.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f42e090d6228f9de81779a104f9d34ad141a9a8746d76b7a49e7037e4c91ed89",
+          "name": "main.js",
+          "size": 180238
+        },
+        {
+          "digest": "sha256:8318aedc7a641afd74c45f28e6bcde9af9c51e7ba615d463aa2301205f312dbf",
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Review cleanup.** Addresses the recommendations and warnings from the Obsidian Community automated review (which had passed with no errors). No user-facing behavior changes — pop-out windows aside.\n\n### Fixed\n- **Pop-out window correctness (audit §2.11).** All DOM creation now uses Obsidian's `activeDocument` (or, in the pure `core/render`, a `Document` injected by the adapter) instead of the global `document`, and element type checks use Obsidian's cross-window-safe `Node.instanceOf`. Rendering a JSON view in a detached window now works correctly. (Resolves ~70 `prefer-active-doc` + 3 `instanceof` review warnings.)\n\n### Changed\n- Replaced the `builtin-modules` build dependency with Node's built-in `module.builtinModules` (one fewer dependency).\n- Removed `!important` from the stylesheet (uses selector specificity instead); made Settings `onChange` handlers non-async (`no-misused-promises`); dropped redundant type assertions.\n\n### Added\n- **Build-provenance attestations** for the release assets (`actions/attest-build-provenance`), so users can cryptographically verify the assets were built from this repo.\n\n### Documentation\n- `SECURITY.md` discloses Ajv's `new Function` schema-compilation (opt-in only; no plugin code uses `eval`/`new Function`) and the clipboard copy behavior.",
+      "draft": false,
+      "name": "1.8.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T22:28:59Z",
+      "tag": "1.8.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:be393e71f04f7df3c4c05f67c1785987481c79f6ea12aaa6f65670a049c21b9c",
+          "name": "main.js",
+          "size": 180058
+        },
+        {
+          "digest": "sha256:52623a6ac6742a712cb89576eee4ffcdad4085664c2f357a8bfdc491248a989f",
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:428a81fd71ce956ad201e051b16802f7bbff51cfa34c74477443e1e6bca1eca5",
+          "name": "styles.css",
+          "size": 27428
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Mobile interaction model.** Tree-mode editing is now fully usable on touch devices, with no dead or invisible affordances. No desktop behavior changes beyond two additive improvements (keyboard reorder, focus-revealed copy button).\n\n### Added\n- **<kbd>Cmd/Ctrl</kbd>+<kbd>E</kbd> toggles Tree/Source** while a JSON view is focused. It's handled by the view-local keymap scope (not a global command hotkey), so it never shadows the core \"Toggle reading view\" binding in Markdown — and the *Toggle tree/source view* command remains for custom rebinding. (Same scope mechanism that already powers <kbd>Cmd/Ctrl</kbd>+<kbd>F</kbd>/<kbd>Z</kbd>/<kbd>Shift</kbd>+<kbd>Z</kbd> inside JSON views.)\n- **Long-press action menu (mobile).** On Obsidian mobile, long-pressing a tree row opens a consolidated menu with *Copy value · Copy path · Rename key · Change type · Move up/down · Delete* — replacing the hover-only inline buttons and drag-and-drop, which don't work on touch (audit §4.2, §4.3, §6.10).\n- **`Alt+ArrowUp` / `Alt+ArrowDown` reorder** the focused row within its parent — a keyboard path for reordering on every platform (previously only mouse drag-and-drop; audit §4.2).\n- **Undo/Redo toolbar buttons on mobile**, with a live disabled state, since there is no hardware `Mod+Z` on touch (audit §4.5).\n\n### Changed\n- On mobile, the hover-revealed inline row actions, copy button and drag handle are no longer rendered (they were invisible-but-tappable — a stray tap could fire an unconfirmed delete) and rows are not marked `draggable` (which collided with touch scroll/long-press); all actions come from the long-press menu instead (audit §4.3, §4.4, §4.8).\n- ≥44px touch targets on mobile across the UI (audit §4.4): the collapse toggle, toolbar icon buttons (undo/redo), search-clear, mode pills, and the value-editing controls (inline text/number/key-rename field, the boolean checkbox, and the \"+ Add key/item\" button). The undo/redo buttons use Obsidian's native `clickable-icon` class for consistent sizing/theming.\n\n### Fixed\n- The copy button is now revealed on `:focus-within`, not just `:hover` (keyboard / touch-laptop access; audit §4.3.1).\n- The type-change menu now also closes on `pointerdown` outside, not only `mousedown`, so it can't get stuck open on touch.\n- **`hidden`-toggled elements stayed visible.** The large-file banner, schema banner, search bar, match-count and search-clear (×) set a `display` value on their class, which overrode the UA `[hidden] { display: none }` (equal specificity) — so `el.hidden = true` didn't hide them (the \"Load tree anyway\" button showed on every file, including small ones; the × showed with an empty query). Added explicit `[hidden]` overrides (the fix already present for the tooltip).\n- The large-file banner's \"Load tree anyway\" button rendered in the wrong (UA-default) font because it set no `font-family`, and read as unstyled/unclear; it now uses the interface font + native Obsidian button styling (comfortable label padding + button shadow), carries an explanatory tooltip, and the banner wraps gracefully on narrow screens. The `+ Add` affordance gained matching padding.\n\n### Toolbar polish (audit §6.1)\n- Removed the redundant Tree/Source **view-header action** — the labeled toolbar toggle and the `toggle-tree-source` command remain the toggle paths.\n- The breadcrumb's current segment is now emphasized by font weight instead of a filled accent chip, so it reads as a path location rather than a button.\n\n### Accessibility & polish (pre-publish pass)\n- Breadcrumb segments are now real `<button>`s — Tab-focusable and Enter/Space-operable with a visible focus ring (WCAG 2.1.1); previously they were `<span>`s with click-only handlers.\n- The copy button and tree row-action buttons now use the interface font (parity with the rest of the chrome), and the copy button gained an `aria-label`.\n\n### Notes\n- `isDesktopOnly` stays `false` (the plugin uses no Node/Electron APIs). Real pointer-events touch-drag and the broader mobile/perf items (virtualization, source-mode debounce) remain deferred to a later release.",
+      "draft": false,
+      "name": "1.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T11:28:54Z",
+      "tag": "1.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f45263b2d8244a00491dfcdece936d511bd31c27ad1758b19effb6b82a564813",
+          "name": "main.js",
+          "size": 175211
+        },
+        {
+          "digest": "sha256:d04857b44b773b4ca3f3ed9d93b785e5424f1a643ebfc4d6740638f552e885eb",
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:9859987b41678ae302bba03e780142b0aeebfa4336da68481cbbd681a51b74f9",
+          "name": "styles.css",
+          "size": 24396
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Rename & submission-prep release.** No functional changes to the editor — this renames the plugin for the Community Plugin Directory and completes the documentation/attribution pass.\n\n### Changed\n- **Plugin ID renamed `obsidian-json-editor` → `json-editor`.** The Obsidian guidelines disallow an `obsidian-`-prefixed plugin id; the manifest `id` and the on-disk plugin folder change accordingly. The internal view type is unchanged, so existing layouts are unaffected. **After updating, move/rename your plugin folder to `.obsidian/plugins/json-editor/`.**\n- Manifest/package description tightened to *\"View and edit JSON files with a Tree/Source toggle. Renders JSON code blocks in Markdown notes.\"*\n\n### Added\n- `THIRD-PARTY-NOTICES.md` — full license texts for the bundled dependencies (ajv + transitive fast-uri **(BSD-3-Clause)** / fast-deep-equal / json-schema-traverse, plus @codemirror/lang-json and @lezer/json, all MIT). Attribution is also carried in the `main.js` banner.\n\n### Documentation\n- README aligned to the actual 1.6.0 feature set (status, unified undo, tree-mode structural editing, schema validation, drag-drop, type-switching, large-file guard, all six settings, a *Known conflicts* section, shipped-vs-2.x roadmap), the dependency-license note corrected, and a documented tree-edit limitation (numeric-string object keys may reorder on save — audit 1.4).\n- SECURITY.md threat model updated — prototype-pollution fixed; ReDoS opt-in + heuristic guard + honest residual surface.\n- AGENTS.md submission path rewritten to the `community.obsidian.md` portal flow.",
+      "draft": false,
+      "name": "1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T14:55:53Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6e714ae1812ec28a45b5d5b180e57b63146a5e4f74af9575b0cc3778e690fe8e",
+          "name": "main.js",
+          "size": 175048
+        },
+        {
+          "digest": "sha256:02772cbb143aa08e949ccf06b74a6b775c0ad35045a88347b381472ab549ccc5",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:88ab72e717244cc1161b4cc23231ec199823d5acc16c06cf2597c5fbbde6e9db",
+          "name": "styles.css",
+          "size": 24405
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Guideline & UX release.** Aligns with the Obsidian plugin guidelines and ships the high-value editing/UX gaps from the pre-submission audit.\n\n> **Heads-up:** `minAppVersion` is now **1.5.7** (the new view-scoped keymap needs it).\n\n### Added\n- **Tree/Source toggle command** (`Toggle tree/source view`) plus a view-header icon — the mode toggle is now keyboard- and command-bindable (bind your own hotkey; no default is set to avoid clashing with the core *Toggle reading view*).\n- **Search in Source mode** — `Cmd/Ctrl+F` (focus-search) now opens CodeMirror's find panel when you're in source mode instead of yanking you to tree; tree mode still focuses the tree search bar.\n- **Large-file guard** — files above a render budget (~1 MB or ~15k nodes) open in Source mode with a *Load tree anyway* banner, so a multi-MB file no longer freezes the UI on open.\n\n### Changed\n- **No more default hotkeys on commands.** `Focus search`, `Undo edit`, `Redo edit` (renamed, sentence-case) carry no default hotkey, per the guidelines; a view-local keymap still handles `Mod+F/Mod+Z/Mod+Shift+Z` while the JSON view is focused — and now correctly falls through to native input undo while you're typing in an inline editor.\n- `minAppVersion` raised to **1.5.7** for the view-scoped keymap and view-header action APIs.\n- Various UI strings corrected to sentence case.\n\n### Fixed\n- **Source-mode undo/redo** no longer destroys and rebuilds the CodeMirror editor on every step — it dispatches a minimal change, preserving cursor, scroll, and focus.\n- **Silent data loss / prototype reassignment** when an object had a `__proto__` (or other prototype-name) key and you deleted/renamed/reordered another key. Such keys are now preserved (and addable).\n- **Pop-out windows**: tooltips and the type-switch menu now resolve their document/window correctly instead of binding to the main window.\n- **Lifecycle leaks**: the Source editor and the type menu are now torn down on view unload.\n- Clipboard copy no longer throws (and now reports failure) on platforms without `navigator.clipboard`; companion-schema paths are normalized; window-bound timers; no hard-coded inline styles.\n\n### Internal\n- Added the official `eslint-plugin-obsidianmd` as a CI guideline gate (`npm run lint:obsidian`); Biome stays the formatter. Test count 478 → 537.",
+      "draft": false,
+      "name": "1.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T10:42:24Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:babf3589476c5ef34538085b66a4a54d1ae6b205313b14bced849a70e6bcae94",
+          "name": "main.js",
+          "size": 170927
+        },
+        {
+          "digest": "sha256:3c97e1ddbe1578e5a936a17e087fbfdbffc19008668a7c3bf164b536e9bf5af0",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:64c3011134ecf6544b69f09c0ec85c87e9344f6330f73fc53e9de7ba5e1b465d",
+          "name": "styles.css",
+          "size": 23531
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Stability & data-integrity release.** Fixes the data-loss and crash blockers found in a pre-submission audit. No new user-facing features — every change here protects your files.\n\n### Fixed\n- **Cross-file undo data loss (critical).** The undo history was not reset when you switched files in the same pane, so `Cmd/Ctrl+Z` in file B could restore — and save — file A's content over it. The same path silently reverted external/sync changes. History (and the schema, search query, and forced source mode) is now reset per file.\n- **Large trees were clipped.** A `.json-content { max-height: 5000px }` cap hid everything past roughly 200–250 expanded rows with no scrollbar. Removed.\n- **Plugin death on `.json` conflict.** If another plugin already handled `.json`, `registerExtensions` threw and the whole plugin failed to load (losing code-block rendering, settings, and commands). The claim is now guarded; on conflict you get a notice and code-block rendering keeps working.\n- **Lost place after every edit.** Re-rendering the tree reset manual expand/collapse, scroll position, and keyboard focus. These are now preserved across edits; after a delete, focus moves to the next sibling.\n- **Big-integer corruption.** Editing a number to a value beyond 2^53 silently truncated it; the tree editor now rejects such input (use source mode for big integers).\n\n### Changed\n- **Schema validation is now opt-in** (`validateAgainstSchema` defaults to `false`). A companion `*.schema.json` was previously auto-loaded and compiled on every file open; a malicious schema in a shared/synced vault could freeze Obsidian via a catastrophic-backtracking regex (ReDoS). Enable it explicitly if you trust your schema files. `compileSchema` now also rejects oversized schemas and obvious nested-quantifier patterns, and a stale companion-schema load can no longer apply to the wrong file.\n\n### Added\n- **Lossy-number warning.** When a file contains integers JSON can't represent exactly (e.g. 64-bit IDs > 2^53), a banner appears and the tree opens read-only so a tree edit can't silently rewrite them; source mode stays editable.\n\n### Internal\n- All `innerHTML = \"\"` DOM clears replaced with `replaceChildren()` (Community-Hub submission-gate requirement); a regression test enforces it across the source tree.\n- Test count 402 → 478 (+76), all green; build and Biome lint clean.",
+      "draft": false,
+      "name": "1.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-13T09:16:23Z",
+      "tag": "1.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:113bd5b8a1cabd34be321434bcebbf126b030349f0d38dbdbe87f881560513d3",
+          "name": "main.js",
+          "size": 166869
+        },
+        {
+          "digest": "sha256:794908dd001f3af103a1b67e0d6826e55babba0be12e0a38317a8f20d2e573a2",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:743271578e65d0d541febdc50fa26daefb9ed64d7c7c8c10ec33980c7dae4dbd",
+          "name": "styles.css",
+          "size": 22799
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **Relicensed from GPL-3.0-or-later to AGPL-3.0-or-later.** Documentation is now licensed separately under CC BY-SA 4.0 (see `LICENSE-DOCS`). Part of adopting the shared workspace conventions.\n- Adopted **Biome** for linting/formatting; added `lint` and `typecheck` npm scripts.\n- Convention alignment: shields.io badge row, `AGENTS.md` now committed with the standard section skeleton, `.claude/` gitignored.",
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T18:57:37Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:da886e5e0cf90e45aebc46807430a026cc8a4a1d14e7b15d68fb9dfaa1f2fe95",
+          "name": "main.js",
+          "size": 166810
+        },
+        {
+          "digest": "sha256:44103445abb224b2fa38c183eedcc11c2aead50bdef42dad1c2fdc508939831a",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:09ef7ca4d40ffe4c07c3e51c386ac14ba3eeb5d3dd1acd7f6e5a1938f7da5847",
+          "name": "styles.css",
+          "size": 22944
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**JSON Schema validation in real time.** Drop a companion schema file next to any `.json` you edit, and the plugin highlights validation errors as you type. Closes the 1.x roadmap.\n\n### Added\n- **JSON Schema validation** via [Ajv](https://ajv.js.org/) (v8). Default behavior: when you open `data.json`, the plugin looks for `data.schema.json` in the same folder; if found, every change in tree or source mode is validated against the schema.\n- **Schema banner** above the editor body shows the current error count (`\"3 schema errors — hover the red rows for details\"`). Hidden when the document is valid; switches to a yellow \"schema not loaded\" variant if the schema file itself is malformed.\n- **Inline row markers** — every tree row corresponding to a validation error gets a red outline + a hover-tooltip with the human-readable message.\n- **Two new settings**:\n  - `validateAgainstSchema` (default `true`) — master switch.\n  - `companionSchemaSuffix` (default `.schema.json`) — change to e.g. `.json-schema` if your conventions differ.\n- **New runtime dependency**: `ajv@8`.\n\n### Internal\n- New pure module `src/core/schema.ts` — `compileSchema(text)` returns a discriminated union (`{ok, schema}` | `{ok: false, error}`); the compiled schema has a `validate(value): PathError[]` that converts Ajv's `instancePath` JSON-Pointer to our `JsonPath` segment array (including `~0`/`~1` decoding).\n- New `src/obsidian/SchemaBanner.ts` UI component with `setErrors(n)` + `setSchemaParseError(msg)` + `hide()`.\n- `TreeView.setValidationErrors(map)` adds `.json-row-error` class + `title` attribute on offending rows; persists across re-renders.\n- `JsonFileView` gains `setSchema(text)` (public for tests/manual) and an async `tryLoadCompanionSchema()` that reads the sibling via `app.vault.cachedRead` on file open. Best-effort: silent failure if the vault is unavailable.\n- 33 new tests (12 schema core, 6 SchemaBanner, 5 TreeView row-marker, 6 JsonFileView integration, +4 settings extension). Total: 373 → 402.\n\n### Notes\n- **Bundle size**: `main.js` grows from ~37 KB to ~163 KB. The vast majority is Ajv; that is the cost of \"real\" JSON Schema. If you prefer the older lightweight bundle and don't need validation, turn the setting off — the validator code is still bundled but never runs.\n- **`$schema` URL fetching is out of scope.** The plugin treats `$schema` inside your data as metadata; it does not fetch remote schemas. Companion-file pattern is the canonical wire-up.",
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T21:49:46Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:99ebf636784f484d83227a37fb01d9aa262276b790d7d4160647835241fb1ff4",
+          "name": "main.js",
+          "size": 45239
+        },
+        {
+          "digest": "sha256:4de3fde77cb932d1937c9b7ecb465f95f4d9e377d41ea648c97c0c6f491227bc",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:b97aa0df5f5f80f2c8b81698a83dd481aa3d299819ff34f9a042f8dd574d41d9",
+          "name": "styles.css",
+          "size": 21858
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Unified cross-mode undo/redo.** Tree mode and source mode now share a single 100-deep text-based history. `Cmd/Ctrl+Z` and `Cmd/Ctrl+Shift+Z` work in both modes; switching between tree and source no longer wipes the undo stack.\n\n### Changed\n- **Unified history**: every change — tree-mode mutation or source-mode text edit — pushes the pre-state TEXT onto a single shared stack. Undo/redo restore that text and refresh the active mode.\n- Mode-switch no longer clears the undo history.\n- Source mode no longer keeps a separate CodeMirror-local undo stack; the unified history captures every doc change. Trade-off: `Cmd+Z` in source mode now undoes per `onChange` event (roughly per keystroke) rather than via CodeMirror's character-grouping heuristic. In practice this is similar granularity.\n\n### Internal\n- `History` is now generic (`History<T>`). `JsonFileView` uses `History<string>` instead of the previous tree-only `History<HistoryState>`. The old `HistoryState` interface is gone; the new API takes and returns the raw `T`.\n- Plugin command IDs renamed: `undo-tree-edit` → `undo-edit`, `redo-tree-edit` → `redo-edit`. Hotkey bindings are unchanged.\n- 4 new integration tests in `JsonFileView.undo.test.ts` covering source-mode undo, source→tree cross-mode undo, tree→source cross-mode undo, and the canUndo / canRedo mode-independence guarantee.\n- Test count: 369 → 373 (existing tree-history tests reused as-is via generic typing).",
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T21:39:22Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c02a84b32e0c4ba329095327f26f1f6b161512924d4bee2cabe1102d62aa4f3d",
+          "name": "main.js",
+          "size": 46018
+        },
+        {
+          "digest": "sha256:e805fb2b981587e2ec19ca06104d203f505d46643965f26b8785f025bdb316b9",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:b97aa0df5f5f80f2c8b81698a83dd481aa3d299819ff34f9a042f8dd574d41d9",
+          "name": "styles.css",
+          "size": 21858
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Reorder and retype.** 1.0.0 made tree mode CRUD-capable. 1.1.0 closes the polish gap: drag any row to a new position in its container, and switch any value to a different JSON type from a single button.\n\n### Added\n- **Drag-and-drop reorder** — hover any row to reveal a `⋮⋮` drag-handle. Drag the row up or down within the same container; a colored line indicates the drop position. Works for both array items and object keys. Cross-container moves are intentionally out of scope.\n- **Type-switching** — every row gets a `T` action button (alongside ✎ + ✕). Click → small inline menu lists all six JSON types (`String`, `Number`, `Boolean`, `Null`, `Object`, `Array`). The current type is shown disabled; picking another type replaces the value with a sensible default (`\"\"`, `0`, `false`, `null`, `{}`, `[]`). Type changes are destructive but undoable — use `Cmd/Ctrl+Z` to revert.\n- **Pure-core ops** — `moveArrayItem`, `moveObjectKey`, `changeType`, and `computeInsertionIndex` in `src/core/edit.ts`, plus the `JsonType` export. All fully unit-tested in isolation.\n\n### Changed\n- Test count: 262 → 369 (+107: 79 core edit, 8 TypeMenu, 4 RowActions extension, 11 TreeView dragdrop, 5 JsonFileView reorder integration).\n\n### Notes\n- Drag-drop is **same-parent only** by design — moving a row from one container into another is deferred (it raises path-validation and type-mismatch questions that warrant a separate spec).\n- Type changes do not preserve content across the change. Converting `{a: 1, b: 2}` to `array` produces `[]`, not `[1, 2]`. This is intentional and consistent: the type-menu is a destructive shortcut, not a data-migration tool.",
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T21:32:10Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1d0eddf515f89088bfc764d43efc35c8e261846f7e60989e0f89699210e5d6cc",
+          "name": "main.js",
+          "size": 39976
+        },
+        {
+          "digest": "sha256:e88c9417d91074a9bdd8755f9e9ddfd41358fbe36a7fef642628a4e3fc1f62cd",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:0dbe59e8b2e6ee7b741bee84068c908ef060101f66474d3cfca09723cb74e450",
+          "name": "styles.css",
+          "size": 19809
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**1.0.0 marks the point where the tree view becomes a real editor.** You can now do every basic structural edit (add / delete / rename keys, add / delete items) directly in tree mode, with full undo/redo support — no round-trip through source mode required for routine work.\n\n### Added\n- **Add object keys** — every container has a \"+ Add key\" affordance at the bottom of its content. Click → inline input → Enter to commit (empty value `null`).\n- **Add array items** — same affordance, labeled \"+ Add item\" for arrays; click immediately appends a `null`.\n- **Delete rows** — hover any row to reveal a ✕ button (also `Backspace` / `Delete` on the focused row). Undo restores it.\n- **Rename keys** — hover any object-key row to reveal a ✎ button. Click → key span becomes an inline input → Enter commits, Esc cancels. Validates against empty + duplicate keys (shown as a Notice).\n- **Undo / Redo** — `Cmd/Ctrl+Z` undoes the last structural or value edit; `Cmd/Ctrl+Shift+Z` redoes. Tree-mode only — source mode keeps CodeMirror's native history (cross-mode unified undo is deferred to 1.2.0). Capacity 100 entries.\n- **Pure-core mutation API** — `addObjectKey`, `addArrayItem`, `deleteAt`, `renameKey` in `src/core/edit.ts` and a `History` class in `src/core/history.ts`, both fully unit-tested without DOM.\n- **Empty containers now render with full container scaffolding** (toggle + brackets + chip + content slot + close) instead of a single `{}` / `[]` span. Lets you `+ Add` to an empty container without first switching to source.\n\n### Changed\n- Switching mode (tree ⇄ source) clears the tree-mode undo history. The source mode has its own CodeMirror history; mixing the two would be confusing in this iteration.\n- `RenderOptions` gains nothing — render.ts stays pure. All structural actions are attached post-render in `TreeView.attachStructuralActions()` (same pattern as `attachCopyButtons`).\n- Test count: 205 → 262 (+57: 24 core edit, 10 history, 6 RowActions, 7 AddAffordance, 10 undo integration; existing tests stay green).\n\n### Notes — explicitly NOT in 1.0.0 (deferred)\n- **Drag-and-drop reorder** → 1.1.0\n- **Type-switching** (string ↔ number ↔ boolean ↔ null ↔ object ↔ array) → 1.1.0\n- **Cross-mode unified undo/redo** (Source + Tree shared stack) → 1.2.0\n- **JSON Schema validation** via ajv → 1.3.0 (or could ship as a separate plugin)\n\nThe original 1.0.0 roadmap conflated all five into one release. Scope-decomposed into focused milestones; each gets its own spec when picked up.",
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T20:39:09Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7716dbc9c504dc84181051df1f9a268b0f65297572d8db17ebab5e25c72358b3",
+          "name": "main.js",
+          "size": 32003
+        },
+        {
+          "digest": "sha256:dc16cfd0a0e8b666671e2b7df277e7b99420c6d4f7c0ae7e637430160a82af0e",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:e9c773678d3853f249f1b912149000e00778aba5891f09173123b8289dbd65e2",
+          "name": "styles.css",
+          "size": 17245
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Keyboard navigation** through the tree (WAI-ARIA tree pattern):\n  - `Tab` focuses the active row (roving tabindex).\n  - `↓` / `↑` move between visible rows.\n  - `→` expands a collapsed container, or jumps to the first child row inside an expanded one.\n  - `←` collapses an expanded container, or jumps to the parent row.\n  - `Home` / `End` jump to the first / last visible row.\n  - `Enter` / `F2` trigger inline-edit on a row's primitive value.\n- **ARIA roles**: tree-root carries `role=\"tree\"` + `aria-label=\"JSON content\"`; containers carry `role=\"treeitem\"` + `aria-expanded` synced with collapse state; child wrappers carry `role=\"group\"`; every row carries `role=\"treeitem\"`.\n- **Coverage tooling**: `@vitest/coverage-v8` and a new `npm run test:coverage` script. Baseline: 92.9% statements, 87.1% branches, 91.8% functions.\n\n### Changed\n- **Render refactor**: `renderObject` and `renderArray` collapsed into a single `renderContainer(parent, items, path, depth, opts, kind)` plus three small helpers (`bracketsFor`, `keyOrIndexElement`, `collapseChipLabel`). `src/core/render.ts` lost ~50 LOC of duplicated scaffolding; structural parity verified by a new test.\n- Tree filter skipping is now keyboard-aware: arrow nav walks only visible rows (honours `.json-filter-active` and ancestor `.collapsed`).\n- Test count: 181 → 205 (+24: 9 ARIA, 14 keyboard nav, +1 render parity).\n\n### Notes\n- No visible UX change for mouse users. The only thing they may notice is that the tree now gets a Tab stop.\n- Out of scope (deferred): screen-reader-specific `aria-live` announcements, multi-select, type-ahead key-search, keyboard-shortcut help overlay.",
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T20:22:36Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fb285e006ae544449e0b7095f268c7d4f642b2a20947840eb7c055d5f19a2617",
+          "name": "main.js",
+          "size": 29801
+        },
+        {
+          "digest": "sha256:9684000ef043914009d6c2908b2579ff261016ad89479e543368127549934883",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:e9c773678d3853f249f1b912149000e00778aba5891f09173123b8289dbd65e2",
+          "name": "styles.css",
+          "size": 17245
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Search & Filter** — live search bar in the tree-view toolbar that strict-filters the tree to keys and primitive values matching the query (case-insensitive substring). Ancestors of matches stay visible; non-matching siblings are hidden. Auto-expands collapsed containers that contain a match. Match count displayed next to the input (\"3 matches\" / \"no matches\").\n- **`Cmd/Ctrl+F` hotkey** in any JSON view focuses the search bar (switches to tree mode first if you're in source).\n- **ESC behavior** in the search input: clears the query if non-empty; blurs the input if already empty.\n- **Clear button (×)** in the search input.\n- **`findMatches()`** pure function in `src/core/search.ts` — value-walks the tree and returns match + on-path path sets with key/value counts.\n- **`TreeView.applyFilter(query)`** API — applies CSS classes to the existing DOM via `data-path` attribute lookup; renderer is not touched.\n\n### Changed\n- Toolbar layout now hosts `Breadcrumb | SearchBar | mode toggle`. Breadcrumb stops claiming all flex space; SearchBar grows to fill (capped at 32em).\n- `--jv-match-bg` and `--jv-match-fg` design tokens added, theme-aware via `--text-highlight-bg`.\n- Test count: 133 → 181 (+48: 22 in `core/search`, 12 in `SearchBar`, 7 in `TreeView.applyFilter`, 6 in `JsonFileView` SearchBar integration, +1 selector hygiene fix).\n\n### Notes\n- Out of scope for this release (deferred to later): regex/case-toggle, substring highlighting inside matched text, match navigation (Cmd+G next/prev), filter inside code-block embeds, filter in source mode (CodeMirror has native Cmd+F), persistent query across file switches.",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T20:08:03Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:826789be9a8f84405c65df401bf7b87451c9256ae5b737663382185d2f533537",
+          "name": "main.js",
+          "size": 24346
+        },
+        {
+          "digest": "sha256:bc4259402aa12d09af74966556ee86b56641f2b5dd2b236bf624c50a0bf99881",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:cda1d1076536bf4bb54cb57e93fec4762178e008a606154f3bc0e5558958fada",
+          "name": "styles.css",
+          "size": 14802
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Visual redesign (Direction B)** — full token-based theme-aware stylesheet (`--jv-*` CSS variables), nested tinted blocks for object/array depth, collapse chips with item counts, SVG chevron icons, and a unified top toolbar combining the breadcrumb and mode toggle.\n- **Embedded code-block polish** — `` ```json `` blocks in Markdown notes render as a titled card; blocks over 20 lines auto-collapse; invalid JSON renders as a styled error card with line/column info instead of crashing.\n- **Empty-state title and hint** for the `.json` file view when the file is empty.\n- **Public documentation surface** — full README rewrite, CHANGELOG (Keep-A-Changelog), CONTRIBUTING, SECURITY, issue + PR templates for Codeberg (`.forgejo/`) and GitHub (`.github/ISSUE_TEMPLATE/`), `.editorconfig`, `versions.json`.\n- **CI: PR-time test workflow** (`npm ci → npm test → npm run build` on every push to `main` and every PR).\n- **package.json metadata** — `repository`, `bugs`, `homepage`, expanded `keywords`, GPL-3.0-or-later SPDX.\n\n### Changed\n- Stylesheet rewritten from scratch around design tokens; no hardcoded colors anywhere, theme-aware end to end.\n- Test count: 122 → 133.\n- Release workflow now extracts release notes from the matching `## [<tag>]` section in `CHANGELOG.md` instead of using a placeholder.\n\n### Fixed\n- Release notes are now passed to `gh release create` via env var rather than direct shell interpolation, so notes containing backticks or other shell-special characters no longer break the release job.",
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-05-27T11:28:29Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:23e637ed43626acdd3fc19211d1685051e17c65cf774d6e85bc7699845ad33af",
+          "name": "main.js",
+          "size": 22217
+        },
+        {
+          "digest": "sha256:8545e80d22bee686c1410f8be6e2b676de02455c2673681c3ec46db6a095f800",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:03c40829d2ea7907d78f7cce93be592bba99c74f2d0b77cbcb9c26b4289d63f2",
+          "name": "styles.css",
+          "size": 7940
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Release 0.1.1 — see CHANGELOG / commits for details.",
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T22:32:29Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f7e2b6c4b968cdd22d833fc5887b47eb4189d233556e2d90c03c51d3076f6646",
+          "name": "main.js",
+          "size": 16842
+        },
+        {
+          "digest": "sha256:c7ca1b13f4c4dc70dd3913be4cc216d9cb97ef23f80947cdb97a3fd1303b0ed8",
+          "name": "manifest.json",
+          "size": 348
+        },
+        {
+          "digest": "sha256:a341cdaf2e5a4f13053883aaa5435e6841613a7e41e80b63cd8c3e77b8224742",
+          "name": "styles.css",
+          "size": 4691
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Release 0.1.0 — see CHANGELOG / commits for details.",
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-20T20:06:29Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "johannes-kaindl/json-editor"
+}

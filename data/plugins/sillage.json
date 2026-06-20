@@ -1,0 +1,129 @@
+{
+  "author": "hansenje",
+  "defaultBranch": "main",
+  "description": "Mistral Vibe integration: chat and predefined tasks for your vault. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "sillage",
+  "lastChangedAt": "2026-06-16T06:00:58.683Z",
+  "lastFetchedAt": "2026-06-16T06:00:58.683Z",
+  "manifest": {
+    "author": "hansenje",
+    "authorUrl": "",
+    "description": "Mistral Vibe integration: chat and predefined tasks for your vault.",
+    "id": "sillage",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "Sillage",
+    "version": "0.2.3"
+  },
+  "name": "Sillage",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ea19413c8f9dd21bec113e681c1cc1a45dac0e7f3d32e32de93d1854ec16f8bf",
+          "name": "main.js",
+          "size": 24339
+        },
+        {
+          "digest": "sha256:3c1a115214b002afc456546c89c52f8cda6fad7073b1ae96879a6857c32a0b77",
+          "name": "manifest.json",
+          "size": 249
+        },
+        {
+          "digest": "sha256:0345b66e3db052b3afc4340d64f0ea994a503f7f6e76888cee3f2f70f20359f4",
+          "name": "styles.css",
+          "size": 3027
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Patch release: correct minAppVersion floor.\n\n## Fix\n- `minAppVersion` raised from 1.8.0 → **1.8.7**. The Obsidian community-plugin lint flagged `Notice.messageEl` as newer than 1.8.0; the API was actually added in 1.8.7 (per the `@since` tag in `obsidian-api`).\n\nNo behavior changes — purely a manifest correction.\n\n## Supply chain\nRelease artifacts carry a signed SLSA build-provenance attestation. Verify with:\n```sh\ngh attestation verify main.js -R J3F3H/sillage\n```",
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T11:10:48Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d584e57915c0ce8104ab142f92258bdbfe1896cca44adffd9b7c7c8bf1b3bb7e",
+          "name": "main.js",
+          "size": 24339
+        },
+        {
+          "digest": "sha256:f4c9cf34e52af0c9433d43c55479b223426bc0afcfb33805dc751dad8bb1deb2",
+          "name": "manifest.json",
+          "size": 249
+        },
+        {
+          "digest": "sha256:0345b66e3db052b3afc4340d64f0ea994a503f7f6e76888cee3f2f70f20359f4",
+          "name": "styles.css",
+          "size": 3027
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Patch release covering a second pass of the Obsidian community-plugin review.\n\n## Fixes\n- Top-level settings heading removed. The previous \"Sillage settings\" heading was flagged for containing both the plugin name and the word \"settings\" — both are redundant since Obsidian already labels the settings tab with the plugin name.\n- `minAppVersion` raised to **1.8.0** so that `Notice.messageEl` (used by the cancel-on-click handler in one-shot note commands) lines up with the declared minimum.\n\n## Supply chain\n- Release artifacts (`main.js`, `styles.css`) carry a signed SLSA build-provenance attestation as in 0.2.1. Verify with:\n  ```sh\n  gh attestation verify main.js -R J3F3H/sillage\n  ```\n\nUpgrading from 0.2.1 is purely a metadata + cosmetic update; no behavior changes.",
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T09:51:07Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2fc1e251faf0fb0d041646379aac3e1ee3e41d5a7d1a29eb79b43adbfcc90f5f",
+          "name": "main.js",
+          "size": 24397
+        },
+        {
+          "digest": "sha256:5aec486e21df514f0e602601e021a9b8a93658aa895e42a8953ebb8822a20f15",
+          "name": "manifest.json",
+          "size": 249
+        },
+        {
+          "digest": "sha256:0345b66e3db052b3afc4340d64f0ea994a503f7f6e76888cee3f2f70f20359f4",
+          "name": "styles.css",
+          "size": 3027
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Hardening release driven by the Obsidian community-plugin review. No new features; the **Reload skills** command is the only user-visible addition.\n\n## User-facing\n- Skill auto-discovery now subscribes to Obsidian vault events instead of `fs.watch`. Cross-platform (works on Linux), no more `fs.watch({recursive:true})` limitation. Added a **Reload skills** command as an explicit fallback for vaults where `.agents/` isn't indexed.\n- `minAppVersion` raised to **1.7.2** so the awaited `Workspace.revealLeaf` signature matches the running Obsidian.\n\n## Internals / review fixes\n- Command id no longer carries the redundant `sillage-` prefix.\n- Settings heading rendered via `new Setting().setHeading()` instead of a raw `<h2>`.\n- Notice click target switched from deprecated `noticeEl` to `messageEl`.\n- All `setTimeout`/`clearTimeout` calls routed through `window.*` for popout-window compatibility.\n- `MarkdownRenderer.render` is now tied to the chat view's component lifecycle (was leaking under the plugin's lifetime).\n- Floating `Promise<void>` calls in event handlers explicitly voided.\n- Subprocess data callbacks and vibe session-meta JSON typed; no more `any` propagation.\n- `builtin-modules` dependency replaced with the native `node:module.builtinModules`.\n\n## Supply chain\n- Release artifacts (`main.js`, `styles.css`) now carry a signed SLSA build-provenance attestation. Verify with:\n  ```sh\n  gh attestation verify main.js -R J3F3H/sillage\n  ```\n\n## Host access disclosures\nThe README now has a dedicated **Host access (Obsidian review disclosures)** section explicitly enumerating the three flagged behaviors:\n- `child_process.spawn` for the user-configured `vibe` binary.\n- `fs.promises` read of `$VIBE_HOME/logs/session/*/meta.json` (the only path Sillage touches outside the vault).\n- `navigator.clipboard.writeText` from the explicit Copy button on assistant bubbles.",
+      "draft": false,
+      "name": "0.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-05T06:54:23Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:db6fab2e201e7b7ce16e028a330615246cb410a9610cec82f0b5e3b50f273c9c",
+          "name": "main.js",
+          "size": 24071
+        },
+        {
+          "digest": "sha256:ed80b94b48241eeb95f260e2d72e5cb8394e2392e724cd73e383312453ea6ca2",
+          "name": "manifest.json",
+          "size": 249
+        },
+        {
+          "digest": "sha256:0345b66e3db052b3afc4340d64f0ea994a503f7f6e76888cee3f2f70f20359f4",
+          "name": "styles.css",
+          "size": 3027
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "First public release.\n\n## Features\n\n- **Chat panel** — streams `vibe --output streaming` into a sidebar view, with cancel button, tool-call visibility, and Insert / Copy buttons on assistant bubbles\n- **Persisted chat history + safe session resume** — chat survives Obsidian reloads, subsequent turns use `vibe --resume <session_id>` so terminal vibe sessions can't collide; falls back fresh if the session has aged out of `$VIBE_HOME/logs/session/`\n- **Note commands** — Summarize, Extract action items (Obsidian Tasks plugin syntax), Rewrite selection, Translate selection (English / French); each cancellable via the persistent Notice\n- **Skill auto-discovery** — any `user-invocable: true` skill under `<vault>/.agents/skills/` registers as a command; `fs.watch` hot-reloads new/edited skills on macOS and Windows\n- **Editor context menu** — right-click in any note for the selection / note commands\n- **Cost / turn / duration telemetry** pulled from vibe's per-session `meta.json`\n- **Configurable Agent** (`accept-edits` default, `auto-approve`, or `default`) to control vibe's tool-use approval\n- **Subprocess hardening** — stdin closed, `PATH` augmented for `~/.local/bin`, in-flight processes killed on plugin unload, per-send timeout\n- **Debug logging toggle** for `[sillage]` console output\n\n## Requirements\n\n- Desktop Obsidian 1.5.0+\n- [Mistral Vibe CLI](https://docs.mistral.ai/mistral-vibe/introduction) installed and authenticated (`vibe --setup`)\n\n## Install (manual)\n\nSee the [README](https://github.com/J3F3H/sillage#install-manual) for clone-and-symlink instructions.\n\n## Privacy\n\nNote content is sent to Mistral via `vibe` whenever a command runs. See [Privacy / data flow](https://github.com/J3F3H/sillage#privacy--data-flow) in the README for the full breakdown.",
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T13:14:33Z",
+      "tag": "0.2.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "j3f3h/sillage"
+}

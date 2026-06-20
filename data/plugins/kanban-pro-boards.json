@@ -1,0 +1,260 @@
+{
+  "author": "Icarian Systems",
+  "defaultBranch": "main",
+  "description": "Local-first Kanban / project boards. Reads and writes the same on-disk board format used by the community Kanban plugin. Includes optional paid Pro features. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "kanban-pro-boards",
+  "lastChangedAt": "2026-06-16T06:00:58.683Z",
+  "lastFetchedAt": "2026-06-16T06:00:58.683Z",
+  "manifest": {
+    "author": "Icarian Systems",
+    "authorUrl": "https://icariansystems.com",
+    "description": "Local-first Kanban / project boards. Reads and writes the same on-disk board format used by the community Kanban plugin. Includes optional paid Pro features.",
+    "fundingUrl": "https://icariansystems.com",
+    "id": "kanban-pro-boards",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.6.0",
+    "name": "Kanban for Professionals",
+    "version": "1.0.9"
+  },
+  "name": "Kanban for Professionals",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:08043ff04e951c103a5b4434cb4728d6bf3c8cbd6fee19ba7abd6a981825b522",
+          "name": "main.js",
+          "size": 786222
+        },
+        {
+          "digest": "sha256:fdee1e7ab3e201957bb92be202a2f67b5457f99e9d6c07258388730fc9408886",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Completes the \"+ Add card\" fix. 1.0.8 made the new card render; this release stops it from disappearing a moment later.\n\n### Fixed\n\n- **A newly added card no longer vanishes ~600ms after it appears.** An empty placeholder card serializes to nothing, so it does not survive a serialize→parse round-trip. When the debounced save flushed, Obsidian re-fired \\`setViewData\\` with the plugin's own bytes; the self-write branch ran \\`applyDiskSnapshot\\` → \\`parseBoard\\` (zero cards) → \\`setBoard\\`, deleting the just-created card out from under the user's open inline editor. The self-write branch now treats a byte-identical echo as a no-op (mirroring the \\`onVaultModify\\` path) and leaves the in-memory board — including the transient placeholder — untouched. Combined with the 1.0.8 visibility fix, \"+ Add card\" now reliably opens an editable card that stays put.\n\n### Internal\n\n- Removed a dangling \\`react-hooks/exhaustive-deps\\` eslint-disable directive in \\`Card.tsx\\` that referenced an unregistered rule and was failing CI lint since 1.0.7.",
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T15:16:40Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fb1ff8251678716ba1fc48a05ccef0aaf4427566f95bda8be4b922293c97410c",
+          "name": "main.js",
+          "size": 786111
+        },
+        {
+          "digest": "sha256:4abc6bf5f7cc6fc72508f140d47c9836d9b8b218004beffa578afcb65c8e2358",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Follow-up patch to the 1.0.6/1.0.7 \"+ Add card\" fixes. The earlier patches chased an inline-editor focus race; the real cause was that the new card was hidden by \\`display:none\\` before focus could ever matter.\n\n### Fixed\n\n- **\"+ Add card\" on a board with empty placeholders no longer creates invisible cards.** The board-level filter-visibility CSS (\\`HiddenCardsStyle\\`) hid any card present in \\`totalCardIds\\` but absent from \\`visibleCardIds\\`. \\`visibleCardIds\\` came from \\`applyFilter\\`, which excludes empty placeholder cards — even when no filter is active — so a new \"+ Add card\" placeholder was \\`display:none\\`'d the instant it was created. The card bumped the lane count but stayed invisible, and being \\`display:none\\` could not take editor focus or fire its discard-on-blur, so empty placeholders piled up (lane chip climbing \"8\", \"9\"… over an empty-looking lane). Placeholder cards are now always included in the visibility set; saved-view and masthead counts stay content-only.",
+      "draft": false,
+      "name": "1.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T04:59:36Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:05683778fd6767ca312aeadc10a15b728b5cb8c67796afc05354f1ae6ddbb903",
+          "name": "main.js",
+          "size": 786024
+        },
+        {
+          "digest": "sha256:fb48e2adc54258f3e340c88e3c884fc38d04856c6451e0fafa40f9ca72a046f5",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Follow-up patch to the 1.0.6 \"+ Add card\" fix.\n\n- **\"+ Add card\" reliably opens the inline editor on the new card.** The previous fix still relied on a `kanban-pro:focus-new-card` window event dispatched via `setTimeout(0)`. Because the column re-renders synchronously but the new card's listener only registers after paint, the event fired before any listener existed and was lost — so the new card stayed blank and looked invisible. The creation intent is now passed as an `autoFocusOnMount` prop, evaluated synchronously at render time, so the card's mount effect opens the editor every time.",
+      "draft": false,
+      "name": "1.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T04:40:53Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:36d78ffd1b92f28fc7edcdacef6d3f034c9b5b43f4eb73bf5f89c3c82817016c",
+          "name": "main.js",
+          "size": 786046
+        },
+        {
+          "digest": "sha256:634fd67f5e63d0f32e688e4a000dd774073e551d3fb356e7f0f8e8884328595c",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "First-time-user QA pass — no new features; this release makes existing (advertised) features actually work and removes a pervasive interruption.\n\nHighlights:\n- **Welcome modal** no longer re-appears after every board edit (it was tied to the metadata-cache refresh that fires on every write). Now auto-opens at most once per install.\n- **Time tracking** is reachable again — the timer pill renders on cards and long-press / \"Details\" opens the history drawer. (A plugin-registry lookup used the wrong id, so the store resolved to null and the panel was never mounted.)\n- **Calendar (.ics) export** now exports cards dated with `[due:: …]` and `📅`, not just `@{date}` — boards full of dated cards were exporting an empty calendar — and reports clearly when there's nothing to export.\n- **Toolbar \"Dashboard\" button** opens the Dashboard.\n- **Pro CTAs** land on the Pro settings pane instead of General.\n- **Saved Views popover** reliably reopens, so custom filters can be saved as named views.\n- **Recurrence field** keeps spaces (\"every Monday\" no longer becomes \"everyMonday\").\n- Right-rail built-ins renamed **\"Smart Views\"**; unified Pro feature copy; card-details paywall no longer clips; lane/board counts respect the active filter.\n\nFull details in [CHANGELOG.md](https://github.com/icarian-systems/kanban-pro-plugin/blob/main/CHANGELOG.md).",
+      "draft": false,
+      "name": "1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T03:35:51Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c68b37a985c6947d7743aced579be2ffd69f70a32d782dfae88f92d8ee1ad0ba",
+          "name": "main.js",
+          "size": 780373
+        },
+        {
+          "digest": "sha256:912a30e6d77f52ec78740995b48bae9c3bb9622600c8b500bee0c88668eec210",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "User-facing README rewrite (install steps, getting started, inline-metadata syntax, commands, settings, screenshots) with developer content moved to CONTRIBUTING.md. No functional code changes — main.js/styles.css behavior identical to 1.0.4.",
+      "draft": false,
+      "name": "1.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T21:27:02Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c68b37a985c6947d7743aced579be2ffd69f70a32d782dfae88f92d8ee1ad0ba",
+          "name": "main.js",
+          "size": 780373
+        },
+        {
+          "digest": "sha256:ee97026558a861e80ece993d0374fcf2cfe96e520dde929a77aea5f4b8ab2922",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:a47af4924a3da8ae66bcc3f3a0cf963806250f4db9f1b4896517e2ad021731b1",
+          "name": "styles.css",
+          "size": 155412
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Resolves the remaining Obsidian automated-review CSS-lint warnings: removes all `!important` from the reduced-motion reset (now uses the CSS-variables route) and matches the README title to the manifest name (**Kanban for Professionals**). See CHANGELOG.md.",
+      "draft": false,
+      "name": "1.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T21:01:25Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c68b37a985c6947d7743aced579be2ffd69f70a32d782dfae88f92d8ee1ad0ba",
+          "name": "main.js",
+          "size": 780373
+        },
+        {
+          "digest": "sha256:cfc0c6fbcc7dde579861c86a8562fc30fafcf1604b987ed1df99729068ef2ffe",
+          "name": "manifest.json",
+          "size": 446
+        },
+        {
+          "digest": "sha256:7e599da1d31651b9a35d5eda1591f402b7e405ed4964224b668a39f49903d70f",
+          "name": "styles.css",
+          "size": 155147
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Renames the directory display name to **Kanban for Professionals** and resolves the Obsidian automated-review warnings (manifest mismatch, builtin-modules dependency, partially-supported CSS, !important in editor overrides). See CHANGELOG.md for details. Plugin id remains `kanban-pro-boards`.",
+      "draft": false,
+      "name": "1.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T20:47:30Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c68b37a985c6947d7743aced579be2ffd69f70a32d782dfae88f92d8ee1ad0ba",
+          "name": "main.js",
+          "size": 780373
+        },
+        {
+          "digest": "sha256:3a20c3c0305dafcd946d8aa3066875a1d1e335e08720b2b52be77cb773ce4415",
+          "name": "manifest.json",
+          "size": 453
+        },
+        {
+          "digest": "sha256:03f8525d18aa63a00d04b8b5394b12abf71d9b50f7bad380e9ffd81269bb1df8",
+          "name": "styles.css",
+          "size": 154868
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "## Changed\n\n- **Plugin `id` renamed to `kanban-pro-boards`** to clear a conflict in Obsidian's submission registry that blocked the community-plugin listing. The on-disk index cache path now derives from `configDir` + `manifest.id` at runtime, so it always follows the real install folder.\n- **Display name** updated to \"Kanban Pro, for the professional\".",
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T19:47:58Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b5daf977fe369d8fc837ce4b400e533b39f6a4b05d1898957ae811e74ca80135",
+          "name": "main.js",
+          "size": 780333
+        },
+        {
+          "digest": "sha256:d7da9bb7e4e03fc29e3abca2ffd494006967bc16ae7aa39a00aa729b8c482f91",
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "digest": "sha256:03f8525d18aa63a00d04b8b5394b12abf71d9b50f7bad380e9ffd81269bb1df8",
+          "name": "styles.css",
+          "size": 154868
+        }
+      ],
+      "author": "icarian-systems",
+      "description": "Kanban Pro 1.0.1 — initial public release.\n\n**Install manually:** download `main.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/kanban-pro/` folder, then enable the plugin in Obsidian's Community plugins settings.\n\n- Free: Board / Table / List views, embeds, basic templates, validator.\n- Pro: Recurrence, Saved Views, time tracking, calendar export, dashboard. [Get a license ($5.99 lifetime, limited time)](https://icarian-systems.lemonsqueezy.com/checkout/buy/d404fb1f-3961-4a3a-9715-8eb4d784fa5e).",
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T19:37:42Z",
+      "tag": "1.0.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "icarian-systems/kanban-pro-plugin"
+}

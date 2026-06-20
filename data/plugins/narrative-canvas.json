@@ -1,0 +1,303 @@
+{
+  "author": "ringeringeraja33",
+  "defaultBranch": "main",
+  "description": "A node-based writing tool for game development, interactive fiction, branching scripts, quest chains, and other nonlinear narrative structures. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "narrative-canvas",
+  "lastChangedAt": "2026-06-16T06:00:58.683Z",
+  "lastFetchedAt": "2026-06-16T06:00:58.683Z",
+  "manifest": {
+    "author": "ringeringeraja33",
+    "description": "A node-based writing workspace for planning complex narratives, branching stories, and game plots.",
+    "id": "narrative-canvas",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.5.0",
+    "name": "Narrative Canvas",
+    "version": "1.1.1"
+  },
+  "name": "Narrative Canvas",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:0faad3787fc17ba452e393357884f76586e1953199312a211b6d0311d12a548c",
+          "name": "main.js",
+          "size": 1112208
+        },
+        {
+          "digest": "sha256:3b9b5e06c5bda1d01efd22c9eab2a91ab1f69926323de61dbb5c7b666a52ba48",
+          "name": "manifest.json",
+          "size": 295
+        },
+        {
+          "digest": "sha256:cc573d861946a6d4a961339363b88b201239e03795737ae8d2880000c0b9274d",
+          "name": "styles.css",
+          "size": 157388
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "# Narrative Canvas 1.1.1\n\nCompared with GitHub release `1.1.0` published on 2026-06-06.\n\n## English\n\n### Added\n\n- Improved the Playbook guide and Sample.ncanvas. Clicking `?` on Playbook now opens the contextual help manual.\n- Added a Validation status page that shows risk details (including export output, issue source, and remediation hints) on hover and keyboard focus.\n- Added Advanced JSON jump actions to Playbook rows so you can jump directly to the matching row/rule in JSON, and added buttons that map to the selected script-builder row and scroll to the corresponding JSON line after expansion.\n- Export All now includes all currently supported outputs: Project JSON, Story MD, Layout JSON, State Schema, Export Profile, Runtime JSON, Yarn, Ink, Twee, Events CSV/JSON, Node Fields CSV, Characters MD/JSON, Playbook JSON, and image exports.\n\n### Changed\n\n- Significantly optimized the inspector UI.\n- Reordered Playbook tabs to: Variable Definitions, Variable Actions, Script Builder, Choice Conditions, Play Rules, Validation.\n- Variable Actions now only work with keys declared in Variable Definitions. The key selector shows variable type, and operators are filtered by type:\n  - strings and objects: `set`\n  - numbers: `set` / `add` / `subtract`\n  - booleans: `set` / `toggle`\n  - arrays: `set` / `append` / `remove`\n- Variable Action input controls are now type-aware. Numbers use numeric input, booleans use true/false dropdowns, and arrays/objects use JSON-form value fields; mismatched values are normalized before save.\n- New variable actions now only expose `onVisit` and `manual` timing; legacy global `onChoose` actions are still loaded for compatibility and execution, but are marked as compatibility rows with migration guidance toward per-option `Effects`.\n- Boolean `set` now uses a true/false selector; `toggle` is shown as `Invert` / `Reverse`.\n- Node inspector state logic is now split into separate Conditions and Effects blocks. Each block opens a one-time structured add row; after submit, the generated text is written back and the temporary control closes.\n- Choice condition tables now show each option’s `Choice Effects` in the last column, while condition controls remain in the same row as condition status.\n- Choice option `Choice Effects` is now synced in both directions between Inspector and Playbook: Inspector keeps editable free text, while Playbook stores structured operation/key/value rows.\n- In narrow inspector widths, condition rows, effect rows, routing controls, and choice editing panels reflow to two columns first, then one column when very narrow, preventing clipping.\n- Choice options now render `Choice Requirements` and `Choice Effects` as matching titled boxed sections.\n- Play preview status text now uses a single muted base color by default when no explicit semantic color is provided.\n- Condition status copy now reads as preview-flow guidance rather than command-style status text.\n- Deleting the last Character or Variable now correctly enters empty-state UI and persists an empty character list or variable object.\n\n### Compatibility\n\n- Existing `.ncanvas` files remain readable. The loader normalizes old `choices[]`, `choiceIndex` links, missing `actions`, old custom node types, Events Sheet columns, Frame / Jump data, and dotted state keys.\n- Story MD import intentionally replaces the current canvas project. Use Layout JSON and State Schema sidecars to restore layout, ports, frame membership, variables, and link metadata after import.\n- Conditions use a safe JavaScript expression subset. Expressions outside that subset stay in Runtime JSON with an export warning; Yarn, Ink, and Twee emit a parseable `false` guard for the affected branch.\n\n## 中文\n\n### 新增\n\n- Playbook 各行新增 JSON 按钮，可打开高级 JSON 并定位到对应行或规则。JSON 定位现在会等待展开后的编辑器完成测量，脚本构建行按钮可滚到选中的 JSON 行。\n- 导出全部现在包含当前工具支持的所有导出内容：Project JSON、Story MD、Layout JSON、State Schema、Export Profile、Runtime JSON、Yarn、Ink、Twee、事件 CSV/JSON、Node Fields CSV、角色 MD/JSON、Playbook JSON 和当前图片导出。\n- 设置校验状态页，可在悬浮或键盘聚焦时显示对应工作文件导出的具体风险、来源说明和处理建议。\n\n### 调整\n\n- 对检查器UI进行大幅优化。\n- 完善了Playbook页面的说明手册（点击“?”图标可查看）和示例内容。\n- Playbook 标签顺序改为：变量定义、变量动作、脚本构建、选项条件、演示规则、校验。\n- 变量动作只能选择已在变量定义中声明的 key。键下拉框显示变量类型，操作下拉框按类型筛选：字符串和对象使用 `set`，数字使用 `set` / `add` / `subtract`，布尔使用 `set` / `toggle`，数组使用 `set` / `append` / `remove`。\n- 变量动作的值控件现在按变量类型约束。数字使用数字输入，布尔值使用 true/false 下拉，数组和对象在 `set` 时使用 JSON 形态的值，不匹配的值在保存前规范化。\n- 新建变量动作只提供 `onVisit` 与 `manual` 时机。旧版全局 `onChoose` 动作仍会读取和执行，但编辑器会标为兼容行，并提示新的选项选择变化写入选项自身的 `Effects`。\n- 布尔变量动作的 `set` 使用 true/false 下拉；`toggle` 在界面显示为 `Invert` / `取反`，明确表示翻转当前值。\n- 节点检查器的状态逻辑区现在分为条件和效果，两块编辑区旁各有添加按钮。添加条件和添加效果都会打开一次性结构化行；提交后生成的条件或效果写入对应文本编辑区，临时控件随即消失。\n- 选项条件表格最后一列显示每个选项的 `选择时效果`，条件控件与条件状态保留在同一行。\n- Choice 选项的 `选择时效果` 现在在检查器和 Playbook 之间实时同步：检查器保留可编辑文本区，Playbook 用结构化的操作 / 键 / 值行呈现同一批效果。\n- 右侧检查器宽度较窄时，条件行、效果行、路由控件和选项编辑区会优先改为两列排列；极窄时再退回单列，避免输入框或编辑区溢出侧栏。\n- 选项条件和脚本构建现在让选择条件编辑区与选择时效果编辑区等高，每一行的两个编辑区对齐。\n- Choice 选项的“选择要求”改为带标题的方框区块，与“选择时效果”一致，使两个同级控件外观统一。\n- 演示预览的状态文字使用统一的浅灰基础色，没有语义状态时不再继承到不一致的颜色。\n- 条件状态文案改为 `演示流程可满足此条件 / 需在演示流程中达成此条件`，让 Playbook 校验更像演示流程提示，而不是当前状态命令。\n- 删除最后一个角色或变量后，页面会立即刷新为空态，并正确保存空角色列表或空变量对象。\n\n### 兼容性\n\n- 旧 `.ncanvas` 文件仍可读取。加载时会规范化旧 `choices[]`、`choiceIndex` 连线、缺失的 `actions`、旧自定义节点类型、事件表列、Frame / Jump 数据和点号状态 key。\n- Story MD 导入会显式替换当前 canvas 项目。导入后使用 Layout JSON 与 State Schema sidecar 恢复布局、端口、frame 归属、变量和连线元数据。\n- 条件字段使用安全的 JavaScript 表达式子集。超出子集的表达式会保留在 Runtime JSON 并进入导出警告；Yarn、Ink 和 Twee 会给对应分支写出可解析的 `false` 条件保护。\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-15T11:09:27Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2f1b401b3097266d277ea8922f017a2b1e2355d9d2f7ddfa4883ef35177b578c",
+          "name": "main.js",
+          "size": 651840
+        },
+        {
+          "digest": "sha256:a58ae2670bc5079a595776f61ea174b44732a3f0b60685852abcd79242057b08",
+          "name": "manifest.json",
+          "size": 287
+        },
+        {
+          "digest": "sha256:7ab3f95a3fa263d82cfc33cd6cd66815bad085b76f482c79309c6504db0a26fd",
+          "name": "styles.css",
+          "size": 107368
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "# Narrative Canvas 1.1.0\n\nCompared with 1.0.5.\n\n## English\n\n### New\n\n- Bilingual interface (English / 中文). Web app: floating `EN / 中` toggle in the lower-right that remembers the last choice. Obsidian plugin: new `Language` setting that can follow Obsidian's interface language.\n- Condition nodes emit labelled `true` / `false` branches. The right-click branch menu names which outgoing link is which, and Play walks the matching branch.\n- Compound condition expressions. `Condition` and node `Requirements` accept `>=`, `<=`, `>`, `<` alongside `==` / `!=`, joined with `&&` or `||` — e.g. `trust_level >= 2 && lantern_lit == true`.\n- Playbook `actions` array in `Playbook.json`. Each entry has a trigger (`onVisit` / `onChoose` / `gate` / `manual`), an operation (`set` / `add` / `subtract` / `append` / `remove` / `toggle` / `clear` / `if` / `goTo` / `show` / `hide` / `lockChoice` / `unlockChoice`), a category (`Quest`, `Variable`, `Actor`, `Item`, `Location`, `Sim Status`, `Alert`, `Misc`, `Custom`, `Manual Enter`, `Quest Entry`), a target node, and a key/value. `gate` + `op: \"if\"` can drive a Condition node from outside. Edit through `Advanced JSON` for now; in-page editor lands in 1.1.1.\n- Frame layer ordering. New frames default beneath regular nodes but above older default-order frames, so adding a grouping frame no longer buries earlier ones.\n- New search bar at the bottom of the Playbook page that searches the Advanced JSON text. Pressing Enter expands Advanced JSON if collapsed and selects the matched span.\n- All four search bars (canvas / characters / events / Playbook) now show a unified `current / total` counter; pressing Enter cycles to the next match and focuses it — canvas centers + 100% zooms the node, character cards scroll to the middle, event rows scroll to the middle, Playbook selects the next JSON span. The counter refreshes live as you type; typing another character resets the \"current position\" to 0 so Enter starts cycling from the first match.\n- Vault integration improvements. Deleting a `.ncanvas` file closes only the matching Narrative Canvas tab(s); other open tabs (showing other files) keep their canvas state untouched. Renaming a `.ncanvas` file (or its parent folder) updates the open tab's path in place. Clicking the same `.ncanvas` file multiple times focuses the already-open tab instead of opening duplicates.\n- Connection ports can slide along the node edge. Drag a port to relocate it on its current side or jump to a different edge of the same node; the link recomputes its path live and the new position is saved with the node, which helps when several incoming or outgoing links would otherwise overlap.\n\n### Improved\n\n- PNG export resolution dropdown is sized by output pixels (`4096 × 4096`, `6144 × 6144`, `8192 × 8192`, `12000 × 12000`). Filename records the actual pixel size; oversized canvases auto-scale to stay within browser raster limits.\n- Characters page lays out as a real grid — cards align in even rows across columns instead of breaking across CSS columns.\n- Sample project shows the new gating: first-time vs repeat briefing condition, an optional Reyes-clue branch, 8 Playbook actions across Variable / Quest / Actor / Sim Status, and a compound trust + lantern gate.\n- Starting a new rectangle selection clears any leftover `Character focus` highlight.\n- Security hardening. Fixed three XSS surfaces in `.ncanvas` loading — node ids and link ids are no longer interpolated raw into HTML attributes. The Obsidian plugin bundle ships a stub `getWebProjectStorage` that always returns null and contains no browser-storage references, matching Obsidian's community-plugin review rules; the standalone web build keeps its own `localStorage` path so the in-browser app continues to save normally.\n- Choice node editing. Dark mode no longer renders the choice option card as a white sheet colliding with dark inputs — the card now follows the inspector panel palette. Editing the `op` dropdown or adding/deleting an \"On choose effects\" entry no longer collapses the `On choose effects` panel; expanded / collapsed state survives re-renders.\n- Routing field. `Routing` + `Go to title` now reflect actual semantics — the title input only appears when routing is `Go to title`; `Continue by link` and `End route` show a short hint instead. Switching away from `Go to title` clears the stray `target`, so saved files no longer carry a routing mode + ghost target combination.\n- Script Builder (Playbook). Each row's node card stacks the title and `Type id` vertically, centered, so narrow columns stay readable. The routing column behaves identically to the node inspector.\n- Docs. README now has a Connection Ports section (input vs output port semantics, link direction rule, and the \"slide along the edge\" behavior). Chinese README is split into a separate `README-zh.md`, linked from the top of `README.md`.\n\n### Compatibility\n\n- Old projects load unchanged. Condition outgoing links without `choiceIndex` are re-synced to the `true / false` slots on open.\n- `Playbook.json` without `actions` still loads — a missing array means no actions.\n- PNG filenames change from `name@2x.png` to `name-WxH.png`. External tools that watched the old pattern need updating.\n\n## 中文\n\n### 新增\n\n- 中英双语界面。网页端右下角浮动 `EN / 中` 切换按钮，会记忆上次选择；Obsidian 插件设置里新增 `语言` 项，可跟随 Obsidian 界面语言。\n- Condition 节点输出带标签的 `true` / `false` 分支。右键连线菜单会指明哪条线对应哪个分支，`演示` 时按条件结果走对应线。\n- 条件表达式增强。`Condition` 与节点 `条件要求` 支持 `>=`、`<=`、`>`、`<`，并可用 `&&`、`||` 拼接，例如 `trust_level >= 2 && lantern_lit == true`。\n- `Playbook.json` 新增 `actions` 数组。每条动作包含时机（`onVisit` / `onChoose` / `gate` / `manual`）、动作（`set` / `add` / `subtract` / `append` / `remove` / `toggle` / `clear` / `if` / `goTo` / `show` / `hide` / `lockChoice` / `unlockChoice`）、分类（`任务`、`变量`、`角色`、`物品`、`地点`、`模拟状态`、`提示`、`杂项`、`自定义`、`手动输入`、`任务条目`）、目标节点和键值。`gate` + `op: \"if\"` 可从外部驱动 Condition 节点。当前请通过 `高级 JSON` 编辑，行内编辑器将在 1.1.1 跟进。\n- `框架` 层级排序。新建 `框架` 默认在普通节点之下，但在更早默认顺序的 `框架` 之上 —— 新加分组不会一次盖住旧分组。\n- Playbook 页底部新增搜索框，搜索 Advanced JSON 文本。回车后会自动展开 Advanced JSON，并把命中的字段选中。\n- 四个搜索栏（canvas / 角色 / 事件表 / Playbook）统一显示 `当前 / 总数` 计数；回车循环到下一个命中并聚焦 —— canvas 居中并 100% 缩放命中节点，角色卡片滚到中间，事件行滚到中间，Playbook 选中下一段 JSON。输入时计数实时刷新，再敲字符会把\"当前位置\"重置为 0，回车从头开始。\n- vault 集成增强。在 vault 里删除 `.ncanvas` 文件时，只关闭对应该文件的 Narrative Canvas tab；其他 tab（显示别的文件）保留 canvas 状态不变。重命名 `.ncanvas` 文件或其父文件夹会同步更新已开 tab 的路径。重复点同一个 `.ncanvas` 不再开多个 tab，而是聚焦已经打开的那一个。\n- 连线端口可以沿节点边缘滑动。把端口拖动可以沿当前边滑动，也可以跳到节点的另一条边；连线路径会实时重算，新位置随节点一起保存。一个节点有多条相互重叠的进 / 出连线时，靠这个把布局摊开。\n\n### 改进\n\n- PNG 导出分辨率按输出像素分档（`4096 × 4096`、`6144 × 6144`、`8192 × 8192`、`12000 × 12000`）。导出文件名记录实际像素尺寸，超大画布会自动缩放避开浏览器位图限制。\n- `角色` 页面改为真正的网格 —— 卡片按容器宽度均匀对齐，不再用 CSS 多列布局错位。\n- 示例项目演示新的 gating：首次 vs 复述 briefing 条件、可选 Reyes 线索分支、跨 `变量` / `任务` / `角色` / `模拟状态` 的 8 条 `演示设置` 动作，以及复合 trust + lantern 条件门。\n- 开始新的矩形框选时会清掉之前的 `角色聚焦` 高亮。\n- 安全加固。修复加载 `.ncanvas` 文件时的三处 XSS —— 节点 id 与连线 id 不再裸拼进 HTML 属性。Obsidian 插件 bundle 里的 `getWebProjectStorage` 是空 stub，永远返回 null，主入口完全不引用浏览器存储，符合 Obsidian 社区插件审查规范；standalone 网页版照常走 `localStorage` 保存路径，浏览器里使用不受影响。\n- Choice 节点编辑。dark mode 下选项卡片不再显示为白底与黑色输入框相撞，卡片配色跟随 Inspector 面板。改 op 下拉框、添加或删除\"选择时效果\"不再折叠 `选择时效果` 面板，展开 / 折叠状态在重渲后保留。\n- 路线字段。`路线` 和 `跳到标题` 改成只有选了 `跳到标题` 才出现标题输入框；`沿连线继续` 和 `结束路线` 改为简短的提示文字。切走 `跳到标题` 后会清空残留的 target，保存出来的文件不会再出现 mode 与 ghost target 的组合。\n- 脚本构建器（Playbook）。每一行节点卡的标题与 `类型 id` 改成竖排居中，窄列也读得清。路线列的行为与节点 Inspector 完全一致。\n- 文档。README 新增\"连线端口\"章节（输入 / 输出端口的语义、连线方向规则、端口沿节点边缘滑动重排）。中文 README 拆成独立的 `README-zh.md`，在 `README.md` 顶部链接进入。\n\n### 兼容性\n\n- 旧项目原样加载。Condition 输出连线缺 `choiceIndex` 时会在打开时同步到 `true` / `false` 槽位。\n- 没有 `actions` 字段的 `Playbook.json` 仍能加载，运行时视为空数组。\n- PNG 文件名从 `name@2x.png` 改为 `name-WxH.png`，依赖旧格式的外部工具需要调整。\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-06T14:46:12Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:52c598715d56fce4426c05afca499382b481fb2997d897f12a08a75da9795c3a",
+          "name": "main.js",
+          "size": 465336
+        },
+        {
+          "digest": "sha256:b6677178be10360dc672db04ad4b35923ce0343d5ad5afef3b2611df0e9d76f3",
+          "name": "manifest.json",
+          "size": 295
+        },
+        {
+          "digest": "sha256:5e9ea03d4ea7dd053bb8df3d0bdb4f0953262c006877f1ca134fa27fdcf28eec",
+          "name": "styles.css",
+          "size": 89388
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "﻿# Narrative Canvas 1.0.6\r\n\r\n1.0.6 is a hotfix for the 1.0.5 release.\r\n\r\n[README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)\r\n\r\n## Fixes\r\n\r\n- Fixed plugin CSS generation so scoped `@media` rules are valid in `styles.css`.\r\n- Reworked the Characters masonry layout to avoid Obsidian's partially supported multicolumn CSS warning.\r\n- Removed `!important` usage reported by the CSS lint check.\r\n- Avoided full-vault file enumeration in the Obsidian project picker.\r\n- Avoided browser storage API references in the Obsidian plugin release bundle.\r\n\r\n## Release Assets\r\n\r\nThe Obsidian plugin release still includes only:\r\n\r\n- `main.js`\r\n- `manifest.json`\r\n- `styles.css`\r\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T23:16:39Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3e0351eb4459a8e5174dfea9412d36ef045855075908f7042d89ea64eade9119",
+          "name": "main.js",
+          "size": 463510
+        },
+        {
+          "digest": "sha256:791553ec663b14625b86cdf716cef4f4ff9b40c39ab998d9a68edca10301c31e",
+          "name": "manifest.json",
+          "size": 295
+        },
+        {
+          "digest": "sha256:d39b5d0b88956e934717082f59c2dd7e9a8c59bef8d4e674fdfea1698aa9ea58",
+          "name": "styles.css",
+          "size": 88809
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "﻿# Narrative Canvas 1.0.5\r\n\r\n[README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)\r\n\r\n## English\r\n\r\nCompared with `1.0.4`, this release mainly fixes canvas editing, node linking, Obsidian plugin compatibility, and the Story / Events / Characters workflows.\r\n\r\n### Canvas\r\n\r\n- Fixed node connection ports so links can be created between nodes again.\r\n- Adjusted connection port styling and positioning so ports follow node edges after resizing.\r\n- Choice branch links now keep visible labels and branch metadata, making it clear which option leads to which next node.\r\n- Single-clicking a node focuses it and zooms the canvas to `100%`.\r\n- Double-clicking a node focuses it, zooms the canvas to `100%`, and opens inline editing.\r\n- While editing a node, clicking inside the current node no longer exits edit mode; clicking outside the node exits edit mode.\r\n- Adjusted default node width and improved text wrapping to reduce sample content overflowing outside frames.\r\n- Fixed black image export output.\r\n- Image export now includes nodes and links outside the current viewport, with safer scaling for large canvases.\r\n- Removed the `Layout H`, `Layout V`, and HTML export buttons.\r\n\r\n### Story And Frame\r\n\r\n- In Story, a node belongs to a Frame when the node center point is inside that Frame.\r\n- If a node center point is inside multiple Frames, it belongs to the smallest containing Frame.\r\n- Frame folding and nesting rules avoid circular containment.\r\n- Dragging nodes / Frames in the Story page writes layout changes back to the canvas.\r\n- The README Story section now documents Frame containment, folding rules, and the relationship between Story display and Canvas operations.\r\n\r\n### Events Sheet\r\n\r\n- Fixed unclickable buttons in an empty Events Sheet.\r\n- Fixed cramped table text and columns after adding a new event frame.\r\n- Events Sheet columns can be resized by dragging, and their widths are preserved after releasing the mouse.\r\n- Renaming, hiding, showing, or deleting columns no longer refreshes the entire canvas.\r\n- Hidden columns are listed in the right-side `Hidden` area.\r\n- Search bars are now consistently placed in the bottom status bar.\r\n\r\n### Characters\r\n\r\n- Typing `@` in node text now opens a character suggestion dropdown.\r\n- When there are many characters, the dropdown has a max height and scrolls.\r\n- Fixed the leftover line after selecting a character from the dropdown.\r\n- New projects no longer include sample characters.\r\n- All characters can now be deleted.\r\n- The Characters page now uses a masonry layout to avoid large empty gaps caused by strict row alignment.\r\n\r\n### Playbook\r\n\r\n- New projects no longer include a default empty variable.\r\n- All variables can now be deleted.\r\n- Fixed add / delete behavior after all variables have been deleted.\r\n- Invalid JSON in Advanced JSON now shows an error instead of breaking the editor.\r\n\r\n### Obsidian Plugin\r\n\r\n- Fixed timers continuing to access cleared DOM after closing the plugin view.\r\n- Fixed stale project state remaining after reopening the plugin view.\r\n- Removed outdated base64 fallback resources.\r\n- Removed dynamic execution through `new Function`.\r\n- Removed native `prompt` / `confirm` dialogs and replaced them with in-app dialogs.\r\n- Plugin CSS is now more tightly scoped to avoid affecting Obsidian’s file tree and workspace styles.\r\n\r\n### UI And Storage\r\n\r\n- Undo / redo buttons were moved to the app header instead of floating only over the canvas.\r\n- `Ctrl+Z` / `Ctrl+Y` now work across more editing pages.\r\n- Browser storage wording is clearer, making it easier to distinguish browser-local saving from file saving.\r\n- The new project filename template description in Settings was simplified to show only the available placeholders.\r\n- Sidebar and file-list class names were cleaned up to reduce conflicts with Obsidian themes.\r\n\r\n## 中文\r\n\r\n相对 `1.0.4`，这个版本主要修复画布编辑、节点连线、Obsidian 插件端兼容以及 Story / Events / Characters 的工作流问题。\r\n\r\n### Canvas 画布\r\n\r\n- 修复节点连接点，节点之间可以重新拉出新连线。\r\n- 调整连接点样式和位置，节点缩放后连接点会跟随边框。\r\n- Choice 分支连线会保留可见 label 和分支信息，能看清每个选项通向哪个节点。\r\n- 单击节点：focus 节点并缩放到 `100%`。\r\n- 双击节点：focus 节点、缩放到 `100%`，并直接进入节点内编辑。\r\n- 编辑节点时，点击当前节点内部不会退出编辑；点击节点外才会退出。\r\n- 调整默认节点宽度，优化文本换行，减少 sample 中节点内容超出 frame 的情况。\r\n- 修复图片导出黑屏问题。\r\n- 图片导出现在能包含当前视口外的节点和连线，并对大画布做了安全缩放限制。\r\n- 移除了 `Layout H`、`Layout V` 和 HTML 导出按钮。\r\n\r\n### Story 与 Frame\r\n\r\n- Story 中判断节点是否属于某个 Frame：以节点中心点为准。\r\n- 如果一个节点中心点落在多个 Frame 内，归入最小的那个 Frame。\r\n- Frame 折叠和嵌套规则避免循环包含。\r\n- Story 页拖动节点 / Frame 会写回 canvas 布局。\r\n- README 的 Story 部分补充了 Frame 包含规则、折叠规则，以及 Story 显示和 Canvas 操作之间的关系。\r\n\r\n### Events Sheet\r\n\r\n- 修复空 Events Sheet 下按钮点不了的问题。\r\n- 修复新增 event frame 后表格文字和列挤在一起的问题。\r\n- Events Sheet 列宽可以拖拽调整，松开鼠标后会保留宽度。\r\n- 修改列名、隐藏列、显示列、删除列时不再刷新整个 canvas。\r\n- 隐藏列统一显示在右侧 `Hidden` 区域。\r\n- 搜索栏位置统一到底部状态栏。\r\n\r\n### Characters 角色页\r\n\r\n- 节点文本中输入 `@` 会弹出角色下拉选择框。\r\n- 角色很多时，下拉框有高度上限和滚动条。\r\n- 修复选择角色后下拉框残留横杠的问题。\r\n- 新建项目不再自带示例角色。\r\n- 允许删光所有角色。\r\n- 角色页改为瀑布流布局，避免严格按行排列造成大量空白。\r\n\r\n### Playbook\r\n\r\n- 新建项目不再自带默认空 variable。\r\n- 允许删光所有 variables。\r\n- 修复删光 variables 后再次新增 / 删除时可能失效的问题。\r\n- Advanced JSON 输入非法 JSON 时会给出错误提示，不会直接把编辑器弄坏。\r\n\r\n### Obsidian 插件端\r\n\r\n- 修复关闭视图后定时器继续访问已清空 DOM 的问题。\r\n- 修复重新打开插件视图时残留上一次项目状态的问题。\r\n- 移除过期的 base64 fallback 资源。\r\n- 移除 `new Function` 动态执行。\r\n- 移除原生 `prompt` / `confirm`，改为应用内对话框。\r\n- 插件 CSS 做了更严格的作用域隔离，避免影响 Obsidian 左侧文件树和工作区样式。\r\n\r\n### UI 与存储\r\n\r\n- 撤销 / 重做按钮移动到应用顶部区域，不再只悬浮在 canvas 上。\r\n- `Ctrl+Z` / `Ctrl+Y` 可用于更多编辑页面。\r\n- 网页端 Browser storage 文案更清楚，便于区分本地浏览器保存和文件保存。\r\n- 设置页的新项目文件名模板说明已简化，只保留可用 placeholder。\r\n- 侧栏和文件列表 class 命名清理，减少和 Obsidian 主题冲突。\r\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T22:40:12Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fb2c01031d1ed8c4db274328c524f594528f4e53d68bf0f3aacc85733c677165",
+          "name": "app.js",
+          "size": 279955
+        },
+        {
+          "digest": "sha256:1a5e7aaf956b9289a4ed6f978341fc63055f81cdb6851ad954483f756b9d2b8c",
+          "name": "canvas.css",
+          "size": 60213
+        },
+        {
+          "digest": "sha256:453629476ba71ab5d3e914fcc07525f9b081706999f417f521a3f4e81f5a9bb8",
+          "name": "index.html",
+          "size": 18279
+        },
+        {
+          "digest": "sha256:45a85e4f5b1b71eee8c9c1bb451899c54d648d4b1815bab36cc139b567b54129",
+          "name": "main.js",
+          "size": 468023
+        },
+        {
+          "digest": "sha256:d9fbf98e0ca1dac803b94ea06fef183b02e29a320e73d7bef9d4aa6925cadaba",
+          "name": "manifest.json",
+          "size": 296
+        },
+        {
+          "digest": "sha256:b3dddbcf786aed50e2d4c3727119c63d5ec7c75c1ed1a2a2540c0ae9d6149c2c",
+          "name": "styles.css",
+          "size": 392
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "## English\r\n\r\n- Fixes plugin-side search and form controls by isolating workspace/search class names and keeping Obsidian host events from swallowing input focus.\r\n- Adds resizable, collapsible left and right sidebars with Obsidian-style icon toggles, saved UI state, and minimum widths that keep labels from wrapping.\r\n\r\n## 中文\r\n\r\n- 修复插件端搜索框和表单控件点不了的问题：隔离 workspace/search 类名，并阻止 Obsidian 宿主事件吞掉输入焦点。\r\n- 左右栏支持拖拽伸缩和折叠，使用接近 Obsidian 原生的图标按钮；栏宽状态会保存，并限制最低宽度，避免文字被挤到换行。\r\n\r\n[README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T06:24:29Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:44644415a864980b73526f7e8b328e3e9788c36ff055256cac2a32f329275a3c",
+          "name": "app.js",
+          "size": 271296
+        },
+        {
+          "digest": "sha256:3bf74e72ba5e67d50384a117294486092aea7dc8091bfb7550a12a5f5058571e",
+          "name": "canvas.css",
+          "size": 55540
+        },
+        {
+          "digest": "sha256:2da5a5da34772f656c7d9f75389a2b12aaead9e8cc7c5a16007eeae4e780132c",
+          "name": "index.html",
+          "size": 17067
+        },
+        {
+          "digest": "sha256:45a85e4f5b1b71eee8c9c1bb451899c54d648d4b1815bab36cc139b567b54129",
+          "name": "main.js",
+          "size": 468023
+        },
+        {
+          "digest": "sha256:49b9d9fb56ef8bdf00d9fad2fa925c44de848b88cca4a4be7fccd6eda805b1e9",
+          "name": "manifest.json",
+          "size": 322
+        },
+        {
+          "digest": "sha256:b3dddbcf786aed50e2d4c3727119c63d5ec7c75c1ed1a2a2540c0ae9d6149c2c",
+          "name": "styles.css",
+          "size": 392
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "## English\r\n\r\n- Improves the canvas right-click menu so it closes after menu actions, outside clicks, Escape, or window focus changes in the Obsidian runtime.\r\n- Removes the broken filename-token dropdown from settings and shows the available tokens as static text.\r\n- Aligns Events Sheet search and action controls with the Characters page layout.\r\n- Renames the fixed whiteboard entry from `Sample.canvas` to `Narrative.canvas` and clarifies that it does not track the project title or saved `.ncanvas` filename.\r\n\r\n## 中文\r\n\r\n- 改进 Obsidian 运行端的 canvas 右键菜单：菜单操作后、点外部、按 Escape、窗口失焦时都会关闭。\r\n- 移除设置页里失效的文件名 token 下拉框，改为静态显示可用 token。\r\n- 将 Events Sheet 的搜索栏和操作按钮排列调整为接近 Characters 页面。\r\n- 将固定白板入口从 `Sample.canvas` 改为 `Narrative.canvas`，并说明它不会跟随 project title 或保存出来的 `.ncanvas` 文件名变化。\r\n\r\n## README / 使用说明\r\n\r\n完整说明、截图和使用示例见仓库 README：[English and 中文 README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T04:57:42Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a9cddb0800ff4effba9a3958e6a3f09047073bbdc70600115485d0b5de9f53e",
+          "name": "app.js",
+          "size": 268872
+        },
+        {
+          "digest": "sha256:0cf0f58cbee690869f5b736e2d598e5cc69551bb3c53a30acb3f17173c420682",
+          "name": "canvas.css",
+          "size": 55921
+        },
+        {
+          "digest": "sha256:522aeffc8c9b716ed4d535968218fababc4cf649fe52f93afb5923782a930942",
+          "name": "index.html",
+          "size": 17065
+        },
+        {
+          "digest": "sha256:6506faf7c1adf9adb030bfc923f1a5d3e4cbc5d42128c974b8e0ba46271dae7e",
+          "name": "main.js",
+          "size": 468788
+        },
+        {
+          "digest": "sha256:9954747ebc928a919cd4a6f014fc81742d41df8655e4817c6a1647298bdcef18",
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:b3dddbcf786aed50e2d4c3727119c63d5ec7c75c1ed1a2a2540c0ae9d6149c2c",
+          "name": "styles.css",
+          "size": 392
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "## English\r\n\r\n- Fixes the Obsidian launch recursion that could show `Maximum call stack size exceeded` and leave the Narrative Canvas view blank.\r\n\r\n## 中文\r\n\r\n- 修复 Obsidian 打开 Narrative Canvas 时可能出现 `Maximum call stack size exceeded` 并导致视图空白的问题。\r\n\r\n## README / 使用说明\r\n完整说明、截图和使用示例见仓库 README：\r\n\r\n[English and 中文 README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T03:51:26Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8dde855cf1730a89210a01922e1b58feff06bdbddb9c260dbcb575a811832540",
+          "name": "main.js",
+          "size": 467727
+        },
+        {
+          "digest": "sha256:90588c76f0cb083ea44eef712d13dbe28296e6b99929f2dc2edc6160fa8a7c2d",
+          "name": "manifest.json",
+          "size": 245
+        },
+        {
+          "digest": "sha256:5099a4abdfa203df695053709c740c4ad2601e4d966477e3093ed0979bdeb2e4",
+          "name": "styles.css",
+          "size": 374
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "## English\n\nNarrative Canvas 1.0.1 updates the community plugin release from 1.0.0 with startup, packaging, and review fixes.\n\n### Changes since 1.0.0\n\n- Fixed a plugin-side startup path that could leave the Narrative Canvas view blank after clicking the ribbon icon.\n- The canvas app now initializes once inside the plugin host, waits for startup to finish, and shows a visible startup error instead of silently leaving a white view.\n- Removed the extra vault-file creation call after opening the view, so a failed startup cannot cascade into more UI errors.\n- Addressed CSS lint warnings by replacing unsupported scrollbar declarations, multicolumn layout, extended system font keywords, and `!important` overrides.\n- Kept the manifest description compatible with automated review rules.\n- Release assets remain the standard community plugin files only: `manifest.json`, `main.js`, and `styles.css`. The canvas HTML, CSS, and app script are embedded in `main.js` as fallbacks.\n- Rechecked empty `characters` and `variables` project states so the Characters and Playbook pages can open without freezing.\n\n## 中文\n\nNarrative Canvas 1.0.1 相比 1.0.0，主要修复插件端启动、打包和社区审核问题。\n\n### 相比 1.0.0 的变化\n\n- 修复点击 ribbon 打开插件后可能出现白屏的启动路径。\n- canvas app 在插件 host 内只初始化一次，并等待启动完成；如果启动失败，会显示可见错误，不再只留下空白页面。\n- 移除了打开视图后的额外 vault 文件创建调用，避免启动失败后继续触发更多 UI 错误。\n- 修复 CSS lint 警告：替换不兼容的 scrollbar 声明、multicolumn 布局、扩展系统字体关键字和 `!important` 覆盖。\n- 保持 manifest description 符合自动审核规则。\n- Release 资产仍只包含社区插件标准文件：`manifest.json`、`main.js`、`styles.css`。canvas HTML、CSS 和 app script 已作为 fallback 内嵌在 `main.js` 中。\n- 复查了空 `characters` 和 `variables` 项目状态，Characters 与 Playbook 页面可以正常打开，不会卡死。\n\n### README / 使用说明\n\n完整说明、截图和使用示例见仓库 README：\n\n[English and 中文 README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T02:33:33Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ebfe50c8455f1729b87330a608dff0d2a92d4104a76c31c73e535d9d4100a53",
+          "name": "main.js",
+          "size": 467736
+        },
+        {
+          "digest": "sha256:929bd08a86c9c95ad323baf13e75ba3c3457e3164fe8f4cefd409a426f88c9cd",
+          "name": "manifest.json",
+          "size": 245
+        },
+        {
+          "digest": "sha256:c74e3bbcdf251995c5854b92e786c9da9d3e9bb41785b60d58f36676db1e4239",
+          "name": "styles.css",
+          "size": 221
+        }
+      ],
+      "author": "ringeringeraja33",
+      "description": "## English\n\nNarrative Canvas 1.0.0 packages the desktop plugin for visual narrative planning.\n\n### Highlights\n\n- Floating Undo and Redo buttons on the canvas.\n- Playbook rule creation works in both the browser app and the desktop runtime.\n- Story Focus selects the node, opens the Node inspector, centers the canvas on that node, and uses 50% zoom.\n- Events Sheet supports hidden-column restoration from the sticky right column.\n- Project files use `.ncanvas`. New files default to `{{project title}}-{{YYYY-MM-DD HHmmss}}.ncanvas`, and file names stay independent from project titles after creation.\n- Empty variables and characters are normalized so new or cleared projects do not freeze.\n- README updated with usage guidance and screenshots.\n\n### Release assets\n\n- `manifest.json`, `main.js`, and `styles.css` are the standard community plugin release files.\n- `main.js` includes embedded fallbacks for the canvas HTML, canvas CSS, and app script, so the plugin does not require separate `app.js`, `index.html`, or `canvas.css` release assets.\n\n## 中文\n\nNarrative Canvas 1.0.0 打包了桌面端插件，用于可视化规划复杂叙事结构。\n\n### 主要更新\n\n- Canvas 左上角加入悬浮的 Undo 和 Redo 按钮。\n- Playbook 的规则创建在网页端和桌面运行端都可以正常使用。\n- Story 里的 Focus 会选中节点，打开 Node inspector，把 canvas 移到该节点，并使用 50% 缩放。\n- Events Sheet 每张表右侧加入固定的隐藏列恢复区。\n- 项目文件使用 `.ncanvas`。新文件默认按 `{{project title}}-{{YYYY-MM-DD HHmmss}}.ncanvas` 命名，创建之后文件名和 project title 互不影响。\n- variables 和 characters 为空时会自动补默认数据，避免新建或清空项目后卡死。\n- README 已更新使用说明和截图。\n\n### Release 文件\n\n- `manifest.json`、`main.js`、`styles.css` 是社区插件标准 release 文件。\n- `main.js` 已内嵌 canvas HTML、canvas CSS 和 app script 的 fallback，所以 release 不需要单独附带 `app.js`、`index.html` 或 `canvas.css`。\n\n### README / 使用说明\n\n完整说明、截图和使用示例见仓库 README：\n\n[English and 中文 README](https://github.com/ringeringeraja33/NarrativeCanvas#readme)\n",
+      "draft": false,
+      "name": "Narrative Canvas 1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T00:42:07Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "ringeringeraja33/NarrativeCanvas"
+}

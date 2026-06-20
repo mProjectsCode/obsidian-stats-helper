@@ -1,11 +1,11 @@
 {
   "author": "Alexander Brittain",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Dictate notes with Whisper or Cohere Transcribe; clean up with a local Ollama model. Private, on-device speech-to-text for Obsidian.",
+  "description": "Dictate notes with Whisper or Cohere Transcribe; clean up with a local Ollama model. Private, on-device speech-to-text for Obsidian. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "local-dictation",
-  "lastChangedAt": "2026-06-01T19:00:58.834Z",
-  "lastFetchedAt": "2026-06-02T04:02:58.925Z",
+  "lastChangedAt": "2026-06-16T05:02:58.614Z",
+  "lastFetchedAt": "2026-06-16T05:02:58.614Z",
   "manifest": {
     "author": "Alexander Brittain",
     "authorUrl": "https://github.com/brittain9",
@@ -13,13 +13,237 @@
     "helpUrl": "https://github.com/brittain9/local-dictation-obsidian-plugin",
     "id": "local-dictation",
     "isDesktopOnly": true,
-    "minAppVersion": "1.8.7",
+    "minAppVersion": "1.11.5",
     "name": "Local Dictation",
-    "version": "2026.5.24"
+    "version": "2026.6.11"
   },
   "name": "Local Dictation",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:9a53a5237c4e050593bac21e60500b4a919ac4339f7e24790d6b4b9f20372855",
+          "name": "checksums.txt",
+          "size": 491
+        },
+        {
+          "digest": "sha256:fedb418e20fea7728351f34b30437f227b8f5c5ca90f59f10131dc048e80672a",
+          "name": "main.js",
+          "size": 216682
+        },
+        {
+          "digest": "sha256:1a57fbb0637940ed1c8876781049dc504a93183e4af6cee706d0c66db4e4408a",
+          "name": "manifest.json",
+          "size": 437
+        },
+        {
+          "digest": "sha256:f640d24f969f171f67e2ed37ff6b660c61814ccc5812ec4b1ef21628f6d60f69",
+          "name": "sidecar-linux-x86_64-cpu.tar.gz",
+          "size": 11850270
+        },
+        {
+          "digest": "sha256:0b66e36088a64a2fbe3114eb89dc5170a079bf4a98b4ac2f6bf9e6a159ee13f3",
+          "name": "sidecar-linux-x86_64-cuda.tar.gz",
+          "size": 714377496
+        },
+        {
+          "digest": "sha256:b1d902c84b9556d02e49975f6449efc6cb9d579e63577825ef2733df3c7b3711",
+          "name": "sidecar-macos-arm64.tar.gz",
+          "size": 10504326
+        },
+        {
+          "digest": "sha256:5a4a0eec8f38ecb9ad82fff0b5f021d3bc69cf347ef88305ad8a22261e85f4f3",
+          "name": "sidecar-windows-x86_64-cpu.tar.gz",
+          "size": 11111556
+        },
+        {
+          "digest": "sha256:2c20c58085b6fbc2066bdc1d6cee633faeeeceae3138d8dc0b6ba539a76e317e",
+          "name": "sidecar-windows-x86_64-cuda.tar.gz",
+          "size": 695957301
+        },
+        {
+          "digest": "sha256:34c5176fb33db154d8c1448a96b2981a86cca0c3aff927fd9fb641450cc6bb02",
+          "name": "styles.css",
+          "size": 22854
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Highlights\n\n- **External edits now show up when Obsidian regains focus.** Presets you change in another window, edits that arrive through sync, and local models you pull from the terminal (`ollama pull`) are picked up automatically the next time the Obsidian window gains focus — no reload or reopening settings. A new serialized preset store keeps a focus refresh, or an unrelated settings save, from ever clobbering preset edits made elsewhere.\n- **Search in the preset manager.** The preset manager gains a search bar that behaves like the community plugin browser: type to filter the built-ins and your own presets by name or description, with the matched text highlighted. Empty sections collapse, and your query survives opening and closing a preset.\n- **Your OpenRouter API key is now stored encrypted.** The key moves out of plaintext `data.json` and into Obsidian's encrypted Secret Storage; only an opaque secret id is persisted or synced, and the key is read only at the OpenRouter request boundary. An existing plaintext key migrates automatically on first load and the old field is stripped — the migration is idempotent, so a synced or restored `data.json` can never overwrite a newer key with a stale one. Because encryption at rest landed in Obsidian 1.11.5, this release now requires desktop **1.11.5** or newer.\n- **GPU acceleration upgraded to CUDA 13.2.** The release CUDA sidecars (Windows and Linux) and their bundled runtimes now build against CUDA 13.2, with support for Visual Studio 2026. **Action for GPU users:** the CUDA sidecar now needs an NVIDIA driver compatible with CUDA 13.x (**R580 or newer**) — update your driver before upgrading if you rely on GPU acceleration.\n\n## Fixes\n\n- **Preset manager duplicate, delete, and save are reliable.** Clicking the pencil/copy/trash icons on a preset row no longer also opens the editor. Duplicating now picks the first free \"(copy)\" / \"(copy N)\" name so duplicate-then-save works immediately, and the save path re-adds a preset that was deleted elsewhere instead of silently dropping it. The user preset cap is raised from 25 to 50, the retired \"Brain dump organizer\" built-in falls back to Clean up, and a muted size estimate (~tokens / chars) now sits under the prompt so you can see how large each request will be.\n- **Sidecar updates now cover every variant you installed.** A plugin update refreshes all of your installed sidecars — CPU and CUDA — instead of only the currently selected engine, through one prompt and one multi-variant flow with per-variant progress (e.g. `CUDA sidecar (1 of 2)`). The preferred runtime updates first, so a partial failure still leaves your selected engine current; development bundles and explicit sidecar-path overrides are left untouched.\n\n## Internal\n\n- **Much faster CUDA release builds.** Caching the extracted Windows CUDA toolkit and tightening the cache identity cut the warm CUDA build legs from ~21–23 minutes to about **2m41s (Windows)** and **3m01s (Linux)**; each release now also emits a timing summary and prunes unreachable Actions caches.\n- Biome upgraded to 2.5.0 (recommended-rules preset migrated).\n- Post-merge cleanup of the above changes: a regression test pins the idempotent OpenRouter migration, the duplicated `requiredEnv` env-var helper is shared from `scripts/lib/`, and a mislabeled packaging test is renamed to what it actually covers. No behavior change.\n",
+      "draft": false,
+      "name": "2026.6.11",
+      "prerelease": false,
+      "publishedAt": "2026-06-14T01:04:33Z",
+      "tag": "2026.6.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b410bf6d426e9f790cd8906f8d97eeac4c1f4672283650f18691bc3b1d39ce43",
+          "name": "checksums.txt",
+          "size": 491
+        },
+        {
+          "digest": "sha256:0545b48e7d4ef539ded7900aeb840cc9fd1c36b6c9fc2ded7cc660f8e222249d",
+          "name": "main.js",
+          "size": 208009
+        },
+        {
+          "digest": "sha256:b1fd50d4ac775c34fa3ef6ca8f4069c094962a6262a662bb20112dcceb0ceb95",
+          "name": "manifest.json",
+          "size": 436
+        },
+        {
+          "digest": "sha256:fe6b882259245cadf2802adc2dc50a65926419e515b4fe1b4956afe8111aaa36",
+          "name": "sidecar-linux-x86_64-cpu.tar.gz",
+          "size": 11876843
+        },
+        {
+          "digest": "sha256:cf8954d88bfb5aa3ca9e94a868a1697cec5ca85d471b47258e8d88aab586d7aa",
+          "name": "sidecar-linux-x86_64-cuda.tar.gz",
+          "size": 874754747
+        },
+        {
+          "digest": "sha256:2908977a6baeae005107130bdfe5a54982572c50c6b6e5eb328c376ca15eeecf",
+          "name": "sidecar-macos-arm64.tar.gz",
+          "size": 10529539
+        },
+        {
+          "digest": "sha256:1961d1ac1e71d338b58e4b778319ae2013d2f9df4e7d48b97789c635f5cdfe9d",
+          "name": "sidecar-windows-x86_64-cpu.tar.gz",
+          "size": 11117148
+        },
+        {
+          "digest": "sha256:74de03bf39281b183710bcdb72dc9daa4ad780988aa8093e0284cf5ea166f6f6",
+          "name": "sidecar-windows-x86_64-cuda.tar.gz",
+          "size": 844380124
+        },
+        {
+          "digest": "sha256:764fd7c261599cc8b2f0558e1dd3ec95df74d8abbaaa885eb10249ceb75ff88f",
+          "name": "styles.css",
+          "size": 22207
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Highlights\n\n- **Preset manager.** The inline prompt textarea, the ephemeral Custom state, and the save-style dialog are replaced by a drill-in preset manager (same pattern as Manage models): browse the built-ins, then create, edit, duplicate, rename, or delete your own presets. An existing custom prompt migrates automatically into a \"My preset\" entry.\n- **Presets can add instead of replace.** Each preset now declares where its output goes: replace the transcript, or add generated content above/below the untouched transcript at the end of a session. The built-in lineup follows suit — **TLDR** now adds its summary above your text instead of rewriting it, a new **Action items** preset appends a checklist below, and Voice commands is retired (old references fall back to Clean up).\n- **Per-preset overrides.** A preset can pin minimum words, temperature, and note-as-context; blank fields inherit your global settings. While the active preset pins a value, the corresponding panel row is locked with a \"Set by preset\" explanation instead of silently ignoring your input.\n- **OpenRouter test button.** One click on the model row sends a minimal completion through your saved key and model id, proving key validity, credits, and the exact model end to end — a checkmark flash on success, a specific message on failure.\n- **Configurable remote timeout.** Advanced > Limits gains a remote request timeout (default 60 s, 5–600 s) for OpenRouter cleanup calls, shown only when remote or auto routing is active.\n\n## Fixes\n\n- **An empty LLM result no longer eats your words.** If a per-utterance cleanup returns empty output, the raw utterance now stays in the note and the failure is surfaced, matching the batch path. An additive preset that produces nothing shows a quiet notice instead of looking like success.\n- **Ollama status recovers on its own.** A failed model-catalog load used to mark the provider as loaded, so the focus-time recheck skipped it forever and the status stayed unhealthy until a manual refresh. Providers whose last load failed are now retried when the panel opens, the window regains focus, or routing changes.\n- **Failure messages name the real culprit.** Errors carry the provider that actually handled the request (flipping the privacy kill switch mid-call can no longer misattribute a failure), \"model not found\" now distinguishes an unconfigured Ollama model from a missing OpenRouter id, and an Ollama missing-model 404 maps to the same clear message as OpenRouter's instead of a generic \"LLM transform failed.\"\n- **Your timing choice survives a restart.** Disabling Transform and re-enabling it later restores the mode you last chose instead of resetting it; when a preset pins the timing, the mode row stays visible but locks with an explanation.\n- **Output-token caps scale with the dictated text** on every path, and the note-context/prior-utterance wrapping no longer inflates the remote billing ceiling.\n- **OpenRouter picker polish.** Models that don't declare modalities are no longer hidden, and the key and catalog probes run in parallel so the status line settles about twice as fast.\n- **Sidebar polish.** The auto-threshold explainer moved into the standard info tooltip, the total context cap is hidden in batch mode (it only governs per-utterance context), the Auto-tab \"Local · Ollama\" / \"Remote · OpenRouter\" labels are restyled as single-line dividers, and the note-as-context toggle is marked experimental with a note about remote input-token cost.\n\n## Internal\n\n- Releases now version as `YYYY.M.MICRO`; this release is 2026.6.10.\n- The persisted settings shape changed: `llmPostprocessPrompt` is removed (the active preset ref is the single source of truth) and legacy per-preset `mode`/`minWords`/`temperature` fields migrate into `timing`/`overrides` on load.\n- Type declarations stay resolvable under the Obsidian community scanner's TypeScript 5.4.\n- Routine dependency bumps (npm dev tooling, Rust minor/patch group).\n",
+      "draft": false,
+      "name": "2026.6.10",
+      "prerelease": false,
+      "publishedAt": "2026-06-11T00:00:42Z",
+      "tag": "2026.6.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c22069d531edabfd4c24018d1980ed02fb0d281d62ce962bb4883c18659c146",
+          "name": "checksums.txt",
+          "size": 491
+        },
+        {
+          "digest": "sha256:b82eb39432b1bfc9cec9f03fd8e7fe5b59fbbae937254343d95c72dc34c41023",
+          "name": "main.js",
+          "size": 202308
+        },
+        {
+          "digest": "sha256:8945fa643b8cc9b72ae4dca077b915461a5a7259e6d256ca6b333566d8f44f91",
+          "name": "manifest.json",
+          "size": 435
+        },
+        {
+          "digest": "sha256:10f4f5b4d450b0fccac48454de94c84da9f90f1d137a4c0bf8ca184731fe5e33",
+          "name": "sidecar-linux-x86_64-cpu.tar.gz",
+          "size": 11876243
+        },
+        {
+          "digest": "sha256:db622a96b4a16ba3580c1f2651a49af57e37ab65a99327d89e29d5256b549bab",
+          "name": "sidecar-linux-x86_64-cuda.tar.gz",
+          "size": 874770198
+        },
+        {
+          "digest": "sha256:7cf1d4eea66cd8fec1adb3ce57a2eb7d893db966c39f4a7eaac4e59fbfbf2f0c",
+          "name": "sidecar-macos-arm64.tar.gz",
+          "size": 10530029
+        },
+        {
+          "digest": "sha256:3f65b526fa0b91510d024b9a231a05435f9a604fc11c6d1cba98ac1e5e7a2679",
+          "name": "sidecar-windows-x86_64-cpu.tar.gz",
+          "size": 11125538
+        },
+        {
+          "digest": "sha256:dcaa1373764300d76b882d29b5b24bffd74783867897da17edd7116cebf69daf",
+          "name": "sidecar-windows-x86_64-cuda.tar.gz",
+          "size": 844437812
+        },
+        {
+          "digest": "sha256:e5b271db89d10bf77e5a8784361a1c1400e0b3122f20f6cb0778c63b64bf05c8",
+          "name": "styles.css",
+          "size": 21514
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Highlights\n\n- **Maintenance release for Obsidian community-review compliance.** No user-facing changes — every dictation, transform, and model behavior is identical to 2026.6.8. This release only adjusts how a couple of internal calls are written so the plugin clears the latest Obsidian automated-review ruleset.\n\n## Internal\n\n- Network requests reach `fetch` through `window.fetch` (a member access) instead of the bare global, satisfying `no-restricted-globals` without an inline eslint-disable directive. The desktop-only streamed byte-cap reads and `AbortSignal` cancellation are unchanged.\n- The two remaining show/hide toggles drive visibility with a CSS class via `toggleClass('local-stt-hidden', …)` instead of assigning `element.style.display`, satisfying `obsidianmd/no-static-styles-assignment`.\n",
+      "draft": false,
+      "name": "2026.6.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-08T03:09:08Z",
+      "tag": "2026.6.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2e60536d2f0ed442831016c66b3a1d7da5a7cebf466f85b22e1ce2580382012b",
+          "name": "checksums.txt",
+          "size": 491
+        },
+        {
+          "digest": "sha256:bbae935682bba3f0f420479ec6a8748d45ef6511809158d603a31204d6c273a9",
+          "name": "main.js",
+          "size": 202285
+        },
+        {
+          "digest": "sha256:9dd95366543de301dba1f3bcc9e8bc4d5c95e365568e4bf955e6263fe93ff347",
+          "name": "manifest.json",
+          "size": 435
+        },
+        {
+          "digest": "sha256:6c987ef1eb88e8b00e3ceab1f7cadeaa68ce5eb5e7b3b237f9e8c76cc9246867",
+          "name": "sidecar-linux-x86_64-cpu.tar.gz",
+          "size": 11877664
+        },
+        {
+          "digest": "sha256:72822bf9aea625a7e6477fa7d2f0f1d7600db1c5c3cafa9d16e1ade10a55445b",
+          "name": "sidecar-linux-x86_64-cuda.tar.gz",
+          "size": 874749563
+        },
+        {
+          "digest": "sha256:f6d562730d72e2c7f7e90d1447bb85c953bbed81da757c870c35da8ee2dcd8f9",
+          "name": "sidecar-macos-arm64.tar.gz",
+          "size": 10529548
+        },
+        {
+          "digest": "sha256:8d22019adeec6aa5c62d2746f75451b55b0908333727e962fd54f54e8a23dfe4",
+          "name": "sidecar-windows-x86_64-cpu.tar.gz",
+          "size": 11125770
+        },
+        {
+          "digest": "sha256:ecec57f829202fe6d4304794105028bb5855a5714c69edc3b0677a84113359bc",
+          "name": "sidecar-windows-x86_64-cuda.tar.gz",
+          "size": 844437752
+        },
+        {
+          "digest": "sha256:e5b271db89d10bf77e5a8784361a1c1400e0b3122f20f6cb0778c63b64bf05c8",
+          "name": "styles.css",
+          "size": 21514
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Highlights\n\n- **Obsidian community-review compliance.** This is a quality-and-compliance release with no user-facing feature changes — every dictation, transform, and model behavior is identical to 2026.6.7. It brings the plugin in line with the Obsidian community-plugin review guidelines so it can pass automated review:\n  - Show/hide UI state (the microphone **Detect** button and the sidecar-install settings group) now lives in a CSS class instead of inline element styles, so themes can override it.\n  - The settings tab no longer renders a redundant \"Local Dictation\" heading at the top — the pane is already titled with the plugin name, and it now opens straight to the model card per Obsidian's settings conventions.\n\n## Internal\n\n- **Adopted `eslint-plugin-obsidianmd` with type-aware linting.** The Obsidian review ruleset — which extends typescript-eslint's type-checked rules — now runs in the build pipeline via a new `lint:obsidian` step wired into `check:frontend`, alongside the existing Biome lint. This catches guideline and type-safety regressions before a release instead of at review time.\n- Conformance fixes surfaced by the new ruleset, none of which change runtime behavior: timer calls go through `window.setTimeout`/`window.clearTimeout`, DOM creation uses Obsidian's `activeDocument`, fire-and-forget async work in lifecycle hooks and event handlers is explicitly voided, the desktop-only streaming `fetch` (needed for cancellation and the response byte cap) is documented as an intentional exemption from `requestUrl`, and a handful of unsafe casts were replaced with properly typed access.\n",
+      "draft": false,
+      "name": "2026.6.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-08T01:35:04Z",
+      "tag": "2026.6.8"
+    },
     {
       "assets": [
         {

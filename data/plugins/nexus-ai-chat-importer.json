@@ -1,24 +1,76 @@
 {
   "author": "superkikim",
   "defaultBranch": "master",
-  "description": "Import AI chat conversations from ChatGPT, Claude, and Le Chat exports into Obsidian as clean, readable Markdown files.",
+  "description": "Import AI chat conversations from ChatGPT, Claude, and Mistral Vibe (formerly Le Chat) exports into Obsidian as clean, readable Markdown files.",
   "errors": [],
   "id": "nexus-ai-chat-importer",
-  "lastChangedAt": "2026-06-01T15:03:58.582Z",
-  "lastFetchedAt": "2026-06-02T09:04:58.580Z",
+  "lastChangedAt": "2026-06-04T01:02:58.596Z",
+  "lastFetchedAt": "2026-06-04T01:02:58.596Z",
   "manifest": {
     "author": "Superkikim",
     "authorUrl": "https://github.com/Superkikim",
-    "description": "Import and organize AI chat exports from ChatGPT, Claude, Mistral Le Chat, Perplexity, and more in your local vault, so you stay in control of your data.",
+    "description": "Import and organize AI chat exports from ChatGPT, Claude, Mistral Vibe, Perplexity, and more in your local vault, so you stay in control of your data.",
     "id": "nexus-ai-chat-importer",
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "Nexus AI Chat Importer",
-    "version": "1.6.5"
+    "version": "1.6.7"
   },
   "name": "Nexus AI Chat Importer",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:d13e9a2a3c7848eeb5469d721ec5178f45de948a1c6e0a17cb37b93d95069196",
+          "name": "main.js",
+          "size": 1098659
+        },
+        {
+          "digest": "sha256:a4467c4b8eca8a3e9d6b200e1a41ac94f1da965e51967c2671fddfc6906fcf35",
+          "name": "manifest.json",
+          "size": 410
+        },
+        {
+          "digest": "sha256:c8d3723b294e3ae54e8519efe5fd2e9779fe78ea14c81fee173417f598dcb575",
+          "name": "styles.css",
+          "size": 51909
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Version 1.6.7 — Mistral Vibe & Message Order Fix\n\n![Version](https://img.shields.io/badge/version-1.6.7-blue) ![Patch](https://img.shields.io/badge/type-patch-orange)\n\n### ✨ New\n\n- **Mistral AI provider rebranded to \"Mistral Vibe\"**\n  - Mistral AI has renamed their chat product; the plugin now reflects the new branding throughout the UI\n  - On upgrade, existing vault folders are renamed automatically: `lechat/` → `vibe/`\n  - Conversation frontmatter updated automatically: `provider: lechat` → `provider: vibe`\n  - Import report links updated to reflect the new folder paths\n  - No re-import required\n\n### 🔧 Improved\n\n- **Upgrade migrations now run after the vault is fully indexed**\n  - Migrations execute in `onLayoutReady` instead of `onload`, preventing silent no-ops on first launch\n\n### 🐛 Fixed\n\n- **Claude: messages rendered out of order in fast exchanges**\n  - When a user replied within the same second as the assistant finished, both timestamps\n    truncated to identical values and a UUID-based tiebreaker flipped the pair —\n    producing two consecutive user messages with the assistant reply displaced below them\n  - `chat_messages` in Claude's export is already in correct chronological order;\n    the redundant sort call has been removed\n  - Affected conversations will render correctly on re-import\n\n\n**Full Changelog**: https://github.com/Superkikim/nexus-ai-chat-importer/compare/1.6.6...1.6.7",
+      "draft": false,
+      "name": "1.6.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T18:41:14Z",
+      "tag": "1.6.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f00aa6cde91ca142eefdc7227e7c1cb7235a28d0db3fb2c2776bc79b634968f2",
+          "name": "main.js",
+          "size": 1086979
+        },
+        {
+          "digest": "sha256:3199ef742144bc594e6500338e5b87e9589cb179cfd21726b6a235ebf4075fab",
+          "name": "manifest.json",
+          "size": 413
+        },
+        {
+          "digest": "sha256:c8d3723b294e3ae54e8519efe5fd2e9779fe78ea14c81fee173417f598dcb575",
+          "name": "styles.css",
+          "size": 51909
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n![Version](https://img.shields.io/badge/version-1.6.6-blue) ![Patch](https://img.shields.io/badge/type-patch-orange)\n\n### 🐛 Fixed\n\n- **Claude text and document extracts in the JSON were silently ignored**\n  - Claude's export includes the text content of `.txt` and `.docx` attachments\n    in the `extracted_content` field of `conversations.json`\n  - This content was being parsed but never added to conversation notes — a processing bug\n  - These extracts are now rendered as collapsible callouts inside the relevant message\n  - Also fixed: the same attachment could be matched both from the ZIP path and from\n    `extracted_content`; inline now wins and the ZIP lookup is skipped\n\n### 🔧 Improved\n\n- **Attachment and inline content display refined**\n  - `.txt` extracts: collapsible callout, no link (the text content is the file)\n  - Document extracts (`.docx`, etc.): collapsible callout labelled *(text extract)* + link back to original conversation\n  - Code file extracts (`.ts`, `.py`, `.js`, …): collapsible callout with syntax-highlighted code fence\n  - Files with no extracted content (images, PDFs, binaries): single placeholder *\"Attachment not provided by export\"*\n\n- **Empty conversations classified as \"ignored\" rather than \"skipped\"**\n  - Conversations with no exportable content (interrupted sessions, artifact-only)\n    are now tracked with a dedicated `ignored` counter in reports\n  - The \"Skipped — No Exportable Content\" table is removed in favour of a\n    `🚫 Empty (ignored)` line in the completion summary\n  - `skipped` now means unchanged conversations only, as intended\n\n- **Attachment summary in reports redesigned**\n  - The old Extracted/Missing/Failed counters are replaced by a breakdown table:\n    Extracted to vault / Inline (embedded) / Not provided by export / Missing / Failed\n  - Applied to both the summary report and the completion dialog\n\n- **ZIP timestamp column in import summary**\n  - Archives and Archive Name Map tables include a Timestamp column\n  - Supports all providers: ISO datetime (Claude old, ChatGPT), 10-digit epoch seconds\n    (Claude new), 13-digit epoch ms (Le Chat, Perplexity)\n  - Formatted using the user's locale setting (same as message timestamps)\n  - Resolves ambiguity when multiple archives share the same truncated display name",
+      "draft": false,
+      "name": "1.6.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-02T15:56:51Z",
+      "tag": "1.6.6"
+    },
     {
       "assets": [
         {

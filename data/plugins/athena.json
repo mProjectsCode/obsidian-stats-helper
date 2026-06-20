@@ -1,11 +1,11 @@
 {
   "author": "polleoai",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Your Second Brain — chat with the LLM of your choice (Claude, GPT, Gemini, or local CLI), ingest URLs, manage knowledge, run projects. Powered by Gryphon.",
+  "description": "Your Second Brain — chat with the LLM of your choice (Claude, GPT, Gemini, or local CLI), ingest URLs, manage knowledge, run projects. Powered by Gryphon. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "athena",
-  "lastChangedAt": "2026-06-01T19:00:58.834Z",
-  "lastFetchedAt": "2026-06-02T04:02:58.925Z",
+  "lastChangedAt": "2026-06-18T05:04:58.654Z",
+  "lastFetchedAt": "2026-06-18T05:04:58.654Z",
   "manifest": {
     "author": "POLLEO.AI",
     "authorUrl": "https://www.polleo.ai",
@@ -14,11 +14,89 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.0.0",
     "name": "Athena",
-    "version": "1.1.1"
+    "version": "1.4.0"
   },
   "name": "Athena",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:501a82dee65bb348375cbf2dee072d0b4581654c7fcde1683550fd15cb38c800",
+          "name": "main.js",
+          "size": 1608176
+        },
+        {
+          "digest": "sha256:313121ebc501295991b8b2b1536e30dea93fd5a263a22fcf40fc93f5d83be5a9",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:d276f277bc359527e8f7e69cc413b4f9fe86569b679d6852b6be96789acca210",
+          "name": "styles.css",
+          "size": 30638
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nHeadline: **setup heals itself and X Articles capture in full.** A new `kb doctor` checks and repairs your environment in one command, the bundled assistant auto-selects a working CLI instead of hanging on a stale one, and a curated set of Web Clipper templates makes browser capture land cleanly. Bundles **Gryphon 2.4.3**.\n\n### Added\n\n- **`kb doctor` — one-command environment check and repair.** `kb doctor` validates your Python and dependencies by actually importing them — not by trusting version numbers, which can lie when two installs shadow each other — and reports exactly what's wrong. `kb doctor --fix` provisions an isolated, self-consistent environment that Athena uses automatically, leaving your system Python untouched. If no working Python is found at startup, the plugin now surfaces a one-line pointer to the fix instead of failing silently. A declared support matrix (Python 3.11+, no upper cap) documents what each release targets.\n- **Athena Web Clipper templates.** A curated template set for the official Obsidian Web Clipper — general pages, LinkedIn, X/Twitter posts, and X Articles — now ships with the plugin. Clips arrive tagged with the right title, source URL, and capture method so Athena ingests them cleanly instead of guessing.\n- **Full X Article capture.** Long-form X (Twitter) Articles now capture with their real structure — headings, lists, and inline images saved locally — instead of a flattened, image-less preview.\n\n### Changed\n\n- **Vendored Gryphon → 2.4.3.** The embedded assistant now picks a working command-line tool (Claude / Codex / Gemini) by probing versions and choosing the newest valid one — healing itself when a stale tool happens to be found first on the system. This fixes first-run chat hangs that previously surfaced only as a 90-second connection timeout. When no usable tool exists, it now fails in about a second with a clear, actionable message instead of hanging.\n\n### Fixed\n\n- **Picks a working Python.** Athena now selects a Python interpreter that actually runs its dependencies, instead of blindly using whichever `python3` the system resolves first — important when a system Python is broken, shadowed, or too new for an installed package set.\n- **Clips ingest even when the panel is closed.** A web clip is now picked up and turned into a page whether or not the Athena panel is open.\n- **X/Twitter capture.** Tweets re-sync through the reliable syndication path (a brittle page selector was dropped); handle-based Article URLs (`/<handle>/article/…`) are now recognized; image-heavy social clips keep their images locally.\n- **Windows stability.** Settings are initialized before the first command can race them, and the startup environment check runs without blocking the interface on slower machines.\n\n",
+      "draft": false,
+      "name": "Athena 1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-18T05:06:14Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f8d32aca7b3338ce73abdf156f60fa71e57ec80280c4242bd7295d290221e34b",
+          "name": "main.js",
+          "size": 1599223
+        },
+        {
+          "digest": "sha256:37068b62a2791976d0639bda292e0b1ba0b6e18dea4584915bf3111f4acc7cfb",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "name": "styles.css",
+          "size": 30464
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nHeadline: **GitHub repos and X/Twitter posts now capture cleanly** with purpose-built extractors instead of the generic page reader, and Athena runs correctly on **native Windows**. Bundles **Gryphon 2.4.0**.\n\n### Added\n\n- **Dedicated GitHub repository capture.** Clipping or adding a GitHub repo now pulls the real README through GitHub's API — so the README's own images and content thumbnails come through intact, instead of the generic DOM reader's mangled, fixed-width image dump. Falls back to a normal page capture if the repo can't be reached.\n- **Dedicated X/Twitter capture.** Tweets and long-form X Articles are captured via X's public syndication endpoint — full post text, the author, media, and (for Articles) the title, cover, and preview — instead of the truncated link-only snippet the page reader produced.\n\n### Fixed\n\n- **Windows: pages landed in the wrong category.** On native Windows, a captured video (or other typed source) could have its wiki page written under *Webpages* instead of its correct section (Videos, Repos, …) because of a path-separator mismatch. Pages now land in the right place on every OS. A `kb lint` check surfaces any previously-miscategorized page for relocation.\n\n### Security\n\n- Hardened the new capture paths against untrusted remote content: newline-stripping before writing page frontmatter (prevents metadata injection), a guard so a crafted README image can't point off-repository, response-size caps, and stricter tweet-URL matching.\n\n### Changed\n\n- **Vendored Gryphon → 2.4.0.** The public build bundles the current Gryphon (headless provider-backend session API).\n\n",
+      "draft": false,
+      "name": "Athena 1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-16T05:51:36Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2a6671d54a897e2461f101684a3fb5e84d61b7f5078a0614fb2bfb376bb410b5",
+          "name": "main.js",
+          "size": 1569765
+        },
+        {
+          "digest": "sha256:8534bd6e14d704a85046e755dffabb1142e84cd0b0caa1aae4e983fdad3f9b3f",
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "name": "styles.css",
+          "size": 30464
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nConsolidates 1.2.1–1.2.4 (the intermediate bumps were vendored-Gryphon refreshes). Headline: the `kb` engine is now **native cross-platform Python**, and **LinkedIn document/carousel posts capture in full**.\n\n### Added\n\n- **Native cross-platform `kb` engine.** The entire `kb` command set *and* `bin/kb-capture` are ported from Bash to Python and run natively on **Windows, Linux, and macOS** — validated end-to-end on a 3-OS VM matrix. `ATHENA_PYTHON` env override lets you point the engine at a specific interpreter/venv (used by self-provisioning test guests). A frozen Bash oracle (`bin/kb-legacy`) backs a byte-for-byte parity test suite.\n- **LinkedIn document & carousel capture.** A clip of a LinkedIn document/carousel post now auto-promotes to a Playwright deep-capture that paginates the carousel, and `kb lint` embeds the captured slides into the wiki page in document order.\n- **`kb add-content`** — ingest pre-captured content (title + text) directly, bypassing fetch. For pages an automated fetch can't reach (auth-blocked); paste the content and Athena builds the wiki page.\n- **Thin-share tweet resolution.** A tweet that is just a pointer to another tweet now surfaces the *destination* tweet instead of dropping it (C1/C2/C3).\n- **`unified_ingest`** — a single routing/dispatch entry point behind every ingest path (Web Clipper, `kb add`, `url-new.txt`, paste, orphan reconciliation).\n\n### Changed\n\n- **arcus floor pinned to `>=0.6.0`** (resolves from PyPI). See 1.2.0 for the arcus cutover itself.\n- **Search-first wiki lookup** — page lookups go through the prebuilt index; dropped watchdog log spam.\n\n### Fixed\n\n- **Capture / titles:** YouTube ingest is clean end-to-end (comments stripped, description captured, stable `video-<id>` slug); X.com `\"<name> on X: …\"` title chrome stripped; embedded image URLs no longer leak into wiki titles; Obsidian-forbidden characters stripped from page names; conference PDF titles expand acronyms and stop truncating at 65 chars; file slugs stop truncating at 60 chars and dropping the tail.\n- **Data integrity / lint:** dead-URL records that were later captured are cleared (resurrection check); the dead-URL ledger is rewritten atomically; merge/rename filenames keep the `Prefix: Title` colon on POSIX; the raw-frontmatter reader lint check covers every module; URL Tracker links resolve to real pages; the default-config hash warning no longer fires on legitimate committed edits; thin-clip auto-fix trashes the matching asset directory atomically.\n- Frontmatter scalars are kept on a single physical line.\n\n",
+      "draft": false,
+      "name": "Athena 1.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-06T00:17:35Z",
+      "tag": "1.2.4"
+    },
     {
       "assets": [
         {

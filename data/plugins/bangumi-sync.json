@@ -1,11 +1,11 @@
 {
   "author": "threeyang3",
   "defaultBranch": "main",
-  "description": "This plugin has not been manually reviewed by Obsidian staff. Sync your Bangumi collections to notes with episode tracking, control panel, and batch editing.",
+  "description": "Sync your Bangumi collections to notes with episode tracking, control panel, and batch editing. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "bangumi-sync",
-  "lastChangedAt": "2026-06-01T17:04:58.895Z",
-  "lastFetchedAt": "2026-06-02T02:00:58.570Z",
+  "lastChangedAt": "2026-06-16T03:03:58.562Z",
+  "lastFetchedAt": "2026-06-16T03:03:58.562Z",
   "manifest": {
     "author": "threeyang",
     "authorUrl": "https://github.com/threeyang3",
@@ -19,6 +19,32 @@
   "name": "Bangumi Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:aefae4508e07f6ad76ef15b79adb3fae616585219bad5dd548e98c0697b70057",
+          "name": "main.js",
+          "size": 634381
+        },
+        {
+          "digest": "sha256:c282a84f55760351c48c65b10855e176256bcdbac45a2fc9b9670c5a0cda5704",
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:3baaaf8435c3c021a7a696f997ab30e7072fac431dd5e54350dbe23825ff359e",
+          "name": "styles.css",
+          "size": 73279
+        }
+      ],
+      "author": "threeyang3",
+      "description": "## 修复\n\n- 修复云端评分为空时无法覆盖本地评分的 bug：`SubjectDocumentService.updateRate` 在 cloudValue 为 `null` 时不再静默返回原内容；新增 `removeRate`（底层走新增的 `removeFrontmatterField` 帮助函数），状态同步执行器在 cloud 决策且 cloudValue 为空时显式调用 `removeRate`，与 `removeComment` / `removeTags` 行为一致。\n- 修复 SP/OP/ED 集数使用小数编号（如 `29.1`、`0.5`）时云端→本地同步丢失状态的问题：frontmatter `ep_statuses` 行的解析、`updateEpStatusInContent` 内的查找/替换/删除正则、`parseEpisodeBox` 的 `data-ep` 提取、右键菜单的集数读取、吐槽 callout 的读取与匹配全部从 `(\\d+)` / `parseInt` 升级为 `(\\d+(?:\\.\\d+)?)` / `parseFloat`，并对 `hasEpisodeComment` 动态拼接的正则做了转义。典型场景：bgm.tv/subject/369304 的 SP “29.1 闲话前编”。\n",
+      "draft": false,
+      "name": "v6.9.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-06T13:13:05Z",
+      "tag": "6.9.8"
+    },
     {
       "assets": [
         {

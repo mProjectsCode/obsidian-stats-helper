@@ -1,0 +1,983 @@
+{
+  "author": "zpzp13",
+  "defaultBranch": "main",
+  "description": "A writing environment customization plugin with typography controls, focus mode, smart quotes, text substitution, typewriter scroll, word counter, and more. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "writing-menu",
+  "lastChangedAt": "2026-06-20T07:04:32.399Z",
+  "lastFetchedAt": "2026-06-20T07:04:32.399Z",
+  "manifest": {
+    "author": "zpzp13",
+    "authorUrl": "https://github.com/zpzp13",
+    "description": "A writing environment customization plugin with typography controls, focus mode, smart quotes, text substitution, typewriter scroll, word counter, and more.",
+    "id": "writing-menu",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.7.2",
+    "name": "Writing Menu",
+    "version": "3.0.14"
+  },
+  "name": "Writing Menu",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2679cd8a79887207655bd5020c1370c9e669f8bcb2b165883bced460df0587ed",
+          "name": "main.js",
+          "size": 587885
+        },
+        {
+          "digest": "sha256:111cd756e3b20228c5f8b8813883b3f3986d1d647cbf09fbb0306217a04533a7",
+          "name": "manifest.json",
+          "size": 364
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 수정 사항\n\n### 타이핑 렉 수정 (63d4a90)\n- **SymbolSuggester**: `onTrigger`가 매 키 입력마다 현재 줄 전체를 문자열로 읽던 문제 수정 → 트리거 최대 길이만큼만 읽도록 변경 (O(n) → O(1))\n- **HeadingLinkFixExtension**: `doc.lineAt().text`로 줄 전체 문자열을 할당하던 문제 수정 → `sliceString`으로 앞 8자만 읽도록 변경 (O(n) → O(1))\n- **watchDisconnect**: `document.body + subtree` 전체를 감시하던 MutationObserver를 직계 부모만 감시하도록 변경, 타이핑 중 에디터 DOM 변경마다 불필요하게 발화하던 문제 제거\n\n### 글자수 카드 실시간 갱신 복원 (820c928)\n- 키 입력마다 SVG 포함 카드 DOM 전체를 재생성하던 방식 제거\n- DOM 구조 최초 1회 생성 후 text node만 교체하는 방식으로 전환\n- `editor-change` 디바운스 제거 → 키 입력 즉시 반영\n- 일평균 숫자는 자동저장(vault.modify) 시점에만 갱신\n\n### 모드별 작업시간 평균 업데이트 수정 (15097fa)\n- 글 작성 중 추적 파일이 활성 파일이면 데일리노트 저장도 건너뛰던 문제 수정 → 30초마다 파일 활성 여부 무관하게 데일리노트에 증분 저장\n- `avgModifyHandler`가 모든 파일 자동저장에 반응해 평균 재계산 타이머가 계속 리셋되던 문제 수정 → 데일리노트 폴더 변경에만 반응하도록 필터링\n- `DailyCharStore`: 자동저장마다 즉시 파일을 읽던 것을 `cachedRead` + 3초 디바운스로 완화",
+      "draft": false,
+      "name": "3.0.14",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T19:10:29Z",
+      "tag": "3.0.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5f17c830bb983650b57b631cc75c7683961dacccc575d144dd08f6b549985516",
+          "name": "main.js",
+          "size": 584121
+        },
+        {
+          "digest": "sha256:05ccf748c80c5532168975707a30892c969fde4cea7630f871fabc6a6176ebb9",
+          "name": "manifest.json",
+          "size": 364
+        },
+        {
+          "digest": "sha256:2ec4d730a320731656dbdcbde306641d4fe42a96e2717ddfba6b1cb054b075e8",
+          "name": "styles.css",
+          "size": 175818
+        }
+      ],
+      "author": "zpzp13",
+      "description": "\r\n\r\n### 변경 사항(8472ea38d978b7818e87526b18a16a9ac2407547)\r\n- **캘린더 topbar 고정**: 스크롤 시에도 상단에 항상 표시 (position: sticky)\r\n- **음악 플레이어 마퀴**: 긴 제목에 한해 딜레이 없이 일정한 속도로 왕복 스크롤, 좌우 패딩 유지, 이전/다음곡 hover 시에도 동일 적용\r\n- **캘린더 날짜 초기화**: 앱 시작·플러그인 재활성화·리로드 시 항상 오늘 날짜 선택\r\n- **들여쓰기 복원**: stepper 컨트롤의 들여쓰기가 문단 첫 줄에만 적용되도록 text-indent 복원\r\n- **작업시간 배지**: 목표 대비·평균 대비 수치가 작업시간 1분 미만이면 — 로 표시",
+      "draft": false,
+      "name": "3.0.13",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T17:28:42Z",
+      "tag": "3.0.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:187e35dd10580c1d641669d40627c33861370da023cabb12b6e59dc47f8e2a17",
+          "name": "main.js",
+          "size": 583286
+        },
+        {
+          "digest": "sha256:74a7658556d5737028f6aeeb99bf653fc84b0fd5f6555267e880096628a0726b",
+          "name": "manifest.json",
+          "size": 364
+        },
+        {
+          "digest": "sha256:1349d1f4145fe16b8922f2167f5a55318b562324fae903e7439fb48a25e5e731",
+          "name": "styles.css",
+          "size": 175442
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## CSS lint 개선\r\n- `text-indent` → `padding-inline-start` 교체 (css-text-indent 부분 지원 경고 해소)\r\n- 불필요한 `!important` 일부 제거",
+      "draft": false,
+      "name": "3.0.12",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T16:34:54Z",
+      "tag": "3.0.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:187e35dd10580c1d641669d40627c33861370da023cabb12b6e59dc47f8e2a17",
+          "name": "main.js",
+          "size": 583286
+        },
+        {
+          "digest": "sha256:2d93cd644ce2964b8802b76c28e684f7888380fab708a0ca24543a54f8c7852e",
+          "name": "manifest.json",
+          "size": 364
+        },
+        {
+          "digest": "sha256:38bdf46b5143e4030e3d8efa6c2cc74473d753824e5075f2cbaed78c7a8fbf25",
+          "name": "styles.css",
+          "size": 175410
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n### Behavior 수정\r\n- **시스템 신원 정보 읽기 경고 해결**\r\n  - `process.env.USERPROFILE` 제거: 기본 내보내기 경로를 빈 문자열로 변경 (사용자가 직접 폴더 선택)\r\n  - Python 프로세스 spawn 시 `{ ...process.env }` 전체 스프레드 제거 → `PATH`, `TEMP`, `TMP`, `SystemRoot` 등 비식별 환경변수만 명시적으로 전달\r\n\r\n### CSS 수정\r\n- **`:has()` 선택자 제거** (성능 경고): Zen 모드 구현을 JavaScript 클래스 부여 방식으로 전환\r\n  - `applyZenLeaf()`: 상위 `.workspace-tabs` / `.workspace-split` 요소에 `wm-zen-tabs` / `wm-zen-split` 클래스 추가\r\n  - `clearZenLeaf()`: 해당 클래스 제거\r\n  - `styles.css`: `:has(.wm-zen-leaf)` 3곳 → `.wm-zen-tabs` / `.wm-zen-split` 클래스 기반 선택자로 교체",
+      "draft": false,
+      "name": "3.0.11",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T15:53:37Z",
+      "tag": "3.0.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6266f695fd9bc818d04d5fd8618c0567f9d5e63368ead2fbb445563ddb1fa37b",
+          "name": "main.js",
+          "size": 582555
+        },
+        {
+          "digest": "sha256:347c6f26feef30f2232f69874d3c147bbaa15331ce64f4ce823d9570e2958740",
+          "name": "manifest.json",
+          "size": 364
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n- **`main.ts:1659`**: `(app as any).hotkeyManager` → `unknown` 캐스트 + `HotkeyManager` 인터페이스로 `any` 완전 제거\r\n- **`main.ts:1703-1704`**: `loadData()` 반환값에 `Partial<WritingMenuSettings>` 타입 명시로 unsafe-assignment 해결\r\n- **`DailyCharStore.ts:164`**: `fm[key]` 접근 결과를 `unknown` 타입으로 명시\r\n- **`export/index.ts`**: `as TFolder` 캐스트 4곳을 `instanceof TFolder` 체크로 교체 (타입 안전 내로잉)",
+      "draft": false,
+      "name": "3.0.10",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T15:42:55Z",
+      "tag": "3.0.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8b8ffe1c250f58fc4662524b082cf62ff34d65e6928f225a9b69e1848b16d78f",
+          "name": "main.js",
+          "size": 582480
+        },
+        {
+          "digest": "sha256:a39552dd35424704f949b73905e8a3a8836fbf7f03e679247c79f3e30cbe349c",
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n- **SymbolSuggester.ts**: `eslint-disable any` 주석 제거, 인터페이스 기반 타입으로 전면 교체\r\n- **Floating promise / no-misused-promises**: `DiffModal.ts`, `CalendarView.ts`, `MusicPlayerSection.ts`, `preview/index.ts`, `VersionPanel.ts` — async 이벤트 핸들러를 `void` 패턴으로 변환\r\n- **TypeScript `any` 타입 제거**:\r\n  - `main.ts`: `ViewUpdate`, `Transaction` 타입 적용 (CodeMirror 플러그인), `MenuItem`, `WorkspaceLeaf` 캐스트 개선\r\n  - `src/export/index.ts`: `pathComponent`, `nameComponent`, `fileNameSetting`, `target` 필드 타입 명시\r\n  - `src/dashboard/WritingTimeSection.ts`: `processFrontMatter` 콜백 타입, `ModeTime` 명시\r\n  - `src/dashboard/data/DailyCharStore.ts`, `TaskParser.ts`: frontmatter/JSON 타입 명시\r\n  - `src/wiki/WikiPanel.ts`, `WikiPopovers.ts`, `src/calendar/components/DayPreviewPopup.ts`: `processFrontMatter` 콜백 타입\r\n  - `src/version/manager.ts`: `JSON.parse` 반환 타입 명시\r\n- **builtin-modules 경고**: `esbuild.config.mjs`에서 `builtin-modules` 패키지를 Node.js 내장 `module.builtinModules`로 교체, `package.json`에서 의존성 제거\r\n\r\n### 문서 (README)\r\n- HWP 내보내기가 `fs`, `path`, `child_process`를 사용하는 이유 영문으로 명시 (개발자 정책 요구사항)",
+      "draft": false,
+      "name": "3.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T15:21:40Z",
+      "tag": "3.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:559e885add226c50805ac802eefbf6fddd5807305f96cf6fccbb07ba971a0718",
+          "name": "main.js",
+          "size": 582524
+        },
+        {
+          "digest": "sha256:469d9f5e8707fce40bbf399f38564f7e53238f25af255284d777f85a2372357b",
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n- 불필요한 타입 단언 제거 (~30곳): `createEl`, `querySelector`, `createElementNS` 등 Obsidian이 이미 구체적 타입을 반환하는 경우\r\n- 플로팅 프로미스 `void` 처리 (~60곳): 결과를 무시하는 async 호출에 명시적 `void` 추가\r\n- 비동기 이벤트 핸들러 정리 (~100곳): `async` 핸들러를 `void IIFE` 패턴으로 변환\r\n- `SymbolSuggester.ts` 파일 단위 eslint-disable 추가 (CodeMirror 내부 API 사용부)",
+      "draft": false,
+      "name": "3.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T14:47:45Z",
+      "tag": "3.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b6192e4393d52dc95599227db402d396cedb1ae57bd63f800557a7a0c9710757",
+          "name": "main.js",
+          "size": 580409
+        },
+        {
+          "digest": "sha256:370205330338c7ccfc2e4567ba7a25b46195d4f8ba20aa941c3065ca0f7cfb91",
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n- `VersionPanel`: 플러그인 인스턴스를 `MarkdownRenderer`의 Component로 사용하던 문제 수정 → `new Component()` 사용\r\n- `catch (_e) {}` → `catch { /* intentional */ }` 로 변경 (빈 블록 + 미사용 변수 경고 동시 해결)\r\n- `controls.ts`: 콜백 타입을 `void | Promise<void>` 로 변경 (no-misused-promises 해결)\r\n- `export/index.ts`: `numEl`/`nameEl` 미사용 변수 제거, `as TFolder` → `instanceof` 체크\r\n- `TimeTrackingView`: `stopwatchLabel` 미사용 변수 제거\r\n- `main.ts`: `TFile`/`TFolder` `instanceof` 체크로 교체, 불필요한 정규식 탈출 문자 수정, 플로팅 프로미스 `void` 추가\r\n- `main.ts`: `app.plugins` 로컬 인터페이스 선언으로 `as any` 제거",
+      "draft": false,
+      "name": "3.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T14:04:29Z",
+      "tag": "3.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ea48d5aa9796e52233e5b315f68de2ae1f37e7a78c02a4974c1596ae8538fad9",
+          "name": "main.js",
+          "size": 580228
+        },
+        {
+          "digest": "sha256:565dc8905f749658f7b25353dcc68cc41d519ff93d00214dd3ffdad82c79b31b",
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\n\n### TypeScript `as any` 제거\n- `vault.adapter as any` → `FileSystemAdapter` instanceof 헬퍼로 교체 (`converterMethods.ts` 9곳)\n- `window.moment as any` → `declare const moment` 선언으로 교체 (6개 파일)\n- `app.internalPlugins as any` → `AppWithInternalPlugins` 로컬 인터페이스 (3개 파일)\n- `app.setting as any` → `AppWithSettings` 로컬 인터페이스 (3개 파일)\n- `leaf.view as any` → `instanceof MarkdownView` 체크로 교체\n- `plugin.settings.versionStages as any` 제거 (타입 이미 존재)\n\n### 기타 개선\n- 플로팅 프로미스 `void` 추가 (export 8곳, MusicPlayer 2곳)\n- 불필요한 `as TFolder[]` / `as TFile | null` → `instanceof` 타입 술어로 교체\n- 빈 `catch {}` → `catch (_e) {}` (14곳)\n- 미사용 변수 제거: `nameEl`, `removedCountEl`, `inputStyle`, `labelSpan`",
+      "draft": false,
+      "name": "3.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T13:51:40Z",
+      "tag": "3.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f13e35c4b4519165279bbe8f737ec0c00e60d0f0276ee58eec91d1efc7a65ed5",
+          "name": "main.js",
+          "size": 580455
+        },
+        {
+          "digest": "sha256:0153a4ce42fbe1d8d62d2dbc52dd1d5f24e89eaf03243f9381e431f7b185a2bd",
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:41672f7bd6c60ab4b15b1c3d596c760880c054ac5bb2c64e9837cb592f60efdc",
+          "name": "styles.css",
+          "size": 175289
+        }
+      ],
+      "author": "zpzp13",
+      "description": "fix: no-static-styles-assignment 전면 수정 - 모든 setCssStyles 정적 값 할당을 CSS 클래스로 전환",
+      "draft": false,
+      "name": "3.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T10:30:16Z",
+      "tag": "3.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d20dcd5308e995a39c10ff5ef318ae5dbd202b4c2e033d44f700706e3ac43396",
+          "name": "main.js",
+          "size": 589272
+        },
+        {
+          "digest": "sha256:3387615d75fbb359a1f692e0f717b1c30d189f4ff4845cc8336e5eea0ea3cf6e",
+          "name": "manifest.json",
+          "size": 374
+        },
+        {
+          "digest": "sha256:e40aa4d978f13a4b25ad98ee2eca276f857737c401ef626a537c7602650b2beb",
+          "name": "styles.css",
+          "size": 165608
+        }
+      ],
+      "author": "zpzp13",
+      "description": "fix: revealLeaf await 추가, style 직접 할당 제거, minAppVersion 1.7.2",
+      "draft": false,
+      "name": "v3.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T09:53:46Z",
+      "tag": "3.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3098b847ce338c53472e52e4a3b848f0964f7b500c05bc88e0e0e0186d1ddb1c",
+          "name": "main.js",
+          "size": 589909
+        },
+        {
+          "digest": "sha256:47de26005c9a5f7167edb42e931747ca2d4d8720c63ce1d29ed8a9e1fca5a541",
+          "name": "manifest.json",
+          "size": 374
+        },
+        {
+          "digest": "sha256:065e150525e80eab46383771ef75cc6f89356057def29d1d79906bb0b37fcc61",
+          "name": "styles.css",
+          "size": 165264
+        }
+      ],
+      "author": "zpzp13",
+      "description": "## 코드 품질 개선\r\n\r\n- minAppVersion 1.7.0으로 상향\r\n- 남은 style 직접 할당 → setCssStyles/CSS 클래스 전환\r\n- activeDocument 적용\r\n- SymbolSuggester setTimeout → window.setTimeout\r\n- 불필요한 이스케이프, 미사용 변수/import 정리",
+      "draft": false,
+      "name": "v3.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T09:18:57Z",
+      "tag": "3.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d93c53ebf4ec617d6feb8cb1f73a2dd0a2adecccbe4c9fa1ea866c4a19a65be",
+          "name": "main.js",
+          "size": 591327
+        },
+        {
+          "digest": "sha256:57b3c7673313d445240ad84ebe1f91c9abeb688af9c25dfe4a2f53737dbb75cd",
+          "name": "manifest.json",
+          "size": 374
+        },
+        {
+          "digest": "sha256:e378a96d07435b91eda45cc041a92d0199a842b9ad0432e410fcdf40d83e4ab3",
+          "name": "styles.css",
+          "size": 164802
+        }
+      ],
+      "author": "zpzp13",
+      "description": "**코드 품질 개선**\r\n\r\n- minAppVersion 1.4.0으로 상향\r\n- el.style 직접 할당 → setCssStyles 전환\r\n- innerHTML 제거\r\n- setTimeout/clearTimeout/requestAnimationFrame → window.* 전환\r\n- document → activeDocument 전환\r\n- 미사용 변수/import 정리\r\n- Promise 처리 개선",
+      "draft": false,
+      "name": "v3.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T08:52:20Z",
+      "tag": "3.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d93c53ebf4ec617d6feb8cb1f73a2dd0a2adecccbe4c9fa1ea866c4a19a65be",
+          "name": "main.js",
+          "size": 591327
+        },
+        {
+          "digest": "sha256:30ea0731308cbd025d88da8155d2251c00537509b9ac6e6b8f37f68c5daae327",
+          "name": "manifest.json",
+          "size": 374
+        },
+        {
+          "digest": "sha256:e378a96d07435b91eda45cc041a92d0199a842b9ad0432e410fcdf40d83e4ab3",
+          "name": "styles.css",
+          "size": 164802
+        }
+      ],
+      "author": "zpzp13",
+      "description": "**새 기능**\r\n  - 캘린더 날짜 호버 시 미리보기 팝업 — 할 일·글자수·작업시간 한눈에 확인\r\n  - 일일 글자수 데일리노트 자동 기록 — 오늘 쓴 글자수를 데일리노트 프론트매터에 누적 저장\r\n  - 일평균 글자수 자동 계산 — 데일리노트 스캔 기반으로 산출\r\n\r\n **개선**\r\n  - 글자수 & 작업 시간 설정 페이지 통합 — 추적 폴더를 두 기능이 공유\r\n  - 작업 시간 데일리노트 기록 — {프로젝트명}_{모드키} 형식으로 프로젝트별 분리 저장\r\n  - 데일리노트 유틸 공용화 — 폴더/형식 설정을 Obsidian 내장 daily-notes 플러그인과 자동 연동\r\n\r\n **버그 수정**\r\n  - 작업 시간 저장 시 \"외부에서 수정\" 알림 반복 발생 문제 해결\r\n  - 같은 날 글자수가 데일리노트에 기록되지 않던 문제 해결\r\n\r\n**내부 정리**\r\n  - HeatmapStore →DailyCharStore 리네임\r\n  - 시간 포맷 함수 timeUtils.ts로 통합\r\n  - 미사용 HeatmapRenderer, calendarHeatmapSource 제거",
+      "draft": false,
+      "name": "v3.0.1 releases",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T03:11:45Z",
+      "tag": "3.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:546136192ff943d68fe183b99c2934dfd8bc83e23eab613a1d5b7faec44d3422",
+          "name": "main.js",
+          "size": 610621
+        },
+        {
+          "digest": "sha256:f92c960981803d682bbeb92a56968255d4f5a1abb76da7e37b884d3fab3602a1",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:cdeb40fdd5c657be453ab2724f002c5f19576e8ce04e3dc3443f0642020a7b39",
+          "name": "styles.css",
+          "size": 114126
+        }
+      ],
+      "author": "zpzp13",
+      "description": "■ 개선\r\n\r\n 1) Zen Mode (단축키 F4)\r\n\r\n 탭 헤더 드롭다운 메뉴 - 보기에 ‘길게 보기’와 ‘집중 모드’ 추가.\r\n\r\n2) 타이포그래피\r\n\r\n 탭 헤더 드롭다운 메뉴 - 타이포그래피에 ‘좌우 여백’ 추가.\r\n\r\n3) 스톱워치\r\n\r\n탭 헤더 드롭다운 메뉴 - 스톱워치에 상태바/대시보드 표시 선택란 추가\r\n\r\n\r\n■ 수정\r\n\r\n기존 버전관리를 신설된 대시보드로 이식.\r\n\r\n\r\n■ New\r\n\r\n★★대시보드★★\r\n\r\n ① 캘린더와 작업 일정 관리\r\n ② 글자수 통계\r\n ③ 작업 시간 통계\r\n ④ 옵시위키\r\n ⑤ 버전관리\r\n ⑥ 스톱워치\r\n ⑦ 음악 플레이어\r\n",
+      "draft": false,
+      "name": "3.0 업데이트",
+      "prerelease": false,
+      "publishedAt": "2026-06-12T15:13:37Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:65ada69a4e3f082529120e85eab5b79cfb407b7fdd9229fc66210a1eb0c2d042",
+          "name": "main.js",
+          "size": 220176
+        },
+        {
+          "digest": "sha256:f92c960981803d682bbeb92a56968255d4f5a1abb76da7e37b884d3fab3602a1",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:56ef46052f89f531a3ec8cfe6cd00f1cabf7a86bd0f76660f84f9594a889b958",
+          "name": "styles.css",
+          "size": 14245
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. zen mode 추가\r\n2. 작업시간->스테이터스바 이동\r\n3. 모바일 프리뷰 추가",
+      "draft": false,
+      "name": "v.2.12.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-10T14:04:09Z",
+      "tag": "2.12.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:107fecf120d39bafe4a0cceafe85f6e3f2f5f87927f2cf568e8a31c89f8838a8",
+          "name": "main.js",
+          "size": 182052
+        },
+        {
+          "digest": "sha256:f92c960981803d682bbeb92a56968255d4f5a1abb76da7e37b884d3fab3602a1",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:581b6f277c47b86af7482065e383368569abd91c8c887bcbaa88c9ea1c1a15ff",
+          "name": "styles.css",
+          "size": 8495
+        }
+      ],
+      "author": "zpzp13",
+      "description": "각주 스타일 추가",
+      "draft": false,
+      "name": "v2.11.2 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-03-11T07:03:04Z",
+      "tag": "2.11.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:107fecf120d39bafe4a0cceafe85f6e3f2f5f87927f2cf568e8a31c89f8838a8",
+          "name": "main.js",
+          "size": 182052
+        },
+        {
+          "digest": "sha256:f92c960981803d682bbeb92a56968255d4f5a1abb76da7e37b884d3fab3602a1",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:581b6f277c47b86af7482065e383368569abd91c8c887bcbaa88c9ea1c1a15ff",
+          "name": "styles.css",
+          "size": 8495
+        }
+      ],
+      "author": "zpzp13",
+      "description": "달라진 점\r\n\r\n1) 지정 글자수/전체 글자수 분리\r\n2) 복사하기 - 각주 제거 옵션 추가\r\n3) 헤딩 색상 지정 옵션 추가\r\n4) 헤딩 첫머리에 대괄호 구문이 자동 링크 처리 되는 버그 해결",
+      "draft": false,
+      "name": "v2.11.1 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-03-11T06:40:31Z",
+      "tag": "2.11.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:133c2b64a1db0c99ff1ec83a9dc414f75fa06d8765401319ec06706e541a30cd",
+          "name": "main.js",
+          "size": 170254
+        },
+        {
+          "digest": "sha256:d1fbfa92eff67f1c2e3a35f4e69fe754ca66fe305afda33e7ea3ce7a89d9d7f5",
+          "name": "manifest.json",
+          "size": 325
+        },
+        {
+          "digest": "sha256:581b6f277c47b86af7482065e383368569abd91c8c887bcbaa88c9ea1c1a15ff",
+          "name": "styles.css",
+          "size": 8495
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 내보내기 하위 토글(들여쓰기, 헤딩 제외) 디폴트값 설정\r\n\r\n2. 모바일 호환\r\n- 내보내기 제외한 모든 기능 모바일 최적화\r\n- 모바일 전용 플러그인 설정-색상설정(hex코드) 추가\r\n- 아이콘 라벨 간격 조정, 스타일 최적화",
+      "draft": false,
+      "name": "v2.11.0",
+      "prerelease": false,
+      "publishedAt": "2026-02-07T12:08:50Z",
+      "tag": "2.11.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3b85fbbab0ca742a0fecc3cbbc086c5459883af8829f26192c619707bee7a668",
+          "name": "main.js",
+          "size": 165392
+        },
+        {
+          "digest": "sha256:7e12a5915680b0f79a95391fe33d67e6ec43ebed26e34f51e4ddc3f0d6ca9a86",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:9a03abe6643ccbe012ebd04a64b76209e8a9cdac7d8f545f8cd1830f6937b713",
+          "name": "styles.css",
+          "size": 7862
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 코드 리팩토링(플러그인 속도 향상)\r\n2. 양쪽정렬 적용",
+      "draft": false,
+      "name": "v2.10.2 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-19T15:50:16Z",
+      "tag": "2.10.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3bda7f4ecab2fa5337daa91b4cf1f0a7804ca2df834ae99a191068b82a28afb9",
+          "name": "main.js",
+          "size": 165360
+        },
+        {
+          "digest": "sha256:60a692fdd4b8fdc20dd73218538620819cbff99000decd2f978f9f5ddbb916af",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:9a03abe6643ccbe012ebd04a64b76209e8a9cdac7d8f545f8cd1830f6937b713",
+          "name": "styles.css",
+          "size": 7862
+        }
+      ],
+      "author": "zpzp13",
+      "description": "포커스 모드 투명도 적용 누락 버그 수정",
+      "draft": false,
+      "name": "v2.10.1 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-19T13:21:25Z",
+      "tag": "2.10.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c988a30cb6deeadf2f4fc791943679c252106838d78979eac410f02cfa1c9057",
+          "name": "main.js",
+          "size": 165192
+        },
+        {
+          "digest": "sha256:60a692fdd4b8fdc20dd73218538620819cbff99000decd2f978f9f5ddbb916af",
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:9a03abe6643ccbe012ebd04a64b76209e8a9cdac7d8f545f8cd1830f6937b713",
+          "name": "styles.css",
+          "size": 7862
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.10.0 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-19T13:09:33Z",
+      "tag": "2.10.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7176cb71119e2eb909a94869f69df7808bef728254e066a3a6c7eb0845949d4c",
+          "name": "main.js",
+          "size": 164766
+        },
+        {
+          "digest": "sha256:7bdcc7df1777409e2cd37443a19c5f07a9c8153096fa99c300870898d4fe5172",
+          "name": "manifest.json",
+          "size": 323
+        },
+        {
+          "digest": "sha256:9a03abe6643ccbe012ebd04a64b76209e8a9cdac7d8f545f8cd1830f6937b713",
+          "name": "styles.css",
+          "size": 7862
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 헤딩 서식 지원\r\n2. 헤딩 제외 복사 메뉴 추가\r\n3. 내보내기 항목에서 '헤딩 제외' 추가",
+      "draft": false,
+      "name": "v2.1.9 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-19T07:47:34Z",
+      "tag": "2.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8e9906a4c4dcce94fc23b0eb99583d0f6e246e1ba748e737a24dbcabab5972f3",
+          "name": "main.js",
+          "size": 157040
+        },
+        {
+          "digest": "sha256:cf9931afda088bbf4d184001f025f5b602b4229cc91813c8e867f23574916d96",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 작업 시간 UI/UX 개선\r\n2. HWP 내보내기 오류 수정\r\n3. 리팩토링",
+      "draft": false,
+      "name": "v2.1.8 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-19T03:46:19Z",
+      "tag": "2.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:788b9996f0f6ca19df29e9f9f060ef161145c85335a9fc40ec18e915e2de5e16",
+          "name": "main.js",
+          "size": 151072
+        },
+        {
+          "digest": "sha256:53ab532b38245badc666f7d74af147ccf7122318570c3723eaf8333de6145049",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "다중 선택, 폴더 내보내기 컴파일 기능 추가. \r\n",
+      "draft": false,
+      "name": "v2.1.7 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-18T06:46:40Z",
+      "tag": "2.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d2cb57dd8f0e76074ed88bafdc41497a1845a744b1219821c0d187d8eccb1b6c",
+          "name": "main.js",
+          "size": 125582
+        },
+        {
+          "digest": "sha256:53ab532b38245badc666f7d74af147ccf7122318570c3723eaf8333de6145049",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.1.6 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T18:00:09Z",
+      "tag": "2.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b79eecccf1cb450d605a70c2ec3f71b063bf192501c6211455ef6569da2ccca7",
+          "name": "main.js",
+          "size": 122555
+        },
+        {
+          "digest": "sha256:937294fe350ef2ec356e15b498018c32f1f13579f12a84721974a79db3ec60c7",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 내보내기 기능 추가\r\n2. 사소한 버그 수정",
+      "draft": false,
+      "name": "v2.1.5 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T17:22:29Z",
+      "tag": "2.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a176450adb2a48f6b1cf137a298745a3cb308f2a8225b9e9ea428e94b7f7ecc",
+          "name": "main.js",
+          "size": 90924
+        },
+        {
+          "digest": "sha256:937294fe350ef2ec356e15b498018c32f1f13579f12a84721974a79db3ec60c7",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.1.4 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T13:03:20Z",
+      "tag": "2.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9b4444ff4cb3a6363a97602571606fb1b5a108e48349fcfe5868ebcc352ebd82",
+          "name": "main.js",
+          "size": 90694
+        },
+        {
+          "digest": "sha256:937294fe350ef2ec356e15b498018c32f1f13579f12a84721974a79db3ec60c7",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.1.3 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T12:42:52Z",
+      "tag": "2.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:32da2bb83d966578fd976349e8215a693a72e53fbd4dfea8e446fc3d0aa0a1e0",
+          "name": "main.js",
+          "size": 90375
+        },
+        {
+          "digest": "sha256:87cec15f2648f441ae5f534d2bdd437505d1dcafe291d7928cf4b86ba75e39ec",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.1.2 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T06:08:45Z",
+      "tag": "2.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2efaf5aaa6fb4fa093545e7d0368f7f23f257f283dcdae4678129e481d9496b9",
+          "name": "main.js",
+          "size": 90043
+        },
+        {
+          "digest": "sha256:c35e31f61e6ddccbb1899ec2357c2652f3afaf666ab6c2f7127223b3700a2f5e",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "1. 작업 시간 숫자 폰트 수정\r\n2. UI 수정",
+      "draft": false,
+      "name": "v2.1.1 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T05:26:10Z",
+      "tag": "2.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6b58605e67966c22f201626ef08cc24f896f18d072f698df8d5b32c7fca0d41d",
+          "name": "main.js",
+          "size": 90263
+        },
+        {
+          "digest": "sha256:c35e31f61e6ddccbb1899ec2357c2652f3afaf666ab6c2f7127223b3700a2f5e",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v2.1.0 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-17T05:19:41Z",
+      "tag": "2.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:940cd622367bded2980ae5c37d3831f7687a458acd21315df9e5e6cc6cd102b2",
+          "name": "main.js",
+          "size": 53571
+        },
+        {
+          "digest": "sha256:007efa688edfe3e944eeda6dc376b2a1c0d4afe98d92ab400d44ab60b542d305",
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c8633bbfe1d9bfaa79e57586947af4b7dca5101f3ef163088946870e271063d4",
+          "name": "styles.css",
+          "size": 6679
+        }
+      ],
+      "author": "zpzp13",
+      "description": "# Writing Menu v2.0.0\r\n\r\n글쓰기 환경을 위한 Obsidian 플러그인입니다.\r\n\r\n## 새로운 기능\r\n\r\n### 스마트 입력 시스템\r\n\r\n- **스마트 따옴표**: 곧은 따옴표를 둥근 따옴표로 자동 변환\r\n  - `\"` → `\"\"`\r\n  - `'` → `''`\r\n\r\n- **스마트 엔터**: 괄호 안에서 엔터 입력 시 닫는 괄호 다음 줄로 커서 이동\r\n  - 모든 괄호 쌍 지원: `()`, `[]`, `{}`, `\"\"`, `''`, `「」`, `『』`, `【】`, `《》` 등\r\n\r\n- **텍스트 치환**: 특정 텍스트를 기호로 자동 변환\r\n  - `-->` → `→`, `<--` → `←`, `...` → `…` 등\r\n  - 백스페이스로 즉시 되돌리기 가능\r\n  - 사용자 정의 규칙 추가 가능\r\n\r\n### 자동완성 개선\r\n\r\n- 트리거 키 입력 시 기호 쌍 팝업 표시\r\n- 카드 형태의 직관적인 설정 UI\r\n- 각 트리거별 활성화/비활성화 토글\r\n\r\n## 개선 사항\r\n\r\n- **포커스 모드**: 타이핑 중에만 활성화, 커서 이동 시 자동 해제\r\n- **커서 색상**: 글자 색상과 동기화\r\n- **UI/UX 개선**:\r\n  - 탭 헤더 메뉴 구조 개선\r\n  - 플러그인 설정 화면 디자인 개선\r\n  - 토글 버튼 정렬 수정\r\n\r\n## 설치 파일\r\n\r\n- `main.js` - 플러그인 메인 파일\r\n- `manifest.json` - 플러그인 메타데이터\r\n- `styles.css` - 스타일시트\r\n\r\n위 파일들을 `.obsidian/plugins/writing-menu/` 폴더에 복사하세요.\r\n",
+      "draft": false,
+      "name": "v2.0.0 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-15T19:20:09Z",
+      "tag": "2.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ff7d41f64a5f1de5366f8d3802ee18f4ee1f3dedd6fe97a1b78bd55f0c1e4b0a",
+          "name": "main.js",
+          "size": 43517
+        },
+        {
+          "digest": "sha256:0fa5f4b53228c72ec909f9b0d196bfcf7707b02dbaf07a5a916b3f7736cdc8c6",
+          "name": "manifest.json",
+          "size": 342
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v1.0.4 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-09T14:34:53Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:12d27f1179cbec14c4dbb6b9202ee22999f561383442c6b75c21c823d5b9792a",
+          "name": "main.js",
+          "size": 41872
+        },
+        {
+          "digest": "sha256:0fa5f4b53228c72ec909f9b0d196bfcf7707b02dbaf07a5a916b3f7736cdc8c6",
+          "name": "manifest.json",
+          "size": 342
+        }
+      ],
+      "author": "zpzp13",
+      "description": "최적화\r\n",
+      "draft": false,
+      "name": "v1.0.3 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-06T09:48:41Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c56b905e5eb06dd268e89ea42279d5f9f6e121cb6ea41bb614550fc8b72a70f",
+          "name": "main.js",
+          "size": 40582
+        },
+        {
+          "digest": "sha256:0fa5f4b53228c72ec909f9b0d196bfcf7707b02dbaf07a5a916b3f7736cdc8c6",
+          "name": "manifest.json",
+          "size": 342
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v1.0.2 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T17:21:25Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d165783623870aa90339cc8676dc41321a21177ac2892be4bafc36c1fd16157e",
+          "name": "main.js",
+          "size": 44539
+        },
+        {
+          "digest": "sha256:0fa5f4b53228c72ec909f9b0d196bfcf7707b02dbaf07a5a916b3f7736cdc8c6",
+          "name": "manifest.json",
+          "size": 342
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v1.0.1 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T16:21:45Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0a2f3388e1e273424086ed43939fe17062508ae1eed56b946f2956c3951a0338",
+          "name": "main.js",
+          "size": 40035
+        },
+        {
+          "digest": "sha256:0fa5f4b53228c72ec909f9b0d196bfcf7707b02dbaf07a5a916b3f7736cdc8c6",
+          "name": "manifest.json",
+          "size": 342
+        }
+      ],
+      "author": "zpzp13",
+      "description": "",
+      "draft": false,
+      "name": "v1.0 - realease",
+      "prerelease": false,
+      "publishedAt": "2026-01-04T13:55:40Z",
+      "tag": "v.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "zpzp13/obsidian-writing-menu"
+}
