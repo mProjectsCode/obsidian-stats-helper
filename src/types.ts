@@ -9,6 +9,7 @@ export interface CommunityPlugin {
 export interface ReleaseAssetSummary {
   name: string;
   size: number;
+  downloadCount: number;
   digest?: string;
 }
 
@@ -20,6 +21,7 @@ export interface ReleaseSummary {
   publishedAt: string | null;
   prerelease: boolean;
   draft: boolean;
+  downloadCount: number;
   assets: ReleaseAssetSummary[];
 }
 

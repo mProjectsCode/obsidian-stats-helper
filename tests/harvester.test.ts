@@ -151,7 +151,10 @@ describe("simplifyRelease", () => {
         published_at: "2026-01-01T00:00:00Z",
         prerelease: false,
         draft: false,
-        assets: [{ name: "main.js", size: 123, digest: "sha256:abc" }],
+        assets: [
+          { name: "main.js", size: 123, download_count: 12, digest: "sha256:abc" },
+          { name: "manifest.json", size: 456, download_count: 3 },
+        ],
       }),
     ).toEqual({
       tag: "1.2.3",
@@ -161,7 +164,11 @@ describe("simplifyRelease", () => {
       publishedAt: "2026-01-01T00:00:00Z",
       prerelease: false,
       draft: false,
-      assets: [{ name: "main.js", size: 123, digest: "sha256:abc" }],
+      downloadCount: 12,
+      assets: [
+        { name: "main.js", size: 123, downloadCount: 12, digest: "sha256:abc" },
+        { name: "manifest.json", size: 456, downloadCount: 3 },
+      ],
     });
   });
 });

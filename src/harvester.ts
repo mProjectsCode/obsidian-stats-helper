@@ -31,6 +31,7 @@ interface GitHubRelease {
   assets: Array<{
     name: string;
     size: number;
+    download_count: number;
     digest?: string | null;
   }>;
 }
@@ -180,6 +181,13 @@ export function selectPlugins(
 }
 
 export function simplifyRelease(release: GitHubRelease): ReleaseSummary {
+  const assets = release.assets.map((asset) => ({
+    name: asset.name,
+    size: asset.size,
+    downloadCount: asset.download_count,
+    ...(asset.digest ? { digest: asset.digest } : {}),
+  }));
+
   return {
     tag: release.tag_name,
     name: release.name,
@@ -188,11 +196,10 @@ export function simplifyRelease(release: GitHubRelease): ReleaseSummary {
     publishedAt: release.published_at,
     prerelease: release.prerelease,
     draft: release.draft,
-    assets: release.assets.map((asset) => ({
-      name: asset.name,
-      size: asset.size,
-      ...(asset.digest ? { digest: asset.digest } : {}),
-    })),
+    downloadCount: assets
+      .filter((asset) => asset.name === "main.js")
+      .reduce((total, asset) => total + asset.downloadCount, 0),
+    assets,
   };
 }
 
