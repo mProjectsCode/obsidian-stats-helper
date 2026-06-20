@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-19T05:01:58.603Z",
-  "lastFetchedAt": "2026-06-19T05:01:58.603Z",
+  "lastChangedAt": "2026-06-20T05:03:32.397Z",
+  "lastFetchedAt": "2026-06-20T05:03:32.397Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,11 +14,37 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.20.2"
+    "version": "1.20.3"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:e05281343850d797e8ddc1e617b9aca3a760f1c5b41d243f77b4618632c84307",
+          "name": "main.js",
+          "size": 830204
+        },
+        {
+          "digest": "sha256:89e36bc312398295b4e984e9ec1942578683daf169ca926821e8c3487edbf961",
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
+          "name": "styles.css",
+          "size": 11779
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\nv1.20.3 is a **parity/latent-bug hotfix** — three write-path fixes that restore behavior that should have been there from the start. No new features, no settings changes, no API changes.\n\n- **🔧 Source-page slug collision fix (Issue #155, PR #156).** When two source files shared a basename across folders (e.g. 11× `About this course.md` across Academy courses), `slugify(basename)` produced the same slug for both — second ingest **silently overwrote** the first, and every `[[sources/<slug>]]` backlink resolved to the wrong source. Fix: every source slug is now `<basename>_<6-hex FNV-1a of full path>`. Single-computation point in `wiki-engine.ts`. Re-ingesting an existing vault renames its `sources/` pages; backlinks update in place. Contributed by @Indexed-Apogrypha.\n- **🔧 `mergeFrontmatter` alias dedup (PR #154).** Repeated re-ingests could grow the `aliases` array without bound — one real-world page accumulated the same alias block ~15× (86 duplicate lines). `mergeFrontmatter` now dedups `fm.aliases` parity with `enforceFrontmatterConstraints` (first occurrence wins, empty strings dropped). Contributed by @DocTpoint.\n- **🔧 Stage-4 `reviewed: true` guard (PR #158).** Re-ingesting an unrelated note could LLM-rewrite a curated `reviewed: true` page's body — the reviewed lock only held on the `createOrUpdatePage` path, not on Stage 4 (`updateRelatedPage`). Fix: `updateRelatedPage` now routes `reviewed: true` pages to `appendToReviewedPage` (parity with `createOrUpdatePage`). The curated body survives verbatim. Contributed by @DocTpoint.\n\n### Fixed\n\n- Source-page slug collision silently overwriting existing pages (#155) — every source slug now fingerprinted by full path\n- `mergeFrontmatter` alias array growing without bound across re-ingests — now deduped parity with `enforceFrontmatterConstraints`\n- Stage-4 `reviewed: true` pages being LLM-rewritten by unrelated re-ingests — now routed through `appendToReviewedPage`\n- tsconfig `lib` outdated for newer TypeScript language servers (`trimEnd` etc.) — bumped to ES2021\n- tsconfig vestigial `baseUrl` — removed (no `paths` map)\n\n### Tests\n\n- **791 tests passing** (was 779; +12), 53 test files, 0 regressions\n- New test suite: `src/__tests__/source-slug.test.ts` — 9 tests covering FNV-1a fingerprint determinism, length cap, re-ingest stability, basename-only collisions\n- New test suite additions: `core/frontmatter.test.ts` (+2 alias dedup tests), `wiki/page-factory.test.ts` (+1 Stage-4 reviewed guard test)\n\n### Contributors\n\n- **@green-dalii** — release coordination, triage, docs\n- **@Indexed-Apogrypha** — reported source-page collision (#155), contributed source-slug fingerprint (PR #156) with 9 unit tests + live e2e validation\n- **@DocTpoint** — contributed mergeFrontmatter alias dedup (PR #154) and Stage-4 reviewed guard (PR #158)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the Assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nNo configuration changes required. All three fixes are automatic.\n\n**Affected scenarios:**\n- **#155 fix:** any vault where source notes share filenames across folders (e.g. multiple `About this course.md` files). Re-ingesting an existing vault renames `sources/` pages but backlinks update in place — no user action needed.\n- **#154 fix:** any vault with re-ingested pages that may have accumulated duplicate aliases.\n- **#158 fix:** any vault using `reviewed: true` to lock curated pages.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.2...1.20.3\n",
+      "draft": false,
+      "name": "1.20.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T23:59:31Z",
+      "tag": "1.20.3"
+    },
     {
       "assets": [
         {
