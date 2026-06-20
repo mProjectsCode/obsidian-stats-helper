@@ -4,8 +4,8 @@
   "description": "Create custom HTML views for your notes based on filter rules. Transform how your notes are displayed. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "custom-views",
-  "lastChangedAt": "2026-06-16T04:04:58.578Z",
-  "lastFetchedAt": "2026-06-16T04:04:58.578Z",
+  "lastChangedAt": "2026-06-20T04:02:32.407Z",
+  "lastFetchedAt": "2026-06-20T04:02:32.407Z",
   "manifest": {
     "author": "Anup Chavan",
     "authorUrl": "https://anupchavan.com",
@@ -14,11 +14,63 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.10",
     "name": "Custom Views",
-    "version": "0.2.8"
+    "version": "0.2.10"
   },
   "name": "Custom Views",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:1db0b3a0e6610deb5af01cc972d9672abbee76b0b9ee25c30ce50dead9901546",
+          "name": "main.js",
+          "size": 299391
+        },
+        {
+          "digest": "sha256:27f84f14a919f7fd7c4308b5b2289a99ec2007d58adefd58057217fc78785a83",
+          "name": "manifest.json",
+          "size": 339
+        },
+        {
+          "digest": "sha256:b09452d7092eb3ddb7e547c3e5b5edd2ab701a7d61e64d932fd4f054d20fbc2e",
+          "name": "styles.css",
+          "size": 25458
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Bug Fixes\r\n\r\n- **Fixed stale or mixed custom view content when switching between notes.** Reading view no longer reuses Obsidian view data that can belong to a previous note; the active-view fast path is now limited to live preview only.\r\n- **Fixed frontmatter leaking into `{{content}}` / `{{file.content}}` when Obsidian’s cached offset is stale or unavailable.** Frontmatter stripping now validates the cache offset and falls back to parsing the raw YAML boundary when needed.\r\n- **Reduced read-only render delay by using Obsidian’s cached file reads.** Custom views now use `vault.cachedRead()` for display renders instead of direct disk reads.\r\n\r\n### Improvements\r\n\r\n- **Live preview custom views render more smoothly.** When safe, the renderer uses the already-loaded editor content instead of waiting on a vault read.\r\n- Hardened frontmatter/body extraction against metadata-cache timing issues.\r\n\r\n### Tests\r\n\r\n- Added regression tests for active-view source rendering, cached read behavior, and stale frontmatter offset handling.",
+      "draft": false,
+      "name": "0.2.10",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T17:58:58Z",
+      "tag": "0.2.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:85be4638084f9d497e0883a65657ea3f60181eab1f4f927271c601533a9e34f6",
+          "name": "main.js",
+          "size": 298544
+        },
+        {
+          "digest": "sha256:6fb5ea6455a06c18ea7c3f1e35fca9f9c4c2c036e1251eb259d9542544382dbf",
+          "name": "manifest.json",
+          "size": 338
+        },
+        {
+          "digest": "sha256:b09452d7092eb3ddb7e547c3e5b5edd2ab701a7d61e64d932fd4f054d20fbc2e",
+          "name": "styles.css",
+          "size": 25458
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Bug Fixes\r\n\r\n- **Right-click context menus now work on links in custom views.** Internal and external links rendered inside a custom view now open Obsidian's native context menu (Open in new tab/right/window, Rename, Bookmark, Copy, Copy path, Copy URL, Reveal in Finder, etc.) instead of a bare \"Copy\" menu.\r\n- **Rendered text in custom views is now selectable.** The overlay was missing the text-selectability that the reading view normally has.\r\n- **Fixed `{{file.content}}` / `{{content}}` rendering blank in reading view.** The note body was being extracted via a property Obsidian removed (`frontmatter.position`), so the raw YAML frontmatter leaked into the content and it failed to render. Now uses the official `frontmatterPosition` API. The same fix was applied to expression mode (`{% %}` blocks) and cross-file `.content` resolution.\r\n- **Fixed custom view content showing blank on first open / after reopening a tab in live preview.** The synchronous pre-hide step was hiding the live editor during its first layout, causing CodeMirror to measure zero height and render empty. Pre-hiding is now restricted to reading mode.\r\n- **Fixed the HTML, CSS, and JavaScript editor boxes rendering broken when settings open in a separate window** (default in Obsidian 1.13). CodeMirror now mounts its styles into the correct window's document. (Fixes #6)\r\n- **Removed direct `Function` constructor usage from plugin source.** Inline template scripts and per-view JavaScript now execute through the `@silentvoid13/rusty_engine` WASM template engine instead of direct `new Function(...)` calls.\r\n\r\n### Improvements\r\n\r\n- Consolidated frontmatter stripping into a single shared helper used by every render path, removing duplicated (and buggy) logic.\r\n- JavaScript template execution now uses the same WASM template engine approach used by Templater inline templates.\r\n\r\n### Maintenance\r\n\r\n- Bumped `esbuild` from `0.28.0` to `0.28.1`.\r\n\r\n### Tests\r\n\r\n- Added regression tests for frontmatter stripping (official API, legacy fallback, edge cases).\r\n- Added tests for the WASM script execution wrapper and engine prewarming.",
+      "draft": false,
+      "name": "0.2.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-19T16:47:29Z",
+      "tag": "0.2.9"
+    },
     {
       "assets": [
         {
