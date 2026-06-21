@@ -4,8 +4,8 @@
   "description": "Your Second Brain — chat with the LLM of your choice (Claude, GPT, Gemini, or local CLI), ingest URLs, manage knowledge, run projects. Powered by Gryphon. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "athena",
-  "lastChangedAt": "2026-06-18T05:04:58.654Z",
-  "lastFetchedAt": "2026-06-18T05:04:58.654Z",
+  "lastChangedAt": "2026-06-21T04:01:09.508Z",
+  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
   "manifest": {
     "author": "POLLEO.AI",
     "authorUrl": "https://www.polleo.ai",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.0.0",
     "name": "Athena",
-    "version": "1.4.0"
+    "version": "1.4.2"
   },
   "name": "Athena",
   "presentInCommunityList": true,
@@ -22,23 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:501a82dee65bb348375cbf2dee072d0b4581654c7fcde1683550fd15cb38c800",
+          "digest": "sha256:86fe1d8d2a7672d296b71b2f619d05339a5e330c85b19ea5a585daa0a53c00eb",
+          "downloadCount": 5,
           "name": "main.js",
-          "size": 1608176
+          "size": 1610109
         },
         {
-          "digest": "sha256:313121ebc501295991b8b2b1536e30dea93fd5a263a22fcf40fc93f5d83be5a9",
+          "digest": "sha256:5190b9cd106834301727c0f1b943b3fb745050858764fe19811f8613152ee90d",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:d276f277bc359527e8f7e69cc413b4f9fe86569b679d6852b6be96789acca210",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 30638
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nHeadline: **switching your AI provider or model now takes effect on your next message.** Changing the provider (Claude → Codex / Gemini), model, reasoning effort, or permission mode in Athena's settings used to relabel the toolbar while the next message was still answered by the previously-running provider — so a switch made to work around one provider's usage limit was silently ignored. That's fixed. Bundles **Gryphon 2.4.5**.\n\n### Fixed\n\n- **Provider and model switches take effect on your next message.** When you change the AI provider, model, reasoning effort, or permission mode from Athena's settings, the chat now retires the active session so your new choice is the one that answers — instead of quietly continuing with the previous provider. The settings notice now says so plainly (\"takes effect on your next message\") instead of telling you to reopen the tab.\n\n### Changed\n\n- **Vendored Gryphon → 2.4.5.** Picks up the provider/model-switch fix above, plus a release-packaging fix so the bundled assistant always ships its current code rather than a stale build.\n\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "Athena 1.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-20T07:41:56Z",
+      "tag": "1.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:501a82dee65bb348375cbf2dee072d0b4581654c7fcde1683550fd15cb38c800",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 1608176
+        },
+        {
+          "digest": "sha256:313121ebc501295991b8b2b1536e30dea93fd5a263a22fcf40fc93f5d83be5a9",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:d276f277bc359527e8f7e69cc413b4f9fe86569b679d6852b6be96789acca210",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 30638
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nHeadline: **setup heals itself and X Articles capture in full.** A new `kb doctor` checks and repairs your environment in one command, the bundled assistant auto-selects a working CLI instead of hanging on a stale one, and a curated set of Web Clipper templates makes browser capture land cleanly. Bundles **Gryphon 2.4.3**.\n\n### Added\n\n- **`kb doctor` — one-command environment check and repair.** `kb doctor` validates your Python and dependencies by actually importing them — not by trusting version numbers, which can lie when two installs shadow each other — and reports exactly what's wrong. `kb doctor --fix` provisions an isolated, self-consistent environment that Athena uses automatically, leaving your system Python untouched. If no working Python is found at startup, the plugin now surfaces a one-line pointer to the fix instead of failing silently. A declared support matrix (Python 3.11+, no upper cap) documents what each release targets.\n- **Athena Web Clipper templates.** A curated template set for the official Obsidian Web Clipper — general pages, LinkedIn, X/Twitter posts, and X Articles — now ships with the plugin. Clips arrive tagged with the right title, source URL, and capture method so Athena ingests them cleanly instead of guessing.\n- **Full X Article capture.** Long-form X (Twitter) Articles now capture with their real structure — headings, lists, and inline images saved locally — instead of a flattened, image-less preview.\n\n### Changed\n\n- **Vendored Gryphon → 2.4.3.** The embedded assistant now picks a working command-line tool (Claude / Codex / Gemini) by probing versions and choosing the newest valid one — healing itself when a stale tool happens to be found first on the system. This fixes first-run chat hangs that previously surfaced only as a 90-second connection timeout. When no usable tool exists, it now fails in about a second with a clear, actionable message instead of hanging.\n\n### Fixed\n\n- **Picks a working Python.** Athena now selects a Python interpreter that actually runs its dependencies, instead of blindly using whichever `python3` the system resolves first — important when a system Python is broken, shadowed, or too new for an installed package set.\n- **Clips ingest even when the panel is closed.** A web clip is now picked up and turned into a page whether or not the Athena panel is open.\n- **X/Twitter capture.** Tweets re-sync through the reliable syndication path (a brittle page selector was dropped); handle-based Article URLs (`/<handle>/article/…`) are now recognized; image-heavy social clips keep their images locally.\n- **Windows stability.** Settings are initialized before the first command can race them, and the startup environment check runs without blocking the interface on slower machines.\n\n",
+      "downloadCount": 9,
       "draft": false,
       "name": "Athena 1.4.0",
       "prerelease": false,
@@ -49,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:f8d32aca7b3338ce73abdf156f60fa71e57ec80280c4242bd7295d290221e34b",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 1599223
         },
         {
           "digest": "sha256:37068b62a2791976d0639bda292e0b1ba0b6e18dea4584915bf3111f4acc7cfb",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 30464
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nHeadline: **GitHub repos and X/Twitter posts now capture cleanly** with purpose-built extractors instead of the generic page reader, and Athena runs correctly on **native Windows**. Bundles **Gryphon 2.4.0**.\n\n### Added\n\n- **Dedicated GitHub repository capture.** Clipping or adding a GitHub repo now pulls the real README through GitHub's API — so the README's own images and content thumbnails come through intact, instead of the generic DOM reader's mangled, fixed-width image dump. Falls back to a normal page capture if the repo can't be reached.\n- **Dedicated X/Twitter capture.** Tweets and long-form X Articles are captured via X's public syndication endpoint — full post text, the author, media, and (for Articles) the title, cover, and preview — instead of the truncated link-only snippet the page reader produced.\n\n### Fixed\n\n- **Windows: pages landed in the wrong category.** On native Windows, a captured video (or other typed source) could have its wiki page written under *Webpages* instead of its correct section (Videos, Repos, …) because of a path-separator mismatch. Pages now land in the right place on every OS. A `kb lint` check surfaces any previously-miscategorized page for relocation.\n\n### Security\n\n- Hardened the new capture paths against untrusted remote content: newline-stripping before writing page frontmatter (prevents metadata injection), a guard so a crafted README image can't point off-repository, response-size caps, and stricter tweet-URL matching.\n\n### Changed\n\n- **Vendored Gryphon → 2.4.0.** The public build bundles the current Gryphon (headless provider-backend session API).\n\n",
+      "downloadCount": 11,
       "draft": false,
       "name": "Athena 1.3.0",
       "prerelease": false,
@@ -75,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:2a6671d54a897e2461f101684a3fb5e84d61b7f5078a0614fb2bfb376bb410b5",
+          "downloadCount": 37,
           "name": "main.js",
           "size": 1569765
         },
         {
           "digest": "sha256:8534bd6e14d704a85046e755dffabb1142e84cd0b0caa1aae4e983fdad3f9b3f",
+          "downloadCount": 38,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:49527a6de744f03a93440f1b890a0e50a929502270468c0782b9d5e5a4bf6868",
+          "downloadCount": 36,
           "name": "styles.css",
           "size": 30464
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nConsolidates 1.2.1–1.2.4 (the intermediate bumps were vendored-Gryphon refreshes). Headline: the `kb` engine is now **native cross-platform Python**, and **LinkedIn document/carousel posts capture in full**.\n\n### Added\n\n- **Native cross-platform `kb` engine.** The entire `kb` command set *and* `bin/kb-capture` are ported from Bash to Python and run natively on **Windows, Linux, and macOS** — validated end-to-end on a 3-OS VM matrix. `ATHENA_PYTHON` env override lets you point the engine at a specific interpreter/venv (used by self-provisioning test guests). A frozen Bash oracle (`bin/kb-legacy`) backs a byte-for-byte parity test suite.\n- **LinkedIn document & carousel capture.** A clip of a LinkedIn document/carousel post now auto-promotes to a Playwright deep-capture that paginates the carousel, and `kb lint` embeds the captured slides into the wiki page in document order.\n- **`kb add-content`** — ingest pre-captured content (title + text) directly, bypassing fetch. For pages an automated fetch can't reach (auth-blocked); paste the content and Athena builds the wiki page.\n- **Thin-share tweet resolution.** A tweet that is just a pointer to another tweet now surfaces the *destination* tweet instead of dropping it (C1/C2/C3).\n- **`unified_ingest`** — a single routing/dispatch entry point behind every ingest path (Web Clipper, `kb add`, `url-new.txt`, paste, orphan reconciliation).\n\n### Changed\n\n- **arcus floor pinned to `>=0.6.0`** (resolves from PyPI). See 1.2.0 for the arcus cutover itself.\n- **Search-first wiki lookup** — page lookups go through the prebuilt index; dropped watchdog log spam.\n\n### Fixed\n\n- **Capture / titles:** YouTube ingest is clean end-to-end (comments stripped, description captured, stable `video-<id>` slug); X.com `\"<name> on X: …\"` title chrome stripped; embedded image URLs no longer leak into wiki titles; Obsidian-forbidden characters stripped from page names; conference PDF titles expand acronyms and stop truncating at 65 chars; file slugs stop truncating at 60 chars and dropping the tail.\n- **Data integrity / lint:** dead-URL records that were later captured are cleared (resurrection check); the dead-URL ledger is rewritten atomically; merge/rename filenames keep the `Prefix: Title` colon on POSIX; the raw-frontmatter reader lint check covers every module; URL Tracker links resolve to real pages; the default-config hash warning no longer fires on legitimate committed edits; thin-clip auto-fix trashes the matching asset directory atomically.\n- Frontmatter scalars are kept on a single physical line.\n\n",
+      "downloadCount": 37,
       "draft": false,
       "name": "Athena 1.2.4",
       "prerelease": false,
@@ -101,22 +143,26 @@
       "assets": [
         {
           "digest": "sha256:38eab45a8c251ca5effcf5bbee945cfd834dd2ebcbf2108072ea007c3e357b79",
+          "downloadCount": 54,
           "name": "main.js",
           "size": 1392404
         },
         {
           "digest": "sha256:2b635afb2f94aebd54596b0d635472b4d26e42ecf9fe2f23905ac49285d86fdf",
+          "downloadCount": 57,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 51,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nRelease-process cleanup version. No functional or API change vs 1.1.0; this release exists to re-trigger Obsidian's Community Plugins directory automated review with the cleaned-up release-asset set.\n\n### Changed — Release assets\n\n- **Drop install zip from GitHub Releases**. Obsidian's directory only fetches `main.js`, `manifest.json`, and `styles.css`; additional release files surfaced a \"Recommendation\" warning on the 1.1.0 submission. The workflow no longer produces or attaches `athena-X.Y.Z.zip`. The Python backend (required for full synthesis) is still available by cloning the repo source.\n- **Drop `bin/` packaging from the workflow**. Was only consumed by the install zip. Stage-assets step is now exactly the three Obsidian-supported files.\n- **Drop the zip from `actions/attest-build-provenance` subject list**. Attestations now cover only the three supported assets.\n\n### Workflow hardening (also in 1.1.1 release window — landed before the version bump)\n\n- **CHANGELOG-extraction fallback**: when `awk` can't find a `## [X.Y.Z]` section in `CHANGELOG.md`, the workflow now emits a default release note linking to the full CHANGELOG + commit-history. Previously this exited 1 and the release was never created — caught by the 1.0.1 backfill failure.\n- **`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true`** at workflow `env:` level. GitHub forces Node 24 for JavaScript actions on 2026-06-02; this opts in now and silences the deprecation warning emitted by `actions/checkout@v4`, `actions/setup-node@v4`, `actions/attest*`, and `softprops/action-gh-release@v2`.\n- **README**: removed the \"Pushing a tag to the polleoai/athena public mirror\" subsection. Maintainer-only knowledge that didn't belong in the public README's \"Known limitations\" block.\n\n### Why this release exists\n\nObsidian's docs ([Submit your plugin](https://docs.obsidian.md/Plugins/Releasing/Submit+your+plugin)) state that to address feedback from the automated review, the submitter must \"update your repository and publish a new GitHub release with an incremented version.\" 1.1.0 had a passing review modulo one \"Recommendation\" warning about the bundled install zip. This release ships a clean automated-review surface.\n\n",
+      "downloadCount": 54,
       "draft": false,
       "name": "Athena 1.1.1",
       "prerelease": false,
@@ -127,22 +173,26 @@
       "assets": [
         {
           "digest": "sha256:38eab45a8c251ca5effcf5bbee945cfd834dd2ebcbf2108072ea007c3e357b79",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1392404
         },
         {
           "digest": "sha256:350331b4ac77c016045ef5f0f4fcf401a271f2ba31bcc3bc964f63170cb9f1b6",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added — JS-side wiki synthesis (cross-platform)\n\n`kb add <url>` now generates the structured digest (`## Key Findings` / `## Methods / Architecture` / `## Notable Quotes` / `## Relevance`) inline as the final step of the capture flow, on every platform Athena runs on. The macOS-only launchd dependency (`com.athena.autoingest`) is no longer required to fill in the \"Pending synthesis\" placeholder.\n\nSynthesis is routed through **Gryphon's provider abstraction** — whichever LLM the user has configured for chat (Claude Code CLI, Anthropic / OpenAI / Google API, or Codex / Gemini CLIs) is what generates the digest. Claude Code subscription stays free; API users pay per-token. No new configuration surface: there is no second model selector in Athena, no second API-key field.\n\n### New module set under `src/athena/`\n\n- **`synthesis.js`** — orchestrator. Builds the user prompt, calls Gryphon's `createProvider(plugin, vaultPath, { resumeSessionId: null })`, parses JSON response, runs quality checks with retry, writes back. Also exports `findPendingPages(plugin)` for bulk-regen scanning.\n- **`synthesis-quality.js`** — verbatim port of the Python `quality_check_summary` + `quality_check_body`: forbidden-opener list (12 entries), forbidden marketing-word list (6), length bounds (100–600 chars), no-newline rule, unicode-math-bold leak check, mandatory `## Key Findings` section. Pure functions, ~10 unit tests pass.\n- **`synthesis-wiki-update.js`** — frontmatter parser, raw-body loader (prefers `raw_path:` over wiki body — ground truth), `summary:` field rewriter, body-zone splicer. The body zone is anchored between the canonical \"Local Copy\" line and the first `## Connections` / `## Keywords` section, so Connections/Keywords are preserved verbatim across regens.\n\n### New command: `kb regen`\n\n- `kb regen <url>` — re-runs synthesis on an existing page. Useful for backfilling pages stuck at the placeholder (Windows installs from 1.0.x), or refreshing after the raw source changes.\n- `kb regen --all-pending` — scans `wiki/format/**` for every page still showing `*Pending synthesis*` and regenerates them in sequence. Stops early on `no-provider` so the user isn't held through N identical failures.\n\nBoth go through the same pattern-matched dispatch as other JS-implemented kb verbs — the LLM never sees the raw `kb regen` text.\n\n### Changed\n\n- `ingestContent` return value gained a `synthesis: { ok, reason, ... }` field; the kb add chat reply surfaces synthesis failure as `*Synthesis failed: <reason>. Run kb regen <url> to retry.*`\n- README \"Operating modes (as of 1.0.9)\" rewritten as \"How `kb add` works\" — capture-only is no longer the default Windows experience; synthesis works everywhere with a Gryphon provider configured.\n- README \"Known limitations (1.0) — Wiki synthesis needs Python\" section removed; Python is still needed for the wiki-page builder (1.2 milestone tracks porting it too), but the synthesis step itself is now Python-free.\n\n### Why this matters\n\nPre-1.1 Athena on Windows produced wiki pages stuck at `*Pending synthesis — run kb regen to generate.*` permanently, because the launchd job that fires the Python regen script doesn't exist on Windows. The user saw a page that looked broken and a command (`kb regen`) that didn't exist. Both fixed: `kb regen` now exists as a real command, and synthesis runs inline by default so the placeholder never reaches the user in normal use.\n\nThe pattern of \"Athena depends on macOS-specific automation\" is gone from the capture flow. The remaining Python dependency (`bin/lib/wiki_page.py` for the page scaffolding) is on the 1.2 roadmap.\n\n### Also in 1.1 — browser-extractor DOM walker\n\nReplaced the `el.innerText`-based capture in `_BROWSER_EXTRACT_JS` with a proper recursive DOM walker. The old extractor stripped structural markup: `<ul><li>` became newline-separated text with no `-` markers, `<pre><code>` became plain text with no fences, and CSS-line-broken `<span>`-per-glyph math (X.com's inline LaTeX rendering) became one character per line.\n\nThe walker emits markdown for the 10 element types that dominate technical content (headings, paragraphs, lists, code, blockquote, links, bold/italic, tables, breaks). Three post-processors clean up the worst residue: math-explosion collapse (concatenates runs of ≥3 single-character lines drawn from Mathematical Alphanumeric Symbols / Greek / math operators), Unicode-bullet normalization (•, ‧, ⁃, ◦, ▪, ►, → → `- `), and blank-run collapse (≥3 newlines → 2).\n\nBundle grew by ~8 kb. 5/5 functional checks pass for lists, code fences, formula collapse, and no exploded-single-char-line residue. The 1.2 milestone tracks bringing in Turndown + Defuddle for the long tail of capture edge cases.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.1.0",
       "prerelease": false,
@@ -153,22 +203,26 @@
       "assets": [
         {
           "digest": "sha256:2997b86ecf7f212e098b9ea669ab49096fcd3ebb8730379f203a55407908a8bb",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 1354939
         },
         {
           "digest": "sha256:a949b01846ecd556ec309660e7c44f64547533b1915be7e5b7aae0265d7d57b7",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added — full kb-command consolidation (phase 1)\n\nArchitectural fix: every kb verb from CLAUDE.md is now pattern-matched in `src/athena/kb-commands.js`, so the LLM **never sees `kb` syntax as a prompt to interpret**. Previously, only ~15 verbs (`add`, `lint`, `stats`, `list`, `search`, etc.) were pattern-matched; the rest (`remove`, `merge`, `move`, `ungroup`, `rename`, `create`, `insight`, etc.) fell through to the LLM, which then explored the codebase for 7+ turns to infer behavior from CLAUDE.md and the source code before executing via raw filesystem tool calls. Slow, expensive, non-deterministic.\n\nAll verbs now have patterns. Handler dispatch tiers:\n\n**Tier 1 — full JS implementation** (new in this release; cross-platform, no Python/bash dependency):\n- `kb remove <page>` — soft-deletes wiki page + linked raw to `.kb-trash/<ts>_kb-remove/`, updates `inbox/url-resolved.tsv` status `captured` → `removed`. Reversible via `kb undo`.\n- `kb undo` — restores the latest `.kb-trash/<ts>_*/` bundle to its original locations, reverts TSV status `removed` → `captured` for any restored wiki page. Cleans up the empty bundle dir after.\n- `kb trash` — lists all `.kb-trash/` bundles newest-first with file counts, ages, and purge-eligibility flag (≥ 30d).\n- `kb rename <page> --to \"New Name\"` — renames the wiki page file (applying Windows-safe filename sanitization) AND updates `[[oldName]]` → `[[New Name]]` wikilinks across all `wiki/**/*.md` + `inbox/**/*.md` files. Skips `raw/` (raw bodies don't carry wikilinks). Reports how many files were updated.\n\n**Tier 2 — pattern-matched, routes to existing `bin/kb` spawn**:\n- `kb merge`, `kb move`, `kb ungroup`, `kb create`, `kb insight`, `kb reflect`, `kb query`, `kb refresh-wiki`, `kb config`, `kb rules add`, `kb report-bug`, `kb request-feature`\n- Works on macOS / Linux today (calls into `bin/kb` bash script). On Windows these surface a \"command requires bash backend\" error from `runMechanical` — clear failure mode instead of LLM exploration.\n\n**Tier 3 — already pattern-matched + handled** (unchanged): `add`, `refresh`, `lint`, `stats`, `index`, `list`, `search`, `journal`, `rules` (read), `trash`, `undo`, `purge`.\n\n### Why this matters\n\nA `kb remove` chat invocation that used to be 7 LLM turns + ~15 tool calls + a few seconds of inference is now **one synchronous JS function call**, executes in milliseconds, behaves identically every time. The LLM is freed to do what it's actually good at — synthesis, reasoning, exploration in unfamiliar territory — instead of repeatedly inferring well-defined Athena semantics.\n\n### Phase 2 (future release)\n\nJS implementations for the Tier 2 verbs (`merge`, `move`, `ungroup`, `create`, etc.) so Windows users get full cross-platform parity. Tier 1 unblocks the most common cleanup workflows today; the rest stay POSIX-bash for now with a clear failure path.\n\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "Athena 1.0.17",
       "prerelease": false,
@@ -179,22 +233,26 @@
       "assets": [
         {
           "digest": "sha256:4fca720fbec4c94fb73a1d1514023ea45fa7c31c9d205f0dd8d34aa25af8b909",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 1346901
         },
         {
           "digest": "sha256:e84dd35bee263f80f069c6c9326c8456fbc1506f824a38d61ccf2b2e37527516",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — chat `kb add` extracts real page title and images (was text-only)\n\nThe browser-capture path executed one bit of JS that returned `document.body.innerText` — no `<title>`, no images, no metadata. Two visible consequences:\n\n- **Every raw had `title: \"Page\"`** (or `\"X Post\"` / `\"Git — repo\"` per-host fallback) regardless of the actual page title. Web Clipper captures had real titles; chat `kb add` never did.\n- **Image-heavy pages (Cisco blog, Medium, etc.) had zero images** in the raw markdown. The \"Local Copy\" link opened a wall of text with no visuals.\n\nFix: `_browserWindowCapture` and `_webviewCapture` now share a `_BROWSER_EXTRACT_JS` script that returns `{ title, text, images: [{src, alt}] }` in one round-trip:\n\n- **Title**: pulled from `<title>` element. Plugin strips trailing site-name chrome (` | LinkedIn`, ` — Cisco Blogs`, etc.) before storing. Per-host fallback (`X Post`, `Git — repo`, `Page`) only fires when no `<title>` exists.\n- **Text**: same progression as before — X tweets first, then `article` / `main` / `[role=\"main\"]`, then `document.body`. No behavior change.\n- **Images**: scoped to the main content area (`article` / `main` / `[role=\"main\"]`, falls back to `body`). Filters: HTTPS only (no `data:` / `blob:` / relative); skip < 50px width or height to drop tracking pixels and favicons; dedupe by src. Emitted as HTML `<img src=\"...\" alt=\"...\" width=\"600\">` for parity with 1.0.13's twimg cleanup — same width constraint, works in both Obsidian Edit Mode and Reading View.\n\n### Use case\n\nYou captured `https://blogs.cisco.com/ai/ai-defense-explorer-lab` via chat `kb add`. **Before 1.0.16**: raw file had `title: \"Page\"` and zero images, Local Copy was a text wall. **1.0.16+**: raw has `title: \"Try Cisco AI Defense Explorer Edition in this hands-on lab\"` (or whatever Cisco's `<title>` was, minus the trailing \" — Cisco Blogs\") and all article images embedded as 600px-wide `<img>` tags.\n\n### Refresh existing captures\n\nThe fix only affects NEW captures. Existing pages with `title: \"Page\"` stay as-is unless explicitly regenerated. Re-capture cleanly:\n\n```\nkb remove <page-name>\nkb add <url>\n```\n\nOr for the wiki page only (won't re-capture the raw, so the raw still has the old title/no-images):\n\n```\nkb refresh <url>\n```\n\n(The `kb refresh` command from 1.0.15 only regenerates the wiki layer, not the raw. To get the new title + images, you need a fresh capture.)\n\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "Athena 1.0.16",
       "prerelease": false,
@@ -205,22 +263,26 @@
       "assets": [
         {
           "digest": "sha256:8d4aeb9e4c4d861acc33d11775f1722d9e28fc23a8d69902b4397fb3e23b4865",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1345718
         },
         {
           "digest": "sha256:b42d6412b658383703267ef322dd59e24e3328f7ed1f9dfeb0aa8816b7064f74",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added — `kb refresh <url>` chat command (Windows-compatible page regeneration)\n\nStale wiki pages (created before a YAML / wikilink / filename fix landed) could not be regenerated through normal `kb add` because the dedup check returned `'exists'` early. The dedup message suggested typing `\"update <page>\"` but that path only triggered when new content was attached — a plain `kb add <url>` had no escape hatch. The POSIX-only `kb refresh-wiki` bash command existed but doesn't run on Windows where `bin/kb` is bash.\n\nNew JS-side chat command `kb refresh <url>` closes the gap:\n\n- **Looks up the page by URL** via `inbox/url-resolved.tsv` (the canonical index — bypasses the filesystem walk).\n- **Reads the wiki page's `raw_path:` frontmatter** to find the existing raw source.\n- **Calls `wiki_page.py --stdin` with `overwrite=true`** so the Python builder rewrites the wiki page in place. The raw file is NOT re-captured — only the wiki layer is regenerated using the current code's YAML formatter, wikilink syntax, sanitization rules, etc. For a fresh browser fetch, use `kb remove` + `kb add` instead.\n- **Reversible** — the Python builder snapshots the prior wiki page to `.kb-trash/` before writing; `kb undo` restores.\n- **Works on Windows** — pure JS plugin path, no `bin/kb` bash dependency.\n\nCompanion change in `bin/lib/wiki_page.py`: the `--stdin` JSON handler now accepts an `overwrite` boolean field (defaults to `false` for backward compat) and forwards it to `create_wiki_page`. Without this, the JS `_runWikiPageBuilder({...overwrite: true})` call would have silently dropped the flag.\n\n### Use case\n\nYou captured a page weeks ago when Athena was 1.0.10. The page's YAML has backslash paths (1.0.12 fix didn't exist yet). Obsidian shows \"Invalid properties\" banner. Type in Athena chat:\n\n```\nkb refresh https://blogs.cisco.com/ai/ai-defense-explorer-lab\n```\n\nPage regenerated with 1.0.14's forward-slash YAML + Local Copy wikilink. Banner clears. No manual delete required.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.15",
       "prerelease": false,
@@ -231,22 +293,26 @@
       "assets": [
         {
           "digest": "sha256:bfc245f67b324aae109408b2cb798f6c2013526f207452d8bf2c660fad173b58",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343567
         },
         {
           "digest": "sha256:13b21d1c9aa62c952a86b591f0e89fbeb3d31ed2654e8be5a0130527d9f066a5",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — Windows: broken \"Local Copy\" wikilink in wiki page body\n\n1.0.12 normalized backslash separators in the `raw_path:` *frontmatter* field but missed the `[[raw\\webpages\\artifacts\\...|Local Copy]]` wikilink in the page body (line 951 in build_wiki_page). On Windows the unnormalized form had backslashes, which **Obsidian's wikilink resolver doesn't follow** — clicking offered to CREATE a new note. Repeated clicks produced auto-numbered empty stubs (`...md`, `... 1.md`, `... 2.md`, `... 3.md`, `... 4.md`) cluttering the vault. Fix: `local_copy.replace('\\\\', '/')` before writing the wikilink, matching what 1.0.12 already did for `raw_path:`.\n\n### Fixed — X.com video overlays empty body content\n\nWeb Clipper captures X.com `<video>` elements with two compounding problems: (1) the `<source>` `src` is `blob:https://x.com/...` — a page-local URL that won't resolve outside the original tweet's runtime, so the video renders as an empty box; (2) the element carries inline `style=\"position: absolute; top: 0%; left: 0%; ...\"` which makes that empty box **overlay whatever scrolls into the same screen region** — body text disappears underneath. New `_strip_blob_videos(body, source_url)` in `process_clip.py` removes any `<video>...<source src=\"blob:...\">...</video>` block and replaces it with a `[Watch video on source](url)` link. Web Clipper's sibling poster `<img>` (the video's still frame, already correctly rewritten by 1.0.13's twimg fix) survives — the visual is preserved, the broken overlay is gone, the user clicks through to the original tweet for the actual playback.\n\n### Migration note for pages stuck with old YAML\n\nIf you have wiki pages that were created BEFORE 1.0.12 and show \"Invalid properties\" in Obsidian, the dedup detection prevents normal `kb add` from regenerating them. Two paths to fix:\n\n- **`kb refresh-wiki <page>`** — re-processes the raw source and rewrites the wiki body with the current code's YAML formatter. Snapshot of the prior page goes to `.kb-trash/` so the rewrite is reversible via `kb undo`.\n- **Delete + re-add**: `kb remove <page>` then `kb add <url>` (forces a fresh capture).\n\nThe new YAML formatter only runs at page-create time, not on every read; that's why \"Invalid properties\" persists for stale pages even when the plugin itself is up to date.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.14",
       "prerelease": false,
@@ -257,22 +323,26 @@
       "assets": [
         {
           "digest": "sha256:bfc245f67b324aae109408b2cb798f6c2013526f207452d8bf2c660fad173b58",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343567
         },
         {
           "digest": "sha256:804348a31dd5321f081322fc41a5960540d64d65fa978a791342a4af11f3757d",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — X.com images now constrained to 600px width in Edit Mode too\n\n1.0.12's twimg cleanup used Obsidian's markdown alt-text width syntax `![Image|600](url)`. Turns out **Obsidian honors `|width` only in Reading View** — Live Preview / Edit Mode renders external image markdown at native pixel size with no width constraint, even with the `|600` in alt text. A `name=medium` image (~1200px wide) still overwhelms the typical 800px editor pane. User correctly reported \"the editing mode shows the same problem. if i change to read-only mode, the display is correct.\"\n\nSwitched to HTML `<img>` tag with explicit `width=\"600\"` — honored in **both** Reading View and Edit Mode (and identically by every other markdown renderer):\n\n- **`bin/lib/process_clip.py`** `_rewrite_twimg_images` now produces `<img src=\"...name=medium\" alt=\"...\" width=\"600\">` instead of `![alt|600](...)`. Two regex branches: markdown `![](pbs.twimg.com/...)` → HTML, and existing HTML `<img src=\"pbs.twimg.com/...\">` → canonicalized HTML (strips Web Clipper junk attributes like `tabindex`, `disableremoteplayback`, inline styles).\n- **`scripts/rewrite-twimg-sizes.py`** got the same overhaul plus a cleanup pass for stale `|600` artifacts in HTML alt attributes (leftover from the brief 1.0.12 markdown-pipe form). Re-running is idempotent — already-canonical refs are skipped.\n- **Dev vault: 60 image refs across 9 X.com captures rewritten to the new HTML form.**\n\n### Trade-off\n\nHTML img is less portable than markdown image syntax (some markdown processors don't render `<img>` tags). For Obsidian — which is Athena's primary surface — HTML img is the correct choice. Other tools (GitHub README rendering, Logseq, Foam) honor HTML img too. The narrow case where this matters: exporting to a markdown-strict renderer like raw GitBook. Documented as a known trade-off; revisit if users complain.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.13",
       "prerelease": false,
@@ -283,22 +353,26 @@
       "assets": [
         {
           "digest": "sha256:bfc245f67b324aae109408b2cb798f6c2013526f207452d8bf2c660fad173b58",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343567
         },
         {
           "digest": "sha256:18194e73151f2ef726140f2c41b22c352c6f45382a2235afb6f90de9aecc8c77",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — Obsidian \"invalid properties\" banner on Windows-created pages\n\nYAML frontmatter was built as raw f-string interpolation: `title: \"{title}\"\\nraw_path: \"{raw_path}\"`. On Windows, `raw_path` contains backslash separators (`raw\\webpages\\artifacts\\foo.md`), and `\\w`/`\\a` aren't valid YAML escape sequences inside a double-quoted scalar — Obsidian banners \"invalid properties\" at the top of every newly-created Windows page. Two fixes in `bin/lib/wiki_page.py`'s `build_wiki_page`:\n\n- **Normalize `raw_path` to forward slashes** via a new `_posix(p)` helper before writing. POSIX-style paths are valid on every OS Python supports; Obsidian handles them in wikilinks the same way as backslash paths.\n- **Universal YAML escape helper** `_yaml_dq(v)` applied to every double-quoted scalar (`title`, `source_type`, `raw_path`, `url`, `summary`). Escapes both backslashes (`\\\\`) and double quotes (`\\\"`) before interpolation. Defensive — protects against any future value with embedded backslashes or quotes.\n\n### Fixed — broken wikilink in chat after wiki creation on Windows\n\n1.0.11 sanitized the on-disk filename (`Web: Foo.md` → `Web — Foo.md`) but the `page_name` field returned to the JS plugin was still the unsanitized form. The chat panel's `[[Web: Foo]]` wikilink therefore didn't resolve to the actual file (`Web — Foo.md`). All three `'page_name': clean_title` returns in `create_wiki_page` now use `_safe_filename(clean_title)` so the reported page name matches the on-disk file.\n\n### Changed — X.com image size cleanup\n\nWeb Clipper grabs `pbs.twimg.com/...?name=large` URLs by default, which are full-resolution (~2000px wide) and take over the Obsidian viewport, hiding body text beneath. Two layers of fix:\n\n- **New `_rewrite_twimg_images(body)` in `process_clip.py`** runs on every new capture: rewrites `name=large` / `name=4096x4096` / `name=orig` → `name=medium` (~1200px, good display quality at ~half the bandwidth), AND adds Obsidian's `|600` width constraint inside the image's alt text so renderers honor an explicit max width even if some twimg URL pattern slips past the URL rewrite.\n- **New `scripts/rewrite-twimg-sizes.py`** runs the same logic retroactively over existing raw files. Idempotent. Run with `--dry-run` first to preview. Verified on the dev vault: 60 image refs across 9 X.com captures rewritten cleanly. Available to ship to end users via a future \"kb migrate\" command or for power users to clone-and-run.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.12",
       "prerelease": false,
@@ -309,22 +383,26 @@
       "assets": [
         {
           "digest": "sha256:bfc245f67b324aae109408b2cb798f6c2013526f207452d8bf2c660fad173b58",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343567
         },
         {
           "digest": "sha256:45f9b4cd7c28b639f4bc2bd585c9ed123f2e11d069695c75a691a3e79ecdce39",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — Windows: wiki page creation no longer fails with `OSError [WinError 87]`\n\nAthena's naming convention uses `:` very liberally (\"X: ...\", \"Web: ...\", \"GitHub: ...\", \"LinkedIn: ...\"). On macOS HFS+/APFS and Linux ext4 this works fine. **On Windows NTFS, `:` is the alternate-data-stream separator — an INVALID filename character** that causes `os.replace()` to throw `OSError [WinError 87] The parameter is incorrect` at the atomic write step in `wiki_page.py:1631`. End result on Windows: raw file saved, no wiki page created, chat panel said \"Page added to knowledge base.\" (lying). 1.0.10's bumped stderr log limit finally made the OSError visible.\n\nFix in `bin/lib/wiki_page.py`:\n\n- **New `_safe_filename(name)` helper** that sanitizes per-platform: POSIX returns `name` unchanged; Windows substitutes `:` → ` —` (em-dash with leading space, reads naturally) and drops other NTFS-reserved chars (`< > | ? * \"`, control chars). Also drops the Unicode replacement character (`�`, `U+FFFD`) on all platforms — it's never user-intent and usually indicates upstream encoding damage.\n- **Applied at the two `wiki_path` construction sites** (lines 1570 and 1605 — the initial path and the disambiguated path used when a collision is detected).\n- **Frontmatter `title:` keeps the original colon-form** — sanitization is filename-only. Obsidian's `[[stem|alias]]` wikilink form lets the rendered display preserve the colon-prefixed title while the on-disk filename uses the em-dash.\n\n### Fixed — chat panel honest about synthesis failure\n\nWhen `_runWikiPageBuilder` returned a result without a `pageName` (Python ran but errored), the chat used to print `**Captured:** <url>` + `Page added to knowledge base.` regardless. **Effectively a lie**: nothing was added. Now the no-pageName-but-Python-present case shows `**Raw saved:** <url>` + a directive to open the dev console for the `[athena] wiki_page.py stderr:` line carrying the actual error. The capture-only-mode message (Python truly absent) is unchanged.\n\n### Known Windows limitations still open\n\n- **LLM via claude.cmd hits cmd.exe metachar escape edge cases.** Console shows `[athena] LLM stderr (exit code 255): > was unexpected at this time.` Athena's prompt template contains the literal `(*?\"<>|)` string in the naming-convention rule — the carets escape `<`, `>`, `|` individually but cmd.exe's parser still trips on multi-metachar sequences. Gryphon's `win-spawn.js` documents this limitation and recommends \"pipe via stdin instead of argv on Windows.\" Real fix: switch `llmProcessContent` to send prompt via stdin rather than the `-p` flag. Tracked for 1.0.12.\n- **Cross-platform vault sync** (macOS vault opened on Windows or vice versa) will produce two different filenames for the same source — `Web: Title.md` on macOS, `Web — Title.md` on Windows. A one-time migration script renaming `:` → ` —` everywhere is tracked for 1.1.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.11",
       "prerelease": false,
@@ -335,22 +413,26 @@
       "assets": [
         {
           "digest": "sha256:5018c29276c75c518cba6f5000c17d56996b40310417a509f469dc7e00739819",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343311
         },
         {
           "digest": "sha256:50448ed12f9b771add0348bb89612c4078ea4fa1c23833e2d5c39ca25e6a5fbc",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 359
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Diagnostic improvements driven by Windows synthesis testing\n\nEach one fixes a \"we can't see why this failed\" gap that surfaced during 1.0.9 Windows full-synthesis tests:\n\n- **Python wiki_page.py stderr log limit bumped 200 → 2000 chars.** Python tracebacks regularly exceed 200 chars, and the 200-char cap routinely truncated before the actual `<ErrorType>: <message>` tail — leaving the user with a file/line pointer (`File ... line 1886, in <module>`) and no error class. 2000 covers any reasonable single-frame traceback; multi-frame traces may still need the manual reproduction command (`<json> | python .obsidian/plugins/athena/bin/lib/wiki_page.py --stdin 2>&1`) to see fully.\n\n- **LLM stderr now surfaces on non-zero exit.** When `claude.cmd` (or any provider) exited with `code: 255`, the console previously showed only `LLM done {code: 255, len: 0}` followed by `LLM parse error: Unexpected end of JSON input` — invisible failure with no actionable signal. Now any non-zero exit prints `[athena] LLM stderr (exit code N): <stderr>` so the user can see auth failures, missing API keys, model errors, etc. directly. Logged only on non-zero exits to avoid noise on the success path.\n\n### Fixed — inbox/url-resolved.tsv ENOENT on fresh vaults\n\nSame class as 1.0.5's url-new.txt fix. The capture-only fallback path at `plugin.js:1133` tries to `readFileSync` the TSV, catches the ENOENT, and logs `[athena] ingest: url-resolved update failed: ENOENT...` — once per failed ingest. Harmless (the catch swallows it) but constant noise. Onload now creates the file as empty if missing. Companion to the 1.0.4 onload dir setup.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.10",
       "prerelease": false,
@@ -361,22 +443,26 @@
       "assets": [
         {
           "digest": "sha256:7446e3b84c3a67d95bd09c94d0e5abe83651d1937af3a6fd732f0cef3c006f24",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1343132
         },
         {
           "digest": "sha256:50c05a96cd067adc94a0b2494a34c87222f713a0d6a68c7ccbdb7c5dd4ad9572",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed — full wiki synthesis now works on a vanilla Community Plugins install\n\nBefore 1.0.9, wiki synthesis required either (a) cloning the full Athena vault from `polleoai/athena` to get the `bin/lib/*.py` sources, or (b) running the maintainer's `./scripts/deploy-to-vm.sh --full-vault` to copy them over. Community Plugins / BRAT users got capture-only by default — capture worked but no wiki page was synthesized.\n\n1.0.9 ships Athena's Python synthesis sources **inside the plugin bundle**. The end-user experience for full synthesis is now:\n\n1. Install Athena via Community Plugins (or BRAT).\n2. Install Python 3.10+ on your system.\n3. `python -m pip install pydantic` (the only non-stdlib Python dep).\n4. Restart Obsidian — `kb add` runs end-to-end synthesis.\n\nWhat changed in detail:\n\n- **`build.js`** now copies `bin/lib/` (31 Python modules) + `bin/config/athena.default.json` into `.obsidian/plugins/athena/bin/` at build time. Plugin install size grows from ~1.3 MB to ~2.0 MB. `__pycache__` directories are excluded (machine-specific noise).\n- **`plugin.js`** introduces a `resolvePythonScript(plugin, relPath)` helper that looks for the script in the plugin's install dir first, falls back to the vault root (for dev vaults and pre-1.0.9 `--full-vault` deploys). All four Python spawn sites now use it: `_runWikiPageBuilder` (`wiki_page.py`), the canonical-slug derivation (`slug.py`), and both Web Clipper paths (`process_clip.py` — handler + watchdog). The no-backend detection check at the chat result handler uses the same resolver, so the \"synthesis was skipped\" message only fires when Python truly can't be invoked.\n- **README operating-modes section rewritten**: capture-only is no longer the default \"Community Plugins user experience\" — it's a fallback for users without Python. The recommended path is plugin + Python + one pip install. The \"clone the full Athena vault\" path stays documented for power users who want the terminal `kb` command set and the lint suite.\n\n### Compatibility\n\n- **No JS API change**, no Gryphon bump. The plugin still composes `GryphonChatView` and uses `wrapForCmdShim` (1.0.8) / `pythonCmd()` (1.0.8) under the hood.\n- **Dev vaults work identically** — the plugin-dir bundled scripts are byte-for-byte copies of the vault-side `bin/lib/`, and the resolver picks plugin-dir first; falling back to vault-side is harmless.\n- **Capture-only mode still exists** — users without Python get the same honest message as before, just with a clearer prescription (\"install Python + pip install pydantic\" instead of \"clone the full Athena vault\").\n- **Plugin bundle size**: ~1.3 MB → ~2.0 MB. Well within Obsidian's reasonable plugin size norms.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.9",
       "prerelease": false,
@@ -387,22 +473,26 @@
       "assets": [
         {
           "digest": "sha256:30359b2ec55c7b46df1350af49765d3c3ba3a449dcb69644fb8959b617b24cee",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1342892
         },
         {
           "digest": "sha256:2356692a1dadd2a2724eb6bdf21a00bf3235324b0a938b485bd5c7ffe4d0060f",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed — Windows: `kb add` no longer fails with \"spawn EINVAL\"\n\nUser-reported on a Windows VM: chat shows \"Reading and summarizing...\" then errors out with `KB command error: spawn EINVAL`. Root cause: Node 20+ on Windows refuses to `spawn()` `.cmd` / `.bat` files directly (CVE-2024-27980 mitigation) — `spawn(claudePath, ...)` returns EINVAL when `claudePath` is `claude.cmd` (the npm install shape on Windows). Two fixes:\n\n- **`llmProcessContent` spawns through `wrapForCmdShim` on Windows .cmd binaries.** Reuses the existing Gryphon helper at `vendor/gryphon/packages/protect/src/win-spawn.js` — handles CommandLineToArgvW arg quoting, cmd.exe metachar escaping, and sets `windowsVerbatimArguments: true` (the Node 20+ requirement for spawning .cmd shims). No-op on POSIX. No new dependency.\n- **Python invocations now use `pythonCmd()` instead of literal `\"python3\"`.** On Windows the default Python install ships `python.exe` — `python3.exe` only exists if the user explicitly installed it that way. Calling `spawn(\"python3\", ...)` therefore returns ENOENT on most Windows setups. The new helper resolves to `\"python\"` on Windows and `\"python3\"` elsewhere. Affects `_runWikiPageBuilder` + the three `execFileSync` sites in the ingest, Web Clipper, and watchdog paths. Cached per-process.\n\n### Known Windows limitations (still open)\n\n- **`bin/kb` (bash script) is not runnable on Windows.** Affects the shell-capture fallback inside `runMechanical` and any `kb <verb>` not handled by the chat-side JS path. Workaround: capture via the Web Clipper drop or the chat `kb add` path (both go through `process_clip.py` / `llmProcessContent`, not the bash script). Full Windows shell-fallback parity needs a `bin/kb.cmd` Windows-native entry point — tracked for a future release.\n- **Long prompts may exceed Windows' 8191-char command-line limit.** `llmProcessContent` passes the prompt via the `-p` argument. The raw-content prefix is capped at 4000 chars but the surrounding boilerplate brings the total close to the limit. Moving the prompt to stdin would solve this — also tracked for a future release.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.8",
       "prerelease": false,
@@ -413,22 +503,26 @@
       "assets": [
         {
           "digest": "sha256:1b52a7abef4d41781d3df4901b220c0335683947908aa2e76d942c0b1c755f4c",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1342686
         },
         {
           "digest": "sha256:619ded64b9c764b0af1d72c8a777ff39975a0036537675361de038a325f5aea9",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added — two audit dashboards: \"did my clip go through?\"\n\nUser-reported scenario: drop a clip via Web Clipper, refresh the URL Tracker, see only one of two recent additions. No way to tell whether the missing one was deduped, failed, still pending, or never arrived. Both new dashboards regenerate automatically on every ingest (Python backend / full-synthesis mode only; Community Plugins capture-only mode gets them in 1.1).\n\n- **`inbox/URL Tracker.md` — All URLs section** (replaces the previous \"Recently Added (last 20)\" cap). Shows every entry in `inbox/url-resolved.tsv` newest-first with a status icon (`✓` captured, `↻` duplicate, `✗` failed/thin/uncapturable, `⊘` removed), the capture timestamp, and either a wikilink (success) or strikethrough title plus URL (failure). Full audit history of every URL the user submitted, ever.\n- **`wiki/dashboards/All Pages.md` — new chronological page index**. Scans every wiki page, groups by `date_added` frontmatter (falls back to `last_updated` / `date` / `created`; missing→\"Undated\" bucket pinned to bottom). Within each date group: alphabetical, with the page summary inlined for context. Companion to URL Tracker: that one shows inputs, this shows outputs. \"What did I do today?\" is now one click instead of a grep.\n\n### Fixed — TSV row-shape disambiguation in dashboard generator\n\n`inbox/url-resolved.tsv` has two row shapes from across the project's history: 4-col modern (`status \\t title \\t url \\t ISO-timestamp`) and 5-col legacy (`status \\t title \\t source_url \\t resolved_url \\t type`). The old `generate_url_tracker` parsed `parts[3]` unconditionally as a date, silently routing the legacy `resolved_url` field into the date column. Invisible before 1.0.7 (the old dashboard didn't display dates); surfaced immediately when the new \"All URLs\" section started rendering timestamps. Fix: ISO-date regex on `parts[3]` decides between date vs resolved_url; legacy rows get an empty date string (acceptable — they predate timestamp tracking).\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.7",
       "prerelease": false,
@@ -439,22 +533,26 @@
       "assets": [
         {
           "digest": "sha256:1b52a7abef4d41781d3df4901b220c0335683947908aa2e76d942c0b1c755f4c",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1342686
         },
         {
           "digest": "sha256:d682771223732aed265c28a391f0e9d2652db4485e60355fe89d46491be42f4d",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Up-arrow now recalls `kb add` and other mechanical prompts.** Gryphon's prompt history walk filters out any message with `source !== \"llm\"` (`vendor/gryphon/.../chat-view.js:3143`) — the design assumes consuming plugins log \"domain-specific commands\" they don't want users to re-navigate to. Athena tags `kb` commands as `source: \"mechanical\"` because they bypass the LLM, but they ARE user prompts and should be recallable. `AthenaChatView._getPromptHistory()` (`src/athena/athena-chat-view.js`) now overrides the walk by shallow-relabeling `mechanical` → `llm` for super's call only. The underlying message objects in `this.messages` and `_fullHistory` keep their real `mechanical` source so other Gryphon filters (context inclusion, retention policy, last-user-message lookup) still route correctly.\n\n### Changed — honest UX for fresh-vault installs\n\n- **Chat now tells the user what actually happened when wiki synthesis is skipped.** On Community-Plugins / BRAT / fresh-vault installs, the plugin saves the raw file but `_runWikiPageBuilder` silently fails because `bin/lib/wiki_page.py` doesn't exist. The chat used to say \"Captured: <url> / Page added to knowledge base.\" — misleading, since no wiki page was actually created. Now: `**Raw saved:** <url>` plus an explicit \"Wiki synthesis was skipped — Athena's Python backend isn't installed in this vault. Capture-only mode is what Community Plugins users currently get. For full wiki synthesis, clone the Athena vault from https://github.com/polleoai/athena and open it in Obsidian instead.\"\n\n### Added — README + scripts for two-mode testing\n\n- **README documents capture-only vs. full synthesis modes** with a table explaining what each provides and how to switch between them. Sets honest expectations for Community Plugins users (who get capture-only) and points at the polleoai/athena repo as the path to full synthesis. The roadmap to bring synthesis into the JS plugin is tracked as the 1.1 milestone.\n- **`scripts/install-to-vault.sh --full-vault`** copies `bin/` + `config/` into the target vault in addition to the plugin bundle. Without the flag the script installs in capture-only mode (mirrors the Community Plugins experience). With the flag the vault gets the full Python backend so synthesis runs.\n- **`scripts/deploy-to-vm.sh --full-vault`** same idea for the HTTP-served VM deploy. The tarball is restructured to be vault-root-anchored (was `plugins/`-anchored) so plugin dirs and `bin/`/`config/` can share one archive without per-mode tar roots. Linux and Windows one-liners updated to extract from the vault root instead of `.obsidian/`. Backward-incompatible for anyone who copy-pasted a 1.0.5 one-liner; re-paste the new printed instructions.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.6",
       "prerelease": false,
@@ -465,22 +563,26 @@
       "assets": [
         {
           "digest": "sha256:bf11624c3a9b6d390148437ed974828c71d6e03d4ae6fffdedcf3ea1f3385ad4",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1341916
         },
         {
           "digest": "sha256:bd6181799e9342f5192bd40ffa1b878289f3dbd948eb4a63e18a6af36d52fa31",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **`inbox/url-new.txt` watcher no longer logs an ENOENT warning on fresh vaults.** `_setupUrlNewWatcher` called `fs.watch(urlNewPath, ...)` directly, but `fs.watch` throws ENOENT when the file doesn't exist — and on Community-Plugins / BRAT / fresh-vault installs it never does. Console showed `[athena] Could not watch url-new.txt: ENOENT: no such file or directory, watch '/<vault>/inbox/url-new.txt'`, and the watcher never attached — so URLs later added via \"URL Tracker.md\" / \"Add URLs.md\" sync would never trigger ingest. Fix: create the file as empty (`fs.writeFileSync(urlNewPath, \"\")`) before attaching the watcher. Idempotent — no-ops on dev vaults that have the file already. Same class as 1.0.4's fresh-vault ENOENT fix.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.5",
       "prerelease": false,
@@ -491,22 +593,26 @@
       "assets": [
         {
           "digest": "sha256:17aac0c7f7dc46271aa2a59d1fd0f0c4a3c30061f46efb8274b71cbce0a9f433",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1341791
         },
         {
           "digest": "sha256:a04cbd6bc277505544e7512d51027ca8066ecf1c19b0eae7e280cb417a8049b5",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **`kb add <url>` from chat no longer throws ENOENT on fresh vaults.** Athena's three-layer dir structure (`raw/{webpages,papers,repos,videos}/artifacts/`, `inbox/`) is created on plugin load by the Python backend in dev vaults, but Community-Plugins / BRAT / brand-new-vault installs don't have a backend installed and therefore lack the dirs entirely. Browser capture would succeed in extracting page text, then `fs.writeFileSync(rawFilePath, ...)` would throw `ENOENT: no such file or directory, open '/<vault>/raw/webpages/artifacts/<slug>.md'` because the parent dir was missing. Fix is two layers:\n  - **Onload structure setup** in `plugin.js` creates the five standard Athena dirs if missing (idempotent — no-ops on dev vaults that already have them). User now sees the Athena layout in the vault file tree immediately after enabling the plugin, even before the first capture.\n  - **Per-write defensive mkdir** before both `writeFileSync` calls in the ingest path (browser-capture write at line ~1001 and content-paste write at line ~1058). Belt-and-suspenders against any future category dir we forgot to seed in onload.\n\n### Known issues\n\n- **Up-arrow doesn't recall the previous message after Obsidian restart.** Reported on Linux. Gryphon's prompt history mechanism (`_getPromptHistory` in `chat-view.js`) reads from persisted `chat-history.json` plus the live message list, so this *should* work in principle. Two plausible failure modes under investigation: (a) persistence wasn't flushed before the restart (likely if the prior `kb add` hung), (b) `kb add`-issued messages have role/type `mechanical` and may be filtered out of the history walk. Will be addressed in a follow-up release after we confirm which is firing — pending dev-console logs from a reproducible Linux session.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.4",
       "prerelease": false,
@@ -517,22 +623,26 @@
       "assets": [
         {
           "digest": "sha256:c6f3430c943171b3aa983c34c84321f050ef7953252a41f2812b0c6301f0a281",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1341451
         },
         {
           "digest": "sha256:0b6a07300920b02dd2a167d7b71f041462287fa717c7a7adcf1f208c9f1dab59",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **`kb add <url>` from chat no longer hangs on Linux.** Athena's `_browserWindowCapture` (`src/athena/plugin.js`) wrapped `await win.loadURL(url)` and a nested 6s `setTimeout` inside a single try/catch with no outer timeout. On Linux — especially Ubuntu 22.04+ with Snap-installed Obsidian under AppArmor — Chromium's sandbox helper can fail to start the renderer, leaving `loadURL` unfulfilled forever. Because the 6s wait was nested *inside* the await chain, it never fired, the catch never ran, and the user saw \"Capturing URL...\" indefinitely with no fallback to `_webviewCapture` or the shell path. Fix: wrap the full BrowserWindow load+extract chain in a `Promise.race` against a 15s outer timeout (mirrors `_webviewCapture`'s existing 15s budget) and ensure `win.close()` runs on both success and failure paths via a `win.isDestroyed()` guard in the catch.\n- **Sandbox policy unchanged** — Athena's own CLAUDE.md security rule \"Browser capture must run with sandbox enabled\" stands. The Linux hang is now a graceful 15s fall-through, not a policy loosening.\n\n### Changed\n\n- **Capture status line surfaces fallback transitions.** Previously the chat status said \"Capturing URL...\" for the full duration (up to ~30s across BrowserWindow + webview + shell retries) with no feedback when a stage failed. Now: \"Capturing URL...\" → \"Browser capture failed, trying webview...\" → \"Webview capture failed, trying Python backend...\" → result. The `browserCapture(url, updateStatus)` signature gained an optional status callback that the ingest caller wires through.\n- **Final-failure message is informative.** When all three capture paths fail (BrowserWindow + webview + bin/kb shell), the chat used to say only \"Capture failed. Check the URL and try again.\" — useless on a fresh Linux VM where the user has no idea what to retry. New message: \"Browser capture failed (this can happen on Linux with sandbox restrictions, or with pages that block automation like Cloudflare-protected sites). Try the Obsidian Web Clipper extension instead.\"\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.3",
       "prerelease": false,
@@ -543,22 +653,26 @@
       "assets": [
         {
           "digest": "sha256:220abbc4a7ad506af19dfd45302e8eef35b0537f0ad5bd00eb482d1d2d7b2463",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1340985
         },
         {
           "digest": "sha256:6f6339201120eab68265e580b03ad636345b830c1ca7d3fb947e965cf58cc805",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Chat panel welcome no longer says \"Welcome to Gryphon\".** The panel is rendered by the bundled Gryphon chat view (composition), and Gryphon's `displayText` option only controlled the workspace tab label — the welcome panel itself hardcoded its own brand string. Athena now uses a thin `AthenaChatView` subclass (`src/athena/athena-chat-view.js`) that lets Gryphon render the functional welcome (provider cards, dismiss, lifecycle) and then swaps the brand-bearing text nodes via stable DOM selectors. Heading is \"Welcome to Athena — your Second Brain\"; body emphasizes ingest + structured KB. Security disclosure retained (the protection still fires inside the bundled view); the \"Tune the rules in Settings → Gryphon → Security\" actionable was dropped since Athena doesn't yet expose that UI in its own settings tab. The fix lives entirely in Athena — no Gryphon change required, so the dependency direction (Athena → Gryphon) stays correct.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.2",
       "prerelease": false,
@@ -569,22 +683,26 @@
       "assets": [
         {
           "digest": "sha256:3df9f3d402b228fe8141d02fff59ad8fa96aa7863bdca9bb9e3fb77748379dce",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1339788
         },
         {
           "digest": "sha256:9a887ba69b0c506ea88f2c4fea2a45af3bec320eae9089b3c65b18677e53e70a",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "Release 1.0.1.\n\nThis release has no curated CHANGELOG section (typically an auto-bump tag — e.g. a Gryphon vendor pin update). See:\n\n- The full [CHANGELOG.md](https://github.com/polleoai/athena/blob/1.0.1/CHANGELOG.md) for context on surrounding releases\n- The commit history at [1.0.1](https://github.com/polleoai/athena/commits/1.0.1) for the exact change set\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.1",
       "prerelease": false,
@@ -595,22 +713,26 @@
       "assets": [
         {
           "digest": "sha256:3df9f3d402b228fe8141d02fff59ad8fa96aa7863bdca9bb9e3fb77748379dce",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1339788
         },
         {
           "digest": "sha256:ee51ac5d6ca01f2cf67a1cc232f5cccb8179e1913b9fdee8d76ccd6a7910b0b8",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:32802cd059d4657e8002141342e13f02ca6898517d9d9b761d9c4056dbbd5d69",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 27995
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nFirst public release. Athena is your Second Brain in Obsidian: ingest URLs, papers, repos, videos, and screenshots into a three-layer knowledge base (raw sources / LLM-maintained wiki / schema), search and synthesize across them, and chat with the model of your choice through the bundled Gryphon plugin.\n\nThis release closes out Obsidian Community Plugins compliance and bundles vendored Gryphon 1.6.0 (whose v1.6.0 itself completed Community Plugins compliance for the chat surface).\n\n### Added — Community Plugins compliance\n\n- **README.md** with feature overview, install instructions, and full network endpoint + system identity disclosures for every bundled SDK.\n- **CHANGELOG.md** in Keep-a-Changelog format with semver versioning.\n- **versions.json** mapping each release to its minimum Obsidian app version.\n- **`.github/workflows/release.yml`** — tag-push and `workflow_dispatch` triggered CI release pipeline. Builds the bundle from a clean checkout, verifies the tag matches `manifest.version`, attaches sigstore build-provenance attestations to every release asset (`main.js`, `manifest.json`, `styles.css`, install zip), and creates the GitHub Release from the matching CHANGELOG section. Tag shape is validated against strict semver before any build runs.\n- **`scripts/release-smoke-test.sh`** — runs `npm install + npm run build:all` from a fresh clone, verifies the three required output artifacts, and (when pnpm is available) repeats the run under pnpm. Gates the release workflow against Obsidian's pnpm-based scorecard sandbox.\n- **manifest.json** now includes `authorUrl: https://www.polleo.ai`. `author` is `POLLEO.AI`, aligning with the Gryphon manifest.\n\n### Changed — bundled Gryphon submodule pinned to 1.6.0\n\n- Brings in Gryphon's own Community Plugins compliance work (CSS hygiene — no `!important`, no `:has()`, no duplicate selectors; README placeholder hunt; sigstore-attested release pipeline; pnpm-friendly build via `pnpm-workspace.yaml` + `file:` workspace deps). Athena bundles Gryphon's stylesheet bit-for-bit, so all of those fixes flow through to Athena's bundle.\n- **No behavior change for end users.** Same UI, same chat surface, same `kb` command set, same wiki layout.\n\n### Added — internal safety net\n\n- `bin/lib/wiki_page.py`: `'linkedin 404 — page not found'`, `'404 — page not found'`, and `'page not found'` added to `GENERIC_TITLES`. Symmetric to `UI_NOISE_RE`'s body-side 404 filter — captures during a transient 404 no longer leave the chrome title as the wiki page name once the raw is corrected.\n- `kb lint` Section 30c: auto-trash raw files with no YAML frontmatter at all. Catches the content-in-wrong-file class (e.g. a GitHub README clipped under a `linkedin-com-posts-ugcpost-*` slug). Moves to `.kb-trash/<ts>_no-frontmatter-lint/` for forensic recovery via `kb undo`. The raw is removed from `raw_files` so subsequent lint sections don't fail on the missing file.\n\n### Compatibility\n\n- **Minimum Obsidian app version**: 1.0.0.\n- **Desktop only.** Athena's terminal `kb` command set and Python KB engine assume a desktop filesystem with Node child-process spawning; mobile is not supported.\n- **No new code dependencies** added in this release vs. the 0.12.x line. Bundle composition is `vendor/gryphon` (Anthropic, OpenAI, Google SDKs) plus Athena's own plugin shell (no SDKs of its own).\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "Athena 1.0.0",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-06-16T05:02:58.614Z",
-  "lastFetchedAt": "2026-06-16T05:02:58.614Z",
+  "lastChangedAt": "2026-06-21T04:01:09.508Z",
+  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -23,22 +23,26 @@
       "assets": [
         {
           "digest": "sha256:23e1ea85df8e305616ee24a2417c702993790f34e89e475fd30d5c2b3026c468",
+          "downloadCount": 241,
           "name": "main.js",
           "size": 796874
         },
         {
           "digest": "sha256:d8a7768203fe56d0cba2c02bfa0a4c0f59fd6157f7ec960396dd1d13daa5017c",
+          "downloadCount": 250,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
+          "downloadCount": 222,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.3.0\n\n### 新功能\n\n- **移动端桌面使用建议**：非桌面端（手机/平板）打开插件设置页时，顶部显示双语提示框，建议用户在桌面端使用以获取「下载增强」功能带来的微信公众号和防盗链图片下载成功率提升\n\n### 修复\n\n- **知乎时间提取重构**：统一使用 `js-initialData` 提取发布时间，移除不可靠的 `.ContentItem-time` CSS 选择器文本解析\n- **知乎回答页时区修正**：修复知乎回答页 `published` 时区未正确转换的问题，`updatedTime` 优先于 `createdTime`\n- **知乎专栏 URL 匹配修复**：修复知乎专栏 URL 匹配不完整的问题，对齐 share-to-save 架构\n- **`buildWebFrontmatter` ISO 时间保护**：已有 ISO 8601 时间不再被强制转换为 UTC，避免时区信息丢失\n- **README 版权引用**：License 章节添加 defuddle 版权引用\n\n## 6.2.0\n\n### 新功能\n\n- **HTTP 工具模块**：新增集中化的请求头构建（`buildHeaders`），包含现代浏览器必发的 `Sec-Fetch-*` 系列头、`Accept-Language` 和 `Referer`，提升防盗链绕过能力\n- **Content-Type 驱动扩展名检测**：下载文件时检查 HTTP `Content-Type` 响应头，当 URL 扩展名与实际 MIME 类型不一致时（如知乎 CDN `.avis` 实际为 PNG），自动修正文件扩展名。优先级：`wx_fmt` > Content-Type > URL 扩展名\n- **Headless 三信号就绪检测**：Electron BrowserWindow 提取页面时同时检测网络空闲、DOM 稳定（MutationObserver）、内容稳定三种信号，替代原有的简单轮询，提升 JS 渲染页面提取可靠性\n- **computed style 戳记**：提取 HTML 前将 `display:none` / `visibility:hidden` / `opacity:0` 写为 inline style，使 defuddle 在 DOMParser 上下文中也能检测 CSS 隐藏元素\n- **图片并发下载 + 内容哈希去重**：同一篇笔记的图片改为 3 路并发下载，新增内容哈希去重（同批次相同内容只保存一份）和逐字节已有文件比对\n- **Node.js 下载重试**：网络错误、超时、429 限流、5xx 服务端错误自动重试（1s/2s 指数退避，最多 2 次），提升下载成功率\n- **元数据增强**：新增 Schema.org JSON-LD 解析、站点名剥离（`\"标题 | 站点名\"` → `\"标题\"`）、作者/发布日期兜底提取，改善笔记 frontmatter 质量\n- **知乎 DOM 预处理**：新增知乎专栏/问答页面专用预处理（实体链接剥离、登录弹窗移除、代码块规范化、懒加载图片修复、发布时间提取）\n- **小红书元数据增强**：从 `__INITIAL_STATE__` 提取作者、发布时间、正文内容，支持视频笔记标记\n- **文件名修缮**：`sanitizeFilename` 增加首尾点号/空格剥离（Windows 兼容）和空值 `'untitled'` 回退\n\n### 改进\n\n- CHROME_UA 升级至 Chrome 148\n- Node.js https 下载支持 HTTP 协议（非 HTTPS URL）\n- 新增 `FileDownloader.downloadToBuffer()` 方法，支持下载到内存获取 Content-Type\n- 验证码检测签名扩充至 12 条（新增 Cloudflare Turnstile、Google reCAPTCHA、hCaptcha）\n- 新增 `ElectronWebContents` / `ElectronBrowserWindow` 类型接口替换 headless 提取器中的 `any`\n- 重定向跟随增加上限控制（最多 5 次）\n\n### 修复\n\n- 修复 `listMdPathsInFolder` / `scanExistingNoteFiles` 路径翻倍 bug（`adapter.list()` 返回 vault 完整路径，重复拼接前缀导致增量同步退化为全量重下载）\n- 修复 headless 重定向后 timeout 竞态问题\n- 修复 HTTP 304 Not Modified 被误判为成功下载\n- 修复 headless 空白页面永远无法稳定退出的轮询问题\n- 修复 `convertHtmlToMarkdown` HTML 双重解析的性能浪费\n- 修复 `stripSiteName` 正则回溯（ReDoS）风险\n- 修复小红书主路径绕过 `enhanceMetadata` 导致缺失站点名剥离\n- 删除未使用的 `DefuddleResponse` 导入、空 `if (isXhs) {}` 块等代码\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.2.0...6.3.0",
+      "downloadCount": 241,
       "draft": false,
       "name": "6.3.0",
       "prerelease": false,
@@ -49,22 +53,26 @@
       "assets": [
         {
           "digest": "sha256:22b6da6f1280398e39986a540c082f53eefc7d3aacdc4a4a657dcc45b4232731",
+          "downloadCount": 21,
           "name": "main.js",
           "size": 794207
         },
         {
           "digest": "sha256:e44175779531e5b04055aeba43bd0cfa374af2fe69a6c0b342e15332eed46801",
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.2.0\n\n### 新功能\n\n- **HTTP 工具模块**：新增集中化的请求头构建（`buildHeaders`），包含现代浏览器必发的 `Sec-Fetch-*` 系列头、`Accept-Language` 和 `Referer`，提升防盗链绕过能力\n- **Content-Type 驱动扩展名检测**：下载文件时检查 HTTP `Content-Type` 响应头，当 URL 扩展名与实际 MIME 类型不一致时（如知乎 CDN `.avis` 实际为 PNG），自动修正文件扩展名。优先级：`wx_fmt` > Content-Type > URL 扩展名\n- **Headless 三信号就绪检测**：Electron BrowserWindow 提取页面时同时检测网络空闲、DOM 稳定（MutationObserver）、内容稳定三种信号，替代原有的简单轮询，提升 JS 渲染页面提取可靠性\n- **computed style 戳记**：提取 HTML 前将 `display:none` / `visibility:hidden` / `opacity:0` 写为 inline style，使 defuddle 在 DOMParser 上下文中也能检测 CSS 隐藏元素\n- **图片并发下载 + 内容哈希去重**：同一篇笔记的图片改为 3 路并发下载，新增内容哈希去重（同批次相同内容只保存一份）和逐字节已有文件比对\n- **Node.js 下载重试**：网络错误、超时、429 限流、5xx 服务端错误自动重试（1s/2s 指数退避，最多 2 次），提升下载成功率\n- **元数据增强**：新增 Schema.org JSON-LD 解析、站点名剥离（`\"标题 | 站点名\"` → `\"标题\"`）、作者/发布日期兜底提取，改善笔记 frontmatter 质量\n- **知乎 DOM 预处理**：新增知乎专栏/问答页面专用预处理（实体链接剥离、登录弹窗移除、代码块规范化、懒加载图片修复、发布时间提取）\n- **小红书元数据增强**：从 `__INITIAL_STATE__` 提取作者、发布时间、正文内容，支持视频笔记标记\n- **文件名修缮**：`sanitizeFilename` 增加首尾点号/空格剥离（Windows 兼容）和空值 `'untitled'` 回退\n\n### 改进\n\n- CHROME_UA 升级至 Chrome 148\n- Node.js https 下载支持 HTTP 协议（非 HTTPS URL）\n- 新增 `FileDownloader.downloadToBuffer()` 方法，支持下载到内存获取 Content-Type\n- 验证码检测签名扩充至 12 条（新增 Cloudflare Turnstile、Google reCAPTCHA、hCaptcha）\n- 新增 `ElectronWebContents` / `ElectronBrowserWindow` 类型接口替换 headless 提取器中的 `any`\n- 重定向跟随增加上限控制（最多 5 次）\n\n### 修复\n\n- 修复 `listMdPathsInFolder` / `scanExistingNoteFiles` 路径翻倍 bug（`adapter.list()` 返回 vault 完整路径，重复拼接前缀导致增量同步退化为全量重下载）\n- 修复 headless 重定向后 timeout 竞态问题\n- 修复 HTTP 304 Not Modified 被误判为成功下载\n- 修复 headless 空白页面永远无法稳定退出的轮询问题\n- 修复 `convertHtmlToMarkdown` HTML 双重解析的性能浪费\n- 修复 `stripSiteName` 正则回溯（ReDoS）风险\n- 修复小红书主路径绕过 `enhanceMetadata` 导致缺失站点名剥离\n- 删除未使用的 `DefuddleResponse` 导入、空 `if (isXhs) {}` 块等代码\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/v6.1.0...6.2.0",
+      "downloadCount": 21,
       "draft": false,
       "name": "6.2.0",
       "prerelease": false,
@@ -75,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:7a1adbc6f8283132f73abdfc5ce1415b40dffaf4f1947bca6036290bac59d717",
+          "downloadCount": 200,
           "name": "main.js",
           "size": 792337
         },
         {
           "digest": "sha256:3c3e9d79b2370388dee0af2cf68baff3c82c405afb0e47b8481644bc8664cab3",
+          "downloadCount": 216,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 192,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.1.0\r\n\r\n- **桌面端「下载增强」覆盖知乎等通用网站**：headless BrowserWindow 不再限于微信，知乎等反爬严格的站点也能正确抓取全文。窗口尺寸升级至 1280×720，伪装正常浏览器视口，大幅降低反爬检测概率\r\n- **附件存储位置变更**：附件从集中式 `ima/attachments/` 改为笔记同目录的 `attachments/` 子文件夹。例如 `ima/个人知识库/xxx/attachments/`，与笔记自然组织在一起\r\n- **通用验证码检测**：从仅微信扩展为多信号检测（Cloudflare / DataDome / Akamai + 页面标题 + 关键词），避免保存空验证码页面\r\n- **defuddle 切换到私有定制版**：修复 `<a>` 内嵌套块级元素导致的断裂 Markdown 链接\r\n- **移动端失败提示优化**：区分平台场景——移动端或「下载增强」关闭时，提示用户切换到桌面端重新同步；桌面端失败时提示确认「下载增强」已开启\r\n- **代码清理**：移除 `kbCategory`/`kbName`/`syncFolder` 等冗余路径字段，`resolveAttachmentFolder` 改用 `noteFilePath` 直接推算",
+      "downloadCount": 200,
       "draft": false,
       "name": "6.1.0",
       "prerelease": false,
@@ -101,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:7b6656c4e4597ac4997ef24d016f009a069ed12ec593c37e9eca307a622ad416",
+          "downloadCount": 98,
           "name": "main.js",
           "size": 779624
         },
         {
           "digest": "sha256:6d84aa82d08c07e20378e03e063994f72f87788f7fe0a587400b08684f326557",
+          "downloadCount": 102,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 94,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 5.2.0\n\n- 个人知识库同步现支持文件夹层级结构——子文件夹中的笔记会保留原始目录树，不再全部堆在根目录下（感谢 @changliu1990 的 PR）\n\n\n## What's Changed\n* fix: sync knowledge base folders recursively by @changliu1990 in https://github.com/chenxiccc/obsidian-ima.copilot-sync/pull/1\n\n## New Contributors\n* @changliu1990 made their first contribution in https://github.com/chenxiccc/obsidian-ima.copilot-sync/pull/1\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/5.1.0...5.2.0",
+      "downloadCount": 98,
       "draft": false,
       "name": "5.2.0",
       "prerelease": false,
@@ -127,6 +143,7 @@
       "assets": [],
       "author": "chenxiccc",
       "description": "## 5.1.0\n\n- 解决部分微信公众号获取的图片重复的问题\n- 架构进行了重构\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "5.1.0",
       "prerelease": false,
@@ -137,22 +154,26 @@
       "assets": [
         {
           "digest": "sha256:6c05dcd1d4c3c9e68de372f19891ecfa14f536ab58439904c02d3a85934be8c4",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 778854
         },
         {
           "digest": "sha256:7aac8bd9289890a13a88834359c3d5d435dc6655af275dc21d614911377645f4",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 5.1.0\n\n- 解决部分微信公众号获取的图片重复的问题\n- 架构进行了重构\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/v5.0.0...5.1.0",
+      "downloadCount": 4,
       "draft": false,
       "name": "5.1.0",
       "prerelease": false,
@@ -163,6 +184,7 @@
       "assets": [],
       "author": "chenxiccc",
       "description": "## 5.0.0\n\n### 电脑端微信公众号能力大幅提升\n\n- 新增 Tier 4 无头浏览器提取：对于 JS 动态渲染的微信文章（图片分享页/小绿书等），自动使用 Electron BrowserWindow 渲染页面后提取完整内容\n- 支持全部 7 种微信文章格式：标准图文、图片分享页、视频消息、音频消息、纯文字消息、小说卡片\n- 图片提取优化：通过 `from=appmsg` 精准过滤正文图片、`cdn_url` 提取轮播隐藏图、URL 标准化去重\n\n### 小红书文章支持\n\n- 新增小红书文章内容提取：正确解析 `__INITIAL_STATE__` JSON 中的图片 URL\n- 文本通过 defuddle + `#detail-desc` 选择器提取\n\n### 设置优化\n\n- `防盗链下载增强` 和 `无头浏览器提取` 合并为单一设置项 `下载增强（仅限桌面端）`\n- 电脑端默认开启，手机端可见但不可用\n\n### 其他改进\n\n- 架构清理：消除 2 个循环依赖、移除 7 处死代码、消除文件下载重复逻辑\n- 文件命名修复：微信图片不再因同名互相覆盖\n- 类型定义整理：共享类型统一到 path-utils.ts",
+      "downloadCount": 0,
       "draft": false,
       "name": "v5.0.0",
       "prerelease": false,
@@ -173,22 +195,26 @@
       "assets": [
         {
           "digest": "sha256:e97bb3e43f12daaa1704615f7ca7e57cd53e420bf86fb97ebf36900b7c470851",
+          "downloadCount": 118,
           "name": "main.js",
           "size": 774063
         },
         {
           "digest": "sha256:bdfec5103683345a7c55d2b52be701c87b21c15ec78c778c9975e762b1cabe6c",
+          "downloadCount": 118,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 111,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "1. （电脑端）大幅提升微信公众号的获取能力，现在 图文类型 公众号文章也可以正确获取。\r\n2. 小红书的文章可以正确获取。\r\n\r\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/v4.7.1...5.0.0",
+      "downloadCount": 118,
       "draft": false,
       "name": "5.0.0",
       "prerelease": false,
@@ -199,22 +225,26 @@
       "assets": [
         {
           "digest": "sha256:23d8a0f1756daae81c235b8fb5092c7265bcad78fe8adf067e0f4f96bea8ade1",
+          "downloadCount": 45,
           "name": "main.js",
           "size": 768543
         },
         {
           "digest": "sha256:a244b0702d8b8da3f428ee686e2ea344ed8a9acf4d3c922606cdc6e2d760683d",
+          "downloadCount": 47,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:44b1200c57e8d45f67c144c10c17c67c04d0c4d67af484c941c6247edc5d79c8",
+          "downloadCount": 42,
           "name": "styles.css",
           "size": 3713
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.7.0...4.7.1",
+      "downloadCount": 45,
       "draft": false,
       "name": "4.7.1",
       "prerelease": false,
@@ -225,22 +255,26 @@
       "assets": [
         {
           "digest": "sha256:ca3b7fe2e150df1c4897b954a135327ef22a0cea619b15b65025a2810e0841ea",
+          "downloadCount": 15,
           "name": "main.js",
           "size": 767448
         },
         {
           "digest": "sha256:f61a6ca96b6b23534b52cd2ffce48ecaa5a8caba18add2884807fb29aba25760",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.6.3...4.7.0",
+      "downloadCount": 15,
       "draft": false,
       "name": "4.7.0",
       "prerelease": false,
@@ -251,22 +285,26 @@
       "assets": [
         {
           "digest": "sha256:9b8e010976f4f896fb582fb1d9bf2143e9abed4abbdd9423866e8ac360c6ec90",
+          "downloadCount": 20,
           "name": "main.js",
           "size": 765168
         },
         {
           "digest": "sha256:fa810785c9cf72316945e288e3e70da4e892397105deebd51a63712cd4bebc1d",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.6.2...4.6.3",
+      "downloadCount": 20,
       "draft": false,
       "name": "4.6.3",
       "prerelease": false,
@@ -277,22 +315,26 @@
       "assets": [
         {
           "digest": "sha256:7dc7782dcb117dffa7634d67bef89ee625d50fd1e737d7193bc836bcdd64fa28",
+          "downloadCount": 29,
           "name": "main.js",
           "size": 763424
         },
         {
           "digest": "sha256:e01335465a0fd314450f15e8d71a4c9df72c0e5964fc9f98cd4459dad01bad63",
+          "downloadCount": 31,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 29,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "修复一些解析的小问题。代码进行了一点重构。",
+      "downloadCount": 29,
       "draft": false,
       "name": "4.6.2",
       "prerelease": false,
@@ -303,22 +345,26 @@
       "assets": [
         {
           "digest": "sha256:7dc7782dcb117dffa7634d67bef89ee625d50fd1e737d7193bc836bcdd64fa28",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 763424
         },
         {
           "digest": "sha256:404ad79b2496fd133d4bcc73c0a03b0a1dfe1616b6a0264f5579aa3559610470",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.6.0...4.6.1",
+      "downloadCount": 3,
       "draft": false,
       "name": "4.6.1",
       "prerelease": false,
@@ -329,22 +375,26 @@
       "assets": [
         {
           "digest": "sha256:d62f4513d9b6e21d70ef29e3e002886911b8de6bb3f5db44b82b8186e179c383",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 762977
         },
         {
           "digest": "sha256:1cdbe1785b35b266b4988c1e66573b3f28e5c0ae7b509ee29d029d158e948ef2",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "大幅提升电脑端防盗链图片的下载能力\r\n只读模式优化",
+      "downloadCount": 0,
       "draft": false,
       "name": "4.6.0",
       "prerelease": false,
@@ -355,22 +405,26 @@
       "assets": [
         {
           "digest": "sha256:1334878a000047e02ed250f680f3b5db0da00b44e2e3d574c3df5964e283b9c3",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 761490
         },
         {
           "digest": "sha256:c131768150d3bd0ca34a6052d5ffaa02c41d288720fa44ea124d4257d1894d7a",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.2.2...4.3.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "4.3.0",
       "prerelease": false,
@@ -381,22 +435,26 @@
       "assets": [
         {
           "digest": "sha256:4d9f0df822ac1ba099365f008b4d152cc49cd279fc936c017d60cbf6b7b6dda3",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 760138
         },
         {
           "digest": "sha256:3d2c6b242da2eedf5a0af350aa73024218f251e5beefe0c79438b5a0584325a1",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.2.0...4.2.2",
+      "downloadCount": 8,
       "draft": false,
       "name": "4.2.2",
       "prerelease": false,
@@ -407,22 +465,26 @@
       "assets": [
         {
           "digest": "sha256:81945e6c858a8ec6d82f4e563d88411542f2c4fba75267229b99dc6bf5dd48c7",
+          "downloadCount": 17,
           "name": "main.js",
           "size": 759293
         },
         {
           "digest": "sha256:39bf740d65d7f5d2cd047ef5ec5f535bf8f2b911ecbe67957cc1adc14b4cf453",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:a45429e29243d5b3ff92dfd8ac51f4781f1d446aef0c3bded62caa9d8b294025",
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 3043
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.1.1...4.2.0",
+      "downloadCount": 17,
       "draft": false,
       "name": "4.2.0",
       "prerelease": false,
@@ -433,22 +495,26 @@
       "assets": [
         {
           "digest": "sha256:f1cec292c32bea0935360bd95e6ad3c248400da2ccf449fca23e5d002ed81217",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 759143
         },
         {
           "digest": "sha256:2c049f7d58ddfa97f92334063a17401e006c3a03483c08ad1b27657626c15361",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:f04d871637691825534354d00c42639740d7b8bb8be1c4a3588736f6d37748a9",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 3063
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.1.0...4.1.1",
+      "downloadCount": 3,
       "draft": false,
       "name": "4.1.1",
       "prerelease": false,
@@ -459,22 +525,26 @@
       "assets": [
         {
           "digest": "sha256:f1cec292c32bea0935360bd95e6ad3c248400da2ccf449fca23e5d002ed81217",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 759143
         },
         {
           "digest": "sha256:2b1d96615eb11db4d0700c43d3d8b36efda878dc2cf521091dd50ece7d307941",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:f04d871637691825534354d00c42639740d7b8bb8be1c4a3588736f6d37748a9",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 3063
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/4.0.0...4.1.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "4.1.0",
       "prerelease": false,
@@ -485,22 +555,26 @@
       "assets": [
         {
           "digest": "sha256:f1cec292c32bea0935360bd95e6ad3c248400da2ccf449fca23e5d002ed81217",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 759143
         },
         {
           "digest": "sha256:9b3903fef5933a5f2fb55994e0a00b5adcdaee87241141614a457b05d79bcf67",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 241
         },
         {
           "digest": "sha256:f04d871637691825534354d00c42639740d7b8bb8be1c4a3588736f6d37748a9",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3063
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.9.6...4.0.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "4.0.0",
       "prerelease": false,
@@ -511,22 +585,26 @@
       "assets": [
         {
           "digest": "sha256:7782d617cb7f4e20466d231d6291be8b990c58ff04d7c304ab6cd303ae1e5504",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 758768
         },
         {
           "digest": "sha256:3435a9bf080e0913a9b1ec95c8e5b2687df2cb2b5a3d9ac700fc14028ad5b8f5",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.9.5...3.9.6",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.9.6",
       "prerelease": false,
@@ -537,22 +615,26 @@
       "assets": [
         {
           "digest": "sha256:f7750314bbe4c3e58024d063f3679c6410d3da723247ae80d26160677db60bb5",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 758711
         },
         {
           "digest": "sha256:fa645adff523e434dfde57962cacc5d2ed298eabadfb4eb115dcac4fa67d6e06",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.9.1...3.9.5",
+      "downloadCount": 0,
       "draft": false,
       "name": "3.9.5",
       "prerelease": false,
@@ -563,22 +645,26 @@
       "assets": [
         {
           "digest": "sha256:11b2d0c417827617501774a01ceef5fe5c406f67e8edb2e5763bb3b9c82a2879",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 758684
         },
         {
           "digest": "sha256:d2bc6b27317bd0b621d3efe7a9a8ee82f44f5e8e0c5349235a9ec40f950f34fd",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.9.0...3.9.1",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.9.1",
       "prerelease": false,
@@ -589,22 +675,26 @@
       "assets": [
         {
           "digest": "sha256:4755f276a03ad20670f2c86f994ffcc64019a474f0f15ae0e71765e7b35e66c2",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 758702
         },
         {
           "digest": "sha256:9c30b49429506f6a8e8bedadf0cb1c43aa957295787cfc598e9225e75de5d0bc",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.8.2...3.9.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "3.9.0",
       "prerelease": false,
@@ -615,22 +705,26 @@
       "assets": [
         {
           "digest": "sha256:2b2b4b2a3b1e2050dfefb7a257b909037034a3e0492507687ba8fb632ed4e9c5",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 758550
         },
         {
           "digest": "sha256:d8f847fb4642077ebe6f125f6e9b2a83446ba07ca48a80569f8cb2c65a966fda",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.8.1...3.8.2",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.8.2",
       "prerelease": false,
@@ -641,22 +735,26 @@
       "assets": [
         {
           "digest": "sha256:8347f274e9e07e64f19c120979de0bab5392509f11e426f484e88c3652c982ca",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 758703
         },
         {
           "digest": "sha256:f9bc6298ebb6d5e0c231798f0ee1cd39f873b8b21f362df6466b717fdb12b684",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.8.0...3.8.1",
+      "downloadCount": 0,
       "draft": false,
       "name": "3.8.1",
       "prerelease": false,
@@ -667,22 +765,26 @@
       "assets": [
         {
           "digest": "sha256:b0fcf41575baf8593295f0becffe30dd02188ed120088f5e9c3a4f865a345fee",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 758708
         },
         {
           "digest": "sha256:937eb6fce4ce8311df539e37750cb5a29862559cfe9d403c55b61ea2fea40a2c",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.7.1...3.8.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.8.0",
       "prerelease": false,
@@ -693,22 +795,26 @@
       "assets": [
         {
           "digest": "sha256:ec895dfe1bbef118351cbac804edf3480b2895d8a3cec237fb7456076ce25c5f",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 757014
         },
         {
           "digest": "sha256:29025062452d101cf4a4bb035258d98e2ebf8de1a14cc5a9cdc55405bf1e7318",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.7.0...3.7.1",
+      "downloadCount": 3,
       "draft": false,
       "name": "3.7.1",
       "prerelease": false,
@@ -719,22 +825,26 @@
       "assets": [
         {
           "digest": "sha256:0b526920936b430bfae5951b0c3a249514cea4f2d5a6b22884f758149607bbd2",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 757664
         },
         {
           "digest": "sha256:2a9636c2f5428b373fccba4339412b62bc61b789dc66851b48444e1d1afb919c",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.6.1...3.7.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.7.0",
       "prerelease": false,
@@ -745,22 +855,26 @@
       "assets": [
         {
           "digest": "sha256:e92fc1927f44323a00cbe433586fc403828ec0adc30e679f94caa58483ff3936",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 754170
         },
         {
           "digest": "sha256:0ea7fe832009c00371345f7b1f206d883d82b9e0e9afa9247beee6612ec97b29",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 234
         },
         {
           "digest": "sha256:c45b08ae64cb384c0e22412a0befe305de5980eff8345fc161701940120003dd",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3047
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.6.0...3.6.1",
+      "downloadCount": 2,
       "draft": false,
       "name": "3.6.1",
       "prerelease": false,
@@ -771,17 +885,20 @@
       "assets": [
         {
           "digest": "sha256:18815be2bdaef4cb5099697ae526930b9f73d5e78eb3ee709bec38d3b6d920f4",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 753713
         },
         {
           "digest": "sha256:7b0a1295831fa87f58793e3842e632f9634ce6a4d02c889bfa007436f0a820d2",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.5.0...3.6.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.6.0",
       "prerelease": false,
@@ -792,17 +909,20 @@
       "assets": [
         {
           "digest": "sha256:6982dcf83de8f1f02f92b1b8eed32a329daeb6da2b6386d65ec3ed91cde5f419",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 753161
         },
         {
           "digest": "sha256:49a5dcfc5a1948d1827d2735dc08fe037de69035917cfb18072e4f07fa8a410c",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.1.1...3.5.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "3.5.0",
       "prerelease": false,
@@ -813,17 +933,20 @@
       "assets": [
         {
           "digest": "sha256:b45bbb76d491c317bdec44c14e56bee1cbc10858cb652cb39d4233542fc2a50f",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 752245
         },
         {
           "digest": "sha256:12dc2d5bed0997617456a05be5db3997f3936795b05f89856b8dc113fc950503",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.1.0...3.1.1",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.1.1",
       "prerelease": false,
@@ -834,17 +957,20 @@
       "assets": [
         {
           "digest": "sha256:07d58f46affc1452e85d8f46d24afd74b0b4f45e2728e5b85c94e410412b0e36",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 747664
         },
         {
           "digest": "sha256:8d5bd6e37f9b7bb35a8987e4bc66caea0e1bb96a4203c51ac730a374db88e9ec",
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/3.0.0...3.1.0",
+      "downloadCount": 3,
       "draft": false,
       "name": "3.1.0",
       "prerelease": false,
@@ -855,17 +981,20 @@
       "assets": [
         {
           "digest": "sha256:3b781f2704292dbe12e727725073f55a7f532b0daec98867e40a17665315254b",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 747501
         },
         {
           "digest": "sha256:3c0a7331edd07676a5b50678d2704b7a88a37db4c303092ce5232fcaf2d24166",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/2.1.0...3.0.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "3.0.0",
       "prerelease": false,
@@ -876,17 +1005,20 @@
       "assets": [
         {
           "digest": "sha256:92297ee77369dc94c2217c80b385ec7771acd273ac8bd25afb8c5f037f138856",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 748102
         },
         {
           "digest": "sha256:67892d784a913676e5f35350a3097b8ce147a094860ac8150b6a479e4a104eee",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/2.0.0...2.1.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -897,17 +1029,20 @@
       "assets": [
         {
           "digest": "sha256:b279266795f3b010cedd21101bbdfc9a196445c246a3e173a197c0d3961ce944",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 738275
         },
         {
           "digest": "sha256:f0311adda928c1c9f64fcdec4988f5ebb240c65021a06092609ef82fad979eee",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/1.2.1...2.0.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -918,17 +1053,20 @@
       "assets": [
         {
           "digest": "sha256:3e9e8c4075d6e7480d48e685039c6b249b325628041ac7cc0b0166a05431b6a7",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 24958
         },
         {
           "digest": "sha256:a6da54e0bcd4dea81b4b729e8f0ab53a2c0ab251ee60136d9dcdfc35e902fd38",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/1.2.0...1.2.1",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -939,17 +1077,20 @@
       "assets": [
         {
           "digest": "sha256:e17619eebf0872560637adea65f39f9b095b116425140b12714fa709176e12e7",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 24958
         },
         {
           "digest": "sha256:3389dda584022e8c7ccdd2319e40e051f872735e4518b1ee8e63b6e2504eaca2",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/1.0.2...1.2.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -960,17 +1101,20 @@
       "assets": [
         {
           "digest": "sha256:cc288c5ba829b73eb0f13e527048e534ad15ba305c1163aae1148112e0412740",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 25707
         },
         {
           "digest": "sha256:c90d499ea6c1efafb6babee1325f196a955a522041c836b580388ca10cadc9b6",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/1.0.1...1.0.2",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
@@ -981,17 +1125,20 @@
       "assets": [
         {
           "digest": "sha256:448d06125502adc9780ad9c66c183a692c5fe58a9843c05a57b99f22cc3bdee9",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 24154
         },
         {
           "digest": "sha256:1d86d670f21fbf02aaa481675f735aa1b8a575dc2c448dada3f9aa07d16d7244",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/commits/1.0.1",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Sync your Trakt.tv watchlist, watch history, favorites, and ratings into Markdown notes — with metadata localization and detailed per-episode watch timestamps. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "sync-trakt",
-  "lastChangedAt": "2026-06-16T05:02:58.614Z",
-  "lastFetchedAt": "2026-06-16T05:02:58.614Z",
+  "lastChangedAt": "2026-06-21T04:01:09.508Z",
+  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
   "manifest": {
     "author": "o1xhack",
     "authorUrl": "https://github.com/o1xhack",
@@ -24,22 +24,26 @@
       "assets": [
         {
           "digest": "sha256:c6688daae968a93b87d23f9e10db6a08e02c9b04d89cea3b1978909dfc4d40f7",
+          "downloadCount": 28,
           "name": "main.js",
           "size": 292029
         },
         {
           "digest": "sha256:a989a95983903ac365c2ba1bfb0599232ebef2a2dcc7a6fd4eac5f5c9b4a2478",
+          "downloadCount": 29,
           "name": "manifest.json",
           "size": 430
         },
         {
           "digest": "sha256:8b421cb565289060de7a4c79bcdd32dd74e4bc3b827058ab29d090b3f69ab737",
+          "downloadCount": 27,
           "name": "styles.css",
           "size": 4918
         }
       ],
       "author": "o1xhack",
       "description": "**Smarter media-note writes.** This release reduces Obsidian Sync version\nhistory churn for large Trakt libraries.\n\n### Added\n\n- New **Community rating/votes update policy** setting under\n  **Settings -> Sync -> Sync behavior**.\n- `Every sync` keeps the old behavior for users who want every Trakt\n  community rating/vote change written immediately.\n- `Smart` writes `trakt_rating` and `trakt_votes` only when the configured\n  minimum interval has elapsed, or when the absolute rating/vote change\n  reaches the user's thresholds.\n- Smart mode records `trakt_community_stats_synced_at` when community\n  stats are actually written. Older notes fall back to `trakt_synced_at`\n  for the initial timing baseline so upgrades do not immediately rewrite\n  the whole library.\n\n### Fixed\n\n- Media-note sync now performs a final no-op guard before writing. If a\n  temporary Obsidian frontmatter-cache miss would only refresh\n  `trakt_synced_at`, the plugin skips the write instead of creating a\n  timestamp-only Obsidian Sync history version.",
+      "downloadCount": 28,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -50,22 +54,26 @@
       "assets": [
         {
           "digest": "sha256:b6e436bacf0ece6c9b7f212e5e2d191dd0a670156729d415bc744b9b8ab55121",
+          "downloadCount": 63,
           "name": "main.js",
           "size": 278332
         },
         {
           "digest": "sha256:16044a8f9f0f8a98fade147a9c5e30228a9c3fc21b8dcdf599ab944152529706",
+          "downloadCount": 61,
           "name": "manifest.json",
           "size": 430
         },
         {
           "digest": "sha256:8b421cb565289060de7a4c79bcdd32dd74e4bc3b827058ab29d090b3f69ab737",
+          "downloadCount": 59,
           "name": "styles.css",
           "size": 4918
         }
       ],
       "author": "o1xhack",
       "description": "## 1.2.1\n\n### Fixed\n\n- Daily Notes manual backfill now refreshes the currently enabled Sync sources before writing the selected date range. Watchlist, favorites, ratings, and detailed watched events now follow the same source toggles as Daily Notes-only sync instead of relying on a stale in-memory snapshot.\n- Detailed watch-history-only items, such as season 0 specials that appear in Trakt history but not in watched shows, can now create/update media notes and appear in Daily Notes.\n- Older local history caches with orphaned detailed-history entries are now repaired automatically with one full history refresh when needed.\n\n### Documentation\n\n- Added a sync architecture and control matrix that documents what each source toggle, sync button, timer, Daily Notes-only sync, and manual backfill writes or deliberately skips.\n- Clarified that Daily Notes-only sync and manual backfill refresh Trakt/TMDB data but do not create, rename, delete, or rewrite media notes.\n\n## Recent highlights\n\n- Daily Notes can auto-sync independently from full media-note sync, using the same source data without rewriting media notes.\n- Large TMDB and detailed-watch-history caches live in local runtime storage, keeping synced `data.json` small.\n- Automatic filename rename keeps localized media notes aligned when metadata language changes.\n- Metadata fallback lets you use a strict primary language with a secondary fallback.\n- Daily Notes integration can write watched / watchlist / favorite / rating events into daily notes.",
+      "downloadCount": 63,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -76,22 +84,26 @@
       "assets": [
         {
           "digest": "sha256:3ee10f16d02d75553114d8246930fbb05e20b9d9a83cbaaf8837279663d841bc",
+          "downloadCount": 20,
           "name": "main.js",
           "size": 272744
         },
         {
           "digest": "sha256:e440fb63d13b1062e11da4cc730e53789830776f624cd94d9439b85904717fd6",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:8b421cb565289060de7a4c79bcdd32dd74e4bc3b827058ab29d090b3f69ab737",
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 4918
         }
       ],
       "author": "o1xhack",
       "description": "## 1.2.0 — 2026-05-17\n\n**Daily Notes-only auto-sync.** Daily Notes can now refresh on their own\ntimer without running the full media-note reconciliation pipeline.\n\n### Added\n\n- A separate **Daily Notes auto-sync** toggle and interval in the Daily\n  Notes settings tab. Both settings are device-local by default.\n- `SyncEngine.syncDailyNotesData()`, a lightweight data-refresh path that\n  shares full sync's Trakt source fetches, detailed-history refresh,\n  token refresh, TMDB / Trakt metadata localization, runtime-cache save,\n  and shared sync lock, but skips media-note create/update/delete/rename.\n- Spec [0011](specs/0011-daily-notes-auto-sync.md), documenting the API\n  research, multi-device model, timer interactions, scenario matrix, and\n  rejected alternatives.\n- Smoke coverage for the new settings, i18n labels, shared lock behavior,\n  and the multi-device detailed-history full-refresh coordinator.\n\n### Changed\n\n- The command **Sync to daily notes (today only)** now refreshes Trakt\n  source data before rendering today's Daily Note. It no longer depends\n  on the previous in-memory `lastMergedItems` snapshot after app restart.\n- Trakt auth success, disconnect, and visibility-triggered settings\n  reloads now reconfigure both the full auto-sync timer and the Daily\n  Notes-only timer.\n- The Daily Notes auto-sync label now says that it updates Daily Notes\n  without media-note sync, and its description explicitly says it can be\n  enabled together with full Auto-sync.\n- Full sync now folds the Daily Notes catch-up result into the full sync\n  completion notice instead of showing two separate final notices.\n- Architecture, manual, and README docs now explain the split between\n  vault-synced settings, local runtime caches, full auto-sync, and\n  Daily Notes-only auto-sync.\n\n### Fixed\n\n- Existing installs that already had a `_localKeys` list now migrate the\n  two new Daily Notes timer settings to device-local defaults. Without\n  this, upgrades could show the cloud icon as synced even though new\n  installs were local by default.\n- Daily Notes-only auto-sync no longer rewrites today's Daily Note or\n  shows an \"updated\" notice when the rendered marker block is unchanged.\n\n### Compatibility\n\n- Existing behavior is unchanged unless the user explicitly enables\n  Daily Notes-only auto-sync. Full sync still updates Daily Notes at the\n  end when Daily Notes integration is enabled.\n- The Daily-only path keeps multi-device safety by using the same\n  `SyncEngine.syncing` lock and the same 1.1.x\n  `lastAuthoritativeFullRefreshAt` coordinator for local runtime history\n  caches.\n\n",
+      "downloadCount": 20,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -102,22 +114,26 @@
       "assets": [
         {
           "digest": "sha256:cd6405992a924ce080482337138dd56e30442e4e8085d338a04bfc105dbbcdba",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 257437
         },
         {
           "digest": "sha256:87c5d4ddb297aa6093f5d66ae8a12ead8c5728c6f97dc0d51131c4337a659a33",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:8b421cb565289060de7a4c79bcdd32dd74e4bc3b827058ab29d090b3f69ab737",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 4918
         }
       ],
       "author": "o1xhack",
       "description": "## 1.1.2\n\nThis release exists specifically so users already on 1.1.1 receive a normal update signal.\n\n- Fixes stale TMDB runtime-cache entries produced by older title-picking logic.\n- Old TMDB cache entries are now treated as misses and refetched synchronously, even when their TTL has not expired.\n- Prevents Daily Notes and media-note filenames from staying on old English or wrong-locale titles after upgrading.\n- Keeps the 1.1.1 runtime-cache architecture and multi-device sync behavior unchanged.\n\nVerification: npm run build, npm run lint, npm run test:i18n (660 passed, 0 failed).\n",
+      "downloadCount": 5,
       "draft": false,
       "name": "1.1.2 — TMDB cache invalidation bugfix",
       "prerelease": false,
@@ -128,22 +144,26 @@
       "assets": [
         {
           "digest": "sha256:968045126bdd2aff2fe15a8b7a07a288a81e125476506815acdbc5c9e2616e56",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 256357
         },
         {
           "digest": "sha256:65fe633242a3f49d645ad929a4bf0d656d52c6e7e72dcb9993c748c76037e78e",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:8b421cb565289060de7a4c79bcdd32dd74e4bc3b827058ab29d090b3f69ab737",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 4918
         }
       ],
       "author": "o1xhack",
       "description": "## 1.1.1\n\n- Moves large TMDB and detailed watch-history caches out of synced data.json into local runtime storage, reducing Obsidian Sync storage and version-history churn.\n- Keeps multi-device sync safe with a slim synced data.json payload and the authoritative full-refresh coordinator for detailed history.\n- Fixes same-ID note matching during Obsidian Sync races and adds a confirmed dedupe tool for existing duplicate notes.\n- Adds second-confirmation dialogs with impact explanations for disconnect, clear cache, clear history state, dedupe notes, and reset defaults.\n- Tightens strict TMDB metadata fallback: zh-CN, zh-TW / zh-HK, Japanese, Korean, and configured fallback languages no longer substitute across incompatible variants; original-language titles are used only when compatible with the selected metadata locale.\n- Refetches TMDB cache entries produced by older title-picking logic automatically, so stale runtime cache cannot keep Daily Notes or media notes stuck on an old English / wrong-locale title.\n- Softens the Daily Notes marker warning from a large red block to a smaller inline warning.\n\nVerification: npm run build, npm run lint, npm run test:i18n (655 passed, 0 failed).\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.1.1 — Runtime cache storage and safer maintenance",
       "prerelease": false,
@@ -154,22 +174,26 @@
       "assets": [
         {
           "digest": "sha256:7ce99d5a4abc6a7312dce35b0e7f5a5caaf99907420c2963413c2b950d33542c",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 221384
         },
         {
           "digest": "sha256:ee1becf326367d7a81645a01cdd6ef076b439e951c1b39644a096ccabd6512ff",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:c24e044b30c96be72e89be957fe5f92159898008173c09f4fb86a15963eda87b",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 4803
         }
       ],
       "author": "o1xhack",
       "description": "Bug fix release.\n\n- Repair malformed plugin-owned frontmatter on existing media notes during sync.\n- Preserve unrelated user frontmatter fields while regenerating trakt-owned fields.\n- Avoid Obsidian YAML parser failures from already-corrupted trakt_* lines so affected notes can self-repair on the next sync.\n\nAssets: main.js, manifest.json, styles.css.",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -180,22 +204,26 @@
       "assets": [
         {
           "digest": "sha256:13e4a966912a56a482715437c18333edf498337d3e1eb9fab6ba4aa1ee636098",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 219898
         },
         {
           "digest": "sha256:6b636b000743cf6286cddb04ddd90c6b197695a97cb6497af9ca367042f10213",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:c24e044b30c96be72e89be957fe5f92159898008173c09f4fb86a15963eda87b",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 4803
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 Filename rename on language change + persistent What's-new modal\n\nFour changes in one release.\n\n## 1️⃣ Filename auto-rename — finally for real\n\nThe `metadataLanguage` setting description has been promising auto-rename on language switch since 0.3.x. **It was never actually implemented.** Git history confirms: zero `rename` / `renameFile` / `vault.rename` calls in any prior version.\n\n1.0.0 ships the rename it has been promising. See [spec 0009](https://github.com/o1xhack/obsidian-sync-trakt/blob/1.0.0/docs/specs/0009-filename-rename.md) for design + manual verification matrix.\n\n### Behaviour\n\nEvery sync compares each existing note's filename against what the current title + filename template would produce, and renames via `app.fileManager.renameFile` when they differ. Internal Obsidian links **auto-update**.\n\n**Trigger is content-driven** — fires on any title/filename mismatch:\n- Switched primary metadata language → rename\n- Switched fallback language (0.9.0) → rename\n- Changed filename template → rename\n- Manually edited `trakt_title` in frontmatter → rename\n\n### Settings → General → Localization (new rows)\n\n```\nAuto-rename on language change:   [✓]   ← default ON\nRename existing notes now:        [Rename now]\n```\n\nToggle off to disable sync-time auto-rename. The button runs a one-shot pass regardless.\n\n### Self-collision exclusion\n\nThe trap: when we walk the disambiguator to find a free name, the file BEING renamed currently occupies its own current path. Without special-casing this, every rename would falsely tier up — `Reborn (2020).md` → `Reborn [157810] (2020).md` even when the natural name was free.\n\n`maybeRenameExistingFile` excludes the file being renamed from its own collision check. Real collisions (a DIFFERENT file at the desired path) still tier up correctly.\n\n### Post-sync notice\n\nWhen ≥1 rename happens, the notice grows an optional suffix:\n\n```\nSync Trakt: 5 new, 2 updated, 12 unchanged, 0 removed. 3 renamed.\n```\n\nSuppressed in the zero-rename steady state.\n\n### Description fixed\n\nThe misleading text on `metadataLanguage` is updated to accurately describe the now-real behaviour and point at the new toggle.\n\n## 2️⃣ Persistent \"What's new\" modal\n\nThe 1.0 introduction also generalizes into a **What's new** system that runs forever — every future release will open a modal explaining what changed since you last clicked Got it.\n\n```\nSync Trakt — what's new\n─────────────────────────────────────\n• 1.0.0: Filename auto-rename on language change. Default ON …\n• 0.9.0: Metadata language fallback — strict primary + …\n• 0.8.1 (Bug fix): Address Obsidian directory submission …\n• 0.8.0: Incremental sync mode for Daily Notes …\n• 0.7.4: Plugin version row at top of General tab\n• 0.7.3 (Bug fix): Unified all notifications under \"Sync Trakt:\" …\n• 0.7.2 (Bug fix): Daily Notes — empty marker pair now gets filled …\n• 0.7.1 (Bug fix): Address Obsidian bot lint + post-PR audit …\n• 0.7.0: Daily Notes integration …\n• 0.6.0: Tabbed settings UI + 11 bundled note-template languages\n\nFull release notes are on GitHub.\n\n                       [ View on GitHub ]   [ Got it ]\n```\n\n### Mechanics\n\n- `historyState.lastReleaseNoticeVersion` tracks the latest manifest version the user has acknowledged\n- On each launch, compare `manifest.version` vs stored — open modal when newer\n- Modal shows only entries strictly newer than stored (so 0.7→1.0 jump shows 9 lines; 1.0→1.1 jump shows just the 1.1 entry)\n- Cross-device safe — Mac dismisses, iPhone respects the dismissal (flag in vault-synced data.json)\n- Secondary \"View on GitHub\" button jumps to the full release notes page\n\n## 3️⃣ Daily Notes — date-range backfill modal\n\nThe 0.7.0 \"Backfill last N days\" slider is replaced with a proper date-range picker. Inspired by the [obsidian-daily-note-plus](https://github.com/o1xhack/obsidian-daily-note-plus) pattern.\n\n```\nBackfill Daily Notes\n─────────────────────────────────────\nQuick select: [Last 7 days] [Last 30 days] [This month] [Last month]\n\nStart date:   [2026-04-13]   ← native <input type=\"date\">\nEnd date:     [2026-05-13]\n\nRange: 31 day(s)\nExisting Daily Notes in range: 18\n\nFor each day in the range:\n• No Daily Note → skip\n• Empty marker region → fill it\n• Marker region already has Trakt content → skip (kept as-is)\n• No markers → append marker region at END of file\nContent outside our marker region is NEVER modified.\n\n                              [ Cancel ]  [ Backfill ]\n```\n\nQuick-preset buttons only **fill the date inputs**; they don't bypass confirmation. User still hits \"Backfill\" before anything runs. Confirm button disables when start > end (with an inline error message).\n\n`manualBackfill` signature now takes `(host, fromDateISO, toDateISO)` instead of `(host, days)`. Defensive handling: future end-dates clamp to today; ranges over 10 years truncate from the start (keep most recent).\n\n## 4️⃣ Daily Notes preview language clarification\n\nSmall description fix — the **Entry format preview** block has always rendered verbs in `templateLanguage` (which matches your actual Daily Notes output). Description didn't spell out the fallback chain:\n- 11 bundled languages (en, zh-CN, zh-TW, ja, ko, fr, de, it, es, pt-BR, ru) → exact match\n- Aliases (zh-HK → zh-TW, etc.) → mapped\n- Anything unsupported → English\n\nNow it does.\n\n## Migration\n\n- `autoRenameOnLanguageChange: boolean` defaults to **true** to match the long-broken description text\n- `historyState.lastReleaseNoticeVersion: string` defaults to `\"\"`; the 1.0 What's-new modal fires on first launch with the full 10-entry log\n- `dailyNotesBackfillDays` setting is **removed** (no migration needed — old values in data.json silently ignored)\n- On the first sync after upgrade, any note whose current filename ≠ desired filename gets renamed — **intentional, and matches the description**\n- Cross-device safe: rename done on Mac → vault sync propagates → iPhone matches by `trakt_id`, no duplicates\n\n## Tests\n\n- 17 smoke-test cases for the rename logic (self-exclusion, real collision tier-up)\n- 62 new smoke-test cases for the What's-new system (chrome i18n, release-log shape, `isVersionNewer` comparator edge cases, `entriesNewerThan` filtering)\n- 7 new smoke-test cases for the preview fallback chain\n- 12 new smoke-test cases for the date-range modal helpers (`computeThisMonth` / `computeLastMonth` — mid-month, first-of-month, year rollover, leap-year Feb)\n- **Total suite: 531 / 0 fail.** Lint + build green.",
+      "downloadCount": 8,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
@@ -206,22 +234,26 @@
       "assets": [
         {
           "digest": "sha256:cb13a53cde784ce77001d3b68d61d220bf782cff21887eea9d4af9aad22bbcf4",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 200537
         },
         {
           "digest": "sha256:cafa9a6c65849eff3aa6d4ad33183ab85e09c732645fb5dd8dbcd476ed85a9c4",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:6090206039b15203643e27f8a9c1e7b94a493499266aa4f993dd1e0434530f98",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 3482
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 Metadata language fallback (strict primary + user-defined secondary)\n\nAdds a single new setting — **Fallback language** — under Localization, right below Metadata language. Solves the silent-fallback bug where you ask for **simplified Chinese**, TMDB / Trakt have only **traditional Chinese**, and you silently get traditional Chinese without knowing.\n\nSee [spec 0008](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.9.0/docs/specs/0008-metadata-language-fallback.md) for the full design.\n\n## Decision matrix\n\n| Primary | Fallback | Behaviour |\n|---|---|---|\n| (unset) | – | Localization off — no API translation calls. Existing. |\n| set | **None** (default) | **Loose match** on primary: exact then language-prefix. **0.8.x behaviour byte-for-byte unchanged.** |\n| set | set | **Strict** primary → **strict** fallback → English original |\n\nSetting a fallback is itself a declaration of intent (*\"I want zh-CN specifically; if not zh-CN, English\"*). One control covers what a separate strict-toggle would have needed two for.\n\n## Sample\n\nSettings → General → Localization:\n\n```\nMetadata language:    [Chinese (Simplified) ▼]\nFallback language:    [English ▼]              ← NEW\n```\n\nResult on a movie that has only zh-TW on TMDB:\n\n| | Before 0.9.0 | After (fallback=en) |\n|---|---|---|\n| `trakt_title` | `黑暗騎士` (silent zh-TW) | `The Dark Knight` (strict miss → en fallback) |\n| `trakt_original_title` | `The Dark Knight` | `The Dark Knight` |\n\n## What's controlled where\n\n| API path | Fallback support |\n|---|---|\n| **Trakt translation endpoint** | Fully controlled. `pickTraktTranslation` accepts a fallback param, runs strict-then-strict. |\n| **TMDB** | Fully controlled. Uses the existing `append_to_response=translations` payload (zero extra API calls); `pickBestTranslation` walks the array strictly when fallback is set. Cache key gains `:fb=...` suffix so mode switches invalidate correctly; pre-0.9.0 cache entries remain valid. |\n\n## Tests\n\n18 new smoke-test cases covering strict match, fallback hit, both miss, language variants, cache namespace partitioning, backward-compat loose path. **431 / 0 fail.**\n\n## Migration\n\n`metadataFallbackLanguage` defaults to `\"\"` (no fallback). Existing users get **byte-for-byte identical** API and pick behaviour. Setting a fallback is opt-in; toggling between modes is reversible.\n\n## Doesn't include\n\n- **Filename rename on language change** — coming in 1.0.0 ([spec 0009](https://github.com/o1xhack/obsidian-sync-trakt/blob/main/docs/specs/0009-filename-rename.md)). The settings description still inaccurately claims rename happens. Will be fixed in 1.0.\n- Multi-level fallback chains (primary → mid1 → mid2 → English). Two-level + English original at the end is enough; longer chains would explode the UI for marginal benefit.\n- Per-item language override.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -232,22 +264,26 @@
       "assets": [
         {
           "digest": "sha256:a05dd0df1333f1b962f61eea9c2fa74e3ed438f2639d23d7b99d366398a966fe",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 194932
         },
         {
           "digest": "sha256:eabd8867d48e8642d59a4480bccd9d8fe5caaab5f24708394c633a8ce58097a7",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:6090206039b15203643e27f8a9c1e7b94a493499266aa4f993dd1e0434530f98",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 3482
         }
       ],
       "author": "o1xhack",
       "description": "## 🤖 Address Obsidian directory submission validator findings\n\nAfter the Obsidian community plugin submission flow migrated from GitHub PRs to https://community.obsidian.md, the validator surfaced six issues against 0.8.0. All addressable; none affect runtime behaviour for users on a current Obsidian version.\n\n## What changed\n\n| # | Issue | Fix |\n|---|---|---|\n| 1-2 | `App.{load,save}LocalStorage` requires Obsidian 1.8.7 but `minAppVersion` was 1.6.6 | Bumped `minAppVersion` to 1.8.7. We've used these APIs since 0.5.0 — the lower bound was always wrong. README badges (× 9 i18n variants) updated to match. |\n| 3-4 | `eslint-disable obsidianmd/ui/sentence-case` on the filename-format placeholder (not allowed) | Removed the placeholder entirely. The setting description already shows `YYYY-MM-DD` as a canonical example, and the field is pre-filled with the user's current value, so the placeholder rarely surfaced anyway. |\n| 5 | `builtin-modules` dev dependency flagged as replaceable | Switched to `node:module`'s built-in `builtinModules`. Same list, no dependency. |\n| 6 | `main.ts:127-128` used `document` instead of `activeDocument` (popout-window unsafe) | Replaced with Obsidian's `activeDocument` global. Listener now fires for popout windows too. |\n\n## Migration\n\nFor users on Obsidian < 1.8.7: 0.8.1 won't install via the directory (Obsidian respects `minAppVersion`). **But your plugin was already broken on those versions** — the `loadLocalStorage` calls would crash on startup. 0.8.1 just makes that incompatibility explicit instead of silent.\n\nExisting `versions.json` entries for 0.4.0 → 0.8.0 still claim 1.6.6 — left as historical record. Only 0.8.1 declares 1.8.7.\n\n## Tests\n\n413 / 0 fail (no test count change). Lint + build green.",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.8.1",
       "prerelease": false,
@@ -258,22 +294,26 @@
       "assets": [
         {
           "digest": "sha256:76a5800aae45e28de7ace2bfca798a23f361bc816ac18d9d1669380f590b7777",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 194552
         },
         {
           "digest": "sha256:35dc260615be082c87dc5db3cf1feb302e31029d815655346b94b31043739a85",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:6090206039b15203643e27f8a9c1e7b94a493499266aa4f993dd1e0434530f98",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 3482
         }
       ],
       "author": "o1xhack",
       "description": "## ✨ Incremental sync mode for Daily Notes\n\nThe default today-mode behaviour fully re-renders the Daily Note marker region on every sync, which **wipes any user edits inside the markers**. Users who annotate their watch entries — *e.g. \"← great episode!\" appended to a rendered line* — had no good option short of moving notes outside the markers.\n\n0.8.0 adds an opt-in **Incremental** mode that protects user edits.\n\n## How to enable\n\nSettings → **Daily Notes** tab → scroll to the bottom → **Sync mode** dropdown.\n\nTwo options:\n\n| Mode | Behaviour |\n|---|---|\n| **Default** | Each sync re-renders the full marker block. Always reflects current Trakt state. Existing 0.7.x behaviour, unchanged. |\n| **Incremental** | For each newly-rendered event line, append it inside the marker region UNLESS some existing line already starts with it. User edits preserved byte-for-byte. |\n\n## Comparison table (rendered live in Settings)\n\n| Scenario | Default | Incremental |\n|---|---|---|\n| Append text to a rendered line | Deleted | Preserved |\n| Insert a custom line in the middle | Deleted | Preserved |\n| Delete a rendered line | Restored next sync | Re-added at end |\n| Edit a rendered line | Deleted | Both lines coexist |\n| Switch metadata language | Re-renders in new language | Both languages coexist |\n| Change rating on Trakt | Rating updates | Both ratings coexist |\n| Delete event on Trakt | Line disappears | Old line stays |\n\n## Migration\n\n`dailyNotesSyncMode` defaults to `\"default\"` so **existing users see zero behaviour change after upgrade**. Switching modes is reversible from the same dropdown.\n\n## Safety\n\n- Past-day mode is **unaffected** (still add-only-on-empty per spec 0006)\n- Marker-region content outside the region is **byte-for-byte preserved** in both modes\n- When no new events arrive, `mergeMarkerBlockIncremental` returns the file content **byte-identical** to input — critical so the 0.3.0 diff-write layer doesn't touch the file unnecessarily\n\n## Tests\n\n12 new smoke-test cases covering: append, insert-middle, delete-restore, edit, language switch, Trakt mutation, empty marker fill, defensive paths. **413 / 0 fail.**",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -284,22 +324,26 @@
       "assets": [
         {
           "digest": "sha256:c0ac86883e44c9fe9e3a9279580325d7a2f2193c1c068a464edd98564b26d542",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 186020
         },
         {
           "digest": "sha256:242d75dc80b68f5132a4ae14a7c351fc4c25d1ff437fd76d12b3c481e8105d07",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:e9e71a5b387faaaab2feb625bf12fa466353c8f4dc97ee1987acd6199785e277",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 2921
         }
       ],
       "author": "o1xhack",
       "description": "## 📌 Plugin version now shown at the top of General tab\n\nTiny but useful — the **General** tab now starts with a Version row that reads directly from `manifest.json` at render time. Never goes stale across releases.\n\n```\nVersion                                                    0.7.4\n─────────────────────────────────────────────────────────\nAuthentication\n  …\n```\n\nConvenient for screenshots, bug reports, and verifying that BRAT / community-plugin updates actually went through.\n\nImplementation: one `new Setting(...).setName(...).setDesc(this.plugin.manifest.version)` at the top of the General tab render. No new i18n strings except the label `Version` / `版本`.\n\nNo other code or behaviour changes.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.7.4",
       "prerelease": false,
@@ -310,22 +354,26 @@
       "assets": [
         {
           "digest": "sha256:4e7c86884ecffbab1ea547536380401bc5c6d99a36afee78c172a9c83181be17",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 185622
         },
         {
           "digest": "sha256:2260b042d9fdec1b2b81d22b81c29608de597a7c32538b7d9fd293c6e8ad9009",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:e9e71a5b387faaaab2feb625bf12fa466353c8f4dc97ee1987acd6199785e277",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 2921
         }
       ],
       "author": "o1xhack",
       "description": "## 🧹 All notifications now identify themselves as Sync Trakt\n\nUser-facing notifications were inconsistent: some used the old \"Traktr:\" prefix (plugin was renamed in 0.4.0), some had no prefix at all, and `daily.catchUpDone` was printing the **raw enum value** (`today wrote_new`) — a bug.\n\n## What changed\n\nEvery popup `Notice` now starts with `Sync Trakt:` so you always know which plugin spoke. Status labels and inline UI text deliberately omit the prefix (surrounding settings tab gives context).\n\nExamples:\n\n| Trigger | New text |\n|---|---|\n| Sync complete | `Sync Trakt：新增 5，更新 3，未变 12，移除 1。` |\n| Daily Note auto-update | `Sync Trakt：Daily Note 已更新。` |\n| Manual backfill | `Sync Trakt：已回溯 3 天，跳过 0 天。` |\n| Today-only command | `Sync Trakt：今日 Daily Note 已更新。` |\n| Sync failed | `Sync Trakt：同步失败 — {error}` |\n| Not connected | `Sync Trakt：未连接。请在设置中完成认证。` |\n| Pairing code copied | `Sync Trakt：配对码已复制。` |\n\n## Three hidden bugs fixed\n\n1. `daily.catchUpDone` was printing the code-level enum `wrote_new` / `overwrote` / `skipped_no_file` straight to the user. Split into three purpose-built keys; `main.ts` picks based on actual result.\n2. When nothing user-visible changed (no today update, no past wrote) we now suppress the notice entirely instead of showing \"0 past day(s) filled\".\n3. Backfill modal description still said \"marker exists → skip\" — out of date since 0.7.2 (empty markers now get filled). Rewritten.\n\n## Safety net\n\n40 new smoke-test assertions force every popup `Notice` string to start with `Sync Trakt:`. If anyone adds a new notice and forgets the prefix, CI catches it.\n\nStats: **401 / 0 fail** after this release.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.7.3",
       "prerelease": false,
@@ -336,22 +384,26 @@
       "assets": [
         {
           "digest": "sha256:87befcdc63b4928c1a6ba46b0edbb84e455eab5562e8fbc9c9bdd1ae30c90c0d",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 184210
         },
         {
           "digest": "sha256:c51a4b624d3a30923f8d6553f85e4d439f72a60fd5d61e6cdca25f3530097445",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:e9e71a5b387faaaab2feb625bf12fa466353c8f4dc97ee1987acd6199785e277",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 2921
         }
       ],
       "author": "o1xhack",
       "description": "## 🐛 Daily Notes: empty marker pair now gets filled on backfill\n\nFixes a bug surfaced by users with a custom Daily Note template that pre-injects the trakt markers as an empty pair `%% trakt:daily:start %% / %% trakt:daily:end %%`. Before 0.7.2, the past-day branch of `processDate` treated any valid marker pair — even empty — as \"already filled\" and skipped writing. Manual backfill silently did nothing for those days.\n\n## What changed\n\nAdded [`isMarkerRegionEmpty`](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.7.2/src/daily-notes.ts) to distinguish:\n\n- **Empty pair** (template-injected, just newlines / whitespace between markers) → **fill in place** via `replaceMarkerBlock`\n- **Pair with real content** → preserve (existing safety, unchanged)\n\nThe original safety contract (spec 0006) is unchanged: regions with any non-whitespace content between markers continue to be skipped on past-day catch-up + manual backfill.\n\n## Tests\n\n- 8 new smoke test cases covering empty / whitespace-only / mixed-content marker regions\n- All 361 existing tests pass\n\n## Affected behaviour\n\n| Scenario | Before 0.7.2 | After 0.7.2 |\n|---|---|---|\n| Daily Note template injects empty markers | Backfill no-op (bug) | Backfill fills the region ✓ |\n| Past day with hand-written events between markers | Skipped | Skipped (unchanged) |\n| Past day with no markers at all | Append fresh region to end of file | Same |",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.7.2",
       "prerelease": false,
@@ -362,22 +414,26 @@
       "assets": [
         {
           "digest": "sha256:12c4d7299d5c414c4de3be54244a4eb8cc9567b9441134c60f8022ec8b2d94ce",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 183447
         },
         {
           "digest": "sha256:d43f062439d42025e8cae516a6414f27d9e8ad7500519852499af9e22e5f0478",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:e9e71a5b387faaaab2feb625bf12fa466353c8f4dc97ee1987acd6199785e277",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 2921
         }
       ],
       "author": "o1xhack",
       "description": "## 🤖 Why this release\n\nObsidian's submission bot flagged 3 `@typescript-eslint/require-await` violations on [PR #12757](https://github.com/obsidianmd/obsidian-releases/pull/12757):\n\n> Async method 'callback' has no 'await' expression\n> Async arrow function has no 'await' expression\n> Async arrow function 'applyTemplateLanguageChange' has no 'await' expression\n\nFixed them all, locked the rule into `eslint.config.mjs` so it can't slip past us again, and used the occasion to run a focused audit on the high-risk code added since 0.1.0.\n\n## ✅ Three real safety issues caught by the audit\n\n### `isMarkerRegionValid` accepted identical markers\n\nIf a user set both Daily Notes marker fields to the same string (e.g. both `%%`), `indexOf` would treat two occurrences of that same string as a \"pair\", and `replaceMarkerBlock` would mangle content between them — violating spec 0006's safety contract.\n\n**Fix**: reject empty / identical / inverted markers up front.\n\n### `migrateFromLegacyFolder` could loop forever on corrupted data\n\nA legacy `data.json` parsing as JSON `null` (or an array, or a primitive) would have been written via `saveData(null)` and re-triggered migration on every launch indefinitely.\n\n**Fix**: validate parsed root is a plain object; anything else degrades to `DEFAULT_SETTINGS` with a console warning.\n\n### `loadLocalKeysAndApplyOverlay` had a loose cast\n\nThe localStorage return value was cast hopefully (`as string[] | null`) rather than validated. Corrupted entries could leak non-arrays downstream.\n\n**Fix**: runtime `Array.isArray` + per-element string-type filter. Corrupted entries degrade to \"first-launch defaults\".\n\n## 🛡️ Tests\n\n**353 / 353 passing** (was 339). 14 new cases:\n- Empty / identical / inverted marker rejection\n- `computeDailyNotePath` across folder + format combinations\n- Regression: corrupted-data handling\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the assets\n\nThe PR #12757 bot will re-scan within 6 hours of these changes hitting `main`. No new PR needed.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.7.1 — Bot fixes + audit hardening",
       "prerelease": false,
@@ -388,22 +444,26 @@
       "assets": [
         {
           "digest": "sha256:73ef4bbb6d6d9aec8d5ff1aada6c07cea97085da73529ec641b5cd2414f53cf5",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 183008
         },
         {
           "digest": "sha256:4114421ffc27edaa0c7c150988fc4905474e37f5541243cba8f171ff65941d3e",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:e9e71a5b387faaaab2feb625bf12fa466353c8f4dc97ee1987acd6199785e277",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 2921
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 Daily Notes integration\n\nAuto-inserts per-event lines into your Daily Note for every sync — **watched episodes, watchlist additions, favorites, ratings** — chronologically sorted, in your chosen template language. Inspired by the [weread plugin](https://github.com/zhaohongxuan/obsidian-weread-plugin)'s daily injection pattern.\n\nSample output:\n\n```\n%% trakt:daily:start %%\n10:00 — 看了 低智商犯罪 (2026) S1E16, S1E17\n14:30 — 加入想看 重生 (2020)\n21:30 — 打分 9/10 黑暗骑士 (2008)\n%% trakt:daily:end %%\n```\n\n## 🛡️ Safety contract\n\n> For every Daily Note file on disk, content outside the marker region must be byte-for-byte identical before and after every catch-up run. No exceptions.\n\n26 edge cases enumerated in [spec 0006](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.7.0/docs/specs/0006-daily-notes-integration.md). All ambiguous situations skip silently rather than risk corruption:\n\n- Daily Note doesn't exist → **skip** (we never create files)\n- Past day with our markers → **skip** (add-only — your previous data stays)\n- Past day without markers → append new marker region to **end** of file\n- Today with markers → **replace** content between markers\n- Today without markers → append fresh marker region\n\n## ✨ Features\n\n### Smart catch-up\nRuns at the end of every sync. Always processes today (overwrite mode), then walks past days from `lastDailyNoteSyncedAt+1` (add-only). 90-day safety cap if cursor is very stale.\n\n### Source-flag gating\nEach event type only appears if its source sync is enabled:\n\n| Event | Required sync flag |\n|---|---|\n| Watched | Sync watch history (detailed) |\n| Added to watchlist | Sync watchlist |\n| Favorited | Sync favorites |\n| Rated | Sync ratings |\n\n### Manual backfill (settings-only)\nSlider 1-30 days. Click → confirmation modal explains the safety rules → executes with same add-only semantics. **Not in Command Palette** — too easy to mis-fire from there.\n\n### Live preview\nSettings page shows 3 sample events in your current language so you know what entries will look like before enabling.\n\n### 11-language verb support\nVerbs (`watched` / `看了` / `視聴` / `시청` / `a regardé` / etc.) follow the bundled `templateLanguage` set from 0.6.0. Unsupported locales fall back to English.\n\n### Customizable markers\nDefault `%% trakt:daily:start %%` (invisible Obsidian comment). Change to visible markdown like `## 今日 Trakt` if you want the section to show in reading view.\n\n## 🔄 Migration\n\n`dailyNotesEnabled` defaults to **false**. Existing users see no change until they go to the new **Daily Notes** tab in settings and toggle it on. The `lastDailyNoteSyncedAt` cursor initializes to empty; first run with the feature on processes only today (no auto-backfill — use the Backfill button for that).\n\n## 🛠️ Tests\n\n**339 / 339 passing** (was 287). 52 new cases covering:\n- Date helpers (including year/leap-day rollovers)\n- Marker region detection (valid, malformed, inverted)\n- Block rendering (empty, single, multi-event)\n- Verb localization in all 11 languages\n- Safety: replaceMarkerBlock / appendMarkerBlock preserve outside content\n- Event aggregation by date with source-flag gating\n- Cross-source chronological sorting\n- Same-timestamp same-show episode comma-merge\n\n## 📚 Spec\n\nFull design + 26-row edge-case matrix in [spec 0006](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.7.0/docs/specs/0006-daily-notes-integration.md).\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the assets, drop into `<vault>/.obsidian/plugins/sync-trakt/`\n\nAfter upgrade: Settings → Daily Notes → toggle on → configure folder/format → done. Next sync will start populating your Daily Notes.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.7.0 — Daily Notes integration",
       "prerelease": false,
@@ -414,22 +474,26 @@
       "assets": [
         {
           "digest": "sha256:28beee2ab20d80cf200de593d17f732531fba9bfed7dcd783ccf900a3a667891",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 154018
         },
         {
           "digest": "sha256:379d86fd1de291f2599a9e796090120588a8213ecbf377bc8527f7ec2eb93a66",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:59cc705e1b93dbddbb0876103307705c79aac9d017b6b96aa0aa3102d83ca9d1",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 2028
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 Why this release\n\nSettings page hit >1000 lines and the template-language dropdown listed 15 options but only 3 actually worked. Both fixed.\n\n## 🗂️ Tabbed settings UI\n\nTop-of-page tabs replace the single-scroll page. **Active tab persists per-device** (Mac/iPhone each remember their own last-viewed tab).\n\n| Tab | Contents |\n|---|---|\n| **General** | Trakt auth, TMDB key/test/cache, Reset |\n| **Notes** | Localization, folder/filename, body templates, tags, tag notes |\n| **Sync** | Sync sources, behavior, history settings |\n| **Daily Notes** | Placeholder — populated by 0.7.0 |\n\n## 🌍 8 new bundled template languages\n\nTemplates now cover **11 languages** total (was 3):\n\n- English, 简体中文 (zh-CN), 繁體中文 (zh-TW) — existing\n- **日本語 (ja-JP)** — new\n- **한국어 (ko-KR)** — new\n- **Français (fr-FR)** — new\n- **Deutsch (de-DE)** — new\n- **Italiano (it-IT)** — new\n- **Español (es-ES)** — new\n- **Português (pt-BR)** — new\n- **Русский (ru-RU)** — new\n\nTemplate-language dropdown now filters to these 11 (was reusing the 15-entry metadata dropdown which silently fell back to English for the 12 it didn't bundle). The Metadata language dropdown stays at 15+ since TMDB genuinely supports those.\n\nTranslations are hand-curated, not machine-translated — section headings, bullet labels, and punctuation follow each language's conventions (full-width colons in JA, spaced colons in FR, etc.).\n\n## 🔄 Migration\n\n**Automatic.** 0.5.x users with `templateLanguage=ja-JP` (silently using English) now get the real Japanese template on next note regeneration. Users with `templateLanguage=custom` see the new filtered dropdown without the Custom option — their saved value stays in data.json until they pick from the new list.\n\n## 🛡️ Tests\n\n**287 / 287 passing** (was 260). 27 new cases:\n- Each of the 8 new languages returns its own template (not English)\n- Short codes alias correctly (`ja` → `ja-JP`)\n- Unsupported locales (`tr-TR`) still fall back to English\n- Each new template contains its language's section headings\n- Tab i18n keys resolve in both en and zh-CN\n\n## 📚 Specs\n\n- [spec 0005 — Settings UI tab navigation](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.6.0/docs/specs/0005-settings-ui-tabs.md)\n- [spec 0007 — Template language expansion](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.6.0/docs/specs/0007-template-language-expansion.md)\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the assets, drop into `<vault>/.obsidian/plugins/sync-trakt/`\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.6.0 — Settings tabs + 8 new template languages",
       "prerelease": false,
@@ -440,22 +504,26 @@
       "assets": [
         {
           "digest": "sha256:3ee611eaf394f229d7771a61236069f0ec5e8351bb9696c0ecab79d2260aa14f",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 137352
         },
         {
           "digest": "sha256:89b561606c868883a5e45b03163608365bcd4e89c4f37b377495db51dbc23bb2",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 🤖 Why this release\n\nSubmission [PR #12757](https://github.com/obsidianmd/obsidian-releases/pull/12757) to the official Community Plugins directory failed bot validation:\n\n> ❌ Please don't include `Obsidian` in the plugin description\n\nThe bot guidance is reasonable — every plugin is by definition for Obsidian, so saying so in the description is redundant filler. Quick fix.\n\n## ✏️ Changed\n\n`manifest.json` + `package.json` description: `\"Obsidian notes\"` → `\"Markdown notes\"`.\n\n> Before: \"Sync your Trakt.tv watchlist, watch history, favorites, and ratings into **Obsidian** notes — with metadata localization and detailed per-episode watch timestamps.\"\n>\n> After: \"Sync your Trakt.tv watchlist, watch history, favorites, and ratings into **Markdown** notes — with metadata localization and detailed per-episode watch timestamps.\"\n\nSame meaning (we do produce Markdown notes); slightly more general; bot-compliant.\n\n## 🔄 Migration\n\nNone. Cosmetic text-only change. No runtime behavior, no settings schema, no data layout impact.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the assets, drop into `<vault>/.obsidian/plugins/sync-trakt/`\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.5.3 — Drop \"Obsidian\" from description for directory bot",
       "prerelease": false,
@@ -466,22 +534,26 @@
       "assets": [
         {
           "digest": "sha256:3ee611eaf394f229d7771a61236069f0ec5e8351bb9696c0ecab79d2260aa14f",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 137352
         },
         {
           "digest": "sha256:50a3849a670edf76f06c882842f942dc4ebadee0ced65b6e694600cdadfcd98d",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 🧹 The fix\n\n0.4.0's data migration deliberately kept the entire legacy `obsidian-sync-trakt/` folder around indefinitely. 0.5.1's display-name rename made the two plugin entries visually distinguishable. But users overwhelmingly don't know to delete the legacy folder manually, so the cruft persists and the duplicate entry stays confusing.\n\n0.5.2 cleans up automatically — but keeps `data.json` as a recovery snapshot.\n\n## ✅ What gets deleted vs kept\n\nIn `.obsidian/plugins/obsidian-sync-trakt/`:\n\n| File | Action |\n|---|---|\n| `manifest.json` | **Deleted** — without this, Obsidian doesn't recognize the folder as a plugin → duplicate entry disappears |\n| `main.js` | **Deleted** — useless without manifest |\n| `styles.css` | **Deleted** — useless without manifest |\n| `data.json` | **Kept** — your recovery snapshot |\n\nYou can delete the now-mostly-empty folder manually whenever you feel safe. Or just leave it — harmless.\n\n## 🛡️ Safety properties\n\n- **Idempotent**: runs on every launch, no-ops when binaries are already gone. Catches devices that migrated under 0.4.0-0.5.1 before this cleanup existed.\n- **Failure-silent**: permission denied / file locked / adapter errors all caught. Plugin never fails to start because of cleanup issues. Retries next launch.\n- **Multi-device-safe**: when one device cleans up and Obsidian Sync propagates deletions to others, devices still on 0.3.x will see their old plugin fail to load on next launch — but BRAT auto-installs 0.5.2 to the new folder, migration runs from the still-intact `data.json` in the legacy folder, and everything recovers transparently.\n- **data.json is never touched** — if you ever need to roll back, the 3 binary files can be downloaded from a 0.3.x release and your state is right there.\n\n## 🔄 Migration\n\n**Automatic.** Existing BRAT users on 0.4.0-0.5.1 will see the legacy plugin entry disappear on the first 0.5.2 launch. No action required.\n\n## 📚 Spec\n\nSpec 0004 updated with a new [\"Update: 0.5.2 cleanup\" section](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.5.2/docs/specs/0004-obsidian-directory-submission.md) covering design rationale + 4 new edge cases.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch. After the update:\n  - Settings → Community plugins should now show only **Sync Trakt** (no more \"Obsidian Sync Trakt\")\n  - `.obsidian/plugins/obsidian-sync-trakt/` still exists but only contains `data.json`. Delete it manually whenever you like.\n- **Manual install**: download the assets\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.5.2 — Auto-clean legacy folder",
       "prerelease": false,
@@ -492,22 +564,26 @@
       "assets": [
         {
           "digest": "sha256:feeaab8c99cd9b643c789c47da65839c865c8c518194913513e43aacd75de4a0",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 135446
         },
         {
           "digest": "sha256:730083017eadacea66dbf3d9c719d8fd4e510ab39706f6d4b5a54b94f99785ac",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 🧹 Why this release\n\nAfter 0.4.0 changed the plugin `id`, BRAT users ended up with **two folders** in their vault — `obsidian-sync-trakt/` (legacy, intentionally preserved as a downgrade safety net) and `sync-trakt/` (the active one). Both folders declared the **same display name** \"Obsidian Sync Trakt\", so Obsidian's plugin list showed two identical entries with no way to tell them apart.\n\nThis release renames the active plugin so users can finally see which is which:\n\n| Folder | Display name | Status |\n|---|---|---|\n| `obsidian-sync-trakt/` | **Obsidian Sync Trakt** | Legacy. Frozen at the last 0.3.x you installed; BRAT no longer updates this folder (because `id` changed in 0.4.0) |\n| `sync-trakt/` | **Sync Trakt** | Active. BRAT keeps updating this one |\n\n## ✅ Cleanup steps for BRAT users\n\nAfter this release lands and you've confirmed the new \"Sync Trakt\" plugin works (sync runs, your TMDB cache + history are intact):\n\n1. Open Obsidian → Settings → Community plugins\n2. **Disable** the entry labeled \"Obsidian Sync Trakt\" (the legacy one)\n3. Open your vault folder → `.obsidian/plugins/`\n4. **Delete** the `obsidian-sync-trakt/` folder manually\n\nYou're done — one clean \"Sync Trakt\" entry going forward.\n\n## ✏️ Changed\n\n- `manifest.json` `name`: `\"Obsidian Sync Trakt\"` → `\"Sync Trakt\"`\n- All 9 README H1s + prose mentions\n- MANUAL.md (4 langs), SETUP.md (4 langs), DEVELOPER.md\n- Historical CHANGELOG entries keep their original names — that's what the plugin was called at the time\n\n## 🔄 Migration\n\nNone. Rename is purely a label change — `id` stayed `sync-trakt`, data folder unchanged, all stored settings preserved.\n\n## 🎯 Why this wasn't in 0.4.0\n\nSpec 0004 deliberately deferred the rename: the bot doesn't check display name (submission was unblocked), and we wanted to minimize one-release scope. Real-world feedback from the 0.4.0 → 0.5.0 BRAT upgrade flow showed the dual-entry confusion warranted fixing now.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch → display name changes → follow the cleanup steps above\n- **Manual install**: download the assets\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.5.1 — Rename display name to disambiguate BRAT installs",
       "prerelease": false,
@@ -518,22 +594,26 @@
       "assets": [
         {
           "digest": "sha256:feeaab8c99cd9b643c789c47da65839c865c8c518194913513e43aacd75de4a0",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 135446
         },
         {
           "digest": "sha256:d610e0763b58f2c5fc1cc383ac8f40698c1d0372be1ca360efa6224eb067eb7a",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 384
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 The problem\n\nPre-0.5.0, every plugin setting lived in `data.json` and followed Obsidian Sync. That meant turning on \"Sync on startup\" on Mac would also turn it on for iPhone — and both devices would fire a sync within 5 seconds of launch, each writing data.json, the sync layer resolving the conflict, and double Trakt API traffic for zero user benefit.\n\n0.3.0 reduced cross-device note-file churn, but the underlying \"every setting syncs\" model remained. 0.5.0 fixes it directly.\n\n## ✨ What's new\n\n### Two-tier settings storage\n\n| Layer | Where | Synced cross-device? |\n|---|---|---|\n| Synced | `data.json` (vault plugin folder) | ✅ via Obsidian Sync |\n| Device-local | `localStorage` (Obsidian app data) | ❌ stays on this device |\n\n### Per-setting cloud icon\n\nA small cloud icon appears next to each eligible setting. Click it to toggle which layer the value lives in.\n\n- ☁️ **Cloud** = synced across devices\n- ☁️✖️ **Cloud-off** = local to this device only\n\nTooltip explains the current state and what clicking will do.\n\n### Initial scope — 4 settings\n\n| Setting | Default | Why |\n|---|---|---|\n| Sync on startup | **local** | Each device should choose its own launch behavior |\n| Auto-sync enabled | **local** | Each device should choose its own cadence |\n| Auto-sync interval | **local** | Same |\n| Plugin UI language | **synced** (toggleable) | Most users want consistent UI; minority flips it |\n\nEverything else (auth tokens, content sync toggles, metadata language, templates, folders, TMDB cache, history state...) stays synced unconditionally.\n\n## 🔄 Migration\n\n**Automatic.** First 0.5.0 launch on each device:\n\n1. Plugin sees no `_localKeys` in localStorage\n2. Seeds the auto-sync trio as device-local\n3. Copies their current data.json values to localStorage\n4. Subsequent saves exclude them from data.json\n\nPer-device: each device runs its own one-time seeding the first time it launches 0.5.0. No coordination needed — the metadata about which keys are local is itself device-local.\n\n**Your existing settings values are preserved.** Only the storage layer changes. If you had auto-sync on with a 60-minute interval, you still do — just now per-device.\n\n## 🛡️ Tests\n\n20 new smoke cases (42-44) locking down:\n\n- `LOCAL_ELIGIBLE_KEYS` membership + every key matches a real `TraktrSettings` field\n- `DEFAULT_LOCAL_KEYS` is a strict subset (catches typos / drift)\n- `uiLanguage` explicitly NOT default-local (regression guard)\n- Storage namespace consistency\n- Cloud icon tooltip i18n in en + zh-CN\n\n**Total tests: 260 (was 240). All passing.**\n\n## 📚 Spec\n\nFull design + 8-row edge-case matrix + alternatives considered: [spec 0003](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.5.0/docs/specs/0003-device-local-settings.md). Status updated to `implemented`.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the assets, drop into `<vault>/.obsidian/plugins/sync-trakt/`\n\nSee the [full changelog](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.5.0/docs/CHANGELOG.md) for all entries.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.5.0 — Device-local settings",
       "prerelease": false,
@@ -544,22 +624,26 @@
       "assets": [
         {
           "digest": "sha256:c219defe7eadc63904e2e7d44812cb3ba0d274846ec9a212f091b88dedea90c2",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 130024
         },
         {
           "digest": "sha256:74288758e9d207e21f309c646b9a0c32ffcfb06e8bf342a39dd7822bbc2b924c",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 384
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 🎯 Why this release\n\nThree coupled changes to make the plugin eligible for [Obsidian's official Community Plugins directory](https://obsidian.md/plugins) + tighten our manifest declarations to match reality.\n\n## 🔧 Plugin id renamed\n\n`obsidian-sync-trakt` → `sync-trakt`. Required by the [submission bot's hard rule](https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml) — IDs containing `obsidian` are rejected. 484 existing directory plugins do have it, but they're all grandfathered from before the rule.\n\n**GitHub repo name stays unchanged** (`o1xhack/obsidian-sync-trakt`). Obsidian identifies plugins by manifest id, not repo path. All external links + BRAT subscriptions + documentation URLs keep working.\n\n**Display name stays \"Obsidian Sync Trakt\"** — bot doesn't check display name. If a reviewer asks, we change it in a follow-up.\n\n## 🪄 Transparent migration on first launch\n\nThe plugin folder under `.obsidian/plugins/` matches the id, so the rename moves data from `.obsidian/plugins/obsidian-sync-trakt/` to `.obsidian/plugins/sync-trakt/`. Without migration, BRAT users upgrading would silently lose their Trakt token, TMDB cache, and history state.\n\nOn first 0.4.0 launch, the plugin:\n\n1. Detects the empty new-folder state\n2. Reads `.obsidian/plugins/obsidian-sync-trakt/data.json` via `vault.adapter.read()`\n3. Saves it to the new folder\n4. Shows a one-time translated Notice:\n\n   > **Traktr: settings migrated from the legacy plugin folder. Your Trakt token, TMDB cache, and history state are preserved.**\n\nThe legacy folder is **kept** as a safety net — users who revert via BRAT find their old state intact. Console line tells you when it's safe to delete manually.\n\nAll exceptions caught; migration failure never blocks plugin launch.\n\n## 📐 minAppVersion bumped to 1.6.6\n\n`fileManager.trashFile(file)` is `@since 1.6.6` per Obsidian's [obsidian.d.ts](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts). Previous `1.4.0` declaration was technically incorrect — users on 1.4.0-1.6.5 who enabled `Delete removed items` would have crashed. The default for that setting is off, so no one hit it, but the declaration is now honest.\n\n## 🛡️ Tests\n\n240 tests passing (was 235). New smoke test covers the migration-notice i18n key in en + zh-CN. File-reading half of the migration is bound to Obsidian's vault adapter and verified manually during release validation — see [spec 0004](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.4.0/docs/specs/0004-obsidian-directory-submission.md) for the 8-scenario edge-case matrix.\n\n## 🔄 Migration\n\n**Automatic.** First 0.4.0 launch on a device that previously ran 0.3.x triggers the migration. No user action required. Fresh installs skip the migration cleanly. Reverting to 0.3.x works because the legacy folder is preserved.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch → migration runs once → notice appears → done\n- **Manual install**: download the assets, drop into `<vault>/.obsidian/plugins/sync-trakt/`\n\nSee the [full changelog](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.4.0/docs/CHANGELOG.md) for all entries.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.4.0 — Community Plugins directory prep",
       "prerelease": false,
@@ -570,22 +654,26 @@
       "assets": [
         {
           "digest": "sha256:7820c37f848bacaa12afd9d16d908c4fa0f6e160e6944c6716886f1803d932b5",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 127742
         },
         {
           "digest": "sha256:33169173948febe251c9c7a053ec81dfb65ac38a26bf172aeaeb9b370e963b3e",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:d2dc4a1727c5f73ff6ef77cfe6a364460a755bc3c4701064b0ee45588219a5d0",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 1352
         }
       ],
       "author": "o1xhack",
       "description": "## 📋 Why this release\n\nA user pasted a TMDB key, switched metadata language to a non-English locale, ran a sync, and ended up with **half-translated notes** — title and overview localized, but genres stayed English and posters were missing. The pre-0.3.2 description of the TMDB key only mentioned posters, so users naturally inferred TMDB was poster-only. The plugin DID fall back to Trakt's translation endpoint, but nothing in the UI said so.\n\n0.3.2 makes the TMDB-vs-Trakt contract **obvious before you paste any keys**, and **testable before you commit to a sync**.\n\n## ✨ What's new\n\n### 🔑 README API comparison table (all 9 languages)\n\nNew section between Quick Start and Install that spells out exactly what each API unlocks:\n\n| Feature | Trakt API _(required)_ | TMDB API _(recommended)_ |\n|---|:---:|:---:|\n| Sync your Trakt library (watchlist, watched, favorites, ratings) | ✅ | — |\n| Per-episode watch timestamps | ✅ | — |\n| Title / overview / tagline in your language | ✅ basic | ✅ higher quality |\n| **Genres in your language** | ❌ | ✅ |\n| **Poster images embedded in notes** | ❌ | ✅ |\n\nUsers now see the trade-off **before** they paste any keys.\n\n### 🧪 TMDB API key Test button\n\nAfter pasting your TMDB key, click **Test** to verify it works. Catches typos in 1 second instead of 30 seconds-into-a-sync.\n\nFour result states surfaced via discriminated union:\n- ✓ **Connected** — your key works\n- ✗ **Empty** — no key entered\n- ✗ **Invalid key** — TMDB rejected the request (with TMDB's own status_message)\n- ✗ **Network error** — couldn't reach TMDB\n\n### ⚠️ Inline warning when language is set but TMDB key is empty\n\nWhen you enable a non-English metadata language without a TMDB key, a warning banner appears under the language dropdown spelling out exactly what's missing (genres stay English, no posters). Non-blocking — Trakt fallback still works for title/overview/tagline.\n\n### 📝 TMDB key description rewritten\n\nOld: _\\\"Optional. If blank, poster images are skipped.\\\"_\n\nNew: _\\\"Recommended. Powers poster images AND complete metadata translation — including genres — in your chosen language. Without a key, posters are skipped and translations fall back to Trakt (covers title / overview / tagline; genres stay English).\\\"_\n\n## 🛡️ Tests\n\n14 new smoke cases (37-40 in `tests/i18n.smoke.ts`) for `verifyTmdbApiKey`:\n- Empty / whitespace input → no network call\n- 200 OK → ok=true\n- 401 / 403 → unauthorized, surfaces TMDB's status_message\n- 5xx + thrown exceptions → network failure with detail\n\n**Total tests: 235 (was 221). All passing.**\n\n## 🔄 Migration\n\nNo data migration. Existing behavior unchanged. Users who sync without TMDB keep getting Trakt-fallback translation exactly as before — they now just see a clear warning explaining what they're missing.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the three assets below\n\nSee the [full changelog](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.3.2/docs/CHANGELOG.md) for all entries.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.3.2 — TMDB key transparency + Test button",
       "prerelease": false,
@@ -596,22 +684,26 @@
       "assets": [
         {
           "digest": "sha256:bc1e1bcddcb040ecc79d497a63a56051aaab9555804376120aa021840d52ed50",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 122092
         },
         {
           "digest": "sha256:4a1364c1b9c00fa6383a151936a081c4d6e99aac108c0734a5d1fef6a2e7763b",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## 🐛 The bug\n\nA user with five Chinese-titled shows all localizing to **重生** under `zh-CN` saw recurring sync failures:\n\n> Failed to sync \"重生\" (show 159058): File already exists.\n\nFive distinct underlying items (different Trakt ids, different IMDb ids, different originals — *Born Again*, *Reborn*, *Go For Broke*, *Be Reborn*…) all collapsed to the same display title under metadata localization. The default `{{title}} ({{year}})` filename template produced the same `重生 (2020).md` for two of them, `vault.create()` threw, and the failure repeated every sync.\n\nThis is a structural risk that grows with metadata-localization adoption — common-translation titles are exactly the cases localization improves the UI for, but they also collide more often.\n\n## ✅ The fix — two-tier filename disambiguation\n\nWhen the default filename collides with an existing note, the CREATE branch now progressively augments the `{{title}}` slot:\n\n| Tier | Format | Example |\n|---|---|---|\n| 0 | `{{title}} ({{year}})` (default) | `重生 (2020)` |\n| 1 | `{{title}} (originalTitle) ({{year}})` | `重生 (Born Again) (2020)` |\n| 2 | `{{title}} (originalTitle) [{{trakt_id}}] ({{year}})` | `重生 (Born Again) [157810] (2020)` |\n\nTier 1 is skipped when `originalTitle === title` (i18n off, or proper noun) — its output would equal tier 0's. Tier 2 always succeeds since Trakt ids are globally unique.\n\nThe augmentation always goes into the `{{title}}` slot, so year / trakt_id / imdb_id positions in custom templates stay where the user put them. Default-template users keep the year-at-end visual convention.\n\n## 🛡️ Tests\n\n13 new smoke cases (cases 31-36 in `tests/i18n.smoke.ts`):\n- `buildFilename` with `titleOverride` correctly substitutes `{{title}}`\n- All three tiers (no collision / tier 1 / tier 2)\n- Same-title edge case skips tier 1\n- Empty `originalTitle` treated as same-title\n\n**Total tests: 221 (was 208). All passing.**\n\n## 🔄 Migration\n\nNo data migration. Existing notes unaffected. The 5th 重生 that was failing will land at `重生 (Born Again) (2020).md` (or whichever tier is needed) on next sync. No user action required.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the three assets below, drop into `<vault>/.obsidian/plugins/obsidian-sync-trakt/`\n\nSee the [full changelog](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.3.1/docs/CHANGELOG.md) for all entries.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.3.1 — Filename collision fix",
       "prerelease": false,
@@ -622,22 +714,26 @@
       "assets": [
         {
           "digest": "sha256:fc89c9d6338a347f433b36c6cb4eb840207be57afa5e1011fe9a6ba9ae298885",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 120892
         },
         {
           "digest": "sha256:4107f694eb6b2611408e68c97d6aa63e1d8c1bdc6621c9d56849e5c9dc07870d",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## 🎬 Highlights\n\n**Sync no longer touches every note's mtime on every run.** Each note is rewritten only when its frontmatter or managed body section would actually change. Cross-device sync layers (Obsidian Sync, iCloud, Syncthing, vault-as-git) see ~1200 fewer \"modified\" files per sync in steady state.\n\nAfter watching one new episode, a 1200-item library now writes exactly one note instead of all 1200. The sync notice surfaces this directly:\n\n> Sync complete: 0 added, 1 updated, **1199 unchanged**, 0 removed\n\n## ✨ What's new\n\n- **Diff-first reconcile.** Frontmatter and body section are compared against on-disk content before any write. `processFrontMatter` / `vault.process` are skipped entirely when neither would meaningfully change.\n- **`trakt_synced_at` semantic upgrade.** Now updates only when sync actually modifies the note — not on every sync. Becomes a useful Bases / Dataview sort key for \"recently changed\" views. Existing 0.2.x values stay as-is on unchanged notes (the new, correct meaning).\n- **`unchanged` counter** in the sync-complete notice (en + zh-CN).\n- **README rewrite (all 9 languages).** Reframed i18n story: metadata localization is the headline (15+ preset languages + custom mode for any TMDB-supported BCP-47 locale); plugin UI is now described as the smaller, separate axis.\n\n## 🛡️ Data safety\n\nThe whole point of this release is \"never silently fail to sync something\". Defended by:\n\n- **Conservative failure mode**: when `metadataCache` returns no parsed frontmatter, we treat as \"definitely write\" rather than risk skipping a real change.\n- **Order-sensitive array compare**: false-positive rewrite is acceptable; silently dropping a change is not.\n- **32 new smoke tests** (208 total, all passing) lock in the acceptance criterion. See spec 0002 §\"Acceptance criterion (data integrity)\".\n\n## 📚 Spec\n\nFull design + 26-row edge-case matrix + alternatives considered: [spec 0002](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.3.0/docs/specs/0002-diff-based-write.md).\n\n## 🔄 Migration\n\nNo data migration. The first 0.3.0 sync may rewrite notes that had real changes accumulated since the last sync (correct). Subsequent syncs are quiet. The legacy \"always rewrite\" behavior is still available by enabling **Overwrite existing note body** in settings.\n\n## 📦 Install / upgrade\n\n- **BRAT users**: auto-updates on next Obsidian launch\n- **Manual install**: download the three assets below, drop into `<vault>/.obsidian/plugins/obsidian-sync-trakt/`\n\nSee the [full changelog](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.3.0/docs/CHANGELOG.md) for all entries since 0.1.0.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.3.0 — Diff-based write",
       "prerelease": false,
@@ -648,22 +744,26 @@
       "assets": [
         {
           "digest": "sha256:2a9ebc92234437e1252385f5e9bc88e4b16fd82983cb77b5a0f6039bdacb3e2c",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 119304
         },
         {
           "digest": "sha256:95f5ed5476c3a191e9d797ae92393dc66382dd6443fb851001b679f2f6cfc2b1",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "**Major: incremental sync.** Steady-state sync wall time drops from 3–5 minutes to under 10 seconds for typical libraries.\n\n## What's new\n\n- **TMDB metadata cache.** Each `(type, tmdbId, language)` triple is cached in `data.json` after first fetch, with a configurable TTL (default 90 days, ±5 days jitter so entries don't all expire on the same day) and lazy stale-while-revalidate semantics. Cache survives device-to-device sync. New setting: **TMDB cache TTL**. New button: **Clear TMDB cache**.\n- **Incremental Trakt history fetch.** Sync stores aggregated history state in `data.json` (per-show + per-movie watch timestamps, plus the set of every event id seen). Subsequent syncs query `/sync/history?start_at=lastIncrementalSyncAt` and merge new events into the stored state. Watching a single new episode now costs ~1 Trakt history call instead of ~150.\n- **Periodic full history refresh** for deletion detection. Every `historyFullRefreshIntervalDays` (default 7), the next sync re-pulls the full history without `start_at`, compares the event-id set against `knownEventIds`, and rebuilds state from scratch when events were deleted on Trakt's side. New setting: **History full-refresh interval**. New command: **Traktr: Force full history refresh**.\n- **Settings auto-reload on app focus.** The plugin re-reads `data.json` from disk when Obsidian becomes visible again (e.g. when the user switches back from another app on iPhone after their Mac finished a sync). No more \"I have to disable + re-enable the plugin to see settings my Mac just synced over.\"\n\n## Documentation\n\n- New `docs/ARCHITECTURE.md` — technical reference covering the module dependency graph, sync flow, data structures, caching layers, API mapping, concurrency model, error handling, i18n architecture, and the cross-device settings model.\n- New `docs/specs/` folder with [spec 0001](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.2.0/docs/specs/0001-incremental-sync.md) — full design rationale, alternatives considered, and migration notes for this release.\n- New `docs/CHANGELOG.md` — version log going forward.\n- README \"Why?\" sections updated across all 9 languages.\n\n## Migration\n\nThe first 0.2.0 sync is the same cost as a 0.1.x sync (cold cache, no history state). Subsequent syncs are fast. No manual action required; fields default to the right values when missing from `data.json`.\n\n## Install\n\n- **BRAT:** auto-updates if you already have `o1xhack/obsidian-sync-trakt` registered.\n- **Manual:** download `main.js`, `manifest.json`, `styles.css` below into `<vault>/.obsidian/plugins/obsidian-sync-trakt/`.\n\nSee [spec 0001](https://github.com/o1xhack/obsidian-sync-trakt/blob/0.2.0/docs/specs/0001-incremental-sync.md) for the full design.\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.2.0",
       "prerelease": false,
@@ -674,22 +774,26 @@
       "assets": [
         {
           "digest": "sha256:816f913481f511b98b51b2358229e3adc35a2f1f1e4f2b812160a034063d05ce",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 101520
         },
         {
           "digest": "sha256:8ad40ecc6f2cab2ba9b33bd04fd8d5c3ceb2bc87a4a1893e6a6be1fb5bca4c29",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## Fix: live sync progress now visible on mobile\n\nUser-reported (iPhone): tapping **Traktr: Sync** showed nothing at all during the sync — only the final **Sync complete: X added** notice appeared at the end. None of the **Loading metadata: 200/1231** progress updates that 0.1.3 added were visible.\n\n**Root cause**: Obsidian's `addStatusBarItem()` is documented as desktop-only. On iOS / Android, the status bar element exists but doesn't render. The 0.1.3 progress reporting wrote to a status bar that mobile users couldn't see.\n\n**Fix**: every progress tick now also drives a **persistent Notice** (created with `duration=0` so it stays on screen, then updated in-place via `Notice.setMessage()`). The notice is hidden when sync finishes — even if an error throws.\n\nBoth desktop and mobile see live progress now. On desktop you also still get the status bar text as before.\n\nAffects all three sync entry points: the manual command, sync-on-startup, and auto-sync.\n\n## What you'll see on iPhone now\n\n```\n⟳ Syncing…              ← right after tapping\n⟳ Fetching from Trakt…\n⟳ Loading metadata: 200/1231\n⟳ Loading metadata: 800/1231\n⟳ Writing notes: 1100/1231\n[brief gap]\nSync complete: 5 added, 1226 updated, 0 removed   ← final 5s notice\n```\n\nThe progress notice replaces itself in place — it doesn't stack 100+ notices on screen.\n\n## No other changes\n\n- No new settings, no new i18n strings\n- No test surface change (132/132 still passing)\n- main.js bumped due to this fix; nothing else touched",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.4",
       "prerelease": false,
@@ -700,22 +804,26 @@
       "assets": [
         {
           "digest": "sha256:babecfbbc628c2b8bd6352a0000beeb9873c0dae4c63ceb343d3c39102be6346",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 100874
         },
         {
           "digest": "sha256:31144827268d6e4ac5caa1f5128a8a0c2b9d2acfcfeff2175800fb17496d575e",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## User-reported bug fixes (0.1.2 → 0.1.3)\n\n### 🌐 Most titles came back as English even with Metadata language = zh-CN\n\n**Root cause** (took some research to nail): TMDB moderators sometimes lock the `title` field on a `zh-CN` translation row to blank — especially for movies without an official mainland release. The API does **not** auto-fall-back to other Chinese variants when this happens; it returns the English original. The TMDB website *does* fall back, which is why https://www.themoviedb.org/movie/772?language=zh-CN shows \"小鬼当家2\" but the API call returned \"Home Alone 2\".\n\n**Fix**: switched the TMDB request to `?language=X&append_to_response=translations` and added a client-side picker that walks the translations array. For `zh-CN` we now try **CN → TW → HK → SG → any other zh entry** until a non-empty title is found. Same pattern Jellyfin / Radarr / tinyMediaManager all use.\n\nAfter upgrading: re-sync to pull the corrected titles.\n\n### 🖼️ Posters mostly missing after enabling Metadata language\n\nSame root cause as above — TMDB returns `poster_path: null` for movies without a poster tagged in the requested language. **Fix**: when a localized request returns null, the plugin now retries the same call without the language parameter to get the default poster. One extra call **only for items missing a localized poster**; most items don't pay this cost.\n\n### ⏳ Sync felt frozen on large libraries\n\nReplaced the `Promise.all` burst (1000+ simultaneous TMDB requests) with a bounded-concurrency pool (5 in flight). What changed:\n\n- **Live progress in the status bar** — `⟳ Loading metadata: 200/1231` updates as items complete\n- **Massively less rate-limit risk** — previously the burst could saturate TMDB's 50 req/s bucket and silently drop posters / translations to swallowed 429s. This is likely a contributing factor to the missing-poster reports\n- Same treatment applied to the Trakt `/translations` fallback path\n\n### 📊 Obsidian Bases support — already works, just needed docs\n\nYour `trakt_poster_url` field is **out-of-the-box compatible** with Obsidian Bases (1.9.3+). No code change needed — added a \"View in Bases\" section to all 9 README languages explaining:\n\n- **Card view**: set **Image property** to `trakt_poster_url`\n- **Table view** (1.9.4+): formula column `image(note.trakt_poster_url)`\n\n### 📝 Title / Tagline template confusion\n\nClarified in the MANUAL (4 languages) that:\n\n- There's no separate \"Title\" field — title is the filename (controlled by **Filename template**) and `{{title}}` variable for the body. Add `# {{title}}` to your template to show it as a heading\n- Tagline format is fully editable in the Movie template directly (`> {{tagline}}` is just one option)\n\n## Tests\n\n132/132 smoke tests passing — 15 new cases covering `pickBestTranslation` (blank-title fallback, main-response trust, no-translation null, TV `name` vs `title`) and `processWithConcurrency` (bounded in-flight count, progress callback per completion).\n\n## Coexistence note\n\nIf you're upgrading from 0.1.2 with existing notes, **just re-sync** — the plugin will pick up corrected Chinese titles and update each note's frontmatter in place. Your hand-written body content is not touched.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.3",
       "prerelease": false,
@@ -726,22 +834,26 @@
       "assets": [
         {
           "digest": "sha256:f86d76544fac89e38a11889507fae268d2c4c5785c2df8bf24510985a9331d1f",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 95318
         },
         {
           "digest": "sha256:ba0122bcf9b96e0f9fe06d99ad3a056c9e9f3a3595c637a40161e89e63d2c86f",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## Documentation overhaul (no plugin code changes)\n\n### Multi-language READMEs\n\nThe README is now available in **9 languages**: English (root), 简体中文, 繁體中文, 日本語, 한국어, Français, Deutsch, Español, Italiano. Click any language at the top of the README to switch.\n\n### Translated SETUP and MANUAL guides\n\nA dedicated [SETUP](https://github.com/o1xhack/obsidian-sync-trakt/blob/main/docs/SETUP.md) walkthrough now exists separate from the README — covers Trakt OAuth app creation, TMDB v3 API key acquisition, plugin configuration, first sync, and troubleshooting. The full [MANUAL](https://github.com/o1xhack/obsidian-sync-trakt/blob/main/docs/MANUAL.md) is also now translated. Both are available in **English, 简体中文, 繁體中文, 日本語**.\n\n### Restructured architecture\n\n- All docs consolidated into `docs/` (previously split between `doc/` upstream and `docs/i18n/` fork)\n- `docs/screenshots/` reserved for image assets (the 3 inherited from upstream are there; product screenshots will be added in a follow-up release)\n- `docs/i18n/index.md` is the navigation hub for translations + how to add a new language\n\n### Redesigned README\n\n- Badges row (version, downloads, license, min Obsidian)\n- Tagline up front\n- Feature sections each with code example showing exact output (frontmatter YAML, watch-history Markdown)\n- Install methods collapsed into expandable sections (BRAT default, then Manual, Community Plugins placeholder, Build from source)\n- Roadmap section so visitors can see what's next\n\n### What did NOT change\n\n- No plugin code changes — `main.js`, settings, commands, all behavior identical to 0.1.1\n- Plugin runtime UI (settings tab, commands, notices) still English + 简体中文 only — that's a separate translation axis, expanded only on demand\n\n### Coverage matrix\n\n| Doc | en | zh-CN | zh-TW | ja | ko | fr | de | es | it |\n|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|\n| README | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |\n| SETUP | ✓ | ✓ | ✓ | ✓ | — | — | — | — | — |\n| MANUAL | ✓ | ✓ | ✓ | ✓ | — | — | — | — | — |\n| DEVELOPER | ✓ | — | — | — | — | — | — | — | — |",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -752,22 +864,26 @@
       "assets": [
         {
           "digest": "sha256:f86d76544fac89e38a11889507fae268d2c4c5785c2df8bf24510985a9331d1f",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 95318
         },
         {
           "digest": "sha256:6e24f6e2e8e8e101c28a6e5b7635157f40b5dc20be75cfdba3fde773c36e134b",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "## Bug fixes\n\n### `{{watch_history}}` now actually updates after first sync\n\nFound by user testing: the default sync mode (`Overwrite existing note body` = off) only updated frontmatter on existing notes — but `{{watch_history}}` is rendered into the body. Result: watch history was frozen at note-creation time and never reflected new episodes you watched after that.\n\n**Fix:** machine-managed section markers using Obsidian's native `%% ... %%` comment syntax. The watch history block now renders as:\n\n```markdown\n%% trakt:watch-history:start %%\n## Watch History\n- S1E1 — 2024-01-15 21:30\n- S1E2 — 2024-01-16 22:00\n%% trakt:watch-history:end %%\n```\n\nOn every sync, when **Sync watch history (detailed)** is on, the engine finds these markers and replaces what's between them. Anything outside the markers — the rest of your body, your hand-written notes, custom sections — stays untouched.\n\n### Migration for existing notes\n\nNotes you created on 0.1.0 don't have the markers yet. **No manual action needed** — on the next sync after upgrading to 0.1.1, the engine auto-appends a marker-wrapped Watch History section to the end of each note's body. Subsequent syncs find the markers and update in place.\n\nIf you want the section to live somewhere other than the bottom of the note, just move the marker block (start marker, content, end marker, all together) wherever you want. Sync will keep finding it by markers.\n\n## Coverage\n\n19 new smoke tests (117 total passing) covering: replace between markers, append when no markers exist, no-op when detailed mode is off, clear-to-empty-markers when data has been removed, movie vs show body shape, prose preservation around markers.\n\n## Compatibility\n\n- 0.1.0 → 0.1.1: notes get auto-migrated on next sync\n- Min Obsidian version: 1.4.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.1",
       "prerelease": false,
@@ -778,22 +894,26 @@
       "assets": [
         {
           "digest": "sha256:1d52640797dc7825a97200a8c847319d4410f1007735708d1989da1fe0845349",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 94230
         },
         {
           "digest": "sha256:23b45352519225d1fc69ff2dc4e618cded9a138d1e4b438118193994693b8981",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:6019c9fe9249213f33a7a58612e5239bb4786d09a3913dc8afbaa59220ca5f53",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 812
         }
       ],
       "author": "o1xhack",
       "description": "First **pre-stable** release of **Obsidian Sync Trakt** — fork of [sarimabbas/traktr](https://github.com/sarimabbas/traktr) with three new feature areas.\n\n> ⚠️ **Beta / pre-stable.** Versions in the `0.x.y` line are for active iteration. Expect frequent updates while features are validated end-to-end. The `1.0.0` line will land once the feature set is stable.\n\n## What's new vs upstream\n\n### 1. Detailed watch history\n- **Sync watch history (detailed)** toggle pulls Trakt's `/sync/history` endpoint\n- Per-episode (or per-movie) watch timestamps render inline in the note body via `{{watch_history}}`\n- Re-watches listed comma-separated; episodes sorted by season then episode number\n- Off by default — opt in when you actually want it\n\n### 2. Metadata localization\n- **Metadata language** setting translates `title` / `overview` / `tagline` / `genres` via TMDB\n- Trakt `/translations/{lang}` fallback when no TMDB key is configured\n- English originals preserved in `trakt_original_*` frontmatter fields\n- Tags + tag-note paths always stay in English so existing Dataview queries keep working\n\n### 3. Bilingual UI + translated default templates\n- **Plugin UI language** picker: English / 简体中文 (settings tab, command palette, notice popups)\n- **Note template language** picker mirrors metadata-language presets (zh-CN / zh-TW / zh-HK / 11 others / Custom)\n- Bundled default templates in English, Simplified Chinese, Traditional Chinese\n- Other language codes fall back to English templates\n\n### 4. Cross-device sync (info, no new code)\n- New info row in Authentication area explains that auth state (Trakt tokens, TMDB key, all settings) lives in `<vault>/.obsidian/plugins/obsidian-sync-trakt/data.json` and follows the user's existing vault-sync layer (Obsidian Sync, Syncthing, iCloud + ADP, Cryptomator)\n- The plugin does **not** store anything on any server\n\n## Install\n\n**Recommended (current method):** [BRAT](https://github.com/TfTHacker/obsidian42-brat) → Add a beta plugin for testing → `o1xhack/obsidian-sync-trakt`\n\n**Manual:** download `main.js` + `manifest.json` + `styles.css` below and drop them in `<vault>/.obsidian/plugins/obsidian-sync-trakt/`.\n\nSee the [README](https://github.com/o1xhack/obsidian-sync-trakt/blob/main/README.md) ([中文](https://github.com/o1xhack/obsidian-sync-trakt/blob/main/docs/i18n/README.zh-CN.md)) for full setup.\n\n## Coexistence with upstream traktr\n\nDistinct plugin id (`obsidian-sync-trakt` vs `traktr`) → both can be installed without OS-level conflict. Both default to the same `Notes folder` (`trakt`) and `Property prefix` (`trakt_`) though — if you intend to run both at the same time, point one of them at a different folder in its settings.\n\n## Compatibility\n\n- Min Obsidian version: 1.4.0\n- Trakt + TMDB API keys you already have for upstream traktr work as-is",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.0",
       "prerelease": false,

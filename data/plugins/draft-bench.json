@@ -4,8 +4,8 @@
   "description": "A full creative writing workflow: project creation, scene management, and manuscript compilation with frontmatter-native data and Bases compatibility. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "draft-bench",
-  "lastChangedAt": "2026-06-16T05:02:58.614Z",
-  "lastFetchedAt": "2026-06-16T05:02:58.614Z",
+  "lastChangedAt": "2026-06-21T04:01:09.508Z",
+  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
   "manifest": {
     "author": "banisterious",
     "authorUrl": "https://github.com/banisterious",
@@ -27,22 +27,26 @@
       "assets": [
         {
           "digest": "sha256:f4142c2c18922cac8753d98f1390b900b47e5c9b2114510ca22379bf70744a7e",
+          "downloadCount": 239,
           "name": "main.js",
           "size": 3088650
         },
         {
           "digest": "sha256:dc74f44a4234783e4e57099060ebee9059955e95ea58ee59f167534b077b16d2",
+          "downloadCount": 303,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:09741df4310b83ad144effb2f068286e289527522278b4a1b0ffae3059529bd9",
+          "downloadCount": 234,
           "name": "styles.css",
           "size": 87363
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Scanner-hygiene patch + Scrivener import fix\r\n\r\nPostinstall patches strip three `new Function(...)` literals from pdfmake's and docx's bundled vendor code, clearing the community-plugin scanner's Dynamic Code Execution recommendation. Production minification enabled in `esbuild.config.mjs` drops `main.js` from 5.83 MB to 3.09 MB (47% reduction, ~2 MB under the 5 MB Sync Standard threshold), retiring the scanner's \"main.js > 5 MB\" warning. The Scrivener RTF importer now suppresses `\\fldinst` field-instruction groups so `HYPERLINK \"scrivcmt://...\"` noise no longer leaks into imported scenes ([#37](https://github.com/banisterious/obsidian-draft-bench/issues/37)). No user-visible feature changes beyond the import fix; 1389 tests pass unchanged.\r\n\r\n### Why this matters\r\n\r\nThree scanner-driven concerns plus one corpus-driven bug:\r\n\r\n- **`new Function(...)` literals**: the scanner currently flags every `new Function` site as a Dynamic Code Execution recommendation. Three sites lived in pdfmake's and docx's bundled vendor code, all inside dead-code branches (globalThis polyfill fallbacks; an unreachable string-callback shim in `setimmediate`). The patches remove them at install time so the bundle no longer carries them.\r\n- **`main.js > 5 MB`**: Obsidian's Sync Standard has a 5,242,880-byte transfer limit; bundles over that trigger a scanner warning. Phase 3 had closed this as not-fixable for Obsidian plugins (code-splitting is off the table since the installer only fetches `main.js` + `manifest.json` + `styles.css`), but a key lever was missed: esbuild's production build carried no `minify` flag. Enabling it drops the bundle by 47% with no source change.\r\n- **#37 RTF leak**: Scrivener wraps inline comments and hyperlinks as RTF fields (`{\\field{\\*\\fldinst{HYPERLINK \"...\"}}{\\fldrslt {visible text}}}`). The custom RTF parser's MVP scope had deferred hyperlink / comment rendering but never suppressed the `\\fldinst` payload, so the instruction text was leaking into imported scenes verbatim. The fix adds `fldinst` to the parser's existing `SKIPPED_GROUP_CONTROL_WORDS` set so the suppress-depth mechanism drops the instruction group while `\\fldrslt` content still emits.\r\n\r\n### Fixed\r\n\r\n- **RTF field-instruction text no longer leaks into imported Scrivener scenes ([#37](https://github.com/banisterious/obsidian-draft-bench/issues/37)).** Real `http(s)` hyperlinks lose their URL with this change (the visible link text still renders as plain text); proper RTF-hyperlink-to-markdown rendering remains a separately deferred feature.\r\n- **Bundle no longer contains `new Function(...)` literals.** New postinstall scripts (`patch-pdfmake.js` + `patch-docx.js`) strip the dead-code branches from `node_modules/` during `npm install`. Same shape as the IE8 setImmediate `createElement('script')` patches the Charted Roots scan-cleanup arc landed earlier.\r\n- **Bundle no longer exceeds the 5 MB Sync Standard threshold.** `minify: prod` in `esbuild.config.mjs` drops `main.js` from 5,825,743 bytes to 3,088,650 bytes (47% reduction, ~2 MB under the 5,242,880-byte limit).\r\n\r\n### Internal\r\n\r\n- **Postinstall patches are idempotent and vendor-update-safe.** Each substitution carries a marker comment so re-running `npm install` is a no-op once applied. When the targeted block isn't found (vendor upgrade reshapes the surrounding code), the patch logs a warning and skips rather than silently mis-editing.\r\n- **Patches subsume the IE8 `createElement('script')` literals on esbuild's resolution path** (`pdfmake/build/pdfmake.js` and `docx/dist/index.mjs`). The pre-existing `mask-script-polyfill-literal` esbuild plugin stays in place as a no-op safety net.\r\n- **Name-introspection grep clean.** Source contains no `Function.prototype.name`, `.constructor.name`, or function `.toString()` calls, so esbuild's identifier mangling can rename freely without `keepNames: true`.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1389 tests pass under minification. PDF compile verified in dev-vault before tag-push (Roboto fonts render; no error toasts; existing scene content unchanged).\r\n\r\n### Install\r\n\r\n- **Community Plugins**: [Install in Obsidian](obsidian://show-plugin?id=draft-bench), or Settings -> Community plugins -> Browse -> \"Draft Bench\" -> Install -> Enable.\r\n- **BRAT** (for pre-release access): add `banisterious/obsidian-draft-bench` as a beta plugin.\r\n- **Manual**: download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 239,
       "draft": false,
       "name": "Draft Bench 0.6.4",
       "prerelease": false,
@@ -53,22 +57,26 @@
       "assets": [
         {
           "digest": "sha256:b2e3d317c17b166089ca95360a7176262d562a71fa51781265ef5f82faf2e9d6",
+          "downloadCount": 22,
           "name": "main.js",
           "size": 5825743
         },
         {
           "digest": "sha256:b87f7c23840a363eba76ba49598a909dabab9b0edf6b9eb91dfabf3f2b61bc8b",
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:09741df4310b83ad144effb2f068286e289527522278b4a1b0ffae3059529bd9",
+          "downloadCount": 21,
           "name": "styles.css",
           "size": 87363
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Scanner-hygiene patch\r\n\r\nReplaces the Manuscript Builder status-chip filter's `:has()` selectors with equivalent sibling-combinator rules so the bundle no longer triggers the community-plugin scanner's \"broad selector invalidation\" performance advisory. All 16 sites the scanner flagged are eliminated. UX is identical to 0.6.2.\r\n\r\n### Why this matters\r\n\r\nThe scanner currently surfaces `:has()` as an advisory (\"Avoid `:has` - it can cause significant performance issues due to broad selector invalidation\"). Modern engines have improved `:has()` invalidation considerably and most mainstream Obsidian themes already ship rules using it, so the advisory is mostly cautionary, but the cleaner answer is to use the pre-`:has()` sibling-combinator idiom that this UI fits naturally.\r\n\r\nThe Manuscript Builder's status-chip filter was the only place we used `:has()` in the plugin. All eight rules lived in one feature and pair with markup we control, so the rewrite is contained.\r\n\r\n### Changed\r\n\r\n- **Status-chip markup restructured.** Inputs were previously nested inside their labels (label-wraps-input affordance); they now sit as siblings paired via `for`/`id`. Click-to-toggle still works via the standard browser association. Input IDs are namespaced through a module-level counter so multiple concurrent Manuscript Builder instances (dock-leaf + popout window, etc.) don't collide.\r\n- **Eight `:has(input:...)` CSS rules rewritten as sibling combinators** (`.chip-input:checked + .chip`, `.chip-input:focus-visible + .chip`, etc.). Pure CSS, no JS state-sync. `:focus-visible` semantics survive intact. The combinator reads the real focused element, so mouse clicks toggle the chip *without* showing the keyboard focus ring (`:focus-visible` rejects pointer-induced focus), while tab navigation transfers the ring to each label correctly.\r\n\r\n### Internal\r\n\r\n- **Visually-hidden checkbox rule scoped via wrapper + attribute** (`.dbench-manuscript-builder__status-chips input[type=\"checkbox\"]`, specificity 0-2-1) to win against Obsidian's bare `input[type=\"radio\"], input[type=\"checkbox\"]` rule in `app.css` (0-1-1). A naive class-only selector loses on specificity and the checkboxes reappear at native size.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1387 tests pass. Manual UI smoke test in dev-vault before tag-push verified that chips render and toggle as before, checkboxes stay visually hidden, and the keyboard focus ring appears only on tab focus.\r\n\r\n### Install\r\n\r\n- **Community Plugins**: [Install in Obsidian](obsidian://show-plugin?id=draft-bench), or Settings -> Community plugins -> Browse -> \"Draft Bench\" -> Install -> Enable.\r\n- **BRAT** (for pre-release access): add `banisterious/obsidian-draft-bench` as a beta plugin.\r\n- **Manual**: download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 22,
       "draft": false,
       "name": "Draft Bench 0.6.3",
       "prerelease": false,
@@ -79,22 +87,26 @@
       "assets": [
         {
           "digest": "sha256:5bda30ed86771074ace31ca2163a2da97867b712f2ee695fceabc14296cb954f",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 5825474
         },
         {
           "digest": "sha256:6d79a5fa5f6b813d84acae3df1e308a96b1fad46df69cfb49c9a2a5b2da48d2c",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:3cf9daf4c0cfc5bf722e123d19da29ec8c0d14e35be5f2bae8253152f9f464fa",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 86296
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Scanner-hygiene patch\r\n\r\nReplaces `jszip` with `fflate` (through a thin JSZip-shaped adapter at [src/utils/zip.ts](src/utils/zip.ts)) so the bundle no longer ships jszip's UMD module-detection code, which Obsidian's community-plugin scanner escalated to an error severity on 2026-05-15. The IE-era polyfill workarounds 0.6.1 introduced to neutralize jszip's transitive `setimmediate` / `immediate` / `lie` / `readable-stream` chain are no longer needed and have been removed. Bundle shrinks from ~5.8 MB to ~5.6 MB; runtime behavior is unchanged.\r\n\r\n### Why this matters\r\n\r\n0.6.1's three-layer fix (native-equivalent polyfill shims, jszip resolution rerouting, vendor-bundle literal masking) worked, but the upstream cause of the warning lived inside `jszip` itself. Removing jszip eliminates the warning at the source and lets the bundling infrastructure shrink back to one workaround (vendor-bundle literal masking for `docx` and `pdfmake`'s pre-bundled IE-era code, which has no module-resolution boundary the rerouting trick could catch).\r\n\r\n`fflate` is a modern, zero-dependency, ~8 KB ZIP library written specifically to avoid the legacy patterns that trip automated scanners. The migration ships behind a thin JSZip-shaped adapter (`ZipBuilder` + `ZipReader`) so call sites continue to read like JSZip code and a future fflate version bump (or another library swap) is a one-file change.\r\n\r\n### Changed\r\n\r\n- **ODT archive creation now routes through `fflate` via [src/utils/zip.ts](src/utils/zip.ts).** `ZipBuilder` exposes the stateful builder API the codebase already used (`new ZipBuilder()` -> `.file()` -> `.generateAsync()`); `ZipReader` exposes the JSZip reader pattern (`loadAsync` + `zip.files` record + `zip.file(path)` lookup + `.async('string' | 'uint8array' | 'arraybuffer')`).\r\n- **`jszip` removed from dependencies**, replaced by `fflate@^0.8.2` (pure JavaScript, zero transitive deps, TypeScript types built in).\r\n- **Test files updated** to use the adapter's `ZipReader` for inspecting compiled DOCX / ODT bytes. The reader pattern API is unchanged from JSZip's surface; only the import line differs.\r\n\r\n### Internal\r\n\r\n- **Bundling infrastructure simplified.** Deleted the `polyfill-shims` esbuild plugin (which rerouted `setimmediate` / `immediate` / `jszip` / `readable-stream`), the `polyfills/setimmediate.js` and `polyfills/immediate.js` native-equivalent shims, the `polyfills/` directory, and the `polyfills/**` eslint ignore. The `mask-script-polyfill-literal` plugin remains for `docx` + `pdfmake`'s pre-bundled IE-era polyfill code.\r\n- **Bundle size dropped ~200 KB** (5.8 MB -> 5.6 MB) from removing jszip and its transitive chain.\r\n- **[docs/developer/third-party-libraries.md](docs/developer/third-party-libraries.md) rewritten** to reflect the fflate-via-adapter architecture: JSZip section becomes \"fflate (ZIP adapter)\" with the adapter rationale and JSZip-shaped surface table; Bundling-and-workarounds section shrinks from three workarounds to one (plus the unrelated pdfmake `getBuffer` callback shim).\r\n\r\n### Verifying release provenance\r\n\r\nSame as prior releases: every release asset (`main.js`, `manifest.json`, `styles.css`) is signed with a GitHub-issued attestation linking it back to the source commit + workflow run that built it.\r\n\r\n```sh\r\ngh release download 0.6.2 --pattern main.js\r\ngh attestation verify main.js --repo banisterious/obsidian-draft-bench\r\n```\r\n\r\nExpected output: `Loaded digest sha256:<hash> ... Verification succeeded!`.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1387 tests pass. Manual ODT round-trip verified against LibreOffice before tag-push.\r\n\r\n### Install\r\n\r\n- **Community Plugins**: [Install in Obsidian](obsidian://show-plugin?id=draft-bench), or Settings -> Community plugins -> Browse -> \"Draft Bench\" -> Install -> Enable.\r\n- **BRAT** (for pre-release access): add `banisterious/obsidian-draft-bench` as a beta plugin.\r\n- **Manual**: download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 4,
       "draft": false,
       "name": "Draft Bench 0.6.2",
       "prerelease": false,
@@ -105,22 +117,26 @@
       "assets": [
         {
           "digest": "sha256:fabf7bba6a4820ad69d23170b77e396e5be17b4b991a8eeb70334d40fc5d5566",
+          "downloadCount": 27,
           "name": "main.js",
           "size": 6046073
         },
         {
           "digest": "sha256:ea1e45b9ad62f3c1ae3e0f33ee68bd434e10153d5c2e68ec1c796d9d46aac5fe",
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:3cf9daf4c0cfc5bf722e123d19da29ec8c0d14e35be5f2bae8253152f9f464fa",
+          "downloadCount": 27,
           "name": "styles.css",
           "size": 86296
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Scanner-hygiene patch\r\n\r\nEliminates the \"10 dynamic `<script>` element creations\" warning the community-plugin scanner reports against 0.6.0's bundle. The flagged patterns come from IE-era polyfills in transitive dependencies; none of the IE branches execute at runtime in Chromium (they sit behind `MutationObserver` / `setImmediate` feature checks that always succeed first), but the static scanner sees the `createElement(\"script\")` literals regardless. All 10 are now gone from the bundle.\r\n\r\n### Why this matters\r\n\r\nThe community-plugin scanner flags any `createElement(\"script\")` literal in plugin code as \"dynamic script-element creation\" (a real concern when the literal *would* execute), regardless of whether the surrounding code is reachable. 0.6.0's bundle inherited 10 such literals from `setimmediate` and `immediate` (jszip's transitive deps) plus `docx` and `pdfmake` (which ship pre-bundled with the polyfills inlined).\r\n\r\nThe fix is structural rather than cosmetic: three layers, each removing the literal in a way that preserves runtime semantics.\r\n\r\n### Fixed\r\n\r\n- **All 10 `createElement(\"script\")` literals removed from the bundle.** Three sources, three fixes:\r\n  - **`setimmediate` and `immediate` npm packages replaced with native-equivalent shims** in [polyfills/](polyfills/). The setImmediate shim uses `setTimeout(fn, 0)` (matching the original's \"yield to the event loop\" macrotask semantic); the immediate shim uses `queueMicrotask` (matching lie's Promise microtask scheduler).\r\n  - **`jszip` resolution rerouted from prebundled `dist/jszip.min.js` to the unbundled `lib/index.js`**, so the new shims actually apply. `jszip`'s `browser` field would otherwise point at a Browserified file with the polyfills already inlined. `readable-stream` routes to Node's built-in `stream` (already external for Electron).\r\n  - **`docx` and `pdfmake` `createElement(\"script\")` literals masked at bundle time.** Both ship pre-bundled distributions with the polyfills inlined as dead code (guarded behind `MutationObserver` / `setImmediate` feature checks that always succeed in Chromium). A new esbuild `onLoad` plugin rewrites the literals to a non-foldable runtime expression (`createElement(\"scrip\"+(globalThis.__dbench_t__||\"t\"))`) that esbuild's optimizer can't constant-fold back. The masked expression evaluates to `\"script\"` if ever executed, but the surrounding branches remain unreachable in modern engines, so runtime behavior is unchanged.\r\n\r\n### Internal\r\n\r\n- **New [polyfills/](polyfills/) directory** with the two native-equivalent shims.\r\n- **[esbuild.config.mjs](esbuild.config.mjs)** gains two plugins: `polyfill-shims` (rewrites the four module resolutions) and `mask-script-polyfill-literal` (transforms `docx` + `pdfmake` vendor file contents at load time).\r\n- Bundle size: 5.7 MB -> 5.8 MB (negligible).\r\n\r\n### Verifying release provenance\r\n\r\nSame as 0.6.0: every release asset (`main.js`, `manifest.json`, `styles.css`) is signed with a GitHub-issued attestation linking it back to the source commit + workflow run that built it.\r\n\r\n```sh\r\ngh release download 0.6.1 --pattern main.js\r\ngh attestation verify main.js --repo banisterious/obsidian-draft-bench\r\n```\r\n\r\nExpected output: `Loaded digest sha256:<hash> ... Verification succeeded!`.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1387 tests pass.\r\n\r\n### Install\r\n\r\n- **Community Store**: **Settings -> Community plugins -> Browse -> \"Draft Bench\"**.\r\n- **BRAT**: add `banisterious/obsidian-draft-bench` in the BRAT settings.\r\n- **Manual**: download `main.js`, `manifest.json`, and `styles.css` into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 27,
       "draft": false,
       "name": "Draft Bench 0.6.1",
       "prerelease": false,
@@ -131,22 +147,26 @@
       "assets": [
         {
           "digest": "sha256:e5fa809e985547502d6ee82fa7d2653256adff930f2f01bbed39d583e90cba32",
+          "downloadCount": 14,
           "name": "main.js",
           "size": 5960242
         },
         {
           "digest": "sha256:f0ade1a4deacc09da3ca8e1d9b93cc29f7a869d0745f7f0371b643135c014f74",
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:3cf9daf4c0cfc5bf722e123d19da29ec8c0d14e35be5f2bae8253152f9f464fa",
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 86296
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Frontmatter type-narrowing refactor\r\n\r\nInternal-quality release. Consolidates the frontmatter type-narrowing boundary into a single canonical module ([src/core/frontmatter-access.ts](src/core/frontmatter-access.ts)) and routes every Obsidian-API access through its typed helpers. Clears all 195 strict-typed-rule warnings the community-plugin scanner reports against 0.5.5 without changing runtime behavior. No user-visible feature changes; 1387 tests pass unchanged.\r\n\r\nThis is the first minor-version bump beyond 0.5.x. SemVer-wise the work is internal-quality, but the scope (eight commits, 195 warning sites cleared, six duplicate helpers consolidated, every `processFrontMatter` callback in the codebase reshaped) warranted a minor bump over a patch. The project-level full-manuscript snapshots feature originally penciled for 0.6.0 defers to 0.7.0: cleaner foundations land first.\r\n\r\n### Why this matters\r\n\r\nObsidian's frontmatter API returns `FrontMatterCache` with an `[key: string]: any` index signature, so every `frontmatter['dbench-X']` read or write previously short-circuited TypeScript's safety checks. The community-plugin scanner runs the strict `@typescript-eslint/no-unsafe-*` rules and surfaced this as 195 warnings across 29 files in the 0.5.5 scan.\r\n\r\nThe refactor establishes a single boundary module that re-narrows the API surface to `Record<string, unknown>`, then provides typed helpers (`readString`, `readNumber`, `readBoolean`, `readArray`) that consume `unknown` and return safe values. Call sites now operate against the narrowed shape and let the type checker enforce the discipline.\r\n\r\n### Changed\r\n\r\n- **New [src/core/frontmatter-access.ts](src/core/frontmatter-access.ts) module.** Two layers:\r\n  - Layer 1 generic adapters (`adaptProcessFrontMatter`, `toGeneric`) reshape Obsidian's `any`-typed boundary values into `Record<string, unknown>` at the single point where Obsidian's API returns them.\r\n  - Layer 3 primitive narrowing helpers (`readString`, `readNumber`, `readBoolean`, `readArray`) consume `unknown` and return a typed value with a documented default for non-conforming inputs.\r\n- **Every `processFrontMatter` callback routes through `adaptProcessFrontMatter`.** 30+ callbacks across the integrity scanner, retrofit, scene / chapter / sub-scene / draft creation paths, project creation, compile presets, reorder, statuses, move-to-X, example-project, apply-compile-state, file-menu archive toggle, Scrivener import-write, and the three linker submodules.\r\n- **Six duplicate `readArray` helpers consolidated.** scenes / sub-scenes / chapters / drafts / chapter-drafts / sub-scene-drafts each carried their own three-line copy; all now import from the canonical module. The `linker/readers.ts` shim (Phase 4 vintage) is deleted; consumers route through the new module.\r\n- **`eslint-plugin-obsidianmd` upgraded 0.2.9 -> 0.3.0** to match the community-plugin scanner's version. The removed `prefer-create-el` rule is dropped from the local config; a non-TS-files override block works around the upstream typed-rule global-scope bug.\r\n- **Strict `@typescript-eslint/no-unsafe-*` rules enforced as errors.** The five rules flip from `\"off\"` to `\"error\"` in [eslint.config.mjs](eslint.config.mjs). New code that bypasses the helpers fails the build.\r\n\r\n### Fixed\r\n\r\n- **Four latent `no-base-to-string` bugs in `String(fm['dbench-X'] ?? '')` patterns.** The `any` typing previously hid the risk that a non-string cache value would render as `'[object Object]'` in `String()` coercion. The refactor surfaced them; migration to `readString` cleared the bugs.\r\n\r\n### Internal\r\n\r\n- **16 new unit tests** in `tests/core/frontmatter-access.test.ts` cover boundary behavior (identity-cast semantics, mutation propagation, narrow-to-default across all four primitive readers).\r\n- **Lint surface now matches the community-plugin scanner's surface.** Local `npm run lint` runs the same `eslint-plugin-obsidianmd@0.3.0` ruleset; subsequent scans should report ~zero in the `no-unsafe-*` categories.\r\n\r\n### Verifying release provenance\r\n\r\nSame as 0.5.5: every release asset (`main.js`, `manifest.json`, `styles.css`) is signed with a GitHub-issued attestation linking it back to the source commit + workflow run that built it.\r\n\r\n```sh\r\ngh release download 0.6.0 --pattern main.js\r\ngh attestation verify main.js --repo banisterious/obsidian-draft-bench\r\n```\r\n\r\nExpected output: `Loaded digest sha256:<hash> ... Verification succeeded!`.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1387 tests pass.\r\n\r\n### Install\r\n\r\n- **Community Store**: **Settings -> Community plugins -> Browse -> \"Draft Bench\"**.\r\n- **BRAT**: add `banisterious/obsidian-draft-bench` in the BRAT settings.\r\n- **Manual**: download `main.js`, `manifest.json`, and `styles.css` into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 14,
       "draft": false,
       "name": "Draft Bench v0.6.0",
       "prerelease": false,
@@ -157,22 +177,26 @@
       "assets": [
         {
           "digest": "sha256:116fa39dde2340184fee015b7c9ea27b5f59c3598f3f04c1235f5584dec74de9",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 5958457
         },
         {
           "digest": "sha256:dd30345236659aea5804a4754c581fc4115555c2fcb814989a8d8f9e8d83c1e6",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:3cf9daf4c0cfc5bf722e123d19da29ec8c0d14e35be5f2bae8253152f9f464fa",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 86296
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Release hygiene + popout polish\r\n\r\nInternal release. Introduces a GitHub Actions release workflow that produces cryptographic build-provenance attestations for every release asset, addressing the \"no artifact attestation\" recommendations from the community.obsidian.md automated scan against 0.5.4. Also picks up eight `document` -> `activeDocument` polish sites surfaced by the same scan. No user-visible feature changes.\r\n\r\n### Added\r\n\r\n- **CI release workflow with build-provenance attestations.** New `.github/workflows/release.yml` triggers on plain SemVer tag push. Runs the full gate set (lint + lint:css + test + build), generates per-file provenance attestations via `actions/attest-build-provenance@v2` for `main.js` / `manifest.json` / `styles.css`, and creates a draft GitHub release with the assets attached. The author reviews the draft, pastes the release description, and publishes.\r\n- **`.nvmrc`** pins Node 20.20.2 so the workflow's `setup-node` reads it via `node-version-file`. Local devs running `nvm use` (no args) pick up the same version automatically.\r\n\r\n### Changed\r\n\r\n- **`document` -> `activeDocument` in 8 sites** for popout-window compatibility. Affected: brand-mark SVG creation, settings-tab link fragment, manuscript-view word-counts wrapper + progress hero, Scrivener importer `webkitdirectory` probe. ESLint warnings drop from 40 to 28; all four gates remain green.\r\n\r\n### Verifying release provenance\r\n\r\nEvery release asset (`main.js`, `manifest.json`, `styles.css`) is now signed with a GitHub-issued attestation linking it back to the source commit + workflow run that built it. To verify:\r\n\r\n```sh\r\ngh release download 0.5.5 --pattern main.js\r\ngh attestation verify main.js --repo banisterious/obsidian-draft-bench\r\n```\r\n\r\nExpected output: `Loaded digest sha256:<hash> ... ✓ Verification succeeded!`. Provides cryptographic provenance from `main.js` back to the source.\r\n\r\n### Internal\r\n\r\n- **`docs/developer/coding-standards.md` § 6.3 (\"Generated files\")** updated to reflect actual treatment: `styles.css` committed to git, `main.js` + `main.js.map` gitignored and produced fresh by CI for releases. Cross-references the new attestation flow.\r\n- **Pre-release tag handling.** Workflow detects the SemVer hyphen convention (e.g., `0.5.5-rc1`) and flags the resulting draft release as a pre-release. Lets us trial workflow changes end-to-end against an rc tag without touching the stable release line.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1371 tests pass.\r\n\r\n### Install\r\n\r\n- **Community Store** (available within 22 hours of this release): **Settings -> Community plugins -> Browse -> \"Draft Bench\"**.\r\n- **BRAT** (for beta testers staying on the BRAT track): add `banisterious/obsidian-draft-bench` in the BRAT settings.\r\n- **Manual**: download `main.js`, `manifest.json`, and `styles.css` into `<vault>/.obsidian/plugins/draft-bench/`.",
+      "downloadCount": 8,
       "draft": false,
       "name": "Draft Bench v0.5.5",
       "prerelease": false,
@@ -183,22 +207,26 @@
       "assets": [
         {
           "digest": "sha256:db95843f4d95587a97a0581c703119d882dfb6cc6f4157109e3e6d8537f9a06b",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 5958390
         },
         {
           "digest": "sha256:0d6bb43e2edff78f713a61875752b619b85d42ba3643c214508c42e0447a4fc2",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:3cf9daf4c0cfc5bf722e123d19da29ec8c0d14e35be5f2bae8253152f9f464fa",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 86296
         }
       ],
       "author": "banisterious",
       "description": "## Scene archive ([#36](https://github.com/banisterious/obsidian-draft-bench/issues/36))\r\n\r\nA status-based archive workflow for the Manuscript view. Park scenes, chapters, or sub-scenes you aren't actively working on without deleting them: the Manuscript view filters items whose status is on a \"hidden\" list, and a \"Show archived\" toolbar toggle reveals them with muted treatment. Compile presets are unaffected.\r\n\r\n### Added\r\n\r\n- **Hidden statuses.** New `hiddenStatuses` settings field. The default vocabulary grows by one entry (`archived`) which is hidden by default. Any other vocab entry can be flagged hidden via the per-row eye toggle in Settings. Renaming a hidden status updates the flag pointer; removing it drops the flag.\r\n- **\"Show archived\" toolbar toggle.** Appears as a fourth toolbar button on the Manuscript leaf when the project has at least one archived item. Flipping it reveals hidden scenes / sub-scenes (and muted chapter cards) at 0.55 opacity, lifting to 0.9 on hover. State persists per-leaf.\r\n- **\"Archive\" / \"Unarchive\" context-menu item** on scene, chapter, and sub-scene notes (file-menu and editor-menu surfaces). Archive stamps `dbench-status` to the first hidden status (typically `archived`); Unarchive routes to the vocabulary's default status.\r\n- **Migration for existing installs.** A one-shot flag appends `archived` to the vocabulary (if absent) and seeds the hidden-statuses list to `[archived]` on first load after upgrade. Writers who delete the seeded status keep that choice; the migration runs at most once.\r\n\r\n### Internal\r\n\r\n- New `isHiddenStatus` helper in `src/core/statuses.ts`.\r\n- `buildContinuousPreset(project, { excludeBasenames })` now accepts a list of basenames to feed into the existing `dbench-compile-scene-excludes` field; Continuous mode uses it to drop archived items.\r\n- Shared `filterArchivedScenes` helper in `manuscript-list-section.ts` consumed by both the flat list body and the chapter-card section, so the filter rule lives in one place.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1371 tests pass.\r\n\r\n**Install:** download `main.js`, `manifest.json`, and `styles.css` into `<vault>/.obsidian/plugins/draft-bench/`, or update via [BRAT](https://github.com/TfTHacker/obsidian42-brat).",
+      "downloadCount": 2,
       "draft": false,
       "name": "Draft Bench v0.5.4: Scene Archive",
       "prerelease": false,
@@ -209,22 +237,26 @@
       "assets": [
         {
           "digest": "sha256:3379764ab5e5ff75f1852b3762866a37ad082b707342f1ee2bdd8efad3f50513",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 5950044
         },
         {
           "digest": "sha256:6d09dcfe3b87663a7ae61eb736706ab627be1c4effdc5a5a74468f119233c79f",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:f22fdd4951b19b7f1557e649162e2c6a78450ad694b4c07ce8a7dcae79be74d6",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 85222
         }
       ],
       "author": "banisterious",
       "description": "Internal-quality release. Five-phase architectural audit landed: a shared frontmatter-wikilinks utility consolidates parser logic that had drifted between two modules; a typed `COMMAND_IDS` registry centralizes the unsafe palette-invocation cast; the 951-line linker decomposes into a focused `linker/` directory; integrity scanning routes every typed-frontmatter cast through the existing `toGeneric` helper. No user-visible behavior changes; the 1360-test suite passes unchanged across every phase.\r\n\r\n### Internal\r\n\r\n- **Extracted frontmatter-wikilinks utility.** New `src/core/frontmatter-wikilinks.ts` consolidates `parseWikilinkBasename`, `canonicalizeWikilinkValue`, and a cache-aware `readWikilinkBasename` helper. Reconciles two divergent implementations previously living in `src/core/linker.ts` and `src/core/sub-scene-drafts.ts`. Sub-scene-drafts callers now also recognize the flow-notation array form and strip block refs (`^block`), matching the linker's behavior. No user-visible change.\r\n- **Typed command-ID constants.** New `src/commands/ids.ts` exports a `COMMAND_IDS` const (all 28 Draft Bench commands) and a `runCommand(app, id)` helper that centralizes the unsafe cast around `app.commands.executeCommandById`. All 28 `addCommand` registrations and the three palette invocation sites in `welcome-modal.ts` and `manuscript-view.ts` now use the typed constants.\r\n- **Linker decomposed into submodules.** The 951-line `src/core/linker.ts` is now a `src/core/linker/` directory of focused files: `lifecycle.ts`, `reconciliation.ts`, `wikilink-backfill.ts` (issues #4 / #6), `folder-auto-rename.ts`, and `readers.ts`. The public `DraftBenchLinker` class API is unchanged; all 44 inbound imports resolve via `index.ts`'s re-exporter. No behavior changes; all 1360 tests pass without modification.\r\n- **Audit Phase 5 cleanup.** Eleven inline typed-frontmatter casts in `src/core/integrity.ts` consolidated through the existing `toGeneric` helper (−53 lines). The `MODIFY_DEBOUNCE_MS` constant in `manuscript-view.ts` gained a calibration comment explaining the intentional 100 ms gap from the Builder's `FILE_SAVE_DEBOUNCE_MS`. `coding-standards.md` gained a § 2.6 section documenting when fire-and-forget `void promise` is the right pattern.",
+      "downloadCount": 1,
       "draft": false,
       "name": "Draft Bench v0.5.3",
       "prerelease": false,
@@ -235,27 +267,32 @@
       "assets": [
         {
           "digest": "sha256:a8e855cfec230d73025a3c8330cd07e3dd213f52219bb6e92211b98569280c87",
+          "downloadCount": 0,
           "name": "draft-bench-v0.5.2.zip",
           "size": 1464605
         },
         {
           "digest": "sha256:5ab386070851f7d24db19c8290194faa60acde439b778efe964e82ba4394dfb2",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 5952971
         },
         {
           "digest": "sha256:1908b6c8dae64dcbbee26d0a45b875e7e0155c40130e6961a103fa353813adf6",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:f22fdd4951b19b7f1557e649162e2c6a78450ad694b4c07ce8a7dcae79be74d6",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 85222
         }
       ],
       "author": "banisterious",
       "description": "Mobile patch for the Scrivener importer's Source step. Two bugs surfaced during dev-vault Android verification of 0.5.1: the in-vault folder list missed bundles copied externally without an Obsidian reload (the indexed cache lags external filesystem changes on mobile), and the in-app folder picker fails on Android builds whose system file picker silently ignores `webkitdirectory`. The first is fixed; the second is mitigated (the OS-level limitation can't be repaired from JS, but the failure mode is now legible and routes writers to a workaround that works).\r\n\r\n## Fixed\r\n\r\n- **Externally-copied `.scriv` bundles surface in the Source step without an app reload** ([#35](https://github.com/banisterious/obsidian-draft-bench/issues/35)). The Source step's \"in-vault picker\" now walks via `app.vault.adapter.list` rather than `app.vault.getFiles()`, so a bundle copied into the vault via Android's file manager (Files by Google, Samsung My Files, etc.) appears the next time the wizard opens — no `Reload app without saving` required. The Parse step's bundle-load path moves to `adapter.read` for the same reason.\r\n\r\n## Mitigated\r\n\r\n- **Folder picker on Android builds that silently ignore `webkitdirectory`** ([#34](https://github.com/banisterious/obsidian-draft-bench/issues/34)). Some Android builds present the in-app folder picker as a file-only chooser regardless of the `webkitdirectory` hint, leaving writers unable to select the `.scriv` folder. **This is an OS-level limitation that can't be repaired from JS**: the plugin can only set the attribute as a hint, and the OS chooses whether to honor it. On affected devices the only path to import is to copy the `.scriv` folder into the vault via the device's file manager first, then use the in-vault dropdown (this works thanks to the #35 fix above).\r\n\r\n  The 0.5.2 mitigation reframes the Source step on mobile so this failure mode is legible:\r\n  - The in-vault dropdown renders **above** the picker widget when bundles exist.\r\n  - When no bundles are in the vault yet, an empty-state hint above the picker explains the file-manager workaround up front.\r\n  - The picker's subtext on mobile reads \"If your file manager supports folder selection\".\r\n  - Tapping the picker and dismissing without selecting (back arrow, cancel) now surfaces a Notice pointing at the workaround.\r\n\r\n## Notes\r\n\r\n- Cancel-event detection requires Android System WebView 113+ (May 2023). Earlier builds may not fire `cancel` on dismiss; on those, the empty-state hint above the picker remains the primary guidance and is unaffected.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)",
+      "downloadCount": 5,
       "draft": false,
       "name": "Draft Bench v0.5.2: Mobile fixes",
       "prerelease": false,
@@ -266,27 +303,32 @@
       "assets": [
         {
           "digest": "sha256:84dc078517a4419af53c95f0f4e49014739fc032150904ccfa5df0c4d05be573",
+          "downloadCount": 0,
           "name": "draft-bench-v0.5.1.zip",
           "size": 1463745
         },
         {
           "digest": "sha256:ec220b313a385d86ede2b612aa776a2f30459219bf1de9eccb1c341022d3ccab",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 5949608
         },
         {
           "digest": "sha256:69a62078cf28ba87b09150d6291b41efb794c0272eaf7f09eb4dc75456869c4a",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:f22fdd4951b19b7f1557e649162e2c6a78450ad694b4c07ce8a7dcae79be74d6",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 85222
         }
       ],
       "author": "banisterious",
       "description": "Follow-up to 0.5.0 that completes two deferred toggles, fixes a pre-existing bug in the Parse step's snapshot count, corrects a Scrivener Windows serialization quirk in the Include-in-Compile parser, and surfaces excluded documents in the Preview step.\r\n\r\nSee: [Importing from Scrivener](https://github.com/banisterious/obsidian-draft-bench/wiki/Importing-from-Scrivener) · Tracked via [#33](https://github.com/banisterious/obsidian-draft-bench/issues/33)\r\n\r\n## Added\r\n\r\n- **Snapshot import.** Per-document Scrivener snapshots become `dbench-type: draft` files alongside each imported scene when the Options-step **Import snapshots** toggle is on. Per-scene cap (1 / 3 / 5 / All) honored. Filename template (`{scene}` `{title}` `{date}` `{date_compact}` `{time}` `{n}`) drives the draft name; default `{scene} - Draft {n} ({date_compact})` matches native Draft Bench drafts so imported snapshots sit indistinguishably alongside drafts the writer creates after import. Each draft note carries the parent-scene/project links, `dbench-draft-number`, `dbench-created-at` (snapshot's `<Date>` normalized to ISO `YYYY-MM-DD`), and `scrivener-snapshot-title` (preserves the original Scrivener title for provenance).\r\n- **Default compile preset stub.** When the Options-step **Create default compile preset** toggle is on, the importer adds an \"Imported defaults\" preset to the new project's `Compile Presets/` folder using DB's standard preset defaults. (Scrivener compile formats don't translate cleanly so the stub is just a starting point.)\r\n- **Preview-step disclosure of excluded documents.** When the source bundle contains documents marked Include-in-Compile = No in Scrivener, the Preview step's Warnings section lists them by title. Import behavior is unchanged from 0.5.0 (preserves `scrivener-include-in-compile: false` provenance frontmatter, doesn't filter at import); the disclosure just makes the existing behavior visible up front.\r\n\r\n## Fixed\r\n\r\n- **`countSnapshots` walked the wrong path.** Pre-existing bug from 0.5.0: the Parse step reported \"Snapshots: 0\" silently for any real Scrivener 3 (Windows) project because the helper looked at `Files/Data/<UUID>/Snapshots/` instead of the actual `<bundleRoot>/Snapshots/<UUID>.snapshots/` Scrivener 3 uses. Now correctly counts the bundle-root location.\r\n- **Include-in-Compile detection on Scrivener Windows.** The 0.5.0 parser rule \"missing `<IncludeInCompile>` element defaults to true\" silently treated toggle-off documents as included. Scrivener Windows serializes the unchecked state by **removing** the element from `<MetaData>` (not by writing `<IncludeInCompile>No</IncludeInCompile>`), so missing-element + non-empty MetaData is the writer's exclusion signal. New rule: missing element + MetaData with other children -> `false`; missing element + empty `<MetaData/>` → `true` (the empty case is genuinely ambiguous and we default to include to avoid silently dropping content). Both the disclosure and the `scrivener-include-in-compile: false` frontmatter now fire correctly for toggled-off documents.\r\n\r\n## Notes\r\n\r\n- **Empty-`<MetaData/>` ambiguity** (Scrivener Windows). For a document whose Include-in-Compile checkbox is unchecked AND that has no other metadata in its MetaData block, Scrivener Windows persists empty `<MetaData/>` either way (untouched-default or toggled-off). The importer can't distinguish the two cases on disk and defaults to include. Workaround in the wiki page's [Known limitations](https://github.com/banisterious/obsidian-draft-bench/wiki/Importing-from-Scrivener): in Scrivener, set a Status / Label / Custom Metadata field on the document before toggling Include-in-Compile off. Keywords don't qualify (they're stored as a sibling element of MetaData, not inside it).\r\n- Snapshot import is best-effort on per-snapshot RTF body issues. A missing or unreadable RTF produces an empty draft note + a warning in the import error log, rather than aborting the whole snapshot import for the scene.\r\n\r\n## Install\r\n\r\n- **BRAT** (recommended): BRAT will pull 0.5.1 automatically on its next refresh.\r\n- **Manual:** download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#051---2026-05-08)",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.5.1 - Scrivener importer follow-up",
       "prerelease": false,
@@ -297,27 +339,32 @@
       "assets": [
         {
           "digest": "sha256:113a2763b1bc7e6f053b799d03c3dc7cbda1f992239880b8f9d45d5b098bfb05",
+          "downloadCount": 0,
           "name": "draft-bench-v0.5.0.zip",
           "size": 1460609
         },
         {
           "digest": "sha256:8910d6826d3be0110558cc368acfd2bf5446fb82966a3d11d4e9905c91908c25",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 5934463
         },
         {
           "digest": "sha256:174f4a4b4b1659e9608941266a0c7dbacd691a7226bfab357c5d509d86d455df",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:f22fdd4951b19b7f1557e649162e2c6a78450ad694b4c07ce8a7dcae79be74d6",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 85222
         }
       ],
       "author": "banisterious",
       "description": "Scrivener 3 project import marquee. A multi-step wizard reads a `.scriv` bundle from inside the vault and produces a fresh Draft Bench project: chapters, scenes, sub-scenes, drafts (optional), and inspector content all carry across, with every mapping reviewed in a Preview step before any file gets written.\r\n\r\n- **Full walkthrough:** [Importing from Scrivener](https://github.com/banisterious/obsidian-draft-bench/wiki/Importing-from-Scrivener)\r\n\r\n## Highlights\r\n\r\n- **8-step wizard** (Source / Parse / Hierarchy / Metadata / Options / Preview / Import / Complete). Discoverable via the `Draft Bench: Import from Scrivener` palette command, an import button in the Manuscript view's project picker row, and an empty-state CTA when no projects exist yet. Cross-platform. Works on every OS Draft Bench supports.\r\n- **Hierarchy auto-detect with per-row override.** Deepest leaves with prose -> scenes; immediate folder parents -> chapters; Parts and Books preserved as `scrivener-part` frontmatter; sub-sub-scenes concatenated as nested headings inside their parent.\r\n- **Status / label / custom-metadata mapping.** Status table matches against your vocabulary with an \"Add as new status\" option (and inline rename input). Labels route to a writer-named frontmatter key. Custom-metadata fields route per-field with type-aware coercion (Checkbox -> boolean, List option ID -> resolved option title, Date -> ISO `YYYY-MM-DD`, Text -> raw string).\r\n- **Inspector content carry-over.** Synopsis -> `dbench-synopsis`; Document Notes -> appended `## Notes` section; inline Comments -> Obsidian `%% comment %%` syntax at the original anchor; Footnotes -> standard markdown footnotes; Project Notes -> project body `## Notes`; Keywords -> Obsidian `tags:` frontmatter.\r\n- **RTF -> markdown body conversion.** Italics, bold, lists, smart quotes, em-dashes, ellipses, footnotes, and inline comments. Inline images extracted to `Research/Images/`. Complex tables fall back to inline HTML (flagged in the import error log).\r\n- **Cross-document Scrivener Links rewritten to wikilinks** via a two-pass `scrivener-uuid -> dbench-file-path` map.\r\n- **Optional snapshot import** with per-scene cap and a writer-editable filename template (`{scene}` `{title}` `{date}` `{date_compact}` `{time}` `{n}`).\r\n- **Optional Research folder import** with hierarchy preserved verbatim. Templates and Trash always skipped.\r\n- **`dbench-synopsis` extended to the scene model** with display in the Manuscript view scene rows. Useful even for writers who fill it manually via the Properties panel.\r\n\r\n## Known limitations\r\n\r\n- **Scrivener 2 and iOS Scrivener formats** are not supported in V1. Re-add as separate parser paths if a contributor surfaces with a project to test against.\r\n- **The `.scriv` bundle has to live inside the vault.** The wizard's Source step copies it in for you on most platforms; on iOS, copy via the Files app first.\r\n- **Compile-format translation is intentionally skipped.** Build your DB compile presets from scratch after import (or use the Options step's opt-in starter preset).\r\n- **Some inline RTF features are deferred** (some hyperlink variants, nested footnotes within tables, unusual inline-image arrangements). These import as best-effort placeholders flagged in the import error log.\r\n\r\n## QA scope\r\n\r\nTested against my own Scrivener 3 Novel-template fixture (sub-scenes + multi-level extras-above + Checkbox / Date / List custom-metadata fields) plus 1297 unit / integration tests. Issue reports across other `.scriv` shapes are welcomed via [#28](https://github.com/banisterious/obsidian-draft-bench/issues/28).\r\n\r\n## Install\r\n\r\n- **BRAT** (recommended for the 0.x phase): add `banisterious/obsidian-draft-bench` as a beta plugin. BRAT will pull 0.5.0 automatically on its next refresh.\r\n- **Manual:** download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#050---2026-05-08)",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.5.0 - Scrivener 3 project import",
       "prerelease": false,
@@ -328,27 +375,32 @@
       "assets": [
         {
           "digest": "sha256:0be81a446ead560d8746b5918e806053b4693ad930970cb2fa1c292965d9a6d1",
+          "downloadCount": 0,
           "name": "draft-bench-v0.4.0.zip",
           "size": 1435540
         },
         {
           "digest": "sha256:be76604f8a5d2975aec818a7ae495fe0d838c8978e8373f156de37bccc8a9575",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 5834308
         },
         {
           "digest": "sha256:6f9e933d44aa92c15ab553ec3eaddee3c3d2e78c2513e1f70644a1b1db39543c",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:c50a144275ac6dfd94001c76e338f9237a4b94209bc1a52465ac110a374a363d",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 70267
         }
       ],
       "author": "banisterious",
       "description": "## Manuscript view Continuous mode\r\n\r\nThe Manuscript leaf gains a **List / Continuous** tab strip below the project picker. The new **Continuous tab** renders the entire project as one scrollable read-only document (chapters, scenes, sub-scenes, full bodies) for revision read-throughs that the per-scene List view isn't shaped for.\r\n\r\nClick any chapter / scene / sub-scene title heading to jump to its source file (cmd/ctrl-click = new tab; +shift = split; +alt = window; right-click for the same options via context menu). The rest of the leaf (typography toolbar, file-save reactivity, scroll preservation) mirrors the Manuscript Builder Preview tab so writers experience the same reading-register behavior across both surfaces.\r\n\r\n### Added\r\n\r\n- **Manuscript view Continuous mode** ([#31](https://github.com/banisterious/obsidian-draft-bench/issues/31)). Tab strip toggles between List (today's navigation surface) and Continuous (read-through). Continuous renders the full manuscript in `dbench-order`; no preset filters, always-everything by design. Title headings carry click handlers; writer-authored H2/H3s inside scene bodies stay inert. File-save reactivity re-renders prose on a 400 ms debounce with scroll preservation across the re-render. Shared four-control typography toolbar (text alignment, reading width, font size, font family) sits above the prose. Same controls + global persistence as the Builder Preview. Active mode persists per project; new projects default to List.\r\n- **`manuscriptViewMode` settings field.** `Record<projectId, 'list' | 'continuous'>` mirroring the existing `manuscriptBuilderTabState` pattern.\r\n- **Opt-in heading source markers in `CompileService.generate(preset, opts)`.** New `GenerateOptions.emitHeadingMarkers` flag instructs the pipeline to append a `<span class=\"dbench-mark\" data-source=\"<vault-path>\"></span>` marker inside every emitted title heading so a post-render walker can attribute headings back to their source files. Off by default — Continuous mode opts in; binary compile renderers don't.\r\n- **Shared preview-typography toolbar module** (`src/ui/shared/preview-toolbar.ts` + `styles/preview-toolbar.css`). Class hooks renamed from `dbench-manuscript-builder__*-toolbar*` to a neutral `dbench-preview-toolbar` block so the same toolbar mounts in both surfaces.\r\n\r\n### Notes\r\n\r\n- **Embeds are stripped from the Continuous render in V1.** The compile pipeline's `stripEmbeds` always strips regardless of preset configuration, so embeds (`![[...]]`) won't render inline in Continuous mode. Tracked as the \"Embed handling\" open question in the planning doc; flag friction in #31 if heavy-embed projects bite.\r\n- **Mobile compatibility.** Continuous mode is mobile-supported on the same surface as the rest of the leaf (Android verified via the 0.3.2 elevation; iOS / iPadOS untested).\r\n\r\n---\r\n\r\n1130 unit + integration tests, all green. For full detail see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 2,
       "draft": false,
       "name": "Draft Bench v0.4.0: Manuscript view Continuous mode",
       "prerelease": false,
@@ -359,27 +411,32 @@
       "assets": [
         {
           "digest": "sha256:17a98e5f1ed059f88a72b9783fdb3d3c98a5e5270a7f2062104f14a62b9cb3ba",
+          "downloadCount": 0,
           "name": "draft-bench-v0.3.3.zip",
           "size": 1431911
         },
         {
           "digest": "sha256:006d4329d9954cae08f7b693a1a814cd73997d3fc3e0e57d7b034590a13c3456",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 5822586
         },
         {
           "digest": "sha256:9bfa72f17927c413c8a39e38877a3a083a71bff89a39d3499be46b85dc8b783c",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:e7fd525f5126d70c7333321c48c57cd8a4100979ddceea9d58962e6d4d98c5f2",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 65369
         }
       ],
       "author": "banisterious",
       "description": "## Manuscript leaf restyle\r\n\r\nThe Manuscript leaf moves from Direction B (Ulysses warm — chips, semantic status colors, gradient progress) to **Direction D3**, a Builder-aligned minimal aesthetic. Now harmonizes with the Manuscript Builder modal + leaf shipped in 0.3.0 / 0.3.1.\r\n\r\nPure visual / IA polish; no API or data-shape change. Mobile support carries forward from 0.3.2.\r\n\r\n### Changed\r\n\r\n- **Manuscript leaf restyle (Direction D3)** ([#30](https://github.com/banisterious/obsidian-draft-bench/issues/30)). Status chips replaced with inline small-caps muted text. Status dots in the project breakdown dropped. Per-scene mini progress bars dropped (writers read progress as text in the count label format; the project-level bar remains the canonical visual signal). Scene rows flatten from a 2-row grid to a single-row 4-column layout (order · title · status · count) with subtitle support flipping to 2 rows. Order capsule pill drops to plain tabular-numeric text. Compile button's gradient + shadow override drops to Obsidian's stock `.mod-cta` solid accent. Project progress bar shrinks from 8px gradient to 2px hairline. Section heads to `--text-muted` small-caps, matching the Builder.\r\n- **Drafts column dropped from scene rows.** The \"N drafts\" column on each scene / sub-scene row is removed. Writers see drafts on the scene file itself; the leaf is for navigation.\r\n\r\n### Removed\r\n\r\n- **Per-status Style Settings exposures.** The four `--dbench-status-*` variable-color knobs (brainstorm/idea, draft, revision, final) are removed from the Style Settings UI. The CSS variables stay in `variables.css` because the Manuscript Builder's status filter pills (#25) still use them.\r\n\r\n---\r\n\r\n1112 unit + integration tests, all green. For full detail see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 1,
       "draft": false,
       "name": "Draft Bench v0.3.3: Manuscript leaf restyle",
       "prerelease": false,
@@ -390,27 +447,32 @@
       "assets": [
         {
           "digest": "sha256:da924f1ce91adac3db05085577b488701e4ff4859411e573b66ba15eae402aa6",
+          "downloadCount": 0,
           "name": "draft-bench-v0.3.2.zip",
           "size": 1433085
         },
         {
           "digest": "sha256:f4dddbb7f55096c3d9c02b7fadc0091d100ccfed5c7acd2d186c406eca707fb6",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5823854
         },
         {
           "digest": "sha256:83167932f29d430f3f80232899315a8f00f030c1073ba1f865c11151a7f46a6b",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:20c7ca277bfdd7c3900f000d04bf39a2fba898f2e9356e447e1b596f3c4008ec",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 71967
         }
       ],
       "author": "banisterious",
       "description": "## Mobile support\r\n\r\nDraft Bench now loads on Obsidian Mobile. The desktop-only restriction is lifted in `manifest.json`; an on-device audit pass on Android confirmed the plugin's surfaces work cleanly on touch devices. Vault output for **PDF / ODT / DOCX** rides along so the binary compile formats produce a working result on mobile; the existing disk-output paths still require Electron's save dialog and stay desktop-only.\r\n\r\n### Verified on Android\r\n\r\nManuscript view, Manuscript Builder modal + leaf, scene / chapter / sub-scene / draft creation, the compile pipeline (markdown + PDF + ODT + DOCX vault output), Style Settings, and Bases integration all walk through cleanly.\r\n\r\n### iOS / iPadOS untested in this release\r\n\r\niOS / iPadOS will ship untested until a Mac-equipped contributor with iOS access surfaces. Bug reports are welcome and triaged via the `mobile-ios` label.\r\n\r\n### Added\r\n\r\n- **Mobile support** ([#29](https://github.com/banisterious/obsidian-draft-bench/issues/29)). `isDesktopOnly: false` in `manifest.json`. Every existing feature works on mobile except the disk-output side of the compile pipeline (desktop-only by construction; vault output is the mobile path).\r\n- **Vault output for PDF / ODT / DOCX compile.** Presets configured for `format: pdf | odt | docx` plus `output: vault` now write the compiled binary to `<project>/Compiled/<preset>.<ext>` via Obsidian's `createBinary` / `modifyBinary`. Mobile-compatible. Supersedes the original D-06 clause that restricted binary formats to disk output.\r\n\r\n### Notes\r\n\r\n- The Scrivener `.scriv` importer ([#28](https://github.com/banisterious/obsidian-draft-bench/issues/28)) is not yet shipped. When it lands, its command and Manuscript view button will gate to desktop via `Platform.isDesktopApp` (RTF parsing and large-file ops make it a structurally desktop-only feature).\r\n- For PDF / ODT / DOCX compile on mobile, set the preset's `dbench-compile-output` to `vault`. Disk output (Obsidian's save dialog) remains the desktop-only path.\r\n\r\n---\r\n\r\n1112 unit + integration tests, all green. For full detail see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.3.2",
       "prerelease": false,
@@ -421,27 +483,32 @@
       "assets": [
         {
           "digest": "sha256:4c738a4763e7660eb08c22f8c6004b86b522717972906b8235bad3f5f89b92fa",
+          "downloadCount": 0,
           "name": "draft-bench-v0.3.1.zip",
           "size": 1432816
         },
         {
           "digest": "sha256:804e008c047b0e27184d98fed873fbfdf503bb229e67f9bebec2c5e8a700fc16",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 5822150
         },
         {
           "digest": "sha256:1d73de0088bdac651a63f824f6135072a1f905f7fcdc28dcfedf854377795ebb",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:20c7ca277bfdd7c3900f000d04bf39a2fba898f2e9356e447e1b596f3c4008ec",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 71967
         }
       ],
       "author": "banisterious",
       "description": "**Dockable Manuscript Builder leaf.** The 0.3.0 Manuscript Builder modal gains a leaf form so you can pin Preview next to a scene you're editing in another pane. The 0.3.0 modal stays as the default entry point; a \"dock to leaf\" icon button in the modal's sticky header (next to the close button) closes the modal and reopens the same content as a workspace tab. The leaf form adds **debounced file-save reactivity** that the modal couldn't support. Preview re-renders ~400ms after a project member is saved, batching rapid saves into a single update so the editor stays snappy.\r\n\r\n## Added\r\n\r\n### Dockable Manuscript Builder workspace leaf ([#27](https://github.com/banisterious/obsidian-draft-bench/issues/27))\r\n\r\nA \"dock to leaf\" icon button in the Manuscript Builder modal's sticky header opens a workspace-tab version of the same Build / Preview UI. Drag the tab to a side pane and you can edit a scene in the main pane while watching Preview update as you save.\r\n\r\n**File-save reactivity** — debounced 400ms — fires only while the Preview tab is active and only for project member files (project, chapter, scene, sub-scene with matching `dbench-project-id`). Drafts (archival snapshots) and compile presets (config) don't trigger a re-render. Bursts of saves (autosave, sync drops) batch into a single re-render after the burst settles.\r\n\r\n**Single-leaf only.** Opening the Builder when a leaf already exists focuses the existing one — no second leaf is created.\r\n\r\n**One-way docking.** The leaf doesn't show a \"convert back to modal\" button. To return to modal form, close the leaf and reopen via the `Draft Bench: Build manuscript` palette command or the Compile CTA in the Manuscript view.\r\n\r\n### `Draft Bench: Show Manuscript Builder leaf` palette command\r\n\r\nOpens the Builder leaf directly, focusing an existing leaf if one is already open. Bind it to a hotkey if you prefer leaf form as your default.\r\n\r\n### Preview scroll position preserved across file-save re-renders\r\n\r\nWhen you're reading deep in Preview and save a paragraph in another pane, Preview re-renders without snapping the scroll back to the top. Tab / preset / project changes still land at the top — those are \"fresh entry\" re-renders where you'd expect to start from the beginning.\r\n\r\n### Last-selected preset persists per project\r\n\r\nThe leaf restores your last-tuned preset across Obsidian reload. The modal also benefits. (Close + reopen now restores the last-selected preset instead of always defaulting to the first one.) Stored as `manuscriptBuilderSelectedPresetId` in plugin settings, keyed by project `dbench-id`.\r\n\r\n## Changed\r\n\r\n### Manuscript Builder rendering core extracted into a host-agnostic shell\r\n\r\nInternal refactor: the modal and the new leaf share the same UI code via a `ManuscriptBuilder` core class that renders into any provided `contentEl`. No behavior change for modal users; sets up cleaner extension paths for any future surfaces (e.g., a sidebar variant) that want the same Build / Preview UI.\r\n\r\n## Install / upgrade\r\n\r\nInstall or update via [BRAT](https://github.com/TfTHacker/obsidian42-brat) by adding `banisterious/obsidian-draft-bench` as a beta plugin. BRAT will fetch this release automatically; if you've previously installed, update via BRAT's \"Check for updates to all beta plugins\" command.\r\n\r\n---\r\n\r\n1102 unit + integration tests, all green. Desktop-only.\r\n\r\nFor the canonical changelog with full detail, see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.3.1: Dockable Manuscript Builder leaf",
       "prerelease": false,
@@ -452,27 +519,32 @@
       "assets": [
         {
           "digest": "sha256:2e454377876d6cbea63f92a2c2970c364f9b1e3b468b57bbc2b1428726d572e6",
+          "downloadCount": 0,
           "name": "draft-bench-v0.3.0.zip",
           "size": 1430604
         },
         {
           "digest": "sha256:292f1a35eb29fc0aa59fa6311d0a6892c84d3f48730be295d7e08950185b8258",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 5813992
         },
         {
           "digest": "sha256:537173b2c34ac94ea632eb9d348652075c13b0a0c8f10e6e33c30383cf98a0c0",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:b74f1bf011f0d5ee3ed16463be464cd3db4680f2b6484d042a18fe3e5a7e9908",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 70787
         }
       ],
       "author": "banisterious",
       "description": "**Manuscript Builder Preview tab marquee.** The Builder modal gains a Preview tab alongside the existing form stack (now Build tab), letting you tune compile presets and read the rendered output without writing a real export file. Several maintainer-facing improvements ride along: an in-modal project switcher, a sticky header that keeps controls reachable during long Preview scroll, and per-project tab persistence.\r\n\r\n## Added\r\n\r\n### Manuscript Builder Preview tab ([#26](https://github.com/banisterious/obsidian-draft-bench/issues/26))\r\n\r\nA new **Preview** tab renders the current preset's compile output as continuous read-only prose using Obsidian's `MarkdownRenderer`. Tweak settings on Build, flip to Preview, see the impact, iterate; no need to write a real output file each time you want to inspect the result.\r\n\r\nPreview re-renders on three triggers: tab activation, preset-selector change, and project-selector change. External edits to source notes mid-session are not auto-reactive (flip Build → Preview to re-trigger).\r\n\r\nSub-scene descent matches the compile pipeline exactly: parent intro prose first, then sub-scenes in `dbench-order`. A 250ms-threshold \"Rendering...\" spinner covers the perceived-latency case for larger projects. Tested clean against a 110k-word fixture; the implementation is single-pass (no chunking, no virtualization).\r\n\r\nEmpty-state messages cover the no-presets, no-scenes, filters-exclude-all, and render-error cases, each with an actionable hint pointing at where to fix the underlying issue.\r\n\r\n> **Preview is for in-Obsidian review, not WYSIWYG of the compiled file.** The actual PDF / ODT / DOCX outputs run through different rendering pipelines (pdfmake / docx generators), so Preview's typography won't match the exported file exactly. Compile to disk and open the file to verify the final result.\r\n\r\n### Preview typography toolbar\r\n\r\nAbove the rendered Preview prose, a four-control toolbar lets you tune the reading register without leaving the modal:\r\n\r\n- **Text alignment:** Left / Justify\r\n- **Reading width:** Full (modal width) / Med (~50em) / Narrow (~40em)\r\n- **Font size:** `−` and `+` step the body font size between 12px and 24px\r\n- **Font family:** Theme default / Serif / Sans-serif / Monospace\r\n\r\nChoices persist globally as a reading-register preference (not per-project — these are about how *you* like to read prose). No Style Settings dependency. Power users wanting deeper customization (custom font stacks, line-height, paragraph spacing) can override the underlying `--dbench-preview-*` CSS variables via a snippet or via Style Settings (see below).\r\n\r\n### Project switcher in the Manuscript Builder header\r\n\r\nThe previously read-only project label in the modal header is now a dropdown listing every project in the vault. Switching there updates the modal in place (presets, selected preset, last-active tab) and routes through the plugin's selection so the Manuscript view re-renders to match. Closing the modal leaves you in whichever project you switched to last.\r\n\r\n### Sticky modal header\r\n\r\nThe title, project + preset row, tab strip, and (when the Preview tab is active) the typography toolbar pin to the top of the modal's scroll container. Keeps controls reachable from any scroll position when the Preview tab's prose runs long.\r\n\r\n### Last-active tab persisted per project\r\n\r\nThe modal remembers each project's last-used tab. First-open of any project lands on Build; subsequent opens land where you left off.\r\n\r\n### Style Settings exposure for Preview\r\n\r\nSeven CSS variables are now exposed under a new \"Manuscript Builder Preview\" section in the Style Settings community plugin: `--dbench-tab-active-accent` plus six Preview-typography vars (font-family, font-size, line-height, max-width, paragraph-spacing, text-align). The in-modal toolbar covers the most common knobs without needing Style Settings; these variables serve power users wanting deeper customization.\r\n\r\n## Fixed\r\n\r\n### Modal close button stays visible during long Preview scroll\r\n\r\nThe sticky header's stacking context could paint over the close button (the X in the top-right corner) once Preview content scrolled under. The close button now sits above the sticky header so it remains clickable from any scroll position.\r\n\r\n## Install / upgrade\r\n\r\nInstall or update via [BRAT](https://github.com/TfTHacker/obsidian42-brat) by adding `banisterious/obsidian-draft-bench` as a beta plugin. BRAT will fetch this release automatically; if you've previously installed, update via BRAT's \"Check for updates to all beta plugins\" command.\r\n\r\n---\r\n\r\n1102 unit + integration tests, all green. Desktop-only.\r\n\r\nFor the canonical changelog with full detail, see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.3.0: Manuscript Builder Preview tab",
       "prerelease": false,
@@ -483,27 +555,32 @@
       "assets": [
         {
           "digest": "sha256:d5922c9420bd1e7377af6e284b5c3d94b82cb94366fcdbd15f990b9f97806df1",
+          "downloadCount": 0,
           "name": "draft-bench-v0.2.4.zip",
           "size": 1424627
         },
         {
           "digest": "sha256:b7cc69a05dc8a0093949b5312914a979b9089fa96c8e87c6aa89c692fd129080",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 5798837
         },
         {
           "digest": "sha256:fe4bceedd7c4a4c74be99e98a1f31d7b932434b306cf46dee8169cccfc08fbb3",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:ad6029083045ccba042e6d8cccd72ea8cfd4e0ce3942dbc6b97886620067658a",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 59082
         }
       ],
       "author": "banisterious",
       "description": "**UI polish patch.** Three small changes to the Manuscript view and Manuscript Builder: simpler primary action, clearer multi-select intent on the status filter, redundant visual element removed from the status chip. No data-shape, compile-pipeline, linker, or integrity-service changes.\r\n\r\n## Changed\r\n\r\n### Status chip drops the redundant colored dot ([#23](https://github.com/banisterious/obsidian-draft-bench/issues/23))\r\n\r\nThe chip's small colored dot and pill background were both derived from the same `--dbench-status-<status>` variable, encoding status twice. The dot is gone; the pill background alone now carries the status color, matching the convention used in GitHub, Linear, Notion, and similar status-badge implementations. Affects scene rows, sub-scene rows, and chapter card headers (all share the same chip helper). Style Settings overrides on `--dbench-status-*` continue to work unchanged.\r\n\r\n### Status filter restyled as toggleable pills ([#25](https://github.com/banisterious/obsidian-draft-bench/issues/25))\r\n\r\nThe Manuscript Builder's Inclusion section previously rendered each status as a native checkbox plus label, which visually read as a radio-button (single-select) pattern despite being multi-select. Each status now renders as a pill: outlined when unselected, color-mix-tinted with the per-status color when selected. Click anywhere on the pill toggles. The underlying `<input type=\"checkbox\">` stays in the DOM (visually hidden) so screen readers and keyboard navigation continue to work. Mirrors the Manuscript view's status-chip pattern but with bolder emphasis for the active-config register.\r\n\r\n### Manuscript view's primary CTA now opens the Manuscript Builder ([#24](https://github.com/banisterious/obsidian-draft-bench/issues/24))\r\n\r\nThe prominent \"Compile\" button used to short-circuit to instant compile (the only preset on single-preset projects, or a fuzzy preset picker on multi-preset projects). It now opens the Manuscript Builder modal, where you pick a preset, configure filters, and run compile from the modal's header. The button is renamed **\"Compile...\"** per the standard ellipsis convention signaling \"opens further UI before action.\" The smaller `book-up` icon button that previously opened the Builder from the Manuscript view header is removed as redundant.\r\n\r\nIf you want true one-click compile, bind a hotkey to one of the existing palette commands: `Draft Bench: Compile current project` or `Draft Bench: Run compile...` Both preserve the pre-0.2.4 behavior.\r\n\r\n## Install / upgrade\r\n\r\nInstall or update via [BRAT](https://github.com/TfTHacker/obsidian42-brat) by adding `banisterious/obsidian-draft-bench` as a beta plugin. BRAT will fetch this release automatically; if you've previously installed, update via BRAT's \"Check for updates to all beta plugins\" command.\r\n\r\n---\r\n\r\n1102 unit + integration tests, all green. Desktop-only.\r\n\r\nFor the canonical changelog with full detail, see [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md).",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.2.4: Manuscript view + Builder UI polish",
       "prerelease": false,
@@ -514,27 +591,32 @@
       "assets": [
         {
           "digest": "sha256:c0fda97895466878be05bb9178083f8ba28ea69117fb57e07c50d532b0be3f48",
+          "downloadCount": 4,
           "name": "draft-bench-v0.2.3.zip",
           "size": 1423914
         },
         {
           "digest": "sha256:4367c19e9dce57548314cd387727311e9b56773295ed043dbf25328fed6e2e65",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 5799261
         },
         {
           "digest": "sha256:1c145be6d96f4e266e35361cc45f474a5e937ac8f7b2c7112205f8d4913271df",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:dc95f30f759b108c7f9ce89a7bc6ae53d224f1a3452520074c195a0744d41ebf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 56228
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.2.3: defensive linker-sort fixes\r\n\r\nThird hot patch of the day. Sequential `Set as sub-scene` retrofits surfaced a corruption pattern in a parent scene's reverse arrays — mispaired entries plus an orphan id that didn't match any note in the vault. Two defensive fixes against latent issues in the linker → sort chain that match the observed corruption shape.\r\n\r\n## Fixed\r\n\r\n- **Sort no longer truncates length-asymmetric arrays** (#22). `sortReverseArraysByOrder` used `Math.min` of the two array lengths and silently dropped tail entries when emitting the sorted output. Asymmetric arrays should never reach the sort under correct usage, but a corrupted sort output was strictly worse than the input. Now returns inputs unchanged when lengths diverge, surfacing the asymmetry for the integrity service to handle.\r\n- **Linker passes the just-added child's order directly to the sort** (#22). `ensureChildInReverse` previously relied on `findNoteById` against the metadataCache for every child including the just-added one. In real Obsidian, the cache for a just-modified file can lag its `'changed'` event by a tick, returning null and demoting the entry to `+Infinity` in the sort. Each subsequent sequential retrofit shifted the demoted entry further back, eventually producing a fully-rotated reverse array. The linker now threads the child's `dbench-order` through to the sort via a new `knownOrders` map; the sort prefers caller-provided values and falls back to `findNoteById` only for entries not in the map.\r\n\r\n## Note on the orphan id\r\n\r\nThe orphan id observed in the user's vault (an id not matching any note) isn't fully explained by these fixes. (It suggests an additional code path may be stamping ids into the parent's iarr.) Tracking as ongoing investigation under #22; the defensive fixes above prevent the rotation-and-truncation pattern that turned the orphan into observable data loss in the user-facing arrays.\r\n\r\n---\r\n\r\n1102 unit + integration tests, all green. Desktop-only.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#023---2026-05-04)",
+      "downloadCount": 3,
       "draft": false,
       "name": "Draft Bench v0.2.3",
       "prerelease": false,
@@ -545,27 +627,32 @@
       "assets": [
         {
           "digest": "sha256:b57ddda7d57228aa226c032c39541aaa25f1cae67a535bd563684813d8ef499d",
+          "downloadCount": 0,
           "name": "draft-bench-v0.2.2.zip",
           "size": 1423768
         },
         {
           "digest": "sha256:dff3ebbefc76d8c4a992d0e73832864e7b3a7e8273bc9239dd8ce011d272e27c",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5798650
         },
         {
           "digest": "sha256:8066ecd3b6ab854668880963debb143f482ce235646a004ddaa138eb094b44ee",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:dc95f30f759b108c7f9ce89a7bc6ae53d224f1a3452520074c195a0744d41ebf",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 56228
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.2.2: sub-scene retrofit nested-layout fix\r\n\r\nSecond hot patch of the day, surfaced while smoke-testing 0.2.1 against an existing sub-scene-shaped folder. `Set as sub-scene` retrofit was inferring the parent scene only for the flat layout; the § 10 nested layout (the post-#11/#12 default) silently fell through to empty placeholders, producing half-stamped notes that needed manual frontmatter editing.\r\n\r\n## Fixed\r\n\r\n- **Nested-layout parent inference** (#21). `inferSceneForSubScene` now does a two-stage match: looks for a scene file at `${parentFolder}.md` first (the nested convention; the scene shares basename with the folder holding its sub-scenes), then falls back to the same-folder match for flat layouts. Resolves correctly under chapter-aware projects too. The retrofit now stamps the full `dbench-scene` / `dbench-scene-id` / `dbench-project` / `dbench-project-id` set + the next `dbench-order` automatically when the writer right-clicks an untyped file in a sub-scene-shaped folder.\r\n\r\n---\r\n\r\n1096 unit + integration tests, all green. Desktop-only.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#022---2026-05-04)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.2.2",
       "prerelease": false,
@@ -576,27 +663,32 @@
       "assets": [
         {
           "digest": "sha256:b143449a8c52e49d4dd3998b33c284c3906a546783b29b5494d2723f76c46815",
+          "downloadCount": 0,
           "name": "draft-bench-v0.2.1.zip",
           "size": 1423635
         },
         {
           "digest": "sha256:5fa5d73cefda26ab7df026505150ef3962e63e0c2148bb9ceb8f547d0ea5bda8",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5798463
         },
         {
           "digest": "sha256:ce0f99a1865939233292eced9243e3a617293afbe6918492a0682789ec834861",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:dc95f30f759b108c7f9ce89a7bc6ae53d224f1a3452520074c195a0744d41ebf",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 56228
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.2.1: integrity-repair data-loss hot patch\r\n\r\nSame-day hot patch for a regression introduced by the 0.2.0 integrity-service work. Surfaced during post-release smoke testing in the maintainer's BRAT-public vault when running `Repair project links` against pre-#15 cache-race residue: each apply pass dropped one valid id from the parent's reverse arrays, then flagged the dropped child as MISSING on the next scan, then dropped another id on apply — a tight data-loss cycle that ran until manually stopped.\r\n\r\n## Fixed\r\n\r\n- **Auto-repair length guard** (#20). The `add-to-reverse` handler now skips the splice-at-matching-index branch when the other array is already at full length but doesn't contain the missing value (i.e., some slot holds mispaired data). Such entries are counted in `conflictsSkipped` rather than being auto-repaired; the writer fixes the underlying `*_CONFLICT` manually first, then re-running scan converges cleanly. The original #14 deletion-shift scenario (where one array is genuinely shorter) continues to auto-repair as designed.\r\n\r\n## Recovery for affected vaults\r\n\r\nIf you ran `Repair project links` against a pre-#15 vault between 0.2.0 and this patch and saw repeated MISSING flags, your reverse arrays may have lost ids. Recovery:\r\n\r\n1. Open each affected child's frontmatter, copy its `dbench-id`.\r\n2. Paste it into the parent's reverse-id array at the matching wikilink position.\r\n\r\nThe integrity scan after this patch surfaces the right targets via `*_CONFLICT` descriptions (e.g., `\"wikilink ... -> A, but id ... -> B\"` tells you which id belongs at which slot).\r\n\r\n---\r\n\r\n1095 unit + integration tests, all green. Desktop-only.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#021---2026-05-04)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.2.1",
       "prerelease": false,
@@ -607,27 +699,32 @@
       "assets": [
         {
           "digest": "sha256:4fc6435a47a1af23705bcd763d5492a9ed671ee3d42850011d6301259bd8e9a5",
+          "downloadCount": 0,
           "name": "draft-bench-v0.2.0.zip",
           "size": 1423546
         },
         {
           "digest": "sha256:cb91b7bca6bcc2b14ab72cfd4c677ebf46bc4e246968396385c09367e98840b7",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5797996
         },
         {
           "digest": "sha256:d31a6a5696cae3e854aec91c71379df88a5b5503f891e31d86699b53e0823602",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:dc95f30f759b108c7f9ce89a7bc6ae53d224f1a3452520074c195a0744d41ebf",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 56228
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.2.0: sub-scene note type\r\n\r\nThe first feature release after the BRAT-public 0.1.x patch series. Sub-scene type promoted from post-V1 to pre-1.0 (the maintainer hit it themselves while writing: six distinct narrative units in a single scene that needed per-unit status, drafts, and isolation), plus a settings-tab reorganization, chapter-aware folder defaults, and a sweep of integrity-service quality-of-life fixes.\r\n\r\n## Headline\r\n\r\n- **Sub-scene note type** (#10). Break a scene into per-unit narrative blocks (the setpieces of an auction night, the movements of a trial sequence, the four memories of a grief sequence), each with its own status, drafts, word count, and reorder position. Hierarchical scenes render as collapsible cards in the Manuscript view; the compile pipeline descends into sub-scenes in narrative order (preserving the parent scene's intro prose under `## Draft` when present); the integrity service tracks scene `<->` sub-scene and sub-scene `<->` draft relationships with the same scan + repair affordances as the other types. New affordances: `New sub-scene` palette command, `Draft Bench` -> `New sub-scene` context-menu entry, `Draft Bench` -> `Set as sub-scene` retrofit, `New draft of this sub-scene`, an \"Add sub-scene\" button on each Manuscript-view scene card. **Backward-compatible**: scenes without sub-scenes work exactly as before.\r\n\r\n## UX + organization\r\n\r\n- **Settings tab reorganized** (#18). Six collapsible sections (Folders, Drafts, Templates, Statuses, Bidirectional sync, About) replace the previous flat scroll. Long descriptions on Scenes folder + Sub-scenes folder shrunk to one short sentence each; shared `{project}` / `{chapter}` / `{scene}` token semantics moved to a section-level info box. About section gained clickable Repository / Wiki / Website links.\r\n- **Chapter-aware folder defaults** (#11, #12). New `scenesFolder` default `{chapter}/` nests scenes under their chapter folder for chapter-aware projects (degrades to flat for chapter-less ones). `subScenesFolder` joins against the parent scene's actual folder, so sub-scenes follow scenes wherever they live. Existing installs migrate once on first 0.2.0 load, and the linker auto-renames the matching folders when a chapter or scene gets renamed.\r\n\r\n## Integrity-service quality-of-life\r\n\r\n- **One-pass repair convergence** (#13). `Repair project links` now resolves length-mismatched parallel arrays (orphan id + padded-empty wikilink, or vice versa) in a single pass instead of needing two.\r\n- **Pairing-preserving repair** (#14). When the scan flags a missing entry on one side of a paired array, the repair splices the missing side at the matching index so wikilinks and ids stay aligned by position.\r\n- **Sorted reverse arrays** (#19). `dbench-scenes` / `dbench-sub-scenes` / etc. now sort by each child's `dbench-order` so frontmatter inspection mirrors narrative order.\r\n- **`processFrontMatter` cache-race fix** (#15). Six `createX` functions previously read the newly-stamped `dbench-id` from the metadata cache after the write returned, often hitting pre-write cache state. Fix captures the id inside the callback. Existing vaults with `\"\"` reverse-id entries from before this fix continue to function; a sweep utility for backfilling is planned as a follow-up.\r\n- **Word-count rollup fix** (#16). Chapter-card word counts now include sub-scene contributions for hierarchical scenes-in-chapter (was dropping them one level up).\r\n\r\n---\r\n\r\n1093 unit + integration tests, all green. Desktop-only.\r\n\r\nFull changelog: [CHANGELOG.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md#020---2026-05-04)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.2.0",
       "prerelease": false,
@@ -638,27 +735,32 @@
       "assets": [
         {
           "digest": "sha256:00e58389f7cea90b99abbbbc0896ed35a15ebf9458feb0d61282d0e554d3118a",
+          "downloadCount": 0,
           "name": "draft-bench-v0.1.4.zip",
           "size": 1412654
         },
         {
           "digest": "sha256:7458d3bb3b7045f5596b15e182cbb582503255837a7ad0dc7f81d8f5eb65b886",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 5740022
         },
         {
           "digest": "sha256:b76d4359bd97cd1216e77ea680605ff0f9c97d11fda104a7b8d7494492b6315d",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:0539ca9174c4b4614a0391882e8d53fb96575b48af4731e18a3467ba04c6f720",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 47010
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.1.4: property-type registration + scene context-menu parity\r\n\r\nTwo-fix release. One closes the long arc of wikilink-reshape fixes from 0.1.1 / 0.1.2 / 0.1.3 with a principled root-cause solution; the other patches a small UX gap discovered during real-vault use.\r\n\r\n## What's in this release\r\n\r\n**Property-type registration** ([#8](https://github.com/banisterious/obsidian-draft-bench/issues/8))\r\n\r\nAt plugin load, Draft Bench now tells Obsidian (via `app.metadataTypeManager`) that the `dbench-*` relationship fields and their ID companions should be treated as `text` / `multitext`. Without this, Obsidian's Properties panel was auto-promoting wikilink-shaped Text fields into list-typed values, which YAML serialized as block-style nested arrays. The root cause behind the chain of fixes shipped in 0.1.1 / 0.1.2 / 0.1.3.\r\n\r\nWith registration, the Properties panel writes wikilinks as quoted strings from the start (`dbench-scene: \"[[Some Scene]]\"`), and `processFrontMatter` round-trips them stably. The 0.1.3 wikilink canonicalization in the linker stays in place as defense-in-depth (idempotent on already-canonical values, and cleans up any data that pre-dates the registration).\r\n\r\n14 properties are registered: the three single-target relationship wikilinks (`dbench-project` / `dbench-chapter` / `dbench-scene`), their ID companions, the four reverse-array wikilinks (`dbench-chapters` / `dbench-scenes` / `dbench-drafts` / `dbench-compile-presets`), and their ID array companions.\r\n\r\n**Scene context-menu parity** ([#9](https://github.com/banisterious/obsidian-draft-bench/issues/9))\r\n\r\nRight-clicking a scene file (in the file explorer or on its tab header) now surfaces a `New draft of this scene` entry in the `Draft Bench` submenu, matching the existing `New draft of this chapter` affordance on chapter notes. Action opens the same `NewDraftModal` the `Draft Bench: New draft of this scene` palette command uses, with the right-clicked file pre-selected as the source scene.\r\n\r\nSurfaced during real-vault use; a writer creating drafts of `The Bottom.md` reasonably looked for a context-menu entry and found nothing.\r\n\r\n## Install or update via BRAT\r\n\r\nAlready on Draft Bench via BRAT? BRAT settings -> **Check for updates** -> reload Draft Bench (or restart Obsidian).\r\n\r\nNew install: `banisterious/obsidian-draft-bench` via BRAT's **Add beta plugin**.\r\n\r\n## Notes\r\n\r\n- **Tests:** 947 unit and integration tests pass (up from 938 at 0.1.3; +9 covering the property-type registrations and the new scene context-menu entry).\r\n- **Bundle and platform:** unchanged from 0.1.3.\r\n\r\n## Closing notes on the wikilink-reshape arc\r\n\r\nThis release closes a short but instructive arc of patches:\r\n\r\n- 0.1.1 / [#4](https://github.com/banisterious/obsidian-draft-bench/issues/4): linker reacts to wikilink-only edits at all.\r\n- 0.1.2 / [#6](https://github.com/banisterious/obsidian-draft-bench/issues/6): linker reads `frontmatterLinks` cache (handles unquoted YAML).\r\n- 0.1.3 / [#7](https://github.com/banisterious/obsidian-draft-bench/issues/7): linker re-canonicalizes wikilink fields on backfill so YAML round-trips clean.\r\n- 0.1.4 / [#8](https://github.com/banisterious/obsidian-draft-bench/issues/8): tell Obsidian what type the field is, so the auto-promotion that triggered the chain doesn't happen in the first place.\r\n\r\nEach layer addressed a real symptom; the type registration in this release fixes the root cause and makes the canonicalization defensive rather than load-bearing.\r\n\r\n## Links\r\n\r\n- [Full CHANGELOG entry](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)\r\n- [Wiki](https://github.com/banisterious/obsidian-draft-bench/wiki)\r\n- [draftbench.io](https://draftbench.io)\r\n- [Specification](https://github.com/banisterious/obsidian-draft-bench/blob/main/docs/planning/specification.md)",
+      "downloadCount": 3,
       "draft": false,
       "name": "Draft Bench v0.1.4",
       "prerelease": false,
@@ -669,27 +771,32 @@
       "assets": [
         {
           "digest": "sha256:9731f80f5f5084814fb22a9d2d46b30dca12c4e768396352e2f57de1ecee4de5",
+          "downloadCount": 0,
           "name": "draft-bench-v0.1.3.zip",
           "size": 1412405
         },
         {
           "digest": "sha256:3d08594e1457356e9908b8a56696764ebe79c10a1965d8e320220a4cd7bf336d",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5738432
         },
         {
           "digest": "sha256:e88d3de9ffc99ce617163583a6ff435f351fc4c4a6acfa28f5d73bd5114091ce",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:0539ca9174c4b4614a0391882e8d53fb96575b48af4731e18a3467ba04c6f720",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 47010
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.1.3 — YAML-shape polish for wikilink fields\r\n\r\nSingle-fix patch release. After the wikilink-only retrofit work shipped in [0.1.1](https://github.com/banisterious/obsidian-draft-bench/releases/tag/v0.1.1) and [0.1.2](https://github.com/banisterious/obsidian-draft-bench/releases/tag/v0.1.2), the linker correctly backfilled the ID companion when a writer set a relationship wikilink via the Properties panel, but the on-disk YAML for the wikilink field ended up in block-style nested-array form rather than the canonical quoted-string form:\r\n\r\n```yaml\r\n# Before this release (ugly, inconsistent with retrofit output):\r\ndbench-scene:\r\n  - - Some Scene\r\n\r\n# After this release:\r\ndbench-scene: \"[[Some Scene]]\"\r\n```\r\n\r\nSame data either way, but the block-list form was harder to read, didn't round-trip predictably, and was inconsistent with how DB's own retrofits write the field. Surfaced during the maintainer's real-vault Phase 2 retest on 0.1.2.\r\n\r\n## What's fixed\r\n\r\nThe reshape originated with Obsidian's `processFrontMatter` round-trip: the metadata cache exposes wikilinks as nested arrays for link-aware purposes, and the serializer writes them back in block style when invoked, even for fields the callback didn't touch. The linker now defensively re-canonicalizes the wikilink field in the same callback that writes the ID companion. Nested-array shapes are unwrapped to `\"[[Basename]]\"` strings; alias (`Foo|Display`), heading (`Foo#Heading`), and block (`Foo^Block`) content are preserved verbatim. Idempotent.\r\n\r\nIf you migrated a draft to 0.1.1 or 0.1.2 and ended up with the block-style YAML, the linker will canonicalize it on the next write to that file (e.g., when you edit the wikilink, or any other DB action that touches the draft's frontmatter). No manual cleanup needed; existing data is preserved either way.\r\n\r\nRefs [#7](https://github.com/banisterious/obsidian-draft-bench/issues/7).\r\n\r\n## Install or update via BRAT\r\n\r\nAlready on Draft Bench via BRAT? BRAT settings -> **Check for updates** -> reload Draft Bench (or restart Obsidian).\r\n\r\nNew install: `banisterious/obsidian-draft-bench` via BRAT's **Add beta plugin**.\r\n\r\n## Notes\r\n\r\n- **Tests:** 938 unit and integration tests pass (up from 935 at 0.1.2; +3 covering the canonicalization path including alias / subpath preservation and idempotence).\r\n- **Bundle and platform:** unchanged from 0.1.2.\r\n\r\n## Looking ahead\r\n\r\nA follow-up FR exists to register `dbench-*` relationship properties as proper Link types via Obsidian's `metadataTypeManager`. That would address the root cause (the Properties panel would write wikilinks as quoted strings from the start, and the metadata cache wouldn't expose them as nested arrays at all) and likely improve the Properties UI affordances for these fields. Tracked separately; this 0.1.3 fix stays useful as a defense even after the type registration lands.\r\n\r\n## Links\r\n\r\n- [Full CHANGELOG entry](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)\r\n- [Wiki](https://github.com/banisterious/obsidian-draft-bench/wiki)\r\n- [draftbench.io](https://draftbench.io)\r\n- [Specification](https://github.com/banisterious/obsidian-draft-bench/blob/main/docs/planning/specification.md)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.1.3",
       "prerelease": false,
@@ -700,27 +807,32 @@
       "assets": [
         {
           "digest": "sha256:bdaf306f8334d95dad1ec5922dca1153c45d2b4fb0e581f347187ea710479088",
+          "downloadCount": 0,
           "name": "draft-bench-v0.1.2.zip",
           "size": 1412340
         },
         {
           "digest": "sha256:868005a5379ed2fc23215d30848e3ae8ec0d9538ee9729c84c9c47cdcc9230ac",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5737957
         },
         {
           "digest": "sha256:35208ab764440fbf7a9f755aa858350f64b2170eeec7c670f107c08e0de2e877",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:0539ca9174c4b4614a0391882e8d53fb96575b48af4731e18a3467ba04c6f720",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 47010
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.1.2 — wikilink-only retrofit fix (frontmatterLinks)\r\n\r\nSingle-fix patch release. Follow-up to the wikilink-only retrofit work shipped in [0.1.1](https://github.com/banisterious/obsidian-draft-bench/releases/tag/v0.1.1) for [#4](https://github.com/banisterious/obsidian-draft-bench/issues/4): the original fix parsed the raw frontmatter value, which works for YAML-quoted wikilinks (`dbench-scene: \"[[Some Scene]]\"`) but missed the unquoted form Obsidian's Properties panel writes by default (`dbench-scene: [[Some Scene]]`). YAML parses that unquoted form as a nested array, which the parser didn't recognize.\r\n\r\nSurfaced during my own real-vault Phase 2 retest, with diagnostic console output confirming the YAML encoding that the 0.1.1 path was missing.\r\n\r\n## What's fixed\r\n\r\nThe linker now consults Obsidian's `frontmatterLinks` cache when backfilling the ID companion. That cache holds the resolved link target regardless of how the YAML encoded the value, so the backfill works uniformly for both quoted-string and flow-notation forms. The raw-value parser stays as a defense-in-depth fallback and now also handles the nested-array form for cases where the link cache isn't populated.\r\n\r\nIf you set a relationship wikilink (e.g., `dbench-scene` on a retrofitted draft) via the Properties panel and the ID companion didn't auto-fill on 0.1.1, this release fixes it. No action needed beyond updating, the linker re-checks each modified file.\r\n\r\nRefs [#6](https://github.com/banisterious/obsidian-draft-bench/issues/6).\r\n\r\n## Install or update via BRAT\r\n\r\nAlready on Draft Bench via BRAT? Open BRAT settings -> **Check for updates** -> reload Draft Bench (or restart Obsidian). 0.1.2 will pull automatically.\r\n\r\nNew install:\r\n\r\n1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat).\r\n2. In BRAT settings, click **Add beta plugin**.\r\n3. Enter `banisterious/obsidian-draft-bench`.\r\n4. Enable Draft Bench under Community plugins.\r\n\r\n## Notes\r\n\r\n- **Tests:** 935 unit and integration tests pass at this release (up from 929 at 0.1.1; +6 covering the `frontmatterLinks` resolution path, nested-array fallback parsing, and edge cases including aliases, path prefixes, heading references, and wrong-type targets).\r\n- **Bundle and platform:** unchanged from 0.1.1.\r\n- **API and data shape:** still stable since 0.1.0; the 0.x rules per [VERSIONING.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/VERSIONING.md) still apply.\r\n\r\n## Links\r\n\r\n- [Full CHANGELOG entry](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)\r\n- [Wiki](https://github.com/banisterious/obsidian-draft-bench/wiki)\r\n- [draftbench.io](https://draftbench.io)\r\n- [Specification](https://github.com/banisterious/obsidian-draft-bench/blob/main/docs/planning/specification.md)\r\n- [Report a bug](https://github.com/banisterious/obsidian-draft-bench/issues/new?template=bug_report.md)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.1.2",
       "prerelease": false,
@@ -731,27 +843,32 @@
       "assets": [
         {
           "digest": "sha256:b82d836194bf04b94b0ea6c332142c7a45130016846ef2bd5513e643a5220de4",
+          "downloadCount": 0,
           "name": "draft-bench-v0.1.1.zip",
           "size": 1411807
         },
         {
           "digest": "sha256:85c84c5208b48fc395b7b29d648856681f75844b30b60799efacc59c8a323346",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 5736321
         },
         {
           "digest": "sha256:c445e8cb12311477a0938b4cefab12e1fbce68884c3b2f5dd78fd784c8dff8c8",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 529
         },
         {
           "digest": "sha256:0539ca9174c4b4614a0391882e8d53fb96575b48af4731e18a3467ba04c6f720",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 47010
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.1.1 — context-menu refactor + retrofit fixes\r\n\r\nFirst incremental release after the [0.1.0](https://github.com/banisterious/obsidian-draft-bench/releases/tag/v0.1.0) launch. Three issues, all surfaced from real-vault migration testing on a writer's existing four-project Fiction folder. No data-model changes; all surface-level UX and integrity improvements.\r\n\r\n## Install or update via BRAT\r\n\r\nIf you already have Draft Bench via BRAT, open the BRAT settings and click **Check for updates**; it'll pull 0.1.1 automatically.\r\n\r\nIf you're new:\r\n\r\n1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat).\r\n2. In BRAT settings, click **Add beta plugin**.\r\n3. Enter `banisterious/obsidian-draft-bench`.\r\n4. Enable Draft Bench under Community plugins.\r\n\r\n## Highlights\r\n\r\n**Context-menu refactor** ([#5](https://github.com/banisterious/obsidian-draft-bench/issues/5))\r\n\r\nAll Draft Bench actions now appear under a single `Draft Bench` submenu in Obsidian's right-click menu (icon `scroll-text`, matching the plugin's ribbon and Manuscript view). Previously, every plugin action lived at the top level alongside Obsidian's native items. On mobile, where Obsidian doesn't yet support submenus, items appear as a flat `Draft Bench:`-prefixed list. Smart visibility carries through unchanged: the submenu only appears when at least one action would change something.\r\n\r\nNew `editor-menu` registration: right-clicking inside an open editor now surfaces the same actions as right-clicking the file in the explorer, scoped to the active note.\r\n\r\n**Wikilink-only relationship edits now work** ([#4](https://github.com/banisterious/obsidian-draft-bench/issues/4))\r\n\r\nSetting a relationship wikilink (e.g., `dbench-scene: [[Some Scene]]` on a retrofitted draft) via the Properties panel previously required also hand-copying the parent's `dbench-id` into the companion field. The linker now resolves the wikilink against the candidate-parent pool and backfills the companion automatically, then proceeds with normal reverse-array reconciliation. Affects all relationship retrofits: draft -> scene, draft -> chapter, scene -> chapter, scene -> project, chapter -> project.\r\n\r\nThis dramatically improves the experience of bringing existing vaults under Draft Bench management. Right-click the file, **Set as draft**, then fill in `dbench-scene` via the Properties panel — that's it.\r\n\r\n**Folder-scope `Set as project` is folder-note-aware** ([#3](https://github.com/banisterious/obsidian-draft-bench/issues/3))\r\n\r\nRight-clicking a project folder and picking `Set as project` previously batch-stamped every markdown file inside (including scene siblings) as a project. The action is now folder-note-aware: it appears only when the folder contains an untyped markdown file matching the folder's name (case-insensitive), and stamps only that file. Other folder-scope retrofits (`Set as scene` / `Set as draft` / `Complete essential properties` / `Add identifier`) keep their batch behavior. (Their semantics naturally apply across all markdown children.)\r\n\r\nThe natural migration workflow becomes: right-click a project folder, **Set as project** (stamps the folder note), then multi-select the scenes and **Set as scene**.\r\n\r\n## Notes\r\n\r\n- **Tests:** 929 unit and integration tests pass at this release (up from 896 at 0.1.0). Net +33: linker backfill + submenu dispatcher + folder-note detection coverage.\r\n- **Bundle:** unchanged from 0.1.0 (~5.7 MB `main.js`).\r\n- **Platform:** desktop-only (`isDesktopOnly: true`); mobile menu fallback included for when Obsidian eventually supports mobile submenus.\r\n- **API and data shape:** stable since 0.1.0; the 0.x phase rules per [VERSIONING.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/VERSIONING.md) still apply.\r\n\r\n## Links\r\n\r\n- [Full CHANGELOG entry](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)\r\n- [Wiki](https://github.com/banisterious/obsidian-draft-bench/wiki)\r\n- [draftbench.io](https://draftbench.io)\r\n- [Specification](https://github.com/banisterious/obsidian-draft-bench/blob/main/docs/planning/specification.md)\r\n- [Report a bug](https://github.com/banisterious/obsidian-draft-bench/issues/new?template=bug_report.md)",
+      "downloadCount": 0,
       "draft": false,
       "name": "Draft Bench v0.1.1",
       "prerelease": false,
@@ -762,27 +879,32 @@
       "assets": [
         {
           "digest": "sha256:18a7b2f5fb5559027c0f0594acc32613b2243c5ba1e38eb412c9ca46e7ebbd98",
+          "downloadCount": 0,
           "name": "draft-bench-v0.1.0.zip",
           "size": 1410919
         },
         {
           "digest": "sha256:380664d1d8d4a7a787e64db304b19b7f3652f42eed8db8b917795e5c7863bbb0",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 5731681
         },
         {
           "digest": "sha256:217dc69b2f69ea9160daa3b0fcf59e5c71d955d8a65dc4e8b6445ab0493fa3c6",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 530
         },
         {
           "digest": "sha256:0539ca9174c4b4614a0391882e8d53fb96575b48af4731e18a3467ba04c6f720",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 47010
         }
       ],
       "author": "banisterious",
       "description": "# Draft Bench 0.1.0 — first BRAT-public release\r\n\r\nThis is the first publicly installable build of Draft Bench. It ships the full V1 feature set: a scene-and-chapter writing model with bidirectional linking, a dockable Manuscript view, a Manuscript Builder compile pipeline (Markdown / ODT / PDF / DOCX), drafts, templates with Templater pass-through, configurable statuses, Bases starter views, and Style Settings integration.\r\n\r\nAPI and data shape may still change between minor versions during the 0.x phase. See [VERSIONING.md](https://github.com/banisterious/obsidian-draft-bench/blob/main/VERSIONING.md) for what counts as breaking and when 1.0 ships.\r\n\r\n## Install via BRAT\r\n\r\n1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat).\r\n2. In BRAT settings, click **Add beta plugin**.\r\n3. Enter `banisterious/obsidian-draft-bench`.\r\n4. Enable Draft Bench under Community plugins.\r\n\r\nDesktop-only for V1 (mobile re-evaluation is post-V1).\r\n\r\n## Highlights\r\n\r\n**Note types and data model**\r\n- Five plugin-managed types: `project`, `chapter`, `scene`, `draft`, `compile-preset`, namespaced under `dbench-` frontmatter.\r\n- Stable identifiers (`dbench-id`) make every reference rename-safe.\r\n- Frontmatter-based discovery: notes are identified by frontmatter, not folder location, so files can move freely in the vault.\r\n\r\n**Manuscript view (dockable leaf)**\r\n- Project summary with hero progress bar (when `dbench-target-words` is set) and per-status breakdown.\r\n- Collapsible chapter cards with order capsule, status chip, word-count rollup, and a per-chapter \"New draft\" button.\r\n- Scene rows with optional subtitle line, status chip, word count, draft count.\r\n- Wikilink-style click affordances (cmd/ctrl-click new tab, +shift split, +alt new window, middle-click new tab, right-click context menu).\r\n- Active-note-sync auto-switches the leaf's selected project as you open files.\r\n\r\n**Manuscript Builder and compile pipeline**\r\n- Compile-preset editor with five collapsible sections (Metadata, Inclusion, Output, Content handling, Last compile).\r\n- Output formats: Markdown (vault or disk), ODT, PDF, DOCX.\r\n- Heading scopes: full / draft / chapter (chapter-aware compile walks two levels).\r\n- Per-scene section breaks via `dbench-section-break-title` (visual or page-break rendering).\r\n- Auto-default heading scope based on project shape.\r\n\r\n**Drafts**\r\n- Scene drafts, chapter drafts (concatenated child scenes with HTML-comment boundaries), single-scene-project drafts.\r\n- Three placement modes: project-local (default), per-scene/parent, vault-wide.\r\n\r\n**Templates**\r\n- Built-in scene + chapter templates, auto-seeded on first use.\r\n- Plugin tokens (`{{project}}`, `{{scene_title}}`, `{{previous_scene_title}}`, etc.) plus Templater pass-through (auto-detected).\r\n- Multi-template support via `dbench-template-type` frontmatter discriminator.\r\n\r\n**Linker and integrity service**\r\n- Live bidirectional sync on metadata changes; suspended states for plugin-driven multi-file operations.\r\n- `Repair project links` batch scan and repair with 14 SNAKE_CASE issue codes (including the `PROJECT_MIXED_CHILDREN` invariant for chapter-aware projects).\r\n\r\n**Retrofit, settings, integrations**\r\n- Idempotent \"Set as project / chapter / scene / draft\" actions with folder-based inference.\r\n- Configurable status vocabulary (idea -> draft -> revision -> final by default).\r\n- `Install starter Bases views` command for projects, scenes, and drafts.\r\n- Style Settings: scene + draft typography variables and an archival border-left cue on draft leaves.\r\n\r\n**Onboarding**\r\n- Welcome modal with three CTAs (Create your first project / Try with an example project / Show the manuscript view).\r\n- Example project generator (*The Last Lighthouse*).\r\n- First-project auto-reveal of the Manuscript view.\r\n\r\n## Notes\r\n\r\n- **Tests:** 896 unit and integration tests pass at this release.\r\n- **Bundle:** ~5.7 MB `main.js` (includes pdfmake + docx). Lazy-loading the heavy renderers is the top post-V1 bundle-size lever.\r\n- **Platform:** desktop-only (`isDesktopOnly: true`).\r\n\r\n## Links\r\n\r\n- [Full CHANGELOG entry](https://github.com/banisterious/obsidian-draft-bench/blob/main/CHANGELOG.md)\r\n- [Wiki](https://github.com/banisterious/obsidian-draft-bench/wiki)\r\n- [draftbench.io](https://draftbench.io)\r\n- [Specification](https://github.com/banisterious/obsidian-draft-bench/blob/main/docs/planning/specification.md)\r\n- [Report a bug](https://github.com/banisterious/obsidian-draft-bench/issues/new?template=bug_report.md)",
+      "downloadCount": 2,
       "draft": false,
       "name": "Draft Bench v0.1.0",
       "prerelease": false,
