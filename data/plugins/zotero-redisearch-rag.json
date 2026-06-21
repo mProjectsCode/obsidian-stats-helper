@@ -4,8 +4,8 @@
   "description": "Import and OCR Zotero PDFs using a Docling pipeline, sync metadata including annotations, and chat with your research literature using local Redis-powered RAG. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "zotero-redisearch-rag",
-  "lastChangedAt": "2026-06-16T04:04:58.578Z",
-  "lastFetchedAt": "2026-06-16T04:04:58.578Z",
+  "lastChangedAt": "2026-06-21T03:04:09.522Z",
+  "lastFetchedAt": "2026-06-21T03:04:09.522Z",
   "manifest": {
     "author": "Jens Mittelbach",
     "authorUrl": "https://www.jensmittelbach.de",
@@ -23,22 +23,26 @@
       "assets": [
         {
           "digest": "sha256:886db4bd3bc4941daa952beefa548d6ca16203286bacf756cc2dabf3d0255adc",
+          "downloadCount": 155,
           "name": "main.js",
           "size": 1043745
         },
         {
           "digest": "sha256:4b437980a0b2267ee0feac31f6c0fea10ed439f5f20d6a3b2b6ea7243500ab8f",
+          "downloadCount": 157,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:a23906dbcf11b32dc53769f8c22a75822a75b088d66c53928736ee00afdfa0ee",
+          "downloadCount": 154,
           "name": "styles.css",
           "size": 13655
         }
       ],
       "author": "jmiba",
       "description": "- Stabilize the Python worker runtime after recent dependency and cache-path changes:\r\n  - pin `docling` back to `2.89.0` and keep `paddlepaddle` at `3.2.2` so the Linux Python 3.12 worker image uses a dependency set that actually installs and still exposes the `docling.document_converter` API expected by the importer,\r\n  - keep the Paddle OCR stack pinned to known-good worker-compatible versions.\r\n- Move the default Python worker cache out of (possibly synced) vault data:\r\n  - add a configurable **Python worker cache path** setting,\r\n  - default the worker cache to a per-vault subdirectory under `~/.cache/zotero-redisearch-rag/` instead of storing heavy worker downloads inside the vault,\r\n  - keep explicit override support, including `./` for vault-relative paths when desired.\r\n- Relax the `requests` pin while keeping the HTTP stack bounded:\r\n  - switch from `requests==2.32.3` to `requests<3`,\r\n  - keep `urllib3`, `charset-normalizer`, and `chardet` constrained to compatible major versions.\r\n- Improve metadata and import-path consistency:\r\n  - include `language` in bidirectional note/Zotero metadata sync and conflict handling,\r\n  - strip temporary import PDF suffixes before persisting `source_pdf` paths so imported chunks point back to the final vault PDF path.\r\n- Harden OCR routing and worker diagnostics:\r\n  - stop low-quality text layers from forcing external Paddle OCR unless that fallback is explicitly enabled,\r\n  - fail early with clearer diagnostics when a requested external OCR engine is unavailable,\r\n  - surface more actionable worker slot, cancellation, and process-exit diagnostics while filtering low-signal Python noise.\r\n \r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/1.0.2...1.0.3",
+      "downloadCount": 155,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,
@@ -49,22 +53,26 @@
       "assets": [
         {
           "digest": "sha256:30ffcd6fe63d8112d01acfba96b1489c3ccec597912801994a99f40d53283d3d",
+          "downloadCount": 43,
           "name": "main.js",
           "size": 1028048
         },
         {
           "digest": "sha256:721cfc5e5229408205b1217d8c49f5f26ca82eb94998ac23ec88a084468425ea",
+          "downloadCount": 43,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:a23906dbcf11b32dc53769f8c22a75822a75b088d66c53928736ee00afdfa0ee",
+          "downloadCount": 41,
           "name": "styles.css",
           "size": 13655
         }
       ],
       "author": "jmiba",
       "description": "- Improve PDF availability detection in the import picker:\r\n  - when Zotero search metadata reports PDF status as unknown, the plugin now hydrates child attachments before deciding whether an item is importable,\r\n  - this avoids falsely treating items with only snapshots or other non-PDF children as having a usable PDF.\r\n- Document the clarified import-picker behavior in the internal architecture notes.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/1.0.1...1.0.2",
+      "downloadCount": 43,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
@@ -75,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:76482d7a952858195a118ebba1fbc01f0420e670dfabfc85b954615beb1d1d7b",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 1026974
         },
         {
           "digest": "sha256:382de5600f50389416fb46d486acd80b7224f26cb365e4e89519ce0e3333d107",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:a23906dbcf11b32dc53769f8c22a75822a75b088d66c53928736ee00afdfa0ee",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 13655
         }
       ],
       "author": "jmiba",
       "description": "- Add a configurable chat retrieval chunk limit:\r\n  - new `Chat context chunks` setting controls the final number of retrieved chunks kept before annotations and answer generation,\r\n  - chat queries now pass that configured limit into the RAG pipeline instead of using a fixed `5` chunks.\r\n- Surface model-list authentication failures in the UI:\r\n  - invalid provider API keys for model lookup now raise Obsidian notices instead of only logging to the console,\r\n  - notices are rate-limited and provider-labeled (for example LM Studio, OpenAI, OpenRouter, Anthropic, Ollama).\r\n- Update internal architecture and RAG pipeline docs for the new retrieval chunk setting and model-list auth-failure behavior.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/1.0.0...1.0.1",
+      "downloadCount": 10,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -101,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:9720a7131ed6b56052948e0b157c747dbd78ff6e5916dddc96d4cdc2ecaa1ecf",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 1024930
         },
         {
           "digest": "sha256:ff33e1667b49917f2dacc39ea73ac473ddaf92931e1cb5a5182c263bb36d1c72",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:a23906dbcf11b32dc53769f8c22a75822a75b088d66c53928736ee00afdfa0ee",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 13655
         }
       ],
       "author": "jmiba",
       "description": "- Add chat session sorting controls:\r\n  - new persisted sort menu next to the session selector supports name, last-modified, and created-time ordering,\r\n  - default ordering is newest modified first,\r\n  - no-op session saves no longer refresh `updatedAt`, so merely switching chats does not reshuffle the list.\r\n- Improve chat-session sort UI/docs:\r\n  - add an Obsidian-style sort button with runtime icon fallback styling,\r\n  - document chat sorting behavior in the chat-panel and RAG pipeline docs.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.10.4...1.0.0",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
@@ -127,22 +143,26 @@
       "assets": [
         {
           "digest": "sha256:d0e16efa1a4bf074bf48e0876e79f7b56a241b552048291ede7b9bf0a88eedec",
+          "downloadCount": 41,
           "name": "main.js",
           "size": 1019390
         },
         {
           "digest": "sha256:955b90757daf0bc760f7527eae6d6de7ed085540521b52f9877c734c3231df7b",
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 41,
           "name": "styles.css",
           "size": 13519
         }
       ],
       "author": "jmiba",
       "description": "- Harden the import pipeline with better failure reporting:\r\n  - route command-palette imports through a dedicated wrapper that catches unexpected failures,\r\n  - write detailed import errors to the plugin log when file logging is enabled,\r\n  - add more specific failure context for bundled-tool sync, Zotero lookup, PDF resolution, Docling extraction, chunk indexing, Redis rebuilds, and final note assembly.\r\n- Improve worker-mode Docling startup and artifact caching:\r\n  - pin `docling` to `2.89.0`,\r\n  - preconfigure shared cache directories for Docling and Hugging Face artifacts in Docker/worker mode,\r\n  - prefetch Docling models on worker startup and persist them behind a version stamp to avoid repeated live downloads.\r\n- Pass `DOCLING_ARTIFACTS_PATH` through to Docling pipeline options when supported so imports can reuse the prefetched model cache.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.10.3...0.10.4",
+      "downloadCount": 41,
       "draft": false,
       "name": "0.10.4",
       "prerelease": false,
@@ -153,22 +173,26 @@
       "assets": [
         {
           "digest": "sha256:bff31f2426c192deda82642e20dfdc4dcb9ddff3151cf5f97cad6421097f9c85",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 1014938
         },
         {
           "digest": "sha256:596a2840b604cce762d1e89abea96498d1cc7b2fc8c02dcff130100eaa161ee5",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 13519
         }
       ],
       "author": "jmiba",
       "description": "- Add explicit privacy/security documentation for filesystem access, process execution, and write-only clipboard actions.\r\n- Normalize Zotero companion preferences colors to 6-digit hex values for CSS lint compatibility.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.10.2...0.10.3",
+      "downloadCount": 11,
       "draft": false,
       "name": "0.10.3",
       "prerelease": false,
@@ -179,22 +203,26 @@
       "assets": [
         {
           "digest": "sha256:b391ae692d031000c5e7375715e758bc97f6e09d14988d4ecee9ac04ea763435",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1014688
         },
         {
           "digest": "sha256:0b964c789bb75bf8b5cda5a1b4bea51f1d2190a49f51ac08067a5e332d7fe7c7",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 13519
         }
       ],
       "author": "jmiba",
       "description": "- Address Obsidian community review findings:\r\n  - raise the minimum Obsidian version to `1.7.2` for APIs used by the plugin,\r\n  - remove an unsafe PDF sidebar icon HTML fallback,\r\n  - update DOM helper usage for Obsidian lint compatibility.\r\n- Reduce fingerprinting concerns by removing environment-variable and system-identity reads from the plugin bundle and bundled Python helpers.\r\n- Keep community release packaging limited to the supported assets: `main.js`, `manifest.json`, and `styles.css`.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.10.1...0.10.2",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.10.2",
       "prerelease": false,
@@ -205,32 +233,38 @@
       "assets": [
         {
           "digest": "sha256:02f991230e6ae708f790565f886f8c919a991505065b3b8d870c106e54fb4e93",
+          "downloadCount": 12,
           "name": "main.js",
           "size": 1015041
         },
         {
           "digest": "sha256:90d966a154cce8a95e502fa824f305d1452a8f81022d05588426d0bbc7904ad9",
+          "downloadCount": 55,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:e5acdf4c5970fa692c60eb999c1507126aa8eb591e23ed12767c04c867a8fc99",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1624
         },
         {
           "digest": "sha256:9dc39e05b23afa1484ea5f0d95b9c6afdbfdfdb92e53601f139e61835b9daf84",
+          "downloadCount": 6,
           "name": "zotero-redisearch-rag.zip",
           "size": 2248041
         }
       ],
       "author": "jmiba",
       "description": "- Update the Zotero Research Assistant Companion add-on to `0.1.5`.\r\n- Extend companion compatibility to Zotero `9.*` by raising the add-on `strict_max_version` from `8.*` to `9.*`.\r\n- Refresh the companion update manifest/hash for the rebuilt `zrr-companion.xpi`.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.10.0...0.10.1",
+      "downloadCount": 12,
       "draft": false,
       "name": "0.10.1",
       "prerelease": false,
@@ -241,32 +275,38 @@
       "assets": [
         {
           "digest": "sha256:35bd1648870475b256e4776deaad36c28d76da443b8d802bd98f02280adcea99",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 1014746
         },
         {
           "digest": "sha256:073f57a5b7d6827b292a89c71ab7bf6391fc7956eefd18d6381cc7c3295f15f1",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:1585d79027422ce0d771ecf4fa6ed19e34de41b2bddf3f2c48addd17c444ba17",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1603
         },
         {
           "digest": "sha256:b983c9225fb456b8f28d19fcc615dcb1e6ddb3481024b61fb314a1e2cfd6bdfc",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2247837
         }
       ],
       "author": "jmiba",
       "description": "- Add optional follow-up query rewriting for retrieval:\r\n  - new `Rewrite follow-up queries` setting rewrites the current chat turn into a standalone retrieval query using recent chat history,\r\n  - the rewritten query is used for retrieval, query expansion, reranking, and annotation lookup,\r\n  - the original user wording is still preserved for answer generation.\r\n- Improve chat-session safety while a response is streaming:\r\n  - disable switching, renaming, deleting, and creating chat sessions while the current response is still in flight,\r\n  - show clearer notices when a session action is blocked until the response is finished or canceled.\r\n- Improve chat request parsing and docs:\r\n  - preserve streamed whitespace more reliably when parsing chat/responses payloads,\r\n  - document follow-up query rewriting in the README, chat-panel docs, retrieval-ranking docs, and settings reference.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.28...0.10.0",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -277,32 +317,38 @@
       "assets": [
         {
           "digest": "sha256:4fb8fec102b945c657a7aa7c51a8b78cf49c0141d9074a5feeab8b00d3e41b46",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 1008543
         },
         {
           "digest": "sha256:ffc798c64baf848dbe27fa5e8c8475cb125dd87122f085d9bb2fce27f05e5c61",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:3f9c38c9e9098dac550155475d016e3b60c1c1563afdb07555957c4dd2d37042",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1582
         },
         {
           "digest": "sha256:58ffb11d00b95af26570955457c740f3f9543e4d6be0d23fedc2ae52a5b8127b",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2245622
         }
       ],
       "author": "jmiba",
       "description": "- Surface import timeout budgeting more clearly during Docling imports:\r\n  - compute a page-aware timeout budget up front,\r\n  - show a notice with the chosen timeout budget before running the import worker,\r\n  - log the same budget details to the console for troubleshooting.\r\n- Bundle the new `pdf_page_count.py` helper into generated tool assets so packaged/plugin builds include the page-count utility used for timeout scaling.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.27...0.9.28",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.28",
       "prerelease": false,
@@ -313,32 +359,38 @@
       "assets": [
         {
           "digest": "sha256:bec672e1e2814f8d23a50443597b971f26298e966a72804de4e7797614a82732",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 1006469
         },
         {
           "digest": "sha256:0188280d945eb31712f214a5e759e7099e0595e323a8cc2558343a70d6b2d880",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:5b760fba7b280f91eb029ec6f6c6d2bb68e1827c650e3c5413204ede6e4bd894",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1561
         },
         {
           "digest": "sha256:0e08d97531a02d3b7e70ef8692eb7183343904d7d266c290445187e357c38d59",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2244866
         }
       ],
       "author": "jmiba",
       "description": "- Scale Docling/import worker timeouts with PDF length:\r\n  - add a small PDF page-count helper to estimate document size before import,\r\n  - increase the worker timeout automatically for longer PDFs while keeping sensible minimum and maximum caps.\r\n- Improve LM Studio tagging/cleanup error handling:\r\n  - detect unloaded LM Studio tagging models more explicitly,\r\n  - show targeted notices for imports, reindexing, and tag generation instead of generic embedding-provider failures.\r\n- Improve Hunspell dictionary discovery and caching for Docling cleanup:\r\n  - search both bundled and temp-cache Hunspell directories,\r\n  - download fallback dictionaries into a shared cache directory instead of the bundled tools folder.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.26...0.9.27",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.9.27",
       "prerelease": false,
@@ -349,32 +401,38 @@
       "assets": [
         {
           "digest": "sha256:f133d47398eb09125323e1eb35165b2edee172912e16363d789412b501e9c4b5",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1003268
         },
         {
           "digest": "sha256:a8a56d90583989d55d1520ca54f71bd90c80f774fc789603d0a5593795c4696c",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:d445a33053e36dc6370b94f6becb2065a368536527481e2d77ec8498ba3890c6",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1540
         },
         {
           "digest": "sha256:7fe3407d1dfcc19759834947c3c1b334b67a7bfb30d77e1136be3b64b269c083",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2243071
         }
       ],
       "author": "jmiba",
       "description": "- Improve LM Studio compatibility for chat requests and title generation:\r\n  - use the `/responses` API automatically for LM Studio chat/title requests when appropriate,\r\n  - fall back to classic chat completions when the responses endpoint is unavailable,\r\n  - parse streamed and non-streamed response payloads more robustly.\r\n- Add LM Studio-aware context budgeting for chat:\r\n  - inspect local model metadata to estimate context length,\r\n  - trim oversized prompts/context blocks automatically,\r\n  - pass explicit output-token budgets to reduce context-overflow failures.\r\n- Add cleanup reasoning-mode controls for LLM cleanup:\r\n  - new `Cleanup reasoning mode` setting with `Automatic`, `Reasoning on`, and `Reasoning off`,\r\n  - in automatic mode, learn the preferred LM Studio native cleanup reasoning mode per provider/model and reprobe it every 30 days.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.25...0.9.26",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.9.26",
       "prerelease": false,
@@ -385,32 +443,38 @@
       "assets": [
         {
           "digest": "sha256:43b57859e15520da52d45f5531863fb5bfe6ab0a2e7f8e885139265a2f058fc4",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 972543
         },
         {
           "digest": "sha256:e261932f03de80096f42de0d18c23a2924a73dfa449ffc218b535d5f75e68aa8",
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:19bba59139a7f2965eae98c4141fc95b94c511e6b9c388a8eb5eef425c4b90ee",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1519
         },
         {
           "digest": "sha256:4c5b7112a63bd2c7f189a5887c3c13526f5264c0ead9ae4e7a1a6cc8ac3e1ad9",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2233980
         }
       ],
       "author": "jmiba",
       "description": "- Improve provider rate-limit handling across chat and indexing workflows:\r\n  - detect common 429 / quota-exceeded failures more reliably,\r\n  - show explicit retry messages for chat provider limits and embedding provider limits,\r\n  - stop treating embedding rate limits as generic provider failures during imports, reindexing, and chat-triggered rebuilds.\r\n- Tighten RAG query typing by introducing a dedicated final-payload type for streamed chat responses.\r\n- Harden Zotero item and PDF attachment helpers:\r\n  - normalize object access through safe record coercion instead of loose unknown-property reads,\r\n  - validate PDF attachment keys more strictly before use,\r\n  - keep citekey, short-title, creator-name, and attachment-path extraction logic working against more heterogeneous payload shapes.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.24...0.9.25",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.25",
       "prerelease": false,
@@ -421,32 +485,38 @@
       "assets": [
         {
           "digest": "sha256:cd6c81e11058d745ebc45b8b82f9316b2a83239730c4efd88e0ace6afaca592b",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 969853
         },
         {
           "digest": "sha256:3b21616e55344728b9e03f1c63bdca9fd4073d9b8b044b353d3cd11def1bea19",
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b26a8b2174d2430b2d5a517124ebf94740b522570c55d137d57ce7f7c13896c7",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 13519
         },
         {
           "digest": "sha256:b9df2c0a6757de044a3d433335eee653eb3dd295c5cfee8ee2eca88973a3e83f",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1498
         },
         {
           "digest": "sha256:b3401bc54621fa86fed7f7ecd3d04df77c91b01eec416a43c7fc59690d0776ab",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2233039
         }
       ],
       "author": "jmiba",
       "description": "- Add chat export post-processing controls:\n  - new `Chat export template` setting to wrap copied chat notes in an optional vault template,\n  - support `{{chat_title}}`, `{{chat_created_at}}`, and `{{chat_body}}` placeholders,\n  - new `Chat export post-create command` setting to run a user-selected command after the copied chat note is created and opened.\n- Improve copied-chat export behavior:\n  - if the template omits `{{chat_body}}`, keep the transcript first so downstream templater workflows can operate on the full note body,\n  - activate the freshly created note before running any configured post-create command.\n- Clean up the chunk-citation implementation by removing the unused native `^zrr-chunk-...` export path and keeping plugin-driven `#zrr-chunk:` jumps as the only page/section citation mechanism.\n- Minor chat UI and code-quality follow-up:\n  - reduce mention picker text sizing slightly for better readability,\n  - enforce `@typescript-eslint/require-await` and remove the unnecessary async `onClose()` implementation in the chat view.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.24",
       "prerelease": false,
@@ -457,32 +527,38 @@
       "assets": [
         {
           "digest": "sha256:7011b8218bab73b86234310b41ff1d78278961884ff2284e12e63b137e4371dc",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 968469
         },
         {
           "digest": "sha256:107ee56f5a71b89de74efa63c6f66d769849b4a6fd8e44e1b491b8cb643f17c7",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:eb16309ddec14a13dc060957774eb4de9a5fdffe19255347966fd04c1b928455",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 13480
         },
         {
           "digest": "sha256:9b60a5e467701aaaaff871200af852d5776506a91fd45704ea22aecf251f241a",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1477
         },
         {
           "digest": "sha256:63e496623ee2aae1123dc5a82b61f3afa9576468bd53dd628a0b3b25646ad0f8",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2232365
         }
       ],
       "author": "jmiba",
       "description": "- Fix chat `@` suggestion icons to reflect Zotero item types instead of always showing a book icon.\r\n- Improve indexed `@` mention search reliability for metadata queries (especially `citekey`) by:\r\n  - searching indexed metadata snapshots in addition to cached Zotero item payloads,\r\n  - normalizing mention queries (leading `@` and surrounding punctuation) before scoring,\r\n  - improving ranking so citekey and metadata hits surface more consistently.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.22...0.9.23",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.23",
       "prerelease": false,
@@ -493,32 +569,38 @@
       "assets": [
         {
           "digest": "sha256:a45aaf790dcbcffb49be29b6553f585041f99e5e8455de70fbade0fe4a92dbe4",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 963466
         },
         {
           "digest": "sha256:a39162e0545f3d6522322829dd1a2c1233dbfdf71428d2fa666b685d11d9a6ac",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:ecf344fe39ffd5b8a7bab10472d281b3b51c9bb0b8354ddc01d4a7daa5ebad27",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 13484
         },
         {
           "digest": "sha256:de344f0651bcd9c02f020b043048985635926cc6ed737177813c12d5a73cf7b1",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1456
         },
         {
           "digest": "sha256:972f583a3ccc158bb558f8433f5d2d4224232df0296fd9fa60a447b25534b90b",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2230588
         }
       ],
       "author": "jmiba",
       "description": "- Improve chat citation insertion with an inline `@` picker overlay inside the chat textarea (no separate modal required).\r\n- Add indexed-only citation suggestions for `@` mentions so results are limited to already indexed Zotero items.\r\n- Expand mention triggering behavior:\r\n  - trigger suggestions for `@` followed by any token,\r\n  - open the picker immediately when only `@` is typed,\r\n  - show recent indexed suggestions even before a first search character is entered.\r\n- Add keyboard interaction for the overlay picker (Arrow Up/Down, Enter/Tab to insert, Escape to close).\r\n- Add follow-up lint hardening for suggest modal prefill callbacks to satisfy no-floating-promises checks.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.9.21...0.9.22",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.22",
       "prerelease": false,
@@ -529,32 +611,38 @@
       "assets": [
         {
           "digest": "sha256:b057b2a1d0340374d16c3bef70a238027e7a235fe5cd7d38c4b4cc0c5721452c",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 954948
         },
         {
           "digest": "sha256:02be079ebcc7034a844cd707747e9da34de6d23c8cc7e041d2df3ac472875fc2",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:e34bcc0d461eec23beb7621bd0421ad4fff0a37481d4f6bc62a95ad662801f26",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1435
         },
         {
           "digest": "sha256:dd6652a7800500477c950f23c213a677b1c4c656cdb7e90e95638fbede22440f",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2227232
         }
       ],
       "author": "jmiba",
       "description": "- Make Zotero PDF imports transactional and self-cleaning:\n  - stage item cache, chunk cache, synced note, and vault-copied PDFs under temporary paths during import,\n  - replace final files only after note finalization succeeds,\n  - clean up staged/incomplete files plus Redis chunk keys when Docling extraction, indexing, or final note assembly fails or times out.\n- Extend cleanup for note deletion and failed imports:\n  - remove vault-local copied PDFs associated with a doc when deleting a note/cache bundle,\n  - add timeout-aware import failure notices and failed-import Redis cleanup.\n- Improve Docling PDF handling:\n  - detect born-digital text layers more reliably and skip unnecessary OCR post-processing for them,\n  - sanitize `docling_config.json` by removing GUI/runtime-managed keys on read/write so persisted config stays portable,\n  - add explicit `--no-llm-cleanup` CLI support when LLM cleanup is disabled.\n- Add regression tests for Docling config filtering and born-digital post-processing decisions.",
+      "downloadCount": 0,
       "draft": false,
       "name": "v0.9.21",
       "prerelease": false,
@@ -565,32 +653,38 @@
       "assets": [
         {
           "digest": "sha256:7eb51d9fb326c187b4fee69e25761dae3321166eba588ca6ffb2b1901ee2a9c1",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 945933
         },
         {
           "digest": "sha256:6f6f4dff3f74dad3f6fa060d25994f288a66e4d6d20d4196cd475d01688f8a3f",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:93cccbd54285fba0d609c9aaedcc6dddecbc4119b20a9015be55884c63dc2d62",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1414
         },
         {
           "digest": "sha256:59e47bdaf766858c6c05750f23c6a7c63965563e6e99bf56eecae2ce692fdd6d",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2222991
         }
       ],
       "author": "jmiba",
       "description": "- Harden Docling LLM cleanup against repeated slow/failing requests:\n  - add a total cleanup time budget so LLM cleanup disables itself after spending too much wall-clock time across chunks,\n  - cap each cleanup request timeout to the remaining cleanup budget,\n  - disable further cleanup calls after timeout failures instead of retrying the same failure mode on later chunks.\n- Improve Python error surfacing by collapsing noisy process stderr into shorter diagnostics that preserve the most relevant traceback/error lines.\n- Reduce noisy warning logs for optional network lookups (model discovery, Zotero Web API group/user resolution, annotation item fetches) by downgrading expected offline/network-unavailable failures to debug logging.\n- Add regression tests covering LLM cleanup timeout handling and cleanup-budget exhaustion.\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "v0.9.20",
       "prerelease": false,
@@ -601,32 +695,38 @@
       "assets": [
         {
           "digest": "sha256:63e5ed51945896bfe003db9e6100f362d180b67785eb27e7896c13d34386e567",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 942443
         },
         {
           "digest": "sha256:c9f054a05c8ce8ed072c6b7c7d0a34e2113cfd29eb38b042529f2c41a66e141e",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:e5fb4d7ce39a00a0eb9201ba2efb1b43bb4e48499a0f9878d6f4dff895b76553",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1393
         },
         {
           "digest": "sha256:e06b611d4b7eb3898a28f1811354d4ec0315b4729ed7c86a620385f39e3c3a6e",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2221261
         }
       ],
       "author": "jmiba",
       "description": "- Restore copied-chat chunk citation jumps without relying on native Obsidian block refs:\n  - exported chat notes now keep legacy `#zrr-chunk:` wiki-links for page/section chunk citations,\n  - regular rendered markdown notes intercept those legacy links and route them through the plugin's existing chunk-marker jump logic.\n- Add live preview support for legacy chunk citation jumps by intercepting `#zrr-chunk:` wiki-links from the CodeMirror editor surface and opening the target chunk directly.\n- Improve internal-link resolution for copied chat-note citations by resolving relative wiki-links against the current note source path during custom navigation.\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "v0.9.19",
       "prerelease": false,
@@ -637,32 +737,38 @@
       "assets": [
         {
           "digest": "sha256:7950d4b61a4e7242dd68cf6cc59088c514e40c74f1a1ef82d1b5e85b2c30a464",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 938101
         },
         {
           "digest": "sha256:f6ae2d0e3d209249507e9b79d59d520771a8e170080df5809ecd605677b8262f",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:d35eab8b591120c27248fc2a9f9f76511b996798de353c4f787340ec46c2df35",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1372
         },
         {
           "digest": "sha256:fe866ac46ebaaca2f201b52cbcc1777012787ecd63f72af7a78149cc3ef86d97",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2219565
         }
       ],
       "author": "jmiba",
       "description": "- Replace the bundled Redis image with `redis/redis-stack:7.4.0-v8` so new and recreated local stacks include Redis Insight.\n- Add multi-vault-safe Redis Insight host-port handling by deriving the Insight port alongside the Redis and Python worker ports during auto-assign.\n- Add a conservative recovery path for image refreshes:\n  - new command palette action **Recreate redis stack (pull configured image)**,\n  - new **Maintenance -> Redis indexing -> Recreate redis stack** button,\n  - implementation pulls the configured Redis image and force-recreates only the `redis-stack` service.\n- Update Docker/quick-start/troubleshooting docs to explain Redis Insight availability and the new recreate workflow.\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.9.18",
       "prerelease": false,
@@ -673,32 +779,38 @@
       "assets": [
         {
           "digest": "sha256:03d87e6aa1fa2e0ff21ec0cd42026d157138f4723facd2082b19b7ff60c2f1c8",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 935610
         },
         {
           "digest": "sha256:83609f382d00f7857281c918951643147a3d614ddcf7e9f4ccb6483f8451f799",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:138d788dc3c12750e09fd464cccb69a7fb8d2c7f96a233252a75dea5b2236218",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1351
         },
         {
           "digest": "sha256:9dbad7eb0d5c39f9204c96441e849f33ac4cc09fbe324d5091a973b648ab2fe4",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2218821
         }
       ],
       "author": "jmiba",
       "description": "- Fix right-sidebar PDF sync recovery after the sidebar tab is closed.\n- Improve manual PDF sync UX for the command and ribbon button.\n- Add a dedicated PDF ribbon button for one-click sidebar recovery.",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.9.17",
       "prerelease": false,
@@ -709,32 +821,38 @@
       "assets": [
         {
           "digest": "sha256:336106fdf54c1828171f9470fc0091e808e4cc9ef44314cc3512685cd1a6bdee",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 932951
         },
         {
           "digest": "sha256:2238ea8ce4eac306f1e9bde53de0005c5d83a766bb66c5752ff2a71d13892b7c",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:fa1cb8146abdf636530e5b36cdcb4ce608f6c433afa011181993b413a88ac0b7",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1330
         },
         {
           "digest": "sha256:a1315f251f68c5b1f29a5054d6d204b06a0508ce0f3ceec1f26a59b4ff60f04d",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2217970
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.16 (Bugfix Release)\n- Fix metadata sync coverage for publication container fields with full bidirectional sync for:\n  - `publication_title` (`publicationTitle` in Zotero)\n  - `book_title` (`bookTitle` in Zotero)\n  - `journal_abbrev` (`journalAbbreviation` in Zotero)\n- Include these fields in metadata conflict/snapshot tracking and one-sided auto-create note -> Zotero behavior.\n- Update docs to reflect expanded synced metadata fields and recognized YAML key variants.\n",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.9.16",
       "prerelease": false,
@@ -745,32 +863,38 @@
       "assets": [
         {
           "digest": "sha256:ccd6b2da7f898f08326aaa023e70dcb711d81be3fe167dcb425dbb8e71be0795",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 930507
         },
         {
           "digest": "sha256:a3e7a1b228f2041fdb392dc211f0ea506fad762600839aebbdf5493d6630bd3c",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:075b3fe458bcc51d11645974914809d24e59df870d7cc0f6e026ed2859625359",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1309
         },
         {
           "digest": "sha256:7559230091fa5c90ff8f99ace49dd9ffd932ed3008d6a7e7a0b1a7b14daf239a",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2217231
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.15 (Bugfix Release)\n- Add chunk-cache self-healing for note-based reindexing when chunks JSON is missing but zrr sync/chunk markers still exist in the note.\n- Apply the same fallback during note-save sync so incremental chunk updates continue after accidental cache deletion.\n- Preserve marker metadata (chunk ID, page, exclude, section) while restoring cache and refresh doc_index note/PDF/attachment metadata where available.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.9.15",
       "prerelease": false,
@@ -781,32 +905,38 @@
       "assets": [
         {
           "digest": "sha256:1fd0ad2783cd3a062106f13ed4758f69eceacc9f697ea323582de5eceeae0b13",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 927336
         },
         {
           "digest": "sha256:32b652f3f084bbdf7ea8fdb41a0db026c36f417f40608e96c5cb6bf0927387a1",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:8c40d08e8e6df6964528a7377510622a1f5e88d998059c018afe3c1aa905bbdd",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1288
         },
         {
           "digest": "sha256:0ec5710d4f5917edfe95e6c979c87ce6024e3c82371937914c4a23e373350fd2",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2216045
         }
       ],
       "author": "jmiba",
       "description": "- Fix repeated empty right-sidebar tab creation when opening Zotero notes:\n  - prevent automatic PDF sidebar sync from creating new sidebar leaves,\n  - reuse existing right-sidebar/PDF leaves only during background sync,\n  - reserve leaf creation for the manual command **Sync PDF view in right sidebar for current note**.\n- Harden right-sidebar leaf detection to use passive leaf iteration instead of `getRightLeaf(...)` during auto-sync paths.\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.9.14",
       "prerelease": false,
@@ -817,32 +947,38 @@
       "assets": [
         {
           "digest": "sha256:8cde37a92fb0d19005f840437820df57aac01da1494151ed30595c3fa65c32e9",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 926512
         },
         {
           "digest": "sha256:6a0ab9e2be317b556b8d3fb68b6e95fa1d6ad9ff8c0dbf938ee7a4605e813ca0",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:74726f39c5fb43f70a6de1b338fac3d506b30a6f5ea7d8418108cef5ffcdc162",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1267
         },
         {
           "digest": "sha256:5e23df6809bd1580d7c1b88a1b031bf2fde97a563f4dccc0a01616a78ceee3b4",
+          "downloadCount": 2,
           "name": "zotero-redisearch-rag.zip",
           "size": 2215580
         }
       ],
       "author": "jmiba",
       "description": "- Add release quality gates for plugin publishing:\n  - add ESLint flat config for TypeScript source checks,\n  - add `npm run lint:changed` helper for fast changed-file linting,\n  - enforce `npm run lint` as part of `npm run package-release`.\n- Add a dedicated manifest validator (`npm run validate:manifest`) and enforce it in `package-release` before build/package steps.\n- Fix minor citation label sanitization escaping to satisfy lint while preserving wiki-link safety.\n\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.13",
       "prerelease": false,
@@ -853,32 +989,38 @@
       "assets": [
         {
           "digest": "sha256:989f94a73be26099de2dd1690760001bcbba641a4367c5084bba32b80e75c443",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 925990
         },
         {
           "digest": "sha256:01eade4592290cb7a31cc27e97fe6422ec84156287a305106924c3067e3edb08",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:34da82e9392edd42c8bab8bed12ecc56ae95f609e956cb5aa11e88466af0475a",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1246
         },
         {
           "digest": "sha256:c7cf3e4ed2c0b0cbfb9d752f132c833b4dc838d74d6ea2b8c24cc725f2296214",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2215245
         }
       ],
       "author": "jmiba",
       "description": "- Fix broken chunk citation wiki-links by writing proper Obsidian link label delimiters (`|`) instead of escaped `\\|` in generated inline citations and exported chat notes.\n- Improve legacy citation compatibility by normalizing malformed chunk anchors (`#zrr-chunk:...\\\\|...`) before rendering and by extracting chunk IDs robustly when opening links.\n- Fix citation/link resolution edge cases for note titles ending in whitespace:\n  - harden filename sanitization to strip trailing spaces/dots after truncation,\n  - sanitize reused basename sources from existing `note_path` / `pdf_path`,\n  - keep exact internal-link path resolution with trimmed fallbacks for legacy files.\n\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.12",
       "prerelease": false,
@@ -889,32 +1031,38 @@
       "assets": [
         {
           "digest": "sha256:02eae6be97713e3714aa2036aa9b62370531c54a20ad75996ce3f6a0ea83a8c7",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 901484
         },
         {
           "digest": "sha256:bfd06b5fbc4deb57ee58db29b8cdf3deb9fb18d9b2b04ac1b7c24c303c236d6a",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:757eaaf8587bde32cf2f21eabb7d57ca6d7164145c3753dcc022d10ae48ee65c",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1225
         },
         {
           "digest": "sha256:24bdfc04d4f44b6a693809149777a6e5f73859d2b0a95071dac4edf6fa4c296b",
+          "downloadCount": 2,
           "name": "zotero-redisearch-rag.zip",
           "size": 2206879
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.11 (Bugfix Release)\n- Fix annotation-sync safety when Zotero annotation fetch is incomplete by preserving existing annotation chunks and skipping delete reindex operations.\n- Fix PDF sidebar sync for newly imported notes by re-triggering sync after doc index updates.\n- Improve PDF sidebar reliability with pending-sync trigger on note open and a manual sync command.\n- Map legacy worker PDF paths (/workspace/vault/...) to vault-relative paths for existing doc_index entries.",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.9.11",
       "prerelease": false,
@@ -925,32 +1073,38 @@
       "assets": [
         {
           "digest": "sha256:4c49828a2d7cf11b73dc5f354e79a5da247de888302e3e6570cbfec7a7c8cf2b",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 900419
         },
         {
           "digest": "sha256:c2e2bbf9366745b2fc304bee530fc010a137f86e05800d479ed8cd09d4184f45",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:f7335030439eccc171c9f63e5e919489e48bf11549bb1d9fd3482a40db73d233",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1204
         },
         {
           "digest": "sha256:53089ca4697f7e3ca51d3834aa8e973918a6f0aa67b2ada063748a7c9763abbf",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2206167
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.10 (Bugfix Release)\n- Fix remaining Obsidian review lint issues in async UI callbacks and deprecated-node patterns.\n- Harden object/unknown-to-string guards to avoid implicit [object Object] coercion.\n- Normalize flagged UI labels to sentence case.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.10",
       "prerelease": false,
@@ -961,32 +1115,38 @@
       "assets": [
         {
           "digest": "sha256:e8d07f42218925212af76ccadb73a7099ffac340181182fe1292744821db8fd3",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 923215
         },
         {
           "digest": "sha256:fd5605535ebc3e454c76eaf38268902b9191492252ec6af485cfd62c80565eef",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:b9fcac535e3c89898d8b2c42987788b0b6d066ad774d0d1ff7c8511262972e50",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 12130
         },
         {
           "digest": "sha256:1f1b04d72f36cc082a5f3b3c85f15ebd6800ceab1457ae3d17a03eba25dec9bc",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1183
         },
         {
           "digest": "sha256:b6511ec6254bf05f6c212aea3d06aba7d6f819b886ada51a0ecb0f993a185076",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2213622
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.9 (Bugfix Release)\r\n- Fix release workflow install failures by syncing npm dependency metadata and lockfile for CI.\r\n- Pin Obsidian peer `@codemirror/state` and `@codemirror/view` dev dependencies so `npm ci` resolves deterministically in GitHub Actions.\r\n- Restore reliable GitHub release asset publication (`main.js`, `manifest.json`, `versions.json`, `styles.css`, and release zip) after CI recovery.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.8...0.9.9",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.9.9",
       "prerelease": false,
@@ -997,6 +1157,7 @@
       "assets": [],
       "author": "jmiba",
       "description": "## 0.9.8 (Bugfix Release)\r\n- Fix Obsidian review-blocking code issues for release validation:\r\n  - replace deprecated markdown rendering calls with `MarkdownRenderer.render`,\r\n  - replace `fetch` usage with Obsidian `requestUrl`,\r\n  - remove `window.confirm` usage in favor of modal confirmations,\r\n  - remove direct `innerHTML` writes in PDF sidebar/icon handling,\r\n  - align command labels and static UI styling with plugin guidelines.\r\n- Fix TypeScript regressions introduced during lint refactors by restoring robust `unknown`/JSON payload narrowing across chat history parsing, worker stream events, Redis stats payloads, and Zotero API response handling.\r\n- Refine runtime-safe metadata/tag/creator parsing and cache payload handling in `main.ts` to prevent `{}`/`unknown` property access errors in editor diagnostics.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.7...0.9.8",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.8",
       "prerelease": false,
@@ -1007,32 +1168,38 @@
       "assets": [
         {
           "digest": "sha256:392b3dd0ce2a8d57a3737401451d45abfef25f25b32a594db5d9c7501355671e",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 918143
         },
         {
           "digest": "sha256:aea20d8d788086a45594f1093a8fc092ad0f9553ef8741e9558863b03268da8f",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:ed1e977407669832c825369d1988b3258876713125473429b6e875c1fcfa8c42",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 1143
         },
         {
           "digest": "sha256:bc4b10fe7e256d5383025978a057db7004ac478de1488b301b8299e79cc0cb65",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2211476
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.7 (Bugfix Release)\r\n- Fix Redis/Python worker startup failures caused by stale container-name conflicts by auto-removing conflicting project containers and retrying startup once.\r\n- Improve Zotero annotation deletion propagation to notes by detecting missing Zotero annotations and refreshing note annotation blocks accordingly.\r\n- Guard annotation-prune sync against incomplete Zotero fetches to avoid accidental removals when annotation APIs fail.\r\n- Add a focus-triggered annotation sync so note updates are pulled shortly after returning to Obsidian.\r\n- Preserve Zotero annotation order within each heading by prioritizing Zotero sort tokens (`annotationSortIndex` / `annotationSort`) during block rendering.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.6...0.9.7",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.7",
       "prerelease": false,
@@ -1043,32 +1210,38 @@
       "assets": [
         {
           "digest": "sha256:133299ddb92674f9a155f8b736960ce93ec81eb62d3763336d0f929aea6dbca0",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 914567
         },
         {
           "digest": "sha256:ca72dc3e43a66b2938a354c9d02c2ef54edda896d9491651bf4ad83989f03170",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 341
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:d31f0648883dc3c6eee23833d688b6160af8a509d9667a1c1c9b1096a2b4c005",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1123
         },
         {
           "digest": "sha256:426956f03b839206c560b172fc3d7e9e4197630c247cb7dac1e25c6a97522390",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2210083
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.6 (Bugfix Release)\r\n- Fix worker-mode Redis `Connection refused` failures on Windows by hardening Redis URL rewriting in worker requests, including `redis://`, `rediss://`, and `redis+tls://` loopback URLs.\r\n- Add support for both `--redis-url <url>` and `--redis-url=<url>` argument styles when mapping worker Redis endpoints.\r\n- Add a defensive Redis URL rewrite inside `python-worker-api.py` so local loopback Redis URLs are remapped to `redis-stack:6379` before tool execution.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.5...0.9.6",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.9.6",
       "prerelease": false,
@@ -1079,32 +1252,38 @@
       "assets": [
         {
           "digest": "sha256:34652d0b34de1726a8bcec6be95b618f541a04c3054cff81764c42f324295fb5",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 911166
         },
         {
           "digest": "sha256:52788e5d68ce719588ea467df3936272f7fa017975ae38be375a4120984330df",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 341
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:4023a4cc77a00aa8e8c1bc8e3339cb866943d4a4068fa1b4d7db3df39319baab",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1103
         },
         {
           "digest": "sha256:8dce4e85e4732b8a409987845f26136f533c34fc12e6e8d091a2236623bfbb5d",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2208455
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.5 (Bugfix Release)\r\n- Fix worker-mode Docling failure on read-only plugin mounts (e.g., Windows containers) by skipping on-demand Hunspell dictionary downloads when `tools/hunspell` is not writable.\r\n- Fix worker-mode Redis indexing on Windows by mapping local `redis://127.0.0.1/...` URLs to the internal compose service (`redis-stack:6379`) when auto-started stack is used.\r\n- Reduce noisy worker dependency warnings by pinning a compatible `requests` HTTP stack and installing `ccache` in the Python worker image.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.4...0.9.5",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.9.5",
       "prerelease": false,
@@ -1115,32 +1294,38 @@
       "assets": [
         {
           "digest": "sha256:b439fd02dea40d8f995bd298570085002f695fd4f60c7de93320ce840f11f33f",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 909791
         },
         {
           "digest": "sha256:dea94cedaa580651ed61775ffa17167527a14ce15b42be08d7457a8c806265d9",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 341
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:2efcdb2bc888714b96e7a447993dd5a590733e4ce04872106ceef855ae40361b",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1083
         },
         {
           "digest": "sha256:fb3d452b5190ec3ac9cd737befdbdbc7b09135c8fecd615ff5ecb3d0128d4240",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2207631
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.4 (Bugfix Release)\r\n- Follow-up bugfix release to publish the previous patch set under a new tag.\r\n- Fix a Windows import stall where the status bar could stay on `Preparing...` while running an extra preflight Docling quality probe before extraction.\r\n- Add first-start guidance in README/docs and a one-time startup toast warning that initial Docker/Podman image pulls/build steps may take 10+ minutes.\r\n- Add a deduplicated Zotero connection-error toast when the configured Zotero Local API is unreachable.\r\n- Change the default cross-encoder reranker preset to `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` (fast multilingual) for new setups.\r\n- Fix Zotero Web API item search fallback by using `include=data` (the Web API rejects `include=meta` with HTTP 400).\r\n- Update `citekey` sync for Zotero 8 native citation keys: prefer native `citationKey` on reads, write native `citationKey` plus `Extra`, and auto-retry writes without native `citationKey` when an API rejects that field.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.3...0.9.4",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.9.4",
       "prerelease": false,
@@ -1151,6 +1336,7 @@
       "assets": [],
       "author": "jmiba",
       "description": "## 0.9.3 (Bugfix Release)\r\n- Add first-start guidance in README/docs and a one-time startup toast warning that initial Docker/Podman image pulls/build steps may take 10+ minutes.\r\n- Add a deduplicated Zotero connection-error toast when the configured Zotero Local API is unreachable.\r\n- Change the default cross-encoder reranker preset to `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` (fast multilingual) for new setups.\r\n- Fix Zotero Web API item search fallback by using `include=data` (the Web API rejects `include=meta` with HTTP 400).\r\n- Update `citekey` sync for Zotero 8 native citation keys: prefer native `citationKey` on reads, write native `citationKey` plus `Extra`, and auto-retry writes without native `citationKey` when an API rejects that field.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.2...0.9.3",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.3",
       "prerelease": false,
@@ -1161,32 +1347,38 @@
       "assets": [
         {
           "digest": "sha256:65643762099507e4f7725025533bd9eef567d13fe5a493973498cd60b5daa9cb",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 906361
         },
         {
           "digest": "sha256:64bc51cfe5381c80a78afb47928a6bd14ed49ff8f683e50231f7d3fc40b9273e",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 341
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:52d445d2920b035f6498a58106cffe7fee31020c4f6dbfcf7904440fd42a1f36",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1043
         },
         {
           "digest": "sha256:f2f7c353f0f2eb3aa7d6b50153c39bd5e239fe75453601d8bdd36551b05cb8f3",
+          "downloadCount": 2,
           "name": "zotero-redisearch-rag.zip",
           "size": 2206242
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.2 (Patch Release)\r\n\r\n- Add metadata auto-create sync so newly populated Zotero metadata fields are written into Obsidian YAML even when the key was previously missing.\r\n- Add one-sided note -> Zotero auto-sync for newly created core bibliographic fields when Zotero is empty (`title`, `short_title`, `citekey`, `date`, `abstract`, `doi`, `publisher`, `place`, `issue`, `volume`, `pages`, `item_type`, `authors`, `editors`).\r\n- Make annotation color changes deterministic in sync by tracking annotation `color_key` in annotation snapshots and forcing note refresh when color changes.\r\n- Rename docs page `docs/annotations.md` to `docs/metadata-and-annotations.md` and expand documentation with detailed metadata/annotation sync behavior and conflict model.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.1...0.9.2",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.9.2",
       "prerelease": false,
@@ -1197,32 +1389,38 @@
       "assets": [
         {
           "digest": "sha256:23f8ce150d014ca1fb7303943d5d3a67a48af3de7ef68a264ce91624cf52016d",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 905096
         },
         {
           "digest": "sha256:39c6569d1af3aefd197bf7a2ea988f21c05b0a2b1846f82ec693ba505d4dadee",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 329
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:a08e7213313de83bb17d17d888c1bb6487f36d789881c0c23b35173d63b44137",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1023
         },
         {
           "digest": "sha256:bc269da0f966236a9566dfe8359cf5992edc637855b04b0237fdd37771ea873b",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2205563
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.1 (Patch Release)\r\n\r\n- Rebrand the plugin display name to **Zotero Research Assistant** across Obsidian UI labels and user-facing docs.\r\n- Rename chat UI labels and command text to match the new product name.\r\n- Rebrand the Zotero add-on package to **Zotero Research Assistant Companion** in the add-on manifest and preferences pane.\r\n- Publish companion add-on update `0.1.4` and refresh `zotero-companion/updates.json` hash for update distribution.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.9.0...0.9.1",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.9.1",
       "prerelease": false,
@@ -1233,32 +1431,38 @@
       "assets": [
         {
           "digest": "sha256:cea4229b42d3135376129b55e74a1ebd5efbd43cf5c0ddd13233ea2db5fb43a3",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 904550
         },
         {
           "digest": "sha256:93995332339854eb9f0f8972971c6c20d46d2e9e127a7e290aa5d4cd3826b736",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:58e36582b5bde9d309551039025249ee426b943c0c84575954b3b7ac3d342143",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 1003
         },
         {
           "digest": "sha256:a680244e9106124334205aaac6a3fb13586e45e0d89940b49437740e2a37a5ff",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2205255
         }
       ],
       "author": "jmiba",
       "description": "## 0.9.0 (Minor Release)\r\n\r\n- Make Python worker runtime the graceful default path for legacy installs:\r\n  - migrate missing/invalid runtime configs to `worker`,\r\n  - run a one-time migration for likely legacy implicit-local defaults,\r\n  - persist migration state with `pythonRuntimeMigrationV1Done`,\r\n  - keep existing local settings intact and show a migration notice.\r\n- Fix runtime-specific stack startup so `Start Redis stack` brings up only required services for the selected runtime.\r\n- Refactor RAG reranking execution for worker mode performance:\r\n  - run `rag_query_redisearch.py` in-process inside `python-worker` for streaming requests,\r\n  - keep cross-encoder reranker models warm across requests via in-worker cache (instead of per-request subprocess reload),\r\n  - add phase/timing events for reranker load/score and end-to-end stream timings.\r\n- Improve RAG streaming control path in worker mode:\r\n  - add worker API cancel endpoint and request-id based cancellation,\r\n  - wire chat cancel to worker request cancel for long-running retrieval/rerank operations.\r\n- Improve reranker model configuration UX:\r\n  - add multilingual cross-encoder presets (`BAAI/bge-reranker-v2-m3`, `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`, `jinaai/jina-reranker-v2-base-multilingual`),\r\n  - support explicit `Custom` model selection in settings.\r\n- Add advanced gating for local runtime controls:\r\n  - new `Advanced Python runtime options` toggle in Prerequisites,\r\n  - hide/disable local-only fields by default,\r\n  - auto-switch to worker if advanced options are turned off while local runtime is active.\r\n- Add explicit legacy-local opt-in paths:\r\n  - new Maintenance action `Use local runtime (legacy)`,\r\n  - new command palette command `Switch Python runtime to local (legacy)`.\r\n- Update docs and README for worker-first runtime UX:\r\n  - document advanced/legacy local runtime flow,\r\n  - document migration behavior,\r\n  - update settings, quick start, Python setup, Docker setup, troubleshooting, and command reference pages.\r\n \r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.8.4...0.9.0",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -1269,32 +1473,38 @@
       "assets": [
         {
           "digest": "sha256:e2435e05820cbae28f5bd7d739a109710b52d2ceb01bfa85a7022bb228fe0df3",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 849151
         },
         {
           "digest": "sha256:cd5e12a0a28581113baa9f5bef37611ebf1156e01e21c3172aea6e569c7bb999",
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:d14d5a1544a8f79eb8244ec12013dda7e93193db2831425f7f05a8a9cc1d3eb3",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 983
         },
         {
           "digest": "sha256:2ffffca2095d7dc5e4b3764a0d738d13b521661880cbdf84ce75646d3cff2006",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2185736
         }
       ],
       "author": "jmiba",
       "description": "## 0.8.4 (Bugfix Release)\r\n\r\n- Fix the **What's New** splash title and layout:\r\n  - use a generic `What's new` header,\r\n  - keep a single visible version heading (`vX.Y.Z`) without duplicate internal release-title lines.\r\n- Fix release-notes sanitization so `Full Changelog` lines are removed even when formatted as markdown links or styled text.\r\n- Fix `ReleaseNotesModal` markdown rendering type-safety by using an Obsidian `Component` lifecycle owner instead of passing the modal instance.\r\n- Move **Maintenance -> Release Notes** to the end of the Maintenance settings section.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.8.3...0.8.4",
+      "downloadCount": 6,
       "draft": false,
       "name": "0.8.4",
       "prerelease": false,
@@ -1305,32 +1515,38 @@
       "assets": [
         {
           "digest": "sha256:ddf651b126cc70cee51c10f7f15a809acc514df375b77808080ca943214fe905",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 851838
         },
         {
           "digest": "sha256:8c830d6914b7014725f11b786545932d570fa4cc5a3b7b469861500af6621f7e",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:13026857d4653133c9da692f80241501e654cd7976874d1145a2b1f5ba6b8564",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 963
         },
         {
           "digest": "sha256:da4d844dbb8fab56358553bb0cd3e5e791e52c68ec47cf0d9df9496ccb97c81f",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2185625
         }
       ],
       "author": "jmiba",
       "description": "## 0.8.3 (Patch Release)\r\n\r\n- Add a versioned bundled release-notes log and show all changes between the previously seen plugin version and the current version.\r\n- Add a manual **Maintenance -> Release Notes -> Show** button to reopen the **What's New** splash on demand.\r\n- Strip per-release `Full Changelog:` lines from bundled notes and show one canonical link to the full changelog in the splash footer.\r\n- Improve release-note bundling by merging GitHub Release notes history (with local fallback) into the generated `releaseNotes.ts` log.\r\n\r\n **Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.8.2.1...0.8.3",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.8.3",
       "prerelease": false,
@@ -1341,6 +1557,7 @@
       "assets": [],
       "author": "jmiba",
       "description": "## New in 0.8.2 (Patch Release)\r\n\r\n- Generate bundled **What's New** content automatically from the GitHub Release body during the release workflow.\r\n- Render **What's New** content as Markdown so release notes formatting is preserved.\r\n- Store only the current release's bundled notes instead of maintaining a full in-repo version history map.\r\n- Package cleanup:\r\n  - exclude `.DS_Store` from release archives,\r\n  - remove tracked Python `__pycache__` artifacts,\r\n  - remove obsolete root `ocr_wordlist.txt`.\r\n\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.8.1...0.8.2",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.8.2",
       "prerelease": false,
@@ -1351,32 +1568,38 @@
       "assets": [
         {
           "digest": "sha256:e26eb66f161a28974d77c8b8f72b3fd3958f93d416b7c067e46fe620317c67a7",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 840002
         },
         {
           "digest": "sha256:e01faf50222c73b9c57a2b50189dc811e9acb69b23a9c36e3009456879158ee4",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:0b4a383b877fbb4cc6e9ee2abb0cf21c155ee7965019e48dfd4b776f80d43310",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 10227
         },
         {
           "digest": "sha256:28c3047b8786fa5bce95c9926ce4aebe7fb4e02c5ff7af5fd2d204a618cafe88",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 923
         },
         {
           "digest": "sha256:37469460a8795b064d520a721acf1fcdf8a5e356ca3d69d784b7c5fc1398701c",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2190188
         }
       ],
       "author": "jmiba",
       "description": "## 0.8.1 (Patch Release)\r\n\r\n- Make the **What's New** splash source robust by using bundled, structured release notes per version instead of parsing `CHANGELOG.md`.\r\n- Keep showing the splash once per plugin version update via the persisted `lastSeenReleaseNotesVersion` marker.\r\n\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.8.0...0.8.1",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.8.1",
       "prerelease": false,
@@ -1387,32 +1610,38 @@
       "assets": [
         {
           "digest": "sha256:541b1b582b476694f5fe96e8fb8759b2117fde8f03dba6eb637a1db30832e11a",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 837855
         },
         {
           "digest": "sha256:603b56f52635dd127e890c2cdaffe713eb08dd7c729547cc4c25f621aba6bcd4",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:c43c4f63602d059c92722c2c629ed3359e346127af91ce1fa4fe30d45247fee6",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 9948
         },
         {
           "digest": "sha256:0ca393957354447450e5100169188b68663286b3d05e70627eee925459d9d503",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 903
         },
         {
           "digest": "sha256:69b525e92750c1ed888fb0a8f03522750f2945662e90efb487f50b86d9322b24",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2189254
         }
       ],
       "author": "jmiba",
       "description": "## New in 0.8.0 (Minor Release)\r\n\r\n- Add optional **agentic retrieval** mode with a lightweight planner step before answer generation.\r\n- Add agentic retrieval actions:\r\n  - keep current context,\r\n  - run an expansion retry retrieval pass,\r\n  - pull full-document chunks for whole-document synthesis queries.\r\n- Add agentic controls in settings (`Enable agentic retrieval`, `Agentic max iterations`).\r\n- Extend RAG tool output with `agentic_mode` and `agentic_trace` for debugging and tuning.\r\n- Add an animated **Thinking** indicator in the assistant bubble before streaming starts.\r\n- Update docs for retrieval tuning and chat panel behavior.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.7.0...0.8.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -1423,32 +1652,38 @@
       "assets": [
         {
           "digest": "sha256:a4c0cbc2d8b61f463d8500d50e15fa68bbb3fe81ddc83611b880c8b55eff3898",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 821709
         },
         {
           "digest": "sha256:139be39d22c6d9913ccaba266be22851138ee4c428585d5b35cb6a7d6589dd4e",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:eda4d35ab77923bdb15afd4d1575126e2dce26415b05351dd4bc40806043ed59",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 883
         },
         {
           "digest": "sha256:4e9e4b56007a77421bdce459ef20447cbcbb7fb446ace78a7e15cc5b61d08eb5",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2183081
         }
       ],
       "author": "jmiba",
       "description": "## New in 0.7.0 (Minor Release)\r\n\r\n- Add Python worker runtime architecture as the recommended path, with Redis and Python running as separate compose services.\r\n- Route Python execution through the worker container in worker mode, including path mapping, worker readiness checks, and worker startup helpers.\r\n- Improve worker reliability:\r\n  - fix requirements path resolution and add fallback handling in worker entrypoint,\r\n  - rebuild worker image automatically on worker startup,\r\n  - remove home-directory mount to avoid Docker home-sharing prompts.\r\n- Improve worker networking compatibility by mapping local loopback provider URLs for container execution.\r\n- Add configurable Tesseract language pack installation in the worker image (default: `eng deu fra spa ita nld por pol swe`).\r\n- Keep local Python fallback mode while disabling/greying local-only Python settings when worker runtime is selected.\r\n- Update docs for worker-first setup, OCR dependencies, Docker setup, and troubleshooting.\r\n- PDF sidebar sync stability fixes:\r\n  - serialize/queue sidebar PDF page jumps and retry once on PDF.js `injectLinkAnnotations` render-order race,\r\n  - stop forcing active-leaf switching during sidebar sync to avoid triggering incompatible active-leaf handlers in other plugins.\r\n \r\n→ [Changelog](CHANGELOG.md)\r\n\r\n  - **Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.6.9...0.7.0",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.7.0",
       "prerelease": false,
@@ -1459,32 +1694,38 @@
       "assets": [
         {
           "digest": "sha256:51b43f74797d0c69cc79306b938b093d40277c3885755806e5c8a94b8cea4a3d",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 809605
         },
         {
           "digest": "sha256:adfac7b7f1c87f7a4577c277d4455523bd39c73adea7075dbefc1be2283ca6ce",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:f1d4fae3713bd9d43e18d378818d8271c48c972a4c76e2f691c7a265f4542a78",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 863
         },
         {
           "digest": "sha256:180a7f60ef0356c6b48957cfa044bd11b836f051219ee44753b0dd452801fa03",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2179340
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.9 (Bugfix Release)\r\n\r\n- Fix `citekey` sync regression where unpinned Better BibTeX keys could be cleared from notes on open.\r\n- Resolve Zotero citekeys with a CSL fallback so BBT-generated keys sync into notes even when not pinned in `Extra`.\r\n- Restore note -> Zotero `citekey` sync by writing `Citation Key: ...` into Zotero `Extra` when `citekey` is edited in Obsidian.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.6.8...0.6.9",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.6.9",
       "prerelease": false,
@@ -1495,32 +1736,38 @@
       "assets": [
         {
           "digest": "sha256:7f6bbf13dc6b2cb16235916fe280300da723b59b4d5f4ffd50dc50bf4103633a",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 809920
         },
         {
           "digest": "sha256:1920f1bdf655aec1164246530e558188bc21dd3305384942a9a5a3b4b266aeaa",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:33e06467a3b1e739200cfbc53f72ae93b4dc04b2e0dd285b291b777987d25e26",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 843
         },
         {
           "digest": "sha256:dad1da61a1762f1d2dd00890e079424b73bcb1bbd3d597f9801e946cd758052a",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2177808
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.8\r\n\r\n- Adjust `citekey` sync policy: only sync note `citekey` back to Zotero `Extra` when a pinned citation-key line already exists.\r\n- Always sync Zotero/Better BibTeX citekey changes into the Obsidian note, even when back-sync is disabled.\r\n- Clarify docs for directional `citekey` sync behavior.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.6.7...0.6.8",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.6.8",
       "prerelease": false,
@@ -1531,32 +1778,38 @@
       "assets": [
         {
           "digest": "sha256:ba1e621de87c7cc2174650233bda3d5543d7f80723a16e0003ffe4a7f7858938",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 809315
         },
         {
           "digest": "sha256:51b0a9654559093061fbccaed120962c246057c9f296e4484d8c1b4d9651ae2a",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:cbca3e25c6de6ef906f6bc22be9396a65c0c8a3761db6070b881c85bf320b182",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 823
         },
         {
           "digest": "sha256:54b2b3bb73c29f77a8b7bdfcf51fd6d23ed4ffe4ea085bc2649816b68f2595e3",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2177604
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.7\r\n\r\n- Add `citekey` to two-way metadata sync between note frontmatter and Zotero items.\r\n- Sync `citekey` to Zotero via `Extra` (`Citation Key: ...`) so Better BibTeX-pinned keys can be updated from Obsidian.\r\n- Update docs to list synced metadata fields and clarify `citekey`/Better BibTeX behavior.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.6.6...0.6.7",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.6.7",
       "prerelease": false,
@@ -1567,32 +1820,38 @@
       "assets": [
         {
           "digest": "sha256:9851fa7e1acb8ffde38bce3927a0af145c5fb7499690df0c58c14e85d5575f1b",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 808279
         },
         {
           "digest": "sha256:e4982521245b9c1566f12684657b661a10b58611eabe072c8a114111e47875c4",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 320
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:b2d15f7776a7dff95685736c3a71675910cc5c32c3320e9ca0a3097769c9af9d",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 803
         },
         {
           "digest": "sha256:68e5c977599fab10b8758eb59d150a4254ba2b25f005b8844673140f9c0cae7c",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2177172
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.6\r\n\r\n- Speed up Zotero import picker search for large libraries by reducing search payloads, adding query debouncing, and caching repeated queries.\r\n- Restrict import picker search to top-level Zotero items and filter out non-importable/untitled results (`note`, `annotation`, `attachment`, and blank titles).\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.6.5...0.6.6",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.6.6",
       "prerelease": false,
@@ -1603,32 +1862,38 @@
       "assets": [
         {
           "digest": "sha256:b99fa68775e1ef024b9fe9de172e031833d915c778dd4c7edc1ecb88d5ac4bfd",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 808194
         },
         {
           "digest": "sha256:b0768eb3ec064157fcabf3647bc18908ff46e682825b362800160eb62be3c376",
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:9cc37315a81b24c7066ee263a5022688591480360c97b200e99e1a4a5117e8b3",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 8840
         },
         {
           "digest": "sha256:7b6b29ddf996309c6f75a91f69d45a9fce5b52c53744e49670e54b8518d974f8",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 783
         },
         {
           "digest": "sha256:7be7a6b6a16474ed4f1143f4c78ee0133a87f02964e877619a93e569b7b9f7f8",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2176966
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.5 (Bugfix Release)\r\n\r\n- Redis startup now prepends resolved Docker/compose binary directories to subprocess `PATH` so GUI-launched Obsidian can find Docker credential helpers.\r\n- In settings, `Auto-assign Redis port` now appears above Redis override fields, and the override fields are disabled and greyed out when auto-assign is enabled.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.6.4...v0.6.5",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.6.5",
       "prerelease": false,
@@ -1639,32 +1904,38 @@
       "assets": [
         {
           "digest": "sha256:04e529fe7f152faa205dcf4f3bdf32128937e1bbaa7e871d886dfccaaf227869",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 807663
         },
         {
           "digest": "sha256:d897ba6b7cf410222bc49fe947a1da40d23ed81fae9e868d88aa36b0f2adaa1e",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:e9a683eeb6e75836a641bf1d599bc7712a29d37a47805020798ce71a3bf7bfd5",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 763
         },
         {
           "digest": "sha256:b960c48cd8d99b083fb15c24b82755cfd6e70aaaa600fb543a0589fb41ecbb40",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2176638
         }
       ],
       "author": "jmiba",
       "description": "## Release 0.6.4 (Bugfix Release)\r\n\r\n- Publish a clean follow-up patch release so the Redis image pin and troubleshooting updates are included in release artifacts.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n- **Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.6.3...v0.6.4",
+      "downloadCount": 3,
       "draft": false,
       "name": "v0.6.4",
       "prerelease": false,
@@ -1675,32 +1946,38 @@
       "assets": [
         {
           "digest": "sha256:0c63d5502b9365a021a3084b408334025df215d0f228d5aabc50998d464c9a68",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 807588
         },
         {
           "digest": "sha256:44187d49f8ec3cf4cdcdabf78203e4b1867e632b9036b81e4584773571fd0e78",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:ab609fae37aac9e2b819aebc1d37f2c41473dcd69969278735bf7327bd1831e8",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 683
         },
         {
           "digest": "sha256:034c8d5befc0d821bbb64d3c1aca11b9f126aeb8a46c45e218845e4f5217c620",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2176326
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.3\r\n\r\n- Pin Redis Stack image to `docker.io/redis/redis-stack-server@sha256:798ab84d9f266936b034ab11c4d04a2b8e4b441884c5aa7d17ac951eefdf742a` to avoid `latest` drift.\r\n- Clarify Redis startup troubleshooting with explicit file-sharing guidance and additional container startup diagnostics.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.6.2...v0.6.3",
+      "downloadCount": 0,
       "draft": false,
       "name": "v0.6.3",
       "prerelease": false,
@@ -1711,32 +1988,38 @@
       "assets": [
         {
           "digest": "sha256:7f75550419976df6ebcfe495ba59ab0db38fa0937235ab5f716fe62d48b468e8",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 807581
         },
         {
           "digest": "sha256:44187d49f8ec3cf4cdcdabf78203e4b1867e632b9036b81e4584773571fd0e78",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:ab609fae37aac9e2b819aebc1d37f2c41473dcd69969278735bf7327bd1831e8",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 683
         },
         {
           "digest": "sha256:51139f0db526591ef1dd730c8911437f8fb51d28bd00e82275202e8d66a2e656",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2176325
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.2 (Bugfix Release)\r\n\r\n- Replace XPI verification with a download button that saves to your system Downloads folder.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.6.1...v0.6.2",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.6.2",
       "prerelease": false,
@@ -1747,37 +2030,44 @@
       "assets": [
         {
           "digest": "sha256:58efc7cad2246301f7316777a05337670ac1cec296416fb4adaff3d390cbddaa",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 807665
         },
         {
           "digest": "sha256:6f6d304e152b47c3048c691344ddd9fe3a6eb322020bd5617a8ad1a7384b0b25",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:ab609fae37aac9e2b819aebc1d37f2c41473dcd69969278735bf7327bd1831e8",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 683
         },
         {
           "digest": "sha256:1834f3e69f22af55929ffb5f17b3f128be7bbe4b57c364e27cc1a896d4c743fb",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2191685
         },
         {
           "digest": "sha256:0271d527d54b80a81be7d94e09729b22fd731d15dc145a60474d6e75882ab18e",
+          "downloadCount": 0,
           "name": "zrr-companion.xpi",
           "size": 6833
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.1 (Bugfix)\r\n\r\n- Include the Zotero companion XPI in release assets to ensure the plugin can install it.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v.0.6.0...v0.6.1",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.6.1",
       "prerelease": false,
@@ -1788,32 +2078,38 @@
       "assets": [
         {
           "digest": "sha256:9c80afd6d42e31411869ef234d6bd7a0066715809c614b6aeb87461114a00500",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 807665
         },
         {
           "digest": "sha256:2ac4c9a018e60275f8f65d10ed624171ea8ee8164d240648f2576a45b0000654",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:ab609fae37aac9e2b819aebc1d37f2c41473dcd69969278735bf7327bd1831e8",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 683
         },
         {
           "digest": "sha256:4d3bb92fea06ac46729893f7f31c498c291d863b4edde6c92a675ea9cc9f2b70",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2191646
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.6.0\r\n\r\n- Image/rect annotations now embed as images in annotation callouts when available.\r\n- Annotation fetch now requests `annotationImage` from Zotero and falls back if the API rejects the include.\r\n- Annotation sync no longer sends `annotationText` for non-highlight/underline types to avoid Web API 400s.\r\n- Added Zotero companion integration (settings + cached-only fetch) for image/ink annotations.\r\n- Zotero companion settings now include install helpers and a status check button.\r\n- Zotero companion add-on now ships with an update URL and `updates.json` manifest.\r\n- Zotero companion settings can generate a token, verify the bundled XPI, and open Zotero Add-ons.\r\n- Inline annotation citations now resolve to annotation blocks instead of missing `zrr-chunk` anchors.\r\n- Docker autodetect no longer overwrites generic `docker`/`podman` values when starting Redis, keeping settings portable across OSes.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.5.3...v.0.6.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "v.0.6.0",
       "prerelease": false,
@@ -1824,32 +2120,38 @@
       "assets": [
         {
           "digest": "sha256:a0b8c5d47d65b6e3af537f0f2531b8f623b95933105fdef9a4e0b64704cbbf53",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 794276
         },
         {
           "digest": "sha256:2ac34c84c15cbc98e00ccd33a1c3f96715819f21f2c9bf2f937ac9399855ee97",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:ab609fae37aac9e2b819aebc1d37f2c41473dcd69969278735bf7327bd1831e8",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 683
         },
         {
           "digest": "sha256:8bc825330b15a8b3cb0f237907e840032a700eb939aee93b1d4f540bee19b21d",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2172062
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.5.3 (Bugfix Release)\r\n\r\n- Inline annotation citations now resolve to annotation blocks instead of missing `zrr-chunk` anchors.\r\n- Docker autodetect no longer overwrites generic `docker`/`podman` values when starting Redis, keeping settings portable across OSes.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n- **Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.5.2...v0.5.3",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.5.3",
       "prerelease": false,
@@ -1860,32 +2162,38 @@
       "assets": [
         {
           "digest": "sha256:0d6508524fa381ff39b06fa3b90ef883f6ffc2e5dec6181c520c402fbf18097d",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 794229
         },
         {
           "digest": "sha256:656eb171ad9a04209dc152be8cd71e9d8a7b977957558d2c906addc83f80603d",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:dafbf794a5ab6eccd42ad3651d84e7650d2a00aba9bb3d49365b1ec2d283beac",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 663
         },
         {
           "digest": "sha256:c1ae0990ecf400c95ff19ba57fb6928ce2aecf218d3069a1770620dcfa2b98ac",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2171976
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.5.2\r\n\r\n- Docker path autodetect no longer overwrites generic `docker`/`podman` settings with OS-specific absolute paths.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.5.1...v0.5.2",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.5.2",
       "prerelease": false,
@@ -1896,32 +2204,38 @@
       "assets": [
         {
           "digest": "sha256:0eb6790340192f3bf208b289e6d18eb8d709dd5c0d3c43ffc6eeab37695370d4",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 794101
         },
         {
           "digest": "sha256:3f0a78a721c7ae6af6e2396d1c7454090818656dfd0559b0c5713c1dd6700f6e",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 295
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:070a75d705fa68d04c24151bee407f60949f6472d99ce4f9075ce44319f005b1",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 643
         },
         {
           "digest": "sha256:6dfe6de3eaac322a3f562d74d6c9fd806fdb86e75ff35125e9cc202db0f6bf81",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2171851
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.5.1\r\n\r\n- Additionally to `~`, `$HOME`, and `%USERPROFILE%` in Python/Docker/Redis path fields, relative paths with separators now resolve from the user home (use `./` for vault-relative Redis paths).\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.5.0...v0.5.1",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.5.1",
       "prerelease": false,
@@ -1932,32 +2246,38 @@
       "assets": [
         {
           "digest": "sha256:b3a475aa606c50c3f4d01acc1e7860ff01d60d5026eb736316e85e571424ce5d",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 793694
         },
         {
           "digest": "sha256:862da8f6dfaa006ee5c569ca9c8e124e604f9926a9ba241972c7782f2b57a817",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:cb569356407bcb0f49966d652f08ddca2b47f77739a0ac8df3ba7c3d698cd219",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 8679
         },
         {
           "digest": "sha256:89f87b559191e1c663dc522f94db98a8b71409a0057e35c81148f40f352bef93",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 623
         },
         {
           "digest": "sha256:898522dc98a573fe1788e1e8b8657300b8951ac90e1b71a3d3eb2c3c53fbca91",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2171674
         }
       ],
       "author": "jmiba",
       "description": "## New in  Release 0.5.0 (Bugfix Release)\r\n\r\n- Annotation import now retries Web API lookups and warns when Web API access is missing.\r\n- Tag syncing now re-converts normalized Obsidian tags back to space-separated Zotero tags to avoid duplicates.\r\n- Retrieval now force-includes top annotation hits and marks annotation citations in chat.\r\n- Settings now accept `~`, `$HOME`, and `%USERPROFILE%` in Python/Docker/Redis path fields for cross-OS portability.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.9...v0.5.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.5.0",
       "prerelease": false,
@@ -1968,32 +2288,38 @@
       "assets": [
         {
           "digest": "sha256:89699b079a9b56c162e4cb697894af2c90f25fbc77057101a643bc3add388a7e",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 778995
         },
         {
           "digest": "sha256:77cadfa38b392c6a2e1e7c7d9fa79e1781230551d2f9456f664bd7e4066c44d7",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:e5713decbe247e7e663548bbd9ce8cf9ddc37b0b984aacb71f29d52e2e783984",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 7553
         },
         {
           "digest": "sha256:4319c0487131a52acaa9e5cb7da78f5ac87944b5fc1fb486cf7641be0e902043",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 603
         },
         {
           "digest": "sha256:95df720a9b5e456be798d1e0668e04cfe4c07b9528ec63395b2ff629421a47fa",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2167171
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.4.9\r\n\r\n- Doc index PDF paths now persist as vault-relative when possible.\r\n- Zotero item picker now shows item type icons.\r\n- Added a template placeholder and sync pipeline for Zotero annotations (two-way sync + Redis indexing).\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.8...v0.4.9",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.4.9",
       "prerelease": false,
@@ -2004,32 +2330,38 @@
       "assets": [
         {
           "digest": "sha256:e521938bceaddf029865f9793fa8c18efc9a117a7257aacc2ac4370d86c8f0f3",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 757145
         },
         {
           "digest": "sha256:2af97b87e7114d6576e2dcf53f4e533e239836153b9ef8982606494971824587",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:a325ce7ac82d736b51577ecdcfdcee56174e163768e99b3f92ba67ba3f745eec",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 7103
         },
         {
           "digest": "sha256:865d5b86d648c1e92d726d1dfc5a58193e2f54a4ee441f656261ec32c4c99e2a",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 583
         },
         {
           "digest": "sha256:eced2a7a30207961bf304aedf288a8b27c65bca1ff784e34c27249cdb7360cfc",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2161073
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.4.8\r\n\r\n- Section chunk markers now label sections explicitly and show the estimated page in parentheses.\r\n- Section chunk badges display the section label with the estimated page number.\r\n- Section chunk notes now include the section heading for readability.\r\n- Metadata sync now includes DOI, publisher, place, issue, volume, pages, and item type.\r\n- Zotero frontmatter keys now normalize to space-separated names (legacy underscore/hyphen/camel variants remain readable).\r\n- Metadata sync now uses a single conflict modal and tracks a last-sync snapshot to reduce repeated prompts.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.7...v0.4.8",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.4.8",
       "prerelease": false,
@@ -2040,32 +2372,38 @@
       "assets": [
         {
           "digest": "sha256:bea1568ad36b7e5dbf32e360d7b3f61dc77f0a0201f5e7a80f3c4c7b5a921e67",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 744278
         },
         {
           "digest": "sha256:9b8e2a8833699fd971a9aa20bdbfca4cac520fa540127b66dbce2a3023ea701c",
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:a325ce7ac82d736b51577ecdcfdcee56174e163768e99b3f92ba67ba3f745eec",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 7103
         },
         {
           "digest": "sha256:35b4f10b7008796101564ac1c35ec6795824883e2c48fddc8c7e93089ac4dbeb",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 563
         },
         {
           "digest": "sha256:ae0e2e0225187c04b66745f03189b64e4606300f2f6c047edd075b981dc9de78",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2157598
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.4.7\r\n\r\n- Better BibTeX citekeys: recognize pinned keys in Extra (bibtex/biblatex) and fall back to CSL `citation-key` when needed.\r\n- Added `date_added` and `date_modified` template vars.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.6...v0.4.7",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.4.7",
       "prerelease": false,
@@ -2076,32 +2414,38 @@
       "assets": [
         {
           "digest": "sha256:cb4495b9312f6f2676a8d53fbe8202d899925e801b28be756bada54f8148caa6",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 743846
         },
         {
           "digest": "sha256:79f0ee877fd86694e0bee847ed1f5d8fdec1f5fc988bd1204cfa525eca26335a",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:a325ce7ac82d736b51577ecdcfdcee56174e163768e99b3f92ba67ba3f745eec",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 7103
         },
         {
           "digest": "sha256:053f3ce511821edd105c6492c9519ae7af7e6843cf10797d608c86ac035a410e",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 543
         },
         {
           "digest": "sha256:7edf91f558a2ae313e4b22499d9c1653135dac7ddf4585d6c6da9219247d7a8a",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2157389
         }
       ],
       "author": "jmiba",
       "description": "## Changes in Release 0.4.6\r\n\r\n- Default reranker model updated to `BAAI/bge-reranker-v2-m3` for better multilingual retrieval.\r\n- Internal refactor: extracted PDF sidebar, chunk marker, and attachment helpers into dedicated modules.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.5...v0.4.6",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.4.6",
       "prerelease": false,
@@ -2112,32 +2456,38 @@
       "assets": [
         {
           "digest": "sha256:ae4d6d8cb6bf064cf7f47732a637a3d3e207330838c35f87b6583aa1c301e07d",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 742547
         },
         {
           "digest": "sha256:9842ff043642c048cc493174a4de2b9f39a9dc63dd3b886ae4b5d32549a13776",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:a325ce7ac82d736b51577ecdcfdcee56174e163768e99b3f92ba67ba3f745eec",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 7103
         },
         {
           "digest": "sha256:852f62b34c810e79309baa0f5777b68b1a5c0d2c4258a4e14e8b2c9e9e948187",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 523
         },
         {
           "digest": "sha256:5ad1ea7237b25bd44c6dabf14e5a0091cfdbccd77d4084103863ceeb527c9430",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2156431
         }
       ],
       "author": "jmiba",
       "description": "## New in Release 0.4.5\r\n\r\n- Improved system prompt for footnote recognition in clean-up passes.\r\n- Added a per-page OCR override setting and clarified OCR mode labels in settings.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.4...v0.4.5",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.4.5",
       "prerelease": false,
@@ -2148,32 +2498,38 @@
       "assets": [
         {
           "digest": "sha256:241be743904d23ddb4c5d227f2d387d34d926ecc3496096b97d04209c0b25d99",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 739845
         },
         {
           "digest": "sha256:22841338ae5458ed129c1031083a09c983c50e6c59214b4c34c91fd6dd495784",
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:e8c9b9021e551b50a5b129383ca0e4b493d0c435f30b259b444685ba41b279dc",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 7064
         },
         {
           "digest": "sha256:294bf8b7dd8c800154ed12864fa4c0ae218752c14225f5a86125cfeefb160b85",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 503
         },
         {
           "digest": "sha256:c3799be670f8972aacb2526e46d89dbfd79581372e5c30cb3036b001a74cc74f",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2155332
         }
       ],
       "author": "jmiba",
       "description": "## 0.4.4 Release Highlights\r\n\r\n- Added bidirectional YAML ↔ Zotero metadata sync for title, short title, date, abstract, tags, authors, and editors with per‑field conflict prompts on note open/save.\r\n- Chat messages are now individually copyable and deletable via icon buttons.\r\n- Docling logging improvements: UTC timestamps, PID/doc labels, and end‑of‑run summaries for noisy CMap warnings; log file cleared before each import.\r\n- PaddleOCR‑VL API retry logic now auto‑splits on HTTP 500 while honoring payload limits.\r\n- Retrieval upgrades: context snippets for embeddings, query expansion, reranking, configurable RRF blending, and per‑document caps.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.3...v0.4.4",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.4.4",
       "prerelease": false,
@@ -2184,32 +2540,38 @@
       "assets": [
         {
           "digest": "sha256:48c121e20e36ab2e7c2843d808540f3daa482c1cb26674c878655e4bbeb720f7",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 691293
         },
         {
           "digest": "sha256:0e7ab596ddb52a80fdf8b69ea01e73506596cd91f712ed234141c61610cccf40",
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:bce128c69d2c442b4818fe0aeffcfff8cda7ad235971ec8be33aa87e1805f389",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 6379
         },
         {
           "digest": "sha256:bff4e172c6a4bd4da54dbc790a075e1bab54f9afbb93fc9e6cd30991dc4833e7",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 483
         },
         {
           "digest": "sha256:a19b5d761d2f9f677dd9adc6021dbc986fc93a7c743b2eaba696d0b79437d927",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2139439
         }
       ],
       "author": "jmiba",
       "description": "## Zotero Redis RAG v0.4.3\r\n\r\n### Highlights\r\n- PaddleOCR API chunking for large PDFs, enabling full processing.\r\n- Improved PDF text layer quality classification.\r\n- Better compatibility with pdf++ and Local Images Plus plugins.\r\n- Safer chat citation link rendering, including comma-before-page and short-title preference.\r\n- Deferred note sync to preserve image link renames from Local Images Plus.\r\n\r\n### Changes\r\n- Chunking improvements for large PDFs via PaddleOCR API.\r\n- Updated PDF text-layer quality assessment.\r\n- pdf++ integration for improved PDF handling.\r\n- Local Images Plus compatibility to avoid image link breakage on note rebuilds.\r\n- Improved citation formatting, including short title usage and page label formatting.\r\n\r\n### Upgrade Notes\r\n- If image links were previously broken, open the affected note and make a small edit to resync chunk cache links.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.2...v0.4.3",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.4.3",
       "prerelease": false,
@@ -2220,32 +2582,38 @@
       "assets": [
         {
           "digest": "sha256:9541daa7a8fd394041030f0e1cac40cd86b03bcf1a8472d1b1ee17c5b83731f6",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 666317
         },
         {
           "digest": "sha256:84ff9b2d8b418b4657d1d163dd38c9375062530be1af6c2d829b19b70eac7278",
+          "downloadCount": 63,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:bce128c69d2c442b4818fe0aeffcfff8cda7ad235971ec8be33aa87e1805f389",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 6379
         },
         {
           "digest": "sha256:8487ced74e421bba5a6da0364e50b50023b01bdb7af0b6971baf8878b080b66e",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 463
         },
         {
           "digest": "sha256:5e6d93e7dfea4534cc9d6b5b75f6540c08929bce3e6a2b453e3778ead17cb2d9",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2129848
         }
       ],
       "author": "jmiba",
       "description": "## Release highlights (0.4.2)\r\n\r\n- Images extracted from PDFs now land in the vault attachment folder.\r\n\r\n→ [Changelog](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.1...v0.4.2",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.4.2",
       "prerelease": false,
@@ -2256,32 +2624,38 @@
       "assets": [
         {
           "digest": "sha256:29f1f126af4d55b334053bf3c24851e56da47cb9b2f80a676906ba8270046675",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 664723
         },
         {
           "digest": "sha256:8afd5a6ec41c3ed792fbe3f5d82c21cd6906359d4c6f22fb81bfde4a64401ef6",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:bce128c69d2c442b4818fe0aeffcfff8cda7ad235971ec8be33aa87e1805f389",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 6379
         },
         {
           "digest": "sha256:7fc7b0d9511d98d938ccddbdbaa88a48ebf61dd8496e1aaca583a45aead2a192",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 443
         },
         {
           "digest": "sha256:dc4fec8b5dcb9c755f9bc82cd7497c8e089bc654f3fb67bccda5c65a7b754e9a",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2129368
         }
       ],
       "author": "jmiba",
       "description": "## Release highlights (0.4.1)\r\n\r\n- Page-synchronous view of PDF in sidebar.\r\n- Improved footnote conversion.\r\n- Footer, header and page number removal from OCR/text-layer extraction.\r\n- PaddleOCR API timeout handling.\r\n\r\n→ [CHANGELOG.md](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.4.0...v0.4.1",
+      "downloadCount": 3,
       "draft": false,
       "name": "v0.4.1",
       "prerelease": false,
@@ -2292,32 +2666,38 @@
       "assets": [
         {
           "digest": "sha256:0bd8365e5991b7464a16d34b7581775b38cfa7c0453e9513e488566ee312bcea",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 646248
         },
         {
           "digest": "sha256:fc36d76b3adad3e5e4c9e64d91bc3de5f47b5696bc7c4026143e722188a806e6",
+          "downloadCount": 33,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:4edafe839ff54f035e6e8880642b3d206c765997f7bb51e2589276e3e907d75b",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 5690
         },
         {
           "digest": "sha256:fc2488ee8a325b4f89cbbc3463f1199fd0e97f402bb91b875912817aedb88df5",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 423
         },
         {
           "digest": "sha256:9520726a6b0196af8fc403b89e31af7cb5b113b7f325a667a68ace41e79a6ac9",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2122459
         }
       ],
       "author": "jmiba",
       "description": "## Release highlights (0.4.0)\r\n\r\n- PaddleOCR API support (PaddleOCR‑VL / PP‑StructureV3) with engine selection and API key settings.\r\n- Image captions now labeled explicitly in indexed text for better retrieval.\r\n- Improved handling of embedding dimension mismatches with drop/rebuild recovery and clearer provider error guidance.\r\n- Better Redis/Zotero connectivity feedback (toast warnings and file logging during rebuilds).\r\n- Python environment setup improvements (shared cache default, per‑vault option, auto‑detect Python path).\r\n- Redis startup now detects existing instances and notifies the user.\r\n\r\n→ [CHANGELOG.md](CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.3.4...v0.4.0",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.4.0",
       "prerelease": false,
@@ -2328,32 +2708,38 @@
       "assets": [
         {
           "digest": "sha256:61c5d6a0e581846f603d731d59e0f9e44fa96acbff7214a855e295cb733edf42",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 485237
         },
         {
           "digest": "sha256:6f8192edb9875e5211b3cac17604d3d76cb612e6d2421d0d35221bdbc0849b2e",
+          "downloadCount": 166,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:751fddd122d188af0a519b72d157daf964170fa3ba15c583e7c4622021be3540",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 5620
         },
         {
           "digest": "sha256:a0af224ba8d5b2c4855c6fbf5b96b651960eaa4228724a7ba3ef67548e533ded",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 403
         },
         {
           "digest": "sha256:6f527b96ccba5679166d714b9f1fc162aadc93fc60d894f73c5b7ce349c93525",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2063430
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Smarter retrieval: hybrid lexical + vector search now auto‑broadens when context is weak, preserves exact matches, and improves short‑query handling.\r\n- Better indexing quality: Markdown‑aware indexing (tables/lists) and page‑reflowed OCR text improve chunk fidelity; long chunks are embedded via multi‑vector subchunks.\r\n- Safer operations: drop/rebuild and purge tools, early Redis‑down warnings, clearer progress logging, and automatic doc_id repair in notes.\r\n- Improved metadata: aliases in frontmatter, robust year extraction, and better attachment detection in the Zotero picker.\r\n\r\n**Relese Notes**: [CHANGELOG](CHANGELOG.md)\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.3.3...v0.3.4",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.3.4",
       "prerelease": false,
@@ -2364,32 +2750,38 @@
       "assets": [
         {
           "digest": "sha256:a77987d30f52a93b531d3080b535bd08f35bd6b628cf0ca07fe06a8e379efe2b",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 411600
         },
         {
           "digest": "sha256:96676e7ac315bcacd4b486afc34d8f03fef5bec75c700fc76b611873d97c3771",
+          "downloadCount": 33,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:73769da69aa6defee8dfc9cc9ccbf0b61e3ea592e0ea0ad19ed7477692339811",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 4795
         },
         {
           "digest": "sha256:171c1e0ea851496f9fd3a55c106615390331373f72c0ce251b84bfb0b5637747",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 383
         },
         {
           "digest": "sha256:1faefdf240c012ee08440252a97f90fdbb5c1ab6f836a5328a5d00129e9ad8e4",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 2033897
         }
       ],
       "author": "jmiba",
       "description": "## 0.3.3 Highlights\r\n\r\n- Tag-aware retrieval boosting + tag regeneration in the chunk editor; optional tag sanitization for Obsidian.\r\n- Editable note body template; clarified YAML-safe frontmatter placeholders with item link + citekey defaults.\r\n- LLM provider profiles: model lists refresh on profile switch, clearer profile deletion, and masked API-key fields.\r\n- Fix: chat title generation avoids incompatible OpenAI calls.\r\n\r\n→ [CHANGELOG.md](CHANGELOG.md)\r\n\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.3.2...v0.3.3",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.3.3",
       "prerelease": false,
@@ -2400,32 +2792,38 @@
       "assets": [
         {
           "digest": "sha256:65d7a7c0d84a599d474323a1757e05587d820590e509d916c4ec75c0b965ff0a",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 399593
         },
         {
           "digest": "sha256:d5f498283a2527022894ab4f1bf6f7ae79f61b09b7cfaf7ee86215a707c53682",
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:73769da69aa6defee8dfc9cc9ccbf0b61e3ea592e0ea0ad19ed7477692339811",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 4795
         },
         {
           "digest": "sha256:a249d2e577000dd9ddd6d451d6b049b5d37bb3dbf6c3db52261ebde4f26a2f3e",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 363
         },
         {
           "digest": "sha256:10482a6c46a87d3844d505ef92416696bbce24fa6f4d1a5775aabfee322a3b05",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 2029906
         }
       ],
       "author": "jmiba",
       "description": "## Patch\r\n\r\n- Hoverbar now shows Lucide icons and tooltips on all buttons.\r\n- Hoverbar: clean-chunk and open-in-Zotero actions added.\r\n- Chunk cleanup progress is now surfaced in the status bar.\r\n- Frontmatter no longer emits empty tag entries when Zotero has no tags.\r\n\r\n→ [Changelog](./CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.3.1...v0.3.2",
+      "downloadCount": 3,
       "draft": false,
       "name": "v0.3.2",
       "prerelease": false,
@@ -2436,32 +2834,38 @@
       "assets": [
         {
           "digest": "sha256:2c1ed77a9d4c9a446617774d094f39407152d70ecf3f187c54558cdff7b5c1f0",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 395358
         },
         {
           "digest": "sha256:23262a0d2be0c13039ccfe7e4166ef9c16eb15ad00b4ccd3c8123fa15e879179",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:73769da69aa6defee8dfc9cc9ccbf0b61e3ea592e0ea0ad19ed7477692339811",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 4795
         },
         {
           "digest": "sha256:eed2bb4b54c063cd4e478a3baf0738cd26380e7b7d61ef5470bec0851b31e560",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 343
         },
         {
           "digest": "sha256:face24be99be43b0968c500cf3a000ec39d16ef9b19b6fcd36db405112b61736",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2028762
         }
       ],
       "author": "jmiba",
       "description": "## Patch\r\n\r\n- Improved Python error handling and auto-opened Settings for environment fixes.\r\n- Frontmatter `pdf_link` now stores raw Zotero deeplinks (no markdown wrapper).\r\n- Release package now includes `CHANGELOG.md`.\r\n\r\n[Changelog](./CHANGELOG.md)\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.3.0...v0.3.1",
+      "downloadCount": 6,
       "draft": false,
       "name": "v0.3.1",
       "prerelease": false,
@@ -2472,32 +2876,38 @@
       "assets": [
         {
           "digest": "sha256:099d656fabee288d2ff081b9d33b145bd37d324b8fe9849114b89d67f0ce0eb3",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 394940
         },
         {
           "digest": "sha256:b52a60c461abf2904f652abf08d18a21063c9fb61d9bde1d2fa777be86a94935",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:73769da69aa6defee8dfc9cc9ccbf0b61e3ea592e0ea0ad19ed7477692339811",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 4795
         },
         {
           "digest": "sha256:692552c7fc991b9e0041910dcd58b61447b04a401d33d99c5abbd6825f693e7b",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 323
         },
         {
           "digest": "sha256:5bad4517f2eb7c90dc5245b801b76c928d98c5af116b98c4696394e7270cb410",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 2028510
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Improved handling of Zotero items.\r\n- New cursor‑anchored chunk toolbar with Tags, Indexed preview, and Exclude/Include.\r\n- Expanded Zotero frontmatter support: editors, tags, collections, book/journal fields, identifiers, abstract.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.2.5...v0.3.0",
+      "downloadCount": 6,
       "draft": false,
       "name": "v0.3.0",
       "prerelease": false,
@@ -2508,32 +2918,38 @@
       "assets": [
         {
           "digest": "sha256:e04c294bd746869d884e6521ad1e1f7ec4bcd2ff9c9ad0a567fbef8e61e97abe",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 284602
         },
         {
           "digest": "sha256:25553dcfe97c23af463cd758425ed42d4ee9146f6d35d940a1c4cd1cf090205e",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:294ab54794afe9b8dec7f541270692c157f4471774d7b808154f7163bd735c31",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 4226
         },
         {
           "digest": "sha256:478071df89e56bf86d116cfcfa2b1942b911f4c17b5454bf8340d87cb7db62c1",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 283
         },
         {
           "digest": "sha256:bc488002c80e01c82937c95212ddcbf5f833ec89aa48be167f2445f1d674c93f",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 1990439
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Redis Stack now auto-selects a vault-specific port to avoid collisions across vaults.\r\n- Docker/Podman auto-detection runs on plugin load and repairs invalid paths.\r\n- Clear notices when Docker/Podman is installed but not running.\r\n- Recreate-from-cache can recover missing PDFs by re-downloading attachments.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.2.2...v0.2.5",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.2.5",
       "prerelease": false,
@@ -2544,32 +2960,38 @@
       "assets": [
         {
           "digest": "sha256:7d64ac401bb31d6839850e51116e6cfd91fcf5c9619b2ace3eca70be01e24cf0",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 273998
         },
         {
           "digest": "sha256:1198b3a3ceedab90e483b0766a68930eaa3a8ecb40e277e23a62528f4a43f8a0",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:294ab54794afe9b8dec7f541270692c157f4471774d7b808154f7163bd735c31",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 4226
         },
         {
           "digest": "sha256:478071df89e56bf86d116cfcfa2b1942b911f4c17b5454bf8340d87cb7db62c1",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 283
         },
         {
           "digest": "sha256:718100794db5cfe9b661a96251eda66c7c00c08f3a2da537fb139d089d4472f9",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 1986094
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- OCR: Tesseract column handling now reflows paragraphs per column on a per‑page basis, improving multi‑column ordering without line‑by‑line output.\r\n- Setup: One‑click Python environment setup from settings (creates .venv in the plugin folder and updates the Python path).\r\n- Vault/Redis: Per‑vault Redis namespacing and Docker Compose project naming for safer multi‑vault setups.\r\n- PDF: OCR‑layered PDF creation option and preference for vault PDFs in citation links.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.2.2...v0.2.4",
+      "downloadCount": 8,
       "draft": false,
       "name": "v0.2.4",
       "prerelease": false,
@@ -2580,32 +3002,38 @@
       "assets": [
         {
           "digest": "sha256:634840bbf9b087d22385d3f818fcf6a59bb5855d316fe978a879d29d06873a1b",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 186077
         },
         {
           "digest": "sha256:2c5efb208bb627c14742ccbda495ecdf71323727cdd1b5c45f8df65520729ce4",
+          "downloadCount": 88,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:294ab54794afe9b8dec7f541270692c157f4471774d7b808154f7163bd735c31",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 4226
         },
         {
           "digest": "sha256:24bafcc9c06ee0a09986c3bd1587f455a3b72805e6a17b0311982b2d8d41d043",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 243
         },
         {
           "digest": "sha256:25ab3f0ffe830396e81a6bca5044ba9fbc1a8f545d0775abfb7190a5699d8c63",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 71885
         }
       ],
       "author": "jmiba",
       "description": "Adds missing  tool file utils_embedding.py\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.2.01...v0.2.2",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.2.2",
       "prerelease": false,
@@ -2616,32 +3044,38 @@
       "assets": [
         {
           "digest": "sha256:c578baff600285bd88c58cf70c39d69e6afc0406ab534cc63cded8bf4f4e492c",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 184814
         },
         {
           "digest": "sha256:b857723a99d8b792358281a541ec0b328934abc356dc475ff0472803bdcbbb9f",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:294ab54794afe9b8dec7f541270692c157f4471774d7b808154f7163bd735c31",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 4226
         },
         {
           "digest": "sha256:004cfa6cc66a14054dbb243980b27703a3de370b8d7f166e433b1d305b049817",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 223
         },
         {
           "digest": "sha256:6fac771cb4758c91ece54285c98f8647bd006f7b3e9c71508d51cf420b3f6d28",
+          "downloadCount": 2,
           "name": "zotero-redisearch-rag.zip",
           "size": 71856
         }
       ],
       "author": "jmiba",
       "description": "# Zotero Redis RAG v0.2.1 – 2025-12-23\r\n\r\n## Improvements\r\n- **Smoother chat streaming:** Greatly reduced flicker in the chat window during streamed LLM responses.\r\n- **Python code cleanup:** Deduplicated embedding utility functions into a shared `utils_embedding.py` module.\r\n- **Better error handling:** Improved messaging for Python tool execution errors.\r\n\r\n## Fixes\r\n- **IndentationError resolved:** Fixed a rare `IndentationError` in `rag_query_redisearch.py` after code deduplication.\r\n- **Multi-vault Redis support:** Clarified and improved support for running Redis Stack in multiple vaults, each on its own port.\r\n\r\n## Notes\r\n- When running multiple vaults, set a unique Redis port (e.g., `6379`, `6380`, etc.) and update the Redis URL in plugin settings for each vault.\r\n- No breaking changes; upgrade is safe for all users.\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.2.0...v0.2.01",
+      "downloadCount": 7,
       "draft": false,
       "name": "v0.2.01",
       "prerelease": false,
@@ -2652,32 +3086,38 @@
       "assets": [
         {
           "digest": "sha256:719cac52176134106661843b9194f89aa51eacd22f8b7cdf3dc5525f9c6ba8b4",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 186156
         },
         {
           "digest": "sha256:7224aedea1d0f1c9df57dab86a660bf1f7277ca4b9eee066a7e0e998f4cd892b",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:294ab54794afe9b8dec7f541270692c157f4471774d7b808154f7163bd735c31",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 4226
         },
         {
           "digest": "sha256:99da4f9529ab4213ee373990467090e21e366826f7607a9fdbab8cf9e925efc6",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 203
         },
         {
           "digest": "sha256:c70228fe3dc83ae99c29d90c1bcb82d1aa9644b8bd9b4b360b648430a5d46894",
+          "downloadCount": 2,
           "name": "zotero-redisearch-rag.zip",
           "size": 71351
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Context window for real conversations\r\n- Save, rename, reload or delete chats\r\n\r\n##Assets\r\n\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.2.0...v0.2.0",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.2.0",
       "prerelease": false,
@@ -2688,32 +3128,38 @@
       "assets": [
         {
           "digest": "sha256:93a6bbd04cc579db41953d2eb5f6a23ca6063843b9c419625c6800f0ff793644",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 154831
         },
         {
           "digest": "sha256:a8f9f74a03ec7644e776b75d556f04670b102de85b38ff6e5e66a233f45a183e",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:7785e5e01e8fa4d10df4d4c4fc785cf8d9e86c370ce52dcc630b39758299857e",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 2865
         },
         {
           "digest": "sha256:53afb4aa0cedfd8a3748af6ee5382affeede82bde6cc9ff35584c20a2a06c3a6",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 183
         },
         {
           "digest": "sha256:a7a799b8d4782308fe62f5d8fb3a329ca5e3d20f0c106e5e9afd135517d1eeb3",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 61128
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Better multi‑vault support for Redis Stack auto‑start: one Docker Compose project per vault, Redis data stored per vault, and host port taken from your configured Redis URL (so multiple vaults can run in parallel on different ports).\r\n- Icons are now generated from icon.svg / icon-chat.svg at build time (easier to customize without editing TypeScript).\r\n- Release packaging is cleaner: excludes Python __pycache__ and *.pyc files.\r\n\r\n## Assets\r\n\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.7...v0.1.8",
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.1.8",
       "prerelease": false,
@@ -2724,32 +3170,38 @@
       "assets": [
         {
           "digest": "sha256:3aa74af7d67a80cf7dfab6301fc5bc08ce11f1e69e377b74ed7a99316aaee6c4",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 153103
         },
         {
           "digest": "sha256:c9b9f80b1236b37579071bdb8e2a1a1ef64d47fec9fab90236a5bef9845e7e7f",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:7785e5e01e8fa4d10df4d4c4fc785cf8d9e86c370ce52dcc630b39758299857e",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 2865
         },
         {
           "digest": "sha256:a579d50d7e9e88b2e5502e2c15559a25654ea6202f016b19e1385e05b66c7d79",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 163
         },
         {
           "digest": "sha256:131c588f1ec4b4a61cab7948d55b5622cbf85d40eae8d0aced0dcb2d26d9ec11",
+          "downloadCount": 0,
           "name": "zotero-redisearch-rag.zip",
           "size": 68780
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n- Added Web API fallback for Zotero reads (search, children, file downloads) and language write-back.\r\n- PDF link now points to Zotero attachments when copy-to-vault is off.\r\n- Overwrite confirmation before replacing an existing note during re‑import.\r\n- Picker badges for “Indexed” and “No PDF” with styling.\r\n- README reworked for clearer onboarding and structure.\r\n\r\n## Assets\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- dist/zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.6...v0.1.7",
+      "downloadCount": 1,
       "draft": false,
       "name": "v0.1.7",
       "prerelease": false,
@@ -2760,32 +3212,38 @@
       "assets": [
         {
           "digest": "sha256:e4610743c36b7ba9434d93098fc5a4cb5bb9cf1d713276b455d1bbfe8b4e7e32",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 130359
         },
         {
           "digest": "sha256:ccdb406e73997833deae694e57c128bc60c437db36217d7dfdddfd6d5429a17b",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:ed7609258ba9adcdf68d2755cdb4109034a405b123742058ba964ce0815c5981",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 2320
         },
         {
           "digest": "sha256:71e1d70913669ff10a84b6f2fb8f1b8b315b3aa793ac4a1a5b4acaad7f20ab75",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 143
         },
         {
           "digest": "sha256:0cf6e4c6960265b00a10ced45e840efb3d8cf16ebb99fb5c715cb2251e10aae0",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 52931
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Redis Stack start now restarts cleanly and writes to the correct data directory.\r\n- Added “Reindex Redis from cached chunks” command to recover indexes after resets or model changes.\r\n- Improved OCR quality scoring (wordfreq) and multi‑column detection heuristics.\r\n- Better page‑range detection for section chunks (no more full‑document spans).\r\n- Note renames now stay linked to citations; note names are Obsidian‑safe without hyphenation.\r\n\r\n## Assets\r\n\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- dist/zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.4...v0.1.5\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.4...v0.1.6",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.1.6",
       "prerelease": false,
@@ -2796,32 +3254,38 @@
       "assets": [
         {
           "digest": "sha256:c114e10333cb6e3c6b39ba546f62de9756d2b787883ea451486dd13e397be934",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 97721
         },
         {
           "digest": "sha256:099a25c740c6dd5ebed388c448529c9fa30e6514302de5c51bddd6d1edee0c46",
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:d404896f6c3bf6096bf99f2eab138448ac05fc6e2fab4cb7b3e61ab49d524ffd",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 2232
         },
         {
           "digest": "sha256:47ea307625967e2ea474e6638bd77002cb9b20852a8a08566216605e87117434",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 103
         },
         {
           "digest": "sha256:24331cc24e62f6480a6a0b0628f2f2aaa9612292ce8f5496d66b9cae176f6029",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 40440
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n- Added OCR routing with quality heuristics to skip OCR when a text layer exists and prefer PaddleOCR with Tesseract fallback.\r\n- Added per‑page OCR decision logic with explicit reasons and richer extraction metadata.\r\n- Added post‑OCR cleanup (dehyphenation, ligatures, conservative corrections) and optional dictionary support with a bundled wordlist.\r\n- Updated requirements and README guidance for PaddleOCR + per‑page OCR dependencies.\r\n- Tool assets now include the default wordlist in packaged releases.\r\n\r\n## Assets\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- dist/zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.3...v0.1.4",
+      "downloadCount": 3,
       "draft": false,
       "name": "v0.1.4",
       "prerelease": false,
@@ -2832,32 +3296,38 @@
       "assets": [
         {
           "digest": "sha256:027fcb7e5a9751aee0f6c80d1879d8efcc9b3037eb714d441b00a6bf02c1daf0",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 77774
         },
         {
           "digest": "sha256:fe80cc51ad2a59c1db89ee9ed82f86acc7b6a0c69fefc01ec0f9db05219b2696",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:d404896f6c3bf6096bf99f2eab138448ac05fc6e2fab4cb7b3e61ab49d524ffd",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 2232
         },
         {
           "digest": "sha256:9dbd627cebe10dd0a61ddc543344acaa340b6e93ea01dfebbef8cc2ddece25a3",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 83
         },
         {
           "digest": "sha256:6a15389c6c1e502cf7bcc4888a382c3d7c197662f2fde1b3a8d4520f9e8e2de0",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 30998
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n- Added full chat panel (right sidebar by default) with markdown rendering, streaming support, and persistent history.\r\n- Citations are now clickable and open the linked note in the main pane, with Zotero deep-links as fallback.\r\n- Added status-bar progress for Docling + indexing, plus bulk cache utilities (rebuild doc index, recreate missing notes).\r\n- Improved page extraction fallback via pypdf to get real page numbers.\r\n- Hidden cache paths + Docker Compose option for persistent Redis data.\r\n\r\n## Assets\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- styles.css\r\n- dist/zotero-redisearch-rag.zip\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.2...v0.1.3",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.1.3",
       "prerelease": false,
@@ -2868,27 +3338,32 @@
       "assets": [
         {
           "digest": "sha256:6fe4b157953625396d8c7c42dd64af661bfdbe24cc68368a8fdcf2ca0d1e4ef1",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 51318
         },
         {
           "digest": "sha256:17dca7287e27c07e13e6c36fd43aa6df81e83e5a17e7f874f2cb86f94865df74",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:1d2ee2a56a765be89ec5e46822f1fed7339b7f6ca3d78b63581e53f0bbf4a867",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 63
         },
         {
           "digest": "sha256:2324b0f443dc7f8ddabf78acb7d3a2f862caa5c6677ace7217dcf67430833e5f",
+          "downloadCount": 3,
           "name": "zotero-redisearch-rag.zip",
           "size": 23199
         }
       ],
       "author": "jmiba",
       "description": "## Highlights\r\n\r\n- Bundle Python tools into the plugin and auto-sync on load/command (BRAT updates now refresh tools too).\r\n- Add configurable YAML frontmatter template and sanitized title-based filenames for notes/PDFs.\r\n- Add “Copy PDFs into vault” toggle (link to Zotero storage when off).\r\n- Improve local Zotero API flow (no API key required) and attachment handling.\r\n- Handle chat providers that reject `temperature` by retrying without it.\r\n\r\n## Assets\r\n- main.js\r\n- manifest.json\r\n- versions.json\r\n- dist/zotero-redisearch-rag.zip\r\n\r\n\r\n**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/v0.1.1...v0.1.2",
+      "downloadCount": 4,
       "draft": false,
       "name": "v0.1.2",
       "prerelease": false,
@@ -2899,27 +3374,32 @@
       "assets": [
         {
           "digest": "sha256:fbb81a4bd947d4deb3a9249d8358718db97f1dc50238d047be737ee0fe261b2f",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 21665
         },
         {
           "digest": "sha256:91494ad209ebdd528aa248b16add24a8552242b72d98de89280bb1a5bf98beb6",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 265
         },
         {
           "digest": "sha256:05a21302cdc4363d2e248b5b2952e7fc536adc653d6e46169e4f29bd33e557e8",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 23
         },
         {
           "digest": "sha256:dee7f9729ebda52cf4896e56febb1a0d4ae251d11e7089d8ec8bd6818f7ad28d",
+          "downloadCount": 1,
           "name": "zotero-redisearch-rag.zip",
           "size": 16661
         }
       ],
       "author": "jmiba",
       "description": "**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/compare/0.1.0...v0.1.1",
+      "downloadCount": 2,
       "draft": false,
       "name": "v0.1.1",
       "prerelease": false,
@@ -2930,6 +3410,7 @@
       "assets": [],
       "author": "jmiba",
       "description": "**Full Changelog**: https://github.com/jmiba/zotero-redisearch-rag/commits/0.1.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.1.0",
       "prerelease": false,

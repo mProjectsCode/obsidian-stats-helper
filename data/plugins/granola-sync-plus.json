@@ -4,8 +4,8 @@
   "description": "Sync your Granola AI meeting notes to your vault with customizable settings. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "granola-sync-plus",
-  "lastChangedAt": "2026-06-16T04:04:58.578Z",
-  "lastFetchedAt": "2026-06-16T04:04:58.578Z",
+  "lastChangedAt": "2026-06-21T03:04:09.522Z",
+  "lastFetchedAt": "2026-06-21T03:04:09.522Z",
   "manifest": {
     "author": "Danny McClelland",
     "authorUrl": "https://github.com/dannymcc/",
@@ -24,22 +24,26 @@
       "assets": [
         {
           "digest": "sha256:c52d3de67d6dd58c0902e5c8a4bbab3a820564cc5a5241b892ca776ad4d87efd",
+          "downloadCount": 438,
           "name": "main.js",
           "size": 110501
         },
         {
           "digest": "sha256:8fad5a0d35dc9c1bb2ac56aeb180b562eabe4758c9b8e97a237d887e4841949e",
+          "downloadCount": 716,
           "name": "manifest.json",
           "size": 361
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 434,
           "name": "styles.css",
           "size": 1070
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.11.1\n\n\n### Fixed\n- **🔐 macOS encrypted-credentials path now actually decrypts on Granola 7.255+**: 1.11.0 added the right code paths but two implementation details prevented them from running on real installs. The Keychain lookup was for account `Granola` but the real account is `Granola Key`, so `find-generic-password` silently returned \"item not found\" and the encrypted path fell back to the plain `stored-accounts.json` — itself a startup-only snapshot, hence the bug stayed hidden for the first ~6h of every Granola session. Once the Keychain lookup worked, decryption still failed because the `.enc` files are not Chromium os_crypt v10 payloads. Granola uses a two-level scheme: `storage.dek` is an os_crypt v10 envelope wrapping a base64-encoded 32-byte DEK, and the `*.json.enc` files are AES-256-GCM (`[12-byte nonce][ciphertext][16-byte tag]`, empty AAD) using that DEK. The plugin now performs both steps correctly, with strict base64-alphabet validation on the wrapped DEK. Reported in [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58) and [#61](https://github.com/dannymcc/Granola-to-Obsidian/issues/61).\n\n### Known issues\n- **6h JWT staleness after Granola has been running a session**: `stored-accounts.json.enc` is written by Granola only at app startup, so the access token inside expires roughly 6h after the desktop app was launched. After that, the plugin's freshness check correctly identifies all file-based sources as expired and 401s on the next sync. The only continuously-fresh source is `granola.db` (SQLCipher); a reader for that is in active investigation on the `investigate/granola-db` branch and tracked in [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58). **Workaround until then**: restart Granola to rewrite the encrypted snapshot with a fresh token.\n\n### Credits\n- Huge thanks to [@francescocinori-ops](https://github.com/francescocinori-ops) for the reverse-engineering (wrong Keychain account, two-level format hypothesis, GCM layout arithmetic) and to [@chuckchuck512](https://github.com/chuckchuck512) for independent corroboration plus the catch that the DEK is base64-wrapped inside the v10 envelope. This release shipped because both of you ran patches against real installs and reported back precisely.\n\n---\n\n### 📦 Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` below\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all three files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\nBuilds are signed with [GitHub artifact attestations](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.",
+      "downloadCount": 438,
       "draft": false,
       "name": "Granola Sync Plus 1.11.1",
       "prerelease": false,
@@ -50,22 +54,26 @@
       "assets": [
         {
           "digest": "sha256:c7a28e3aca6539410f9934b150993234502af95968585d8016107888f008b623",
+          "downloadCount": 48,
           "name": "main.js",
           "size": 108303
         },
         {
           "digest": "sha256:1752a13d0982e64c26e740d72cf48c27408b149d3ac7feaac47ac7c4dcd9693c",
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 361
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 48,
           "name": "styles.css",
           "size": 1070
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.11.0\n\n\n### Fixed\n- **🔐 401s on Granola 7.255+ where the plaintext token file is frozen**: Recent Granola desktop builds stopped refreshing `stored-accounts.json` and now write auth state only to the encrypted `stored-accounts.json.enc` (Electron safeStorage) and `granola.db` (SQLCipher). The plugin was reading the frozen plaintext file, getting an expired JWT, and 401ing on every sync. The credential loader now decodes each candidate token's `exp` claim and picks the freshest source rather than the first parseable one (Fixes [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58)).\n\n### Added\n- **🔓 macOS: decrypt `stored-accounts.json.enc` via the Keychain**: On macOS, the plugin can now read Granola's encrypted auth store directly. It reads Granola's safeStorage master key from the user's Keychain (you'll see a one-time Keychain Access prompt allowing Obsidian to read the \"Granola Safe Storage\" item) and decrypts the Chromium os_crypt v10 payload locally. No tokens leave the machine. Linux and Windows users still rely on the plaintext fallbacks for now — open an issue if you're hitting #58-style failures on those platforms.\n\n### Credits\n- Thanks to [@francescocinori-ops](https://github.com/francescocinori-ops) for the thorough diagnosis in [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58), including the JWT-exp short-circuit analysis and the Chromium os_crypt v10 format reference that made the macOS decryption path straightforward.\n\n---\n\n### 📦 Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` below\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all three files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\nBuilds are signed with [GitHub artifact attestations](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.",
+      "downloadCount": 48,
       "draft": false,
       "name": "Granola Sync Plus 1.11.0",
       "prerelease": false,
@@ -76,22 +84,26 @@
       "assets": [
         {
           "digest": "sha256:a8cae4b7bbf3c4cc88a3e59e7a85073fb4d96ddddfbf29e7206355dc8f6e7245",
+          "downloadCount": 163,
           "name": "main.js",
           "size": 104377
         },
         {
           "digest": "sha256:d5a7f52fc629bf9945c8d98a980dd1d46906affa66158dbd8d943f72228d56f5",
+          "downloadCount": 193,
           "name": "manifest.json",
           "size": 361
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 152,
           "name": "styles.css",
           "size": 1070
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.10.0\n\n\n### Fixed\n- **🔐 Credential loader prefers `stored-accounts.json`**: When a stale `supabase.json` was left behind by older Granola versions, the plugin was reading it first and short-circuiting with an expired token, never falling through to the new `stored-accounts.json` written by Granola 7.205+. The lookup order now tries `stored-accounts.json` first and skips paths that resolve to a directory (Fixes [#56](https://github.com/dannymcc/Granola-to-Obsidian/issues/56))\n- **🛡️ \"Skip existing notes\" now actually skips**: Previously, if Granola had updated the source document, the plugin would fall through and overwrite the local file even with this setting enabled — silently destroying manual edits. The setting now truly protects existing notes; only additive frontmatter (attendee tags, attendee backlinks, Granola URL) is refreshed (Fixes [#48](https://github.com/dannymcc/Granola-to-Obsidian/issues/48)). **Behaviour change** for users who relied on `1.9.2`'s \"Smart re-sync for updated notes\"; if you want re-sync on Granola updates, disable \"Skip existing notes\".\n- **📝 Notes without titles in Granola are no longer synced**: Granola creates the document as soon as a meeting starts, and users often add a title later. The plugin used to write these as `Untitled Granola Note.md` and never rename them. We now skip untitled documents and pick them up on the next sync once they have a title (Fixes [#53](https://github.com/dannymcc/Granola-to-Obsidian/issues/53))\n- **📅 Daily-note links use the meeting's date, not the sync date**: A meeting that syncs the day after it took place now links into the correct day's daily/periodic note instead of being added to today's. Thanks to [@georgeguimaraes](https://github.com/georgeguimaraes) in [#44](https://github.com/dannymcc/Granola-to-Obsidian/pull/44)\n- **📁 Nested Granola folders sync to nested vault folders**: Walks the `parent_document_list_id` chain so a sub-space syncs to `<syncDir>/Parent/Child/` instead of being flattened at the root. Thanks to [@michaeljauk](https://github.com/michaeljauk) in [#49](https://github.com/dannymcc/Granola-to-Obsidian/pull/49)\n\n### Added\n- **🔗 Optional attendee backlinks in frontmatter**: New toggle writes attendees as Obsidian `[[wikilinks]]` in a configurable frontmatter property (default `participants`), so attendees appear in the graph view and backlink panel. Off by default; existing attendee-tag behaviour is unchanged. Thanks to [@phenly](https://github.com/phenly) in [#51](https://github.com/dannymcc/Granola-to-Obsidian/pull/51)\n- **⏱️ Toggle for per-speaker transcript timestamps**: New \"Include transcript timestamps\" setting hides the `(HH:MM:SS)` markers in transcripts for leaner notes / cleaner LLM input. On by default. Thanks to [@jsbirch](https://github.com/jsbirch) in [#50](https://github.com/dannymcc/Granola-to-Obsidian/pull/50)\n- **🔒 README \"Network use & background activity\" section**: Explicit disclosure of the `setInterval` + network behaviour used by auto-sync, in line with the Obsidian community-plugin reviewer recommendation.\n\n### Changed\n- **📦 Release assets trimmed to plugin essentials**: Releases now contain only `main.js`, `manifest.json`, and `styles.css`, matching the Obsidian reviewer recommendation. The release-bundled `.zip` and `versions.json` were removed (Obsidian reads `versions.json` from the repo, not from releases).\n- **🔏 Release artifacts are signed with GitHub artifact attestations**: `main.js` and `styles.css` now have build provenance attestations; verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.\n\n---\n\n### 📦 Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` below\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all three files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\nBuilds are signed with [GitHub artifact attestations](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.",
+      "downloadCount": 163,
       "draft": false,
       "name": "Granola Sync Plus 1.10.0",
       "prerelease": false,
@@ -102,32 +114,38 @@
       "assets": [
         {
           "digest": "sha256:b42e9f8031375308cf1b5952f67b23f9a1329f211277a0f92f4858afffab3e4a",
+          "downloadCount": 33,
           "name": "1.9.4.zip",
           "size": 23907
         },
         {
           "digest": "sha256:22997ad3d657d4bd60c711ce89a92cb7cad8ca5905ae21eb74a7be0958a86bac",
+          "downloadCount": 172,
           "name": "main.js",
           "size": 99970
         },
         {
           "digest": "sha256:959d3f162b10fcffb7114d585e04c3259b4c2ad47adaa2fe7ba01b828c7fc890",
+          "downloadCount": 216,
           "name": "manifest.json",
           "size": 360
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 171,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:29bcad6421ff21842cf69429b1a7ba58575f9ab8037891c55b3a8366563587d8",
+          "downloadCount": 10,
           "name": "versions.json",
           "size": 764
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.9.4\n  \n  ### Fixed\n- **🔐 Auth after Granola's encrypted-storage migration**: Granola's late-April / early-May 2026 desktop builds replaced the plaintext `supabase.json` with an encrypted `supabase.json.enc` and moved auth tokens into a new plaintext `stored-accounts.json` file. The plugin now reads tokens from `stored-accounts.json` (macOS, Windows and Linux paths) and parses the new multi-account `accounts[].tokens.access_token` shape. Existing `supabase.json` / `workos_tokens` / `cognito_tokens` paths still work as higher-priority fallbacks for users on older Granola builds (Fixes [#55](https://github.com/dannymcc/Granola-to-Obsidian/issues/55))\n\n### Credits\n- Thanks to [@brettjenkins](https://github.com/brettjenkins) for diagnosing the upstream change and implementing the fix in [#54](https://github.com/dannymcc/Granola-to-Obsidian/pull/54)\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.9.4.zip`\n  2. Extract the `granola-sync-plus` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 172,
       "draft": false,
       "name": "Granola Sync Plus 1.9.4",
       "prerelease": false,
@@ -138,32 +156,38 @@
       "assets": [
         {
           "digest": "sha256:ca00407d9df0d0d616dfc27e4f16efa38c975c61064bdcabd5bcc0e0f70fe8e1",
+          "downloadCount": 308,
           "name": "1.9.3.zip",
           "size": 23618
         },
         {
           "digest": "sha256:85b794a320e77e44104c44228d4e305a910af45dfdf0c8d5c011fd7b9e56103e",
+          "downloadCount": 213,
           "name": "main.js",
           "size": 98899
         },
         {
           "digest": "sha256:0759a5c69fa83d64d432f4abbf8c2a9b4152379ae794342529de7073733c4d51",
+          "downloadCount": 1152,
           "name": "manifest.json",
           "size": 360
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 200,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:c0acab2cf8f0fae97b500d3c77a44df0889584ad84beef92413a0d1535b98c47",
+          "downloadCount": 77,
           "name": "versions.json",
           "size": 744
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Granola Sync Plus 1.9.3\n\n### Important: Plugin Renamed\n\nThis release renames the plugin from **Granola Sync** to **Granola Sync Plus** and changes the plugin ID from `granola-sync` to `granola-sync-plus`. This was required because the ID `granola-sync` is already taken in the Obsidian community plugin catalog.\n\n**If you previously installed the plugin manually**, you need to:\n1. Close Obsidian\n2. Rename your `.obsidian/plugins/granola-sync/` folder to `.obsidian/plugins/granola-sync-plus/`\n3. Restart Obsidian\n\nAlternatively, delete the old folder and do a fresh install from this release.\n\n### Changed\n- **Plugin ID**: `granola-sync` → `granola-sync-plus`\n- **Plugin name**: \"Granola to Obsidian Sync\" → \"Granola Sync Plus\"\n- **Funding URL**: Added Buy Me a Coffee link to manifest\n\n### Community Plugin Catalog\n\nWe've submitted the plugin to the Obsidian community plugin catalog! Once approved, you'll be able to install it directly from **Settings → Community Plugins** in Obsidian. Track the submission here: https://github.com/obsidianmd/obsidian-releases/pull/10254\n\n---\n\n### Installation Options\n\n**Option 1: Download ZIP (Recommended)**\n1. Download `1.9.3.zip`\n2. Extract the `granola-sync-plus` folder to `.obsidian/plugins/` in your vault\n3. Enable the plugin in Obsidian Settings → Community Plugins\n\n**Option 2: Manual Installation**\n1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 213,
       "draft": false,
       "name": "Granola Sync Plus 1.9.3",
       "prerelease": false,
@@ -174,32 +198,38 @@
       "assets": [
         {
           "digest": "sha256:eb437631748f1345fcf215b2b5b9605d9e187f751b0b39ad537c07757556ea34",
+          "downloadCount": 18,
           "name": "1.9.2.zip",
           "size": 23546
         },
         {
           "digest": "sha256:85b794a320e77e44104c44228d4e305a910af45dfdf0c8d5c011fd7b9e56103e",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 98899
         },
         {
           "digest": "sha256:2848b4ae9bed542062c3f38b1b3ff43fb6e9a1870a09cfc0a19999738637b77a",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:6d1194cecca12d9bd949e02d68612af0d4e5da546787ce79f234e5ba0a1131c9",
+          "downloadCount": 2,
           "name": "versions.json",
           "size": 724
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.9.2\n  \n  ### Fixed\n- **🔧 Obsidian API Compatibility**: Replaced removed `vault.recurseChildren()` API call with `getMarkdownFiles().filter()`, fixing a crash that prevented all sync operations (Fixes [#42](https://github.com/dannymcc/Granola-to-Obsidian/issues/42))\n- **📝 My Notes Extraction**: Added fallback to check `doc.content` directly when \"My Notes\" panel is not found in the panels array, fixing \"Include My Notes\" not producing any content (Fixes [#33](https://github.com/dannymcc/Granola-to-Obsidian/issues/33))\n- **🔄 Smart Re-sync for Updated Notes**: Notes that have been updated in Granola (e.g., re-enhanced with a new template) are now automatically re-synced even when \"Skip Existing Notes\" is enabled, by comparing `updated_at` timestamps (Fixes [#21](https://github.com/dannymcc/Granola-to-Obsidian/issues/21))\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.9.2.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 6,
       "draft": false,
       "name": "Granola Sync 1.9.2",
       "prerelease": false,
@@ -210,32 +240,38 @@
       "assets": [
         {
           "digest": "sha256:62840fbfc0c3755db2bf258da6ffeac852b0dcf4b4e4d06091397b46ed3ed5e1",
+          "downloadCount": 42,
           "name": "1.9.1.zip",
           "size": 23397
         },
         {
           "digest": "sha256:b545e6619422f90165ecca85a44212eefcf253672295744a30691a70f0ea77c5",
+          "downloadCount": 15,
           "name": "main.js",
           "size": 98074
         },
         {
           "digest": "sha256:bc031eba1c26ab02e92836dd6d56afd825e164ae3ada23a3137d545790637d72",
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:24a33f96b6fb7e27c646f08a46fcab8058a3fde7181bd72c3ceed186b80bf403",
+          "downloadCount": 5,
           "name": "versions.json",
           "size": 704
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.9.1\n  \n  ### Fixed\n- **🔍 Duplicate Detection**: Fixed issue where notes in subfolders weren't found during duplicate detection\n  - When using date-based folders or Granola folder organization, notes are now correctly found\n  - Prevents duplicate notes being created when filename patterns are changed\n\n### Resolves\n- Fixes [#34](https://github.com/dannymcc/Granola-to-Obsidian/issues/34): Duplicated notes after selecting 2 different formats for sync\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.9.1.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 15,
       "draft": false,
       "name": "Granola Sync 1.9.1",
       "prerelease": false,
@@ -246,32 +282,38 @@
       "assets": [
         {
           "digest": "sha256:968f200dc15817f5700dfcaaccaf519138069b6b3192da6f8475fd667cb15584",
+          "downloadCount": 8,
           "name": "1.9.0.zip",
           "size": 23360
         },
         {
           "digest": "sha256:0fef69ac03a38a54e5de199ca3f036769047376dc654e96c0cc119ae0037d72c",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 97987
         },
         {
           "digest": "sha256:15a2f3895cf0d7e4b9fdfb38be31d9a9d6a85126f03f87781e752eee693e2146",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:84633bfb747a844e31164e761a43ce288719574f951603582412f74b490dd588",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 684
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.9.0\n  \n  ### Added\n- **⚙️ Frontmatter Customization**: New settings to fully customize the frontmatter of synced notes\n  - **Include Title Toggle**: Option to exclude the `title` field from frontmatter — useful if you prefer the filename as the single source of truth\n  - **Include Dates Toggle**: Option to exclude `created_at` and `updated_at` timestamps from frontmatter\n  - **Date Format Selection**: Choose between ISO 8601 (full datetime), date-only (YYYY-MM-DD), or a custom format\n  - **Custom Date Format**: Define your own date format using YYYY, MM, DD, HH, mm, ss tokens\n  - **Additional Frontmatter**: Add custom key-value pairs to every synced note (e.g., `type: meeting`, `status: draft`)\n\n### Resolves\n- Fixes [#36](https://github.com/dannymcc/Granola-to-Obsidian/issues/36): Setting to adjust frontmatter (toggle individual fields)\n- Fixes [#35](https://github.com/dannymcc/Granola-to-Obsidian/issues/35): Configure properties in synced note\n- Fixes [#16](https://github.com/dannymcc/Granola-to-Obsidian/issues/16): Select date formats and property/ies to map to\n- Addresses [#14](https://github.com/dannymcc/Granola-to-Obsidian/issues/14): Assign a template to created meeting file (via additional frontmatter)\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.9.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 3,
       "draft": false,
       "name": "Granola Sync 1.9.0",
       "prerelease": false,
@@ -282,32 +324,38 @@
       "assets": [
         {
           "digest": "sha256:febe19b9f1add70032f55f3eab1aed5d589f21f80a0a7b7d6b7763f9fa6d66ca",
+          "downloadCount": 228,
           "name": "1.8.0.zip",
           "size": 21792
         },
         {
           "digest": "sha256:c18ed8c3da82b4d50d4ffd79a2e763c67c5e50c4e12d32a2ba7ec95bfba3b277",
+          "downloadCount": 39,
           "name": "main.js",
           "size": 91032
         },
         {
           "digest": "sha256:2da887cb5b9a57f16d2adb4a9d3b4f9eeafe529ea72ffcf5abbcabe0f7f5dc2f",
+          "downloadCount": 85,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 36,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:6fb4438e246b37423e23535bfc1e7eb666a78e2a12e3808a48a3429c6de43ec9",
+          "downloadCount": 10,
           "name": "versions.json",
           "size": 664
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.8.0\n  \n  ### Added\n- **📝 My Notes Support**: New option to include your personal \"My Notes\" content from Granola under a dedicated \"## My Notes\" section\n- **🤖 Enhanced Notes Control**: New option to control whether AI-generated Enhanced Notes are included (enabled by default)\n- **🎯 Folder Filtering**: New feature to selectively sync only notes from specific Granola folders\n  - Enable folder filter toggle to activate filtering\n  - Refresh folder list from Granola API\n  - Select/deselect individual folders with checkboxes\n  - \"Select All\" and \"Deselect All\" buttons for convenience\n- **📋 Note Content Settings**: New organized settings section for controlling what content appears in synced notes\n\n### Fixed\n- **🐛 Notes Without Enhanced Notes**: Fixed issue where notes without AI-generated enhanced notes would fail to sync entirely\n  - Notes will now sync if they have My Notes, Enhanced Notes, or Transcript content\n  - Gracefully handles missing content types instead of failing silently\n\n### Enhanced\n- **Transcript Heading**: Changed transcript section heading from \"# Transcript\" to \"## Transcript\" for consistent hierarchy\n- **API Enhancement**: Now requests additional panel data from Granola API for My Notes support\n- **Settings Organization**: Improved settings UI with clear section headings for Note Content, Filename Settings, etc.\n\n### Resolves\n- Fixes [#32](https://github.com/dannymcc/Granola-to-Obsidian/issues/32): Notes without enhanced notes fail to export\n- Fixes [#31](https://github.com/dannymcc/Granola-to-Obsidian/issues/31): Select folders to sync\n- Fixes [#27](https://github.com/dannymcc/Granola-to-Obsidian/issues/27): Include full transcript (setting now properly initialized in defaults)\n- Fixes [#17](https://github.com/dannymcc/Granola-to-Obsidian/issues/17): Sync 'My Notes' and 'Enhanced Notes' under different headers\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.8.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 39,
       "draft": false,
       "name": "Granola Sync 1.8.0",
       "prerelease": false,
@@ -318,32 +366,38 @@
       "assets": [
         {
           "digest": "sha256:14c4bdfc38ec8893e71b508f204a0631b5553a5b103d4a5bb13053b0b6b5a549",
+          "downloadCount": 39,
           "name": "1.7.3.zip",
           "size": 19830
         },
         {
           "digest": "sha256:59fa1be3ceb5753ce5bdeae1c240a906729191cd43f9d1026f63df1e85c48e30",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 81371
         },
         {
           "digest": "sha256:0a0c378bf54097560729edfa251b672fac5b62d1f4be64931a09e02a3ce870db",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:564aa0598693427d0017f21fe9a8e45f439e7266f9ce95529ccdcf4efb3f0852",
+          "downloadCount": 2,
           "name": "versions.json",
           "size": 644
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.7.3\n  \n  ### Fixed\n- **🗓️ Daily Note Integration**: Fixed daily note detection for custom date formats including day-of-week suffixes (e.g., `YYYY-MM-DD-ddd` producing `2025-12-06-Sat`)\n  - Now reads date format and folder settings directly from Obsidian's Daily Notes core plugin\n  - Supports all moment.js date format tokens: `YYYY`, `YY`, `MMMM`, `MMM`, `MM`, `M`, `dddd`, `ddd`, `DD`, `D`\n  - Falls back to legacy matching for users without Daily Notes plugin enabled\n- **🔄 Duplicate Note Prevention**: Fixed issue where duplicate notes were created on every sync\n  - Changed `skipExistingNotes` default to `true` for new installations\n  - Added secondary `granola_id` check when filename collisions occur to prevent duplicates even when search scope misses the original file\n\n### Resolves\n- Fixes [#30](https://github.com/dannymcc/Granola-to-Obsidian/issues/30): Daily Note integration not working with YYYY-MM-DD-ddd date format\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.7.3.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 7,
       "draft": false,
       "name": "Granola Sync 1.7.3",
       "prerelease": false,
@@ -354,32 +408,38 @@
       "assets": [
         {
           "digest": "sha256:a0109af4e3af88e78c58c9ec55e28c4d50766d6811488e0647e6a580317a1bb6",
+          "downloadCount": 17,
           "name": "1.7.2.zip",
           "size": 19103
         },
         {
           "digest": "sha256:a879228b4e054343afbd3be36e5cda5dd52315b42d315bf68f859390d7bc2560",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 78741
         },
         {
           "digest": "sha256:6103b3f436e50977baa8a68cd2394620764a1c185aea6b0f4839153da0367bfb",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:c83126583e3b81284e3a1853d9522c657aa5298af9dad75f95bc39cc2dfd4665",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 624
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.7.2\n\n### ✨ New Features\n\n**Historical Notes Sync** 🎉\n- Added `syncAllHistoricalNotes` setting to sync all historical notes from Granola, not just recent ones\n- Added `documentSyncLimit` setting to control the maximum number of documents synced in a single operation\n- Resolves issues with incomplete sync history (Closes #25, Closes #18)\n\n**Folder Reorganization**\n- New command to reorganize existing Granola notes into new folder structures\n- Improved status bar updates with custom message support\n- Better control over how your notes are organized in Obsidian\n\n### 🙏 Contributors\n\nSpecial thanks to [@andrewsong-tech](https://github.com/andrewsong-tech) for implementing these features!\n\n---\n\n### 📦 Installation Options\n\n**Option 1: Download ZIP (Recommended)**\n1. Download `1.7.2.zip`\n2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n3. Enable the plugin in Obsidian Settings → Community Plugins\n\n**Option 2: Manual Installation**\n1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n3. Place all files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\n---\n\nSee the full [CHANGELOG.md](https://github.com/dannymcc/Granola-to-Obsidian/blob/main/CHANGELOG.md) for complete version history.",
+      "downloadCount": 5,
       "draft": false,
       "name": "Granola Sync 1.7.2",
       "prerelease": false,
@@ -390,27 +450,32 @@
       "assets": [
         {
           "digest": "sha256:916980ffdcecc1f391040579f0ee2fcce8a1bfc20fe8e3ddcfb9060da0a950a5",
+          "downloadCount": 3,
           "name": "granola-1.7.1-main.js",
           "size": 71156
         },
         {
           "digest": "sha256:58ce3d1196f4453696355401d212d0cd2f3957e1b2d086bfea6624b7c010c608",
+          "downloadCount": 1,
           "name": "granola-1.7.1-manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "granola-1.7.1-styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:7bb6e65472f8797e4535d08ab3fd5059e29ff46ea4ba201b03e4b0dbd3a363dc",
+          "downloadCount": 1,
           "name": "granola-1.7.1-versions.json",
           "size": 604
         }
       ],
       "author": "dannymcc",
       "description": "## 🚀 Granola Sync 1.7.1\n\n### 📝 Changes\n\n- **👥 Contributors Section**: Added contributors section to README to recognize community contributions\n- **Documentation**: Improved documentation for all features\n\n---\n\n### 📦 Installation Options\n\n**Option 1: Download ZIP (Recommended)**\n1. Download `1.7.1.zip`\n2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n3. Enable the plugin in Obsidian Settings → Community Plugins\n\n**Option 2: Manual Installation**\n1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n3. Place all files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\n---\n\nSee the full [CHANGELOG.md](https://github.com/dannymcc/Granola-to-Obsidian/blob/main/CHANGELOG.md) for complete version history.",
+      "downloadCount": 0,
       "draft": false,
       "name": "Granola Sync 1.7.1",
       "prerelease": false,
@@ -421,32 +486,38 @@
       "assets": [
         {
           "digest": "sha256:5e4c140085ace273592f5460d1550057949c0ae2a2fed352c9b871c5835d6b31",
+          "downloadCount": 51,
           "name": "1.7.0.zip",
           "size": 17368
         },
         {
           "digest": "sha256:92e0f4ca137c7f71b38ab8ecd3091fcb94eb0f7bc0520becc8a78a433c5adfa1",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 71151
         },
         {
           "digest": "sha256:ae960f5c6f35fe3913fe68e24330c9338d9f38fcc88e5ce1ef0629c6521b90e2",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:41e71822add3031748269ea8b501b9361843274dc5c2abef26bfe560ca8f8adf",
+          "downloadCount": 2,
           "name": "versions.json",
           "size": 584
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.7.0\n  \n  ## 📝 Changes\n\nSee the full [CHANGELOG.md](https://github.com/dannymcc/Granola-to-Obsidian/blob/main/CHANGELOG.md) for details.\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.7.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 10,
       "draft": false,
       "name": "Granola Sync 1.7.0",
       "prerelease": false,
@@ -457,32 +528,38 @@
       "assets": [
         {
           "digest": "sha256:e9aad223acba26904647f038d283399706059317fd5c0021b13b26b67251d09b",
+          "downloadCount": 232,
           "name": "1.6.3.zip",
           "size": 15995
         },
         {
           "digest": "sha256:4165c387dc9f46c9067b31834b5bc74a31c5ab6aa012fcb9ffbba7923c1e473e",
+          "downloadCount": 19,
           "name": "main.js",
           "size": 65504
         },
         {
           "digest": "sha256:9ae2660eeadcb44efc95084e60f623bcc4a3b2876590f0f4a6661b03ec79afd6",
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 17,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:b74a2ea4d86c7fc010a8b58d1e3fe08b27f0cafd379926c3edce6c80f588a592",
+          "downloadCount": 5,
           "name": "versions.json",
           "size": 563
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.6.3\n  \n  ## 📝 Changes\n\nSee the full [CHANGELOG.md](https://github.com/dannymcc/Granola-to-Obsidian/blob/main/CHANGELOG.md) for details.\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.6.3.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 19,
       "draft": false,
       "name": "Granola Sync 1.6.3",
       "prerelease": false,
@@ -493,6 +570,7 @@
       "assets": [],
       "author": "dannymcc",
       "description": "## 🔧 Bug Fixes\n\n### Periodic Notes Integration\n- **Fixed Periodic Notes integration not working properly** (#6)\n- Corrected API method calls to use proper Periodic Notes plugin methods\n- Added intelligent fallback support for different note types:\n  - ✅ **Daily periodic notes** (primary)\n  - ✅ **Weekly periodic notes** (fallback)  \n  - ✅ **Monthly periodic notes** (fallback)\n- Improved error handling and logging for easier debugging\n- Updated settings descriptions to clarify multi-note-type support\n\n## 🔄 How the Fix Works\n\nThe plugin now properly integrates with the Periodic Notes plugin by:\n\n1. **First trying daily periodic notes** (most common use case)\n2. **Falling back to weekly notes** if daily notes aren't configured\n3. **Falling back to monthly notes** if neither daily nor weekly are available\n4. **Providing detailed console logging** to help debug any remaining issues\n\n## 📦 Installation\n\nUpdate to 1.6.2 and ensure you have the **Periodic Notes plugin** installed and enabled. The integration will automatically detect which type of periodic notes you're using and add Granola meetings to the appropriate note.\n\n## 🙏 Thanks\n\nThanks to @radzio for reporting this issue and testing the integration!",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.6.2 - Periodic Notes Integration Fix",
       "prerelease": false,
@@ -503,6 +581,7 @@
       "assets": [],
       "author": "dannymcc",
       "description": "## 🔧 Bug Fixes\n\n### Authentication Compatibility\n- **Fixed authentication issues for users who recently updated Granola** (#9)\n- Added automatic fallback support for both old and new Granola authentication file locations\n- Support for new location: `Users/{username}/Library/Application Support/Granola/supabase.json`\n- Maintains backward compatibility with old location: `Library/Application Support/Granola/supabase.json`\n- Handles both `workos_tokens` and `cognito_tokens` authentication structures\n\n## 📦 Installation\n\nThis release automatically resolves authentication issues without requiring any configuration changes from users. The plugin will automatically detect and use the correct authentication file location and token structure.\n\n## 🙏 Thanks\n\nThanks to all users who reported this issue and provided debugging information!",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.6.1 - Authentication Compatibility Fix",
       "prerelease": false,
@@ -513,32 +592,38 @@
       "assets": [
         {
           "digest": "sha256:1e662da2e707674f9fe9443ee240e6fd1b4e66656611d14c24df402da6a35bf5",
+          "downloadCount": 35,
           "name": "1.6.0.zip",
           "size": 13680
         },
         {
           "digest": "sha256:ebde77d87580b6321fd3176b2654cffe09b0e10a4f24048c347719398483a64f",
+          "downloadCount": 15,
           "name": "main.js",
           "size": 52322
         },
         {
           "digest": "sha256:79ac66fb5f99e6a3d299d4e360cf6657f280c602a460a3e770a9d5abe8de18b0",
+          "downloadCount": 33,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:205e5cc1de7fc084fba4be5bcc23882777ba73d828178321507da4fc2b2e098a",
+          "downloadCount": 2,
           "name": "versions.json",
           "size": 503
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.6.0\n  \n  ### Added\n- **🗓️ Periodic Notes Integration**: New support for the Periodic Notes plugin alongside existing Daily Notes integration\n  - Independent toggle for Periodic Notes integration (can be used with or without Daily Notes)\n  - Configurable section heading for Periodic Notes (separate from Daily Notes section)\n  - Automatic detection of Periodic Notes plugin availability\n  - Settings UI automatically disables when Periodic Notes plugin is not installed\n  - Seamlessly integrates with Periodic Notes' daily note creation and management\n\n### Enhanced\n- **Dual Integration Support**: Users can now enable Daily Notes, Periodic Notes, both, or neither\n- **User Choice**: Flexible integration options to match different Obsidian workflows\n- **Backward Compatibility**: All existing Daily Notes functionality preserved unchanged\n\n### Technical\n- Added `enablePeriodicNoteIntegration` and `periodicNoteSectionName` settings\n- Added `isPeriodicNotesPluginAvailable()` method for plugin detection\n- Added `getPeriodicNote()` method for Periodic Notes API integration\n- Added `updatePeriodicNote()` method mirroring Daily Notes functionality\n- Enhanced sync logic to support both integrations independently\n- All changes maintain 100% backward compatibility with existing settings and workflows\n\n### Fixes Issue\n- Resolves [#6](https://github.com/dannymcc/Granola-to-Obsidian/issues/6): Request for Periodic Notes plugin support\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.6.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 15,
       "draft": false,
       "name": "Granola Sync 1.6.0",
       "prerelease": false,
@@ -549,32 +634,38 @@
       "assets": [
         {
           "digest": "sha256:7bacc90c5d22251ad08a4eab863b17b5a474a44159fd6d4386e5ac974aa10b02",
+          "downloadCount": 24,
           "name": "1.5.2.zip",
           "size": 13213
         },
         {
           "digest": "sha256:4631edfeb9dfbd0d08536b199236bdf3c453173994fecfdcaed1203f29e5cdf6",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 47936
         },
         {
           "digest": "sha256:2511bbbbbcc54cb68f4e236610a26790454f97f4ceeb07c5b5b4bf76a66b7cda",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:86f03ca3f273ed835136cee1644b7c52b97ec8e9d22fbd496e4982f00812ec73",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 483
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.5.2\n  \n  ### Fixed\n- **Settings UI**: Fixed JavaScript errors that prevented all settings from displaying\n- **Heading Syntax**: Corrected `setHeading()` calls to use proper `createEl()` syntax\n- **Sync Functionality**: Resolved sync issues caused by cached JavaScript errors\n- **Console Output**: Cleaned up debug logs for cleaner production experience\n\n### Technical\n- Fixed `containerEl.createEl().setHeading()` runtime errors\n- Restored all 19 settings to be properly displayed and functional\n- Improved error handling and reduced verbose logging\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.5.2.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 8,
       "draft": false,
       "name": "Granola Sync 1.5.2",
       "prerelease": false,
@@ -585,32 +676,38 @@
       "assets": [
         {
           "digest": "sha256:b30725abda0a9e5759c0cd9d8e2377a313a53d06f61729e7129faf4e1cbf664b",
+          "downloadCount": 7,
           "name": "1.5.1.zip",
           "size": 13264
         },
         {
           "digest": "sha256:d9d480889f7919400d74563c24477ed746c57c7b69cc8d6217b05adfc36a4396",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 48318
         },
         {
           "digest": "sha256:b6a25c6e9f9c339ebb40cc7a68c9c53117d1527ed107cf0f11ea88c9f9336d25",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:7329b0c9d7423e4b5eb71fab53f605a4a0c20d69e832f490759b5aeaf8e34100",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 463
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.5.1\n  \n  ### Fixed\n- **Platform Support**: Added proper Linux authentication path support (`~/.config/Granola/supabase.json`)\n- **Modern Obsidian APIs**: Replaced deprecated APIs with current best practices\n  - Use `Platform` instead of Node.js `os` module\n  - Use `window.setTimeout`/`window.setInterval` instead of global versions\n  - Use `Vault.process` instead of `Vault.modify` for background file operations\n  - Use `Vault.getFolderByPath` instead of `getAbstractFileByPath`\n  - Use `Vault.recurseChildren` for recursive folder operations\n  - Use `Vault.getAllFolders` for folder enumeration\n  - Use `FileManager.processFrontMatter` for atomic frontmatter updates\n  - Use `MetadataCache.getFileCache` instead of regex for heading detection\n- **UI Consistency**: Converted all UI text to sentence case per Obsidian guidelines\n- **Settings Improvements**: \n  - Use `setHeading()` instead of HTML heading elements\n  - Remove hardcoded CSS styling\n  - Remove top-level settings heading\n  - Remove ribbon icon toggle (users can customize via Obsidian settings)\n- **Code Quality**: \n  - Reduced unnecessary console logging while preserving essential error messages\n  - Improved error handling and performance\n- **Version Requirements**: Updated minAppVersion to 1.6.6 to support modern APIs\n\n### Technical\n- All changes maintain backward compatibility for user data and settings\n- No breaking changes to plugin functionality or user experience\n- Addresses all Obsidian plugin review feedback for official plugin store inclusion\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.5.1.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 5,
       "draft": false,
       "name": "Granola Sync 1.5.1",
       "prerelease": false,
@@ -621,32 +718,38 @@
       "assets": [
         {
           "digest": "sha256:c3e4ce10f05a3526578ed51953936782ff9a45bb03f8e4cbafc19307c3951499",
+          "downloadCount": 27,
           "name": "1.5.0.zip",
           "size": 14881
         },
         {
           "digest": "sha256:eede43c6201f30de027e83788127d38c006abf4209926aaed36815b9f22efb4b",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 55972
         },
         {
           "digest": "sha256:533176ffd56a6c4a9f29fecf8406f7da66d1382f02f3e5dedc78861cafe2537f",
+          "downloadCount": 86,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:1f98032ccae07254eb04b2d89153f1cd5905a4c2cd659823a2a4dd1bcf987c35",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 444
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.5.0\n  \n  ### Added\n- **🧪 Experimental: Search Scope for Existing Notes**: Control where the plugin searches for existing notes when checking for duplicates by granola-id\n- **Flexible Search Options**: Choose between \"Sync Directory Only\" (default), \"Entire Vault\", or \"Specific Folders\"\n- **Duplicate Prevention Tools**: Added \"Find Duplicate Notes\" button to scan for and identify existing duplicates\n- **Auto-Sync Safety**: New \"Re-enable Auto-Sync\" button to safely restart auto-sync after testing new settings\n- **Enhanced Settings Safety**: Search scope settings now save without triggering auto-sync to prevent accidental duplicates\n\n### Enhanced\n- **Experimental Features Section**: Clear UI separation for experimental features with backup warnings\n- **User Safety**: Prominent warnings about backing up vault before using experimental features\n- **Duplicate Management**: Added comprehensive duplicate detection and management tools\n- **Error Prevention**: Auto-sync temporarily disabled when changing search scope settings\n\n### Technical\n- **Recursive Folder Search**: Added support for searching all markdown files within specified folders and subfolders\n- **Safe Settings Management**: New `saveSettingsWithoutSync()` method to prevent unwanted auto-sync triggers\n- **Validation Improvements**: Enhanced folder path validation with user-friendly error messages\n- **Search Scope Flexibility**: Infrastructure for different search strategies based on user needs\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.5.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 6,
       "draft": false,
       "name": "Granola Sync 1.5.0",
       "prerelease": false,
@@ -657,32 +760,38 @@
       "assets": [
         {
           "digest": "sha256:8b02cdefa21f48a5bf1f02e669d697cb052c46edf16497fdaeeb20abb38c626d",
+          "downloadCount": 4,
           "name": "1.4.0.zip",
           "size": 12047
         },
         {
           "digest": "sha256:1e818c863a2fd0c0a7df5daecccd1d5b8b65bfe30ee4308287ff063758f559bb",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 44171
         },
         {
           "digest": "sha256:1b07e2d653cbf5cfc29d486ab293b6aa0c5054c7ea883d95bb609a970ded8fe5",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:5548b3a166d0b533fa9f692329a60182dd3ed8d0b25558b7ab82a966b6323ca1",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 423
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.4.0\n  \n  ### Added\n- **Customizable Attendee Tag Structure**: New setting to customize how attendee tags are formatted and organized\n- **Tag Template System**: Use `{name}` placeholder to create custom tag hierarchies (e.g., `people/{name}`, `meeting-attendees/{name}`)\n- **Flexible Tag Organization**: Allows users to control their tag hierarchy and reduce root-level tag clutter in Obsidian\n\n### Enhanced\n- **Attendee Tag Generation**: Now uses customizable templates instead of hardcoded `person/` prefix\n- **Tag Validation**: Automatic cleanup of invalid tag structures (double slashes, leading/trailing slashes)\n- **Settings UI**: Added new \"Attendee Tag Template\" setting with helpful examples and validation\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.4.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.4.0",
       "prerelease": false,
@@ -693,32 +802,38 @@
       "assets": [
         {
           "digest": "sha256:36e2f86a2ed35751236c998de2ad72529af0c992f92427fe82517cdedc9863ea",
+          "downloadCount": 2,
           "name": "1.3.2.zip",
           "size": 11800
         },
         {
           "digest": "sha256:ba3eaf44292fd7b087ce0da1da4a85c4cdbc0c1503f609fadf74a354ffeeab11",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 43240
         },
         {
           "digest": "sha256:8dbe8e2c6ca651636ac086ce41cad6202a29db5e7a5013ca9e281f0042075e05",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:f12ba51a33eb39238c33023a1a4fcec1376cc3e3d68e5eae541e386c942cf494",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 402
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.3.2\n  \n  ### Fixed\n- **Nested bullet preservation**: Fixed issue where sub-bullets from Granola were being flattened instead of maintaining proper indentation in Obsidian\n- **List structure**: Improved ProseMirror to Markdown conversion to properly handle nested bullet lists with correct indentation\n- **Bullet formatting**: Sub-bullets now display with proper 2-space indentation per nesting level\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.3.2.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.3.2",
       "prerelease": false,
@@ -729,32 +844,38 @@
       "assets": [
         {
           "digest": "sha256:52d251267d4077436e5474966c9ca327ce318c72b418b26bdc231a5c281082b6",
+          "downloadCount": 17,
           "name": "1.3.1.zip",
           "size": 11383
         },
         {
           "digest": "sha256:eccfcbfc1a0f7eeec972bbf799161a2dcfb68bf46a7f97781b6270b52a7552d8",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 41623
         },
         {
           "digest": "sha256:d2ca7ff1345ce54279270a82f84da9a3dccde0290d39fc0f2d7efae598f16df8",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:fd7aca21a394c5d8a388704a91a12ccc34f28351069b354685b861e209ff1976",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 381
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.3.1\n  \n  ### Fixed\n- **Granola URL format**: Fixed incorrect URL format from `https://app.granola.ai/documents/{id}` to correct `https://notes.granola.ai/d/{id}`\n- Updated documentation examples to reflect correct URL format\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.3.1.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 4,
       "draft": false,
       "name": "Granola Sync 1.3.1",
       "prerelease": false,
@@ -765,32 +886,38 @@
       "assets": [
         {
           "digest": "sha256:ada107211cc79eacbf2a1aedeba9400d4ab806943ac2e2a2c1b2823113bfc4f4",
+          "downloadCount": 2,
           "name": "1.3.0.zip",
           "size": 11381
         },
         {
           "digest": "sha256:239f2bc4a80e4ed1151a1ef5334ed2c25b9aaaf8dcb0d24eefe5e705001ed7ff",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 41630
         },
         {
           "digest": "sha256:d13ca24173a1989b707efde3a7cb0ebff291bab5b61415baf40edf8e389d699b",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:30220fc2d0f909a3db78ffecd9ec51b17db7defbe295352ab095f8bc48cac363",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 360
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.3.0\n  \n  ### Added\n- **Granola URL integration**: Add links back to original Granola notes in frontmatter (`granola_url`)\n- **Enhanced attendee extraction**: Improved name resolution using detailed person data from Granola API\n- **Multi-folder infrastructure**: Code infrastructure ready for when Granola API includes folder information\n- **Organized settings UI**: Grouped related settings into clear sections (Metadata & Tags, Daily Note Integration, etc.)\n- **Better deduplication**: Prevents duplicate attendees from multiple sources (people array + calendar events)\n\n### Enhanced\n- **Attendee name detection**: Now uses `fullName`, `givenName`, `familyName` fields for more accurate names\n- **Settings organization**: Related settings grouped under clear headings for better UX\n- **Metadata management**: Unified handling of tags, URLs, and other frontmatter data\n- **Console output**: Cleaner debug information with better organization\n\n### Technical\n- **Future-ready folder support**: All infrastructure in place for multi-folder tagging when API supports it\n- **Improved email tracking**: Prevents processing same attendee multiple times across different data sources\n- **Enhanced error handling**: Better error messages and graceful fallbacks\n- **Code organization**: Cleaner separation of concerns and modular design\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.3.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 1,
       "draft": false,
       "name": "Granola Sync 1.3.0",
       "prerelease": false,
@@ -801,32 +928,38 @@
       "assets": [
         {
           "digest": "sha256:9bcae24d7babbd2b6b968478a666fc2100fd4fc69aa6865579276cfbe0d0acd6",
+          "downloadCount": 12,
           "name": "1.2.2.zip",
           "size": 9668
         },
         {
           "digest": "sha256:f3b48e15d46bbe9d3f4f81b7e201271a49cad3713e2957cdfc09f0bb26c9cf41",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 33096
         },
         {
           "digest": "sha256:49cda819c3f11d0973c051a5c50685623475fbae6f6ae5538994ef115862c7bb",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:aa8d9e81ba14915d841fb1c4e217e85200e8fe7bd1a92916dc2dfdb33b813acb",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 339
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.2.2\n  \n  ### Fixed\n- **Critical bug**: Fixed issue where meetings with duplicate titles (e.g., recurring \"Enterprise Team | Project Update\") were being skipped instead of created with unique filenames\n- Daily note integration now works correctly for meetings that would have been skipped due to filename collisions\n- Added timestamp-based unique filename generation when title conflicts occur\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.2.2.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 4,
       "draft": false,
       "name": "Granola Sync 1.2.2",
       "prerelease": false,
@@ -837,32 +970,38 @@
       "assets": [
         {
           "digest": "sha256:c685e72c0261468948234e781fb274675687dda5c44108e4f09ff501c6e72e43",
+          "downloadCount": 2,
           "name": "1.2.1.zip",
           "size": 9455
         },
         {
           "digest": "sha256:95cb38e00b1048fa2ca30f9b10f0d83a39da7e880a02834939d1770b13976660",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 32200
         },
         {
           "digest": "sha256:028c87d5ccf4bf65414c24f790f1b973e92fc39d1268f2d6f4dafe2034794d76",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:391ab3ef1737add7c12d6ab2d2d4ee582458896365a83671c659436046f1ba81",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 318
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.2.1\n  \n  ### Fixed\n- **Critical bug**: Fixed daily note integration using hardcoded date instead of current date\n- Daily note meetings now correctly appear in today's note instead of a previous date\n- Enhanced daily note detection to work with multiple date formats (DD-MM-YYYY, YYYY-MM-DD, etc.)\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.2.1.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.2.1",
       "prerelease": false,
@@ -873,32 +1012,38 @@
       "assets": [
         {
           "digest": "sha256:dba775fd52f4cb6f8b75e98ca7a08ec5e189defdf2c48ea6ae76420087cd31f3",
+          "downloadCount": 3,
           "name": "1.2.0.zip",
           "size": 9262
         },
         {
           "digest": "sha256:b319e510960989cd13304eaa31663cd5f1bde2c5c68e016e6f8d7ac3f095f85a",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 31506
         },
         {
           "digest": "sha256:76761c6be712eb10f89047283bcd954ec65eb024663922a6ee102ef5c71fa82f",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:367d0c4398a630fdef7ff2c6368327aceb4c2fd8f00e226d554975152224beba",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 297
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.2.0\n  \n  ### Added\n- **Attendee tagging system**: Automatically extract meeting attendees and add them as tags in note frontmatter\n- **Smart name filtering**: Exclude your own name from attendee tags with configurable settings\n- **Organised tag structure**: Uses `person/` prefix for clean tag organisation (e.g. `person/john-smith`)\n- **Existing note updates**: Updates attendee tags in existing notes while preserving manual edits when enabled\n- **Conservative defaults**: Attendee tagging disabled by default to avoid disrupting existing workflows\n\n### Changed\n- Enhanced settings UI with attendee tagging configuration options\n- Improved case-insensitive name matching for more reliable filtering\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.2.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.2.0",
       "prerelease": false,
@@ -909,32 +1054,38 @@
       "assets": [
         {
           "digest": "sha256:e470c42e12ec29b0dd29e6daffa82891c27c82e9f8d734b64018f062db70fdb6",
+          "downloadCount": 3,
           "name": "1.1.2.zip",
           "size": 7707
         },
         {
           "digest": "sha256:460731e0b700d3ec38d7dcd8a9921aa7d9f883f5c5571990e5d6acc8544941ad",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 23895
         },
         {
           "digest": "sha256:df86192493eed7c92770ef2e3654fbf85795564ccaa711878511bf6fb156ea02",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:9ae3e2c8675a8b275a018579b9b0755d64ea2732b5745bea0f82f4e803ef4c12",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 276
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.1.2\n  \n  ### Fixed\n- Completely resolved daily note integration issues by implementing a robust file search-based approach\n- Daily note integration now works regardless of complex Daily Notes plugin configurations\n- Meetings from today are now properly added to the daily note section as expected\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.1.2.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.1.2",
       "prerelease": false,
@@ -945,32 +1096,38 @@
       "assets": [
         {
           "digest": "sha256:d3caeb196bc9c9de5a6ec210704c3d266f30bb7ea1a36e540bd90492a8114de5",
+          "downloadCount": 3,
           "name": "1.1.1.zip",
           "size": 7630
         },
         {
           "digest": "sha256:fd4fc63f1d84f1989577ce875acf63bd3b9a7f7678474bb8f59410659fb2ff14",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 24041
         },
         {
           "digest": "sha256:61a9bb649b87d50b0b371e8478695f917d09a8ab9b78febbbe1e6d33faa68307",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:d5cea12721d4f690ea0bdcf03ef96bbb04c23f7b8de8a8d995dce509b7a34cc6",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 255
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.1.1\n  \n  ### Fixed\n- Resolved \"File already exists\" error by adding proper file name conflict detection\n- Fixed daily note integration to work with hierarchical folder structures (e.g. Notes/Daily/YYYY/MM)\n- Enhanced daily note detection with better logging and error handling\n- Improved folder creation for date-based daily note structures\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.1.1.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 2,
       "draft": false,
       "name": "Granola Sync 1.1.1",
       "prerelease": false,
@@ -981,32 +1138,38 @@
       "assets": [
         {
           "digest": "sha256:4d1bb88b9b34bf1e7b07334caef538dd17f8449be5c9e6580afaf6c4d9563efb",
+          "downloadCount": 3,
           "name": "1.1.0.zip",
           "size": 7286
         },
         {
           "digest": "sha256:4fa12d99793f782f58009d4f389d78ec4025b8596c8c324ef7341024d553907e",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 22558
         },
         {
           "digest": "sha256:ccba243b4637d73f1f30f8102bcf5e3a41c3d073e8f54d571c70a7982a0160f2",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:ac15bc421b2b66d211f50e622891af0097f47dcf8f0ac684b2167bac5ee9a92c",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync 1.1.0\n  \n  ### Added\n- Customisable daily note section name setting - users can now customise the heading used for Granola meetings in their Daily Note\n  \n  ---\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.1.0.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 3,
       "draft": false,
       "name": "Granola Sync 1.1.0",
       "prerelease": false,
@@ -1017,32 +1180,38 @@
       "assets": [
         {
           "digest": "sha256:b2bed580977cacd2125f8c6ca6eb78ce95b900687cb04cf4371507c5dca2cc75",
+          "downloadCount": 5,
           "name": "1.0.9.zip",
           "size": 7238
         },
         {
           "digest": "sha256:ca4df7d06b80f1bba4f9743be017b217f56c5b5b8b4732bfdb92c0c5f583f334",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 22119
         },
         {
           "digest": "sha256:66be360056c0a6ec10a611c624438c2ddacc1751041a53c2d189886a43517a3c",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:db2d99c2278f292a4b0c24dc13ec504b451484ae4453604b7033532a5e6d6dbc",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 213
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync v1.0.9\n  \n  ### Changed\n- New version number bump to adpot new versioning\n  \n  ### 📦 Installation Options\n  \n  **Option 1: Download ZIP (Recommended)**\n  1. Download `1.0.9.zip`\n  2. Extract the `granola-sync` folder to `.obsidian/plugins/` in your vault\n  3. Enable the plugin in Obsidian Settings → Community Plugins\n  \n  **Option 2: Manual Installation**  \n  1. Download individual files: `main.js`, `manifest.json`, `styles.css`, `versions.json`\n  2. Create folder `.obsidian/plugins/granola-sync/` in your vault\n  3. Place all files in the folder\n  4. Enable the plugin in Obsidian Settings → Community Plugins",
+      "downloadCount": 4,
       "draft": false,
       "name": "Granola Sync v1.0.9",
       "prerelease": false,
@@ -1053,32 +1222,38 @@
       "assets": [
         {
           "digest": "sha256:101918f8784ba302ac9505c272abe07039122ab63df61d5c9945bc4c52061bed",
+          "downloadCount": 4,
           "name": "1.0.1.zip",
           "size": 7155
         },
         {
           "digest": "sha256:46159896f9db45ff3c64c3d7054ed88c64fa02a4b13935991fe91d5b621a4340",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 19535
         },
         {
           "digest": "sha256:cf522adb834894df3844f34df4af90071a2e375058fb46895da25a6956a08703",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 1070
         },
         {
           "digest": "sha256:8da5fc3ced3c1ddaecbf2edfdf98e8c5f62187b0bcd742ac87dbcda47b2320d3",
+          "downloadCount": 1,
           "name": "versions.json",
           "size": 42
         }
       ],
       "author": "dannymcc",
       "description": "🚀 Granola Sync v1.0.1\r\n\r\n✨ **New Features**\r\n\r\n**Status Bar Integration**\r\n\r\nReal-time sync status displayed in the bottom right corner of Obsidian\r\nNo more popup notifications - clean, non-intrusive status updates\r\nVisual feedback with color-coded states and smooth animations:\r\n\r\n🟢 \"Granola Sync: Idle\" - Ready to sync\r\n🔵 \"Granola Sync: Syncing...\" - Currently syncing (with pulse animation)\r\n✅ \"Granola Sync: X notes synced\" - Success (auto-disappears after 3s)\r\n❌ \"Granola Sync: Error - [details]\" - Specific error messages (auto-disappears after 5s)\r\n\r\n**Enhanced Daily Note Integration**\r\n\r\nAutomatic meeting links added to your Daily Note\r\nTime-sorted entries with meeting times displayed\r\nSmart section management - updates existing sections instead of duplicating\r\nCustomizable section headers - choose your own heading style\r\n\r\n🔧 **Improvements**\r\n\r\n**Better Error Handling**\r\n\r\nSpecific error messages in status bar (e.g., \"credentials failed\", \"fetch failed\")\r\nGraceful degradation - plugin continues working even if some features fail\r\nImproved compatibility with different Obsidian versions\r\n\r\n**Enhanced User Experience**\r\n\r\nCleaner interface - removed disruptive popup notifications\r\nInstant feedback - see sync progress immediately in status bar\r\nAuto-recovery - status automatically returns to \"Idle\" after showing results\r\n\r\n🐛 **Bug Fixes**\r\n\r\nFixed JavaScript compatibility issues with older Obsidian versions\r\nResolved syntax errors that prevented plugin loading\r\nImproved stability of auto-sync functionality\r\nBetter handling of edge cases in filename generation\r\n\r\n📝 **What's Included**\r\n\r\nmain.js - Core plugin functionality with status bar integration\r\nmanifest.json - Updated to version 1.0.1\r\nstyles.css - Enhanced styling for status bar states\r\nversions.json - Version compatibility information\r\n\r\n🎯 **How to Update**\r\n\r\nDownload the latest release files\r\nReplace existing files in .obsidian/plugins/granola-sync/\r\nRestart Obsidian or reload the plugin\r\nEnjoy the new status bar integration!\r\n\r\n🙏 **Feedback**\r\nFound a bug or have a feature request? Please open an issue on [GitHub](https://github.com/dannymcc/Granola-to-Obsidian/issues).\r\n\r\nFull Changelog: [v1.0.0...v1.0.1](https://github.com/dannymcc/Granola-to-Obsidian/compare/v1.0.0...v1.0.1)",
+      "downloadCount": 3,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -1089,27 +1264,32 @@
       "assets": [
         {
           "digest": "sha256:fb1efbc28e63dbccfcd066d41bed09b4343165077b2ae06d6e33cd7a115f046e",
+          "downloadCount": 4,
           "name": "1.0.0.zip",
           "size": 6732
         },
         {
           "digest": "sha256:5bf499bbee4ca5e413fcdb81b8b0717e94eff9a222a62c503812c3a470cc8893",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 16334
         },
         {
           "digest": "sha256:7588a4e63e58583d386bc7f47e2393070474af721b6be36b76bbd119a8b3eca3",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 308
         },
         {
           "digest": "sha256:63269fac0e3a0de25ff11f90688f9e0447d4548ec56ee6c66222a7f5556059f1",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 867
         }
       ],
       "author": "dannymcc",
       "description": "",
+      "downloadCount": 3,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

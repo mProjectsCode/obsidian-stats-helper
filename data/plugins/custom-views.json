@@ -4,8 +4,8 @@
   "description": "Create custom HTML views for your notes based on filter rules. Transform how your notes are displayed. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "custom-views",
-  "lastChangedAt": "2026-06-20T04:02:32.407Z",
-  "lastFetchedAt": "2026-06-20T04:02:32.407Z",
+  "lastChangedAt": "2026-06-21T03:04:09.522Z",
+  "lastFetchedAt": "2026-06-21T03:04:09.522Z",
   "manifest": {
     "author": "Anup Chavan",
     "authorUrl": "https://anupchavan.com",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.10",
     "name": "Custom Views",
-    "version": "0.2.10"
+    "version": "0.2.11"
   },
   "name": "Custom Views",
   "presentInCommunityList": true,
@@ -22,23 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:1db0b3a0e6610deb5af01cc972d9672abbee76b0b9ee25c30ce50dead9901546",
+          "digest": "sha256:414d29c5c16826227b66d120ed1b193bb3666ae72ef6a126255e499467e43a4f",
+          "downloadCount": 28,
           "name": "main.js",
-          "size": 299391
+          "size": 301384
         },
         {
-          "digest": "sha256:27f84f14a919f7fd7c4308b5b2289a99ec2007d58adefd58057217fc78785a83",
+          "digest": "sha256:638ed10e346280eb85c059a8f4b8d1f0d3651e51b0462220b10b98d3e13676ad",
+          "downloadCount": 30,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:b09452d7092eb3ddb7e547c3e5b5edd2ab701a7d61e64d932fd4f054d20fbc2e",
+          "downloadCount": 28,
+          "name": "styles.css",
+          "size": 25458
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Bug Fixes\r\n\r\n- Fixed template lookups for frontmatter keys containing `/`, including `{{book/title}}`, `{{[\"book/title\"]}}`, and `{{\"book/title\"}}` (Fixes #8).\r\n- Slash-containing keys now also work inside larger expressions, e.g. `{{book/title + 10/2}}`, while normal division still works when no matching slash key exists.\r\n\r\n### Tests\r\n\r\n- Added regression tests for quoted slash keys, unquoted slash keys, filters, array indices, arithmetic expressions, division fallback, and ambiguous cases where both a slash key and division operands exist.",
+      "downloadCount": 28,
+      "draft": false,
+      "name": "0.2.11",
+      "prerelease": false,
+      "publishedAt": "2026-06-20T12:18:51Z",
+      "tag": "0.2.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1db0b3a0e6610deb5af01cc972d9672abbee76b0b9ee25c30ce50dead9901546",
+          "downloadCount": 28,
+          "name": "main.js",
+          "size": 299391
+        },
+        {
+          "digest": "sha256:27f84f14a919f7fd7c4308b5b2289a99ec2007d58adefd58057217fc78785a83",
+          "downloadCount": 30,
+          "name": "manifest.json",
+          "size": 339
+        },
+        {
+          "digest": "sha256:b09452d7092eb3ddb7e547c3e5b5edd2ab701a7d61e64d932fd4f054d20fbc2e",
+          "downloadCount": 28,
           "name": "styles.css",
           "size": 25458
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\r\n\r\n- **Fixed stale or mixed custom view content when switching between notes.** Reading view no longer reuses Obsidian view data that can belong to a previous note; the active-view fast path is now limited to live preview only.\r\n- **Fixed frontmatter leaking into `{{content}}` / `{{file.content}}` when Obsidian’s cached offset is stale or unavailable.** Frontmatter stripping now validates the cache offset and falls back to parsing the raw YAML boundary when needed.\r\n- **Reduced read-only render delay by using Obsidian’s cached file reads.** Custom views now use `vault.cachedRead()` for display renders instead of direct disk reads.\r\n\r\n### Improvements\r\n\r\n- **Live preview custom views render more smoothly.** When safe, the renderer uses the already-loaded editor content instead of waiting on a vault read.\r\n- Hardened frontmatter/body extraction against metadata-cache timing issues.\r\n\r\n### Tests\r\n\r\n- Added regression tests for active-view source rendering, cached read behavior, and stale frontmatter offset handling.",
+      "downloadCount": 28,
       "draft": false,
       "name": "0.2.10",
       "prerelease": false,
@@ -49,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:85be4638084f9d497e0883a65657ea3f60181eab1f4f927271c601533a9e34f6",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 298544
         },
         {
           "digest": "sha256:6fb5ea6455a06c18ea7c3f1e35fca9f9c4c2c036e1251eb259d9542544382dbf",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 338
         },
         {
           "digest": "sha256:b09452d7092eb3ddb7e547c3e5b5edd2ab701a7d61e64d932fd4f054d20fbc2e",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 25458
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\r\n\r\n- **Right-click context menus now work on links in custom views.** Internal and external links rendered inside a custom view now open Obsidian's native context menu (Open in new tab/right/window, Rename, Bookmark, Copy, Copy path, Copy URL, Reveal in Finder, etc.) instead of a bare \"Copy\" menu.\r\n- **Rendered text in custom views is now selectable.** The overlay was missing the text-selectability that the reading view normally has.\r\n- **Fixed `{{file.content}}` / `{{content}}` rendering blank in reading view.** The note body was being extracted via a property Obsidian removed (`frontmatter.position`), so the raw YAML frontmatter leaked into the content and it failed to render. Now uses the official `frontmatterPosition` API. The same fix was applied to expression mode (`{% %}` blocks) and cross-file `.content` resolution.\r\n- **Fixed custom view content showing blank on first open / after reopening a tab in live preview.** The synchronous pre-hide step was hiding the live editor during its first layout, causing CodeMirror to measure zero height and render empty. Pre-hiding is now restricted to reading mode.\r\n- **Fixed the HTML, CSS, and JavaScript editor boxes rendering broken when settings open in a separate window** (default in Obsidian 1.13). CodeMirror now mounts its styles into the correct window's document. (Fixes #6)\r\n- **Removed direct `Function` constructor usage from plugin source.** Inline template scripts and per-view JavaScript now execute through the `@silentvoid13/rusty_engine` WASM template engine instead of direct `new Function(...)` calls.\r\n\r\n### Improvements\r\n\r\n- Consolidated frontmatter stripping into a single shared helper used by every render path, removing duplicated (and buggy) logic.\r\n- JavaScript template execution now uses the same WASM template engine approach used by Templater inline templates.\r\n\r\n### Maintenance\r\n\r\n- Bumped `esbuild` from `0.28.0` to `0.28.1`.\r\n\r\n### Tests\r\n\r\n- Added regression tests for frontmatter stripping (official API, legacy fallback, edge cases).\r\n- Added tests for the WASM script execution wrapper and engine prewarming.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.2.9",
       "prerelease": false,
@@ -75,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:ada980ce94b52fa62eaf3a445ffd6e35fbf778185387aef4ec9a8191ea769bec",
+          "downloadCount": 335,
           "name": "main.js",
           "size": 218446
         },
         {
           "digest": "sha256:771822d496a4da149de5f5fa45dcd9935c979a8004c28f20dd5432f4b21daa31",
+          "downloadCount": 702,
           "name": "manifest.json",
           "size": 338
         },
         {
           "digest": "sha256:32f3242f7e27c43205fb178ba7af855f458e5ef88f1ef0ce0a3d7812b5c32701",
+          "downloadCount": 334,
           "name": "styles.css",
           "size": 24899
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Improvements\r\nMigrated settings UI to Obsidian's new declarative settings API.",
+      "downloadCount": 335,
       "draft": false,
       "name": "0.2.8",
       "prerelease": false,
@@ -101,22 +143,26 @@
       "assets": [
         {
           "digest": "sha256:f3aabb315a436727527a18c5fde786ddede20c237aaf401d95bfd8cda9e772f8",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 217438
         },
         {
           "digest": "sha256:f33ed4a4d6f7370ccef23fb4f9aa552eceee5d04468a2c013698eb2d3f8925f4",
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:32f3242f7e27c43205fb178ba7af855f458e5ef88f1ef0ce0a3d7812b5c32701",
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 24899
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\r\n- Fixed file navigation not switching with `Cmd+Up/Down\r\n\r\n### Improvements\r\n- Simplified settings UI\r\n- Added a `preHideIfMatch` synchronous pre-hide step to eliminate content flicker when switching between files",
+      "downloadCount": 11,
       "draft": false,
       "name": "0.2.7",
       "prerelease": false,
@@ -127,22 +173,26 @@
       "assets": [
         {
           "digest": "sha256:c69f444bbf346cf098a9807db8b026a5e0db7d31bfab680180d018d311d1a09e",
+          "downloadCount": 63,
           "name": "main.js",
           "size": 217588
         },
         {
           "digest": "sha256:8d6564770f6fdd67984ddd50ffc13b29286d1c528bc969f6dbf23e3ccae534d7",
+          "downloadCount": 83,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:32f3242f7e27c43205fb178ba7af855f458e5ef88f1ef0ce0a3d7812b5c32701",
+          "downloadCount": 62,
           "name": "styles.css",
           "size": 24899
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bug Fixes\r\n\r\n- Fixed default view not showing file content — `{{file.content}}` was wrapped in `<p>` tags which is invalid HTML (block `<div>` inside inline `<p>`), causing the content to not display.\r\n",
+      "downloadCount": 63,
       "draft": false,
       "name": "0.2.6",
       "prerelease": false,
@@ -153,22 +203,26 @@
       "assets": [
         {
           "digest": "sha256:790a75b5490535f917ff55d45cb7caf187e96dea90726261ecfa82ddd0cb7384",
+          "downloadCount": 50,
           "name": "main.js",
           "size": 217578
         },
         {
           "digest": "sha256:190fae5e55ccb7381e8c3c49e764e386d9fd1d679ea4da93e940b85e7e69edbc",
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:32f3242f7e27c43205fb178ba7af855f458e5ef88f1ef0ce0a3d7812b5c32701",
+          "downloadCount": 50,
           "name": "styles.css",
           "size": 24899
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bug Fixes\r\n\r\n- Fixed {{ }} placeholders not resolving inside {% for %} loops — variables like {{ item }}, {{ loop.index }}, and filter chains like {{ name | upper }} now resolve correctly within loop bodies\r\n- Fixed {{ }} placeholders not resolving after {% set %} blocks\r\n- Fixed nested {% for %} loops (e.g., {% for row in rows %}{% for col in cols %}) which previously failed silently\r\n\r\n## Improvements\r\n- Loop metadata properties (loop.index, loop.index0, loop.first, loop.last, loop.length) now resolve inside loop bodies\r\n- Filter chains work on loop variables, including replace for wiki-link stripping: {{ img | replace:\"[[\",\"\" | replace:\"]]\",\"\" }}\r\n- Added CONTRIBUTING.md with development setup, architecture overview, and known issues\r\n- Added structured GitHub issue templates for bug reports and feature requests",
+      "downloadCount": 50,
       "draft": false,
       "name": "0.2.5",
       "prerelease": false,
@@ -179,22 +233,26 @@
       "assets": [
         {
           "digest": "sha256:c45b8a2840656112f80f67927b6c9ecf045ab37e3aa22682fdb0ea6c57e410d9",
+          "downloadCount": 42,
           "name": "main.js",
           "size": 216563
         },
         {
           "digest": "sha256:761de80648a0fe562295d10abd9076064b7850032c8471d65e28e84d2ad078ba",
+          "downloadCount": 50,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:4ba7fa8f38cd41916fd30509ce6d72c1e6413cdb2c800853172c30b79655a768",
+          "downloadCount": 42,
           "name": "styles.css",
           "size": 24900
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Simplified properties and inline title handling\r\n\r\nRemoved all reparenting and cloning logic for properties and inline title visibility. The plugin now uses a simple CSS-class approach that works in editing view (live preview) only. The toggles have been renamed to \"Show properties in editing view\" and \"Show inline title in editing view\" with descriptions noting that properties and inline titles are always hidden in reading view. A proper reading-view solution will be addressed in a future release.\r\n\r\n## Live-updating settings\r\n\r\nAll main settings toggles (Work in live preview, Work in canvas, Editable content, Allow JavaScript execution) now immediately update all open views when changed, instead of only affecting the active view. This means toggling a setting applies everywhere without needing to switch tabs or reopen files.\r\n\r\n## Bug fixes\r\n\r\n- Fixed `setPluginState` (enable/disable commands) to refresh all open views instead of only the active leaf.\r\n- Fixed ViewConfig JSDoc comments that incorrectly described `showProperties` and `showInlineTitle` as hiding when they control showing.\r\n- Fixed indentation inconsistency in the filter builder auto-advance logic.\r\n\r\n## Tests\r\n\r\n- Added tests for `editableContent` default value, ViewConfig optional field defaults, and showProperties/showInlineTitle semantics.\r\n- 788 tests pass (up from 781).",
+      "downloadCount": 42,
       "draft": false,
       "name": "0.2.4",
       "prerelease": false,
@@ -205,22 +263,26 @@
       "assets": [
         {
           "digest": "sha256:6762151cc4ae017338ff8fd53209f73697d88ec042b56bc0da6a65a4e7f68aa3",
+          "downloadCount": 25,
           "name": "main.js",
           "size": 215970
         },
         {
           "digest": "sha256:998e498dce498268a6e6ab1b6942503d944d45e56bf0d3e3d6eba7e9f4b03c67",
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:f98d61bc63e875f6890b377518626b02ae0ee22bb515e6d802e49036cca43af7",
+          "downloadCount": 25,
           "name": "styles.css",
           "size": 24100
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Content Styling Overhaul\r\n \r\nCustom view content now matches native Obsidian reading view styling exactly. The rendered content container includes `markdown-preview-view` and `markdown-rendered` classes, so Obsidian's built-in typography, list, code block, and callout styles apply correctly without manual CSS overrides.\r\n \r\nRemoved ~30 lines of redundant CSS rules (list padding, paragraph margins, etc.) that were previously needed to approximate native styling.\r\n \r\n## Bug Fixes\r\n \r\n- **Canvas node cleanup** — restoring a canvas node now properly removes `data-cv-hide-properties` and `data-cv-hide-inline-title` attributes, preventing stale state after toggling views.\r\n- **Template whitespace handling** — `{{ file.content }}` and `{{ content }}` with spaces around the placeholder are now recognized correctly for editable content detection.\r\n- **Live preview visibility** — added CSS counter-rules so the content container remains visible in both reading and live preview modes despite inheriting `markdown-preview-view` hiding rules.\r\n\r\n## Code Quality\r\n \r\n- Added 49 unit tests for core renderer utilities: `templateHasEditableContent`, `findFirstPipe`, `resultToString`, `parsePropertyPath`, and `extractWikiLink`.\r\n- Excluded test files from TypeScript type-checked ESLint rules that produce false positives with vitest.\r\n- Total test count: 780 tests across 10 test suites, all passing.",
+      "downloadCount": 25,
       "draft": false,
       "name": "0.2.3",
       "prerelease": false,
@@ -231,22 +293,26 @@
       "assets": [
         {
           "digest": "sha256:dc9791636dce83f3a089d6795beb3f95c08031709648512823147e433372da7a",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 215751
         },
         {
           "digest": "sha256:827dca6515fc377cd0c05ed87045e5131ac9030e44a53c1f8f4e442506155665",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:4402701a70e134d5449f4018ee7d06232ea9d39c3905a682322ba88d48e62374",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 24824
         }
       ],
       "author": "github-actions[bot]",
       "description": "<img width=\"1728\" height=\"1117\" alt=\"Screenshot 2026-05-23 at 7 40 44 PM\" src=\"https://github.com/user-attachments/assets/599cfdcc-8705-4dd7-87aa-a7f302c53380\" />\r\n\r\n## Separate CSS and JavaScript fields\r\n\r\nEach view now has dedicated **CSS** and **JavaScript** editors alongside the HTML template. CSS is injected via a `<style>` tag and JS executes after the template renders with `this` bound to the container element. All three editors support template syntax (`{{property}}`, expressions, logic blocks) so your styles and scripts can reference frontmatter values directly.\r\n\r\n## Expression engine\r\n\r\nTemplates now support a full expression syntax inspired by Obsidian Bases. Use functions, methods, operators, and logic blocks directly inside `{{ }}`:\r\n\r\n- **Functions:** `now().format(\"YYYY-MM-DD\")`, `if(rating > 8, \"Great\", \"OK\")`, `link(cast[0]).asFile().name`\r\n- **Methods:** `tags.filter(value > 2).join(\", \")`, `title.upper()`, `runtime.round(0)`\r\n- **Logic blocks:** `{% if rating > 8 %}...{% endif %}`, `{% for cast %}...{% endfor %}`, `{% set x = 5 %}`\r\n- **Operators:** arithmetic (`+`, `-`, `*`, `/`, `%`, `**`), comparison (`==`, `!=`, `>`, `<`), logical (`&&`, `||`, `!`), ternary (`? :`)\r\n\r\nThe legacy pipe-filter syntax (`{{property | filter}}`) continues to work — the engine auto-detects which mode to use.\r\n\r\n## Cross-file property resolution\r\n\r\nTemplate expressions can now chain across wiki-linked files. If your frontmatter has `cast: [\"[[Adarsh Gourav]]\"]`, you can write `{{cast[0].cover}}` to pull the `cover` property from the linked file's frontmatter, or `{{cast[0].content}}` to read its body content. Chains can go multiple levels deep.\r\n\r\n## Rich template autocomplete\r\n\r\nThe template editors now provide context-aware autocomplete with typed icons matching Obsidian's property type system. After a dot, suggestions are filtered by the inferred type — file objects show file properties and methods, strings show string methods, and so on. Frontmatter properties from the vault are included with their detected types (text, number, date, list, checkbox).\r\n\r\n## Per-view CSS scoping\r\n\r\nCSS from each view — whether from the CSS field or injected dynamically by JavaScript — is now automatically scoped to its own tab. Opening the same view on two files in separate tabs no longer causes one file's styles to override the other's.\r\n\r\n## Auto-refresh after settings change\r\n\r\nViews now re-render automatically when you close the Edit View modal or delete a view. No more reloading the app to see your changes.\r\n\r\n\r\n## Bug fixes\r\n\r\n- Fixed modulo operator (`%`) not being recognized in expression mode, causing expressions like `runtime % 60` to return empty.\r\n- Fixed autocomplete icon sizing (was hardcoded to 24px, now scales with font size).\r\n- Removed dead code path in mode detection that could never be reached.\r\n- Fixed a MutationObserver leak where re-rendering a view accumulated observers without disconnecting previous ones.\r\n\r\n",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.2.2",
       "prerelease": false,
@@ -257,22 +323,26 @@
       "assets": [
         {
           "digest": "sha256:0f5d5a93fe81b741ffd056b8b551691dc2b5a85fc9e4a142034b6dafa386f3bb",
+          "downloadCount": 45,
           "name": "main.js",
           "size": 68620
         },
         {
           "digest": "sha256:434baf99531612425fd7c3bd1c9a1c9d0f6ca85847125cac9a45263b2f2fa367",
+          "downloadCount": 64,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:5633fe927c9643745d24dff7d010b429d1102f83d558a4bb389dbd16f501d4f0",
+          "downloadCount": 45,
           "name": "styles.css",
           "size": 21714
         }
       ],
       "author": "anupchavan",
       "description": "## Editable content in live preview (experimental)\r\n\r\nCustom Views no longer means giving up your editor. When enabled, the `{{file.content}}` area inside your template becomes a fully functional live editor — not a read-only render.\r\n\r\nEverything you'd expect from the normal Obsidian editor works inside the template: slash commands, wikilink suggestions, embeds, Dataview blocks, undo/redo, and auto-save. The template wraps around the editor, so your layout (headers, sidebars, metadata panels) stays intact while the content area is editable.\r\n\r\n**How it works:** The real CM6 editor is repositioned into the `{{file.content}}` placeholder in your template. Frontmatter is hidden automatically so only the body content is visible and editable.\r\n\r\n**Requirements:**\r\n- \"Work in live preview\" must be enabled.\r\n- The template must contain an unfiltered `{{file.content}}` or `{{content}}` — piped variants like `{{file.content | markdown}}` remain read-only.\r\n- Enable via Settings → Custom Views → \"Editable content in live preview (experimental).\"\r\n\r\n## Per-view display options\r\n\r\nEach view now has a **Display options** section (visible when editable content is enabled) with toggles for:\r\n- **Show properties** — hide or show the metadata/properties section for that specific view.\r\n- **Show inline title** — hide or show the inline title (only appears if Obsidian's global \"Inline title\" setting is on).\r\n\r\nThese work in both reading view and live preview, and are configurable independently per view.\r\n\r\n## Auto-saving view settings\r\n\r\nThe Edit View modal no longer has Save/Cancel buttons. All changes — name, rules, template, display options — are saved automatically as you edit. No more forgetting to click Save.\r\n\r\n## Bug fix: stale link resolution\r\n\r\nInternal links in the template overlay now resolve relative to the currently active file rather than the file that was active when the overlay was first created. Previously, navigating between files that matched the same view could cause links to resolve against the wrong file path.",
+      "downloadCount": 45,
       "draft": false,
       "name": "0.2.0",
       "prerelease": false,
@@ -283,22 +353,26 @@
       "assets": [
         {
           "digest": "sha256:355e3c920efa978f4fab58d8dc116206570a298ebd0cc21e55b8e66564ac9155",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 54065
         },
         {
           "digest": "sha256:bf9f3d02cb571ea5874fadee3380e055c1037708ec5ec1695d377a53db563597",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:27aaddbbac38e8e397a1a82f88bc7735ad9ec3c6532240402d1119c653278be7",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 21820
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Template editor with syntax highlighting\r\nThe plain textarea for editing view templates has been replaced with a full CodeMirror 6 code editor.\r\n\r\n### What's new:\r\n\r\n- **HTML syntax highlighting** — tag names, attributes, attribute values, comments, and special characters are all colorized using Obsidian's built-in `--code-*` CSS variables, so the editor looks right with any theme (light, dark, or custom).\r\n- **Line numbers** — a gutter shows line numbers alongside your template code.\r\n- **Auto-close HTML tags** — typing `>` after an opening tag like `<div` automatically inserts `</div>` and places the cursor between the tags. Void elements (`br`, `img`, `input`, etc.) and self-closing tags are correctly skipped.\r\n- **HTML autocompletion** — typing `<` shows a list of common tag suggestions; typing a space inside an open tag suggests common attributes (`class`, `id`, `style`, `href`, etc.).\r\n- **Bracket matching & auto-close brackets** — matching brackets are highlighted, and opening brackets/quotes are automatically paired.\r\n- **Undo/redo history** — full editor history with standard keyboard shortcuts.\r\n- **Tab indentation** — Tab key indents, Shift+Tab dedents.\r\n\r\n**Under the hood:**\r\n\r\nThe editor uses `@lezer/html` (the HTML parser only) rather than the heavier `@codemirror/lang-html`, keeping the bundle at ~52 KB instead of ~750 KB.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.9",
       "prerelease": true,
@@ -309,22 +383,26 @@
       "assets": [
         {
           "digest": "sha256:23c4c636a17f0be7cfc6b8a263258d15835d4dc3080ea9cd27628ec96600252e",
+          "downloadCount": 16,
           "name": "main.js",
           "size": 34033
         },
         {
           "digest": "sha256:bf9f3d02cb571ea5874fadee3380e055c1037708ec5ec1695d377a53db563597",
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:aa3be1348c15f79023f3c1802a84dd04135f90a1c5380797714e488f2ae97407",
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 21661
         }
       ],
       "author": "anupchavan",
       "description": "Maintenance release: no user-facing feature changes.\r\n\r\nFixes all issues flagged during Obsidian community plugin code review:\r\n\r\n- Inline `<script>` tags in templates continue to work as before, but\r\n  `<script src=\"...\">` tags are now silently ignored. Loading external\r\n  scripts from a template was never reliable in Obsidian and is outside\r\n  the scope of this plugin.\r\n- Improved popout-window compatibility throughout the UI (uses Obsidian's\r\n  `activeDocument` and window-scoped timers where required).",
+      "downloadCount": 16,
       "draft": false,
       "name": "0.1.8",
       "prerelease": false,
@@ -335,22 +413,26 @@
       "assets": [
         {
           "digest": "sha256:d58f2468a6b97e9ae4fe285bbcf79bcb0fbe7d3d0fe4a59af590b23e1d460b17",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 237421
         },
         {
           "digest": "sha256:5435b1aed6e60ad2dea954bcdbb82b870024760b606da073306550fc945d778f",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 337
         },
         {
           "digest": "sha256:aa3be1348c15f79023f3c1802a84dd04135f90a1c5380797714e488f2ae97407",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 21661
         }
       ],
       "author": "anupchavan",
       "description": "Updated minimum App Version in the manifest",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.7",
       "prerelease": false,
@@ -361,22 +443,26 @@
       "assets": [
         {
           "digest": "sha256:69fc78efbd21dad6c639e42f391d95627dfb0fcc2ff167a08e401af778c38198",
+          "downloadCount": 37,
           "name": "main.js",
           "size": 32194
         },
         {
           "digest": "sha256:5234a75c242ea78d8c2087b0d8fc87970e2a1c0b0752991c5a230643b7148ace",
+          "downloadCount": 854,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:e35d6a38678b031b82c35f3fe9e40fe3b3d8fd2d02518da2d2a726a35acd6864",
+          "downloadCount": 36,
           "name": "styles.css",
           "size": 20724
         }
       ],
       "author": "anupchavan",
       "description": "**Full Changelog**: https://github.com/anuwup/obsidian-custom-views/compare/0.1.5...0.1.53",
+      "downloadCount": 37,
       "draft": false,
       "name": "0.1.53",
       "prerelease": true,
@@ -387,22 +473,26 @@
       "assets": [
         {
           "digest": "sha256:c8941607c93d574cc94beaf7d1cf9e68b72aa76ee5168dea0144934eba1955a5",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 32661
         },
         {
           "digest": "sha256:d1373aa6f3702a359fcc6b9d739e7f7d475360121c2d6bf3e384685f80432ef1",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:e35d6a38678b031b82c35f3fe9e40fe3b3d8fd2d02518da2d2a726a35acd6864",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 20724
         }
       ],
       "author": "anupchavan",
       "description": "**Full Changelog**: https://github.com/anuwup/obsidian-custom-views/compare/0.1.5...0.1.52",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.1.52",
       "prerelease": true,
@@ -413,22 +503,26 @@
       "assets": [
         {
           "digest": "sha256:a0030957fbea450df647ed8c63013ef396850c86f3e1c7b33380c81a39e79b4d",
+          "downloadCount": 24,
           "name": "main.js",
           "size": 34065
         },
         {
           "digest": "sha256:5fbf2036d018f343254a3092b4d076a5969c3e60075eb54b533c601db4867b74",
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:e35d6a38678b031b82c35f3fe9e40fe3b3d8fd2d02518da2d2a726a35acd6864",
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 20724
         }
       ],
       "author": "anupchavan",
       "description": "Added Canvas support",
+      "downloadCount": 24,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,
@@ -439,22 +533,26 @@
       "assets": [
         {
           "digest": "sha256:15c9a527fe6f070adfbd3e229d4287aae63373ffc84b154793c5e3b3487caa88",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 32057
         },
         {
           "digest": "sha256:d2cb9014f92bf88f205c1f61816fd1677e1d313f57ba05aa7e175ff35787907a",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:e35d6a38678b031b82c35f3fe9e40fe3b3d8fd2d02518da2d2a726a35acd6864",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 20724
         }
       ],
       "author": "anupchavan",
       "description": "file properties are listed first in the LHS container",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.5",
       "prerelease": true,
@@ -465,22 +563,26 @@
       "assets": [
         {
           "digest": "sha256:3e07ab8b90c82c1827fa60e319fe5630e42d5b9846f16cfc1b97faafe1d51160",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 30319
         },
         {
           "digest": "sha256:3535b80d51c9565e395333de1575eae51032c3db2fdc5f668175dc333c32fbf7",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:f22fa301e97c2fc43b344fbe548ba1ca5f9eb61ca9806da9ed9bc56ae1f0eef6",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 19639
         }
       ],
       "author": "anupchavan",
       "description": "Added more filters and updated settings UI",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.1.4",
       "prerelease": false,
@@ -491,22 +593,26 @@
       "assets": [
         {
           "digest": "sha256:d71081330ac7afadd7e1e0a69a7eb1373f95808a9cffcddd90c2f8e37c220e0b",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 27207
         },
         {
           "digest": "sha256:7641fea4636ff7763c58c491ef4d0917f83dd0a802a7e959efc23461d598dccb",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:eda552434d55319e6e8ed3f57f651593a4244829ec973d2e577bd1dc0a383c8b",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 21263
         }
       ],
       "author": "anupchavan",
       "description": "Fixed searching in rules.",
+      "downloadCount": 7,
       "draft": false,
       "name": "0.1.3",
       "prerelease": true,
@@ -517,22 +623,26 @@
       "assets": [
         {
           "digest": "sha256:be8559c1fe99797819e96bb47c3a660f1455974085d0497290a8ac29c3b16b36",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 24094
         },
         {
           "digest": "sha256:0b8436fb8cc22996b6592ff45a4e7b54ab08e5dca80787e4ba715fb2cff0a278",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:e5e60c78fa689b54586eee945f138455454a0a0799d4ab109a61d6c2654efeb9",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 16265
         }
       ],
       "author": "anupchavan",
       "description": "Updated Settings UI.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -543,22 +653,26 @@
       "assets": [
         {
           "digest": "sha256:113c9073340b156b7cf083e149d705c81098623e96ae6b471af017ae21772f3f",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 25202
         },
         {
           "digest": "sha256:94a4db4483c20140320cc159af28b182188ba7c72062bafcf9e9e8f3c05f7aec",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 343
         },
         {
           "digest": "sha256:eef0a6b8af2fdad5596f025067da9bfe1b2cf6370b33c7706db078e8cc27fd23",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 15991
         }
       ],
       "author": "anupchavan",
       "description": "Pre-release for testing and feedback",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.1",
       "prerelease": true,
@@ -569,22 +683,26 @@
       "assets": [
         {
           "digest": "sha256:3308f60538bb339a05fc8f56c8a50d8ee4ea70da60572621506c99558f3ba09e",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 27843
         },
         {
           "digest": "sha256:240be4858858af5f3c3eedab990f772706054c55ab7b350f421438dce47fa963",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 365
         },
         {
           "digest": "sha256:1943a91c0e897ab65e1e659faf8f3204a0de384a59eb233b3ac722faa0197b29",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 13949
         }
       ],
       "author": "anupchavan",
       "description": "Initial beta release of Custom Views plugin",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.1.0",
       "prerelease": true,
