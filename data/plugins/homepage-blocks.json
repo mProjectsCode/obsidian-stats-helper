@@ -4,8 +4,8 @@
   "description": "A composable, drag-and-drop homepage. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "homepage-blocks",
-  "lastChangedAt": "2026-06-16T03:03:58.562Z",
-  "lastFetchedAt": "2026-06-16T03:03:58.562Z",
+  "lastChangedAt": "2026-06-21T02:01:09.515Z",
+  "lastFetchedAt": "2026-06-21T02:01:09.515Z",
   "manifest": {
     "author": "Alfio Caprino",
     "authorUrl": "https://github.com/acaprino",
@@ -23,22 +23,26 @@
       "assets": [
         {
           "digest": "sha256:d5feafb4edf64c7f86305448b640f2a0f87455c4ad4539ec9d39132756fb081e",
+          "downloadCount": 169,
           "name": "main.js",
           "size": 535512
         },
         {
           "digest": "sha256:9c566f3825e58a751f83469b7c0e0b1670c9317dad2d714c5a78275548aed4f7",
+          "downloadCount": 178,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:0791d9e57e4cf9e628daedeeedc98bc362a2a57e2ee327df40a599a3c09a8879",
+          "downloadCount": 168,
           "name": "styles.css",
           "size": 108293
         }
       ],
       "author": "acaprino",
       "description": "Compliance/maintenance release for the Obsidian community review platform: resolves the \"Local Storage\" scan finding.\n\n## Fixed\n- Voice dictation consent flag now persists via Obsidian's official `App.loadLocalStorage`/`App.saveLocalStorage` API instead of raw `window.localStorage`. The official API scopes keys by real vault ID automatically — strictly better than the previous vault-name suffix, which could collide between two vaults sharing a name. Consent stays per-device and per-vault by design: a synced `data.json` or a shared layout pointing at someone else's API endpoint never inherits it.\n- `minAppVersion` raised from 1.7.2 to 1.8.7 (the `@since` version of the new API), hence the minor version bump.\n\n## Notes\n- The consent storage key changed, so existing voice-dictation users will see the one-time consent dialog once more on their next recording. Migrating the old key would have required keeping a raw `localStorage` read in the code, defeating the remediation.\n- The \"Vault Enumeration\" scan finding is an informational capability disclosure, not a violation: `getMarkdownFiles()` powers the Recent files, Vault search, Quotes list, Random note, and Embedded note suggester features, with all enumeration lazy and feature-gated. No code change applicable.\n\nFull gate: tsc clean, eslint clean, 156/156 tests passing, zero `localStorage`/`sessionStorage` references in the bundled `main.js`.\n",
+      "downloadCount": 169,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -49,22 +53,26 @@
       "assets": [
         {
           "digest": "sha256:13517f90e919972a87eee0922f7067f0f0035689ccb4b9cca90a9b4be6cb4154",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 535755
         },
         {
           "digest": "sha256:d6ff99b8938a54f0c246f872da3132297b42feaa2a76218c76570a096fdb600d",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:0791d9e57e4cf9e628daedeeedc98bc362a2a57e2ee327df40a599a3c09a8879",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 108293
         }
       ],
       "author": "acaprino",
       "description": "Compliance/maintenance release for the Obsidian community review platform: resolves the CSS lint findings (64 warnings reduced to 15, each survivor justified inline).\n\n## Fixed\n- Replaced all 11 `:has()` selectors with JS-toggled state classes (`hp-toolbar-open`, `hp-header-empty`, `hp-dragging`, `hp-block-<type>`) and `:focus-within` for the vault-search focus ring, avoiding the broad selector-invalidation cost of `:has()`.\n- Removed 33 of 45 `!important` declarations via cascade/specificity analysis. The 12 that remain are individually justified in comments: GridStack inline-style overrides (top/left/width/height), the `prefers-reduced-motion` kill-switch, measurement utility classes, and the vendored GridStack CSS.\n- Gallery width caps moved into custom properties (`--hp-grid-cap`, `--hp-masonry-cap`, `--hp-masonry-gap`). This ends the specificity war with the JS-set inline variables and fixes a real bug: the old `columns: 3 !important` cap could force MORE masonry columns than the user configured; the new `min()` clamp respects the setting.\n\n## Notes\n- CSS multicolumn stays for the masonry layout (3 residual lint notes): the \"partial support\" flag concerns `column-span`/balancing, which are not used; column flow plus `break-inside` work on every Obsidian platform without JS measurement.\n\nNo functional changes intended. Full gate: tsc clean, eslint clean, 156/156 tests passing.\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.2.2",
       "prerelease": false,
@@ -75,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:d73eafed461411d4474e988a9f7ba05da097eae65dc23a61ccdb18b62629e46f",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 548494
         },
         {
           "digest": "sha256:4768712183cb30639318e15d35404c9f2051b28e9b46b857951009f741e786fe",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:25f446c7febd3262c78df5df4b8e7d5ed8a8f1143ada55f908acd963dfeeb410",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 105651
         }
       ],
       "author": "acaprino",
       "description": "Compliance/maintenance release for the Obsidian community review platform.\n\n## Fixed\n- Removed a forbidden `eslint-disable` of `obsidianmd/ui/sentence-case` in the Video embed block; the URL placeholder now uses the `{video-id}` template form, which the rule exempts by design.\n- `versions.json` now maps 1.2.1 to `minAppVersion` 1.7.2 (1.2.0 had shipped against 1.5.0 while the code already required 1.7.2 APIs).\n\n## Tooling\n- Added `@eslint-community/eslint-plugin-eslint-comments` with the same directive restrictions the community review platform enforces (`require-description`, `no-restricted-disable`).\n- Scoped typed obsidianmd lint rules off JSON files.\n\nNo functional changes. Full gate: tsc clean, eslint clean, 156/156 tests passing.",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -101,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:3d6bd39c444832b8bfb3ebb10ff89d964285c52f5085138c083b8aef4750c8a0",
+          "downloadCount": 20,
           "name": "main.js",
           "size": 518392
         },
         {
           "digest": "sha256:50386499a4b11472d0198fff3af44f92b1ada5aaae76cb46a1b87409b0def07c",
+          "downloadCount": 80,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:0fa22a8001d2aacf32bf23471ffc2d7b6952b23beb574ae075a59ecee9f19b09",
+          "downloadCount": 18,
           "name": "styles.css",
           "size": 104779
         }
       ],
       "author": "acaprino",
       "description": "## Highlights\n\n### Security\n- **Voice API keys encrypted at rest** — AES-GCM-256 with a non-extractable device key stored in IndexedDB; plaintext keys migrate on the next save.\n- **First-use consent modal** per provider (Whisper / Gemini) before any audio upload, remembered locally per device.\n- **Mobile fallback** — the voice block disables itself on platforms missing `MediaRecorder` / `navigator.mediaDevices` with a clear message.\n- **Import sanitizer** — layout imports now strip `apiKey` and unknown config fields; the confirm dialog shows a dropped-count so you can see what changed.\n- **Video embed** no longer grants `clipboard-write` to the embedded player; lightbox ESC respects open modals and contenteditable fields.\n\n### Reliability\n- **Save-layout disk errors** surface as a Notice (was previously swallowed, which caused silent reverts on next launch).\n- **Tag cache** invalidates on vault events — quotes and random-note blocks always see fresh results after renames or tag edits.\n- **MediaRecorder race** fixed — rapid stop→start no longer corrupts the new recording with stale chunks.\n- **Auto-height batch** is now exception-safe (`setStatic(true)` restored via `finally`).\n\n### UX\n- **Hover highlight** toggle subtly lifts blocks on mouseover and reveals the collapse chevron.\n- **Block settings modal** split into tabs (Header · Body · Card · Content) for faster navigation.\n- **README** now documents the voice-dictation data flow, endpoints, and revocation steps.\n\n## Under the hood\n\n- `GridLayout.ts` 1,671 → ~950 LOC. Extracted: `Scheduler`, `AutoHeightManager`, `ResponsiveColumnsManager`, `BlockSettingsModal`, `RemoveBlockConfirmModal`.\n- `main.ts` 686 → 351 LOC. Extracted: `HomepageSettingTab`, `ConfirmPresetModal`, `validation` (with the `validateLayout`-is-idempotent contract).\n- **vitest + happy-dom + fake-indexeddb** harness with **70 tests** covering validation round-trips, migration idempotence, crypto round-trips, import sanitization, tag cache, Scheduler, newId, dailySeed.\n- esbuild strips `console.debug/log/info/trace` in production (retains `error/warn`).\n- `@typescript-eslint/no-floating-promises` enforced; all ObsidianReviewBot ESLint rules passing.\n\n## Compatibility\n\n- `minAppVersion`: **1.5.0** (unchanged).\n- Existing `data.json` files migrate in place. Plaintext API keys will be encrypted on the next save. **No manual action required.**\n\n## Install\n\nDownload `main.js`, `manifest.json`, and `styles.css` from this release into `<vault>/.obsidian/plugins/homepage-blocks/`, then enable the plugin in Settings → Community plugins.\n",
+      "downloadCount": 20,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -127,22 +143,26 @@
       "assets": [
         {
           "digest": "sha256:65b6374a3049912b0fdedba3656d14ef86ed9fbb5f252b29046c49f4b055423a",
+          "downloadCount": 12,
           "name": "main.js",
           "size": 427053
         },
         {
           "digest": "sha256:fc1f95019ef88c2a4d860d37b5f132b9d13718ce836e7749fce30239421b57eb",
+          "downloadCount": 43,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:e6a05c404347b81f68dc9c83099f538e78a6a3419b4773a4d25a99d2b7c76798",
+          "downloadCount": 13,
           "name": "styles.css",
           "size": 74797
         }
       ],
       "author": "acaprino",
       "description": "Enable mobile support (`isDesktopOnly: false`)",
+      "downloadCount": 12,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -153,22 +173,26 @@
       "assets": [
         {
           "digest": "sha256:65b6374a3049912b0fdedba3656d14ef86ed9fbb5f252b29046c49f4b055423a",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 427053
         },
         {
           "digest": "sha256:40ccf444ad7eb736e6d23c53b9ae07734852d715b0ce6dae9a37a0df6be05078",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 329
         },
         {
           "digest": "sha256:e6a05c404347b81f68dc9c83099f538e78a6a3419b4773a4d25a99d2b7c76798",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 74797
         }
       ],
       "author": "acaprino",
       "description": "### What's New\n- Greeting block: 50 language presets, custom salutations, emoji picker with 3 modes (auto/custom/random)\n- Accent color: intensity slider (5-100%), sRGB color-mix (no hue shift), interactive control overrides\n- Responsive: gallery/quotes/greeting/button-grid auto-adapt to narrow containers\n- Gallery: auto-height on resize, deferred ResizeObserver, batched resize coalescing\n- Lightbox: instance-scoped, keyboard isolation, swipe navigation\n- Security: HtmlBlock defense-in-depth tag stripping, VideoEmbed origin guard\n- 15 block types (added spacer)",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -179,22 +203,26 @@
       "assets": [
         {
           "digest": "sha256:a6c0f021d8d3f0a524e1950736e06716f7a3bb3dd53de21bd6a06ea0f6f74e69",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 283732
         },
         {
           "digest": "sha256:cc278c63b8938080d5d2a269e8f92f256cb2af6c8aa1cb86043edff82c31bf9a",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 305
         },
         {
           "digest": "sha256:35a833eab3cf63b5f4b4056c601c8d8d90297a5eed5a77704b23b394fd47f71a",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 21485
         }
       ],
       "author": "acaprino",
       "description": "Initial release of Homepage Blocks — a dynamic, composable homepage with native blocks.",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

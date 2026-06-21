@@ -4,8 +4,8 @@
   "description": "Convert tagged lines into structured Markdown notes with one click. Supports custom entity types with configurable frontmatter and color-coded pill in the editor. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "entity-notes",
-  "lastChangedAt": "2026-06-16T03:03:58.562Z",
-  "lastFetchedAt": "2026-06-16T03:03:58.562Z",
+  "lastChangedAt": "2026-06-21T02:01:09.515Z",
+  "lastFetchedAt": "2026-06-21T02:01:09.515Z",
   "manifest": {
     "author": "Bart van Wissen",
     "description": "Create entity notes on the fly: write a dangling [[wikilink]], add a tag like #person or #project, and click the inline button to spin up a structured note. Links to entity notes are decorated with a colored pill in the editor.",
@@ -22,22 +22,26 @@
       "assets": [
         {
           "digest": "sha256:364ac0baca684e0c2566da183caf61f3f3881803359ff0e591dce850701d0e54",
+          "downloadCount": 99,
           "name": "main.js",
           "size": 25470
         },
         {
           "digest": "sha256:20ae68aa8942bd8973c4acdea74e7fbd6c36103d184146e140d04bc623c6bda6",
+          "downloadCount": 459,
           "name": "manifest.json",
           "size": 381
         },
         {
           "digest": "sha256:d62bc0da3871563404663f06182230d1501e94df59dcf9e36ce79c2ed8bfea08",
+          "downloadCount": 96,
           "name": "styles.css",
           "size": 2420
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Obsidian Bases file generation.** A new \"Create base files\" button in the settings screen generates an `Entities/<id>.base` file for each enabled entity type. Each generated base is a table view filtered to its entity type, with column order derived from the enabled frontmatter fields and template. A confirmation modal handles existing files (skip / overwrite / cancel).\n\n### Fixed\n\n- **Timestamps no longer appear in entity names from task lines.** Lines such as `- [ ] - 12:30 - Talk to Alice #person` now produce an entity named `Talk to Alice` instead of `- 1230 - Talk to Alice`. List/task marker stripping is now iterative, and a leading `HH:MM` timestamp (with optional separator dash) is removed from the derived title.\n- **iOS compatibility.** Replaced regex lookbehind assertions in tag matching with a consuming alternative so the plugin works on iPhone and iPad, where lookbehind is unsupported.\n- **Numeric settings reject non-finite values.** Values like `Infinity` and `-Infinity` no longer pass numeric coercion in entity-type frontmatter templates and fall through to be stored as strings.\n- **Whitespace-only frontmatter values no longer coerce to `0`.** A template field set to spaces or tabs is now kept as a string instead of being silently turned into the number zero.\n\n## What's Changed\n* fix: strip timestamps from entity names in task lines with HH:MM prefix by @bartvw in https://github.com/bartvw/entity-notes/pull/9\n\n## New Contributors\n* @bartvw made their first contribution in https://github.com/bartvw/entity-notes/pull/9\n\n**Full Changelog**: https://github.com/bartvw/entity-notes/compare/1.2.1...1.3.0",
+      "downloadCount": 99,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -48,22 +52,26 @@
       "assets": [
         {
           "digest": "sha256:978c176bbcece5b40cb9bf5f465c6ff4248b3eb95a7081ff95c6196192eb1003",
+          "downloadCount": 24,
           "name": "main.js",
           "size": 22377
         },
         {
           "digest": "sha256:189b7406ec589f2c5ed3f032e62c91c73ba984d152f9c14c2d7ae136051dddb1",
+          "downloadCount": 493,
           "name": "manifest.json",
           "size": 381
         },
         {
           "digest": "sha256:4c739f8c76573b8627e4bc6a68c917d8d63b67289b0fca3b047041ac5399ad78",
+          "downloadCount": 22,
           "name": "styles.css",
           "size": 2238
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Vault root as target folder.** Entity types can now be configured with an empty target folder to store notes directly in the vault root. Previously leaving the field blank blocked saving with a \"Target folder is required\" notice.\n\n**Full Changelog**: https://github.com/bartvw/entity-notes/compare/1.2.0...1.2.1",
+      "downloadCount": 24,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -74,22 +82,26 @@
       "assets": [
         {
           "digest": "sha256:42248cafea3fd9aa8ca51bb69f0e037da28064506d47cc074be8ad32c0f69c62",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 22387
         },
         {
           "digest": "sha256:de7b2fb6d3f3b81fd51601ed029d7775a527de2be4f7734583faa27c11fc4ef2",
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 381
         },
         {
           "digest": "sha256:4c739f8c76573b8627e4bc6a68c917d8d63b67289b0fca3b047041ac5399ad78",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 2238
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Wikilink conversion.** When a trigger tag appears directly after an unresolved `[[wikilink]]`, a convert button now appears after the tag. Clicking it creates an entity note from the wikilink text and strips only the tag from the source line — the wikilink stays in place and now resolves to the new note. Previously the entire line was always replaced.\n- **Multiple convert buttons per line.** A line with several unresolved wikilink+tag pairs (e.g. `[[Alice]] #person [[Project Alpha]] #project`) now shows a separate button for each pair. Each button converts only its own wikilink independently.\n- **Convert on Enter converts all matches.** When Convert on Enter is enabled, pressing Enter at the end of a line with multiple unresolved wikilink+tag pairs creates all the entity notes and strips all the tags in one operation.\n\n### Changed\n\n- **Convert button placement.** The `→ EntityType` button now appears immediately after its trigger tag instead of at the end of the line, making it clear which tag each button belongs to.\n- **Wikilinks in filenames are unwrapped.** When deriving a filename from a line that contains wikilinks (e.g. `Talked to [[Alice]] #person`), the brackets are stripped but the link text is kept — the note is named `Talked to Alice` rather than `Talked to`.\n- **Title frontmatter field preserves wikilinks.** For line conversions, the `title` field now contains the line text with embedded wikilinks kept in full (e.g. `Talked to [[Alice]]`), while the filename strips the brackets. For wikilink conversions, the title field is the bare link text as before.\n- **Note body.** Line conversions now include a note body containing the line text with the trigger tag and list/task markers stripped. Wikilink conversions produce no body. This replaces the previous behavior of writing only frontmatter for all conversions.\n\n**Full Changelog**: https://github.com/bartvw/entity-notes/compare/1.1.0...1.2.0",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -100,22 +112,26 @@
       "assets": [
         {
           "digest": "sha256:55d2687946fa0c1292790c5fc44640483e6915c8f5d2b1736015c25fa0857f2e",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 19569
         },
         {
           "digest": "sha256:a544fa5fa1f34501e481cca064a515a871f2484eb6dc7aa36ee0cae7a27f06fb",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 381
         },
         {
           "digest": "sha256:4c739f8c76573b8627e4bc6a68c917d8d63b67289b0fca3b047041ac5399ad78",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 2238
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Configurable frontmatter fields.** Each of the five standard fields (`title`, `entity-type`, `tags`, `created`, `source-note`) can now be toggled on/off and given a custom field name. Settings are global (apply to all entity types) and live under a new \"Default frontmatter\" section in the settings screen. Changing a name affects all notes created after saving; existing notes are not modified. Duplicate field names are rejected with a notice.\n- **Configurable entity identification.** A new \"Identify entities by\" setting (Preferences) controls how the plugin detects entity notes for pill display: by the entity-type property (default) or by tags. In Tags mode, a note whose tags field contains multiple entity type ids shows a pill for each.\n\n### Changed\n\n- Settings screen is now structured in three sections: Preferences → Default frontmatter → Entities.\n\n**Full Changelog**: https://github.com/bartvw/entity-notes/compare/1.0.5...1.1.0",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -126,22 +142,26 @@
       "assets": [
         {
           "digest": "sha256:da09041133e7e9c6f694308adf385d107847041d490c2b64cd84c0c0b12cb943",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 15936
         },
         {
           "digest": "sha256:25b848097c5649ea407b9b5ab7fa089cc0f8709fb130ef8cb00ea8683c821486",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 381
         },
         {
           "digest": "sha256:86083815f03a2f003f38257cc914b182a49e8be67c6fe0ce9f7ea34419e181ac",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 1417
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- Indentation is now preserved when converting an indented list item (e.g. `  - My idea #idea` becomes `  - [[My idea]]` instead of losing the leading spaces).\n\n**Full Changelog**: https://github.com/bartvw/entity-notes/compare/1.0.4...1.0.5",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.5",
       "prerelease": false,
@@ -152,22 +172,26 @@
       "assets": [
         {
           "digest": "sha256:42b7cdac8def7209fdc27685bd6e5b11a974a670920c8d7c3f45c75d3174861f",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 15918
         },
         {
           "digest": "sha256:a54ba3eab351b8f1097be8d654dcde87bd15a31bcf970cebb77f1c8954144a20",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 246
         },
         {
           "digest": "sha256:86083815f03a2f003f38257cc914b182a49e8be67c6fe0ce9f7ea34419e181ac",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 1417
         }
       ],
       "author": "github-actions[bot]",
       "description": null,
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.4",
       "prerelease": false,
@@ -178,22 +202,26 @@
       "assets": [
         {
           "digest": "sha256:42b7cdac8def7209fdc27685bd6e5b11a974a670920c8d7c3f45c75d3174861f",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 15918
         },
         {
           "digest": "sha256:4da4743d5c6efe5f525afc9b8c5343ac414177f5f88cb46dbf25207d88d3544f",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 246
         },
         {
           "digest": "sha256:86083815f03a2f003f38257cc914b182a49e8be67c6fe0ce9f7ea34419e181ac",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 1417
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- Entity pill text color now respects the active Obsidian theme instead of always using white.\r\n- Target folder paths configured in settings are now normalized for cross-platform compatibility (mixed slashes, trailing slashes, etc.).\r\n- Settings modal headings now use the standard Obsidian heading style for consistent appearance.\r\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,
@@ -204,22 +232,26 @@
       "assets": [
         {
           "digest": "sha256:d3b3301e49c8b49e6b8dad71702287cdc251d030457864b884365fae18e4c2e0",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 15850
         },
         {
           "digest": "sha256:7aea934cca7a85dd53a01f587510f97776b05b6a71d7a2fd0bc0af5a89edd988",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 246
         },
         {
           "digest": "sha256:f88faa4e509e93ebd9837d6c0720b0b1f30b88baa530388e9cd51b78743430a5",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 1400
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- Inline `→ EntityType` button appears at the end of any line containing a configured trigger tag (e.g. `#project`, `#person`). Clicking it creates a dedicated note and replaces the line with a wikilink.\r\n- Entity pill badge rendered after wikilinks to known entity notes in Live Preview, Source mode, and Reading mode. The pill is visual only — never written to the file.\r\n- **Convert on Enter** setting (default: off). When enabled, pressing Enter at the end of a matched line triggers the conversion and moves the cursor to the next line.\r\n- Five built-in entity types: Person, Idea, Accomplishment, Feedback, Project. All are enabled by default and fully customizable.\r\n- Settings UI to add, edit, and delete entity types. Each type exposes: name, trigger tag, target folder, pill color, enabled toggle, and a frontmatter template for extra fields.\r\n- Created notes include YAML frontmatter: `title`, `entity-type`, `tags`, `created`, and `source-note` (wikilink back to the originating note).\r\n- List items are handled naturally: `- Met Alice #person` becomes `- [[Met Alice]]`.\r\n- Trigger tags inside fenced code blocks and YAML frontmatter are ignored.\r\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,

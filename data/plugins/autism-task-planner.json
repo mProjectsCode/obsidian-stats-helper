@@ -4,8 +4,8 @@
   "description": "Reduce your mental load by sequencing your tasks in a drag-and-drop UI with compounding time estimates. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "autism-task-planner",
-  "lastChangedAt": "2026-06-16T03:03:58.562Z",
-  "lastFetchedAt": "2026-06-16T03:03:58.562Z",
+  "lastChangedAt": "2026-06-21T02:01:09.515Z",
+  "lastFetchedAt": "2026-06-21T02:01:09.515Z",
   "manifest": {
     "author": "mm0x1",
     "authorUrl": "https://github.com/mm0x1",
@@ -23,17 +23,20 @@
       "assets": [
         {
           "digest": "sha256:61f99b6b931a84361d793a8092e388b23e9be226f14f4d3616c58ccfb4c870d9",
+          "downloadCount": 139,
           "name": "main.js",
           "size": 53573
         },
         {
           "digest": "sha256:14693422a4f97b9fa40f3239b775ca7b66733e0304864b1121baf1b83295afc2",
+          "downloadCount": 187,
           "name": "manifest.json",
           "size": 322
         }
       ],
       "author": "mm0x1",
       "description": "## v1.0.8\n\nFixes remaining issues flagged by ObsidianReviewBot:\n\n- Removed explicit `constructor` methods from `TaskPlannerView` and `TaskPlannerSettingsTab` — this resolves a false-positive in the `obsidianmd/prefer-active-doc` rule caused by a prototype chain bug (the rule's `REPLACEMENTS` object accidentally matches `constructor` via `Object.prototype`). The plugin instance is now assigned after view construction in the `registerView` callback.\n- Rephrased the default start time description to avoid the `HH:mm` notation that triggered the sentence-case rule in the bot's stricter configuration.\n- Removed unused `App` and `WorkspaceLeaf` imports.",
+      "downloadCount": 139,
       "draft": false,
       "name": "v1.0.8",
       "prerelease": false,
@@ -44,17 +47,20 @@
       "assets": [
         {
           "digest": "sha256:4eea9c8030fdc44b021e709958b8f175f738e10df081cfc5bd75ef4234b65e1d",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 53601
         },
         {
           "digest": "sha256:332c741b5c7b04df1c13020c6176f754c1ff5c9d015d5ac96d5ddd05bc615bec",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 322
         }
       ],
       "author": "mm0x1",
       "description": "## v1.0.7\n\nAddresses all required issues flagged by ObsidianReviewBot:\n\n- Sentence case applied to all UI text\n- Removed `detachLeavesOfType` from `onunload` (prevented user-moved leaves from persisting their position)\n- Fixed floating promises and promise-in-void-context issues\n- Replaced manual `<h2>`/`<h3>` elements in settings with `Setting.setHeading()`\n- Removed unnecessary type assertions\n- Removed `async` from `onClose` (it had no `await` expression)\n- Replaced `innerHTML` assignments with Obsidian's `setText()` helper\n- Bumped `minAppVersion` to `1.7.2` to cover `revealLeaf` and `ColorComponent` API requirements",
+      "downloadCount": 5,
       "draft": false,
       "name": "v1.0.7",
       "prerelease": false,
@@ -65,22 +71,26 @@
       "assets": [
         {
           "digest": "sha256:e379130117cfd15b986c9e1eaa2e272cc097861b39da2773859ada1363dab839",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 53577
         },
         {
           "digest": "sha256:a3a8940655df0e4967befa74e74babfb21d1b52cf4fb8841a707d1590276c88a",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 323
         },
         {
           "digest": "sha256:cb835cddcd991bc0dcdcb1b472d2aa2d1fe658d03bf0a196e8b20a855b09cca3",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 10184
         }
       ],
       "author": "mm0x1",
       "description": "## Bug fix\n\n**Deleting tasks and then reordering created duplicate entries in the file.**\n\nDeleting a line shifts every line below it up by one in the file, but the in-memory `lineIndex` values of remaining tasks were never updated. A subsequent reorder would read wrong file lines using those stale positions, writing scrambled content while leaving old lines untouched — producing duplicates.\n\n`syncDeleteToFile` and `syncBulkDeleteToFile` now update `lineIndex` on all remaining tasks after each successful write.\n\n## Design improvement\n\n`modifyLines()` now accepts an optional `onSuccess` callback. Any sync operation that changes the number of lines in the file passes its index-update logic there. This ensures:\n- Index updates only happen when the file write actually succeeds\n- The requirement is visible at the callsite — a future method that splices lines and omits `onSuccess` is an obvious gap to spot in review",
+      "downloadCount": 10,
       "draft": false,
       "name": "v1.0.6 — Fix: task duplicates from delete + reorder",
       "prerelease": false,
@@ -91,22 +101,26 @@
       "assets": [
         {
           "digest": "sha256:53d7ec010bf92d3ea4512e243e8575a5b02e7deea8e4bb64220e03c94b6ec844",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 53385
         },
         {
           "digest": "sha256:e1c7bb454b3d4c9ef9738b1c22ed498558c714a55cd399f5f2506f504fed9fab",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 322
         },
         {
           "digest": "sha256:cb835cddcd991bc0dcdcb1b472d2aa2d1fe658d03bf0a196e8b20a855b09cca3",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 10184
         }
       ],
       "author": "mm0x1",
       "description": "## Bug fix\n\n**Dragging tasks more than once produced scrambled file order.**\n\n`task.lineIndex` was set at parse time and never updated when a reorder was synced to the file. On the second drag, `syncReorderToFile` read file lines using the original (now wrong) positions, writing scrambled content back.\n\nFix: `syncReorderToFile` now updates each task's `lineIndex` to its new position in the file immediately after writing, so all subsequent reorders and file operations use correct positions.",
+      "downloadCount": 1,
       "draft": false,
       "name": "v1.0.5 — Fix: reorder scrambles file after second drag",
       "prerelease": false,
@@ -117,22 +131,26 @@
       "assets": [
         {
           "digest": "sha256:9bd3b92c90ecddcae9ff0c95f9a70d63f7c08a4f9eaa3551598081eb737bc9be",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 53304
         },
         {
           "digest": "sha256:8dc3a97d7c4308240f92549378c8eb18eec02c0741b0729e9c48c1cc26104979",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 322
         },
         {
           "digest": "sha256:cb835cddcd991bc0dcdcb1b472d2aa2d1fe658d03bf0a196e8b20a855b09cca3",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 10184
         }
       ],
       "author": "mm0x1",
       "description": "## Bug fixes\n\n- **Reorder after Reset All restored completed state** — reordering tasks after clicking Reset All would put them back to completed. Root cause: the reorder sync was using a stale in-memory snapshot of each line (`task.raw`) that still held the old `- [x]` content. Now reads the live file content instead.\n- **Completing a `- [ ]` checkbox task didn't write to file** — the file sync guard was blocking all checkbox lines (`- [`), including unchecked ones. Now only skips already-completed `- [x]` lines.\n- **Category edits were gated on the wrong sync toggle** — category changes now always write to file (explicit user action), regardless of toggle state.\n- **Delete button was gated on sync completions toggle** — delete now always removes the line from file.\n- **Reset All did N sequential file writes** — now a single bulk write.\n- **`chore` and `chores` both appeared in dropdowns** — parser now normalises `-chore` → `chores`.\n\n## Code quality\n- Extracted `modifyLines()` helper shared by all sync methods\n- `capitalizeFirst` moved to the correct module",
+      "downloadCount": 1,
       "draft": false,
       "name": "v1.0.4 — Bug fixes and code cleanup",
       "prerelease": false,
@@ -143,22 +161,26 @@
       "assets": [
         {
           "digest": "sha256:225560cd611f5e61a6a0914d7c0e572e7825c1b38a4de0ab453c0d295b0b3990",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 54021
         },
         {
           "digest": "sha256:a55d45b739da41b20d7e9ba86411a5afd03f511449e9d7d91696e7efa706bc0f",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 322
         },
         {
           "digest": "sha256:cb835cddcd991bc0dcdcb1b472d2aa2d1fe658d03bf0a196e8b20a855b09cca3",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 10184
         }
       ],
       "author": "mm0x1",
       "description": "## Bug fix\n\n**Clear completed** now deletes non-recurring completed tasks from the markdown file in a single write operation. Previously it only removed them from the panel — reloading the note caused them to reappear.",
+      "downloadCount": 1,
       "draft": false,
       "name": "v1.0.3 — Fix: Clear completed removes tasks from file",
       "prerelease": false,
@@ -169,22 +191,26 @@
       "assets": [
         {
           "digest": "sha256:dd475fa941be9dbe8d4018f0bdb181879d38d8be8ffc834d638bc74293a0f9c5",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 53536
         },
         {
           "digest": "sha256:29e12725c5b44d60330e831158ff1218594ec5b28af3abfa8b95fa347620d1b9",
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 322
         },
         {
           "digest": "sha256:cb835cddcd991bc0dcdcb1b472d2aa2d1fe658d03bf0a196e8b20a855b09cca3",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 10184
         }
       ],
       "author": "mm0x1",
       "description": "## What's new\n\n**Recurring tasks** — add `~` to the end of any task to mark it as recurring:\n\n\\`\\`\\`\n- feed the cat 2m -chores ~\n- take vitamins 1m -health ~\n\\`\\`\\`\n\n- Recurring tasks show a small **↻** badge in the UI\n- **Clear completed** skips recurring tasks — they stay in the list\n- A new **Reset all** button appears (in the footer) whenever recurring tasks are completed — click it each morning to reset them all to incomplete\n- Completion still syncs to file as `- [x]` normally; Reset all removes the checkbox",
+      "downloadCount": 4,
       "draft": false,
       "name": "v1.0.2 — Recurring tasks",
       "prerelease": false,
@@ -195,22 +221,26 @@
       "assets": [
         {
           "digest": "sha256:2fbd96fe15d5c720574a8e87acbcade649bdb6c28280cd75710120af11b6e115",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 52821
         },
         {
           "digest": "sha256:bd7598c5486518d9774f4a786eb63bbeb44c38de2fc051a5dd95144ccff70943",
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 322
         },
         {
           "digest": "sha256:110c372bee81b81a02c36463e8cc17dce551ea6b4b27d6d72065cfc8ba69c443",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 9684
         }
       ],
       "author": "mm0x1",
       "description": "- Fix: scrolling on mobile no longer triggers accidental drags. Drag only starts from the ⠿ handle.\n- Fix: plugin id no longer contains 'obsidian' (changed to autism-task-planner)\n- Add MIT license",
+      "downloadCount": 4,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -221,22 +251,26 @@
       "assets": [
         {
           "digest": "sha256:460d136075b6302036f3fa5bdb621ae1ce41702a166dcba31116ce616e8bf6ca",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 52796
         },
         {
           "digest": "sha256:e8c0bd6a6046c546d642ac00aa08dd7a64334942ab819a5309af0b2979c8da57",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 331
         },
         {
           "digest": "sha256:110c372bee81b81a02c36463e8cc17dce551ea6b4b27d6d72065cfc8ba69c443",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 9684
         }
       ],
       "author": "mm0x1",
       "description": "Initial release",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

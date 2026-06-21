@@ -4,8 +4,8 @@
   "description": "Automate frontmatter updates using conditional rules.",
   "errors": [],
   "id": "conditional-properties",
-  "lastChangedAt": "2026-06-19T03:02:58.592Z",
-  "lastFetchedAt": "2026-06-19T03:02:58.592Z",
+  "lastChangedAt": "2026-06-21T02:01:09.515Z",
+  "lastFetchedAt": "2026-06-21T02:01:09.515Z",
   "manifest": {
     "author": "Diego Eis",
     "authorUrl": "https://diegoeis.com",
@@ -23,37 +23,44 @@
       "assets": [
         {
           "digest": "sha256:b1ad29aef104454eeb49812aa9c1a8a77c75da9fff6af9cf24fe5129ca61a637",
+          "downloadCount": 84,
           "name": "main.js",
           "size": 55882
         },
         {
           "digest": "sha256:312500e4e3c36013841e7e206b31216fbff11f74c3eea6f52e58615d3f311ddd",
+          "downloadCount": 96,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:5fecae2acad2cc7a49da13cb0fbe6f7553aea0bc18e8c6c1d60ca40b075b85ab",
+          "downloadCount": 0,
           "name": "conditional-properties.zip",
           "size": 16032
         },
         {
           "digest": "sha256:fe959b40912b46af6fd347dbad847e00408fcaef3b15e051363141db7aa69481",
+          "downloadCount": 84,
           "name": "styles.css",
           "size": 2761
         },
         {
           "digest": "sha256:b89b611240f6850510debe0e918d664326f7983dba4c6e8e7e5426db47f555ef",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 1066
         },
         {
           "digest": "sha256:0da31421c0ecb5745171010c8c86964b6ec25cb7e3d9017aba787278da319b6f",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 506
         }
       ],
       "author": "diegoeis",
       "description": "## 0.20.4 - 2026-06-18\n### Fixes\n- **No more scroll-to-top or lag on any settings interaction.** Every remaining `this.display()` call inside the settings UI has been replaced by a localized DOM mutation:\n  - Changing the **Scan scope** no longer rebuilds the page — the \"Notes to scan\" row is now created once and toggled via an `is-hidden` class.\n  - **Add rule** appends the new rule's `wrap` right after the Add button instead of re-rendering all rules.\n  - Changing a condition's **Property / First level heading** type, or its **operator**, rebuilds only that single condition row in place.\n  - Changing an action's **Property / First heading** type, or its **action** (add / overwrite / delete / rename / …), rebuilds only that single action row in place.\n\n  The only `display()` left in the settings UI is on **Import settings**, where rebuilding the whole tab is the right thing to do (every field potentially changed).\n\n### Internal\n- Eliminated dead code (`_updateValueInputState`, never called).\n- Removed the unused `ruleIdx` parameter from `_renderThenAction` and call sites.\n- Translated lingering Portuguese comments to English (or removed them when they only restated the code).\n- Replaced fragile class-based DOM lookups (`.extra-setting-button`, `.conditional-match`, `.setting-item-name`) with explicit references on `ruleCtx`:\n  - `ruleCtx.matchWrapEl` — the Match dropdown element, `null` when absent.\n  - `ruleCtx.removeBtnByCondition` — `WeakMap<Setting, HTMLElement>` mapping each condition's `Setting` instance to its ✕ button element.\n  - `ruleCtx.actionEntries` — array of `{ el, setting }` per action row, so reindexing and rebuilds use the `Setting` instance directly instead of querying the DOM by class.\n- Added `_rebuildCondition(ruleCtx, cond)` and `_rebuildAction(ruleCtx, action)` to encapsulate the \"this row's shape changed, redraw just this row\" path that used to be a full `display()`.\n- Added an `is-hidden` utility class in `styles.css` so visibility toggles stay in CSS instead of being scattered as inline `style.display = '…'` assignments.\n\n## 0.20.3 - 2026-06-18\n### Fixes\n- **The rule-level Remove button no longer scrolls or lags either.** The same `display()` call that 0.20.1 and 0.20.2 eliminated for rows was still firing when an entire rule was removed. The rule's `wrap` element is now detached in place; the other rules stay exactly where they were on screen.\n\n### Internal\n- The Remove handler unsubscribes the rule's `onScanStateChange` listener and prunes it from `_scanStateUnsubscribers` before detaching the DOM, so removed rules don't leave dangling subscribers behind.\n- Both `Run this rule` and `Remove` resolve the rule's current index via `Array#indexOf(rule)` at click time instead of trusting the `idx` captured at render time. With re-renders gone, the closure-captured index would go stale after any other rule was removed and we'd run / delete the wrong one.\n\n## 0.20.2 - 2026-06-18\n### Fixes\n- **Removing a condition or action no longer scrolls or lags.** Same root cause as 0.20.1 — the per-row Remove (✕) button still called `display()`, which destroyed and rebuilt the entire settings tab. Now the removed row's DOM is detached in place; the remaining rows are reindexed (`Condition 1`, `Condition 2`, …) via the `Setting` instance, and when a rule drops back to a single condition the `Match (any/all)` dropdown and the last Remove ✕ are stripped without re-rendering.\n\n### Internal\n- Introduced a per-rule `ruleCtx` object (`{ wrap, ifHeader, rule, conditionSettings, actionWraps }`) shared between `_renderRule`, `_renderCondition`, `_renderThenAction`, `_addConditionRemoveButton`, and `_ensureMatchDropdown`. Remove handlers mutate this context instead of falling back to a full re-render.\n- Condition rows are tracked as `Setting` instances so `setName()` is enough to reindex; action wraps are tracked as their root elements and reindexed via a scoped `querySelector` for `.setting-item-name`.\n\n## 0.20.1 - 2026-06-18\n### Fixes\n- **\"+ Add condition\" and \"+ Add action\" no longer scroll the settings tab to the top.** Previously each click re-rendered the entire settings UI via `display()`, which destroyed and recreated every rule and reset the scroll position — making it impossible to keep your eyes on the rule you were editing. The new condition/action is now appended in place, right above its \"Add\" button.\n- **New conditions/actions appear instantly.** The full re-render was also responsible for the lag — every existing rule, condition and action was being rebuilt on each click. Only the new row is created now.\n- The `Match (any/all)` dropdown is materialized on the fly the first time a rule gets a second condition, and the per-condition Remove button is wired into the previously-single condition at the same moment — no element is destroyed and recreated.\n\n### Internal\n- `_renderCondition()` and `_renderThenAction()` now return the elements they create (the `Setting` and the wrap `div`), so callers can insert them at a precise position without resorting to `lastElementChild` or DOM scraping.\n- New helpers `_ensureMatchDropdown(ifHeader, rule)` and `_addConditionRemoveButton(settingLine, rule, cond)` extract the dynamic-mutation logic. The Remove handler looks up the condition's current index via `Array#indexOf` instead of capturing it in a closure, so removals stay correct after subsequent additions.\n- Remove handler for actions does the same `indexOf` lookup, fixing a latent off-by-one when an action is deleted after another was appended.\n- All DOM lookups remain scoped to elements the plugin owns (`settingEl.querySelector(...)`, `ifHeader.querySelector(...)`); no global `document.querySelector` was introduced. No `innerHTML`, `var`, or unregistered listeners were added — Obsidian's `createEl` / `createDiv` and the `Setting` / `DropdownComponent` / `ButtonComponent` APIs are used throughout, in line with the project's plugin guidelines.\n\n## 0.20.0 - 2026-05-19\n### New Features\n- **Frontmatter property placeholders in THEN values.** Any `{propertyName}` reference inside a THEN action's value (property add/overwrite/remove, title prefix/suffix/overwrite) is now expanded to the live value of that frontmatter property on the note being processed. Example: an action `Property excerpt = Add value {g_excerpt}` copies the contents of `g_excerpt` into `excerpt`.\n- **Missing properties expand to an empty string** — no error, no literal `{name}` left behind.\n- **Array values are joined with `, `** so a multi-valued source like `tags` produces a readable string.\n- The reserved placeholders `{date}`, `{date:FORMAT}`, and `{filename}` keep their existing meaning; they're resolved first and never collide with property lookups.\n\n### Internal\n- `_formatText(text, file)` now takes an optional third argument `fm` (the in-progress frontmatter snapshot). All four call sites inside `applyRulesToFrontmatter` pass `newFm`, so a later action in the same rule sees the writes performed by earlier actions. When `fm` is omitted, the helper falls back to `metadataCache.getFileCache(file).frontmatter`.\n- Placeholder resolution is now a two-pass replace: pass 1 handles `{date}`/`{filename}`; pass 2 treats any other `{name}` token as a frontmatter lookup. The pass-2 regex excludes `:` and whitespace, so a malformed `{date:FORMAT}` survivor would not be mistaken for a property name.\n\n### Why\nUsers storing canonical content in one property (`g_excerpt`, `g_title`, `summary`, ...) and needing to project it onto another (`excerpt`, `description`, ...) previously had to copy by hand. This closes that gap without inventing a new action type — the existing add/overwrite/title actions just gained a richer expansion grammar.\n\n",
+      "downloadCount": 84,
       "draft": false,
       "name": "0.20.4 — Frontmatter property placeholders + settings UI no longer lags or scrolls",
       "prerelease": false,
@@ -64,37 +71,44 @@
       "assets": [
         {
           "digest": "sha256:0f8fbba33aa8daf6e5a9137f40e345ec1d6a9c8b7bf663330e13e86f2cf08467",
+          "downloadCount": 414,
           "name": "styles.css",
           "size": 2638
         },
         {
           "digest": "sha256:b60002a6c1111e4a2f539f2d0e7fccd64ef94a8b086fca3a305f54943f576430",
+          "downloadCount": 561,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:cb48766da8a87164939f8bd65c7d311a28a3eff6bf8ff214d123481ca75e0514",
+          "downloadCount": 1,
           "name": "conditional-properties.zip",
           "size": 14931
         },
         {
           "digest": "sha256:3727285ea8e192faf9e8d4d5691f5b649a65b5261c375de0644017625c3bcd2a",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 401
         },
         {
           "digest": "sha256:b89b611240f6850510debe0e918d664326f7983dba4c6e8e7e5426db47f555ef",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 1066
         },
         {
           "digest": "sha256:72a9eff3031bd934102d959ce8b34780d1a595aead64e3a33e1afea283c5a0ab",
+          "downloadCount": 419,
           "name": "main.js",
           "size": 51375
         }
       ],
       "author": "diegoeis",
       "description": "Follow-up to v0.19.0: the same type-aware normalization used by THEN actions is now applied when matching IF conditions.\n\n### What's new\n- IF conditions on properties registered as `checkbox`, `date`, or `datetime` are now type-aware. Rules like `IF property: created_at exactly \"08-08-2025\"` now match a note that stores `created_at: 2025-08-08`, because the plugin normalizes the user-typed date through the same Daily Notes / Templates / common-fallback pipeline used by THEN before comparing.\n- Applies to `exactly`, `contains`, and `notContains` operators.\n- Checkbox example: `IF property: done exactly \"true\"` matches a note with `done: true` (boolean).\n\n### What didn't change\n- `exists` / `notExists` / `isEmpty` (they don't read the value).\n- `FIRST_LEVEL_HEADING` source type.\n- Text / number / multitext / tags / aliases / untyped properties — same literal-string comparison as before.\n\n### Compatibility\n- Minimum Obsidian version: 1.5.0 (unchanged).",
+      "downloadCount": 419,
       "draft": false,
       "name": "0.19.1 — Typed property coercion in IF conditions",
       "prerelease": false,
@@ -105,37 +119,44 @@
       "assets": [
         {
           "digest": "sha256:c4741437e474854dcce5ffda58de4ed2f0dc5ad431d252ee310f6dc758fc76e0",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:b89b611240f6850510debe0e918d664326f7983dba4c6e8e7e5426db47f555ef",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 1066
         },
         {
           "digest": "sha256:e607e6d8c1c7635568af0aad2c4a03fb1b2fa5c8f59c1ca4db93168a1b6e9d2d",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 380
         },
         {
           "digest": "sha256:0f8fbba33aa8daf6e5a9137f40e345ec1d6a9c8b7bf663330e13e86f2cf08467",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 2638
         },
         {
           "digest": "sha256:36fa63631e96449859f1bfe1749510f0edf58d5dbc5dc8ec03faed13dbebff7c",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 50587
         },
         {
           "digest": "sha256:496e827d3e0fd04391da1aeed4ba04fbc2aa29fb56803348b10adf51c268c6f6",
+          "downloadCount": 3,
           "name": "conditional-properties.zip",
           "size": 14665
         }
       ],
       "author": "diegoeis",
       "description": "Rules targeting properties registered as `checkbox`, `date`, or `datetime` now write the YAML with the right runtime type, so the native Obsidian widgets render properly. Closes part of #11.\n\n### New Features\n- **Checkbox**: rule value `\"true\"` (any casing) becomes the boolean `true`; anything else becomes `false`. Renders as a real Obsidian checkbox instead of plain text.\n- **Date**: values are normalized to `YYYY-MM-DD` before writing. If you type in ISO, it's used directly. Otherwise the plugin tries Daily Notes' configured date format (if the core plugin is enabled), then Templates' (if enabled), then `DD-MM-YYYY`, `DD/MM/YYYY`, and `YYYY/MM/DD` in that order. First strict match wins. `MM-DD-YYYY` is intentionally excluded to avoid silent DD-vs-MM ambiguity for non-US users.\n- **Datetime**: trimmed and written as-is (Daily Notes / Templates only expose date formats).\n- **`add` collapses into `overwrite` for typed scalar properties** — you can't push a second value into a checkbox or a date, so the plugin transparently overwrites.\n\n### Bug Fixes\n- `_writeFrontmatter` used to delete any property whose value was `null` OR `undefined`. It now only deletes on `undefined`. `null` is preserved as a valid value. No visible behavior change today, but it removes a footgun for future code paths.\n\n### Why\nIssue #11 from @KenCrandall reported that checkbox and date property values were always written as strings, breaking the native widgets. This release fixes that.\n\n### Compatibility\n- Minimum Obsidian version: 1.5.0 (unchanged).",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.19.0 — Typed property coercion (checkbox / date)",
       "prerelease": false,
@@ -146,37 +167,44 @@
       "assets": [
         {
           "digest": "sha256:b89b611240f6850510debe0e918d664326f7983dba4c6e8e7e5426db47f555ef",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 1066
         },
         {
           "digest": "sha256:c8ab6938898306bd42b71f4450398bc5bc1d5d4018c08f9a95108f883c1d6d94",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:0f8fbba33aa8daf6e5a9137f40e345ec1d6a9c8b7bf663330e13e86f2cf08467",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 2638
         },
         {
           "digest": "sha256:af38a399df1c7a8c9d0ae6ef7669d29927a8c37eb9092f2f890a3b289c6d548b",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 359
         },
         {
           "digest": "sha256:705eb9bd294123d67e61a8cbdda8661e7a25b6aadcd2bb67879a979ccb215b5b",
+          "downloadCount": 0,
           "name": "conditional-properties.zip",
           "size": 12552
         },
         {
           "digest": "sha256:3363ed8819d86f0e40609079adc03d90ae13be09e56d2f4da2e2c242d80ec0ca",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 44590
         }
       ],
       "author": "diegoeis",
       "description": "Cancel a long-running scan without restarting Obsidian, without leaving frontmatter half-written.\n\n### New Features\n- **Stop button next to Run now / Run this rule**: while a scan is in progress, the Run button stays visible in a disabled / loading state and a red **Stop** button appears next to it. Clicking Stop finishes the file currently being processed (so frontmatter is never left half-written) and skips every remaining file in the queue.\n- **`Stop running scan` command in the command palette**: hidden when idle, visible only while a scan is in progress. Same semantics as the in-UI Stop button.\n- **Stopped notice**: the completion notice now reports stopped runs explicitly, e.g. `Conditional Properties: 5 modified / 6 scanned — stopped (skipped 94 of 100)`.\n\n### Internal\n- New plugin-level flags `_scanRunning` / `_cancelScan` and helpers `isScanRunning()`, `requestStopScan()`, `onScanStateChange(cb)`. Each scan iteration checks `_cancelScan` before starting the next file.\n- Settings tab subscribes to scan-state changes so both Run buttons (vault-wide and per-rule) flip between idle/running automatically without re-rendering the whole tab.\n- Concurrent `runScan` / `runScanForRules` calls short-circuit with `{ busy: true }` instead of silently double-running.\n\n### Out of Scope\n- Scheduler runs (automatic every-N-minutes) remain unstoppable from the UI — they have no surface to show a Stop button. A manual run during a scheduler tick is rejected as busy.\n- `Run conditional rules on current file` is single-file and stays uninterruptible (atomic by nature).\n\n### Compatibility\n- Minimum Obsidian version: 1.5.0 (unchanged).",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.18.0 — Stop button for running scans",
       "prerelease": false,
@@ -187,37 +215,44 @@
       "assets": [
         {
           "digest": "sha256:6dc4a377b05fd505508a920bc1fcec7da50619fc7235316fa93ae3241d7caa01",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 40062
         },
         {
           "digest": "sha256:81208679f353811b2bf8b36bf99495749acaa56a2183c94721f63275cab5aaaa",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 338
         },
         {
           "digest": "sha256:b89b611240f6850510debe0e918d664326f7983dba4c6e8e7e5426db47f555ef",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 1066
         },
         {
           "digest": "sha256:c7621c13c3a4a44c364da356e80ba20f0719e8c6ec819e6eef8afa12e3a620d2",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 2269
         },
         {
           "digest": "sha256:03bb2d1a86593e098d5df25b7fff370395d6425aec497fbaf877d0ac32ee29ec",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:b459508717876e957581828159e62c377ac4ddd1887d5c97b9c845789b9ee079",
+          "downloadCount": 0,
           "name": "conditional-properties.zip",
           "size": 11505
         }
       ],
       "author": "diegoeis",
       "description": "Each rule now supports a flat list of conditions combined with **Match any / Match all of the following**, inspired by Zotero. Replaces the old workaround of using temporary properties to simulate AND/OR.\n\n### New Features\n- **Multiple conditions per rule (any/all)**: each rule now supports a flat list of conditions and a `Match any of the following` / `Match all of the following` selector at the top of the IF block. Tracked in FRD-001 v2.0.\n- **`+ Add condition` button** appended to the IF block — arbitrary number of conditions per rule, each keeping the existing layout (PROPERTY / FIRST_LEVEL_HEADING + operator + value).\n- **Per-condition remove (`×`)**: each condition gets a remove button when more than one is present. When the rule is back to a single condition, the match dropdown auto-hides.\n\n### Migration\n- **Automatic, one-time migration** from the legacy single-condition shape to the new `{ match, conditions: [...] }` shape. Migration version bumps from 2 to 3 inside `_migrateRules()` and is idempotent.\n- **All legacy rules default to `match: \"any\"`**. Because there is exactly one condition, behavior is bit-for-bit identical to v0.16.3 until the user adds a second condition.\n- **`data.backup.json` is written next to `data.json` in the plugin folder before the migration writes anything**, so users can recover the pre-v0.17.0 settings by copying it back if needed.\n- **Downgrade is not supported** after the first v0.17.0 load. Older plugin versions don't understand `conditions[]` and will silently ignore the new rules.\n\n### Bug Fix Bundled\n- `applyRulesToFrontmatter` was shallow-copying frontmatter (`{...currentFrontmatter}`), which preserved nested array references shared with Obsidian's `metadataCache`. Mutations like `newFm.tags.push(...)` polluted the cache permanently and the next run would see the value as \"already applied\" and skip the write. Replaced with a deep clone (JSON round-trip).\n\n### UI Polish\n- Buttons migrated to the official `ButtonComponent` API with `.setCta()` (Add rule, + Add condition, + Add action), `.setWarning()` (Remove), or default styling (Run this rule).\n- Match selector migrated to `DropdownComponent`.\n- IF header rebuilt to mirror the THEN header structure, with the match dropdown flex-aligned to the right.\n- Condition rows now reuse the same visual treatment as action rows (`.conditional-then-action`).\n\n### CSS\n- Dropped all legacy `.eis-btn*` rules, removed orphan `.conditional-remove-action`, removed `--cp-red-color`.\n- Scoped `.setting-item-name` under `#eis-cp-plugin` so it stops leaking into other plugins' settings tabs.\n- Deduplicated `.conditional-rules-header`.\n\n### Compatibility\n- Minimum Obsidian version: 1.5.0 (unchanged).",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.17.0 — Multiple conditions per rule (any/all)",
       "prerelease": false,
@@ -228,37 +263,44 @@
       "assets": [
         {
           "digest": "sha256:52c034cf5ad920ffaed47307ba7c6c68a866c54d4375dd2a06661886998bcfe3",
+          "downloadCount": 12,
           "name": "main.js",
           "size": 36348
         },
         {
           "digest": "sha256:5483920034400034d6c4c57b6465db7338ada12a2bba93ce9753e5bbdaba273c",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:73a4f81f10669f25fa7d45cac54c0977a61c1855e2146a7ff67e0bf5249d9174",
+          "downloadCount": 0,
           "name": "conditional-properties.zip",
           "size": 11181
         },
         {
           "digest": "sha256:d36ae33ac8c1982d3f064ccc233af76a7c79d06b1683e8dc0fca4000f7efd455",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 5075
         },
         {
           "digest": "sha256:c1436d311f4bb7909a3b3e6fa3ba6708fc1faba406ecf0891e7ed6358d27a2ad",
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 2133
         },
         {
           "digest": "sha256:4d976f5d9ebf785e789dbe4638134b8c5841716ea441e9009992b3af96c62387",
+          "downloadCount": 0,
           "name": "versions.json",
           "size": 317
         }
       ],
       "author": "diegoeis",
       "description": "Hygiene release driven by the community-plugin validator. **No runtime behavior changes.**\n\n### Improvements\n- **styles.css**: removed all `!important` declarations in the active stylesheet and replaced shorthand hex `#fff` with the full 6-digit `#ffffff`. The red-button variant now wins through selector specificity (`#eis-cp-plugin button.eis-btn.eis-btn-red`) instead of `!important`, and the hover color reuses the `--text-on-accent` CSS variable. Cleared the warnings reported by the community CSS lint at `styles.css:78–80` and `styles.css:100`.\n- **README**: removed \"(Coming Soon)\" placeholder from the Community Plugins install section; marked the rename-property action and the title overwrite / `{filename}` / `{date:FORMAT}` placeholders as shipped (they landed in v0.16.0 and v0.15.0 respectively and were still showing as pending).\n- **Release workflow**: now uploads `main.js`, `styles.css`, `manifest.json`, `versions.json`, the zip, and `LICENSE` individually to the GitHub Release (previously only the zip and manifest were attached, which made the LICENSE file invisible to release-asset validators).\n- **Artifact attestations**: the release workflow now generates GitHub artifact attestations for `main.js`, `styles.css`, and `manifest.json` via `actions/attest-build-provenance@v2`, so users can cryptographically verify the release came from this repo.\n\n### Compatibility\n- Minimum Obsidian version: 1.5.0 (unchanged).",
+      "downloadCount": 12,
       "draft": false,
       "name": "0.16.3",
       "prerelease": false,
@@ -269,22 +311,26 @@
       "assets": [
         {
           "digest": "sha256:48c59544be013a87b9d92b4f387718ae4dbe2827406e978220031bec38f52cfb",
+          "downloadCount": 750,
           "name": "styles.css",
           "size": 5021
         },
         {
           "digest": "sha256:52c034cf5ad920ffaed47307ba7c6c68a866c54d4375dd2a06661886998bcfe3",
+          "downloadCount": 781,
           "name": "main.js",
           "size": 36348
         },
         {
           "digest": "sha256:48429ed6a74a977c5a2c3404ffdca5f56e45cd399d9d80f58aaccfd9ec572e89",
+          "downloadCount": 1273,
           "name": "manifest.json",
           "size": 366
         }
       ],
       "author": "diegoeis",
       "description": "🎯 What Changed\r\nThe plugin now detects H1 headings only immediately after YAML frontmatter, completely ignoring first-level headings that appear in the middle or end of documents.\r\n\r\n🔧 Problem Solved\r\nBefore: The plugin considered any H1 in the document as the \"title\", even if it was on line 500. This caused issues where:\r\n\r\nFiles with H1 headings in internal sections were treated as having a title\r\nThe IF first level heading does not exist rule didn't work correctly\r\nThere was no consistency about which H1 represented the note's title\r\nNow: Only the H1 immediately after YAML frontmatter is considered the \"title\". Example:\r\n```\r\n---\r\ntype: note\r\n---\r\n\r\n# This Is The Title  ← ✅ Detected\r\n\r\nContent...\r\n\r\n## Section\r\n\r\nMore content...\r\n\r\n# Another Heading  ← ❌ Ignored (not the title)\r\n```\r\n⚠️ Breaking Change\r\nThis change may affect existing files:\r\n\r\nFiles with H1 not immediately after YAML: Will be treated as \"no title\" and will receive a new H1 at the beginning if rules are configured\r\nFiles with multiple H1s: Only the first one (after YAML) will be considered; others will be ignored\r\n✨ Benefits\r\nConsistent behavior: The \"title\" is always in the same place\r\nRules work correctly: notExists and isEmpty now reliably detect files without titles\r\nConfiguration independent: Completely ignores Obsidian's \"Show inline title\" setting\r\nMore predictable: You know exactly where the plugin will add/modify the title\r\n🔍 Technical Details\r\nRemoved dependency on MetadataCache.headings\r\nDirect file content reading with vault.read()\r\nPosition verification of H1 relative to frontmatter\r\nEnsures only whitespace can exist between YAML and H1\r\n📝 Primary Use Case\r\nPerfect for vaults using plugins like Granola that create notes with structured content but no initial title, allowing Conditional Properties to automatically add titles using {filename} or {date} placeholders.\r\n\r\n🚀 How to Update\r\nReload the plugin in Obsidian (Settings → Community plugins → Reload)\r\nReview your rules - files with H1 headings not at the top may now be processed\r\nTest with \"Run conditional rules on current file\" command\r\n📚 Documentation\r\nFor more information about H1 detection and title modification rules, see the [plugin documentation](https://github.com/diegoeis/obsidian-conditional-properties).",
+      "downloadCount": 781,
       "draft": false,
       "name": "0.16.2",
       "prerelease": false,
@@ -295,22 +341,26 @@
       "assets": [
         {
           "digest": "sha256:48c59544be013a87b9d92b4f387718ae4dbe2827406e978220031bec38f52cfb",
+          "downloadCount": 285,
           "name": "styles.css",
           "size": 5021
         },
         {
           "digest": "sha256:6bf8ab38044009724bb395869aa0689d2d3e749f08ce87744ba39d16905dd0b7",
+          "downloadCount": 293,
           "name": "main.js",
           "size": 34702
         },
         {
           "digest": "sha256:c9410e3dea3c9aae7f327b4b7314bea40ffed16892aad567cce959a01edb8aee",
+          "downloadCount": 295,
           "name": "manifest.json",
           "size": 366
         }
       ],
       "author": "diegoeis",
       "description": "## 🐛 Bug Fix\r\n\r\n### Fixed inline title interference with FIRST_LEVEL_HEADING conditions\r\n\r\nThis release fixes a critical bug where Obsidian's \"Show inline title\" setting was interfering with the `notExists` operator for `FIRST_LEVEL_HEADING` conditions.\r\n\r\n#### What was fixed:\r\n- The `_getNoteTitle()` function now ignores Obsidian's inline title setting\r\n- Only real H1 headings (`# Title`) in the file content are considered\r\n- The `notExists` operator now works correctly regardless of inline title configuration\r\n\r\n#### Benefits:\r\n- ✅ Keep \"Show inline title\" enabled in your Obsidian settings\r\n- ✅ Use conditional rules to automatically create titles when H1 doesn't exist\r\n- ✅ Consistent behavior across different Obsidian configurations\r\n\r\n#### Example use case:\r\n```yaml\r\nIF: First level heading → does not exist\r\nTHEN: Change title → Overwrite to → {filename}\r\n```",
+      "downloadCount": 293,
       "draft": false,
       "name": "",
       "prerelease": false,
@@ -321,22 +371,26 @@
       "assets": [
         {
           "digest": "sha256:9701a0f4e109b71857b5e19190251cf3154c64a38df306dae68d1d6f5d411d45",
+          "downloadCount": 116,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:2659eae648501f9bdcd00b2ceecddd3fe4977015ca07664858f3fecbcfba83bb",
+          "downloadCount": 110,
           "name": "main.js",
           "size": 34849
         },
         {
           "digest": "sha256:48c59544be013a87b9d92b4f387718ae4dbe2827406e978220031bec38f52cfb",
+          "downloadCount": 109,
           "name": "styles.css",
           "size": 5021
         }
       ],
       "author": "diegoeis",
       "description": "### New Features\r\n\r\n\r\n- **RENAME property action**: New action to rename properties while preserving their values. Use \"Rename property to\" option in THEN actions to change property names (e.g., rename `old_company` to `company`)\r\n\r\n\r\n \r\n\r\n\r\n### Improvements\r\n\r\n\r\n- Case-insensitive property name matching for rename operations\r\n\r\n\r\n- Automatic protection against overwriting existing properties during rename\r\n\r\n\r\n- Clean removal of old property after successful rename",
+      "downloadCount": 110,
       "draft": false,
       "name": "0.16.0",
       "prerelease": false,
@@ -347,17 +401,20 @@
       "assets": [
         {
           "digest": "sha256:36b3696056ce4f4dc079062941b0fc322c3a785209621652f1be68f304a5e138",
+          "downloadCount": 137,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:7c110c7a6d97bbdb7b1e8e8fb2bc95fb686d3c93e0f9208937b2226ad477a4a2",
+          "downloadCount": 127,
           "name": "main.js",
           "size": 33692
         }
       ],
       "author": "diegoeis",
       "description": "## 0.15.0 - 2026-01-08\r\n\r\n### New Features\r\n\r\n- **OVERWRITE TO option for title modification**: Completely replace note titles instead of just adding prefix/suffix\r\n\r\n- **{filename} placeholder**: New placeholder that inserts the file's basename (without .md extension)\r\n\r\n- **Combined placeholders**: Mix {date}, {date:FORMAT}, and {filename} in any order (e.g., `{date:YYYY-MM-DD} - {filename}`)\r\n\r\n- **Auto-create H1 headings**: When using `notExists` or `isEmpty` operators with FIRST LEVEL HEADING, the plugin now creates H1 headings automatically\r\n\r\n- **Improved UI**: Text input field now hides automatically when using `exists`, `notExists`, or `isEmpty` operators\r\n\r\n \r\n\r\n### Bug Fixes\r\n\r\n- Fixed issue where rules with `notExists` or `isEmpty` operators on FIRST LEVEL HEADING were being skipped\r\n\r\n- Fixed `isEmpty` operator returning false for non-existent headings instead of true\r\n\r\n- Fixed OVERWRITE TO not working when H1 heading doesn't exist",
+      "downloadCount": 127,
       "draft": false,
       "name": "OVERWRITE TO option for title",
       "prerelease": false,
@@ -368,22 +425,26 @@
       "assets": [
         {
           "digest": "sha256:48c59544be013a87b9d92b4f387718ae4dbe2827406e978220031bec38f52cfb",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 5021
         },
         {
           "digest": "sha256:e07d5a9f3d0c68d8ee2d67f23ad6c793dcc388fc7b59811a8b27ac443e31864a",
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 366
         },
         {
           "digest": "sha256:1082ce1d032db536513f05c3688910ebf49c6e6566e60d957ba7810323aa06ec",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 31970
         }
       ],
       "author": "diegoeis",
       "description": "- fixing a little layout bug caused by last update of Obsidian, \r\n- rewriting the readme adding best instructions and examples.\r\n",
+      "downloadCount": 11,
       "draft": false,
       "name": "fixing a little layout bug, updating the readme adding best instructions and examples.",
       "prerelease": false,
@@ -394,22 +455,26 @@
       "assets": [
         {
           "digest": "sha256:bf71cda66cc7e7e9310ff03a3a5d7b60e227666c686c8c8ea88be1dff310c29d",
+          "downloadCount": 66,
           "name": "manifest.json",
           "size": 300
         },
         {
           "digest": "sha256:8cc418578d8aba04e03f54c1fd5e19f8ab8e63e762d1bedb2881f0ed1285e84c",
+          "downloadCount": 23,
           "name": "styles.css",
           "size": 5029
         },
         {
           "digest": "sha256:1082ce1d032db536513f05c3688910ebf49c6e6566e60d957ba7810323aa06ec",
+          "downloadCount": 25,
           "name": "main.js",
           "size": 31970
         }
       ],
       "author": "diegoeis",
       "description": "This release brings significant performance enhancements and stability improvements, along with important bug fixes. Here are the key highlights:\r\n\r\nPerformance Optimization: Enhanced execution of conditional rules for better efficiency.\r\nBug Fixes: Addressed reported issues affecting rule application in specific scenarios.\r\nUI Improvements: Visual refinements for an improved user experience.\r\nDependency Updates: Updated dependencies to ensure compatibility and security.\r\nUpdate Note: We recommend all users update to this version to benefit from the performance improvements and bug fixes.",
+      "downloadCount": 25,
       "draft": false,
       "name": "Performance Improvements and Bug Fixes",
       "prerelease": false,
@@ -420,22 +485,26 @@
       "assets": [
         {
           "digest": "sha256:7d48c11ceb90196aefbb3525f774195244f13e85295a179b3fc8bf2cbe7d4ce5",
+          "downloadCount": 39,
           "name": "manifest.json",
           "size": 300
         },
         {
           "digest": "sha256:1e33239b009e5e0080bcbedadc26a356a484a2ae6279626d81439e5d9028b0fa",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 5052
         },
         {
           "digest": "sha256:3b3ea5824b62e1d711da32aef5a37d493e2dc7c0af87dcfcab8399d0a47677ad",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 32146
         }
       ],
       "author": "diegoeis",
       "description": "Release 0.14.3 - Obsidian Plugin Submission Review Fixes\r\nThis release addresses all feedback from the Obsidian plugin submission review, implementing best practices and improving code quality for official plugin directory inclusion.\r\n\r\n## 🔧 Code Quality Improvements\r\nAPI & Best Practices\r\nFile Modification Methods: Replaced Vault.modify() with Vault.process() for atomic content modifications\r\nFrontmatter Handling: Implemented FileManager.processFrontMatter() for safer, atomic frontmatter updates\r\nHeading Detection: Switched from string matching to MetadataCache.getFileCache() to properly detect headings and avoid false positives in code blocks\r\nMoment.js Import: Updated to import moment directly from the \"obsidian\" package instead of accessing via window.moment()\r\nCode Cleanup\r\nConsole Logging: Removed excessive debug logging from production code, keeping only error logs for troubleshooting\r\nCommand Registration: Simplified command IDs by removing redundant plugin prefix:\r\nconditional-properties-run-now → run-now\r\nconditional-properties-run-current-file → run-current-file\r\nConditional Commands: Added checkCallback to file-dependent commands for proper enable/disable state based on active file existence\r\n## 🎨 UI/UX Improvements\r\nSettings Interface\r\nRemoved top-level plugin name heading per Obsidian guidelines\r\nConverted all UI text to sentence case for consistency\r\nImplemented proper section headings using Setting().setName().setHeading()\r\nUpdated button and label text:\r\n\"Backup & Restore\" → \"Backup and restore\"\r\n\"Export Settings\" → \"Export settings\"\r\n\"Import Settings\" → \"Import settings\"\r\n\"+ Add Rule\" → \"Add rule\"\r\n\"+ Add action\" → \"Add action\"\r\n\"IF\" → \"If\"\r\n\"THEN:\" → \"Then:\"\r\n\"First Level Heading\" → \"First level heading\"\r\n\"ADD VALUE\" → \"Add value\"\r\n\"REMOVE VALUE\" → \"Remove value\"\r\n\"OVERWRITE ALL VALUES WITH\" → \"Overwrite all values with\"\r\n\"DELETE PROPERTY\" → \"Delete property\"\r\n\"Change Property\" → \"Change property\"\r\n\"Change Title\" → \"Change title\"\r\nCSS Improvements\r\nRenamed CSS variable --red-color to --cp-red-color to avoid conflicts with other plugins\r\nImproved plugin-specific class naming for better isolation\r\n## 📊 Impact\r\nThese changes ensure the plugin follows all Obsidian plugin development guidelines and best practices, making it ready for official plugin directory inclusion. The updates improve:\r\n\r\nReliability: Atomic operations prevent data corruption\r\nPerformance: Proper API usage improves efficiency\r\nCompatibility: Plugin-specific naming prevents conflicts\r\nUser Experience: Consistent UI language and proper command behavior\r\nMaintainability: Cleaner code with proper error handling\r\n## 🔗 Related\r\nAddresses feedback from [Obsidian Releases PR #8201](https://github.com/obsidianmd/obsidian-releases/pull/8201)\r\nFull changelog: [CHANGELOG.md](https://github.com/diegoeis/obsidian-conditional-properties/blob/main/CHANGELOG.md)",
+      "downloadCount": 6,
       "draft": false,
       "name": "",
       "prerelease": false,
@@ -446,22 +515,26 @@
       "assets": [
         {
           "digest": "sha256:9d0618b98c6ab826c3886272e3d502692694457e3c98d35146eea8c686e398e8",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 3689
         },
         {
           "digest": "sha256:9231c4dc228b1797940b0d65eef92e4399fb3a9823f08e238a08b6c1d03fa924",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 38808
         },
         {
           "digest": "sha256:e95508d7ac9443d3c7d988b79f3182aa94e80f3317a8f071711fd84161e069a8",
+          "downloadCount": 40,
           "name": "manifest.json",
           "size": 300
         }
       ],
       "author": "diegoeis",
       "description": "\r\n## Release 0.13.0 — 2025-12-13\r\n\r\n### 🚀 Highlights\r\n- **Backup & restore:** Export and import plugin settings directly from the settings tab.\r\n- **Title rules:** Add prefixes/suffixes with `{date}` formatting to note titles.\r\n- **New condition operators:** `exists`, `notExists`, and `isEmpty` give you more control when defining rules.\r\n\r\n### ✨ Improvements\r\n- `{date}` placeholders now work in property values.\r\n- Value inputs automatically hide when the selected operator doesn’t require them.\r\n- Settings UI is wrapped in `#eis-cp-plugin` to prevent CSS conflicts (addresses issue #3).\r\n\r\n### 🐞 Fixes\r\n- `DELETE PROPERTY` now removes keys reliably and logs debugging info.\r\n- Prevent duplicate title prefixes/suffixes and improve date formatting.\r\n- Properly hide the value field when using the `isEmpty` operator.\r\n\r\n### 📚 Docs & Maintenance\r\n- README and PRD updated to reflect the new operators and workflows.\r\n- `.gitignore` updated (e.g., [.DS_Store](cci:7://file:///Users/diegoeis/.DS_Store:0:0-0:0), IDE folders).\r\n- Removed the legacy “REPLACE VALUE” action in favor of the current `add/remove/overwrite/delete` actions.\r\n\r\nEnjoy the update!",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.13.0",
       "prerelease": false,
@@ -472,22 +545,26 @@
       "assets": [
         {
           "digest": "sha256:3c4900e83e7bfa6945c2818ad273b0d2c07332385abeedb0d63e45943c7b7be6",
+          "downloadCount": 16,
           "name": "main.js",
           "size": 37662
         },
         {
           "digest": "sha256:37a9abf8dec582b9a979eaa7b953b3c37de87f54f8b33dbba131fd124f37fedb",
+          "downloadCount": 400,
           "name": "manifest.json",
           "size": 300
         },
         {
           "digest": "sha256:2a7bd4e598746c17cb1955a8c62331e2e6593950f1b024c8acbc902032a93bf0",
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 2279
         }
       ],
       "author": "diegoeis",
       "description": "Overview:\r\nThis release introduces powerful new actions for more flexible frontmatter management, along with UI improvements and bug fixes.\r\n\r\nKey Changes:\r\n\r\nNEW: OVERWRITE Action - Completely replaces a property's value with a new one, ideal for resetting or fully updating properties.\r\nNEW: DELETE PROPERTY Action - Permanently removes a property from the frontmatter, with built-in warnings for safety.\r\nEnhanced UI - Added warning messages for destructive actions and conditional display of value fields.\r\nImproved YAML Handling - Better cleanup of empty lines and whitespace when modifying properties.\r\nDocumentation Updates - Updated README with examples and roadmap for template variable support.\r\nBug Fixes:\r\n\r\nFixed property removal logic to prevent broken YAML structures.\r\nEnsured consistent behavior across ADD, REMOVE, OVERWRITE, and DELETE actions.\r\nThis version enhances automation capabilities while maintaining ease of use. All processing remains local for privacy.",
+      "downloadCount": 16,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -498,6 +575,7 @@
       "assets": [],
       "author": "diegoeis",
       "description": "### Release Notes for Conditional Properties v0.9.0\r\n\r\n**Overview:**  \r\nThis release introduces powerful new actions for more flexible frontmatter management, along with UI improvements and bug fixes.\r\n\r\n**Key Changes:**\r\n- **NEW: OVERWRITE Action** - Completely replaces a property's value with a new one, ideal for resetting or fully updating properties.\r\n- **NEW: DELETE PROPERTY Action** - Permanently removes a property from the frontmatter, with built-in warnings for safety.\r\n- **Enhanced UI** - Added warning messages for destructive actions and conditional display of value fields.\r\n- **Improved YAML Handling** - Better cleanup of empty lines and whitespace when modifying properties.\r\n- **Documentation Updates** - Updated README with examples and roadmap for template variable support.\r\n\r\n**Bug Fixes:**  \r\n- Fixed property removal logic to prevent broken YAML structures.\r\n- Ensured consistent behavior across ADD, REMOVE, OVERWRITE, and DELETE actions.\r\n\r\nThis version enhances automation capabilities while maintaining ease of use. All processing remains local for privacy.\r\n\r\n**Full Changelog**: https://github.com/diegoeis/obsidian-conditional-properties/compare/0.1.0...0.9.0",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.9.0 Release",
       "prerelease": false,

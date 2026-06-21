@@ -4,8 +4,8 @@
   "description": "Turn notes into gamified Quest Maps, visual Memory Maps (Canvas), and flashcard Review Decks powered by AI Skills. Supports Claude Code, Gemini CLI, and Cursor. Features FSRS spaced repetition, active recall, memory retention, and AI hints. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "engram-quest",
-  "lastChangedAt": "2026-06-16T03:03:58.562Z",
-  "lastFetchedAt": "2026-06-16T03:03:58.562Z",
+  "lastChangedAt": "2026-06-21T02:01:09.515Z",
+  "lastFetchedAt": "2026-06-21T02:01:09.515Z",
   "manifest": {
     "author": "powen",
     "authorUrl": "https://github.com/bahfahh",
@@ -24,17 +24,20 @@
       "assets": [
         {
           "digest": "sha256:4fd4868c70619779c80e64fb02b23404407d9e74e0a3becb60f8bd37af45d5e5",
+          "downloadCount": 127,
           "name": "main.js",
           "size": 480677
         },
         {
           "digest": "sha256:dc2449ce26324102668799f7a45885465faea69bf99469ba61d0a3c1e0a44673",
+          "downloadCount": 185,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "A large feature accumulation since 1.8.0 — Quest Map progress persistence, new Pro review tools, and many fixes.\n\n## Quest Map\n- Persistent progress: completed nodes, progress, and best scores are stored separately from quest YAML, so AI can update a quest without wiping your progress.\n- New `iframe` challenge type for local HTML interactive simulations, plus an in-map progress panel.\n- Per-question type override inside `questions_json`, so a single quest node can mix challenge formats.\n- Quest state now migrates automatically when the source `.md` is renamed or moved.\n- Layout polish: wider vertical band, smaller islands, panel lifted out of scroll; chapter text is now selectable; clearer learning feedback.\n\n## Pro — Review\n- Synapse: surface mastered memory anchors during review (one-shot skill, incremental mode).\n- Time-boxed Review: 5/10/15-minute buttons with a real-time countdown, inlined into the card header.\n- macro-review skill is now installable; achievements added.\n\n## Settings\n- Sponsor and \"Buy me a coffee\" buttons at the top of settings.\n\n## Bug Fixes\n- Review: deleting a card now works across `%%card%%`, `Q:/A:`, and `::` formats — previously `%%card%%` / `Q:A` cards silently survived deletion and reappeared next session.\n- Quest: `truefalse` with `questions_json` falls back to `q` for the statement; click handler captures the correct target index.\n- Synapse: store back text in anchor records (fixes missing back), mutex / no-flash / post-reveal handling, cross-line highlight selection, looser refresh-banner thresholds, fixed silent pool-too-small banner.\n- Runtime: use `activeDocument` instead of plugin-scoped document; installer uses `Vault#configDir` instead of a hardcoded `.obsidian` path.\n\n## Docs & Tooling\n- README redesigned (bilingual) with new screenshots and an `obsidian://` deep-link install step.\n- quest-map skill: SVG image-quiz guidance; SKILL.md split with a sharper decision table.\n- Added eslint-plugin-obsidianmd and fixed several official-scan lint errors.\n",
+      "downloadCount": 127,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,
@@ -45,17 +48,20 @@
       "assets": [
         {
           "digest": "sha256:a0f0bc6c6a546d6b779ac961d08d169cdc9e67a1d4fab5a4ffc27bbdd7f11468",
+          "downloadCount": 75,
           "name": "main.js",
           "size": 435915
         },
         {
           "digest": "sha256:17779c9c0c6d8ea54562aaef37a7399307ab93b97494b2a2087abc1cbe33d5bf",
+          "downloadCount": 147,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Achievements\n\n- **6-tier Daily Review achievements** — replaced the single daily milestone with a full progression: Focused Start (20), Memory Surge (50), Sprint Breakthrough (80), Hundred Fever (100), State of Flow (150), Memory Domain (200) cards in one day\n- **Achievement unlock display on completion screen** — when you finish a review session, newly earned achievements are shown immediately with their icon and rarity glow\n\n## Bug Fixes\n\n- **Hub / Review modals** — keymap scope is now properly released when minimizing, so global hotkeys (Ctrl+P / Ctrl+O) work while a session is minimized",
+      "downloadCount": 75,
       "draft": false,
       "name": "1.8.0",
       "prerelease": false,
@@ -66,17 +72,20 @@
       "assets": [
         {
           "digest": "sha256:2a5ae7c055b05bf5e4a4e24e63f0803208f3c66c58cae8fa728fcd42bab0c1cd",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 431749
         },
         {
           "digest": "sha256:052f17a4f4705dfce9df062c10fc6241c276b4a1e5cb6b37f6c45cf7003f7a98",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fixes\n\n### Skills — `get_mtime.sh` (cross-platform mtime helper)\n- Escape single quotes for the PowerShell single-quoted string so paths with apostrophes (e.g. `it's_note.md`) parse correctly instead of breaking out of the literal.\n- Add `set -eu` and split `SECS=$(stat ...)` into a variable so `stat` failures on macOS/Linux propagate properly instead of silently expanding to `0` inside `$((... * 1000))` — preventing scan-record from misclassifying every file as epoch 1970.\n- Cast `DateTime` to `DateTimeOffset` before `ToUnixTimeMilliseconds` on the Windows branch (fixes `MethodNotFound` on PowerShell 5.1).\n- Add `-NoProfile` so user `profile.ps1` does not contaminate stdout, and `-ErrorAction Stop` so missing files fail fast.\n- Add an explicit `-f` existence check with a uniform error message across all three platform branches.\n\n### Memory Map skill — Layout & Sizing Rules\nQuality of generated `-memory.canvas` files improved, especially for Chinese / Japanese / Korean source notes:\n- **Layout pattern guide**: explicit guidance for sequential flow / contrast / radial / cluster content types — avoids mis-routing sequential L1→L2→L3 content into a 2×2 grid with crossing arrows.\n- **CJK node width rules**: 320–460px for single-column, 200–230px for two-column nodes; English defaults overflow CJK content.\n- **Group-to-group spacing**: at least 100px horizontal / 200px vertical between adjacent groups (the 60/50px node spacing is too tight for groups).\n- **Group containment validation**: explicit four-inequality check on every child node before saving, preventing Obsidian's linter from silently relocating orphan nodes.",
+      "downloadCount": 4,
       "draft": false,
       "name": "1.7.1",
       "prerelease": false,
@@ -87,17 +96,20 @@
       "assets": [
         {
           "digest": "sha256:2a5ae7c055b05bf5e4a4e24e63f0803208f3c66c58cae8fa728fcd42bab0c1cd",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 431749
         },
         {
           "digest": "sha256:3a3fb2d23b3698503116afbbbbcc66af03435bac7bb3c7c77c80ed06b0bd3918",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- **Image Card Flow**: Added dedicated Image Card Flow skill reference for AI-generated image-based cards\n- **Scroll toolbar**: Highlight/quote toolbar stays visible while scrolling through long answers\n- **%% card %% spacing**: Tolerates spacing variants in `%% card %%` format + dark mode chip fix\n- **Fenced Q:/A: editor**: Loader and editor now correctly aligned for fenced cards\n- **Scroll position**: Preserved when applying highlight or blockquote formatting\n- **Multi-line back**: Preserved when editing `::` cards\n- **Long-answer card blocks**: Added support for long-answer card block rendering\n- **Card format guide**: Highlighted in review session for easier reference\n- **Long AI answer docs**: Added explanation for long AI answer cards\n\n## Skills / Installer\n\n- **installer**: `image-cards.md` now included in review-deck install list\n\n## Internal\n\n- `CARD_FENCE` hoisted to helpers; help chip extracted as standalone class",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.7.0",
       "prerelease": false,
@@ -108,17 +120,20 @@
       "assets": [
         {
           "digest": "sha256:33ea63c50b597c7c9ae80b9cc6e72ab5e8da6bf164ddda351a359c49b69d7e39",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 423498
         },
         {
           "digest": "sha256:7c1df5e0649639b5f0fbb4c6e477b7a27ae648c0c439168f78e493fb80cad735",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- Added **Highlight** (`== Highlight`) and **Blockquote** (`> Blockquote`) formatting tools to the review session card editor — applies Obsidian-native markdown to selected text\n- Blockquote button replaces the previous Bold tool for clearer semantic intent\n- Fixed card edit formatting writeback so changes persist correctly to the source note\n- Fixed edit form source card refresh after saving\n\n## i18n / UI\n\n- Renamed blockquote button label from `> Emphasis` → `> Blockquote` (EN) and `> 重點` → `> 引述` (ZH) to match Obsidian terminology",
+      "downloadCount": 7,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
@@ -129,17 +144,20 @@
       "assets": [
         {
           "digest": "sha256:c592cb09b01fd2b9383e9d2b422e3ccb6df1fe53fc9bb28308a518f4cf5a83f5",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 413839
         },
         {
           "digest": "sha256:415d987d7ed1e00a1c4c28f159d1bd0a7145dd484c40792ea3a8b9f3db3101aa",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Achievements\n\n- Add 12 new achievements with custom icons, expanding the achievement system with more milestones and visual rewards for learners",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
@@ -150,17 +168,20 @@
       "assets": [
         {
           "digest": "sha256:2f39f8859d6b2efda3965846fcc1052dd3c0a89b7771e09a12315bac9f8231f3",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 412972
         },
         {
           "digest": "sha256:6c3473c3986f727c5f72b322b5db620c9519681fefd4193251e5d73278998315",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fixes\n\n- **Review / Memory Map**: Improve memory map discovery — more reliable detection of map nodes across vault structures.\n- **UI Chooser**: Fix UI chooser design regression — layout and styling now render correctly in both light and dark mode.",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.4.1",
       "prerelease": false,
@@ -171,17 +192,20 @@
       "assets": [
         {
           "digest": "sha256:f2f2c1060d41515b761308214ca38bf52940f04779bad79bbe368b312e22bd5d",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 406702
         },
         {
           "digest": "sha256:dfd3ee7dfcd502ca3da3588d9b2e1df4a1719975b7afef102b8f279c5a5eda74",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- **Fenced block mode**: Wrap multiple Q:/A: cards in `---` delimiters — cleaner multi-card notes without one block per card\n- Fenced block only triggers when `---` is immediately followed by `Q:`, preventing conflicts with Markdown horizontal rules\n- Fix multi-line answer truncation in manual card creation — now always uses Q:/A: format\n\n## Quest Map\n\n- Restore center alignment for choice buttons on desktop; add image basename fallback for missing paths\n- Fix choice button label `align-items` and mobile layout drift\n- Enable pinch-zoom on lightbox images\n- Fix choice button text wrapping and add tap-to-zoom lightbox on mobile\n\n## Docs\n\n- Added fenced mode code examples to README and help guide\n- Added `---` ignore-note clarification for fenced blocks",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
@@ -192,17 +216,20 @@
       "assets": [
         {
           "digest": "sha256:63e4e9ed2701855062b6c1957311a18a7adc9829e7043090eb18bce3beabd4b6",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 401145
         },
         {
           "digest": "sha256:97c1b3f0c603b8c805532db0db462f949be4bf0cdf405309fb750640e855d756",
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fixes\n\n- **Quest**: Support `image-quiz` card type with `options`/`keywords` render modes\n- **Review**: Sort decks by due+unseen count to match UI reviewable order\n- **Installer**: Rewrite bash `scripts/` paths to skill-relative on install\n\n## Docs\n\n- **Skills**: Remove all hardcoded Chinese from skill files (now fully English)\n- **Quest**: Add image discovery workflow to generation flow step 6\n- **General**: Promote `Q:/A:` as recommended flashcard format; clarify Anki partial support",
+      "downloadCount": 10,
       "draft": false,
       "name": "1.3.1",
       "prerelease": false,
@@ -213,17 +240,20 @@
       "assets": [
         {
           "digest": "sha256:683196af6e737a5c87652a276d0103d628762d1c6baa6ff297ad2d4239637c90",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 398690
         },
         {
           "digest": "sha256:74ec673d3447b49b192654630237877a19ca9c203ad3af71be33109d96a3bf66",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Quest Map — Full Redesign\n\n- **Multi-question round system** with global game state — quests now play out as structured rounds, not single questions\n- **6 new challenge types**: countdown, snapshot, auction, timeline, chain, memory-palace\n- **Duolingo-style UI**: island assets (9 islands, dark + light mode each), golden/blue dashed path, wider spacing\n- **Progressive difficulty ramp**: recognition → application → analysis → synthesis → boss\n- **Learning loop UX**: island complete glow, unlock animation, round review panel\n- **Skills: quest structure** — min 3 questions per round, node count scales to source note size\n- **Crown + gold border** for completed islands; islands resized to fit 4–5 per screen\n\n## Memory Map\n\n- **Improved note linking**: name match + canvas file-node fallback for better accuracy\n- **Minimum node spacing rules** to prevent overlap on dense maps\n\n## Review Deck\n\n- Code blocks now included in answer (A:) collection\n- Strip `.md` from basename before `getFirstLinkpathDest` fallback lookup\n- Sync rename/move to scan-record; prevent empty note on stale `notePath`\n- Allow optional whitespace in Q/A matching\n\n## Skills & Infrastructure\n\n- Windows bash self-re-exec guard in `search_vault.sh`\n- Strengthened filename mandates in skills docs\n- Manual deck guide added to help FAQ",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -234,17 +264,20 @@
       "assets": [
         {
           "digest": "sha256:e2cc70c48d27bc9bffb0b96f36372f5e066c1810702580f6b877b76e3c1ee680",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 360143
         },
         {
           "digest": "sha256:84d29a29373b7080dd08380ca84c847c50184647af85572334b53481d5a72341",
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fixes\n\n### Mobile UI\n- Align tag filter dropdown width with other filters on mobile\n- Unify mobile toolbar layout across all tabs — filters now wrap to consistent rows\n- Remove conflicting mobile grid override that forced 1-column layout\n- Optimize Grid View card size on mobile for 4–6 cards per screen\n\n### Review Deck\n- Sanitize deck names containing slashes to prevent subdirectory creation in ai-cards/\n\n### Skills\n- Enforce JSON library serialization in Edit/Delete Flow to prevent data corruption",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.2.2",
       "prerelease": false,
@@ -255,17 +288,20 @@
       "assets": [
         {
           "digest": "sha256:cd6b230aa1373a5d2a93ca1d3820f9e62dd6e0b17fe47b1b83b30c625a3bdb2d",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 358512
         },
         {
           "digest": "sha256:d0f22b4ef678951a4e854162625f85f3fef4496a221bde8773acd7b4e8ce02b8",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- fix(review): improve mobile modal UX and scan fallback — better usability on small screens\n\n## Hub / Data View\n\n- feat: new data view in hub for reviewing deck stats and activity\n\n## Style / Dark Mode\n\n- style: fix dark mode colors for quest difficulty badges\n- style: brighten text in utility buttons and badges for dark mode contrast\n- style: change answer block to yellow theme in dark mode\n- style: brighten purple theme colors in dark mode for better visibility\n- style: refine dark mode metric colors\n\n## Bug Fixes\n\n- fix(ui): add z-index to achievement rarity badge to prevent image overlap\n- fix: dark mode color corrections",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -276,17 +312,20 @@
       "assets": [
         {
           "digest": "sha256:c28d3c10d74be12b2422efcbf21b43c1401e10dc5a4c0efb25e1d90503dd1f0a",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 339105
         },
         {
           "digest": "sha256:70a8a9b559f5dc6405d4c1049d010ddb2bc12223f251269566552dad5b947702",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Achievement System\n- New Achievements tab with familiarity donut chart and 10 unlock cards (First Card, Ten Cards, Fifty Cards, Five Hundred, Century, Master 50, Streak 3/7/30, Daily Surge)\n- 1000 and 2000 card milestone achievements added\n- Review activity bar chart with 7/30/90-day toggle\n- Fixed totalCardsReviewed baseline using SR repetitions sum\n\n## Dark / Light Mode\n- Hub modal, Review session, and Achievement tab now fully respect Obsidian's dark/light theme\n- Achievement cards use separate RARITY_DARK / RARITY_LIGHT color palettes\n- SVG charts, stat boxes, and buttons are all theme-aware\n- Upgraded all achievement badge icons to higher-quality WebP\n\n## Mobile\n- Achievement tab layout optimized for phone screens\n\n## Bug Fixes\n- Fixed vault root path depth and icon dir in scripts\n- Added try/catch to async event handlers and floating promises\n- Replaced all innerHTML usages with sanitizeHTMLToDom/textContent\n- Replaced hardcoded .obsidian paths with vault.configDir",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -297,17 +336,20 @@
       "assets": [
         {
           "digest": "sha256:81397f78a24f07c4012b6b86698bf8b4269ee616fe1871299c9deb504eed8356",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 300427
         },
         {
           "digest": "sha256:607e43626ee5cf043f273aaa484fdb643a0eaad9fc4da0f284c19078699f56ba",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- **Embedded images in review cards** — images in source notes now render inline in card fronts and backs\n\n## Parser Fixes\n\n- Multi-line question support in Q:/A: format — questions spanning multiple lines now parse correctly\n- CRLF normalization and HTML comment skipping — improves compatibility with Windows line endings and notes with HTML comments\n- Precise fenced code block pairing — code blocks no longer bleed into adjacent card content\n\n## Quest Map\n\n- Mobile layout fix — matching question grid columns now use min-width:0 and allow text wrapping, preventing overflow on small screens\n\n## Docs\n\n- README and user-guide updated with full Review Deck capabilities",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.1.9",
       "prerelease": false,
@@ -318,17 +360,20 @@
       "assets": [
         {
           "digest": "sha256:b4d587c8cc1c4cca8aa7db0823abe841885118f0bc885d4f429914fe3cbccfb2",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 299435
         },
         {
           "digest": "sha256:6c85535f38e3c4c3611d20393deb6c355ddcca556c31f6f8b7681551f94fdf78",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Review Deck\n\n- **Card-level source field**: AI-generated cards can now specify per-card source note(s) via a `source` field in the hints file — supports string, array, or `null` (to suppress the source note button for AI-creative cards)\n- **Markdown rendering**: Question, answer, and hint fields now render full Markdown including code blocks\n- **Source note buttons**: Updated to use `sourceNotePaths` array, enabling multi-source cards to show multiple note buttons in the session header\n\n## Mobile\n\n- Source note buttons and add/delete controls are now always visible on touch devices\n- FAB raised above the native toolbar using `safe-area-inset-bottom`\n\n## Migration\n\n- SR data, hints, and AI-cards are now auto-migrated when a source note is renamed or moved",
+      "downloadCount": 1,
       "draft": false,
       "name": "1.1.8",
       "prerelease": false,
@@ -339,17 +384,20 @@
       "assets": [
         {
           "digest": "sha256:4d50a36a1687c53650c372371bdbd95cf047c3929f4d377c0f8107f259d981b4",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 297181
         },
         {
           "digest": "sha256:3d3ed62f895227bc888f083cf70972f3bde675cb86d30592ccdbda259e904d4b",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## What's New\n\n### Review Deck\n- **Manual card creation** — Add cards directly to any deck without AI generation\n- **Source note buttons** — Jump back to the original note from within the review session\n- **Resume review progress** — Session state is preserved; pick up where you left off\n- **Minimize to floating button** — Collapse the session overlay to view the note underneath, then resume with one click\n\n### Hub\n- **Minimize button** — Hub modal can now be minimized to a floating button, keeping it out of the way while you work\n\n### Bug Fixes\n- Fixed duplicate quest entries appearing after `loadData` on reload\n\n### Docs\n- README messaging updated: notes stay clean, context stays linked, AI is optional",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.1.7",
       "prerelease": false,
@@ -360,17 +408,20 @@
       "assets": [
         {
           "digest": "sha256:b51e9ea4350e69253c2f24221a75304148c0e60ff915c92cb5b7b89b8f6c0362",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 288028
         },
         {
           "digest": "sha256:3dc09d83a02927a2737e95e592c3eb89d5eb37ce48d70770aa976ac2cabaca21",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## What's New\n\n### Bug Fixes\n- **Q:/A: multi-line answers** — `A:` can now be empty (answer starts on the next line). A single blank line inside the answer is allowed; **two consecutive blank lines** end the card. A Cloze line or next `Q:` also ends the answer automatically.\n- **Cloze cards after Q/A blocks** — Cloze cards that follow a Q/A block are no longer absorbed into the answer.\n\n### Docs\n- Guide (Q5) and README now clearly document all three card formats (`::`, `Q:/A:`, `{{c1::}}`), tag format, and Q:/A: boundary rules.",
+      "downloadCount": 5,
       "draft": false,
       "name": "1.1.6",
       "prerelease": false,
@@ -381,17 +432,20 @@
       "assets": [
         {
           "digest": "sha256:6c3ea782f631ec858f5bf8213aa2fb7955fab559ec901303f5423d4bc614523e",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 281822
         },
         {
           "digest": "sha256:39ef47c0b820589fe98bbda4e879c20d0e104a7391676cb0532cb8c363a82c4b",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## What's New\n\n### Bug Fixes\n- Strip bold (`**`) and highlight (`==`) markers from flashcard front/back during review\n\n### Features\n- **Q:/A: manual flashcard format** — write cards directly in notes using `Q:` / `A:` syntax, no AI required\n- **TARGET DECK in ai-cards** — generated cards now include `TARGET DECK` frontmatter for Obsidian_to_Anki compatibility\n\n### Skills Optimization\n- Skills now use Obsidian CLI (`obsidian search`) for all vault search and note discovery — faster, index-backed, full syntax support\n- Batch L2 hint generation with flexible discovery strategy\n- Renamed `skills.md` → `skillsindex.md`; added core principles and search strategy docs\n\n### Docs\n- Anki FAQ added to README and help guide (EN + ZH)\n- Help guide Q5 expanded with Q:/A: format example",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.1.5",
       "prerelease": false,
@@ -402,17 +456,20 @@
       "assets": [
         {
           "digest": "sha256:3037477c2535adb1632cbf52afa1bc7e7b0c5ee877e538529356158fd3a8b4dd",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 279129
         },
         {
           "digest": "sha256:ecaaa9c97d3976de16ff9cea6b7ef6cda65c65d2951b33b82b6acd26431a4544",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## What's New\n\n### ✨ Features\n- **📋 Copy button** in review session — copies question + L1/L2/L3 hints + answer to clipboard. Shows ✅ Copied feedback for 1.5s.\n\n### 🐛 Bug Fixes\n- Fixed text selection in plugin modals (Obsidian global `user-select: none` override)",
+      "downloadCount": 6,
       "draft": false,
       "name": "1.1.4",
       "prerelease": false,
@@ -423,17 +480,20 @@
       "assets": [
         {
           "digest": "sha256:58106321746a1ea9fbde2ff43c72f0110e53f73d52a1fb004d67175e0b9d68b9",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 270989
         },
         {
           "digest": "sha256:f10128c98793b0419ecd8b659bb299e7879e220273e84038bba4cc6bf7823998",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fixes\n\n- fix: use local date instead of UTC for due date comparison\n- fix(review-edit): fix save bug + move edit button to card top\n- fix(review): rename `.review-deck/` to `engram-review/` for mobile compatibility\n- fix(skills): prohibit inference expansion in L2 hints\n\n## Improvements\n\n- feat(review): add card edit UI in session modal\n- optimization: memory skills",
+      "downloadCount": 7,
       "draft": false,
       "name": "1.1.3",
       "prerelease": false,
@@ -444,17 +504,20 @@
       "assets": [
         {
           "digest": "sha256:d0c611b9f335742fd1c21ac6df369af93c7c94602a8071d210a4f81ca25e0d50",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 262146
         },
         {
           "digest": "sha256:2e5af86c543680c2a0c6286ed161c88cc327208fa812fa61f12f490d0e0e6738",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fix: Review Deck hints now work on mobile\n\n### Problem\nHints (L1/L2/L3) generated on desktop were not loading on Obsidian mobile. The plugin stored hint data in `.review-deck/hints/` — a dot-prefixed folder that Obsidian's mobile adapter cannot reliably access.\n\n### Fix\n- Renamed storage folder: `.review-deck/` → `engram-review/`\n- **Auto-migration**: On first load after update, all existing hints, config, and scan-record are automatically copied to the new folder. No manual action needed.\n- Migration is resilient: recovers from partial failures on restart; errors are caught so the plugin continues working even if migration fails.\n\n### Also in this release\n- skills: Edit Flow — fix/change a card's question, answer, or hints\n- skills: Delete Flow — remove a card or all hints for a note",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.1.2",
       "prerelease": false,
@@ -465,17 +528,20 @@
       "assets": [
         {
           "digest": "sha256:3f66b3435f463158cead8618c1db64af78cb53169b2732b4f1fb3b2f25add58d",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 261283
         },
         {
           "digest": "sha256:a3f47bd2a3219f32d93e8ae6e5822eb696539c4447226f9d53f32e0f2d7c086a",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## Bug Fix\n\n**fix: Hint L1/L2/L3 silently missing when hint JSON uses array format**\n\n### Root Cause\n`mergeReviewHints` used a dict key lookup (`hintData.cards[card.front]`), but AI-generated hint JSONs consistently produced array format. The `if (hint)` guard caused silent failure — Review Deck opened normally but all hints were empty.\n\n### Changes\n- `src/review/helpers.js` — `mergeReviewHints` now normalizes array-format payloads to dict before lookup (backward compatible, no vault JSON migration needed)\n- `skills/review-deck/skills.md` — Added CRITICAL format spec after Step 10 to prevent AI from producing wrong format again\n- `tests/review-session.test.js` — Added 4 regression tests covering dict format, array format compat, null payload, missing cards field",
+      "downloadCount": 3,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -486,17 +552,20 @@
       "assets": [
         {
           "digest": "sha256:a2abf6fc0895b2edc22c489f2bbb36fb00eeb88381a132c2290c266a6e3bca43",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 255954
         },
         {
           "digest": "sha256:71d7708716e9175e1e722c7fafa253df5781bd601583935cd27d028a64362519",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## What's New in 1.1.0\n\n### New Features\n- **Quest completion screen** — celebration screen shown when all nodes in a quest are finished\n- **Node completion persistence** — quest node completion state is now saved and restored across sessions\n- **Delete function** — ability to delete quests/items from the hub\n- **Hub enhancements** — sort, completed state filter, and searchable tag filter added to Quest and Memory tabs\n\n### Bug Fixes\n- Fixed memory map failing to load when `config.json` was missing on first run",
+      "downloadCount": 4,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -507,17 +576,20 @@
       "assets": [
         {
           "digest": "sha256:3e9c548b799f845e952b7b64239ff2dd5d0347cd9c2dde5a49aa6aabf4ead05f",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 240754
         },
         {
           "digest": "sha256:12944b5653a0a3d675508c85ad8e9d3a982a6656673a91a4855ece19246b1ea0",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 502
         }
       ],
       "author": "bahfahh",
       "description": "## EngramQuest v1.0.0 — Initial Release\n\nThe first AI-native learning system for your vault.\n\n### Features\n- **Quest Map** — Transform notes into interactive island-based learning stages with multiple-choice, ordering, and matching challenges.\n- **Memory Map** — Visualize concepts using Obsidian Canvas with AI-generated association chunks.\n- **Review Deck** — FSRS-powered spaced repetition with triple-level AI hints (L1 clue / L2 vault context / L3 direct hint).\n- **AI Skills** — Install Claude Code, Gemini CLI, or Cursor skill packs directly from the plugin settings.\n\n### Installation\nInstall via the Obsidian Community Plugins browser, or download `main.js` and `manifest.json` manually.",
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
