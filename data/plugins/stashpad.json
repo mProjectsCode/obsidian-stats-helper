@@ -4,8 +4,8 @@
   "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "stashpad",
-  "lastChangedAt": "2026-06-20T07:04:32.399Z",
-  "lastFetchedAt": "2026-06-20T07:04:32.399Z",
+  "lastChangedAt": "2026-06-21T06:05:09.527Z",
+  "lastFetchedAt": "2026-06-21T06:05:09.527Z",
   "manifest": {
     "author": "Human",
     "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Stashpad",
-    "version": "0.113.0"
+    "version": "0.115.9"
   },
   "name": "Stashpad",
   "presentInCommunityList": true,
@@ -21,23 +21,147 @@
     {
       "assets": [
         {
+          "digest": "sha256:d418c7c7e9945a590761d541ca21a600f3a5f546670af8f2057e061f751039fa",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 764482
+        },
+        {
+          "digest": "sha256:e77bd679c38f28f3718aa4146954432a2e6edcc9d370731f68d47c0289c59d5a",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:2f1608061c69731e1a4a610f864c3d2f27cfca0baa76048a7af9207697ae2daa",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 156405
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.115.9 — Encrypt any folder, settings polish, and follow-up fixes\n\nExtends encryption to arbitrary (non-Stashpad) folders, tidies the encryption\nsettings page, and fixes the rough edges found while reviewing the new feature.\n\n## Encrypt arbitrary folders (0.115.8)\n- **\"Encrypt with Stashpad\" now works on any folder, not just Stashpad folders.**\n  Right-click a folder in the file explorer:\n  - A **Stashpad folder** gets its own password and its notes are locked individually\n    (unchanged behavior).\n  - A **non-Stashpad folder** (arbitrary files of any type) is bundled into a single\n    encrypted file: every file is zipped, encrypted under a folder password, and the\n    originals are deleted. A confirmation dialog explains the model before anything\n    happens.\n- **\"Decrypt with Stashpad\"** appears on a folder that holds such a bundle and restores\n  every file (including subfolders) back into place, then removes the encrypted bundle.\n- The bundle is encrypted with AES-256-GCM, the encrypted copy is verified before any\n  original is deleted, and files that change mid-encrypt are left in place and reported\n  rather than lost. Extraction is path-sanitized and never overwrites existing files.\n\n## Encryption settings polish (0.115.7)\n- **A single caution note** now sits at the top of the Folders section (covering both\n  archive and trash behavior) instead of being repeated; the folder-panel warning modal\n  is kept for when you encrypt from the folder panel.\n- **Section headers and dividers** added across the Encryption tab (Folders, global\n  settings, etc.), matching the existing \"Sharing\" section styling, so the page is\n  easier to scan.\n\n## Follow-up fixes (0.115.9)\n- **\"Decrypt with Stashpad\" no longer appears on regular encrypted Stashpad folders.**\n  It now shows only on folders that actually hold an encrypted bundle, not on folders\n  whose encrypted files are locked notes.\n- **Re-encrypting a previously-bundled folder is handled correctly.** Encrypting a\n  folder that was bundled and then decrypted re-bundles it as expected instead of doing\n  nothing; a folder that still holds a bundle now tells you to use Decrypt instead.\n- **Clearer confirmation.** The bundling dialog now states that the action can't be\n  undone with Cmd+Z (the originals are permanently deleted so no readable copy is left\n  in the trash) and that the only way back is to decrypt with the password.\n- **New command: \"Decrypt a folder bundle…\"** lists every encrypted folder bundle in\n  the vault and decrypts the one you pick — so bundles are reachable from the command\n  palette, not only the right-click menu.\n- **Emptied subfolders are cleaned up** after a folder is bundled, instead of being left\n  behind as empty directories.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.115.9",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T03:52:46Z",
+      "tag": "0.115.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:071deadc349d2541162073d3c5a22607109d74891bcc2f0a7295b275fb91895c",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 757001
+        },
+        {
+          "digest": "sha256:9d3d1a923f48d52a9645f154fefddd9c047ebe6101395dc57be21ffa51f555ec",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 356
+        },
+        {
+          "digest": "sha256:3c88fc81062cad733ab8d31fd56e1641acbefbcf1ff1a4dcc8c651538e455d2e",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 156050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.115.6 — Per-folder encryption polish + four follow-up features\n\nBuilds on the per-folder encryption release with subfolder support, plaintext\narchives, an encrypt-from-file-explorer entry point, and settings polish.\n\n## Important fix\n- **Rotating a folder's key no longer leaves it temporarily \"stuck.\"** A regression\n  in the previous release zeroed the folder's in-memory key right after a rotation, so\n  folder actions failed until you re-entered the password. Fixed — rotation keeps the\n  folder unlocked. (No data was ever lost; re-entering the password worked around it.)\n\n## Per-folder encryption\n- **Subfolders inherit the parent folder's password.** A note in a subfolder of an\n  encrypted folder uses that folder's key — set the password once, on the top folder.\n  You can't set a separate password on a subfolder that already inherits one.\n- **Per-subfolder options.** Selecting a folder in the encryption settings now lists\n  its subfolders, each with its own \"encrypt notes\" + \"hide filenames\" toggles (they\n  still share the parent's password).\n- **Per-folder trash keys.** Notes deleted from a folder with its own password are now\n  encrypted under *that* key (not the vault key), and rotating the folder's key\n  re-encrypts its trash too, so restore keeps working.\n\n## Folders & import\n- **Exclude subfolders by prefix.** A new setting (default `_`): any subfolder whose\n  name starts with a listed prefix is kept local — not surfaced as a Stashpad folder\n  or pulled into import.\n- **🔒 Encrypt with Stashpad** — a new right-click action on folders in Obsidian's\n  file explorer: give a folder its own Stashpad password (and lock the notes in it)\n  without opening settings.\n- **Archive command works with plaintext archives.** Archiving into a folder whose\n  \"Encrypt archived notes\" is off now moves the notes there (de-indexed, not\n  encrypted) instead of refusing.\n\n## Settings\n- Section names are now Title Case with an emoji per section (📁 Folders & Storage,\n  🔒 Encryption, 🗑️ Deleting, …) for faster scanning.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.115.6",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T02:53:25Z",
+      "tag": "0.115.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cbcc559cd298b17ad5163c2f6b8b58a029a6180a8f511ac0692e339908fb221a",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 750207
+        },
+        {
+          "digest": "sha256:5e3ad9cb95f20e3cd6067c482cb3242bc8a7227afc2b16840cdd6e63075e82f5",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 357
+        },
+        {
+          "digest": "sha256:3c88fc81062cad733ab8d31fd56e1641acbefbcf1ff1a4dcc8c651538e455d2e",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 156050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.114.16 — Per-folder encryption fixes (review follow-up)\n\nFollow-up fixes from a review of the 0.114.15 per-folder encryption release.\n\n- **Fixed: the per-folder \"Lock now\" button encrypted the whole folder** instead of\n  just forgetting the password from memory. It's now **\"Lock (forget password)\"** and\n  only drops the in-memory key (you re-enter the password on next access). Encrypting\n  or decrypting a folder's notes is the \"Encrypt this folder's notes\" toggle. The\n  redundant \"Unlock all\" button was removed.\n- **Key hygiene:** rotating a folder's key now wipes the old key from memory; the\n  encrypted-note export wipes its in-memory decrypted copy after writing; the export\n  subfolder setting is sanitized against path escapes; the vault-wide unlock clears\n  its cached key copies.\n\nAll 0.114.15 features (per-folder passwords, key rotation, encrypted-note export) are\nunchanged otherwise.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.114.16",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T01:40:15Z",
+      "tag": "0.114.16"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ee7d19cb4d30766c59c66005197f850959fd7f26becaa0d1faae999be854b0fa",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 750017
+        },
+        {
+          "digest": "sha256:2f09734850afb73c6e52fa447f5a0e98d3e121e63cc5a175a8ef982482ebc6bb",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 357
+        },
+        {
+          "digest": "sha256:3c88fc81062cad733ab8d31fd56e1641acbefbcf1ff1a4dcc8c651538e455d2e",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 156050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.114.15 — Per-folder encryption, key rotation, and encrypted-note export\n\nThis release overhauls vault encryption into a **per-folder** model with manual\npassword sharing, adds **key rotation**, an **export path for locked notes**, and a\nset of keychain-reliability fixes. Everything since `0.113.0`.\n\n## Keychain reliability (0.113.1–0.113.3)\n- Encryption notices now read **\"Settings → Stashpad → Encryption\"** (Stashpad's own\n  settings, not Obsidian's) so the path is unambiguous. Native-Obsidian paths\n  (`Settings → Files & Links`) are left as-is.\n- **Setting a shared password now keeps this device's keychain in sync** with it —\n  previously the device kept serving a stale password, so auto-unlock used the old one\n  and \"paste from keychain\" returned the wrong value.\n- **Stop silently zeroing the saved keychain password.** Setup / set-shared-password /\n  change-password / request-access used to clear the saved password whenever the\n  \"Remember\" box was unticked. Now they never auto-forget — only the explicit \"Forget\n  on this device\" action and remove-encryption clear it — and password changes update\n  the saved copy instead of leaving it stale.\n\n## Per-folder encryption (0.114.0–0.114.8)\n- **Per-folder keys.** Each top-level folder can have its **own password** (a separate\n  key), so you can share just that folder with collaborators. Folders without their own\n  password fall back to the vault password, so existing encrypted content is unaffected.\n- **\"Per-folder passwords\" settings section.** Set / unlock / change a folder password,\n  lock or unlock a folder's notes, and per-folder toggles for archive, trash handling,\n  and encrypting content + filenames for the folder, its archive, and its trash.\n- **Aggregate tabs.** New \"All encrypted\" and \"All archived\" views list everything in\n  one place, grouped by folder (read-only; they never decrypt).\n- **Old passwords are retained, never deleted.** Changing a password relabels the prior\n  one `[deprecated]` and keeps it (and parks the old keychain entry) for recovery —\n  but a deprecated password can no longer unlock current content.\n- **Keychain entry names** follow a readable `date – folder – author-initials`\n  convention instead of an opaque random id, and stay within the platform's\n  secret-id rules.\n- The dedicated \"Forget password on this device\" buttons were retired (passwords are\n  retained, never deleted); the device-approval (\"collaborators\") UI is hidden in\n  favor of manual password sharing. The underlying code is kept, just dormant.\n\n## Key rotation (0.114.9, 0.114.14)\n- **Rotate a folder's key** (\"when someone leaves the org\"): re-encrypts every locked\n  note in the folder under a brand-new key, then retires the old password so it can no\n  longer decrypt — true invalidation, unlike a cheap password change.\n- Rotation is **crash-safe**: it writes verified temp copies (originals untouched),\n  swaps the key, then commits — and finishes or cleanly rolls back an interrupted\n  rotation on the next launch, using an on-disk nonce so it can always tell whether the\n  swap actually happened.\n\n## Export locked notes (0.114.15)\n- **Export an encrypted note as a shareable `.stash`.** From the locked-note menu or\n  the \"All encrypted\"/\"All archived\" tabs, export a virtual copy re-encrypted under a\n  **new password you choose** in the export dialog. The original locked note is left\n  untouched. (A locked note's on-disk file is encrypted to the vault/folder key, not a\n  password, so it can't be shared as-is — hence the re-encrypt.)\n\n## Archive, trash & settings fixes (0.114.10–0.114.13)\n- **Archive command:** if the notes are already in an archive folder, it now says so\n  instead of silently moving them to a *different* archive (which also caused the\n  default-archive target to be ignored).\n- **\"All archived\"** lists the archived notes grouped by folder (not just folder names).\n- Toggling an encryption-dependent setting (encrypt trash, hide titles, …) with no\n  encryption set up now walks you through setting it up first.\n- The \"Default archive folder\" is set from the single dropdown in settings (the\n  redundant per-folder \"default target\" button was removed).\n- The per-folder settings are now a **folder dropdown + one dynamic panel** instead of\n  a long list of every folder, and sit below the global encryption settings.\n- \"Hide titles of locked notes\" is now the **default** that per-folder filename\n  options can override.\n\n## Notes\n- A folder's trash uses the vault key for now; per-folder trash keys and subfolder key\n  inheritance are planned follow-ups.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.114.15",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T01:33:01Z",
+      "tag": "0.114.15"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:d96c8998be78b45360e94d77345aea93dd68bd6ac80814f9cdcc1620d22edd36",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 722007
         },
         {
           "digest": "sha256:21ccf746565fd182009827eec0c6ec8515fb7056377622a5e2c299f1eeccb082",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:220420b4fa3eefba2c5056054e5591fe635c98234470db1407fe1d8777af0d21",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 155155
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.113.0 — Settings now sync across devices\n\n## Fixed: settings didn't sync (Obsidian Sync)\nStashpad stored its settings in a non-standard `.stashpad/data.json` subfolder, which\nObsidian Sync's \"Community plugin settings\" does not sync — so settings silently failed\nto propagate between devices (e.g. desktop ↔ mobile). Now fixed:\n\n- **`data.json` is back at the standard `<plugin>/data.json` path** that Obsidian Sync\n  syncs. The `loadData`/`saveData` overrides that relocated it have been removed (the\n  inherited standard-path versions are used).\n- **One-time, safe migration:** on first launch of this version, an existing\n  `.stashpad/data.json` is copied to the standard path (it's the active store, so it\n  wins over any stale leftover), a `.stashpad/data.json.bak` backup is written, and the\n  old file is retired so it never re-migrates.\n- As a result, these now sync across devices: **folder-panel pins, hidden folders, and\n  downranked folders**, all **settings toggles**, and **Stashpad's own keybindings**.\n\nNote: make sure Obsidian Sync's \"Community plugin settings\" option is enabled. After\nupdating on all devices, settings converge on the standard `data.json` and sync normally.\n(Other plugin-private files — the action log, render cache, author registry, and\nencryption keyfile — intentionally remain in `.stashpad/`.)\n\n_Internals: settings-storage relocation merged via the `sync-settings` branch._",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.113.0",
       "prerelease": false,
@@ -48,22 +172,26 @@
       "assets": [
         {
           "digest": "sha256:827663f90350db15fe770ac1c8e9205c7d0835911578eea4e1144b6756c0d5d1",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 722469
         },
         {
           "digest": "sha256:aee221f0da2e68303167fe41fd9f14464c70432ae292a2cf21da5a4752fd9b4a",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 357
         },
         {
           "digest": "sha256:220420b4fa3eefba2c5056054e5591fe635c98234470db1407fe1d8777af0d21",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 155155
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.112.11 — Friendlier \"Remove encryption\" + settings reliability\n\n## Removing encryption is now simple and unblockable\n- **No password retyping.** Removing encryption only asks you to type the confirmation\n  phrase — not your password. So if you've **lost the password**, you can still remove\n  encryption and start fresh.\n- **Locked notes:** if anything is still encrypted (locked), removal offers to either\n  **decrypt everything** (back to normal notes) or, if you've lost the password,\n  **permanently delete the locked content** — then proceeds.\n- **Encrypted trash:** a clear choice to **Decrypt** it back to your folders or\n  **Discard** it (with a second confirmation). Discarding now actually deletes the trash\n  files rather than leaving unreadable leftovers.\n- The \"is anything still encrypted?\" check is now near-instant instead of scanning the\n  whole vault.\n\n## Encrypted trash tab\n- **Permanent delete** of individual items (with a \"can't be restored\" warning),\n  **multi-select** (click, ⌘/Ctrl-click, Shift-range), bulk **Restore/Delete selected**,\n  and **⌘/Ctrl+A** to select all.\n\n## Settings reliability\n- Fixed a bug where the **settings tab could render blank** (it stopped on a button\n  that used an API not present on all builds), and another where it **didn't refresh**\n  after actions like removing encryption.\n- Settings sections are now listed **alphabetically**.\n- Hardened rendering so a single misbehaving control can no longer blank the whole tab.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.112.11",
       "prerelease": false,
@@ -74,22 +202,26 @@
       "assets": [
         {
           "digest": "sha256:6ccfa98dd588ebf4ae800dbfaa37ceb9e84c43a364541e7959641161ec74cb26",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 716972
         },
         {
           "digest": "sha256:4708c4dd0cc650d3a5ae4fc6bb3997ad17ae5ec17fd9c3b6117161359bc1a0ac",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:5eea16480a5153be9a7a63519545c69fa37d2cedbb6194b6ac1f6545477cf935",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 153969
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.111.0 — Create folders from the folder panel\n\nAdd a new Stashpad folder without leaving the folder panel. A **\"+\" button** in the\nFolders heading opens a quick name prompt; the folder is created (with intermediates),\nseeded with a Home note, and opened — the same result as creating one from Settings,\nnow one click away.",
+      "downloadCount": 6,
       "draft": false,
       "name": "0.111.0",
       "prerelease": false,
@@ -100,22 +232,26 @@
       "assets": [
         {
           "digest": "sha256:17c6968306a4882259a9fe2f320e769190496a2df391a2e85340bcbadb33f646",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 715129
         },
         {
           "digest": "sha256:23c35063dca6346b31e8439ec0aeefcd3012398553ceaf4523dec8a761808019",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:5eea16480a5153be9a7a63519545c69fa37d2cedbb6194b6ac1f6545477cf935",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 153969
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.110.0 — Granular settings + name-first attachments\n\n## Settings, reorganized\nThe settings are split from one sprawling **General** tab into focused categories, so\neach heading is tightly relevant to what's under it: **Folders & storage**, **Import &\nexport**, **Note titles**, **Dates & time**, **List & display**, **Moving notes**,\n**Deleting**, **Composer & copying**, **Windows & tabs**, and **Maintenance**. The old\n**Diagnostics** tab is also split into **Diagnostics** (profiling, debug trace, log) and\na new **Notifications** tab (history limit, per-category mute, history browser). Same\nsettings and behavior — just easier to find. (Native settings search still matches every\nindividual setting.)\n\n## Attachments: name-first filenames\nNew attachments are now named `photo-<id>.png` instead of `<id>-photo.png` — the\nreadable name comes first and the extension stays last.\n\n- **Rebootstrap migrates existing attachments** to the new format, rewriting the\n  `![[links]]` in note bodies and the `attachments` frontmatter as it goes.\n- **Link safety:** the migration only runs when Obsidian's *\"Automatically update\n  internal links\"* (Settings → Files & Links) is on. If it's off, Rebootstrap detects\n  the old-style attachments but leaves them untouched and warns you to enable the\n  setting first — so links are never orphaned. Detection is conservative, so unrelated\n  files are never renamed.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.110.0",
       "prerelease": false,
@@ -126,22 +262,26 @@
       "assets": [
         {
           "digest": "sha256:6c4015aa2a13380cf51dbdeb02e8c44f6ac1c6de87e44c8f1632a05752cfda55",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 711598
         },
         {
           "digest": "sha256:ebbbc09b9c741ba1cb56cdbe056e72d3ec7e262f0cfc8ce95b115ac9c3b48e07",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:5eea16480a5153be9a7a63519545c69fa37d2cedbb6194b6ac1f6545477cf935",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 153969
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.108.4 — Mobile tap fixes, fork provenance, diagnostics\n\n## Mobile: tap the note you meant\nFixes a long-standing mobile annoyance where, with the keyboard up and the composer\nlifted, tapping the note just above the composer would open a *different* note. The\ncause was the list reflowing as the keyboard dismissed — rows slid out from under\nyour finger mid-gesture. Now a double-tap opens the note you actually aimed at, in\none fluid motion, and a tap that only dismisses the keyboard no longer opens anything\nby accident.\n\n## Note forking\n- Forks now record where they came from: a `forked-from` link back to the original,\n  with every member of a fork family kept in sync.\n- Forking (and cloning, and inserting templates) produces a clean standalone note —\n  version/sheet metadata is no longer copied across, so a duplicate can't inherit a\n  stray \"final\" marker or ordering.\n- Deleting a note prunes it from its fork family automatically.\n- Clearer labels distinguish **Fork as a version** (a draft within a tabbed group)\n  from **Fork into a separate note…** (a re-homed standalone copy).\n\n## Diagnostics\n- New **Debug trace** toggle (Settings → Diagnostics) for capturing low-level\n  diagnostic lines while reproducing an issue, with Copy/Clear buttons. Local only —\n  no network, no file writes, and off by default.",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.108.4",
       "prerelease": false,
@@ -152,22 +292,26 @@
       "assets": [
         {
           "digest": "sha256:40fbc8af958872ec6c0ca9e9b68f42312fa01cf067d13f9976b6fcfcbdc7946b",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 705922
         },
         {
           "digest": "sha256:04a998efcd1da9fe232d48db3c024c43c7f5e780df9e56f9b46b916e84a41f9e",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:5eea16480a5153be9a7a63519545c69fa37d2cedbb6194b6ac1f6545477cf935",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 153969
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.107.1 — Sheet versions, list pins, note forking\n\n## Sheet versions\nKeep multiple tabbed versions of a single note (drafts/variants) and switch between\nthem inline. The active version persists across reloads, is hardened against being\nhidden by accident, and is gated behind a settings toggle that ships **off** by\ndefault — turn it on under settings when you want it.\n\n## Pin notes in the list\nPin notes to the top of a Stashpad list so they stay put above the rest. Pinned rows\nare marked with a `pin` icon in the meta column, and the folder panel can reveal a\nfolder's Home list-pinned notes.\n\n## Fork a note\nFork any note into a variant under a parent you choose — a quick way to branch an\nidea without losing the original.\n\n## Tasks\n- Unified due-date / assignee modal with dedicated clear (×) buttons on the date and\n  time fields.\n- Right-click task actions are grouped under a single **Task** submenu, with\n  context-menu gating so options only appear when relevant.\n- `Remove task` renamed to `Remove from tasks`; the redundant `Set due date` entry is\n  dropped from the Task submenu.\n\n## List & filtering\n- Collapse or expand every note body at once, plus an **expand bodies by default**\n  setting.\n- Reworked tags filter: a searchable, ranked, keyboard-navigable popover.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.107.1",
       "prerelease": false,
@@ -178,22 +322,26 @@
       "assets": [
         {
           "digest": "sha256:f4c3a2a6d2b5ddffcb5f5f7ae7554b689f33e09d334b7efaa679638af1925333",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 688062
         },
         {
           "digest": "sha256:c46b81236888f184c9266238447889d5c202327b0206721cb9a92d793c3c9d34",
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 357
         },
         {
           "digest": "sha256:98c616025b2e3b267a9539e61e096486e3e140261b062c94a962c18e8d19fbe7",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 147501
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.103.10 — Internal API cleanup\n\nReplaces two Obsidian APIs that are now deprecated with their current equivalents\n(`setDestructive` for the destructive encryption-settings buttons; `messageEl` for the\nsplit-progress notice). Purely internal — no visible change in behavior or appearance.",
+      "downloadCount": 10,
       "draft": false,
       "name": "0.103.10",
       "prerelease": false,
@@ -204,22 +352,26 @@
       "assets": [
         {
           "digest": "sha256:82e4725b0261c69ce4493f2b396e92a5ebeda2f503efbbe128c22f2f6a7541cb",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 688061
         },
         {
           "digest": "sha256:7e1111b13ac606e4ca47e8758708ffe9c8375578c226880b7e644814d5c901f9",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:98c616025b2e3b267a9539e61e096486e3e140261b062c94a962c18e8d19fbe7",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 147501
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.103.9 — Reload action easier to find\n\nThe **Reload without saving** item in the mobile ⚡ actions menu now sits near the top\n(right after Notification history) and shows regardless of selection, instead of being\ntucked at the very bottom. It's the quick fix when the view looks reverted to a stale\nstate. No other changes.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.103.9",
       "prerelease": false,
@@ -230,22 +382,26 @@
       "assets": [
         {
           "digest": "sha256:5f865be5ee0087b252184a8e57bf2edcc615d483b852bc57e32e399bbf8df555",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 688105
         },
         {
           "digest": "sha256:aa098d24177ba4b9a19855b9d68b24e5000c69a3b7de498d8887bb7e74410d5a",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:98c616025b2e3b267a9539e61e096486e3e140261b062c94a962c18e8d19fbe7",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 147501
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.103.8 — Reload shortcut + smoother folder conversion\n\nSmall quality-of-life release. Still alpha; keep backups.\n\n## Convert into a Stashpad now imports your files\n\nTurning an existing vault folder into a Stashpad (the \"Convert into a Stashpad?\" prompt)\nused to leave the folder's existing files untouched, so you then had to run \"Import\nloose files & folders\" separately. Now it does both in one step: on confirm it adds the\nHome note and also sweeps the folder's loose files and subfolders into notes. Files\nalready structured as notes, and reserved subfolders, are left alone.\n\n## Reload without saving, from the actions menu (mobile)\n\nThe mobile ⚡ actions menu has a new **Reload without saving** item. It's the quick fix\nwhen the view looks like it reverted to an earlier state: it rebuilds from the files on\ndisk (your notes are safe). It's hidden while notes are selected so it can't be tapped\nmid-action. On desktop, Obsidian's built-in \"Reload app without saving\" command does the\nsame thing.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.103.8",
       "prerelease": false,
@@ -256,22 +412,26 @@
       "assets": [
         {
           "digest": "sha256:0b5fd372d2b32c4ebd1f6b0ddb703d1fa14965fd8401090e61fe6f7a732a1600",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 687799
         },
         {
           "digest": "sha256:526da2ebb53ca585082955d6e4c17e76a33c2f59beef0a6a4e52afac5f303bcb",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 356
         },
         {
           "digest": "sha256:98c616025b2e3b267a9539e61e096486e3e140261b062c94a962c18e8d19fbe7",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 147501
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.103.6 — Better note splitting\n\nCapturing or splitting a wall of text into many notes is now faster, calmer, and more\npredictable. Still alpha; keep backups.\n\n## Split-on-submit (composer)\n\n- **New notes land where you submitted them.** Previously, if you pasted a long block\n  with split-on-newlines on and then navigated to another level mid-creation, the\n  remaining notes followed you there. Now the destination is fixed at submit time, so\n  the whole batch stays put.\n- **Split by line, paragraph, or heading.** Right-click the split button in the\n  composer to choose how a paste is broken up — every line (the original behavior),\n  blank-line paragraphs, or Markdown headings.\n- **Long pastes show progress** and are created as one batch: a single redraw at the\n  end instead of a flickery note-by-note repaint, and a single undo for the whole\n  paste.\n\n## Split modal (splitting one note into several)\n\n- **Split into many at once.** A new \"Split by:\" row breaks a note into multiple notes\n  in one click (each line / paragraphs / headings), with a live count — no more placing\n  one divider at a time. The original line/cursor two-way split is still there.\n- **Friendlier divider.** Clicking a line puts the split point just *below* it, and the\n  divider now centers in the view so you can see context above and below it. Navigating\n  the split point no longer jumps the list back to the top.\n\n## Smoothness\n\n- Big splits, the Rebootstrap maintenance command, and Open Knowledge Format\n  auto-rebuilds no longer repaint the list once per affected note, so the view stays\n  calm during bulk changes.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.103.6",
       "prerelease": false,
@@ -282,22 +442,26 @@
       "assets": [
         {
           "digest": "sha256:3bc29c49103db7b7170934194d49af80433142f8ba78920608916a793877edb3",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 681431
         },
         {
           "digest": "sha256:cc972685379a115f9cf65077d6a7ba7d397202a34c5d73c26d15b6561ae57bd0",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 357
         },
         {
           "digest": "sha256:1311e796accde6c04ebcf7125375cfe6ce8f71f67f2fa077afeb49d038ac85fc",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 146565
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.102.20 — Shorter store description\n\nListing-only update: trimmed the plugin description to fit the community-store's\n200-character limit and removed a wording (\"in-place editing\") that could be read as\ninline text editing, which Stashpad doesn't do (editing a note body opens it in\nObsidian's normal editor). No code or feature changes.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.102.20",
       "prerelease": false,
@@ -308,22 +472,26 @@
       "assets": [
         {
           "digest": "sha256:3bc29c49103db7b7170934194d49af80433142f8ba78920608916a793877edb3",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 681431
         },
         {
           "digest": "sha256:18b7ca2e199039ffbe77dd2c6092612bb3992bf5ce289a6016ef50844e8ec89b",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 401
         },
         {
           "digest": "sha256:1311e796accde6c04ebcf7125375cfe6ce8f71f67f2fa077afeb49d038ac85fc",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 146565
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.102.19 — Plugin-store review compliance (round 2)\n\nHousekeeping release continuing the community-plugin-store review pass. No feature\nchanges. Still alpha; keep backups.\n\n## Compatibility\n\n- **Minimum Obsidian version is now 1.13.0.** Stashpad leans on APIs (the declarative\n  settings/search, workspace and encryption APIs) that the store review requires the\n  manifest to declare. The plugin already ran against 1.13+; this just makes the floor\n  explicit. If you're on an older Obsidian, update to 1.13 or later to install.\n\n## Under the hood\n\n- Cached note bodies are now re-hydrated with Obsidian's own `sanitizeHTMLToDom`\n  (the sanctioned, safe HTML-to-DOM API) instead of a lower-level call the review\n  flagged. Rendering is unchanged.\n- Fixed an internal lint nit: a regex that strips a leading byte-order mark now uses an\n  escape sequence instead of a literal invisible character. No behavior change.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.102.19",
       "prerelease": false,
@@ -334,22 +502,26 @@
       "assets": [
         {
           "digest": "sha256:dd14b8ebb069e58e6d06e0e57d43ff8c0c8b7c7abe7722c02f815f5476ee80b9",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 681452
         },
         {
           "digest": "sha256:0c55053d22d1d6c7f98a54be055bbadc800d240752f91ee6c246469b5ca2104e",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 400
         },
         {
           "digest": "sha256:1311e796accde6c04ebcf7125375cfe6ce8f71f67f2fa077afeb49d038ac85fc",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 146565
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.102.16 — Plugin-store review compliance\n\nHousekeeping release: changes to satisfy Obsidian's automated community-plugin review.\nNo behavior changes — same features as 0.102.12, just cleaner under the hood. Still\nalpha; keep backups.\n\n## Under the hood\n\n- **Zip handling switched from JSZip to `fflate`.** `.zip` / `.tar.gz` / `.stash`\n  export and import, plus encrypted-bundle handling, now use the dependency-free\n  `fflate` library. This removes legacy polyfill code the review flagged and trims the\n  bundle. Bundles round-trip identically (text, attachments, and nested paths\n  verified); existing `.stash` files still import.\n- **Code-quality cleanups for the store guidelines:** OS detection via Obsidian's\n  `Platform` API, inline styles moved to `setCssStyles`, settings headings use the\n  standard `Setting().setHeading()`, cached note bodies are re-hydrated without\n  `innerHTML`, and unused imports removed. No visible change.\n\n## CSS\n\n- Internal stylesheet tidy-up (a mislabeled grid gap), with the remaining intentional\n  rules documented. No visual change.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.102.16",
       "prerelease": false,
@@ -360,22 +532,26 @@
       "assets": [
         {
           "digest": "sha256:453bc1f8d4ad804f9165f0c0b30da8b58dce0dff178ef50d7c55183549d1a42c",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 766648
         },
         {
           "digest": "sha256:fd334573cf83dc29146e02f377b81bcdb90557211ee786ce35db032a0f63db09",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 249
         },
         {
           "digest": "sha256:8fb986bb3dde29c789ea0b82f8d0086046eecc7e5ce0c3de07b148ca52a3a956",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 144684
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.102.12 — Open Knowledge Format (OKF) support\n\nTurn a Stashpad folder into a browsable **Open Knowledge Format** bundle — the open,\nvendor-neutral way to share curated knowledge with LLMs and agents — without\nhand-authoring any of it. See `docs/okf-guide.md` for a from-scratch walkthrough.\n\n## OKF (new)\n\n- **New \"Open Knowledge Format (OKF)\" settings tab.** Flip it on, and a folder you\n  opt in becomes a valid OKF bundle while staying a normal Stashpad folder —\n  nothing of yours is renamed or removed.\n- **Opt in per folder via a template.** Enabling OKF creates an `OKF Template.md`;\n  assign it to the folders you want (all, some, or none) in Settings → Templates.\n  A one-click \"Create template + open Templates\" gets you there.\n- **Complementary frontmatter.** OKF folders get `okfType` / `okfTitle` /\n  `okfTimestamp` (yours to edit) plus `okfParent` / `okfChildren` as relative-\n  Markdown links that mirror your note tree — added alongside Stashpad's own fields.\n- **Generated `index.md`** per OKF folder (an OKF table-of-contents) with a legend\n  explaining the fields.\n- **Export as OKF.** Right-click a note (or selection) → \"Export as OKF…\" and pick\n  any of **.zip** / **.tar.gz** (portable OKF bundles) or **.stash** (re-importable).\n  Bundles map the `okf*` fields to OKF's standard keys, keep the originals for\n  lossless re-import, include a scope-adjusted `index.md`, and bundle attachments.\n- **Stays in sync automatically.** Adding, moving, or deleting notes refreshes the\n  folder's OKF fields + `index.md` a few seconds later (a manual \"Rebuild\" button\n  forces it immediately). Archive folders are always excluded.\n\n## Folder panel\n\n- **Pinned folders now appear in the top \"Pinned\" section**, mixed with pinned\n  notes, so notes and folders share one quick-access area. The folder list below is\n  unchanged (pinned folders still rank first there).\n\n## Templates\n\n- The per-folder template field's autocomplete is now **keyboard-driven**: ↑/↓ to\n  move through suggestions, Enter to pick, Esc to close, and Tab to complete the\n  path one segment at a time.\n\n## Encryption\n\n- Added a clear, prominent disclaimer in the Encryption settings: the encryption\n  feature is **AI-built and not human-audited or security-tested** — a best-effort\n  nice-to-have, not a guarantee. Don't rely on it for anything sensitive, and keep\n  your own unencrypted backups. (Still beta.)\n\n## Polish\n\n- Settings text alignment fixes across several sections, monospaced code references\n  in the settings copy, and clearer setup guidance.\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.102.12",
       "prerelease": false,
@@ -386,22 +562,26 @@
       "assets": [
         {
           "digest": "sha256:5aea69e8f2d0e9b6d41dc3470ceb9770d83598999be002fa170483043eac3cf0",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 747284
         },
         {
           "digest": "sha256:49e87e688c7a4bb96bbce1c509f79d52bbd829e9f0134d4cd43e6bbfd768a559",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:95759a989372a721b1230a01d749fb094eed6cefcec072497dbd96f22f687823",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 142728
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.100.0 — Shared-key collaboration for encryption (BETA)\n\n> ⚠️ **Beta, and not yet tested across real devices.** Vault encryption — and\n> especially this new shared-key collaboration — is beta software handling data\n> that has **no recovery if the key is lost**. The multi-device sync of the key\n> file has only been verified in simulation, not on two real synced devices yet.\n> **Keep your own unencrypted backups of anything important**, and treat this as\n> \"protects against a casual snoop,\" not \"trust it with secrets,\" until it's had\n> wider testing and a security review. No `.stashenc` format changes — existing\n> encrypted notes keep working and single-device vaults upgrade automatically.\n\n## Share an encrypted vault with collaborators\n\nTwo people on one synced vault can now share encrypted content. The vault has a\nsingle key, distributed through a synced key file (`.stashpad/keys.json`, with\nrolling backups in `_keys/`). Pick whichever sharing style you prefer — or use\nboth:\n\n- **Shared password** — set one passphrase that everyone types to unlock. Share\n  it through a password manager or secure message. Simplest; the trade-off is a\n  shared secret and no per-person removal.\n- **Device approval** — a new device taps **Request access**, an existing member\n  taps **Approve**, and the key is shared to that device by public key. No shared\n  secret ever changes hands; each person keeps their own password.\n\nManage both under Settings → Stashpad → Encryption → **Sharing**: set/change/turn\noff the shared password, and approve, deny, or remove devices.\n\nNotes:\n- Removing a member or turning off the shared password stops *future* access; it\n  does not claw back copies someone already synced (true revocation would require\n  rotating the key — a future feature).\n- The key file is safe to sync: it only ever contains public keys and the key\n  wrapped under a password/public key, never anything in the clear.\n\n## Also in this release\n\n- **List refresh on external delete** — deleting a note on the filesystem (sync,\n  another device) now updates the list immediately.\n- **Decrypt-all is faster** — \"Decrypt all locked notes\" no longer rewrites\n  settings once per note; it batches a single save at the end.\n- **Encryption UX polish** — a clearer \"Forget password on this device\" action\n  (distinct from removing encryption), a BETA badge in the encryption screens,\n  the type-to-confirm phrase is case-insensitive, and the remembered password is\n  now namespaced per vault so it can't collide between vaults on one machine.\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.100.0",
       "prerelease": false,
@@ -412,22 +592,26 @@
       "assets": [
         {
           "digest": "sha256:74a255c640ff9454eb09f8df49a9749a964a123258f58bff8e5df5a82e1f8aa9",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 732294
         },
         {
           "digest": "sha256:b417525de7848f8b09cb555ed7ee40df9f47d8013ef9ae2c08766ebc406583c0",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:ca65c558c924cea1b86df45abc5aec55de00a31cefbc51d1ad10dac0ad36f25a",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 142228
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.23 — Cross-folder note paste\n\nCut or copy notes in one Stashpad folder and paste them into another. Previously\nthe clipboard worked only within a single folder; a different-folder paste was\nrefused.\n\n## Paste across folders\n\n- **Cut → move, copy → clone.** Pasting in the list of a different folder now\n  moves the notes there (cut) or drops a fresh duplicate (copy). The whole\n  subtree comes along — the note and all of its children.\n- **Attachments travel with the notes.** A moved or copied subtree carries its\n  referenced attachments into the destination folder's `_attachments`, so the\n  result is self-contained — no links pointing back at the original folder.\n  On a move, the source's now-unused attachments are cleaned up; attachments\n  shared with other notes are left in place.\n- **Copies get new identities; moves keep theirs.** A copy is a true duplicate\n  (fresh ids), so it's independent of the original. A move preserves each note's\n  id. Pasted roots land where your cursor is.\n- **Archive folders are protected.** An auto-encrypting archive folder is\n  declined as a cross-folder paste target (its key might not be on this device),\n  with a pointer to the explicit \"Move to archive\" command. Archive folders also\n  stay out of cross-folder search, so they don't surface as targets.\n\n## Undo / redo\n\n- **Every cross-folder paste is undoable and redoable.** Undo a move and the\n  notes (and their attachments) return to the source folder; undo a copy and the\n  duplicate is removed. Redo replays it. The same applies to pasting a cut into a\n  note's composer.\n\n## Composer paste\n\n- Pasting a cross-folder cut into a note's **composer** drops the full subtree in\n  as an indented bullet outline — the note plus its children, nested by depth and\n  ordered to match the list — then removes the originals (undoable).\n",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.99.23",
       "prerelease": false,
@@ -438,22 +622,26 @@
       "assets": [
         {
           "digest": "sha256:da2d194cd9e4be939db8571a66ab06ed1239371bddd6e83a23cf58fb83674397",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 724955
         },
         {
           "digest": "sha256:25485ad0f9994e8b0db19de97943713abc918d126bf7e66395dfaf88f7351a56",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:ca65c558c924cea1b86df45abc5aec55de00a31cefbc51d1ad10dac0ad36f25a",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 142228
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.20 — Task reminders only ping the assignee\n\nRefines the due-date reminders from 0.99.19: a task assigned to specific people\nnow only reminds **those** people — you get a reminder for a task assigned to\nyou, not for one assigned to a coworker. Tasks with **no** assignee still remind\neveryone.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.99.20",
       "prerelease": false,
@@ -464,22 +652,26 @@
       "assets": [
         {
           "digest": "sha256:922eef170e0583affe455204d723675a3dbbb7ceaa97453a185fe7a86f7ceb30",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 724855
         },
         {
           "digest": "sha256:75b819817200bb630a5cb085afda76be8aaed4c3854d258a2c01552b467f36fe",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:ca65c558c924cea1b86df45abc5aec55de00a31cefbc51d1ad10dac0ad36f25a",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 142228
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.19 — Multiplayer authorship, task reminders, full settings search\n\n## Task due-date reminders\n\n- Setting a due date on a task now actually reminds you. Because a plugin can't\n  run while the app is closed, reminders fire **when Obsidian next launches**\n  (for anything that came due while it was closed) and on a periodic check while\n  it's open. Each is a persistent notification with an **Open** button, recorded\n  in the notification history under a new **Reminder** category (and respecting\n  its mute toggle). A reminder won't re-fire for the same task + date once shown.\n\n## Multiplayer authorship (shared vaults)\n\n- **Assigning works across the whole vault now.** The \"Assign to\" / due-date\n  picker lists every author found anywhere in the vault — not just the ones this\n  device's registry happens to know — so a coworker who's only worked in *other*\n  folders shows up with their real identity, and assigning them no longer creates\n  a duplicate.\n- **New folders auto-populate** with every known author, so you can assign anyone\n  immediately without waiting for them to contribute there first.\n- **New command: \"Sync authors across all folders.\"** Backfills existing folders\n  so every known author exists everywhere — handy after adding a collaborator.\n\n## Settings search\n\n- Every Stashpad setting is now findable in Obsidian's settings search, including\n  the **Authorship**, **Templates** (color aliases / note templates), and **JD\n  Index** pages — previously only their page names matched.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.99.19",
       "prerelease": false,
@@ -490,22 +682,26 @@
       "assets": [
         {
           "digest": "sha256:76ba92f3c2c6550d1d86c6d76900594c2d05507b3a19ef5157d15065b9220983",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 717280
         },
         {
           "digest": "sha256:68ab5d2e05418f4e047d72c64009e28d820defa4047d7febbc48142c0f529b47",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:df143db4ef260406c3a7326e0ae9b79fc4789c60d71d7757bf193142ae5e45e4",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 141680
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.14 — Encrypted notes no longer disappear on restart\n\nFixes a bug where a locked (encrypted) note's 🔒 placeholder could vanish after\nrestarting the app. The placeholders were rebuilt by scanning the vault's file\nindex for the encrypted blobs, but on a fresh start the view renders before the\nvault finishes indexing those files — so the placeholders came up empty and the\nregistry that anchors them could be cleared.\n\nNow the placeholders render from the saved registry (available immediately at\nstartup) and the registry is reconciled against the disk directly (and only\nafter the vault is fully loaded), so locked notes stay put across restarts. A\nlocked note whose registry entry had been lost is recovered from its sidecar on\nthe next launch.",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.99.14",
       "prerelease": false,
@@ -516,22 +712,26 @@
       "assets": [
         {
           "digest": "sha256:c08978589ec50afaec1e390f9540b00d6aa5c1ae2d044901fdf396d90dbadef4",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 716935
         },
         {
           "digest": "sha256:7a551ea2c3765449048cadb0f39cbb61b0f9cfa4fd5e4c0830e39484440b2cb9",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:df143db4ef260406c3a7326e0ae9b79fc4789c60d71d7757bf193142ae5e45e4",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 141680
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.13 — Tab management + note-clipboard polish\n\n## Tabs\n\n- **New command: “Close duplicate & orphaned Stashpad tabs (tidy up).”** Collapses\n  duplicate tabs (keeping one per folder + focused note) and prunes tabs whose\n  note no longer exists. It warms up every tab first so it works on the real\n  views, keeps the active/healthy one, and shows a short summary of what it did.\n- **Pinned-note clicks no longer hijack or duplicate tabs.** Clicking a pinned\n  (or shared / task) note now reuses an existing tab on that folder if there is\n  one — deferred tabs included — and only opens a new tab when there isn't.\n- **Tab titles carry the note id** when focused into a note (`Folder — Title · id`)\n  so tabs on same-titled notes stay distinguishable.\n\n## Copy / cut / paste of notes\n\nBuilding on the note clipboard, the two paste destinations are now clearly split\nand work at any nesting depth:\n\n- **Paste in the list = structural.** Copy → clones the note (and its subtree) at\n  the current level; cut → moves it into the focused parent. Works whether or not\n  a note is selected, and into empty parents.\n- **Paste in a note’s composer = text.** Copy → drops the note’s text in; cut →\n  drops the whole subtree’s text in (as an indented bullet outline) and deletes\n  the originals. You can’t paste a cut note into itself.\n- **Visual indicators:** cut notes ghost out; copied notes get a subtle tint.\n  **Escape cancels** a pending cut/copy.\n- **“Copy tree” (the outline command)** now also loads the note clipboard, so the\n  whole stack can be pasted — cloned in the list, or dropped as an outline into a\n  note.\n\n## Import\n\n- A `.stash` bundle can now carry **color-name aliases** (hex → friendly name);\n  on import they’re added to the destination folder’s color settings, so colors\n  set by an external tool come in already named.\n\n## Fixes\n\n- The in-list “Nest under…” picker now lands the cursor and selection on the\n  destination note, instead of drifting to the next note after the list shifts.\n- Pasting works correctly when focused inside a parent (previously it only\n  reliably worked at the top level).",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.99.13",
       "prerelease": false,
@@ -542,22 +742,26 @@
       "assets": [
         {
           "digest": "sha256:ddfdcab18bac22b50f067ed75fbd60e15ef32629e10685bf816a4072f791d946",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 712554
         },
         {
           "digest": "sha256:acd66d2aedf3d81d04429fe688308de6e7745416c6adb116aefc78fc61baa7f8",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:dfd78c50650b4d4021356099fb17e46b9b94a0aaac8e0dc8c6c356d33a24e029",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 141100
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.99.0 — Note clipboard + encryption hardening\n\n## Copy, cut, and paste note blocks\n\nA note clipboard that runs in parallel with the system clipboard, on the\nfamiliar keys (Mod+C / Mod+X / Mod+V, rebindable in Settings → Hotkeys):\n\n- **Copy** puts the note bodies on the system clipboard as text AND the notes\n  on the note clipboard — paste in the list to **duplicate** them (fresh ids;\n  paste again for more copies), or paste anywhere else for plain text.\n- **Cut** + paste in the list **moves** the notes after the cursor row.\n- **Cut** + paste in the **composer** drops the text in and deletes the\n  original notes (undoable). This only triggers when the pasted text is\n  actually the cut text — copying something else in between leaves the cut\n  pending, so nothing is deleted by surprise.\n- Copy/cut defer to the normal clipboard when text is highlighted; paste only\n  intercepts when the note clipboard holds notes. Everything is undoable.\n\n## Security hardening (post-release review of the encryption feature)\n\nA dedicated security + code review of 0.98.38's vault encryption; all findings\nfixed:\n\n- The encrypted blob is now **verified on disk** (read back and byte-compared)\n  before any plaintext is deleted — a truncated write on a network drive or\n  sync client can no longer cost data.\n- The idle auto-lock can no longer corrupt an in-flight lock operation (the\n  session key is handed out as a copy, never the live buffer).\n- Notes **edited while a lock is running are kept**, not deleted (the bundle\n  holds the pre-edit content; a warning lists anything left in plaintext).\n- A failed plaintext deletion now raises a persistent warning instead of\n  silently reporting a clean lock.\n- The persisted render cache no longer retains the text of locked or\n  securely-deleted notes.\n- Right-click → Delete now honors \"Encrypt items sent to trash\" (it previously\n  bypassed the encrypted trash).\n- Restore destinations from sidecar files are sanitized (a tampered sidecar\n  can't redirect decrypted notes outside the vault), missing origin folders\n  are recreated, and hidden-title deletes no longer reveal their origin folder\n  on disk.\n- KDF parameters in encrypted files are clamped, so a crafted file can't\n  demand absurd memory/CPU when a password is entered.\n- \"Remove encryption\" now scans the disk directly so it can never miss a\n  freshly-written encrypted note.\n- The \"Encrypt trash filenames\" and \"Follow Obsidian's trash setting\" toggles\n  are now functional.\n\n## Encrypted trash backfill\n\n- New command: **\"Encrypt existing Obsidian trash\"** — sweeps everything\n  already sitting in plaintext in the vault's `.trash/` into the encrypted\n  trash. Restore puts the files back into `.trash/` exactly as they were.\n  (\"Encrypt items sent to trash\" only covers new deletes; this covers the\n  backlog.)\n\n## Fixes & polish\n\n- Archive and Encrypt-&-delete commands now have keybind rows in Settings →\n  Hotkeys (and are findable via settings search).\n- The encrypted-trash tab no longer duplicates rows when refreshed rapidly.\n- Unlock/restore read note metadata from disk, fixing rare cases where a\n  restored child note was re-attached to the top level.\n- Pending archive sweeps are cancelled when the plugin unloads.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.99.0",
       "prerelease": false,
@@ -568,22 +772,26 @@
       "assets": [
         {
           "digest": "sha256:5ce6fb8ed77007f8a7743aa1ca745a03179d6c31c1d49f46837c4677720f2790",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 698341
         },
         {
           "digest": "sha256:d78ce280765ca6405c4028ead1a444316ab21d86143237603ed5ff6b074dd445",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:dfd78c50650b4d4021356099fb17e46b9b94a0aaac8e0dc8c6c356d33a24e029",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 141100
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.98.38 — Vault encryption\n\nA large release: Stashpad can now encrypt notes at rest, on top of the existing\n`.stash` export encryption. Everything is **opt-in** — set up an encryption\npassword first (Settings → Encryption). Lost passwords are unrecoverable by\ndesign; there is no backdoor.\n\n## Encryption setup & key management\n\n- Set an encryption password for the vault (Settings → Encryption). The key is\n  password-derived; the password itself is never stored.\n- Optionally remember the password in the OS keychain so an idle auto-lock\n  re-unlocks silently instead of re-prompting.\n- Idle auto-lock: forget the key from memory after N idle minutes.\n- Change password (re-wraps the same key) and Remove encryption. Removal is\n  **refused while any encrypted content still exists**, so you can't strand\n  locked notes by erasing the key.\n\n## Lock & unlock notes\n\n- **Encrypt (lock) a note + its children** into one encrypted bundle, in place.\n  The readable copy is removed; a 🔒 placeholder takes its slot. Unlock restores\n  it (one click on the placeholder, or the command).\n- Available from the note context menu, a dedicated **\"Encrypt (lock) selection\"**\n  command, and a recoverable **\"Decrypt (unlock)\"** command that works on a\n  selection or recursively through a parent's subtree.\n- **\"Decrypt ALL locked notes in the vault\"** command as a one-shot unlock-all.\n- Locked placeholders keep their slot in manual-sorted lists, carry a timestamp,\n  and have their own right-click / mobile menu. An optional **\"Hide titles of\n  locked notes\"** setting shows a generic label instead of the note title.\n- **Encryption view filter** in the view dropdown: show all, locked only, or\n  decrypted only.\n\n## Folders\n\n- **Encrypt / decrypt all notes in a folder** from the folder-panel menu, with\n  progress for large folders.\n- **Archive folders:** mark a folder so any note moved into it is automatically\n  encrypted. A default archive folder + a **\"Move selection to archive\"** command\n  make one-tap archiving easy; the action is undoable.\n\n## Secure delete & encrypted trash\n\n- **\"Encrypt & delete\"** sends a note to an encrypted trash instead of leaving a\n  readable copy behind. An opt-in **\"Encrypt items sent to trash\"** setting routes\n  the normal delete through the same path.\n- A dedicated **Encrypted trash** tab lists deleted notes grouped by the folder\n  they came from, with per-item and **Restore all** recovery. Undo (Ctrl/Cmd+Z)\n  brings a just-deleted note straight back.\n\n## Security hardening\n\n- Locking/secure-deleting **permanently removes** the plaintext rather than sending\n  it to the system/`.trash` (where it would stay readable). The encrypted blob is\n  verified byte-for-byte before the original is removed.\n- When titles are hidden, the title is kept out of filenames and metadata, not just\n  the on-screen label.\n- Attachments referenced only by a locked note are encrypted with it (shared ones\n  are left in place); restore reuses an existing copy by content instead of\n  duplicating.\n\n## Fixes & polish\n\n- Cross-folder search/picker no longer mislabels a folder's home note (home notes\n  shared an internal id and collided).\n- Folder panel: single-click opens a folder (and the \"Open in new tab\" button\n  responds to every click), the \"Folders\" heading opens the folder switcher, a\n  trash button sits beside it, and archive folders show an archive icon. The\n  switcher lists archive folders with their icon and an \"Open encrypted trash\"\n  entry.",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.98.38",
       "prerelease": false,
@@ -594,22 +802,26 @@
       "assets": [
         {
           "digest": "sha256:8cf8d70b5558a399523b69db917a5d4561fd575771cc4d8afe59ef3cc881bf6f",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 643149
         },
         {
           "digest": "sha256:8de95996c3d6209d1f0d9a6af79215c73b4b4d91bf59cb34f01112e5f5f095d1",
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:a2f3bd9fb107cf6f96ca2fd9b8f831c7f4c7573da34b7be8d3118dbcf059bb86",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 135095
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.96.3 — Fix plugin failing to load on older Obsidian\n\nFollow-up to 0.96.2. That release lowered the minimum Obsidian version but the\nplugin still failed to load on pre-1.13 Obsidian: a settings class extended a\n1.13-only API at module load, which threw before the plugin could start.\n\n- The plugin now loads correctly on **pre-1.13 Obsidian**, with a working\n  (non-blank) settings tab. On Obsidian 1.13+, settings and native search are\n  unchanged.\n\nIf 0.96.2 wouldn't load for you on an older Obsidian, this fixes it.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.96.3",
       "prerelease": false,
@@ -620,22 +832,26 @@
       "assets": [
         {
           "digest": "sha256:4b58249c35e06da90852644bc0f472a3d1ecdc53a6d52e6f02310dd6484bb6f7",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 643117
         },
         {
           "digest": "sha256:359d5dbec223313b6990036204306c7f906126e0c51496dcaecd143d092c35e6",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:a2f3bd9fb107cf6f96ca2fd9b8f831c7f4c7573da34b7be8d3118dbcf059bb86",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 135095
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.96.2 — Runs on older Obsidian again; compact-mode checkboxes\n\n## Compatibility: runs on pre-1.13 Obsidian again (0.96.2)\nThe settings overhaul in 0.94.0 had raised the minimum Obsidian version to 1.13.0\n(for the native settings-search integration), which left the plugin unusable on\nolder releases. That's fixed:\n- **`minAppVersion` is back to 1.7.0.** The plugin loads and the settings tab\n  works on older Obsidian again.\n- On Obsidian **1.13+** you still get the native settings-search integration. On\n  **older** versions the settings render normally (just without the in-app\n  settings search, which those versions don't have anyway).\n\n## Compact mode: checkboxes on every row (0.96.1)\n- In **compact mode**, every note row now shows a checkbox so the list reads as a\n  tight checklist — not only task-tagged notes. Click a checkbox to toggle that\n  note's done state in place.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.96.2",
       "prerelease": false,
@@ -646,22 +862,26 @@
       "assets": [
         {
           "digest": "sha256:dd325ee916b3b269953138e352f2f2e0fe140d8fa4f4aeacf686cb922d6157cd",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 642745
         },
         {
           "digest": "sha256:517498f859625d4cbbdbf5e80e8a7debcae4a6f1194dd2b530fd17574faff874",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:a2f3bd9fb107cf6f96ca2fd9b8f831c7f4c7573da34b7be8d3118dbcf059bb86",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 135095
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.96.0 — Search opens in a new tab; second color-picker chord\n\n## Search results open in a new tab (0.96.0)\n- New setting **\"Search results open in a new tab\"** (Settings → General, **on by\n  default**). Picking a result in the Search modal now opens it in a fresh\n  Stashpad tab focused on that note, instead of navigating the current tab.\n- Applies to both same-folder and cross-Stashpad results. Turn it off to restore\n  the previous in-place navigation.\n\n## Set note color — second default chord (0.95.5)\n- The **Set note color** command now defaults to both **`Shift+:`** and **`;`**\n  (semicolon), with both chords active. Existing users who hadn't remapped it\n  pick up the semicolon automatically; anyone who customized it is left alone.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.96.0",
       "prerelease": false,
@@ -672,22 +892,26 @@
       "assets": [
         {
           "digest": "sha256:775d529128373f78a0bdb371bb08c09f187c8087885588b7f257fda66dae9232",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 641790
         },
         {
           "digest": "sha256:3063d181adc5639f1ae70694bf39a357bdc069df3f948b00407b2f3e3b11898d",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:a2f3bd9fb107cf6f96ca2fd9b8f831c7f4c7573da34b7be8d3118dbcf059bb86",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 135095
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.95.4 — Folder panel placement, native settings search, panel polish\n\n## Folder panel placement (0.95.0–0.95.2)\nTake control of the folder list and the Pinned shelf.\n\n- **Pin / downrank / hide folders.** Right-click any folder in the panel to\n  **pin** it to the top (clustered with a pin icon), **downrank** it into a\n  dimmed group at the bottom, or **hide** it from the list. Each folder is in at\n  most one state.\n- **Restore anywhere.** Hidden folders collapse into a **\"Hidden (N)\"** strip at\n  the bottom of the list with an inline unhide, and are also listed in\n  **Settings → General → \"Folder panel placement\"** (Unpin / Reset / Unhide).\n- **Reload-proof open indicators.** The per-folder \"open\" dot now lights up for\n  every folder with an open tab — including tabs Obsidian lazy-defers after a\n  restart — by reading each tab's persisted folder instead of only the focused\n  one. Exact immediately on launch, no caching.\n- **Folder icons.** Each folder row gets an icon, tinted by that Stashpad's Home\n  note color when one is set.\n\n## Pinned shelf, redesigned (0.95.1–0.95.4)\nThe folder panel's Pinned list now matches the Pinned side panel.\n\n- **Expandable subtrees.** Parent pins show a child-count badge; click to expand\n  the outline inline.\n- **View options.** A menu (list icon) toggles **Sort by pin order** (default) or\n  **Group by folder** — shared across both the folder panel and the Pinned panel.\n- **Drag to reorder** pins in the folder panel.\n- **Stronger note colors** carry into both pin panels: a left accent bar, a tinted\n  wash, and a tinted icon + label.\n- The Pinned panel's view-options button is tucked onto the Home row.\n\n## Native settings search (0.94.0–0.94.4)\nStashpad's settings migrated to Obsidian 1.13's declarative settings API.\n\n- Stashpad settings now appear in Obsidian's built-in **\"Search settings…\"**.\n- **Per-setting search** for General, Diagnostics, and every Hotkey command —\n  search \"command palette\", \"timezone\", \"confirm deletes\", etc. and jump straight\n  to the control (~80 individually searchable entries).\n- Settings render as native sub-pages; the old custom tab bar and in-plugin search\n  box are gone. `minAppVersion` is now **1.13.0**.\n\n## Focus + navigation (0.95.3)\n- **Focus last Stashpad tab** and **Focus folder panel** commands bounce focus\n  between the side panels and your notes — layout-independent, bindable from\n  Obsidian's Hotkeys.\n\n## Folder deletes are safer (0.95.1–0.95.2)\n- Deleting a folder from the panel **closes its open tab(s)**, posts a persistent\n  notification, and offers **Undo** (the folder is moved to the vault trash and\n  can be restored in one click). Deletions from the file explorer notify too.\n\n## Fixes & polish (0.92.x–0.93.x)\n- **iPad / mobile icons** no longer collapse to zero width (blank nav and search\n  buttons), with a general fix to keep inline icons from being squeezed.\n- **File-explorer context menu:** \"Open folder in Stashpad\" on existing Stashpad\n  folders.\n- **Hotkeys:** a revert-to-default icon on each binding slot.\n- **Search scope:** an \"excluded Stashpad folders\" opt-in at the bottom of the\n  folder picker.\n- Keep a multi-selection when pressing Escape out of the composer.\n- Auto-detect synced/deployed builds and nudge for a reload without needing a\n  window refocus.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.95.4",
       "prerelease": false,
@@ -698,22 +922,26 @@
       "assets": [
         {
           "digest": "sha256:f0f03668f9551034285babe8e3c56d68c33a4489e9e1bc8b2039ce6df9a7d9e2",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 592635
         },
         {
           "digest": "sha256:c4c18c6a326e60eb3b60ad5957a8a9ef39b3f914f830c0176facc1822265ed26",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:690080d820dde151708e08efc1d6c8a8e7a5c6184ba4cb4a2fd441049a2309fe",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 124375
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.84.17 — Encrypted exports, loose-file import, persisted render cache\n\n## Encrypted `.stash` export / import (0.84.3, 0.84.13–0.84.17)\n`.stash` bundles can now be password-protected with **AES-256-GCM** and a\nstrong key derivation. Backward-compatible with unencrypted bundles.\n\n- **Encryption suite:** Argon2id KDF (falls back to PBKDF2 in environments\n  without Argon2), AES-256-GCM, authenticated header.\n- The KDF that produced a given file (Argon2id vs PBKDF2) is surfaced in\n  the export toast and import modal, so you know what's protecting it.\n- **Encrypted exports are tagged in the filename** with `-encrypted` and a\n  live preview during the export rename modal.\n- **Import is notification-first.** Dropping an encrypted bundle no longer\n  blocks the UI with a password modal — you get a toast that opens the\n  password prompt on click. The modal gains a **Remind me later** action\n  that reschedules the prompt instead of dismissing the bundle.\n- **Manual-import bookkeeping:** a manual import clears the\n  encrypted-waiting queue so \"Remind me later\" never resurfaces a bundle\n  you've already brought in.\n\n## Export rename modal (0.84.2)\n- A native-undo-aware rename step before the file is written. The default\n  name is prefilled and pre-selected so you can type a fresh name in one\n  go; standard `Cmd+Z` works inside the modal.\n\n## Loose-file + loose-folder import (0.84.1, 0.84.4, 0.84.5, 0.84.7–0.84.9)\nIteration on the import flow that landed in 0.79.\n\n- **Command:** **Import loose files in the current folder** — manual\n  counterpart to the auto-import watcher.\n- **Loose folders too.** Pasted subfolders are converted into nested note\n  trees, mirroring their on-disk structure (same shape as folder-drop in\n  0.79.6).\n- **Smarter folder import.** Reserved subfolders (`_archive`,\n  `_attachments`, `_authors`) merge into the existing destination instead\n  of being copied as nested notes. Existing note ids are preserved.\n- Fixed a regression where folder-import adoption seeded an archived id\n  as a collision (the kept-id case).\n- **Shared `importLooseInto` primitive** so rebootstrap and the new\n  command run identical logic.\n- **Loose-import sweep handles `.stash` bundles** (decrypt-aware), and\n  always skips `.edtz` at the top level *and* nested inside folder\n  imports. `NON_NOTE_EXTENSIONS` is centralized.\n\n## Auto-import a dropped `.stash` (0.84.10–0.84.12)\n- Dropping a `.stash` bundle into a Stashpad folder root now auto-imports\n  it, armed against the startup `create` storm.\n- **Retroactive sweep:** at startup + every 5 minutes, every Stashpad\n  folder is scanned for loose drops that arrived while Obsidian was\n  closed.\n- **Option C for encrypted bundles during a sweep:** rather than\n  interrupt the user with a modal, encrypted bundles defer to a\n  non-blocking snoozable toast so the rest of the sweep keeps going.\n\n## Performance (0.83)\n- **Skip recovery-link writes (setting).** Profiling showed `fmSync` (the\n  `parentLink` / `children` recovery fields) running ~628ms per move on\n  large vaults — pure overhead for users who don't rely on the recovery\n  fields. New **Write recovery navigation links** toggle (default on)\n  skips those writes entirely when off.\n- **Persisted render cache.** A new `RenderCacheStore` backs the\n  in-memory body-render cache with a single `render-cache.json` in the\n  plugin private dir. A cold open does one bulk read to repopulate\n  instead of re-rendering every visible body.\n\n## Internal (0.82.5–0.82.9)\n- `view.ts` split into five focused modules — `view-keys.ts`,\n  `view-helpers.ts`, `authorship-tracker.ts`, `view-dnd.ts`,\n  `note-body-renderer.ts`, `view-sort.ts`. No user-facing change, but\n  navigation around the codebase is much easier and the modules cache\n  better.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.84.17",
       "prerelease": false,
@@ -724,22 +952,26 @@
       "assets": [
         {
           "digest": "sha256:c7866f56aa3dceddcd21a65aa3b5650843f281a357bb2faf646658887d16e160",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 545422
         },
         {
           "digest": "sha256:31dca08a2dd95aa7f7a2a495266a10fdd355de074c4408be5711bd86724ae99b",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:c35897a94284f97ac2adfa473bc8d5c060abd2ffc4c534d3a30576640edaa2df",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 122937
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.82.4 — Faster big lists, import refinements, navigation polish\n\n## Performance: big lists load far faster (0.81–0.82)\n\nThe headline change. Opening a folder used to read and render *every*\nnote's body up front; on a large folder (or a network drive) that was the\ndominant cost.\n\n- **Lazy body rendering.** Rows now render their body only when they\n  scroll near the viewport. A cheap title placeholder shows instantly\n  (the title comes from the filename — no file read), and the full body\n  fills in on demand. Already-rendered rows still paint instantly from\n  cache. In practice this cut per-row read time ~40× and reads-per-open\n  from \"every note\" to \"roughly what's on screen.\"\n- **Look-ahead margin** pre-renders a screenful above/below so scrolling\n  and arrow-navigation rarely catch a placeholder mid-fill.\n- **Opt-in performance profiler.** A Diagnostics toggle records render /\n  read / write timing; the *Dump performance profile* command copies a\n  Markdown table you can inspect. Zero overhead when off.\n\n## Imports: safer defaults + fixes (0.79.16–0.79.21, 0.80.1, 0.80.5)\n\n- **Auto-import is now off by default.** Dropping files only imports\n  automatically once you enable it in settings. The *Import file(s) into\n  Stashpad…* command works either way — it writes the chosen files and\n  imports them directly, listing the current folder first.\n- **Attachments are embedded**, not just linked (`![[file]]`), so they\n  preview inline; the `attachments` frontmatter is stored as proper\n  internal links.\n- **Created/modified times are preserved** on import (falling back to the\n  file's own timestamps) instead of being stamped to the import time.\n- **Slow-drive + mobile fixes.** Stashpad no longer re-imports notes it\n  just created (a network-drive race that could re-home a note to Home),\n  and an editing/rename loop that could endlessly re-import a note on\n  mobile is fixed. Rebootstrap never bumps `created`/`modified` or adds\n  contributors. An archive-move conflict guard prevents losing an original.\n- `_archive` is excluded from the find / move / destination pickers (and\n  Obsidian's own search), so archived originals don't clutter results.\n- File-manager labels are platform-correct (\"Show in File Explorer\" on\n  Windows, \"Finder\" on macOS).\n\n## Navigation polish (0.80.2–0.80.4, 0.82.4)\n\n- **Jump to top / bottom** of the list — new commands with default\n  `Home` / `End` hotkeys (rebindable).\n- **Escaping the composer with ↑** returns to the last-focused note for\n  that level, not the bottommost.\n- **Going up a level (←/Backspace)** pins the note you came from to the\n  top of the parent list, so the next up/down moves relative to it.\n- The in-list **\"Nest under…\"** picker skips over the notes being moved\n  when you arrow through candidates.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.82.4",
       "prerelease": false,
@@ -750,22 +982,26 @@
       "assets": [
         {
           "digest": "sha256:914308824d8e02fbfdac17493bfa3b59b99fdfde45a4aeb266fc141f21187bb6",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 537357
         },
         {
           "digest": "sha256:87bddc810bcb39a430c8e762d53e7d4de5d25c94ac01b938e05d85d7e626f46a",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:c35897a94284f97ac2adfa473bc8d5c060abd2ffc4c534d3a30576640edaa2df",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 122937
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.79.15 — Task assignment + drop-to-import\n\n## Task assignment (0.78)\nAssign tasks to people from your author registry. Builds on the registry\nthat landed in 0.77.\n\n- **Assign from the due picker.** The Due-date picker now has an \"Assign\n  to\" section — removable assignee chips plus an autocomplete that\n  Sift-matches registry authors and accepts free entry (mints a new\n  author id). Frontmatter gains reserved `assignedTo` (array) and\n  `assignedBy` keys.\n- **Standalone Assign command** — assign or re-assign without touching\n  the due date. Available from the note context menu (**Assign to…**) and\n  the command palette (**Assign task to…**). Toggles `task` automatically\n  if the note isn't one yet.\n- **Tasks panel assignment filter.** New dropdown chip — Everyone /\n  Assigned to me / to others / by me / Unassigned — AND-combined with the\n  status filter. Filter chip is capped in width so it clears the panel's\n  scrollbar.\n- **Assignee chips on task rows.** First name when there's room, initials\n  when 3+ assignees fit; \"you\" chip is accent-highlighted. Mobile / narrow\n  panels render initials-only with the full name on hover.\n- Focus-ring clipping on the add-person input fixed.\n\n## Drop-to-import (0.79)\nDrop any file or folder into a Stashpad in the file explorer and Stashpad\nturns it into a note. Also a manual import command, log + dedup, and\nseveral feedback fixes.\n\n### File auto-import (0.79.1)\n- New `ImportService` watches files landing directly in a Stashpad\n  folder root.\n- **Markdown becomes a Stashpad note** — frontmatter is filled in and the\n  original is moved to `_archive/`.\n- **Other files move to `_attachments/`** and a new note is created\n  linking them (link in body + `attachments` frontmatter).\n\n### Folder auto-import (0.79.2, 0.79.6)\n- Dropping a folder rebuilds it as a **parent/child note tree** mirroring\n  the original structure: folder → parent note, subfolders → nested\n  parents, files → child notes (markdown cloned, non-markdown linking the\n  archived file).\n- The original folder is then moved to `_archive/`. Empty folders become\n  empty parent notes so the hierarchy stays intact.\n\n### Manual import command (0.79.4)\n- New **Import file(s) into Stashpad…** command. Opens a native file\n  picker (desktop + mobile) and copies the chosen files into the\n  destination folder, where the auto-import watcher takes over.\n- Multi-folder vaults get a chooser — your pinned/top Stashpad sorts\n  first.\n\n### Import log + duplicate handling (0.79.3, 0.79.7)\n- New append-only `import-log.jsonl` records every import.\n- Top-level dropped files are checked against the log by name + size; a\n  match opens an **ImportDupChoiceModal** with three options: **Import\n  anyway**, **Replace existing**, **Skip**.\n- **Replace** captures the prior import's notes from the log, trashes\n  them, then imports the new files — undoable, restores from captured\n  content.\n- New **Open import log** command opens the history viewer.\n\n### Rebootstrap sweeps loose files (0.79.5)\n- `rebootstrapAllFolders` sweeps any pre-existing loose files in a\n  Stashpad folder root (predating auto-import, not already notes, not\n  reserved subfolders) into notes the same way a drop would.\n- Gated on the `autoImport` setting; reports the count per folder.\n\n### Archive + search hygiene (0.79.10, 0.79.12, 0.79.13, 0.79.14)\n- Renamed `.archive` → `_archive`: Obsidian ignores dot-folders, so the\n  original archive sometimes failed to capture files. `_archive` is a\n  normal reserved folder; legacy `.archive` is still recognized for\n  ignore purposes.\n- Undo no longer re-triggers an import when restoring an archived\n  original (the file lands back in the Stashpad root from the trash).\n- Each folder's `_archive/` is registered with Obsidian's\n  `userIgnoreFilters` (add-only, idempotent) so native search, quick\n  switcher, graph, and link suggestions skip it.\n- Centralized `RESERVED_SUBFOLDER_NAMES` + `isArchivedPath` /\n  `isInReservedSubfolder` guards.\n- Link builder now covers all file types and re-excludes `.edtz`\n  (Templater encrypted files). New setting **Inherit Obsidian's excluded\n  files** (on by default) honors `userIgnoreFilters` in regex + path-prefix\n  forms for link surfaces too.\n\n### Startup safety (0.79.15)\n- Obsidian replays a `create` event for every existing file on load,\n  which used to trigger a bogus \"Import 100+ files?\" prompt on every\n  vault open. The importer is now armed ~2.5s after `onLayoutReady`, so\n  the startup replay is ignored.\n\n## Other (0.79.8, 0.79.9, 0.79.11)\n- **\"Hide notes without attachments\"** filter — per-folder toggle in the\n  filters/view popover. A parent stays visible while any descendant has\n  an attachment, so the attachment-bearing child remains reachable.\n- **Detail panel follows newly-created notes.** When sending a new note,\n  the panel now updates with the list selection instead of staying pinned\n  to the previous note.\n- **Persistent delete toast with Undo button** — single and multi delete.\n  The Undo button and the undo stack share one guarded restore closure so\n  clicking Undo and pressing `Mod+Z` both work, double-fires no-op, and\n  redo re-arms the guard.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.79.15",
       "prerelease": false,
@@ -776,22 +1012,26 @@
       "assets": [
         {
           "digest": "sha256:e47657718a5436a713306923bf8988532cdf20b14b9993eb17d2f863a4e87cc1",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 507200
         },
         {
           "digest": "sha256:eeeff2e03077dbed777c9fa2fe5ab785c40f47f767d1a269520476aee23469d7",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:9271ba3d71b915a45cb0f7015d08775ed563a85b687980c6e34875c85c3e8491",
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 119360
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.77.9 — Author registry + claim authorship\n\nA multi-step pass over Stashpad's authorship model. The headline is a new\n**author registry** that makes contributor/author data resilient to deleted\nstubs, plus a way to **retroactively claim** notes you wrote before setting\nyour author name.\n\n## Author registry (0.77.1–0.77.6)\nA rebuildable recovery cache + append-only rename history for every author\nthe vault has seen. Explicitly *not* a source of truth — the truth still\nlives in note frontmatter and `_authors/` stubs.\n\n- **`authors.json`** lives in the plugin private dir. Records the local\n  user on load + every settings save, plus any author seen on stamp\n  (`ensureAuthorFile`).\n- **Rebuild from a full vault scan.** New command **Rebuild author\n  registry** reconstructs `authors.json` by scanning author/contributor\n  wikilinks across every note's frontmatter (catches ids whose stub was\n  deleted) plus the existing `_authors/` stubs (authoritative for\n  name/role/department). `firstSeen` + rename history is preserved across\n  rebuilds.\n- **Restore missing author stubs.** New command **Restore missing author\n  stubs (from registry)** regenerates any deleted `_authors/<name>.md` in\n  every Stashpad folder from the registry's remembered name / role /\n  department. Never overwrites or duplicates an existing one (matched by\n  id).\n- **Settings UI.** New **Known authors (registry)** section in the\n  Authorship tab — Rebuild + Restore-missing-pages buttons and a list of\n  every recorded author with role / department, id, and rename history.\n  Presented as a recovery / audit tool, not a source of truth.\n- **Rebootstrap refreshes the registry.** `rebootstrapAllFolders` now\n  refreshes the registry cache from its scan (read-only w.r.t. notes —\n  only plugin-private `authors.json` is rewritten). Stub-file restoration\n  is deliberately not folded in: a missing page may have been deleted on\n  purpose.\n\n## Author stubs use Obsidian-native aliases (0.77.4)\n- Display name now lives in the stub's `aliases` array — so `[[Name]]`\n  resolves and the quick switcher finds the author — rather than a custom\n  `name` key.\n- `ensureAuthorFile` delegates to a single canonical writer\n  (`buildAuthorStub`). The legacy `name` key is read as a fallback so\n  existing stubs keep resolving, then migrated off on next refresh.\n\n## Auto-seed your own author page (0.77.7)\n- `seedLocalAuthorStub(folder)` creates *only* your own author page in any\n  folder that lacks it. No-op if your id already has a stub there.\n- Runs at new-folder creation and once at startup across existing folders\n  (deferred ~4s after `onLayoutReady` so discovery + dedupe see a settled\n  metadata cache).\n- Coworker pages stay lazy — they appear where they actually stamp — so\n  this stays an O(local user) cost instead of O(authors × folders).\n\n## Claim authorship retroactively (0.77.8–0.77.9)\nFor notes you wrote before setting an author name in Stashpad.\n\n- **Author-only variants** claim unowned notes (notes with no author set).\n- **\"+ contributor\" variants** also add you to `contributors` on already-\n  authored notes — original author is left untouched.\n- Two scopes: **selection** (current row + multi-selection) and **folder**\n  (confirms with a count first).\n- **Never overwrites an existing author.** Only fills blanks.\n- **Dedup:** already-yours notes are skipped; you're never set as both\n  author and contributor on the same note.\n- **Drops a redundant contributor entry** when you become the author of a\n  note you'd previously edited (author supersedes contributor), and\n  remembers that so undo restores it.\n- **Fully undoable.** Undo touches only the captured changed paths — never\n  paths that were skipped.",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.77.9",
       "prerelease": false,
@@ -802,22 +1042,26 @@
       "assets": [
         {
           "digest": "sha256:9da20f641372b5a4a1372c7933c622259178ea4ec8063faa47ef2f2832754a55",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 486066
         },
         {
           "digest": "sha256:2acf3309a53d5a3d184ababba0ebe409f057d489a7d7f681f61733e2547ee2c1",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:6fdeb372fa94e903709793499403eca4ba900bc3544135ed4e0f2f300582c6f1",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 116335
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.76.19 — Cross-folder send-without-switching, modal polish, open-in-Stashpad\n\n## Cross-folder destination (0.76.14–0.76.16)\n- **Composer content survives a destination pick.** Picking a cross-folder\n  destination used to clear `composerDraft` and load the destination\n  folder's draft, silently dropping whatever you'd already typed or pasted\n  (e.g. an embedded image link). The picker now captures the live composer\n  contents and carries them through.\n- **Send without leaving your spot.** Picking a parent in another Stashpad\n  no longer switches the view there. The next composer submit creates the\n  note in the destination folder remotely while you stay exactly where you\n  are.\n- **Persistent landed-notice with Jump.** The confirmation `\"<title>\"\n  landed in <folder>` sticks around (no auto-dismiss) and its **Jump**\n  action navigates to the freshly created note itself, not just its\n  parent.\n\n## Due-date picker polish (0.76.17)\n- Date and time inputs render with uppercase letters (month abbreviation,\n  AM/PM) for consistency with the icon-led layout.\n- Zeroed the `::-webkit-datetime-edit` leading padding so the value sits\n  flush against the icon — a leftover gap from the now-hidden native\n  picker indicator.\n\n## Compact confirm modals (0.76.18)\n- Delete / confirm / due-picker dialogs are just a line or two of content\n  plus buttons, but Obsidian was sizing them tall (lots of empty space,\n  worse on mobile). A shared `.stashpad-compact-modal` class now sizes\n  them to their content (`height: auto`, `min-height: 0`,\n  `max-width: ~440px`) with a `70vh` cap + scroll for safety.\n\n## \"Open this note in Stashpad\" command (0.76.19)\n- For when you've opened a Stashpad note in the normal Obsidian editor by\n  accident. The new command jumps to the same note inside Stashpad:\n  reuses an open Stashpad tab on that folder (reveal + navigate), else\n  opens a fresh tab on the folder.\n- `checkCallback`-gated to active Stashpad notes, so it stays\n  hidden/disabled otherwise.",
+      "downloadCount": 7,
       "draft": false,
       "name": "0.76.19",
       "prerelease": false,
@@ -828,22 +1072,26 @@
       "assets": [
         {
           "digest": "sha256:6fafb8c489c9282e9246527ac985d3e953192437a3f3ce1bd29457db5d8a4d45",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 483873
         },
         {
           "digest": "sha256:84ba5727462dbd50700a526ee21104f474ba9e47fb939f0e46c9f3c1836eb1b7",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:874faf8bcfcfe7feee98e53e7fb8512152ffa9fd1eee3294ff2efa81d82c773d",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 115396
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.76.13 — Right detail panel, Tasks panel v2, double-click to open\n\n## Right detail panel (0.74)\nA new right-sidebar `StashpadDetailView` that surfaces the currently-cursored\nnote from the active Stashpad. Counterpart to the left-side panels view\n(Pinned / Shared / Tasks) — left for navigation, right for current-row\ninspection.\n\n- **Body + metadata** rendered at the top, with the children list below.\n- **Outline expander** on every child row that has descendants — a count\n  badge (collapsed = muted, expanded = accent-tinted) drills the subtree\n  open inline. State persists per row.\n- **Inline composer** anchored to the bottom of the panel (always visible).\n  Submitting creates a *child* of the displayed note via the active view's\n  `createNoteUnder`, so the new note lands exactly where the panel implies.\n  `Shift+Enter` inserts a newline.\n- **Drag-reorder + full context menu** on every child row, both delegating\n  to existing view methods so behavior matches the main list.\n- **Stays pinned during background reorders** — the panel no longer re-locks\n  to the live cursor on every main-view render, so reordering children\n  doesn't yank the panel off the note you're working on.\n- **Fixed the \"two clicks needed\" bug** on first interaction — the panel\n  used to re-render on every `active-leaf-change`, including when it became\n  the active leaf, destroying the clicked element before the click event\n  delivered.\n\n## Tasks panel v2 (0.76)\n- **Task model:** `H` toggles a note as a task — adds the `task` frontmatter\n  tag and sets `completed: false` (an unfilled checkbox). `H` again strips\n  both. Legacy `task: true` / bare `completed` fields still count.\n- **`D` opens a due-date / due-time picker.** Date and time inputs are\n  constrained to 260px and stacked one per row, each with a leading icon\n  (calendar for date, clock for time). Native picker indicators on the\n  right are hidden — the leading icon opens the OS picker via `showPicker`.\n  Presets: Today / Tomorrow / Next week. Clear and Cancel actions.\n- **Status buckets:** Overdue / Due today / Upcoming / No date / Completed.\n- **Sub-filter pill bar** at the top with each bucket's count. `All` stacks\n  every non-empty section; the others filter to a single bucket and drop\n  the redundant in-list header. Active filter is remembered per session.\n- **`No date` chip** added as a dedicated filter.\n- **Filter chips** moved from pill to 6px rounded corners to match the\n  rectangular panel buttons above them.\n\n## Checkboxes on task rows (0.76.10–0.76.12)\n- A task note now shows a **clickable checkbox at the leftmost edge** of its\n  row — in the main list (new leading grid column on `.is-task` rows) and\n  in the detail panel's children outline. Clicking toggles `completed` in\n  place.\n- The checkbox fully swallows `mousedown` / `click` / `dblclick`, so\n  clicking it doesn't select the row, and a fast double-click toggles\n  instead of opening the note. The row's double-click-to-open handler\n  also explicitly skips the checkbox.\n- **Fixed:** completing a task in the main list and then creating another\n  note no longer strips the completed item's strikethrough / checkbox\n  styling.\n\n## Date display (0.76.6)\nTwo new General-tab settings:\n- **Date display format:** Locale short / long, ISO, US, EU.\n- **Display timezone:** any IANA name (blank = system), applied natively\n  via `Intl.DateTimeFormat`'s `timeZone` option — no extra dependency.\n\n## Double-click to open (0.75)\n- New General-tab setting **\"Double-click a note to open it\"** (on by\n  default). Double-clicking (or double-tapping on mobile) a list row\n  navigates into it — same as `ArrowRight` or the enter arrow. Single\n  click still just selects.\n\n## Performance (0.73.5–0.76.7)\n- **Viewport-driven lazy markdown rendering** for note bodies in big lists.\n  Rows beyond the fold defer their `cachedRead` + `MarkdownRenderer.run`\n  until an `IntersectionObserver` says they're near the viewport.\n- **Gated lazy render to lists > 60 notes** so small lists don't pop in one\n  frame after first paint.\n- **Shell rows for the lazy-body path** — offscreen rows used to start as\n  zero-height blanks; now they render a shell with the correct height so\n  scroll position is stable.\n- **Optimistic note creation:** new notes appear instantly without waiting\n  for the metadata cache.\n- **Cached row overflow measurement.** The \"multi-second render after\n  adding a note\" lag in 200+ child folders was 200 reflows interleaved with\n  DOM writes — each row's body ran an `rAF` reading `scrollHeight` /\n  `clientHeight` to decide the 2-line clamp. Now memoized.\n\n## Visual polish (0.76.13)\n- **Count badges are now square** (3px corner radius instead of 7px) in\n  both the Pinned panel and the detail panel's children outline. One shared\n  `renderCountBadge` helper drives both, so they stay in lockstep.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.76.13",
       "prerelease": false,
@@ -854,22 +1102,26 @@
       "assets": [
         {
           "digest": "sha256:4289e0235d538d48e6f98f129ef1ba9bf892d07cdd3d1ad802b2967f9b39865b",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 452797
         },
         {
           "digest": "sha256:fbacdd3b405e02a19fc8f8e1d161ede7e2d58f441c8244b525e89f8cee447aca",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:137b727d4a3581de40a5b0ab203cbda688183a62c25955d217c5682ac92f149f",
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 101811
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.73.4 — Notification polish, settings redesign, big-list performance\n\n## Notifications polish (0.72)\n- **Action buttons in toasts** now read correctly in both light and dark\n  themes — switched to `--interactive-normal` / `--interactive-hover` (the\n  previous hover state resolved to near-black on some light themes).\n- **Shorter action labels.** Toasts like `Jump to 'Family budget' parent`\n  collapse to `Jump to parent`. The destination context is already in the\n  toast body.\n- **Reveal opens the Files panel first.** Reveal used to scroll/highlight\n  inside a collapsed Files panel — invisible, requiring a second click after\n  manually opening Files. Now Stashpad reveals the file-explorer leaf and\n  then calls `revealInFolder`, so the result is visible on first click.\n\n## Multiplayer-safety fixes (0.72)\n- **Lengthened contribution-stamp debounce, and skipped entirely when an\n  editor is active.** In a multiplayer-on-network-drive scenario the\n  client's `processFrontMatter` was racing with another user's open editor\n  on the same note, occasionally eating a few of their typed characters.\n- **Park contribution stamps when another client just wrote.** A new\n  external-modify classifier distinguishes our own `vault.modify` events\n  from another client's. Within a 1.5s grace window after an external write,\n  our own contribution stamps wait so they don't clobber the other writer.\n\n## Stashpad-wide quality of life (0.72)\n- **`.md` drops in `_imports` auto-adopt.** Mirrors what `.stash` drops\n  already did. The file is renamed up into the Stashpad root\n  (de-duplicating the basename with `-1` / `-2` on collision) and gets the\n  standard orphan-frontmatter backfill (`id`, `parent`, `created`,\n  `attachments`).\n- **Optional auto-navigate after move.** Two new settings, both off by\n  default:\n  - `autoNavOnMoveIn`: after moving via the in-list move picker, drill into\n    the destination so you follow the note.\n  - `autoNavOnMoveOut`: after outdent, the cross-parent picker, or \"Move to\n    Home\" from the context menu, drill into the destination.\n\n## Settings redesign (0.73.0–0.73.2)\n- **Tabbed settings UI.** The single tall scroll is now six tabs: General /\n  Diagnostics / Authorship / Templates / JD Index / Hotkeys.\n- **Full-text search** at the top of the settings tab. When the box is\n  populated, the body switches to \"all sections grouped by tab heading\"\n  mode and filters out non-matching items. Clearing the query reverts to\n  the single-active-tab view.\n- All 39 inventory items were cross-walked and confirmed present in the\n  new layout — nothing was lost in the move.\n\n## Composer link autocomplete (0.73.3)\n- `[[…]]` autocomplete now includes all file types — images, PDFs, audio,\n  and other attachments — not just markdown notes. Markdown notes still\n  insert as `[[Title]]` (basename, no extension); other files insert with\n  their extension. `.edtz` (Encrypted Templater) files are excluded.\n\n## Big-list performance (0.73.4)\n- **Skip the full render on arrow-key nav and plain row clicks.** Each\n  cursor move on a 200+ note folder used to call `render()`, tearing down\n  and rebuilding every row (markdown hydrate, drag handlers,\n  authorship-footer reads, etc.) just to flip two CSS classes — measured at\n  100–300ms per keystroke on a cold cache.\n- New `repaintSelectionClasses()` walks the existing row DOM and updates\n  the selection classes in place, leaving everything else untouched.",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.73.4",
       "prerelease": false,
@@ -880,22 +1132,26 @@
       "assets": [
         {
           "digest": "sha256:77354f3583794b280529537943f23c9d7760163e96e86a800c383d9def209a4c",
+          "downloadCount": 5,
           "name": "main.js",
           "size": 441391
         },
         {
           "digest": "sha256:2ea912fc395caad8efd1437911a14f7397ab2719e7dc910f050bb4f0efc661fe",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:004a778e8352903c4b2f4ac00e8672325e676f77225690ef71c346a8341ddec7",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 97424
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.71.20 — Mobile polish + view-mode icon cleanup\n\n## Mobile (0.71.16)\n- **Search modal:** filter-chip row is skipped on mobile, where the chips +\n  When-builder were eating too much vertical space. The typed `in:` /\n  `when:` syntax still works in the input.\n- **View-mode buttons:** tiny-mode + open-in-new-window buttons are hidden\n  on mobile (neither works there). The lone Compact button shrinks to 28x28\n  to match the other mobile pill heights.\n\n## View-mode icons (0.71.16 – 0.71.20)\n- Compact button's icon swaps to `maximize-2` while compact mode is active,\n  so the affordance reads as \"exit / expand\" rather than the static \"enter\"\n  glyph. All four call sites flipped (initial fix in 0.71.16, follow-ups\n  through 0.71.18).\n- The \"exit compact\" icon then changed from `maximize-2` to `panel-top`\n  (0.71.19) — the diagonal-arrows look was visually too similar to the\n  tiny-mode exit glyph, and `panel-top` evokes \"restore the top panel I\n  hid,\" which is semantically closer to what exit-compact does.\n- The \"exit tiny mode\" button's `⤢` unicode glyph was replaced with the\n  lucide `maximize-2` icon (0.71.20), with proper flex centering + SVG\n  sizing on `.stashpad-tiny-expand` so it renders correctly inside the\n  icon-only button.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.71.20",
       "prerelease": false,
@@ -906,22 +1162,26 @@
       "assets": [
         {
           "digest": "sha256:9e75e0f9c78c938d2828e49bb0fb990b3ea9396639e37b803b65c72bb3d59f65",
+          "downloadCount": 9,
           "name": "main.js",
           "size": 441229
         },
         {
           "digest": "sha256:09fccc7aa7a049cb671fd0e199bdb3336acf029626bf44a2da9ffebb7dbeb137",
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:2a8a144502564dee19d193a3d213db8f83a4b8aca0e59d4790d3c5d159d4125d",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 96697
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.71.15 — Focused-header body capped at ~3 lines\n\nAfter the JD index Preview overwrites a home note with a full hierarchy, the\nfocused-header strip was eating up to half the viewport.\n\n- `.stashpad-focused-body` is now capped at roughly three lines tall\n  (`max-height: calc(var(--font-text-size) * 1.5 * 3)`) with `overflow-y:\n  auto`. The header stays compact and scrolls internally instead of pushing\n  the note list down.",
+      "downloadCount": 9,
       "draft": false,
       "name": "0.71.15",
       "prerelease": false,
@@ -932,22 +1192,26 @@
       "assets": [
         {
           "digest": "sha256:9e75e0f9c78c938d2828e49bb0fb990b3ea9396639e37b803b65c72bb3d59f65",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 441229
         },
         {
           "digest": "sha256:f8e04d6ab2ef2336d568b31b784221b4dafb74297e093c4e8f4eb87494ff8b8c",
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:1ffc6efda9debc7ceb7c6af3c272608b62bbd1ed1b8f7b76f208ff2d2c3200c9",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 96355
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.71.14 — JD Index Builder: area + folder support\n\nImprovements to the JD Index Builder introduced in 0.71.\n\n- **Range-area prefixes** like `10-19 Life Admin` now match the strict\n  regex and slot into the hierarchy as proper areas.\n- **Folder-only entries** are picked up. The scan walks folders as well as\n  files, so JD areas / categories that exist only as folder containers\n  (`10-19 Life Admin/`, `11 Me & My Family/`) show up in the index even\n  when they have no matching note file. Folder rows render as plain text\n  tagged `_(folder)_`; file rows stay as wikilinks.\n- **Hierarchy resolution upgraded.** Categories nest under their containing\n  area by numeric range `[lo, hi]`; IDs continue to use the dotted-parent\n  rule. Synthetic ranges aren't auto-created — an empty `10-19` won't\n  materialize a row.\n- **Build creates Stashpad notes for folders too**, link-less and treated\n  like synthetic parents, so the tree stays well-formed.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.71.14",
       "prerelease": false,
@@ -958,22 +1222,26 @@
       "assets": [
         {
           "digest": "sha256:173369ee0233c54ba3c070673c5fcf203362f0b0e2c2ca22dfe668849dea274f",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 439834
         },
         {
           "digest": "sha256:8cfdde0717359fbb7d8c1b6932b255c714bdc80fb37cd057412e28e3973e4f3d",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:1ffc6efda9debc7ceb7c6af3c272608b62bbd1ed1b8f7b76f208ff2d2c3200c9",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 96355
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.71.13 — Shared panel + JD Index Builder\n\n## Shared panel (0.70)\n- New **Shared** panel in the panels view, alongside Pinned Notes.\n- Surfaces notes where (a) the note has at least one contributor, or\n  (b) the user authored the folder's home note but someone else wrote the\n  note in question.\n- Filter chips: All / Mine / Others / per-author dropdown (shown when 2+\n  authors are present), plus a \"Has contributors\" toggle.\n- Rows show title + folder badge + an author/contributor byline. Sorted\n  newest-first by modified time.\n\n## JD Index Builder (0.71)\nA new settings section that walks notes whose basenames start with a dotted\nprefix (pure Johnny.Decimal `11.01 X` or any alphanumeric scheme like\n`animal.duck.yellow X`) and generates a nested index.\n\n- **Scope:** whole vault or a single folder.\n- **Output:** by default writes `Index.md` in the chosen index folder.\n- Non-matching notes are listed at the bottom of the generated index so\n  nothing is silently dropped.\n- Numeric-aware sort: `10` comes after `9`.\n- Settings UI: Scope / Scope folder / Index folder / Index filename inputs,\n  plus Build / Reveal in Finder / Open index buttons.\n- Command palette: **Build / Rebuild JD index**.\n\n### Preview mode\n- The Preview command overwrites the designated Stashpad folder's HOME note\n  body with the rendered index — frontmatter is preserved, everything below\n  the closing `---` is replaced.\n- Body is just the link list: no heading, no \"(preview)\" wording, no extras.\n- When zero notes match, the preview body is a single-line hint explaining\n  the most common cause (Stashpad-folder exclusion swallowing the source) so\n  you know where to toggle in settings.\n- \"No home\" error path when the designated folder isn't actually a Stashpad\n  yet — open it in Stashpad first to bootstrap the home note.\n\n### Confirmation modal\n- **Build** now routes through a real Modal (not native `confirm`) so the\n  dialog can offer a \"Run preview first\" button that fires the lightweight\n  single-file preview inline.\n- Three states: first-ever build leads with \"Try Preview\" + heavy-build\n  wording; builds creating >50 notes get the sterner large-build wording;\n  experienced subsequent builds get a terse confirm.\n- Folder name (inside the quotes) and the literal `jdPrefix` token render\n  in monospace.\n\n### Notifications\n- Preview-success Notice persists until user action — inline **Open** button\n  jumps to the freshly-updated home note; **Dismiss** closes it. Wired into\n  all three call sites (settings button, command palette, build-confirm\n  modal).\n\n### Heading + bullet rendering\n- Section titles are H1: `# Indexed`, `# Non-indexed`, `# Excluded folders`.\n- Bullet items carry a `#`-count prefix matching their nesting depth —\n  depth 0 = `- #`, depth 1 = `- ##`, capped at six (`######`). Synthetic\n  parents and excluded-folder rows follow the same shape.\n\n### Fixes\n- Rebuild no longer wipes frontmatter. Previously `vault.modify(existing,\n  body)` replaced the entire file with just the body, then a partial\n  `processFrontMatter` call added back only `jdPrefix` + `parent` — wiping\n  `id`, `created`, and `attachments`. Re-running **Build** will repair any\n  notes already corrupted by the pre-0.71.9 bug.\n\n## Folder-path autocomplete (0.71.1)\n- New `FolderSuggest` helper (extends Obsidian's `AbstractInputSuggest`)\n  dropdown-completes vault folder paths in settings text inputs, matching\n  the affordance Obsidian uses in Files & Links.\n- Wired into the Stashpad notes folder, JD scope folder, and JD index folder\n  inputs.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.71.13",
       "prerelease": false,
@@ -984,22 +1252,26 @@
       "assets": [
         {
           "digest": "sha256:d027c9fa7b67712ad831178a4f6bea43a283be55cee142f99005f36d2592725f",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 416789
         },
         {
           "digest": "sha256:92fa4bae3994fe432fe0f57431052e3ed5c94cdeb84aee22f338fedbab22b0eb",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:e5b928128c2570069e5fa7988c626828f3448920b689919598281447911cab8f",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 94963
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.69.45 — Search modal fixes\n\n## Search modal\n- **Enter on highlighted result now picks reliably.** The previous handler\n  chain wasn't actually firing SuggestModal's Enter handler; the chip handler\n  now explicitly calls `selectActiveSuggestion` in its non-chip branch.\n  (0.69.44)\n- **Folder-picker Escape restores focus to the search input.** After closing\n  a sub-picker spawned from the search modal, the re-opened modal now\n  receives keyboard focus instead of leaving it on whatever Obsidian's\n  modal-stack happened to restore to. (0.69.45)\n- **`on: <time>` filters narrow to ±60s** around the specified moment instead\n  of degenerating to the full day. `on: 9:45pm` used to return every note\n  from today because the time component was dropped; now a 2-minute window\n  applies when a time is present, falling back to the day window when only a\n  date is given. (0.69.45)",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.69.45",
       "prerelease": false,
@@ -1010,22 +1282,26 @@
       "assets": [
         {
           "digest": "sha256:60721650b32ecbac188286bf91aa9a3fbe013b1dcad6469984beb7aa8b3feacd",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 416540
         },
         {
           "digest": "sha256:327e6febf8372f4ffbf8a04328a261fe7fcd38f3f33debcbfd0eea2c7b99dfcb",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:e5b928128c2570069e5fa7988c626828f3448920b689919598281447911cab8f",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 94963
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.69.43 — Search overhaul, sidebar panels, \"When\" filter builder\n\nA chat-style nested-notes view for Obsidian: rapid capture, outliner navigation,\nin-place editing. Local-only, no external services.\n\n## Sidebar panels + Pinned Notes (0.68)\n\n- New sidebar panels view; first panel is **Pinned Notes** (MRU targeting,\n  drag-reorder, `P` keybind, strike-through on completed rows).\n- Search promoted to a panel-independent global actions row above the master\n  button bar; an icon-only Search button also lives in the Stashpad header\n  between the folder switcher and tags dropdown.\n\n## Search modal overhaul (0.69)\n\n- Multiple matches in a long note surface as separate clustered result rows\n  with ±2-line preview context (capped at 5 clusters per note).\n- Local-folder badge on every note row; N folder-open entries collapse into a\n  single \"Open folder in a new tab…\" sub-picker.\n- Breadcrumb path line under the parent blurb (local + cross-folder).\n- Query-token highlighting in titles, previews, and parent blurbs.\n- `in:` now spans every searchable Stashpad folder, matching the parity of the\n  time filters.\n- **Create-from-search:** when no results match, a \"Create new: <query>\" row\n  appears. Picking it opens a destination picker across all Stashpad folders\n  and spawns a new tab on the picked parent.\n- Re-pressing the search keybind while the modal is open focuses + selects-all\n  in the search input (instead of stacking a second modal).\n- Tab is focus-trapped inside the modal (wraps instead of escaping to Obsidian).\n\n## \"When\" filter builder (0.69)\n\n- Unified `before:` / `on:` / `after:` into a single **When** chip with\n  Before / On / After / Between mode tabs.\n- **Day picker:** Today / Yesterday + Mon–Sun row; weekday names in the END\n  slot of Between mode resolve to the next future occurrence.\n- **Timeframe picker:** preset chips (Last 7d / 30d / This week / This month)\n  plus a \"Last N units\" stepper. When used with `on:`, relative durations are\n  converted to a concrete `YYYY-MM-DD`.\n- **Custom time picker:** HH/MM fields, AM/PM toggle, 3×4 numpad, Tab cycling,\n  24h support.\n- Keyboard polish: Enter/Escape stay inside the builder; popover keys don't\n  leak to the result list; unhandled keys fall through to the rest of\n  Obsidian's keymap.\n\n## Composer undo (0.69)\n\n- `Mod+Z` / `Mod+Shift+Z` in the composer now reliably triggers the textarea's\n  native undo / redo. Previously could accidentally undo the prior Stashpad\n  action when the textarea was empty.\n- Stashpad's own undo still works from the note list — blur the composer\n  (`Esc`) first.\n- **Known issue:** `Mod+Backspace` (delete-to-line-start) in the composer is\n  not yet undoable. `Opt+Backspace` (delete-word) is undoable.\n\n## \"Ouroboros\" — swap with parent (0.63)\n\n- Swap a note with its parent — with cycle guard, descendant-move recovery,\n  and a \"Confirm Note Swap\" modal.\n- Siblings travel with the swap; undo is cycle-safe.\n- Multi-select: mod-click fully deselects; shift-arrow trims the range.\n\n## Advanced search filters (0.64)\n\n- New `in:` / `before:` / `after:` / `on:` filters with a clickable chip row.\n- Multi-word filter values; bracketed values\n  (`in: [copy stashpad features]`); date filters accept an optional\n  time-of-day suffix.\n- `in:` matches \"inside the subtree of a note matching this title.\"\n- Folder-open results are downranked when a filter is active.\n- Smart bracket pairing in the search input: auto-insert closing `]`,\n  pair-delete on backspace.\n\n## Unified folder picker (0.65)\n\n- One picker handles reveal / open / switch-current / create.\n- \"Open in another new tab\" pinned to the bottom.\n- Create always opens in a new tab; can convert existing non-Stashpad folders.\n\n## In-Stashpad navigation (0.66 + 0.67)\n\n- Back / forward buttons in the breadcrumb and the tiny header.\n- Per-tab history covers folder switches (not just tree-up); persists across\n  reloads; back falls through to navigate-up at the root.\n- Tiny header's folder/title is itself a folder-picker button.\n- `Mod+S` is the default keybind for the unified folder picker.\n- `cloneSubtree` snapshots children before insert and refuses same/descendant\n  targets.\n\n## Other fixes\n\n- Color filter menu no longer crashes on open (TDZ fix).\n- Breadcrumb infinite loop on cyclic ancestor chains fixed (visited-id Set).\n- Sub-picker close no longer dismisses the parent search modal.\n- Perf pass: dropped `:has()` selectors, lazy anchor capture, removed a\n  spurious composer retry path.\n\n## Install\n\nCompatible with Obsidian 1.7+. Install via BRAT from this repo, or copy\n`main.js`, `manifest.json`, and `styles.css` into a folder under your vault's\n`.obsidian/plugins/`.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.69.43",
       "prerelease": false,
@@ -1036,22 +1312,26 @@
       "assets": [
         {
           "digest": "sha256:e26acad9069006607e159a555f58156750d1500f799fccb81e644c5c628535d6",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 373339
         },
         {
           "digest": "sha256:d46119e677f98e169e76cbd9cb7ca718c928c2f54570a6dbaad5b52a3bc96822",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:6171819a6a9f356f8d51a256d0a63e745b785d19f289d3f033b8a10f2a027f42",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 75650
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes since 0.60.0\r\n\r\n- 0.62.4: tiny mode, improved ribbon menu button, copy-codeblock keybind\r\n\r\n# 0.62.4 — Tiny Mode, ribbon menu button, copy-codeblock keybind\r\n\r\n## Ribbon icon (0.62.0–0.62.3)\r\n- Clicking the ribbon button now opens a searchable folder picker showing\r\n  every Stashpad in the vault — leaves, folders, and a \"Switch folder…\"\r\n  entry — instead of jumping to whichever tab happened to be open.\r\n- The \"Open Stashpad in new tab\" command also shows the picker on\r\n  multi-folder vaults.\r\n\r\n## Tiny Mode + view modes (0.61)\r\n- **Tiny mode** — pop the current Stashpad out into a small always-visible\r\n  window with a minimal shell. Three view-mode buttons (Normal / Compact /\r\n  Tiny) live in the header.\r\n- Compact rules apply to Tiny too; composer narrows below a 700px threshold;\r\n  rail collapses on wide→narrow transitions.\r\n- Tiny window restores via `setBounds`; plugin stylesheet is injected into\r\n  popout windows on open so styles work in detached windows.\r\n- Sticky toggle no longer resizes the window.\r\n\r\n## Codeblock copy + Notification history\r\n- New default keybind (`{`) to copy code from a fenced code block under the\r\n  cursor.\r\n- Notification history is now reachable from the actions menu; the log\r\n  section moved to the top of settings.",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.62.4",
       "prerelease": false,
@@ -1062,22 +1342,26 @@
       "assets": [
         {
           "digest": "sha256:d1a55cccec75a459b60bda30ba70afa65954169235b8e38b3a212d6a29391399",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 361937
         },
         {
           "digest": "sha256:91a23854436432be073a114eb144535285229e93f5d816076a0419088574c9c8",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:6819bdf6fe62a5e63ce02b9bdfcd56092ab02724708654d7b304734f266a214d",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 68230
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes since 0.58.2\r\n\r\n- 0.60.0: ribbon icon — context menu with leaves + folders + folder picker\r\n- Update GitHub actions workflow to autotag and release upon commit\r\n\r\n# 0.60.0 — Ribbon menu + small-features batch\r\n\r\n## Ribbon icon\r\n- Ribbon click now opens a context menu listing every Stashpad — leaves,\r\n  folders, and a folder picker — instead of jumping to whichever tab happened\r\n  to be open.\r\n\r\n## Small-features batch (0.59)\r\n- Catch-all fixes: typo, slug, capitalization, select-all, export fixes,\r\n  jump-to-parent across folders, breadcrumb count, color undo.\r\n- Keybind input: wider field with a \"Use both\" override; true auto-resize;\r\n  cancel-restores-prior; dead-key starters (`Option+E` etc.) are now bindable.\r\n- Title-case folder labels in the switch-folder picker.\r\n- Scroll: the `preserve` policy sticks to the bottom when at bottom;\r\n  `scrollListToBottom` uses a settle watchdog for at-bottom mutations.",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.60.0",
       "prerelease": false,
@@ -1088,22 +1372,26 @@
       "assets": [
         {
           "digest": "sha256:ff68f219a73895662db677ba2e41f3dec28415343c5ff69ab8752d821b97e6fe",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 358304
         },
         {
           "digest": "sha256:f52ff7c4b61d9a212da261c5c68164b07b5d41f5649e4fc4913e55861ba13fae",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:55580a98ed8874b503f9c53ff999719673e6e46df8fa8dfe69838c90f9664b4e",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 67442
         }
       ],
       "author": "grub-basket",
       "description": "- Added more notifications, with links.\r\n- Scroll position is based on last selected note. \r\n- Search refinements across all modals, similar to the internal link selector search.\r\n- Small improvements and bug fixes.\r\n\r\n# 0.58.2 — NotificationService, ScrollPolicy, picker unification\r\n\r\n## Frontmatter recovery layer (0.54)\r\n- Redundant `parentLink` + `children` frontmatter so a note can be navigated\r\n  up/down even if Stashpad's index breaks.\r\n- Home notes renamed to `Home-<folder>.md` with bootstrap-time backfill.\r\n- Rebootstrap button also backfills frontmatter; quiet when already in sync.\r\n\r\n## NotificationService (0.55) — the headline feature\r\n- Centralized notification infrastructure.\r\n- Verbose notifications for delete / move / merge / clone / reorder.\r\n- Persistent history modal + settings entry + command.\r\n- Per-category mute settings UI; multiplayer (cross-author) filters in the\r\n  history modal.\r\n- Bulk actions show bulleted summaries; toast CSS polish; multi-line errors;\r\n  clear-history confirm.\r\n- Frontmatter sync: silent success, persistent toast on failure only; live\r\n  notice for sustained queue activity.\r\n- Import error toasts get Reveal / Show actions; per-attachment delete toasts\r\n  route through the service.\r\n\r\n## ScrollPolicy + cursor restore (0.56)\r\n- New `ScrollPolicy` type wired through `render()`; `preserve` is the default —\r\n  kills the post-action bouncing.\r\n- Anchor-row preservation (not pixels); follow-cursor on keyboard reorder;\r\n  smart post-delete selection; nest picker selects the new parent; undo of\r\n  nest highlights the un-nested note.\r\n- Last cursor row persists across reloads via localStorage; restored by id.\r\n\r\n## Picker unification (0.57)\r\n- Token-order-agnostic matching in the suggest picker + folder picker.\r\n- Folder picker = Stashpad-only; destination + move pickers = cross-folder +\r\n  roots.\r\n- Find modal → pick a Stashpad folder → opens in a new tab; spawned tab\r\n  returns focus to origin on close.\r\n\r\n## Context-menu polish (0.58)\r\n- Context-menu toggle complete; rebootstrap renames stale slugs and refreshes\r\n  the command palette.\r\n- Icons for \"Move to\" / \"Move to Home.\"\r\n- Notify on no-op moves (already at destination, or into self).",
+      "downloadCount": 6,
       "draft": false,
       "name": "0.58.2",
       "prerelease": false,
@@ -1114,22 +1402,26 @@
       "assets": [
         {
           "digest": "sha256:78031a2b0d833ea025311e4b344b985131473f2ae32ac802f68869d525f2f275",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 319079
         },
         {
           "digest": "sha256:9fef11f313ffd9767302b293de9e85b526702df049b3f7698012a98d02ecbe8e",
+          "downloadCount": 29,
           "name": "manifest.json",
           "size": 248
         },
         {
           "digest": "sha256:1a8f894ced6d4eaeec618d4e5696d43428610a24e44f885b06463d727b8084a8",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 62865
         }
       ],
       "author": "grub-basket",
       "description": "- Add flat view.\r\n- Fix scrolling issue.\r\n- Add database caching and better scoping to improve performance on large vaults.\r\n- Accordion menu for mobile.\r\n\r\n# 0.53.20 — Multiplayer authorship, per-parent sort, scroll-to-bottom\r\n\r\n- **Multiplayer authorship** (0.51.11): author / contributor stamping, footer\r\n  row in the view, log author column. Per-user identity stored in settings;\r\n  author stub files live under `_authors/`.\r\n- **Per-parent sort dropdown** (0.52.0): sort each parent's children\r\n  independently; drag reverts that parent to manual mode.\r\n- **Robust scroll-to-bottom** (0.53.x): adaptive scroll that survives slow\r\n  markdown render on Obsidian reload — per-row ResizeObserver, sticky observer\r\n  for the at-bottom branch, watchdog `requestAnimationFrame` polling for up to\r\n  30s. `stickToListBottom` short-circuits the geometric check.",
+      "downloadCount": 6,
       "draft": false,
       "name": "0.53.20",
       "prerelease": false,
@@ -1140,22 +1432,26 @@
       "assets": [
         {
           "digest": "sha256:4ee2ccb96c3e9bed5f6dd12f032b9d6511f88f414e501e173df9cb2f6708ddd4",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 298146
         },
         {
           "digest": "sha256:6e70dbb97e25fdea66371ba5ba9b25ba26ebc1000534e412b3ac7c2e71da8457",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:694d47132a07fcd26c0a929a231d125a178d3ae01ad9971dfb32921a00e06d10",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 52659
         }
       ],
       "author": "grub-basket",
       "description": "Manual Sort + Predefined Sorts.\r\nDragging a note will switch back to Manual and override the previous manual sort order.\r\nOrder persists per-parent.\r\nUndo/redo should work.\r\n\r\n# 0.52.0 — Per-parent sort\r\n\r\n## Per-parent sort dropdown\r\n- Each parent in the tree gets its own sort mode (date created / modified /\r\n  manual / alphabetical / …).\r\n- Dragging a child of an auto-sorted parent reverts that parent to manual\r\n  mode, so a manual reorder always wins without nuking the rest of the tree.",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.52.0 - Reorder Notes",
       "prerelease": false,
@@ -1166,22 +1462,26 @@
       "assets": [
         {
           "digest": "sha256:4ee2ccb96c3e9bed5f6dd12f032b9d6511f88f414e501e173df9cb2f6708ddd4",
+          "downloadCount": 0,
           "name": "main.js",
           "size": 298146
         },
         {
           "digest": "sha256:6e70dbb97e25fdea66371ba5ba9b25ba26ebc1000534e412b3ac7c2e71da8457",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 247
         },
         {
           "digest": "sha256:694d47132a07fcd26c0a929a231d125a178d3ae01ad9971dfb32921a00e06d10",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 52659
         }
       ],
       "author": "grub-basket",
       "description": "Public preview.\r\n\r\n# Note\r\nThis is redundant, like the other logs, but has everything from the first commit. \r\n\r\n# 0.51.11 — Multiplayer authorship\r\n\r\nFirst public release. Stashpad is a chat-style nested-notes view for\r\nObsidian: rapid capture, outliner navigation, in-place editing. Local-only,\r\nno external services.\r\n\r\n## Multiplayer authorship (the headline feature)\r\n- Per-user identity in settings: name, role, department.\r\n- `_authors/` reserved folder with auto-generated stub file per identity;\r\n  bidirectional sync between the settings name and the stub.\r\n- Author stamped on every new note; contributor list tracks who else has\r\n  edited it (debounced until edits settle).\r\n- Footer row on each note shows author / contributors / last-edit, with\r\n  per-folder \"you've worked in\" links.\r\n- Log gains an Author column so multi-user activity is auditable.\r\n\r\n## Other 0.51.x changes\r\n- Keybind/command parity audit (0.50.0): every Stashpad command is now\r\n  bindable from the command palette.\r\n- Clone-the-current-tab command (0.51.11).\r\n- Split delete-confirm setting + frontmatter-attachment fallback (0.51.12,\r\n  0.51.13).\r\n\r\n## Install\r\nCompatible with Obsidian 1.7+. Install via BRAT from this repo, or copy\r\n`main.js`, `manifest.json`, and `styles.css` into a folder under your vault's\r\n`.obsidian/plugins/`.\r\n\r\n# 0.51.11 — First public release\r\n\r\nStashpad is a chat-style nested-notes view for Obsidian: rapid capture,\r\noutliner navigation, in-place editing. Local-only, no external services.\r\n\r\nThis release captures everything from the project's genesis through 0.51.11.\r\n\r\n---\r\n\r\n## The composer + capture loop\r\n- Chat-style composer with autofocus-after-send (setting).\r\n- Per-folder drafts that survive reload, tab restore, and folder switches;\r\n  cross-tab draft sync; debounced per-keystroke saves so live typing isn't\r\n  clobbered.\r\n- Composer autocomplete for tags (`#`) and wikilinks (`[[`) with\r\n  order-independent token matching; focus and caret preserved across renders.\r\n- Drag-and-drop or paste files into the composer (0.48).\r\n- Split a note at the cursor line via modal (0.37); the second half inherits\r\n  the source's creation timestamp `+1ms`.\r\n\r\n## The outliner / list\r\n- Note reordering via keyboard (0.16) and full drag-and-drop with hover grip,\r\n  cross-parent drag (with confirm), drop-to-nest, animated drop indicator,\r\n  toasts on reparent (0.17).\r\n- Outdent (`Mod+[`) re-parents the selection to its grandparent (0.23).\r\n- Arrow-wrap at list edges; click a link to open the target; tab focus\r\n  returns to the originating Stashpad when an Edit-in-Tab closes (0.19, 0.29).\r\n- Copy-as-outline of a selection (0.19).\r\n- Per-note color coding: swatch + border + child arrow; preset grid +\r\n  custom-color submenu; per-Stashpad color aliases (0.24, 0.46).\r\n- \"Adopt\" outside notes into a Stashpad via the command palette; auto-rename\r\n  to `<basename>-<id>.md`; auto-fix orphan parents on create / rename into a\r\n  Stashpad (0.22, 0.34).\r\n- Cross-Stashpad search and move (0.32); cross-Stashpad results tier below\r\n  locals in the search modal (0.31).\r\n\r\n## Undo / redo\r\n- Undo/redo for note creation (with text restored to the input box),\r\n  deletion (immediate), draft deletion, reorder, reparent, color, and more.\r\n\r\n## Filters + search\r\n- Time filter (Today / Week / Month / Year / All) with a calendar/rolling\r\n  toggle, mode-aware labels, persisted across reloads (0.22, 0.42).\r\n- Tag filter dropdown — subtree-scoped, immediate-children counts, clears on\r\n  navigation (0.41).\r\n- Color filter dropdown with per-Stashpad aliases (0.45, 0.46).\r\n- Search/pick rows show body on top with parent body below (0.30).\r\n- In-list picker preserves scroll, pre-selects above the cursor; Esc\r\n  cancels and keeps scroll pinned at bottom (0.20, 0.21).\r\n\r\n## Multiplayer authorship (the 0.51.x headline)\r\n- Per-user identity in settings: name, role, department.\r\n- `_authors/` reserved folder with an auto-generated stub file per identity;\r\n  bidirectional sync between the settings name and the stub.\r\n- Author stamped on every new note; contributor list tracks who else has\r\n  edited it (debounced until edits settle).\r\n- Footer row on each note: author / contributors / last-edit, with\r\n  per-folder \"you've worked in\" links.\r\n- Log gains an Author column so multi-user activity is auditable.\r\n\r\n## Keybindings + commands\r\n- Unified per-command bindings: two slots per command + active-slot toggle +\r\n  in-app recorder (0.26).\r\n- Keybind/command parity audit (0.50): every Stashpad command is now\r\n  bindable from the command palette.\r\n- Clone-the-current-tab command (0.51.11).\r\n- `Mod` hint shown as `(Cmd/Ctrl)` for cross-platform clarity.\r\n\r\n## Mobile\r\n- A multi-pass mobile redesign (0.36): lift composer above the keyboard,\r\n  hide Obsidian's mobile toolbar over Stashpad, floating composer rail,\r\n  select-mode toggle + `⋯` actions menu, focused-header sticky one-line\r\n  preview when scrolled offscreen, focus-driven keyboard-lift via\r\n  `:has(textarea:focus)`. Desktop also gets the `⋯` actions menu (0.38).\r\n\r\n## Layout / chrome\r\n- Focused header redesigned to match list-row layout (3 columns +\r\n  duplicate-tab button) (0.40).\r\n- Multi-select with Esc collapsing to the anchor; zap icon select-mode\r\n  toggle; multi-edit (0.38, 0.39).\r\n- Tag click opens global search filtered by that tag (0.19).\r\n- Breadcrumb context menu, \"open in tab\" actions (0.37).\r\n\r\n## Filesystem + integrity\r\n- Plugin private state relocated into `<pluginDir>/.stashpad/` (0.43).\r\n- Folder-scoped integrity sweep, paginated log with export + clear (0.21).\r\n- `data.json` writes serialized so draft writes can't clobber shortcuts.\r\n- Confirm-delete settings split for multi-delete and single notes with\r\n  descendants/attachments (0.44).\r\n- Stricter Stashpad detection + create-Stashpad UI in settings (0.35).\r\n\r\n## Templates + cloning\r\n- Clone, insert template, per-Stashpad template file; warns when template\r\n  frontmatter overlaps Stashpad's auto fields (0.47).\r\n\r\n## Sticky scroll-to-bottom\r\n- Sticky scroll across async markdown rendering; render restores to the NEW\r\n  bottom when previously bottom-pinned (0.20, 0.21).\r\n\r\n## Misc polish\r\n- Esc consumed via Obsidian's `Scope` so it never warps tabs (0.49).\r\n- `:has()`-free where the perf matters; rendered-markdown cache per row\r\n  (later in 0.52 series — included here for context).\r\n\r\n## Install\r\nCompatible with Obsidian 1.7+. Install via BRAT from this repo, or copy\r\n`main.js`, `manifest.json`, and `styles.css` into a folder under your vault's\r\n`.obsidian/plugins/`.\r\n",
+      "downloadCount": 0,
       "draft": false,
       "name": "0.51.11",
       "prerelease": false,
