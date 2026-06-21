@@ -4,8 +4,8 @@
   "description": "Sync notes bidirectionally between your vault and Airtable, SeaTable, or Supabase databases.",
   "errors": [],
   "id": "auto-note-importer",
-  "lastChangedAt": "2026-06-01T16:01:58.573Z",
-  "lastFetchedAt": "2026-06-02T01:01:58.595Z",
+  "lastChangedAt": "2026-06-21T01:22:06.883Z",
+  "lastFetchedAt": "2026-06-21T01:22:06.883Z",
   "manifest": {
     "author": "uppinote",
     "authorUrl": "https://github.com/uppinote20",
@@ -18,7 +18,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "0.15.0",
     "name": "Auto Note Importer",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "name": "Auto Note Importer",
   "presentInCommunityList": true,
@@ -26,23 +26,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:0e606cf44a009011f9b19242b7d73ed3a64726ef0c86a8abd87c5a2d12f4b996",
+          "digest": "sha256:44cb5c3fe711e2d6ba93d50fd6ff1b1ec1c8d7d0a633abb62c2b9500b4f9db5e",
+          "downloadCount": 5,
           "name": "main.js",
-          "size": 117417
+          "size": 119732
         },
         {
-          "digest": "sha256:ffb127baad330f53b4214c20cc189ad6111c4df4a0a079ebde75e39b6f27d288",
+          "digest": "sha256:5ed8b726ac80b24f46b2469c4e3e4d0c4c319998c576b1b6657d174aecadc128",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 441
         },
         {
           "digest": "sha256:9ca3f176d978c592b35416911482c37cb385c3b9d8251fec7b2351a8d44823a9",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 6464
+        }
+      ],
+      "author": "claude[bot]",
+      "description": "## What's Changed\n\n### Bug Fixes\n- Prevent frontmatter edits from overwriting structured remote fields (#108)\n  - Introduces `isPushable` to the `FieldTypeMapper` interface, stricter than `!isReadOnly`, to exclude object-shaped fields (Airtable `barcode`/collaborators, SeaTable `collaborator`/`geolocation`, Supabase `json`/`jsonb`) from push payloads\n  - Fixes a data-loss bug where a jsonb column with an empty frontmatter placeholder was overwritten with `null` on push\n  - Fail-closed for unknown types — unrecognized field types are treated as not pushable\n\n### Performance\n- Cache verification result on credential form to skip redundant `verifySetup` probe on Save (#112)\n  - A successful connection test sets a 60-second freshness fingerprint, allowing the next Save to skip the `verifySetup` network probe\n  - Fingerprint is invalidated on any field edit, probe failure, or `needsSetup` — a changed or bad credential can never ride a stale \"verified\" result past the save gate\n  - Primarily affects Supabase (the only provider that implements `verifySetup`)\n\n### Refactoring\n- Unify exhaustiveness guards behind a shared `assertNever` helper (#113)\n  - Adds `src/utils/assertNever` — enforces switch/if exhaustiveness at compile time (missing cases after union extension fail to compile) and throws at runtime\n  - Routes all five throwing exhaustiveness guards (sync mode/scope, conflict mode, setup-requirement kind, credential type) through the helper\n  - Upgrades `migration.ts`'s guard to a real `satisfies never` check that catches missing cases at compile time\n\n### Testing\n- Add cross-provider `FieldTypeMapper` parity contract tests (#111)\n  - Registry-driven test suite that validates all registered mappers satisfy shared invariants: `filenameSafe ⊆ subfolderSafe`, no subfolder-safe type maps to `attachment`/`link`/`unknown`, and prototype-chain names fail closed\n  - Automatically covers future providers the moment they register a mapper\n  - Sorts `FILENAME_SAFE_TYPES` in Airtable and SeaTable mappers for deterministic test output\n\n### Maintenance\n- Bump CI artifact and attest actions to Node 24 runtimes (#106)\n  - `actions/upload-artifact` v4.6.2 → v7.0.1 (Node 24)\n  - `actions/download-artifact` v4.3.0 → v8.0.1 (Node 24)\n  - `actions/attest-build-provenance` v2.4.0 → v4.1.0 (Node 24)\n  - Preemptive update ahead of GitHub's Node 20 runner removal on 2026-09-16\n- Upgrade TypeScript 4.7.4 → 5.9.3 and `@typescript-eslint` v5 → v8 (#109)\n  - Updates ESLint toolchain to `@typescript-eslint` v8 (ESLint 8 retained, no config churn)\n  - Replaces `const _exhaustive: never` workaround with idiomatic `satisfies never` (TS 4.9+)\n  - No runtime changes — compiler-only upgrade, emitted JS is identical\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-20T15:55:06Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0e606cf44a009011f9b19242b7d73ed3a64726ef0c86a8abd87c5a2d12f4b996",
+          "downloadCount": 96,
+          "name": "main.js",
+          "size": 117417
+        },
+        {
+          "digest": "sha256:ffb127baad330f53b4214c20cc189ad6111c4df4a0a079ebde75e39b6f27d288",
+          "downloadCount": 114,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:9ca3f176d978c592b35416911482c37cb385c3b9d8251fec7b2351a8d44823a9",
+          "downloadCount": 93,
           "name": "styles.css",
           "size": 6464
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- Fix SeaTable metadata cache robustness and migrate from native `fetch` to Obsidian `requestUrl` (#104)\n  - Recover response shape when older Obsidian builds reject on 4xx/5xx (mirrors `SupabaseMetadataCache`)\n  - Fix `dtable_server` gateway fallback to match `SeaTableClient` so settings UI no longer 404s\n  - Swallow `SyntaxError` from non-JSON proxy responses, surfacing them as friendly `HTTP {status}` errors\n  - Widen status check to full 2xx range, add `Accept: application/json` header, and fix race condition in `clearForCred` during in-flight requests\n- Fix CSS compatibility for Obsidian 1.4.5: replace `text-decoration-color` with `border-bottom`, remove `!important`, and raise `.ani-field-error` selector specificity (#104)\n- Fix SeaTable sync failures behind corporate proxies by accepting the full 2xx status range in all client methods (#105)\n  - `getBaseToken`, `fetchNotes`, `fetchRecord`, and `batchUpdate` now treat any 2xx response as success\n  - Mirrors the behavior already present in `SeaTableMetadataCache`\n\n### Maintenance\n- Harden release workflow with two-job split (`build` / `release`) and SLSA build-provenance attestation via `actions/attest-build-provenance` (#104)\n  - Postinstall scripts can no longer run in the same job as the OIDC signing identity\n  - Pin attestation action to SHA instead of mutable tag; include `manifest.json` as attestation subject\n- Update `manifest.json` `authorUrl` to profile URL and drop `builtin-modules` external dependency (#104)\n- Correct README \"Permissions & Disclosures\" section to match vault APIs actually used (#104)\n- Resolve 3 pre-existing ESLint warnings: narrow `as any` cast in `main.ts` and drop non-null assertions in `field-cache.ts` (#105)\n",
+      "downloadCount": 96,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -53,22 +87,26 @@
       "assets": [
         {
           "digest": "sha256:c26fad5af96fc6c0291c24b0b8eb3e916f7cf5eab0a278badf5e3ddbc24a2d9b",
+          "downloadCount": 26,
           "name": "main.js",
           "size": 116662
         },
         {
           "digest": "sha256:aa7a212775e007b59ee04fb737e2ae6169cead96af3ee9b7495dd0be3121556d",
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 469
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 24,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add per-config subfolder slash literal toggle (#97)\n  - New `subfolderTreatSlashAsLiteral` setting per config: when enabled, slash characters in subfolder field values are treated as literal (e.g. `AC/DC` → single folder `AC-DC`) instead of creating nested folders\n  - Default is `false`, preserving legacy behavior where `2024/Q1` creates a two-level folder hierarchy\n  - Toggle appears beneath every subfolder field picker across Airtable, SeaTable, and Supabase configurations\n  - Existing settings migrate automatically with `false` fallback — no behavior change for current users\n- Add `isSubfolderSafe` field filter and UI parity for subfolder dropdowns across all providers (#100)\n  - New `isSubfolderSafe` / `getSubfolderSafeTypes` methods on `FieldTypeMapper` exclude attachment, link, and object-shaped column types (collaborator, geolocation, barcode, etc.) from subfolder field pickers — fixes over-restrictive filtering for Airtable and under-restrictive filtering for SeaTable / Supabase\n  - Settings UI now surfaces stale stored subfolder/filename values that no longer match the active filter as a synthetic `(unsupported / hidden)` option, so users can re-select without silent data loss\n  - Runtime guard in `determineFolderPath` falls back to flat layout when a field value resolves to `[object Object]`, protecting legacy configs that predate this change\n\n### Maintenance\n- Fix release workflow trigger + bump GitHub Actions to v6 + add repo templates (#99)\n  - `release.yml` tag filter changed from `\"*\"` to `\"[0-9]*\"` to prevent sync tags from accidentally triggering the publish workflow\n  - `actions/checkout` and `actions/setup-node` updated from v3/v4 → v6; Node.js bumped from 18 → 20 (active LTS) across all workflows\n  - Added `CODEOWNERS`, `pull_request_template.md`, and issue templates (bug report, feature request)\n",
+      "downloadCount": 26,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
@@ -79,22 +117,26 @@
       "assets": [
         {
           "digest": "sha256:33e59e1ca6cefb3bd9b3cba5b4bef53aec6f7051dcaae07b32d8fac019944977",
+          "downloadCount": 27,
           "name": "main.js",
           "size": 113406
         },
         {
           "digest": "sha256:72bc14e1b4574440db18574769e44f6f124b6fc0c8a0373053b9afb7baafe51b",
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 461
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 24,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add Supabase / PostgreSQL provider with full read, write, and bidirectional sync (#90)\n  - Connects via PostgREST (direct `requestUrl`, no `@supabase/supabase-js` dependency)\n  - OpenAPI introspection populates Schema/Table/View/Filename/Subfolder dropdowns in the settings UI, matching the SeaTable UX pattern\n  - Supports legacy `anon`/`service_role` JWTs and new `sb_publishable_…`/`sb_secret_…` keys; the credential form auto-detects the key kind and surfaces an RLS-impact hint\n  - Primary key is auto-detected from the OpenAPI spec and editable for views or composite-PK cases\n\n### Bug Fixes\n- Show inline RPC setup banner in the Supabase credential form when the required database function is missing (#92)\n  - Replaces the transient toast notice with a persistent inline banner that stays visible until the setup SQL is applied and verified\n  - Blocks credential save when a publishable key is used against a project missing the `ani_supabase_schema` RPC, preventing silent misconfiguration\n  - Save and Test buttons show loading state during the probe; changing any credential field auto-clears a stale banner\n\n### Documentation\n- Refresh README and CLAUDE.md for Supabase provider and inline RPC banner (#94)\n  - Adds Supabase to the provider list and connection card flow in README\n  - Corrects publishable-key section: banner location, button text (Verify), and save-blocked-until-verified guarantee\n  - Adds `SupabaseClient` to the Key Classes reference in CLAUDE.md\n",
+      "downloadCount": 27,
       "draft": false,
       "name": "0.11.0",
       "prerelease": false,
@@ -105,22 +147,26 @@
       "assets": [
         {
           "digest": "sha256:15d1ec840b08b78f0e7980f30082606512d895fd3f2b3460e5517e91ec757725",
+          "downloadCount": 94,
           "name": "main.js",
           "size": 78752
         },
         {
           "digest": "sha256:cddfe5f28a59baea61781291719f9298c08fb70bf2af673298313a00c39babc2",
+          "downloadCount": 101,
           "name": "manifest.json",
           "size": 461
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 90,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add metadata-driven dropdowns for SeaTable connection settings (#81)\n  - Table, View, Filename field, and Subfolder field selectors now populate automatically from the SeaTable API instead of requiring manual text entry\n  - New `SeaTableMetadataCache` service fetches and caches tables/columns/views per credential, so the settings tab loads metadata once and reuses it across re-renders\n  - Gracefully falls back to text inputs when the API token is empty or metadata fetch fails, and auto-upgrades to dropdowns on the next render once the token is reachable\n\n### Bug Fixes\n- Fix connection card not re-rendering when switching credential type in the dropdown (#80)\n  - Credential type changes (e.g. SeaTable → Airtable) now correctly rebuild the provider instead of calling `reconfigure()` on a mismatched type, which previously threw and silently prevented the card from updating\n  - Connection card now renders based on `credential.type` alone; missing secrets show a `Setup required` badge instead of dropping the card entirely\n  - New e2e test case covers bidirectional credential-type switching to prevent regression\n\n### Refactoring\n- Align `batchUpdate` batch-limit guard with `SyncResult` failure contract (#78)\n  - Size-limit guard now returns `SyncResult[]` failures instead of throwing, matching all other failure paths\n  - Extracted `buildBatchFailures` and `BATCH_LIMIT_ERROR` helpers to `api-errors.ts`, shared across both Airtable and SeaTable clients\n\n### Documentation\n- Refresh README and CLAUDE.md for 0.9.0 multi-provider release (#77)\n  - Updated README to cover both Airtable and SeaTable credentials, setup, commands, field types, and troubleshooting\n  - Expanded CLAUDE.md architecture overview to reflect the full 0.9.0 module structure including new providers, types, and services\n  - Corrected conflict resolution mode label from `airtable-wins` to `remote-wins` in docs\n  - Added e2e test commands and code ↔ test bidirectional link conventions to CLAUDE.md\n\n### Testing\n- Extract shared e2e harness helpers into a common module (#79)\n  - New `tests/e2e/obsidian-helpers.mjs` consolidates ~250 LOC duplicated across all four E2E harnesses\n  - Exports `buildSyncHarnessHelpers`, `buildSettingsHarnessHelpers`, `makeSetConfigAndQuery`, and `buildConfigExpr` factories\n  - Reduces 4-way duplication to a single definition; future provider harnesses reuse helpers with ~80 LOC savings each\n",
+      "downloadCount": 94,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -131,22 +177,26 @@
       "assets": [
         {
           "digest": "sha256:0d4c99642780166e0b0d779605845f84adf5ab2f4bdc01f092cd7a0ed676563b",
+          "downloadCount": 27,
           "name": "main.js",
           "size": 74075
         },
         {
           "digest": "sha256:a53ede30e663c8bcade5aee61b612002537caf9d3005a5f5fcc4072960ecf6a8",
+          "downloadCount": 29,
           "name": "manifest.json",
           "size": 460
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 26,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add SeaTable as a supported database provider (#72)\n  - New `SeaTableClient` implements `DatabaseProvider` with Base-Token caching, system field stripping, and batch update support for all writable column types\n  - New `SeaTableFieldMapper` maps SeaTable native column types (`text`, `long-text`, `single-select`, `formula`, `link-formula`, `ctime`, …) to the standard field type taxonomy\n  - Settings UI renders a SeaTable-specific connection card (Table ID / View ID / Filename field / Subfolder field) when a SeaTable credential is active\n  - To connect: create a Read & Write API Token in your SeaTable Base → Advanced settings → API Tokens, then add it as a SeaTable credential in plugin settings\n- Add provider-aware credential form with connection test button (#61)\n  - New `CredentialFormRenderer` interface enables provider-specific credential UI without hardcoding Airtable logic\n  - Settings UI now shows a **Test Connection** button that validates API credentials against the provider's API\n  - Edit mode pre-populates existing credential fields for a smoother editing experience\n- Include provider label in bidirectional command names (#68)\n  - Bidirectional sync commands now show `with {Provider}` (e.g. \"Bidirectional sync current note with Airtable\") for consistency with pull (`from`) and push (`to`) commands\n  - Command IDs are unchanged — existing hotkey bindings are preserved\n\n### Refactoring\n- Introduce `DatabaseProvider` abstraction to prepare for multi-database support (#58)\n  - New `DatabaseProvider` interface decouples sync logic from Airtable-specific implementation\n  - New `ProviderRegistry` factory maps credential types to provider instances\n  - Credentials are now a discriminated union supporting `airtable`, `seatable`, `supabase`, `notion`, and `custom-api` types\n  - Settings UI shows a provider type dropdown; non-Airtable types display \"Not yet supported\" until implemented in upcoming releases\n  - Fully backward compatible — no data migration required for existing Airtable credentials\n- Extract provider-agnostic field type system (#60)\n  - New `FieldTypeMapper` interface and `StandardFieldType` taxonomy replace hard-coded Airtable field type constants\n  - New `AirtableFieldMapper` maps 29 Airtable field types to standard types (text, number, computed, system, etc.)\n  - `ProviderRegistry` extended with field type mapper lookup, enabling Settings UI to query type info without a provider instance\n  - Fully backward compatible — no behavior change for existing Airtable usage\n- Rename sync mode values and command IDs to provider-agnostic names (#62)\n  - `SyncMode` literals renamed from `'to-airtable'`/`'from-airtable'` to `'push'`/`'pull'`; `'bidirectional'` unchanged\n  - Command IDs renamed: `sync-from-airtable-*` → `sync-pull-*`, `sync-*-to-airtable-*` → `sync-push-*-*`\n  - Command names and status bar messages now derive the provider label dynamically (e.g. \"Syncing from SeaTable…\" for SeaTable configs)\n  - **Breaking:** existing custom hotkeys bound to old command IDs must be re-bound to the new `sync-pull-*` / `sync-push-*` IDs\n- Use provider-reported batch size for push operations (#69)\n  - Sync orchestrator now reads `provider.capabilities.batchUpdateMaxSize` at runtime instead of importing a hardcoded Airtable constant\n  - Future providers with different batch limits will automatically use the correct batch size without code changes\n- Rename settings fields and conflict mode to provider-agnostic names, settings v2→v3 migration (#70)\n  - `autoSyncFormulas` setting renamed to `autoSyncComputedFields`; conflict resolution value `'airtable-wins'` renamed to `'remote-wins'`\n  - Settings UI labels updated (e.g. \"Auto-sync server-computed fields\", \"Remote wins (overwrite Obsidian)\")\n  - Automatic v2→v3 migration runs on plugin load — existing settings are preserved with no manual action required\n- Harden settings migration and reduce credential lookup overhead (#71)\n  - Migration now safely handles malformed credentials (missing `id`, unknown `type`, non-object entries) and non-array fields without crashing\n  - Future-version settings are refused rather than partially applied, preventing data corruption on downgrade\n  - Credential lookups during settings save reduced from O(N×M) to O(N+M) via a pre-built index\n\n### Maintenance\n- Add exhaustive switch guard to `processSyncRequest` (#67)\n  - Adding a new `SyncMode` value without handling it in the mode-dispatch switch now causes a compile-time error, preventing silent fall-through\n",
+      "downloadCount": 27,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -157,22 +207,26 @@
       "assets": [
         {
           "digest": "sha256:ada5252e50e30c844c1faeb6134684381f73ba71a78ead24422c215348f1969d",
+          "downloadCount": 115,
           "name": "main.js",
           "size": 57181
         },
         {
           "digest": "sha256:4fa0c9bd3df9cde8401a304e7a64eb4b3b038fb345308847ca3a936e32b514a2",
+          "downloadCount": 119,
           "name": "manifest.json",
           "size": 460
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 110,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- Fix missing `styles.css` in release assets (#57)\n  - Custom styles were not applied for users who installed via GitHub release\n  - Added `styles.css` to both `gh release upload` and `gh release create` steps in the release workflow\n",
+      "downloadCount": 115,
       "draft": false,
       "name": "0.8.1",
       "prerelease": false,
@@ -183,22 +237,26 @@
       "assets": [
         {
           "digest": "sha256:ada5252e50e30c844c1faeb6134684381f73ba71a78ead24422c215348f1969d",
+          "downloadCount": 44,
           "name": "main.js",
           "size": 57181
         },
         {
           "digest": "sha256:d83b0dd97a2c1596a64bff22cc8c824aa20331a5a7a2000bb261dcc1fb5a7f75",
+          "downloadCount": 55,
           "name": "manifest.json",
           "size": 460
         },
         {
           "digest": "sha256:3f5eaa2e087364e7acfefa5a6dd741e47163c2ffbfb8f985b0e3053a41653ee9",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 6071
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add multi-base/table configuration support (#48)\n  - Manage multiple Airtable bases and tables simultaneously, each with independent sync settings\n  - New tab-based Settings UI for switching between, adding, and removing configurations\n  - Credential registry to name and reuse API keys across configurations; supports per-credential rate limiting\n  - Per-config commands dynamically registered (e.g., \"Sync from Airtable — Blog Posts\")\n  - Folder overlap validation to prevent configurations from targeting the same or nested paths\n  - Automatic migration from v1 single-config settings to the new v2 multi-config format\n",
+      "downloadCount": 44,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -209,17 +267,20 @@
       "assets": [
         {
           "digest": "sha256:c0cf4315ddfc4634065ab5836a7a6eb5b9e88e865e5fb0163f363a419ed92d21",
+          "downloadCount": 46,
           "name": "main.js",
           "size": 41755
         },
         {
           "digest": "sha256:7a3859b622d95a519864c8b12bd37d909bf82dcc7fc1ac60f3a326fd99acf857",
+          "downloadCount": 80,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add Airtable view filtering support (#45)\n  - Choose a specific Airtable view from the Settings UI to sync only the records that view exposes (filtered/sorted)\n  - View selector dropdown appears after a table is selected; defaults to all records when left empty\n  - Changing the base or table automatically resets the selected view\n  - Fields and views for a table are now fetched in a single API call and cached together\n\n### Bug Fixes\n- Fix memory leak in settings tab when closing the settings panel (#46)\n  - Debounce timer is now properly cleared when the settings tab is hidden\n  - Enabled TypeScript `strict: true` for stronger compile-time type safety\n\n### Other Changes\n- Add comprehensive tests for sync pipeline modules (#47)\n  - 56 new tests covering SyncOrchestrator, AirtableClient, FileWatcher, and FieldCache\n  - Test suite expanded from 267 to 323 tests\n  - Extended Obsidian mock infrastructure with app, file, and folder factory helpers\n",
+      "downloadCount": 46,
       "draft": false,
       "name": "0.7.0",
       "prerelease": false,
@@ -230,17 +291,20 @@
       "assets": [
         {
           "digest": "sha256:d32d3a0af180c832413e37cc82a05583d5a0befa67c8fc9484511c5609b98b58",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 39996
         },
         {
           "digest": "sha256:1ce05c57fca749c024d1dfe948e41054f35ed58b94ca21ec3788e8d38a89c245",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's New\n\n### Auto-generate Bases database files (#43)\nThe plugin can now generate `.airtable-bases` files containing base and table metadata after syncing from Airtable, enabling Obsidian Bases table/card views. Disabled by default — enable in settings with file location options (vault root / synced folder / custom path).\n\n### Retry on transient network errors (#44)\nThe rate limiter now retries on transient network errors (DNS failures, timeouts, connection resets) with exponential backoff (1s → 2s → 4s). Uses an allowlist approach — only known network error patterns are retried, while programming errors fail fast.\n\n## Improvements\n- `isTransientError` uses allowlist (`ECONNRESET`, `ETIMEDOUT`, `ENOTFOUND`, `net::ERR_*`, etc.) instead of retrying all unknown errors\n- Retry budget is shared between 429 responses and network errors\n- Updated JSDoc across `RateLimiter` class, `execute()` method, and related constants\n\n**Full Changelog**: https://github.com/uppinote20/obsidian-auto-note-importer/compare/0.5.4...0.6.0",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.6.0",
       "prerelease": false,
@@ -251,17 +315,20 @@
       "assets": [
         {
           "digest": "sha256:e0f67923a787be58aa7fa855a4e10cb9727ae0f0a54c1ca5f5a864b927224a1a",
+          "downloadCount": 40,
           "name": "main.js",
           "size": 35570
         },
         {
           "digest": "sha256:cd8d48ec5b424ddfb62b6e1321c71eaf7641026b5b1595137bd008d387b7c4df",
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's Changed\n\n### New Features\n- **Respect Retry-After header on 429 responses** (#28): RateLimiter now automatically detects 429 (Too Many Requests) responses and retries after the server-specified delay\n  - Duck-type response detection — no dependency on Obsidian types\n  - Case-insensitive `Retry-After` header parsing (seconds format)\n  - Configurable max retries (default: 3) with 30s fallback delay\n  - All AirtableClient methods benefit automatically — no caller changes needed\n\n### Tests\n- 8 new test cases covering retry behavior, header parsing edge cases, and non-retryable response passthrough\n\n**Full Changelog**: https://github.com/uppinote20/obsidian-auto-note-importer/compare/0.5.3...0.5.4",
+      "downloadCount": 40,
       "draft": false,
       "name": "0.5.4",
       "prerelease": false,
@@ -272,17 +339,20 @@
       "assets": [
         {
           "digest": "sha256:d8a3ec2ad51af1b0816ce55886e0b18925da9f99cf7ebb568f4bf90cf6ffde4c",
+          "downloadCount": 30,
           "name": "main.js",
           "size": 35040
         },
         {
           "digest": "sha256:e1b50b32eb056ffaec22b775cf8d1ccc9b025531f9a3e087609803c7786c7f2f",
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- **Surface error details in debug mode** (#37): Show error message in Notice when `debugMode` is enabled in `createNoteFromRemote` catch block\n\n### Refactoring\n- **Eliminate redundant file lookup** (#36): Skip `getFilesToSync()` call in `from-airtable` mode by restructuring `processSyncRequest`\n- **Extract SyncOrchestrator** (#35): Separate sync orchestration logic from `main.ts` into dedicated `SyncOrchestrator` class\n\n### Code Quality\n- **Fix lint warnings** (#38): Remove non-null assertions, use `Setting.setHeading()` per Obsidian UI guidelines\n- Add `@handbook` markers for bidirectional code-docs linking\n\n**Full Changelog**: https://github.com/uppinote20/obsidian-auto-note-importer/compare/0.5.2...0.5.3",
+      "downloadCount": 30,
       "draft": false,
       "name": "0.5.3",
       "prerelease": false,
@@ -293,17 +363,20 @@
       "assets": [
         {
           "digest": "sha256:e141f01cf429083d6d45474384b20eb206a0461db828ee965dc283577baf123f",
+          "downloadCount": 13,
           "name": "main.js",
           "size": 34473
         },
         {
           "digest": "sha256:2ec1822a37c58242436dff8a0f749b67ea338dbb2b5b3dedf01008cd0cd804cf",
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bug Fixes\n\n- **#29**: Prevent `pendingFiles` loss on sync failure — moved `clear()` to success path so files can be retried on next cycle\n- **#30**: Filter `.` and `..` segments in `sanitizeFolderPath` to block path traversal attacks via Airtable subfolder field\n- **#31**: Replace `NodeJS.Timeout` with `ReturnType<typeof setTimeout>` for browser-compatible timer type in Electron renderer\n\n## Tests\n\n- Added 3 test cases for path traversal filtering in `sanitizeFolderPath` (44/44 passed)\n- E2E 11/11 passed",
+      "downloadCount": 13,
       "draft": false,
       "name": "0.5.2",
       "prerelease": false,
@@ -314,17 +387,20 @@
       "assets": [
         {
           "digest": "sha256:a943d8b16bf304769448c2561733dcf36103cdada0a3983dde9da86e42f2388c",
+          "downloadCount": 8,
           "name": "main.js",
           "size": 34454
         },
         {
           "digest": "sha256:554482f849b85f4067d315bc869ce169ffec175eab7a590d27300569f8ee3db6",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n- Add refresh buttons to base, table, and field dropdowns in settings\n- Each button clears only its level of cache (with cascading invalidation for dependent data)\n- No plugin restart needed to reflect Airtable schema changes\n\n## Details\n\n- `FieldCache`: Added `clearBases()`, `clearTables(baseId)`, `clearFields(baseId, tableId)` methods with hierarchical cache invalidation\n- `SettingsTab`: Added `addExtraButton` with refresh icon to each Airtable metadata dropdown\n- Deduplicated cache-clearing logic and extracted `configureRefreshButton` helper\n\n**Full Changelog**: https://github.com/uppinote20/obsidian-auto-note-importer/compare/0.5.0...0.5.1",
+      "downloadCount": 8,
       "draft": false,
       "name": "0.5.1",
       "prerelease": false,
@@ -335,17 +411,20 @@
       "assets": [
         {
           "digest": "sha256:567b92977e3ffd898e2059c273a868ab5d2d02ee439a1c208242cb1273eb5bce",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 33707
         },
         {
           "digest": "sha256:c0f14b5124d42d9b6d67443497240a11e6ec4acc4ada7be3385c26e1334a56c9",
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Highlights\r\n\r\nMajor feature addition: bidirectional sync between Airtable and Obsidian, along with a full architectural refactoring to a domain-driven modular structure.\r\n\r\n## New Features\r\n\r\n- **Bidirectional sync** — Push note edits from Obsidian to Airtable, pull changes back\r\n- **Conflict resolution** — Three modes: `obsidian-wins`, `airtable-wins`, `manual`\r\n- **File watching** — Auto-detect file changes in the sync folder (configurable debounce)\r\n- **Formula/relation auto-sync** — Pull back Airtable formula recomputed values after push\r\n- **Debug mode** — Delay multiplier for development and debugging\r\n- **New commands** — Push, pull, and bidirectional sync by scope (current / modified / all)\r\n\r\n## Architecture\r\n\r\n- Monolithic → domain-based modular architecture (`services/`, `core/`, `builders/`, `file-operations/`, `ui/`, `utils/`)\r\n- `SyncQueue` — Prevents concurrent syncs, merges duplicate requests\r\n- `ConflictResolver` — Strategy-pattern conflict resolution\r\n- `FileWatcher` — Debounce-based file change detection\r\n- `RateLimiter` — API request throttling\r\n- `FieldCache` — Airtable field metadata caching\r\n\r\n## Bug Fixes\r\n\r\n- Resolve FileWatcher `isSyncing` race condition (split into external/internal flags)\r\n- Add Airtable record ID format validation before API calls\r\n- Fix local-only fields being pushed to Airtable (422 errors)\r\n- Strengthen read-only field filtering (formula, rollup, lookup)\r\n\r\n## Testing\r\n\r\n- 10 Vitest unit test suites / 220 tests\r\n- 11 E2E test scenarios via Chrome DevTools Protocol\r\n- One-command E2E runner (`npm run test:e2e:full`)\r\n\r\n## Code Quality\r\n\r\n- Duck-typing → `instanceof` type checks\r\n- Remove unnecessary `return await`, unused fields, duplicated code\r\n- `as any` → type-safe mock patterns\r\n- Unify null checks (`== null`)\r\n\r\n**Full Changelog**: https://github.com/uppinote20/obsidian-auto-note-importer/compare/0.4.0...0.5.0",
+      "downloadCount": 11,
       "draft": false,
       "name": "0.5.0",
       "prerelease": false,
@@ -356,17 +435,20 @@
       "assets": [
         {
           "digest": "sha256:7a2bbf18fa5bbad9a82b8b2beb1fa1996edd005a690e57dfdd4d6f0d82cf111c",
+          "downloadCount": 346,
           "name": "main.js",
           "size": 17202
         },
         {
           "digest": "sha256:5d00db33c98fe72549beca39a55b60bcef7467d7a3da36ed4b2e731e33217276",
+          "downloadCount": 570,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.4.0 (2025-09-21)\n\n### ✨ New Features\n\n- **Formula Field Support**\n  - Added support for Airtable Formula fields in filename and subfolder selection. Formula fields are now validated for filename compatibility with enhanced error handling and fallback mechanisms.\n\n### 🔧 Improvements\n\n- **Enhanced Field Validation**\n  - Implemented field-type-specific validation logic: Formula fields receive strict validation while text, select, and number fields use basic sanitization for better compatibility.\n  \n- **Improved Error Handling**\n  - Added robust fallback mechanisms when field validation fails, ensuring notes are always imported with safe filenames using record IDs as backup.\n\n### ⚙️ Maintenance\n\n- **Code Quality**\n  - Resolved Claude Code review feedback regarding validation scope and field type differentiation.\n  - Enhanced type safety and error handling throughout the validation pipeline.",
+      "downloadCount": 346,
       "draft": false,
       "name": "0.4.0",
       "prerelease": false,
@@ -377,17 +459,20 @@
       "assets": [
         {
           "digest": "sha256:a9fd950bd38c1cb6334b329e242b1321cee769d123715a980d18b88f894dff92",
+          "downloadCount": 44,
           "name": "main.js",
           "size": 16124
         },
         {
           "digest": "sha256:7046106eb812fa63240d68761ca4b9c6383ac12037071c3c2fb1b0e67a7bb644",
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 460
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.3.0 (2025-09-15)\n\n### ✨ New Features\n\n- **Subfolder Organization**\n  - Automatically organize imported notes into subfolders based on Airtable field values. Support for nested structures like \"Category/Subcategory\".\n  \n- **Smart Field Selection UI**\n  - Enhanced dropdown menus that only show safe field types (Text, Select, Number) for filename and subfolder selection. Unsupported fields are hidden with summary indicator.\n\n- **Mobile Compatibility**\n  - Plugin now works on mobile devices with full functionality across all Obsidian platforms.\n\n### 🔧 Improvements\n\n- **Enhanced Documentation**\n  - Comprehensive field type reference and new template examples with advanced features.\n  \n- **Performance Optimizations**\n  - API response caching, debounced UI updates, and recursive folder scanning with depth limits.\n\n### ⚙️ Maintenance\n\n- **Code Improvements**\n  - Safer filename handling, enhanced error reporting, and improved template processing.",
+      "downloadCount": 44,
       "draft": false,
       "name": "0.3.0",
       "prerelease": false,
@@ -398,17 +483,20 @@
       "assets": [
         {
           "digest": "sha256:1a9f4ca62ea71d1b56b41f35cddebc55189f66325c8e30c5134845bdd4a30f8c",
+          "downloadCount": 59,
           "name": "main.js",
           "size": 12444
         },
         {
           "digest": "sha256:662ba4153e4aaaa60f75d062facfa786669ff2c0a2471661f9a297dabeb5be66",
+          "downloadCount": 71,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.4 (2025-09-05)\r\n\r\n### ✨ New Features\r\n\r\n- **Sync Progress Indicator**\r\n  - A notice now appears in Obsidian showing the real-time progress of the note synchronization process (e.g., \"Syncing 10/100...\"). This provides better feedback, especially when importing a large number of notes.\r\n\r\n### ⚙️ Maintenance\r\n\r\n- **Dependency Updates**\r\n  - Updated key development dependencies to their latest versions to improve stability and security.\r\n",
+      "downloadCount": 59,
       "draft": false,
       "name": "0.2.4",
       "prerelease": false,
@@ -419,17 +507,20 @@
       "assets": [
         {
           "digest": "sha256:92e10fd94baf230275b3b50e4cc702346a092e3a2a19c0484177b9f11f02e6f8",
+          "downloadCount": 9,
           "name": "main.js",
           "size": 12160
         },
         {
           "digest": "sha256:3be46fba82df05099c39c79dc8e26e9f4acdd0fd2bf724988e609537e9aab958",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.3 (2025-08-31)\r\n\r\n### 🛠️ Template Processing Improvements\r\n\r\n- **Enhanced Multi-line Text Handling in Templates**\r\n\tImproved how multi-line text values are processed in templates to ensure proper formatting:\r\n\t- **Frontmatter**: Multi-line values in YAML frontmatter now maintain proper indentation for valid YAML block scalars\r\n\t- **Body Content**: Multi-line text in note body preserves original formatting without unwanted indentation",
+      "downloadCount": 9,
       "draft": false,
       "name": "0.2.3",
       "prerelease": false,
@@ -439,16 +530,19 @@
     {
       "assets": [
         {
+          "downloadCount": 159,
           "name": "main.js",
           "size": 11703
         },
         {
+          "downloadCount": 249,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.2 (2025-05-27)\r\n\r\n### 📝 Minor Fixes\r\n\r\n- **Sentence Case Corrections**  \r\n    Fixed command names, notices, and error messages in the UI that were not properly using **sentence case**",
+      "downloadCount": 159,
       "draft": false,
       "name": "0.2.2",
       "prerelease": false,
@@ -458,16 +552,19 @@
     {
       "assets": [
         {
+          "downloadCount": 4,
           "name": "main.js",
           "size": 11703
         },
         {
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.1 (2025-05-26)\r\n\r\n### 🧼 UI & UX Polish\r\n\r\n- **Followed Obsidian Community Guidelines**\r\n    \r\n    - Removed top-level headings (e.g., `<h2>`) from the settings tab.\r\n        \r\n    - Reworded all UI labels and descriptions to use **sentence case**, as required by Obsidian's plugin style guide.\r\n        \r\n    - Removed \"Obsidian\" from plugin metadata to comply with naming restrictions for third-party plugins.",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.2.1",
       "prerelease": false,
@@ -477,16 +574,19 @@
     {
       "assets": [
         {
+          "downloadCount": 11,
           "name": "main.js",
           "size": 11757
         },
         {
+          "downloadCount": 55,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.0 (2025-05-02)\r\n\r\n### 🚀 New Features\r\n\r\n- **Configurable Primary & Filename Fields**  \r\n    You now have more control over how notes are identified and named:\r\n    \r\n\t- **Primary Field**: Specify the Airtable field to use as a unique identifier. This prevents duplicates when \"Allow Overwrite\" is disabled.  \r\n        _Defaults to the first field in your Airtable view if left empty._\r\n        \r\n\t- **Filename Field Name**: Choose the Airtable field to use for the note's filename.  \r\n        _Defaults to `title`. Falls back to the Primary Field, then the Airtable record ID._\r\n        \r\n- **Advanced Template Parsing with Dot Notation**  \r\n    Template placeholders now support accessing nested values in complex Airtable fields using dot notation:  \r\n    _e.g., `{{Attachment.0.url}}`, `{{Created By.name}}`, `{{Linked Field.0}}`_\r\n    \r\n- **Airtable Pagination Support**  \r\n    Fetches all records across multiple pages (beyond Airtable's 100-record limit).\r\n\r\n<br>\r\n\r\n### ✨ Improvements\r\n\r\n- **Extended Airtable Field Type Support**  \r\n    The plugin now handles more Airtable field types—including Lookup, Rollup, Attachments, and User objects—making templates more expressive and robust.\r\n\t\r\n- **Enhanced Settings UI**\r\n    \r\n    - Airtable Personal Access Token input is now masked for better security.\r\n        \r\n- **Automatic `primaryField` Injection in Frontmatter**  \r\n    To ensure reliable duplicate checking (when \"Allow Overwrite\" is off), the plugin now automatically adds a `primaryField: <value>` to the YAML frontmatter if it's missing.  \r\n    If no frontmatter block exists, a minimal one is created containing only the `primaryField`.\r\n    \r\n- **Filename Sanitization**  \r\n    Filenames derived from Airtable fields are now automatically cleaned to remove invalid characters (`/ \\ : * ? \" < > | '`), preventing errors when saving notes.\r\n\t\r\n- **Safer Default Note Formatting**  \r\n    When no custom template is used:\r\n    \r\n    - The default note includes standard YAML frontmatter with fields like `videoId`, `tags`, `description`, etc.\r\n        \r\n    - Values are inserted using `formatYamlValue`, which ensures safer quoting and escaping to avoid YAML parsing issues.\r\n\t\r\n- **Documentation Enhancements**\r\n    \r\n    - The `README.md` now includes detailed instructions for using dot notation, handling various Airtable field types, and an improved example workflow.\r\n        \r\n    - A complete example template file (`template-example.md`) shows how to format notes with complex nested fields.\r\n\r\n<br>\r\n   \r\n### 🔧 Internal Changes\r\n\r\n- Major updates to `main.ts`, `fetcher.ts`, `settings.ts`, and `note-builder.ts`.\r\n    \r\n- Introduced `utils.ts` for reusable logic (`getNestedValue`, `sanitizeFileName`, `formatYamlValue`).\r\n    \r\n- Modularized code for better maintainability and readability.\r\n    \r\n- Updated `README.md` and `examples/template-example.md` to reflect new functionality.",
+      "downloadCount": 11,
       "draft": false,
       "name": "0.2.0",
       "prerelease": false,
@@ -496,16 +596,19 @@
     {
       "assets": [
         {
+          "downloadCount": 5,
           "name": "main.js",
           "size": 9040
         },
         {
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.1.3 (2025-04-29)\r\n\r\n### 🛠️ Fixes\r\n- Replaced unsafe type casting with proper type guards (`instanceof`) for `TFolder` and `TFile` in settings management.",
+      "downloadCount": 5,
       "draft": false,
       "name": "0.1.3",
       "prerelease": false,
@@ -515,16 +618,19 @@
     {
       "assets": [
         {
+          "downloadCount": 7,
           "name": "main.js",
           "size": 9040
         },
         {
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 459
         }
       ],
       "author": "github-actions[bot]",
       "description": "## v0.1.2 (2025-04-28)\r\n\r\n### ✨ Changes\r\n- Removed the word **\"Obsidian\"** from `manifest.json`, `package.json`, `package-lock.json` and README descriptions to comply with community plugin submission guidelines.",
+      "downloadCount": 7,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -534,16 +640,19 @@
     {
       "assets": [
         {
+          "downloadCount": 6,
           "name": "main.js",
           "size": 9040
         },
         {
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 477
         }
       ],
       "author": "uppinote20",
       "description": "## v0.1.1 (2025-04-28)\r\n\r\n### 🌟 First Public Release\r\n- Automatically import Markdown notes from Airtable into your Obsidian vault.\r\n- Supports both manual sync (`Sync Notes Now`) and scheduled auto-sync (interval-based).\r\n- Customizable destination folder, template file, and overwrite options.\r\n- Includes YAML frontmatter and a default note template.\r\n- If the `title` field is missing, the plugin automatically uses the primary field as the filename.\r\n\r\n### 🛠️ Fixes & Improvements\r\n- Changed bundle output from `dist/` to root (`main.js`) for simpler CI releases.\r\n- Resolved `.gitignore` conflicts by removing the `dist/` directory structure.",
+      "downloadCount": 6,
       "draft": false,
       "name": "0.1.1",
       "prerelease": false,
