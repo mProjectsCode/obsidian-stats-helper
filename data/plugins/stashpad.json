@@ -4,8 +4,8 @@
   "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "stashpad",
-  "lastChangedAt": "2026-06-21T06:05:09.527Z",
-  "lastFetchedAt": "2026-06-21T06:05:09.527Z",
+  "lastChangedAt": "2026-06-22T07:05:09.562Z",
+  "lastFetchedAt": "2026-06-22T07:05:09.562Z",
   "manifest": {
     "author": "Human",
     "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents.",
@@ -13,11 +13,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Stashpad",
-    "version": "0.115.9"
+    "version": "0.117.0"
   },
   "name": "Stashpad",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8cd8b227ed1558278a4b6cd8529d112c6e0113106a1d95f3c61f8b29f4162d15",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 774476
+        },
+        {
+          "digest": "sha256:bdcc3b88cb981ee60d36686738d23c79f644241c217fede85ef2f09ed3bbb6cf",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 349
+        },
+        {
+          "digest": "sha256:f441b656c2f90f1bad2c39a8538eb1db3a51d9ff1cfe6f91329bf1fb1ae8086f",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 161361
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.117.0 — Breadcrumb \"jump to level\" + breadcrumb polish\n\nAdds a quick way to jump to any level in the current path, plus a set of\nbreadcrumb refinements.\n\n## Jump to any level\n- **A new \"route\" button at the right end of the breadcrumb row** opens a\n  **Jump to level** picker. It's styled like the other breadcrumb action\n  buttons (back / forward / select) and stays visible even when the inline\n  crumbs are squished — which is exactly when you need it.\n- The picker lists **every level of the current path** top-to-bottom — Home,\n  then each folder/note down to where you are — with **full, untruncated\n  titles** (long titles wrap instead of being cut off). Each level has a\n  leading **number** (Home = 0, then 1, 2, …); the current level is\n  highlighted. Click any level to jump straight there.\n- The picker is a proper modal, so it works the same on desktop and mobile and\n  sizes itself to the content.\n- **Right-click (or long-press on mobile) any level** in the picker for the same\n  menu the inline crumbs offer: Navigate here, Open in new Stashpad tab, or Open\n  in editor (new tab).\n\n## Breadcrumb refinements\n- On mobile, the slash separators between crumbs are tighter — a bare `/` with\n  less surrounding space — so the path doesn't look wastefully spread out at\n  very small widths. Desktop spacing is unchanged.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.117.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T18:41:02Z",
+      "tag": "0.117.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b23da9fb489dc53ed6343fb607e7beffe101bf02305e4cb85c42a0205019d014",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 772680
+        },
+        {
+          "digest": "sha256:157831061859f4301f851aee2d4e0b6ca2c252f6b9c130446d9d72572569e7d6",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 349
+        },
+        {
+          "digest": "sha256:d1f55304c31d323f37db5af83b61b602974e3e137d6147a1f35f768731132ee2",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 158377
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.116.1 — Cascading header-bar overflow, plus a store-review lint fix\n\nThis release reworks how the header bar behaves on narrow panes and fixes a\nlint error flagged by the community-plugin review.\n\n## Cascading, collapsible header bar (0.116.0)\n\nThe header bar (folder · search · tag · color · sort · view · time buttons ·\nwindow buttons) no longer clips or wraps to a second row when a pane gets\nnarrow. Its controls are organized into five **groups**, each with its own\ndistinctive icon and a combined popover, and they fold in two phases as space\nruns out:\n\n- **Groups (left→right):** folder + search (`folder-search`), tag + color\n  (`filter`), sort + view (`sliders-horizontal`), time (`clock`), and window\n  controls — tiny / compact / open-in-new-window (`app-window`).\n- **Phase one** — as the bar narrows, each group collapses from its expanded\n  button row into a single iconed \"combined menu\" button, in order: window →\n  time → tag/color → sort/view → folder/search. Clicking a group's icon opens a\n  popover with that group's controls.\n- **Phase two** — once every group is a compact icon and the row still doesn't\n  fit, a master overflow button (the sideways `⋯`) appears at the right edge and\n  absorbs the group buttons one at a time, right to left, listing them as\n  sections inside its own menu.\n- When the pane is widened again, everything expands back in reverse. A group\n  icon (or the `⋯`) shows an accent border when a hidden control has a\n  non-default value, so an active filter is never hidden silently.\n- Desktop behavior; the mobile combined-filters menu is unchanged.\n\nIncludes follow-up fixes found in testing: the folder name shows in full again\n(it was being capped to a narrow width and not restoring), the extra gap between\nthe search and tag controls is gone, and the overflow button no longer grows in\nheight.\n\n## Plugin-review lint fix (0.116.1)\n\nRemoves the only `eslint-disable` directive in the source — in\n`aggregate-view.ts`, the encrypted/archived aggregate view's `setState` now\ncasts its argument to the proper `ViewStateResult` type instead of `any`, so the\ncommunity-plugin validator no longer reports an undescribed/disallowed disable\ndirective. No behavior change.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.116.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T07:49:16Z",
+      "tag": "0.116.1"
+    },
     {
       "assets": [
         {

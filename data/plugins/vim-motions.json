@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-21T06:05:09.527Z",
-  "lastFetchedAt": "2026-06-21T06:05:09.527Z",
+  "lastChangedAt": "2026-06-22T07:05:09.562Z",
+  "lastFetchedAt": "2026-06-22T07:05:09.562Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.5.1"
+    "version": "0.7.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:044c8406d80eb32eec61f37018cca4fbad7ad553239951adbb6d9b4ea43e2355",
-          "downloadCount": 18,
+          "digest": "sha256:7f59c15e9e038c130856c6bad541362f194b5f8c9afdd5d3f49582257b7e730a",
+          "downloadCount": 5,
           "name": "main.js",
-          "size": 63152
+          "size": 65894
         },
         {
-          "digest": "sha256:6dfa75eca7fda2fea2e600ae159288fe899317d50589a87ddf1dd5ffec8c2e7e",
-          "downloadCount": 18,
+          "digest": "sha256:da2b3e56006b3412cad67a89c648b721a153d729a6b565e2e4b2f6d52a1cb7c2",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 604
         },
         {
           "digest": "sha256:3a99220e2363c9cdf72204cddf88dcc23b6f5d2cbc468e3868c533f45602d0be",
-          "downloadCount": 18,
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 4062
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- EasyMotion (`<leader><leader>w/j/f`) and hint mode (`<leader><leader>h`) now work with any leader key, including space (`let mapleader = \" \"`) and comma. Previously, leader keys with default Vim bindings (space → forward char, comma → reverse repeat find) were consumed immediately by codemirror-vim before the multi-key sequence could accumulate. Fixed by unmapping the leader key's conflicting default binding before registering EasyMotion `mapCommand` entries. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- Vimrc `let mapleader = \" \"` (space) now correctly sets the leader key. The parser previously split the line by whitespace, losing the space inside quotes. Added regex-first parsing for `let` to preserve quoted values containing whitespace.\r\n- Vimrc loading no longer falsely reports \"loaded but contained no commands\" when the editor isn't ready. `loadVimrc` now distinguishes \"editor not available\" (`ready: false`, retries on next event) from \"file parsed with 0 commands\" (`ready: true`). Includes a retry loop (up to 10 attempts, 100ms apart) to handle the race between `active-leaf-change` and editor initialization.\r\n- Leader-dependent features (EasyMotion, hint mode) are re-registered after vimrc loading resolves the leader key, ensuring they use the user's configured leader instead of the default backslash.\r\n- Visual mode selection on markdown text objects (`vi*`, `va*`, `vi$`, `va$`, `vi~`, `va~`, `vi=`, `va=`, `vi_`, `va_`, `` vi` ``, `` va` ``, `vil`, `val`, `viC`, `vaC`, `viB`, `vaB`, `vio`, `vao`, `vit`, `vat`) now selects the correct range — previously selected one character too far to the right. Operators (`d`, `y`, `c`) were unaffected. Root cause: codemirror-vim's `makeCmSelection` adds +1 to the head position in visual mode, and built-in text objects compensate via an internal `expandSelection` helper, but custom `defineMotion` text objects bypassed that path. ([#4](https://github.com/saberzero1/motions/issues/4))\r\n- `]b` with a single buffer no longer opens a stale file from a previous session's recent-files list.\r\n- `vgq` (visual mode `gq`) no longer triggers macro recording. The `vim-keypress` handler for macro recording previously intercepted the `q` keystroke in `gq` as a macro-record toggle. Fixed by restricting macro recording to normal mode only (matching Vim behavior), tracking previous keypress to detect `g`-prefixed operator sequences, and cancelling pending record state on mode changes. ([#5](https://github.com/saberzero1/motions/issues/5))\r\n\r\n### Added\r\n\r\n- `VimRegistration.unmapDefaultBinding(key)` — removes a key's default codemirror-vim binding (e.g. `<Space>` → `l`) so `mapCommand` multi-key sequences starting with that key can accumulate in the input buffer.\r\n- `VimrcLoadResult.ready` field — distinguishes \"editor not available\" from \"file parsed successfully\", enabling reliable retry logic for vimrc loading.\r\n- E2E tests for EasyMotion with space and comma as leader keys, verifying the `unmap` + `mapCommand` approach works for keys with default Vim bindings.\r\n- E2E test for EasyMotion surviving settings hot-reload (disable → re-enable cycle).\r\n- `getSelection()` test helper for asserting exact visual mode selections.\r\n- `loadSingleFileWorkspace()` test helper using `obsidianPage.loadWorkspaceLayout()` to set up deterministic single-file workspace state with an empty recent-files list.\r\n- 14 new E2E tests verifying exact visual mode selection for all delimiter-based text objects (`*`, `$`, `~`, `=`, `_`, `` ` ``), plus regression guards for operator mode.\r\n- E2E tests for `gq` in visual mode (wrap + no macro recording), `gqq` macro non-interference, and standalone `q` macro recording start/stop.\r\n- 3 Neovim golden comparison cases for `gq` operators (`gqq`, `Vgq`, `gqj`) added to the `g-commands` suite with content deviation registered (Markdown-aware wrapping differs from Neovim's plain-text `gq`).\r\n\r\n### Changed\r\n\r\n- `registerEasyMotion()` now calls `reg.unmapDefaultBinding(leader)` before registering `mapCommand` entries, allowing any single-character leader key to work.\r\n- `registerWorkspaceNavigation()` hint mode binding uses the resolved leader key from `LeaderRegistry` (same approach as EasyMotion).\r\n- `createHintModeAction()` return type narrowed from `ActionFn` to `() => void` (the function ignores all parameters).\r\n- `VimrcLoadResult` gains `ready: boolean` field; `loadVimrc()` returns `ready: false` when the editor adapter is unavailable.\r\n- Vimrc `active-leaf-change` callback retries `loadVimrc` up to 10 times when the editor isn't ready, then re-registers leader-dependent features after successful load.\r\n- `KNOWN_LIMITATIONS.md`: \"EasyMotion leader key conflict with `mapCommand`\" marked as fixed; added vimrc parser space-handling context.\r\n- `KNOWN_LIMITATIONS.md`: added \"Visual mode on single-character text objects\" section documenting a codemirror-vim edge case where `vi*` on `*x*` (1-char inner content) does not select correctly.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.6.0...0.7.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T02:24:59Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:20975ee688efa9a1d27ee6c0db8dafe8003edf73fe5d25c7255bb1335fd25698",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 64514
+        },
+        {
+          "digest": "sha256:534166126d7b005607dd96bfc90da45f3758792273af5752b91312e850203f47",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 604
+        },
+        {
+          "digest": "sha256:3a99220e2363c9cdf72204cddf88dcc23b6f5d2cbc468e3868c533f45602d0be",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 4062
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n#### Neovim deviation closure\r\n\r\n- `di*`/`da*` with cursor on delimiter now correctly no-ops — previously the delimiter scanner treated the delimiter position as \"inside\", operating on the text. Matches Neovim behavior.\r\n- `diB`/`daB` on nested blockquotes (`>>`) now correctly scopes to the innermost nesting level — previously deleted all blockquote content regardless of depth.\r\n- `P` (paste before cursor) now places cursor on the last pasted character, matching Neovim — previously CM Vim placed cursor one position further.\r\n- Rewrote `gP`/`gp` to use direct register-reading implementation instead of delegating through `Vim.handleKey`, avoiding re-entrancy issues with the new `P` override.\r\n\r\n#### Neovim test infrastructure\r\n\r\n- Ex commands (`:s`, `:sort`, `:d`, `:yank`, `:join`, `:noh`, `:undo`, `:redo`, `:global`) now work correctly in Neovim golden comparison tests — added `dispatchVimKeys` routing that detects Ex command sequences and dispatches them via `Vim.handleEx()` instead of character-by-character key input.\r\n\r\n### Changed\r\n\r\n- `test/neovim/deviations.ts` reduced from 28 to 19 entries (9 removed, 3 new cursor-position deviations added for Ex commands where content is correct but cursor placement differs from Neovim).\r\n- `KNOWN_LIMITATIONS.md` behavioral deviations table expanded with 5 entries for confirmed upstream constraints (`dG`, `>>`, `V+>`, `d0`, `<<`) that cannot be intercepted via `mapCommand` due to codemirror-vim's operator-pending dispatch architecture.\r\n\r\n### Added\r\n\r\n#### Neovim golden comparison testing\r\n\r\n- Neovim-backed golden comparison system for Tier 1 Vim behavior tests, inspired by Zed editor's `NeovimBackedTestContext`. Sends identical keystrokes to both Obsidian and a headless Neovim instance, compares resulting editor state (content, cursor, mode).\r\n- `test/neovim/client.ts` — Neovim RPC client wrapping the official `neovim` npm package. Spawns `nvim --embed --headless`, provides `setContent()`, `setCursor()`, `input()`, `getContent()`, `getCursor()`, `getMode()`, `getRegister()`.\r\n- `test/neovim/compare.ts` — state comparison helpers: `getObsidianState()`, `getNeovimState()`, `compareStates()`.\r\n- `test/neovim/golden.ts` — golden file read/write infrastructure with `loadGoldenFile()`, `saveGoldenFile()`, `findGoldenCase()`.\r\n- `test/neovim/deviations.ts` — known deviation registry tracking behavioral differences from Neovim. `isKnownDeviation()` silently allows expected behavioral differences during golden comparison.\r\n- `test/neovim/test-wrapper.ts` — `testWithNeovim()` function: the primary test format for Tier 1 tests. Operates in playback mode (golden files, no Neovim needed) or compare mode (`NEOVIM_COMPARE=1`, live Neovim).\r\n- `test/neovim/test-definitions.ts` — 199 test case definitions across 16 suites covering motions, operators, text objects, editing, yank/put, insert entry, visual mode, g-commands, bracket commands, insert mode, scroll (Ctrl-A/X), and Ex commands.\r\n- `test/neovim/record-golden.ts` — standalone script to record golden files from Neovim without running Obsidian. Usage: `npm run test:neovim-record`.\r\n- `test/neovim/smoke.ts` — Neovim client smoke test. Usage: `npm run test:neovim-smoke`.\r\n- 16 golden files in `test/neovim/golden-data/` recorded against Neovim 0.12.2.\r\n- npm scripts: `test:neovim-smoke`, `test:neovim-record`, `test:neovim-compare`.\r\n\r\n#### Edge-case test expansion\r\n\r\n- 110 new edge-case tests translated from Neovim's legacy test suite (`test/old/testdir/`), replit/codemirror-vim (`test/vim_test.js`), and VSCodeVim (`test/motion.test.ts`).\r\n- Word motion edge cases: `w`/`b`/`e`/`ge` across empty lines, at document boundaries, with punctuation, count clipping, line wrapping.\r\n- Operator edge cases: `dw` at end of line, `dd` on last/only line, `d2w`/`2dd`, `D`, `dk`, `dj` on last line, `de`/`db`, `dG`/`dgg`, `dfx`/`dtx`, `cw` vs `ce`, `cc`/`C`/`2cc`.\r\n- Text object edge cases: `iw`/`aw` on whitespace, `iW`/`aW` with mixed punctuation, nested `i(`/`i{`/`i[`, `di(` across lines, `d2aw` with count, `i\"` with escaped quotes.\r\n- Character search edge cases: `f`/`t` not crossing line boundaries, `2t`/`2F` counts, `;` after `t`, `,` reversal.\r\n- Visual mode edge cases: `viw`, `v3l+d`, `gv` reselect, `V+y` linewise, visual at document boundaries.\r\n- Yank/register edge cases: `yy`/`yw` linewise flag, `y$` without newline, numbered register rotation, `\"Ayy` append, `\".` last inserted text.\r\n- Repeat edge cases: `.` after `dw`/`>>`/`cw+text`, `3.` with count.\r\n- Search edge cases: `*`/`#` wrap-around.\r\n- Mark edge cases: mark persistence after edit, `'.` jump to last change.\r\n\r\n### Fixed\r\n\r\n- `test/coverage-report.ts` — replaced broken regex YAML parser with proper YAML parsing via the `yaml` package, fixing `npm run test:coverage` which previously reported 0/0 on the multi-line manifest format.\r\n\r\n### Changed\r\n\r\n- Replaced `js-yaml` dependency with [`yaml`](https://github.com/eemeli/yaml) — better maintained, YAML 1.2 spec-compliant, ships its own types.\r\n- All 16 Tier 1 test files (`test/specs/vim-builtin/*.e2e.ts`) now use `testWithNeovim()` as the primary test format alongside existing `it()` blocks. Neovim lifecycle hooks (`startNvim`/`stopNvim`) added to top-level `before`/`after`.\r\n- `test/helpers.ts` — added `vimRawKeys()` for raw byte key sequences (supports `\\x1b` for Escape, `\\x01`-`\\x1a` for Ctrl keys, `\\n` for Enter).\r\n\r\n### Documentation\r\n\r\n- README: added \"Testing strategy\" section describing the Neovim golden comparison system, test types (`[nvim]`/`[obsidian]`/Tier 2), and available test commands.\r\n- `KNOWN_LIMITATIONS.md`: added \"Test-discovered behavioral discrepancies\" section documenting 6 bugs found during edge-case test translation (`dG` trailing newline, `iB` nesting, `di*` on delimiter, dot-repeat of `cw`, `)` cursor off-by-one, `n`/`N` wrap-around).\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.5.1...0.6.0",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T09:54:22Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:044c8406d80eb32eec61f37018cca4fbad7ad553239951adbb6d9b4ea43e2355",
+          "downloadCount": 19,
+          "name": "main.js",
+          "size": 63152
+        },
+        {
+          "digest": "sha256:6dfa75eca7fda2fea2e600ae159288fe899317d50589a87ddf1dd5ffec8c2e7e",
+          "downloadCount": 19,
+          "name": "manifest.json",
+          "size": 604
+        },
+        {
+          "digest": "sha256:3a99220e2363c9cdf72204cddf88dcc23b6f5d2cbc468e3868c533f45602d0be",
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 4062
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- `.obsidian.vimrc` is now also loaded on startup, instead of only on leaf change.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.5.0...0.5.1",
-      "downloadCount": 18,
+      "downloadCount": 19,
       "draft": false,
       "name": "0.5.1",
       "prerelease": false,

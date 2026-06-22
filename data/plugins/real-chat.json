@@ -4,8 +4,8 @@
   "description": "Chat sidebar for any OpenAI-compatible API (DeepSeek, OpenRouter and more). Bring your own key. Reads and edits your notes, ranked vault search, web access, image tools, and persistent memory. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "real-chat",
-  "lastChangedAt": "2026-06-21T06:05:09.527Z",
-  "lastFetchedAt": "2026-06-21T06:05:09.527Z",
+  "lastChangedAt": "2026-06-22T07:05:09.562Z",
+  "lastFetchedAt": "2026-06-22T07:05:09.562Z",
   "manifest": {
     "author": "Chris Gage",
     "authorUrl": "https://github.com/saorgage",
@@ -18,7 +18,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "Real Chat",
-    "version": "1.0.2"
+    "version": "1.1.1"
   },
   "name": "Real Chat",
   "presentInCommunityList": true,
@@ -26,27 +26,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:5e0f348a47f27575c0ca96650de575c559f73ac83870d96d8a15e2bb01c49eb9",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 132945
+        },
+        {
+          "digest": "sha256:7c9e6acbaccddf9ee0e736bd5df1413437a664420ba70ddef7202f4eba084334",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 537
+        },
+        {
+          "digest": "sha256:e3802b68b524ca2be5fc6f13fc110c1b7aaac1d80fb8d6c4f36c2993465afd8b",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 13041
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **\"lone leading surrogate in hex escape\" (HTTP 400) could brick a chat session.** The ranked\n  vault-search snippet was sliced at fixed character offsets (`body.slice(at-60, at+120)`), which\n  could cut through a surrogate pair (e.g. an emoji in a note), leaving a half-character. That\n  broken snippet got saved into the session as a `tool` result, so every later message re-sent it\n  and the provider rejected the whole request. Two-part fix: the snippet is now surrogate-safe, and\n  a `stripLoneSurrogates` pass cleans every outgoing message (system/user/assistant/tool) at the\n  API boundary — so any corrupted text (truncated emoji, bad paste, a poisoned note) can no longer\n  400 the request. Valid emoji and characters are preserved.\n\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T19:29:41Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b4ab960a256f0dc1fc4b167503d3c50b1cc1e78c6b9044d5413cc437eeec07e2",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 133318
+        },
+        {
+          "digest": "sha256:7b3a77abe01d51eebd49b4f829a4e66348b8eec6927ac9daf5f1acca3a08a124",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 551
+        },
+        {
+          "digest": "sha256:5795e65a700d32dfcd87d137fd2e23721acada3a24337c2b452747dfe55a61d7",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 13400
+        }
+      ],
+      "author": "saorgage",
+      "description": "## Vision: see *and* act on an image in one turn\n\nWhen your chat model can't see an attached image (e.g. DeepSeek), the turn now routes through your configured **vision provider** (Gemini, etc.) running the **full tool loop** — so it can see the image *and* act on it in a single message.\n\n### Added\n- **`save_attached_image`** — saves the actual pasted/attached image bytes into your vault and returns a clickable `![[link]]`. So \"save this screenshot and tell me what it says\" works in one message.\n- Image turns now have the complete tool set (create/edit notes, search, etc.) driven by the vision model.\n\n### Fixed\n- **Images were unusable on follow-up turns** — the image was dropped after the first send, so follow-ups fell back to a model that can't see images and would claim no image was passed. Attached images are now **sticky**: the chip persists across turns; tap × to remove.\n- A stray `\"undefined\"` was injected into the message text whenever an image was attached.\n\nVerified end-to-end against Gemini 2.5 Flash (OpenAI-compatible): vision + tools + streaming + multi-step tool results all work together.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T18:34:48Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:dc485dfb3b72d077fe2bd2f0618b051e284f2f6966b04d2ed86f31c6a43a8bf9",
-          "downloadCount": 15,
+          "downloadCount": 27,
           "name": "main.js",
           "size": 130513
         },
         {
           "digest": "sha256:e3a02d5eeeb43b1b1d84b66a3ab855a4f9f494c67a7b75acfc327567c130d4c1",
-          "downloadCount": 15,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 537
         },
         {
           "digest": "sha256:5795e65a700d32dfcd87d137fd2e23721acada3a24337c2b452747dfe55a61d7",
-          "downloadCount": 15,
+          "downloadCount": 26,
           "name": "styles.css",
           "size": 13400
         }
       ],
       "author": "saorgage",
       "description": "Add fundingUrl (GitHub Sponsors, Ko-fi) so the Support link appears on the plugin page in Obsidian.",
-      "downloadCount": 15,
+      "downloadCount": 27,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
