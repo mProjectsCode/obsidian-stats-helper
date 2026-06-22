@@ -4,8 +4,8 @@
   "description": "Preview HTML mockups from your vault with your plugin's CSS injected into an isolated iframe, for design-time UI prototyping. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "mockup-viewer",
-  "lastChangedAt": "2026-06-16T06:00:58.683Z",
-  "lastFetchedAt": "2026-06-16T06:00:58.683Z",
+  "lastChangedAt": "2026-06-22T06:05:09.556Z",
+  "lastFetchedAt": "2026-06-22T06:05:09.556Z",
   "manifest": {
     "author": "twrusstw",
     "authorUrl": "https://github.com/twrusstw",
@@ -23,22 +23,26 @@
       "assets": [
         {
           "digest": "sha256:299d0ad404bad5006ea0ec7db15c7841253390df02912c0fae1c7a6db996b467",
+          "downloadCount": 45,
           "name": "main.js",
           "size": 304166
         },
         {
           "digest": "sha256:56a6b3e3890f50cea7c76e641619ff3f4cbd07490bc17c30f3a653d0530e303d",
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:78f8ace759f781c730b6ac9ebb2153fe5e27fc48be7f6619709bf9333edbb578",
+          "downloadCount": 43,
           "name": "styles.css",
           "size": 10551
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n- iframe now picks up Obsidian theme CSS (e.g. Minimal's 267KB `theme.css`) and plugin-generated rules (Style Settings' `#css-settings-manager`), which Obsidian injects as inline `<style>` rather than `<link>` — the previous link-only snapshot missed them, so mockups rendered with theme variables but not theme selector rules\n\n### Internal\n- `snapshotObsidianInlineStyles` + `appendObsidianInlineStyles` parallel the existing `<link>` clone path; `extractInlineStyleTexts` extracted as a pure helper with unit tests\n- own `styles.css` tagged with `data-mv=\"plugin-own\"` (sync scan + `MutationObserver` fallback because Obsidian injects after `onload`) so the snapshot skips it instead of double-stacking `.mockup-viewer-root` rules into the iframe\n\n",
+      "downloadCount": 45,
       "draft": false,
       "name": "0.0.4",
       "prerelease": false,
@@ -49,22 +53,26 @@
       "assets": [
         {
           "digest": "sha256:37e91e1718a4c8c5f4699929d96ad5b287337d96e5b0b964a8e7618fec4eab77",
+          "downloadCount": 21,
           "name": "main.js",
           "size": 303114
         },
         {
           "digest": "sha256:ea43bc500d51022441c52f6de4d17b90e00aefeed2b4e5373b496fd01adfdcc7",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:78f8ace759f781c730b6ac9ebb2153fe5e27fc48be7f6619709bf9333edbb578",
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 10551
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- 2 new shell presets aligned to Obsidian plugin API classes: `markdown-view` (mirrors `MarkdownView` reading mode) and `input-suggest` (mirrors `AbstractInputSuggest` inline dropdown)\n- `decorateShell` hook in `src/iframe/shell.ts` for post-inject tweaks (used by `suggest` and `input-suggest` to auto-mark the first `.suggestion-item` as `.is-selected`)\n- shell scope rewritten around the Obsidian API class a plugin developer extends: the 7 presets `view` / `markdown-view` / `modal` / `suggest` / `settings` / `popover` / `input-suggest` map 1:1 onto `ItemView` / `MarkdownView` / `Modal` / `SuggestModal` / `PluginSettingTab` / `HoverPopover` / `AbstractInputSuggest`\n\n### Fixed\n- `view` shell now wraps user content in `.workspace-leaf-content > .view-content`, the real Obsidian scroll container. Previously content lived directly on `body`, which Obsidian's `body { overflow: clip }` rule clipped — chart axis labels and any content beyond the iframe viewport were unreachable\n- `modal` shell adds `mod-scrollable` so long modal content can scroll inside `.modal-content` instead of being clipped\n- `settings` shell width: replaced the previous `min(1600px, 90vw)` override with Obsidian's actual default values (`--modal-max-width: 1100px`, `--modal-max-height: 1000px`) so the modal renders at the same dimensions as the live Settings UI\n- `popover` shell now mirrors real `.popover > .markdown-embed > .markdown-embed-content` nesting so inner padding/border inherits correctly\n\n### Changed\n- iframe content injection switched to `srcdoc`-driven loading; user inline scripts and the bundled Chart.js run natively without per-element rehydration\n- mockup file enumeration now reads the configured folder directly via `getAbstractFileByPath` instead of scanning the whole vault\n- `view` shell DOM change introduces a small visual difference: user content now inherits `.view-content`'s default padding/margin from Obsidian's app.css. Mockups that previously assumed body-direct rendering may need minor padding adjustment\n\n### Renamed\n- mockup files standardized under `<shell>-demo.html`: `with-chart.html` content folded into `hello.html`, `obsidian-prompt-modal.html` → `modal-demo.html`, `obsidian-settings-tab.html` → `settings-demo.html`, `obsidian-suggest-modal.html` → `suggest-demo.html`. `hello.html` kept as the intro example\n- all demo content rewritten as generic Obsidian-flavoured samples (release notes / quick switcher / file picker) so the bundled sample pack is project-neutral\n- `markdown-view` shell adds default `--file-line-width: 700px` + auto-centered `.markdown-preview-sizer` so reading mode looks like Obsidian's centered narrow column instead of left-aligned full-width\n\n### Internal\n- removed `src/iframe/scripts.ts` (no longer needed)\n- review-driven changes: community plugin scanner flagged dynamic `<script>` construction (now via `srcdoc` string-concat) and full-vault enumeration (now folder-scoped)\n- bundled sample-pack sources moved from `mockup-vault/Mockup/` to `samples/` so the dev QA vault can be wiped without losing the bundle source\n- added `scripts/reset-vault.sh` to wipe the dev vault back to first-install state (empty `Mockup/` + default `data.json`) for testing the empty-state flow; defaults to seeding the `mockup-viewer` plugin as a source so the \"Import sample pack\" empty state appears immediately, or pass `--no-source` for a truly fresh `no-sources` state\n\n",
+      "downloadCount": 21,
       "draft": false,
       "name": "0.0.3",
       "prerelease": false,
@@ -75,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:d4699a2a7d61d97ad294c14a07a06dc74aee20382854ab1a1660d69034f051a0",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 298518
         },
         {
           "digest": "sha256:76b78d7eca1e2f4f437d3e80db47cf693b2c80e1596d44211e752533d8106b2d",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:78f8ace759f781c730b6ac9ebb2153fe5e27fc48be7f6619709bf9333edbb578",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 10551
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n- manifest: removed redundant \"Obsidian\" word from plugin description (community plugin review requirement)\n\n### Docs\n- README slimmed (~205 → 136 lines); moved directive full reference to `docs/directives.md` and Chart.js integration to `docs/charts.md`\n\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.0.2",
       "prerelease": false,
