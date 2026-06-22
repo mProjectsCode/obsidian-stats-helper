@@ -4,8 +4,8 @@
   "description": "A dynamic control center for your vault. Unify hubs, notes, tasks, periodic notes, and web resources with intuitive buttons. Replace new tab for instant access.",
   "errors": [],
   "id": "synaptic-view",
-  "lastChangedAt": "2026-06-01T17:04:58.895Z",
-  "lastFetchedAt": "2026-06-02T02:00:58.570Z",
+  "lastChangedAt": "2026-06-22T03:04:09.544Z",
+  "lastFetchedAt": "2026-06-22T03:04:09.544Z",
   "manifest": {
     "author": "Yongmini",
     "authorUrl": "https://x.com/Facilitate4U",
@@ -23,22 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b1dd2011f542ca47748f22dc7078687982972a38862de18cb5c6412f5ad5aaa9",
+          "downloadCount": 746,
           "name": "main.js",
           "size": 79533
         },
         {
           "digest": "sha256:ea6df30f0932b535cb2a0d5d06fcb7853a5bfc8125b953a410283ea42aa0b084",
+          "downloadCount": 927,
           "name": "manifest.json",
           "size": 372
         },
         {
           "digest": "sha256:f9d4f790417aa11edc99af1731845c63179bc30c423e1bf2b378c8713f6f1bb4",
+          "downloadCount": 729,
           "name": "styles.css",
           "size": 20760
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.5\r\n\r\nCommunity plugin review compliance — event lifecycle and deprecated API cleanup.\r\n\r\n### Fixes\r\n\r\n- **registerDomEvent**: Replaced remaining raw `addEventListener` calls with `registerDomEvent()` in `FloatingButtonManager` and `EmptyStateViewManager` (Component subclasses)\r\n- **Deprecated API**: Replaced `workspace.activeLeaf` with `getMostRecentLeaf()` in `emptyStateView.ts` and `createFileAction.ts`\r\n- **Timeout cleanup**: `refreshOpenViewsTimeout` is now properly cleared in `onunload()` to prevent stale callbacks after plugin disable\r\n\r\n---\r\n\r\n## 0.1.4\r\n\r\nEmpty state handling and live settings refresh.\r\n\r\n### Fixes\r\n\r\n- **Empty state on command open**: Opening Synaptic View via command palette with no Quick Access items now shows setup guide instead of blank screen\r\n- **Windows flickering**: Resolved race condition where setup message would briefly appear then vanish on empty tabs\r\n\r\n### Improvements\r\n\r\n- **Live settings refresh**: Changes to Quick Access items in settings now immediately update all open Synaptic View tabs without requiring a new tab\r\n- **State preservation**: Each tab retains its currently active file/button when settings change; only tabs viewing deleted items fall back to default\r\n\r\n### Technical\r\n\r\n- `SynapticContainer` now stores `_synapticView` instance for direct refresh access\r\n- `refreshFloatingButtons()` method on `SynapticView` rebuilds button bar while preserving active state\r\n- `refreshOpenSynapticViews()` on plugin iterates managed leaves on settings change\r\n\r\n---\r\n\r\n## 0.1.3\r\n\r\nDismiss button, hover preview fix, and code quality improvements.\r\n\r\n### Features\r\n\r\n- **Dismiss button**: Added an X button at the end of the Quick Access button group to deactivate Synaptic View and restore the tab to its default state\r\n\r\n### Fixes\r\n\r\n- **Hover preview**: Synaptic View no longer injects into hover preview popover leaves\r\n- **registerDomEvent**: Dismiss button click handler uses `registerDomEvent()` for proper lifecycle cleanup\r\n\r\n### Technical\r\n\r\n- `SynapticContainer` interface replaces `as any` casting for `_synapticDestroy` property across all files\r\n- Sentence case applied to dismiss button translation (`'Dismiss'` not `'Dismiss Synaptic View'`)\r\n\r\n---\r\n\r\n## 0.1.2\r\n\r\nCommunity plugin review compliance - lifecycle management improvements.\r\n\r\n### Fixes\r\n\r\n- **registerDomEvent**: Replaced raw `addEventListener`/`removeEventListener` with Obsidian's `registerDomEvent()` for automatic cleanup in `FloatingButtonManager`\r\n- **Component lifecycle**: `FloatingButtonManager` now extends `Component` with proper `load()`/`unload()` lifecycle\r\n- **Memory leak fix**: `EmptyStateViewManager` now extends `Component` using `this.register()` and `addChild()` pattern instead of manual `Map<WorkspaceLeaf, SynapticView>` tracking\r\n- **Per-tab cleanup**: Document-level listeners are now properly cleaned up when individual tabs close mid-session, not just on plugin unload\r\n\r\n### Technical\r\n\r\n- `EmptyStateViewManager` uses `addChild()` for automatic parent-child Component cleanup\r\n- DOM attribute `data-synaptic-quick-access` replaces in-memory Map for quick-access navigation state\r\n- `_synapticDestroy` callback stored on container elements for per-leaf lifecycle cleanup\r\n- Command-opened Synaptic Views register cleanup via `plugin.register()`\r\n\r\n---\r\n\r\n## 0.1.1\r\n\r\nCommunity plugin submission compliance and bug fixes.\r\n\r\n### Fixes\r\n\r\n- **Memory leak prevention**: Proper event listener cleanup on plugin unload\r\n- **API compliance**: Use `getLanguage()` API instead of `moment.locale()` for locale detection\r\n- **Conditional command**: \"Add current file to Quick Access\" command now properly checks for active file\r\n- **Path normalization**: User-defined file paths now use `normalizePath()` for cross-platform compatibility\r\n- **Core style protection**: Plugin styles no longer override Obsidian core `.view-content` styles\r\n\r\n### Improvements\r\n\r\n- **Settings UI**: Section headings now use proper `Setting.setHeading()` pattern\r\n- **Sentence case**: All UI text follows Obsidian's sentence case convention\r\n- **File picker**: Now uses Obsidian's `AbstractInputSuggest` for better UX\r\n- **Min app version**: Updated to 1.8.0 for `getLanguage()` API support\r\n\r\n### Technical\r\n\r\n- Added `destroy()` method chain: `main.ts` → `EmptyStateViewManager` → `SynapticView` → `FloatingButtonManager`\r\n- Fixed `versions.json` to match `manifest.json`\r\n- Copyright year updated to 2026\r\n\r\n---\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v1.8.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 746,
       "draft": false,
       "name": "0.1.5",
       "prerelease": false,
@@ -49,22 +53,26 @@
       "assets": [
         {
           "digest": "sha256:04fcc8d3477b13b0a5997ec640289df7743ddb6f45679b1dfca75aab1237967c",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 77685
         },
         {
           "digest": "sha256:b299e5b736e009f352a8613b8d34954367cad37bc49c3757d5863a92bd6aa00e",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 372
         },
         {
           "digest": "sha256:9fa3590d755014c9a9d3cc32fd883d0b246ede3102cc075aab195650f1889bd0",
+          "downloadCount": 0,
           "name": "styles.css",
           "size": 20708
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.4\r\n\r\nEmpty state handling and live settings refresh.\r\n\r\n### Fixes\r\n\r\n- **Empty state on command open**: Opening Synaptic View via command palette with no Quick Access items now shows setup guide instead of blank screen\r\n- **Windows flickering**: Resolved race condition where setup message would briefly appear then vanish on empty tabs\r\n\r\n### Improvements\r\n\r\n- **Live settings refresh**: Changes to Quick Access items in settings now immediately update all open Synaptic View tabs without requiring a new tab\r\n- **State preservation**: Each tab retains its currently active file/button when settings change; only tabs viewing deleted items fall back to default\r\n\r\n### Technical\r\n\r\n- `SynapticContainer` now stores `_synapticView` instance for direct refresh access\r\n- `refreshFloatingButtons()` method on `SynapticView` rebuilds button bar while preserving active state\r\n- `refreshOpenSynapticViews()` on plugin iterates managed leaves on settings change\r\n\r\n---\r\n\r\n## 0.1.3\r\n\r\nDismiss button, hover preview fix, and code quality improvements.\r\n\r\n### Features\r\n\r\n- **Dismiss button**: Added an X button at the end of the Quick Access button group to deactivate Synaptic View and restore the tab to its default state\r\n\r\n### Fixes\r\n\r\n- **Hover preview**: Synaptic View no longer injects into hover preview popover leaves\r\n- **registerDomEvent**: Dismiss button click handler uses `registerDomEvent()` for proper lifecycle cleanup\r\n\r\n### Technical\r\n\r\n- `SynapticContainer` interface replaces `as any` casting for `_synapticDestroy` property across all files\r\n- Sentence case applied to dismiss button translation (`'Dismiss'` not `'Dismiss Synaptic View'`)\r\n\r\n---\r\n\r\n## 0.1.2\r\n\r\nCommunity plugin review compliance - lifecycle management improvements.\r\n\r\n### Fixes\r\n\r\n- **registerDomEvent**: Replaced raw `addEventListener`/`removeEventListener` with Obsidian's `registerDomEvent()` for automatic cleanup in `FloatingButtonManager`\r\n- **Component lifecycle**: `FloatingButtonManager` now extends `Component` with proper `load()`/`unload()` lifecycle\r\n- **Memory leak fix**: `EmptyStateViewManager` now extends `Component` using `this.register()` and `addChild()` pattern instead of manual `Map<WorkspaceLeaf, SynapticView>` tracking\r\n- **Per-tab cleanup**: Document-level listeners are now properly cleaned up when individual tabs close mid-session, not just on plugin unload\r\n\r\n### Technical\r\n\r\n- `EmptyStateViewManager` uses `addChild()` for automatic parent-child Component cleanup\r\n- DOM attribute `data-synaptic-quick-access` replaces in-memory Map for quick-access navigation state\r\n- `_synapticDestroy` callback stored on container elements for per-leaf lifecycle cleanup\r\n- Command-opened Synaptic Views register cleanup via `plugin.register()`\r\n\r\n---\r\n\r\n## 0.1.1\r\n\r\nCommunity plugin submission compliance and bug fixes.\r\n\r\n### Fixes\r\n\r\n- **Memory leak prevention**: Proper event listener cleanup on plugin unload\r\n- **API compliance**: Use `getLanguage()` API instead of `moment.locale()` for locale detection\r\n- **Conditional command**: \"Add current file to Quick Access\" command now properly checks for active file\r\n- **Path normalization**: User-defined file paths now use `normalizePath()` for cross-platform compatibility\r\n- **Core style protection**: Plugin styles no longer override Obsidian core `.view-content` styles\r\n\r\n### Improvements\r\n\r\n- **Settings UI**: Section headings now use proper `Setting.setHeading()` pattern\r\n- **Sentence case**: All UI text follows Obsidian's sentence case convention\r\n- **File picker**: Now uses Obsidian's `AbstractInputSuggest` for better UX\r\n- **Min app version**: Updated to 1.8.0 for `getLanguage()` API support\r\n\r\n### Technical\r\n\r\n- Added `destroy()` method chain: `main.ts` → `EmptyStateViewManager` → `SynapticView` → `FloatingButtonManager`\r\n- Fixed `versions.json` to match `manifest.json`\r\n- Copyright year updated to 2026\r\n\r\n---\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v1.8.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.4",
       "prerelease": false,
@@ -75,22 +83,26 @@
       "assets": [
         {
           "digest": "sha256:2f5dd468c10890c559ed76aec83a5bbceae7cdc550d51521c365ada6c5f260b0",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 75785
         },
         {
           "digest": "sha256:f017d07da8da4f5f8e49f386c77a1ab07556d01c87cc32319898adbb57d993dc",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 372
         },
         {
           "digest": "sha256:9fa3590d755014c9a9d3cc32fd883d0b246ede3102cc075aab195650f1889bd0",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 20708
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.3\r\n\r\nDismiss button, hover preview fix, and code quality improvements.\r\n\r\n### Features\r\n\r\n- **Dismiss button**: Added an X button at the end of the Quick Access button group to deactivate Synaptic View and restore the tab to its default state\r\n\r\n### Fixes\r\n\r\n- **Hover preview**: Synaptic View no longer injects into hover preview popover leaves\r\n- **registerDomEvent**: Dismiss button click handler uses `registerDomEvent()` for proper lifecycle cleanup\r\n\r\n### Technical\r\n\r\n- `SynapticContainer` interface replaces `as any` casting for `_synapticDestroy` property across all files\r\n- Sentence case applied to dismiss button translation (`'Dismiss'` not `'Dismiss Synaptic View'`)\r\n\r\n---\r\n\r\n## 0.1.2\r\n\r\nCommunity plugin review compliance - lifecycle management improvements.\r\n\r\n### Fixes\r\n\r\n- **registerDomEvent**: Replaced raw `addEventListener`/`removeEventListener` with Obsidian's `registerDomEvent()` for automatic cleanup in `FloatingButtonManager`\r\n- **Component lifecycle**: `FloatingButtonManager` now extends `Component` with proper `load()`/`unload()` lifecycle\r\n- **Memory leak fix**: `EmptyStateViewManager` now extends `Component` using `this.register()` and `addChild()` pattern instead of manual `Map<WorkspaceLeaf, SynapticView>` tracking\r\n- **Per-tab cleanup**: Document-level listeners are now properly cleaned up when individual tabs close mid-session, not just on plugin unload\r\n\r\n### Technical\r\n\r\n- `EmptyStateViewManager` uses `addChild()` for automatic parent-child Component cleanup\r\n- DOM attribute `data-synaptic-quick-access` replaces in-memory Map for quick-access navigation state\r\n- `_synapticDestroy` callback stored on container elements for per-leaf lifecycle cleanup\r\n- Command-opened Synaptic Views register cleanup via `plugin.register()`\r\n\r\n---\r\n\r\n## 0.1.1\r\n\r\nCommunity plugin submission compliance and bug fixes.\r\n\r\n### Fixes\r\n\r\n- **Memory leak prevention**: Proper event listener cleanup on plugin unload\r\n- **API compliance**: Use `getLanguage()` API instead of `moment.locale()` for locale detection\r\n- **Conditional command**: \"Add current file to Quick Access\" command now properly checks for active file\r\n- **Path normalization**: User-defined file paths now use `normalizePath()` for cross-platform compatibility\r\n- **Core style protection**: Plugin styles no longer override Obsidian core `.view-content` styles\r\n\r\n### Improvements\r\n\r\n- **Settings UI**: Section headings now use proper `Setting.setHeading()` pattern\r\n- **Sentence case**: All UI text follows Obsidian's sentence case convention\r\n- **File picker**: Now uses Obsidian's `AbstractInputSuggest` for better UX\r\n- **Min app version**: Updated to 1.8.0 for `getLanguage()` API support\r\n\r\n### Technical\r\n\r\n- Added `destroy()` method chain: `main.ts` → `EmptyStateViewManager` → `SynapticView` → `FloatingButtonManager`\r\n- Fixed `versions.json` to match `manifest.json`\r\n- Copyright year updated to 2026\r\n\r\n---\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v1.8.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.3",
       "prerelease": false,
@@ -101,22 +113,26 @@
       "assets": [
         {
           "digest": "sha256:c049b7d9fefb60d1b1f393c005fa0a7b58aaefd635cf51c9d8bd4adfd74b0cd9",
+          "downloadCount": 1,
           "name": "main.js",
           "size": 74705
         },
         {
           "digest": "sha256:ed4f341493eb4047416dc0760a19514c1b998d3847118089beb17c80ae9947a5",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 372
         },
         {
           "digest": "sha256:5303142a0e34dcfc917be9a1691a240503f6bea4e113d76fffc128dda8556239",
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 20607
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.2\r\n\r\nCommunity plugin review compliance - lifecycle management improvements.\r\n\r\n### Fixes\r\n\r\n- **registerDomEvent**: Replaced raw `addEventListener`/`removeEventListener` with Obsidian's `registerDomEvent()` for automatic cleanup in `FloatingButtonManager`\r\n- **Component lifecycle**: `FloatingButtonManager` now extends `Component` with proper `load()`/`unload()` lifecycle\r\n- **Memory leak fix**: `EmptyStateViewManager` now extends `Component` using `this.register()` and `addChild()` pattern instead of manual `Map<WorkspaceLeaf, SynapticView>` tracking\r\n- **Per-tab cleanup**: Document-level listeners are now properly cleaned up when individual tabs close mid-session, not just on plugin unload\r\n\r\n### Technical\r\n\r\n- `EmptyStateViewManager` uses `addChild()` for automatic parent-child Component cleanup\r\n- DOM attribute `data-synaptic-quick-access` replaces in-memory Map for quick-access navigation state\r\n- `_synapticDestroy` callback stored on container elements for per-leaf lifecycle cleanup\r\n- Command-opened Synaptic Views register cleanup via `plugin.register()`\r\n\r\n---\r\n\r\n## 0.1.1\r\n\r\nCommunity plugin submission compliance and bug fixes.\r\n\r\n### Fixes\r\n\r\n- **Memory leak prevention**: Proper event listener cleanup on plugin unload\r\n- **API compliance**: Use `getLanguage()` API instead of `moment.locale()` for locale detection\r\n- **Conditional command**: \"Add current file to Quick Access\" command now properly checks for active file\r\n- **Path normalization**: User-defined file paths now use `normalizePath()` for cross-platform compatibility\r\n- **Core style protection**: Plugin styles no longer override Obsidian core `.view-content` styles\r\n\r\n### Improvements\r\n\r\n- **Settings UI**: Section headings now use proper `Setting.setHeading()` pattern\r\n- **Sentence case**: All UI text follows Obsidian's sentence case convention\r\n- **File picker**: Now uses Obsidian's `AbstractInputSuggest` for better UX\r\n- **Min app version**: Updated to 1.8.0 for `getLanguage()` API support\r\n\r\n### Technical\r\n\r\n- Added `destroy()` method chain: `main.ts` → `EmptyStateViewManager` → `SynapticView` → `FloatingButtonManager`\r\n- Fixed `versions.json` to match `manifest.json`\r\n- Copyright year updated to 2026\r\n\r\n---\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v1.8.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Dismiss Button**: Add an X button at the end of the button group to deactivate Synaptic View\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -127,22 +143,26 @@
       "assets": [
         {
           "digest": "sha256:04d87965ef5ebefeaf9334372b49cb06c850b2a2eb0d9d3801e5970b103e38b6",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 75019
         },
         {
           "digest": "sha256:275e8f3023bf38bf8f5239cd4515ed9e72e37986c0dd1c07b4ec00bbe9e77982",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 372
         },
         {
           "digest": "sha256:5303142a0e34dcfc917be9a1691a240503f6bea4e113d76fffc128dda8556239",
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 20607
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.1\r\n\r\nCommunity plugin submission compliance and bug fixes.\r\n\r\n### Fixes\r\n\r\n- **Memory leak prevention**: Proper event listener cleanup on plugin unload\r\n- **API compliance**: Use `getLanguage()` API instead of `moment.locale()` for locale detection\r\n- **Conditional command**: \"Add current file to Quick Access\" command now properly checks for active file\r\n- **Path normalization**: User-defined file paths now use `normalizePath()` for cross-platform compatibility\r\n- **Core style protection**: Plugin styles no longer override Obsidian core `.view-content` styles\r\n\r\n### Improvements\r\n\r\n- **Settings UI**: Section headings now use proper `Setting.setHeading()` pattern\r\n- **Sentence case**: All UI text follows Obsidian's sentence case convention\r\n- **File picker**: Now uses Obsidian's `AbstractInputSuggest` for better UX\r\n- **Min app version**: Updated to 1.8.0 for `getLanguage()` API support\r\n\r\n### Technical\r\n\r\n- Added `destroy()` method chain: `main.ts` → `EmptyStateViewManager` → `SynapticView` → `FloatingButtonManager`\r\n- Fixed `versions.json` to match `manifest.json`\r\n- Copyright year updated to 2026\r\n\r\n---\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v1.8.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 7,
       "draft": false,
       "name": "0.1.1",
       "prerelease": false,
@@ -153,22 +173,26 @@
       "assets": [
         {
           "digest": "sha256:84e886640820622e05ccc7d03890694dc55f8b649ad8b3218d5324e5982d3f3b",
+          "downloadCount": 32,
           "name": "main.js",
           "size": 75586
         },
         {
           "digest": "sha256:aea463c92207b8d310671b2f5a4ec0c93de55ef8dfb8ea56dd16c8da07dd1bc5",
+          "downloadCount": 79,
           "name": "manifest.json",
           "size": 373
         },
         {
           "digest": "sha256:29907ba3f95fafb9c349221dbe8905de1d5dbc4c112659bd75b8a9869f2afed2",
+          "downloadCount": 31,
           "name": "styles.css",
           "size": 21396
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release Notes\r\n\r\n## 0.1.0 (Initial Release)\r\n\r\n**Synaptic View** - Don't build a homepage. Configure your Synaptic View.\r\n\r\nA dynamic control center that unifies your project hubs, daily notes, task boards, periodic notes, and web resources. No Dataview queries, no maintenance—just intuitive buttons that connect you to what matters.\r\n\r\n### Features\r\n\r\n- **Unified Dashboard**: Open via command palette or optionally replace new tabs with Synaptic View\r\n- **Quick Access Buttons**: 4 types of smart buttons (File, Web, Journal, Calendar) with customizable icons and order\r\n- **Calendar Integration**: Mini calendar with date/week/month/quarter/year navigation\r\n- **Journal Integration**: Seamless support for Daily Notes and Periodic Notes plugins with auto-creation\r\n- **Daily Note Task Badge**: Real-time display of incomplete tasks with priority system\r\n- **Quick Edit Mode**: Cmd/Ctrl + Click to open files in edit mode alongside preview\r\n- **Settings UI**: Drag-and-drop reordering, file path autocomplete, Lucide icon picker\r\n- **Add Current File Command**: Instantly add current file to Quick Access\r\n- **Multilingual Support**: English and Korean with automatic language detection\r\n- **View Style Options**: Customizable preview-only styling (hide inline title, embedded mentions)\r\n\r\n### Technical\r\n\r\n- TypeScript with strict type checking\r\n- esbuild-based bundling\r\n- Metadata cache integration for performance\r\n- Responsive CSS with theme compatibility\r\n- Desktop-only (requires Obsidian v0.15.0+)\r\n\r\n---\r\n\r\n# Future Roadmap\r\n\r\n- **Quick Access Grouping**: Organize buttons by color or category\r\n- **Advanced Default View Mode**: Time-based or context-based default views\r\n- **Group Type**: Bundle Quick Access items into collapsible groups\r\n- **Smart Type**: Display recently modified or frequently accessed files\r\n- **Multi Synaptic View**: Multiple view configurations for different contexts (work/personal/study)\r\n\r\n---\r\n\r\nFor detailed usage instructions, see [README.md](./README.md) (English) or [README_KO.md](./README_KO.md) (한국어).\r\n\r\n",
+      "downloadCount": 32,
       "draft": false,
       "name": "0.1.0",
       "prerelease": false,
