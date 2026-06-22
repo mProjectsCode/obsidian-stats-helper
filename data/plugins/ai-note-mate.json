@@ -4,8 +4,8 @@
   "description": "Note Mate is a smart AI assistant for your vault. With Note Mate, you can easily create new notes, expand on ideas, and get insights from your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ai-note-mate",
-  "lastChangedAt": "2026-06-21T04:01:09.508Z",
-  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
+  "lastChangedAt": "2026-06-22T05:02:09.550Z",
+  "lastFetchedAt": "2026-06-22T05:02:09.550Z",
   "manifest": {
     "author": "ialex32x",
     "authorUrl": "https://github.com/ialex32x",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "Note Mate",
-    "version": "1.5.1"
+    "version": "1.5.2"
   },
   "name": "Note Mate",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:935631cf9ac529ab018d7a04bcaa6095a84a3dfeb3bac743e0c4c65bcfeae3e1",
-          "downloadCount": 8,
+          "digest": "sha256:56f726ac7526f6df7f97e303fa489e41acc32b99027285d9d9306f6f346ead02",
+          "downloadCount": 0,
           "name": "main.js",
-          "size": 1287375
+          "size": 1295952
         },
         {
-          "digest": "sha256:dbb03b192206f28b537d9cb40582e2152455ccf172010f7b2a14776cf7096270",
-          "downloadCount": 8,
+          "digest": "sha256:e81859d8398fd5fe84d2959f6cad589e5b2480b6836ba360cf0aeb416d507720",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:2f40ec298709bb63f1fdaef7494183d3ea7c3ceb8e284cc42064f65762e7e8fc",
-          "downloadCount": 8,
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 107891
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### What's new\n\n- **Branching during streaming** — Conversations can now be branched while the assistant is still streaming, letting you fork a new path without waiting for the current reply to finish.\n\n### Refinements\n\n- **Improved LLM editing accuracy and efficiency** — Multiple tool improvements help the LLM edit notes more precisely and efficiently:\n  - `insert_text` replaces `edit_lines` with heading-anchored insertion, fuzzy heading matching, and normalized direction arguments for predictable edits.\n  - `batch_replace_text` enables multiple text replacements in a single operation; `replace_text` accepts `old`/`new` as parameter aliases.\n  - Hash-gated `set_section` prevents accidental overwrites by verifying section content before applying changes.\n  - `edit_files_frontmatter` is split into dedicated `batch_set` and `batch_unset` tools for clearer frontmatter manipulation.\n  - Section-targeting tools now accept fuzzy heading matches, tolerating minor formatting differences.\n  - `occurrence_offset` and `max_replacements` replace `replace_all` and `expected_count` for more intuitive control over text replacement scope.\n  - Line endings are normalized and block inserts are auto-padded for cleaner, more consistent edit output.\n- **Read section for main agent** — `read_section` is now available to the main agent, no longer restricted to sub-agents.\n- **Faster plugin loading** — Session store loading has been refactored to eliminate redundant serialization and reduce startup overhead, significantly improving plugin load speed.\n\n### Fixes\n\n- **Streaming Mermaid deferral** — Mermaid diagrams during streaming are now deferred until the stream completes, preventing rendering glitches from partial diagram syntax.\n- **Draft save responsiveness** — Draft save delay has been reduced to 2 seconds, making auto-save feel more responsive during active conversations.\n\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "1.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T04:43:16Z",
+      "tag": "1.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:935631cf9ac529ab018d7a04bcaa6095a84a3dfeb3bac743e0c4c65bcfeae3e1",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 1287375
+        },
+        {
+          "digest": "sha256:dbb03b192206f28b537d9cb40582e2152455ccf172010f7b2a14776cf7096270",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:2f40ec298709bb63f1fdaef7494183d3ea7c3ceb8e284cc42064f65762e7e8fc",
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 107891
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### What's new\n\n- **Tencent Cloud ASR** — Speech-to-text now supports Tencent Cloud as a provider alongside DashScope, with COS-based upload for large audio files.\n- **Disable skills** — Skills can now be disabled via `disable: true` in frontmatter; disabled skills are excluded from the count badge and dimmed in the details modal.\n- **Model name on assistant bubbles** — Assistant messages now display the model name that generated the response, giving better visibility into which provider handled each turn.\n- **Unread indicator** — The scroll-to-bottom button now shows a visual indicator when new messages are waiting, making it easier to catch up after scrolling away.\n- **Search directory scoping** — The `search_content` tool now supports directory-level filtering, letting agents narrow searches to specific vault folders.\n\n### Refinements\n\n- **Localized AGENT.md template** — The default AGENT.md template is now fully localized across all supported languages.\n- **Active TODO injection** — Active TODO items from the session are now automatically injected into the system prompt, keeping the agent aware of outstanding tasks.\n- **Copy button in model selector** — Model selector items now include a copy button for quickly capturing model identifiers.\n- **Leaner chat-stream** — Assistant lifecycle and QuickAsk logic have been extracted out of `chat-stream` into dedicated modules, reducing the core stream module's footprint.\n- **Context compression module** — The context reducer has been renamed and reorganized into a clean `context-compression` module with better separation of concerns.\n- **Orchestrator decomposition** — Delegate payload construction and handoff seed generation have been extracted from the orchestrator into focused, testable units.\n\n### Fixes\n\n- **Session deletion race** — A race condition when deleting sessions has been resolved, with improved logging for better diagnostics.\n- **Concurrent write safety** — Sequential write chaining now prevents concurrent write races that could corrupt session data on disk.\n- **Scroll parking** — Manually scrolling up now reliably parks auto-follow, preventing the view from snapping back during streaming.\n- **Mermaid overflow** — Long Mermaid diagrams in chat bubbles no longer overflow their containers.\n- **Casing conflict detection** — Vault casing conflict checks now handle undefined path segments and correctly scan parent folders.\n\n",
-      "downloadCount": 8,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.5.1",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-21T04:01:09.508Z",
-  "lastFetchedAt": "2026-06-21T04:01:09.508Z",
+  "lastChangedAt": "2026-06-22T05:02:09.550Z",
+  "lastFetchedAt": "2026-06-22T05:02:09.550Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.20.3"
+    "version": "1.21.1"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:71f2720fbb91f464b969822f674f64c50950b3e30287cab198cdd341a4994e50",
+          "downloadCount": 92,
+          "name": "main.js",
+          "size": 1001733
+        },
+        {
+          "digest": "sha256:b52cfc82e1db616e433bf77e6575637bd2affe1d5bd2da8fd0e3c3359ea1a956",
+          "downloadCount": 98,
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:b0daf38945b1d939be89ecc751709e3ced70abc369c654c5a38bff92d69bcb1b",
+          "downloadCount": 89,
+          "name": "styles.css",
+          "size": 12377
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\nv1.21.0 is a **feature release** that delivers three major improvements — a pre-ingest requirements gate that stops small/local LLMs from fabricating wiki pages, an Operation History panel with insight-driven visualization, and Schema Coherence Phase 1. Italian is added as the 9th language, an incomplete-page cleaner ships, and several latent bugs are fixed.\n\n- **🛡️ Pre-ingest requirements gate (Issue #164, PR #174).** Every source file is now validated *before* any LLM call — empty/whitespace-only/frontmatter-only notes are rejected, and small/local models (e.g. Ollama gemma4, qwen-coder) no longer fabricate entity names to satisfy the JSON schema when given a blank prompt. The gate is implemented as an extensible, ordered `CONTENT_CHECKS` registry (in new `core/source-requirements.ts`) — future checks (e.g. prompt-injection detection) can be added as a single registry entry. Content-hash dedup (FNV-1a, length-prefixed) catches identical content across paths. Interactive ingests prompt before re-ingesting duplicates; folder/watcher ingests auto-skip. Defense-in-depth `isBlankSource` guard in `source-analyzer.ts` catches any future caller that bypasses the gate. Contributed by @Indexed-Apogrypha.\n- **📊 Operation History Panel (Issue #122, PR #171).** Browse recent ingestions, lint reports, and maintenance runs in a searchable, filterable UI. Insight-driven visualization: global KPI cards (8 metrics), per-entry 1-line insight, expandable details with clickable page links. Pure-function `parseLogEntries` + `HistoryModal`. Command palette entry + settings entry.\n- **🔗 Schema Coherence Phase 1 (Issue #124, PR #167).** Schema configuration (`schema/config.md`) is now the single source of truth for both system prompts and generation prompts. New `SchemaContext` shared parsed representation, `buildSchemaSectionTemplate(ctx, pageType)` extracts user-defined sections, and `buildActiveTagVocabularySection` injects custom tag vocabulary into system prompts. Eliminates the \"schema template overridden by hardcoded sections\" bug.\n- **🇮🇹 Italian locale (Issue #159, PR #159).** Plugin UI and wiki output now support Italian as the 9th language (joining English, 中文, 日本語, 한국어, Deutsch, Français, Español, Português). Contributed by @FrancoTampieri.\n- **🧹 Incomplete-page cleaner (Issue #170).** Wiki pages left in a partial state (interrupted ingest, plugin reload mid-write, LLM error after page created on disk) are automatically cleaned on startup. New `generation_complete` frontmatter flag stamped `false` at start, flipped to `true` on successful write. QuickFixes Phase 3 self-scan archives pages where the flag is stuck at `false` via `fileManager.trashFile` (recoverable from Obsidian's `.trash`). Pages without the field are treated as legacy — never wiped on upgrade.\n\n### Added\n\n- Pre-ingest requirements gate: empty/whitespace/frontmatter-only notes rejected before LLM call (#164 / PR #174)\n- Content-hash deduplication (`hashBody` FNV-1a + length prefix) for folder + watcher ingests (#164 / PR #174)\n- Re-ingest confirmation prompt for interactive ingests on duplicate content (#164 / PR #174)\n- Operation History Panel with insight-driven visualization: KPI cards, per-entry insights, clickable page links (#122 / PR #171)\n- Command palette entry: \"View Ingestion History\" (#122 / PR #171)\n- Settings panel entry: \"Operation History\" button (#122 / PR #171)\n- Schema Coherence Phase 1: `SchemaContext`, `buildSchemaSectionTemplate`, custom section + tag vocabulary injection (#124 / PR #167)\n- `setGenerationComplete()` + `findIncompletePages()` + `cleanIncompletePages()` in `core/incomplete-page-cleaner.ts` (#170)\n- QuickFixes Phase 3: incomplete-page self-scan on startup (#170)\n- Italian locale (9th language) — UI strings + wiki output format (#159 / PR #159)\n- New `core/source-requirements.ts` with extensible `CONTENT_CHECKS` registry (#164 / PR #174)\n- New `core/incomplete-page-cleaner.ts` with `generation_complete` lifecycle (#170)\n- New `core/log-parser.ts` + `core/detail-renderer.ts` for log.md structured parsing (#122 / PR #171)\n- New `ui/history-modal.ts` with `HistoryModal` class (#122 / PR #171)\n- New `ui/modals.ts` `ConfirmModal` for re-ingest prompts (#164 / PR #174)\n\n### Fixed\n\n- **Empty notes made small/local LLMs fabricate wiki pages (#164, CRITICAL).** Ingesting an empty / whitespace-only / frontmatter-only note no longer produces fabricated entity/concept pages. Large models (Claude, GPT) refused the blank input and never surfaced this bug in dev; smaller local models \"helpfully\" filled in made-up names to satisfy the JSON schema.\n- **Hardcoded Chinese error string leaked into non-Chinese UI (#172).** `WikiEngine.createOrUpdateFile()` final-fallback throw used a literal CJK string. Now uses `getText('fileWriteFailed')` with i18n coverage across all 9 locales.\n- **Duplicate entry in `createdPages` inflated report count (#173).** LLM surface-form variants of the same path could duplicate rows in the \"Created\" listing and count header. New `dedupPages()` pure-function helper applied at all three report sites.\n- **Pre-ingest requirement gate defense-in-depth.** `source-analyzer.ts` now returns `null` on blank body even if the gate is bypassed by a future caller.\n\n### Tests\n\n- **939 tests passing** (was 791 in v1.20.3; +148 tests), 67 test files, 0 regressions\n- New: `core/source-requirements.test.ts` (12 tests: `checkNonEmpty`, `checkCompatibleType`, `checkContentRequirements`, `hashBody` stability + length-prefix collision safety, extensibility)\n- New: `core/incomplete-page-cleaner.test.ts` (10 tests: `isIncomplete` edge cases, `findIncompletePages` scope filtering, `cleanIncompletePages` failure isolation)\n- New: `core/log-parser.test.ts` (multi-language log label parsing)\n- New: `core/detail-renderer.test.ts` (rendering logic)\n- New: `__tests__/__support__/wiki-engine-harness.ts` (in-memory App + LLM client + write-path tracker)\n- New: `__tests__/wiki/wiki-engine-ingest.test.ts` (7 tests: empty file → 0 wiki pages assertion, requirements gate, duplicate, interactive prompt, re-ingest confirm)\n- New: `__tests__/wiki/wiki-engine-dedup.test.ts` (4 tests: ordering, empty, no-dup, heavy-dup)\n- New: `__tests__/wiki/wiki-engine-i18n-error.test.ts` (i18n error message assertion)\n- New: `__tests__/schema/auto-maintain.test.ts` (watcher batch-context wiring)\n- New: `__tests__/root/i18n-parity.test.ts` (bidirectional parity across 9 locales)\n- New: `__tests__/schema/schema-section-template.test.ts` + `schema-context.test.ts`\n- New: `__tests__/ui/history-modal.test.ts` (HistoryModal + parser)\n- New: `__tests__/ui/settings-tag-desc.test.ts`\n- New: `__tests__/core/frontmatter.test.ts` additions: `isBlankSource` + `upsertFrontmatterField`\n\n### Contributors\n\n- **@green-dalii** (maintainer) — release coordination, triage, #170/#172/#173 implementation, all 9 README locale updates, final integration\n- **@Indexed-Apogrypha** — #164 root-cause investigation, PR #174 (pre-ingest requirements gate: `CONTENT_CHECKS` registry + `hashBody` + watcher batch-context + `buildIngestedHashes` TTL cache + write-invalidation), #122 review feedback\n- **@FrancoTampieri** — #159 (Italian locale: 9th language, full UI + wiki output translation)\n- **@DocTpoint** — #124/#122 review feedback, prior schema design discussions\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### From Community Plugin Website\n\nVisit [karpathywiki on community.obsidian.md](https://community.obsidian.md/plugins/karpathywiki) and click **Install**.\n\n### Manual Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` from the assets below\n2. Create folder `VaultFolder/.obsidian/plugins/karpathywiki/`\n3. Copy the three files into that folder\n4. Enable **Karpathy LLM Wiki** in **Settings → Community plugins**\n\n---\n\n## Configuration\n\nAfter installation:\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Select your **LLM Provider** (Anthropic, OpenAI-compatible, Gemini, Ollama, LM Studio, etc.) — 11 providers supported\n3. Enter **API Key** and **Base URL** (for custom providers)\n4. Click **Test Connection** to validate\n5. (Optional) Configure Wiki folder, language, advanced LLM parameters, auto-maintenance\n\n---\n\n## Full Changelog\n\nSee [CHANGELOG.md](https://github.com/green-dalii/obsidian-llm-wiki/blob/main/CHANGELOG.md) for the complete version history.\n\n**Compare:** [1.20.3...1.21.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.3...1.21.0)\n",
+      "downloadCount": 92,
+      "draft": false,
+      "name": "1.21.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T00:49:54Z",
+      "tag": "1.21.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:e05281343850d797e8ddc1e617b9aca3a760f1c5b41d243f77b4618632c84307",
-          "downloadCount": 300,
+          "downloadCount": 520,
           "name": "main.js",
           "size": 830204
         },
         {
           "digest": "sha256:89e36bc312398295b4e984e9ec1942578683daf169ca926821e8c3487edbf961",
-          "downloadCount": 303,
+          "downloadCount": 523,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
-          "downloadCount": 300,
+          "downloadCount": 518,
           "name": "styles.css",
           "size": 11779
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\nv1.20.3 is a **parity/latent-bug hotfix** — three write-path fixes that restore behavior that should have been there from the start. No new features, no settings changes, no API changes.\n\n- **🔧 Source-page slug collision fix (Issue #155, PR #156).** When two source files shared a basename across folders (e.g. 11× `About this course.md` across Academy courses), `slugify(basename)` produced the same slug for both — second ingest **silently overwrote** the first, and every `[[sources/<slug>]]` backlink resolved to the wrong source. Fix: every source slug is now `<basename>_<6-hex FNV-1a of full path>`. Single-computation point in `wiki-engine.ts`. Re-ingesting an existing vault renames its `sources/` pages; backlinks update in place. Contributed by @Indexed-Apogrypha.\n- **🔧 `mergeFrontmatter` alias dedup (PR #154).** Repeated re-ingests could grow the `aliases` array without bound — one real-world page accumulated the same alias block ~15× (86 duplicate lines). `mergeFrontmatter` now dedups `fm.aliases` parity with `enforceFrontmatterConstraints` (first occurrence wins, empty strings dropped). Contributed by @DocTpoint.\n- **🔧 Stage-4 `reviewed: true` guard (PR #158).** Re-ingesting an unrelated note could LLM-rewrite a curated `reviewed: true` page's body — the reviewed lock only held on the `createOrUpdatePage` path, not on Stage 4 (`updateRelatedPage`). Fix: `updateRelatedPage` now routes `reviewed: true` pages to `appendToReviewedPage` (parity with `createOrUpdatePage`). The curated body survives verbatim. Contributed by @DocTpoint.\n\n### Fixed\n\n- Source-page slug collision silently overwriting existing pages (#155) — every source slug now fingerprinted by full path\n- `mergeFrontmatter` alias array growing without bound across re-ingests — now deduped parity with `enforceFrontmatterConstraints`\n- Stage-4 `reviewed: true` pages being LLM-rewritten by unrelated re-ingests — now routed through `appendToReviewedPage`\n- tsconfig `lib` outdated for newer TypeScript language servers (`trimEnd` etc.) — bumped to ES2021\n- tsconfig vestigial `baseUrl` — removed (no `paths` map)\n\n### Tests\n\n- **791 tests passing** (was 779; +12), 53 test files, 0 regressions\n- New test suite: `src/__tests__/source-slug.test.ts` — 9 tests covering FNV-1a fingerprint determinism, length cap, re-ingest stability, basename-only collisions\n- New test suite additions: `core/frontmatter.test.ts` (+2 alias dedup tests), `wiki/page-factory.test.ts` (+1 Stage-4 reviewed guard test)\n\n### Contributors\n\n- **@green-dalii** — release coordination, triage, docs\n- **@Indexed-Apogrypha** — reported source-page collision (#155), contributed source-slug fingerprint (PR #156) with 9 unit tests + live e2e validation\n- **@DocTpoint** — contributed mergeFrontmatter alias dedup (PR #154) and Stage-4 reviewed guard (PR #158)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the Assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nNo configuration changes required. All three fixes are automatic.\n\n**Affected scenarios:**\n- **#155 fix:** any vault where source notes share filenames across folders (e.g. multiple `About this course.md` files). Re-ingesting an existing vault renames `sources/` pages but backlinks update in place — no user action needed.\n- **#154 fix:** any vault with re-ingested pages that may have accumulated duplicate aliases.\n- **#158 fix:** any vault using `reviewed: true` to lock curated pages.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.2...1.20.3\n",
-      "downloadCount": 300,
+      "downloadCount": 520,
       "draft": false,
       "name": "1.20.3",
       "prerelease": false,
@@ -53,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:58f34e11afa7b4c313fee277b6f3cf55390854e02e029393297e7f0eadf665cc",
-          "downloadCount": 252,
+          "downloadCount": 256,
           "name": "main.js",
           "size": 828238
         },
         {
           "digest": "sha256:cc6db768d5aa78287b13dc3aaa368d68d85180cf9c103787c103ed3fe98d97eb",
-          "downloadCount": 253,
+          "downloadCount": 258,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
-          "downloadCount": 252,
+          "downloadCount": 256,
           "name": "styles.css",
           "size": 11779
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **🔧 Anthropic fallback fix (PR #151).** Anthropic Messages API only accepts `user`/`assistant` roles in the messages array — system instructions must be a top-level field. Previous fallback retry paths (prefill rejection, thinking-control fallback) incorrectly injected `{role: 'system'}` into messages, causing a second 400 that masked the real fix. All 4 Anthropic fallback paths now correctly keep system as a top-level parameter. Contributed by @Indexed-Apogrypha.\n- **🔧 Anthropic prefill detection (Issues #141, #147).** Claude Opus 4.8, 4.7, 4.6, Sonnet 4.6, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview reject assistant message prefilling with 400. The plugin now detects this specific error and retries without prefill. Applied to both `AnthropicClient` and `AnthropicCompatibleClient`.\n\n### Fixed\n\n- Anthropic fallback retry injected `{role: 'system'}` into messages array — Anthropic API rejects non-user/assistant roles in messages; system must be top-level (PR #151)\n- AnthropicClient prefill rejection not detected — `requestUrl` discards response body on 4xx; now uses specific error string matching (#141, #147)\n- AnthropicCompatibleClient same prefill detection issue — both clients now share the same fix\n\n### Tests\n\n- **779 tests passing** (was 771), 52 test files, 0 regressions\n- New test suite: Anthropic API simulator — validates full fallback chain including system prompt handling, prefill rejection, thinking-control fallback\n\n### Contributors\n\n- **@green-dalii** — multiple hotfix iterations, throw:false investigation, revert for clean author PR merge\n- **@Indexed-Apogrypha** — reported Anthropic 400 regression (#141, #147), identified the system-role-in-messages root cause, contributed PR #151 with Anthropic API simulator tests\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the Assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nNo configuration changes required. The fix is automatic — Anthropic fallback paths now correctly keep system instructions as a top-level field.\n\n**Affected models:** Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, Claude Fable 5, Claude Mythos 5, Claude Mythos Preview.\n\n**Unaffected models:** All non-Anthropic providers (DeepSeek, OpenAI, Gemini, OpenRouter, etc.) and Claude Opus 4.5 and earlier.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.0...1.20.2\n",
-      "downloadCount": 252,
+      "downloadCount": 256,
       "draft": false,
       "name": "1.20.2",
       "prerelease": false,
@@ -89,7 +119,7 @@
         },
         {
           "digest": "sha256:795d91759727ead8932d6115f7b00480e4d8fc1eb6f1b9a24168c2c0a3307bf4",
-          "downloadCount": 83,
+          "downloadCount": 84,
           "name": "manifest.json",
           "size": 354
         },
@@ -119,7 +149,7 @@
         },
         {
           "digest": "sha256:f338b8125a40f29f01da7dd44421672641ab454a6b876ec87d894a3c2c50f09e",
-          "downloadCount": 188,
+          "downloadCount": 189,
           "name": "manifest.json",
           "size": 354
         },
@@ -149,7 +179,7 @@
         },
         {
           "digest": "sha256:3bc88da755c0528e7d9aff2336a17c26023227f7ac85b1557a7c42b632c9c299",
-          "downloadCount": 415,
+          "downloadCount": 416,
           "name": "manifest.json",
           "size": 354
         },
@@ -179,7 +209,7 @@
         },
         {
           "digest": "sha256:3bc88da755c0528e7d9aff2336a17c26023227f7ac85b1557a7c42b632c9c299",
-          "downloadCount": 534,
+          "downloadCount": 535,
           "name": "manifest.json",
           "size": 354
         },
@@ -209,7 +239,7 @@
         },
         {
           "digest": "sha256:bc2ee9dba0db07f24c820891ae9b2bd2557ec97472a965e8c8e607d856534154",
-          "downloadCount": 963,
+          "downloadCount": 964,
           "name": "manifest.json",
           "size": 354
         },
@@ -239,7 +269,7 @@
         },
         {
           "digest": "sha256:22469ff786a716c762216c8a5bbc56e9c782706392a70f362989fa2219e62253",
-          "downloadCount": 145,
+          "downloadCount": 146,
           "name": "manifest.json",
           "size": 354
         },
@@ -263,26 +293,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 473,
+          "downloadCount": 475,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 484,
+          "downloadCount": 486,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 471,
+          "downloadCount": 473,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 473,
+      "downloadCount": 475,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,
@@ -299,7 +329,7 @@
         },
         {
           "digest": "sha256:072aa6a4320ced88fd878d096a04357e7b197519704f6d3d8fd6b29d49b3f125",
-          "downloadCount": 268,
+          "downloadCount": 269,
           "name": "manifest.json",
           "size": 353
         },
@@ -329,7 +359,7 @@
         },
         {
           "digest": "sha256:bfafa6bb039754c87c1190840b40f67a02d19ee99b3e547db5876cf68867f722",
-          "downloadCount": 130,
+          "downloadCount": 131,
           "name": "manifest.json",
           "size": 353
         },
@@ -359,7 +389,7 @@
         },
         {
           "digest": "sha256:2752d75451b274f8185208ce94a3bd3f7a54ce9735db8675fa08d505c47bc778",
-          "downloadCount": 183,
+          "downloadCount": 184,
           "name": "manifest.json",
           "size": 353
         },
@@ -389,7 +419,7 @@
         },
         {
           "digest": "sha256:7fa4c61fad4fe3c82bf6595ad852c5d2874e2bdb7787329c9afd9dbb01bb0645",
-          "downloadCount": 200,
+          "downloadCount": 201,
           "name": "manifest.json",
           "size": 353
         },
@@ -419,7 +449,7 @@
         },
         {
           "digest": "sha256:ab0aeabecefd330fef0f6c125326f3c467b2015f7df7ba0b1da9c4ec8147d57e",
-          "downloadCount": 269,
+          "downloadCount": 270,
           "name": "manifest.json",
           "size": 353
         },
@@ -449,7 +479,7 @@
         },
         {
           "digest": "sha256:b27b8df38871c0a6f23bcd30e290da8d524f2836d729d1d502f5696050626d75",
-          "downloadCount": 221,
+          "downloadCount": 222,
           "name": "manifest.json",
           "size": 353
         },
@@ -479,7 +509,7 @@
         },
         {
           "digest": "sha256:ac02fad8bd1fe663d2fd994df6fa49ec7b3cb04ecf862aa31319561b75e4c0df",
-          "downloadCount": 145,
+          "downloadCount": 146,
           "name": "manifest.json",
           "size": 353
         },
@@ -509,7 +539,7 @@
         },
         {
           "digest": "sha256:4c92d280dea5ae054a5d13a2f08b87c7de5af93fd32f2f22f6d8a808654906f2",
-          "downloadCount": 169,
+          "downloadCount": 170,
           "name": "manifest.json",
           "size": 353
         },
@@ -539,7 +569,7 @@
         },
         {
           "digest": "sha256:b6aea77380a40b499b486f44fd1891bd6801e14084077aea46f549f395bfc32f",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 353
         },
@@ -569,7 +599,7 @@
         },
         {
           "digest": "sha256:63927d4f686f5cf4243d52a58a0484670e9c0e9bb2fd9ae92ed3835e5f680c49",
-          "downloadCount": 282,
+          "downloadCount": 283,
           "name": "manifest.json",
           "size": 353
         },
@@ -599,7 +629,7 @@
         },
         {
           "digest": "sha256:7a675293b4c3ef3eb5aea3e5fbda4d5f977c7baf9a49cbc5d42b932f468112f1",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 353
         },
@@ -629,7 +659,7 @@
         },
         {
           "digest": "sha256:a2dc75b10a109b69f4044402985589d5f262f31e06fbe4f6574ef5d5e1dc00f4",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 353
         },
@@ -659,7 +689,7 @@
         },
         {
           "digest": "sha256:9aa3f11c45f3fe1a313f9198d1cdc27b9694b6aa2fbcc02a330a4933437a582d",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 353
         },
@@ -689,7 +719,7 @@
         },
         {
           "digest": "sha256:8d1c880b71968b34289f95a840a5d8b8a92bbef6d68ad1dd0ff029c49f878688",
-          "downloadCount": 86,
+          "downloadCount": 87,
           "name": "manifest.json",
           "size": 353
         },
@@ -719,7 +749,7 @@
         },
         {
           "digest": "sha256:80103796a11b41f99ac9efebe36b6558e6d880633970fb8aa77823f1a83b640f",
-          "downloadCount": 177,
+          "downloadCount": 178,
           "name": "manifest.json",
           "size": 353
         },
@@ -743,26 +773,26 @@
       "assets": [
         {
           "digest": "sha256:cacd1526ef3a917511a716accde5913b6869ffc505490a56ba8b30a50ede93ad",
-          "downloadCount": 625,
+          "downloadCount": 626,
           "name": "main.js",
           "size": 661713
         },
         {
           "digest": "sha256:501014006b42867e41a9484d4075da8b9a72f6bea9cd8422f76fab0fb6fd3001",
-          "downloadCount": 655,
+          "downloadCount": 657,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:213622be8fe51d2cdf9eb886f2cf6620bcfaf54f86f81722b3f8bc28af20aac2",
-          "downloadCount": 618,
+          "downloadCount": 619,
           "name": "styles.css",
           "size": 6140
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Custom granularity per-type limits ignored**: In custom mode, entity and concept limits were set separately in the UI but three code paths failed to enforce them separately:\r\n    - The extraction loop merged entityLimit + conceptLimit into a single total cap, losing per-type distinction\r\n    - The LLM instruction text was vague (\"user-defined limits\") with no concrete numbers injected\r\n    - The fix-limit function used hardcoded values ({maxEntities: 3, maxConcepts: 3}) ignoring user settings entirely\r\n    - All three now read `customEntityLimit`/`customConceptLimit` dynamically from settings. Added 6 unit tests (101 total). Non-custom modes\r\n  \r\n  **Cumulative since 1.9.1** (1.10.0 was the feature release, 1.10.1 and 1.10.2 are bug fixes):\r\n  - **Minimal extraction granularity**: New option limiting extraction to ~5 items, ideal for batch processing 100+ files\r\n  - **Custom extraction granularity**: User-defined entity/concept limits (1-300 each) with conditional input fields\r\n  - **Aliases support in duplicate detection**: LLM now sees page aliases when resolving entity names, preventing duplicate stubs for synonyms\r\n  - **Slug normalization in duplicate detection**: resolvePagePath checks title/alias slugs before falling back to LLM\r\n  \r\n  ---\r\n  \r\n  ## Installation\r\n  \r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n  \r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\r\n  and click **Add to Obsidian** to install directly.\r\n  \r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n  \r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n  \r\n  ---\r\n  \r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n  \r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\r\n  detailed usage and model recommendations.\r\n  \r\n  ---\r\n  \r\n  **Full Changelog**: [1.10.1...1.10.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.10.1...1.10.2)",
-      "downloadCount": 625,
+      "downloadCount": 626,
       "draft": false,
       "name": "1.10.2 — Custom granularity per-type limits enforcement",
       "prerelease": false,
@@ -779,7 +809,7 @@
         },
         {
           "digest": "sha256:80825c1f0ec24b555fec85566feb100fc65d13955b67670a31d581860b1a3899",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 353
         },
@@ -809,7 +839,7 @@
         },
         {
           "digest": "sha256:e9403d17ce385899acfbaad64baa4e67ac262bb20cd790ef12fb2d506f22d0b8",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 353
         },
@@ -833,26 +863,26 @@
       "assets": [
         {
           "digest": "sha256:ac6d7bf79952f683ffaa669f6f6a8911ca74e0c89ab8b44386eb3218a1472286",
-          "downloadCount": 105,
+          "downloadCount": 106,
           "name": "main.js",
           "size": 646927
         },
         {
           "digest": "sha256:53ba3946e2989f22bdd37498e21e6b0bd80e9859b73fd807f641e80b50050caa",
-          "downloadCount": 116,
+          "downloadCount": 118,
           "name": "manifest.json",
           "size": 352
         },
         {
           "digest": "sha256:fb00d556cc24bf33ee32544e4db15f845026c74a9808e774fdeb72fefec09f78",
-          "downloadCount": 105,
+          "downloadCount": 106,
           "name": "styles.css",
           "size": 6052
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Memory leak in QueryModal**: Component was created on undeclared property `renderComponent` instead of declared `activeRenderComponent`, leaving it dangling without cleanup\r\n  - **lintFixer encapsulation**: `lint-controller.ts` was accessing private property; added public proxy method `fixPollutedPage()` on WikiEngine\r\n  - **createMessageStream language type**: All 3 client implementations accepted only `'en' | 'zh'` while interface defined all 8 languages\r\n  - **Batch delay default**: Changed from 300ms to 500ms to reduce rate-limit risk on default settings\r\n  - **Missing zh.ts i18n keys**: `lintNoIssuesFound` and `lintContradictionOpen` were missing from Chinese translations, causing TypeScript compilation errors\r\n\r\n  ### Added\r\n  - **91 unit tests**: Added `parseJsonResponse` (14), `mergeFrontmatter` (9), `preserveFrontmatterReviewTag` (4), `isPageEmpty` (5), `detectPollutedPages` (6). Previously 53 tests across 1 file, now 91 tests across 2 files\r\n  - **Related entity/concept wiki-link enforcement**: LLM now outputs `[[wiki-link]]` for all related entities/concepts even if they don't exist yet — allows Lint to detect them as dead links\r\n  - **tsc --noEmit passes with 0 errors**: Fixed tsconfig moduleResolution (node→bundler), skipLibCheck, narrowed include scope to src/**\r\n\r\n  ### Changed\r\n  - **Documentation overhaul**: CLAUDE.md and ROADMAP.md rewritten, removing stale version history from v1.7.x (preserved in CHANGELOG)\r\n  - **testLLMConnection i18n-ized**: Hardcoded Chinese replaced with TEXTS system, test prompt unified to English\r\n  - **tsconfig.json**: moduleResolution updated to bundler, skipLibCheck enabled, include scope narrowed\r\n\r\n  ---\r\n\r\n  ## Installation\r\n\r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n\r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\r\n\r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n\r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n\r\n  ---\r\n\r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n\r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\r\n\r\n  ---\r\n\r\n  **Full Changelog**: [1.9.0...1.9.1](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.9.0...1.9.1)",
-      "downloadCount": 105,
+      "downloadCount": 106,
       "draft": false,
       "name": "1.9.1 — Bug fixes, 91 unit tests, tsc compliance",
       "prerelease": false,
@@ -869,7 +899,7 @@
         },
         {
           "digest": "sha256:78b26a113e27f46410cba458fcbc1b3696dcb5534199744d66b7cd1ee031626c",
-          "downloadCount": 53,
+          "downloadCount": 54,
           "name": "manifest.json",
           "size": 352
         },
@@ -899,7 +929,7 @@
         },
         {
           "digest": "sha256:71d4814d66defab81c748031201dad76830f37c2f455649b8456671e21703f19",
-          "downloadCount": 99,
+          "downloadCount": 100,
           "name": "manifest.json",
           "size": 352
         },
@@ -929,7 +959,7 @@
         },
         {
           "digest": "sha256:556f795472891e225a3db54621e7be65fe0d3b40725742106f410105cacfe87b",
-          "downloadCount": 64,
+          "downloadCount": 65,
           "name": "manifest.json",
           "size": 352
         },
@@ -959,7 +989,7 @@
         },
         {
           "digest": "sha256:c3af61d65590766cebda8667b93ef6d4d5465450f14608ee0a9078523a9a2051",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 353
         },
@@ -989,7 +1019,7 @@
         },
         {
           "digest": "sha256:7de2b786ecc7870b8499af27cf28340f702b375f8b2bf34bf4cd03cdde16e17d",
-          "downloadCount": 36,
+          "downloadCount": 37,
           "name": "manifest.json",
           "size": 353
         },
@@ -1019,7 +1049,7 @@
         },
         {
           "digest": "sha256:649aca63cfdc18e2a5b01917dac6852716c0b6c8065194f4385bda6b62995eb3",
-          "downloadCount": 49,
+          "downloadCount": 50,
           "name": "manifest.json",
           "size": 353
         },
@@ -1049,7 +1079,7 @@
         },
         {
           "digest": "sha256:4dbea1a3d25d201cbd817bade319f00c2246e52f3d337e7c76a705b7ee8a5e5b",
-          "downloadCount": 36,
+          "downloadCount": 37,
           "name": "manifest.json",
           "size": 353
         },
@@ -1079,7 +1109,7 @@
         },
         {
           "digest": "sha256:10a7b0a48cb7a8bde8f0918f2535a70db70c7944a59704116729dfc4c0bec2e6",
-          "downloadCount": 62,
+          "downloadCount": 63,
           "name": "manifest.json",
           "size": 353
         },
@@ -1109,7 +1139,7 @@
         },
         {
           "digest": "sha256:e41129cbd1b0e6059787a1b7b088a6631171fbf94327ea1e20763766c1a60dd5",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 353
         },
@@ -1139,7 +1169,7 @@
         },
         {
           "digest": "sha256:43e5c8e719ba87d8ea67b95e3ec02bb4de3a7dfacf3eb9fe77c3fae073fdc181",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 353
         },
@@ -1169,7 +1199,7 @@
         },
         {
           "digest": "sha256:d0427c7fcd1331fce49c94c707d808a46f1cd3f75333a69a58868139d5f74f3a",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 353
         },
@@ -1199,7 +1229,7 @@
         },
         {
           "digest": "sha256:98d84ec03497c53d9577974127d2b9721fb9af57adaa100ea8609164d5c67eaf",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 353
         },
@@ -1229,7 +1259,7 @@
         },
         {
           "digest": "sha256:c45de1d38f996ce3552e1057341f23d5c4fd8da5fd661d964da2eb3fa2f2c9c4",
-          "downloadCount": 145,
+          "downloadCount": 146,
           "name": "manifest.json",
           "size": 352
         },
@@ -1259,7 +1289,7 @@
         },
         {
           "digest": "sha256:88cbeeac1966eb549b438938e07dd773e61f6d8bc14503fd7759e9a1d137b345",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 352
         },
@@ -1289,7 +1319,7 @@
         },
         {
           "digest": "sha256:9e4b01209407dbcbe4541e8cfdfe25e40cd219a6ed0f9290cee9bd22d0fa9fea",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 352
         },
@@ -1319,7 +1349,7 @@
         },
         {
           "digest": "sha256:a5fef98bdc7c4f195771d0b288747b4088cef6dbfa40dc771383ad54d0f349df",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 350
         },
@@ -1349,7 +1379,7 @@
         },
         {
           "digest": "sha256:12d0b3549fd591c6eae9688242655b37aad5358866146111a3bf3e8ee523ea7a",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 350
         },
@@ -1379,7 +1409,7 @@
         },
         {
           "digest": "sha256:dbc3eb4072c64009bc40985ab8e5fb124ba3cbe6d63db67210eab77f24cabcd8",
-          "downloadCount": 38,
+          "downloadCount": 39,
           "name": "manifest.json",
           "size": 350
         },
@@ -1409,7 +1439,7 @@
         },
         {
           "digest": "sha256:bc0c792bb6b97385a1a31535c10d80753ea40cd3887a38a0fd6f3cd9b086e9c4",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 350
         },
@@ -1439,7 +1469,7 @@
         },
         {
           "digest": "sha256:86faebcc2cb96fec62d75f050adb12b7241ec028980d59cac96bf5e25482bf44",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 350
         },
@@ -1469,7 +1499,7 @@
         },
         {
           "digest": "sha256:059f1b20791f4e2b563b63b84365cea6b74369895a3024c2b346c1eb059a022e",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 350
         },
@@ -1499,7 +1529,7 @@
         },
         {
           "digest": "sha256:f41bdc751ba5047af0052192f9927ac30f547d7c99a61be2533bb0caeaddf137",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 356
         },
@@ -1529,7 +1559,7 @@
         },
         {
           "digest": "sha256:c3bacd151d0afc7ad40b68cbf173a62cca27145b5d6e7b8b26c07ed167eddf5a",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 351
         },
