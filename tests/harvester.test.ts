@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { parseLinkHeader } from "../src/github.ts";
-import { normalizeDailyState, parseCommunityPlugins, selectPlugins, simplifyRelease } from "../src/harvester.ts";
+import {
+  fetchReleases,
+  normalizeDailyState,
+  parseCommunityPlugins,
+  selectPlugins,
+  simplifyRelease,
+} from "../src/harvester.ts";
 import { buildStatusMarkdown } from "../src/status.ts";
 
 describe("parseCommunityPlugins", () => {
@@ -173,6 +179,53 @@ describe("simplifyRelease", () => {
   });
 });
 
+describe("fetchReleases", () => {
+  test("bypasses conditional caching so download counts refresh", async () => {
+    const calls: Array<{ pathOrUrl: string; conditional?: boolean }> = [];
+    const github = {
+      async request<T>(pathOrUrl: string, options?: RequestInit & { conditional?: boolean }) {
+        calls.push({ pathOrUrl, conditional: options?.conditional });
+
+        return {
+          status: 200,
+          notModified: false,
+          headers: new Headers(),
+          rateLimit: { limit: 5000, remaining: 4999, reset: 0 },
+          data: [
+            {
+              tag_name: "1.0.0",
+              name: "1.0.0",
+              body: null,
+              author: null,
+              published_at: "2026-01-01T00:00:00Z",
+              prerelease: false,
+              draft: false,
+              assets: [{ name: "main.js", size: 100, download_count: 42 }],
+            },
+          ] as T,
+        };
+      },
+    };
+
+    const result = await fetchReleases(github, "owner", "repo", [
+      {
+        tag: "1.0.0",
+        name: "1.0.0",
+        description: null,
+        author: null,
+        publishedAt: "2026-01-01T00:00:00Z",
+        prerelease: false,
+        draft: false,
+        downloadCount: 1,
+        assets: [{ name: "main.js", size: 100, downloadCount: 1 }],
+      },
+    ]);
+
+    expect(calls).toEqual([{ pathOrUrl: "/repos/owner/repo/releases?per_page=100", conditional: false }]);
+    expect(result.releases[0]?.downloadCount).toBe(42);
+  });
+});
+
 describe("parseLinkHeader", () => {
   test("extracts relation URLs", () => {
     const links = parseLinkHeader('<https://api.github.com/repos/a/b/releases?page=2>; rel="next", <x>; rel="last"');
@@ -196,9 +249,35 @@ describe("buildStatusMarkdown", () => {
           pluginCount: 4,
           startedAt: null,
           updatedAt: "2026-06-01T12:30:00.000Z",
+          requestStats: {
+            total: 9,
+            fetched: 6,
+            notModified: 2,
+            failed: 1,
+            conditional: 5,
+            unconditional: 4,
+          },
         },
-        cachedRequests: 12,
-        pluginFiles: 2,
+        cacheStats: {
+          total: 12,
+          repo: 4,
+          manifest: 5,
+          releases: 2,
+          other: 1,
+        },
+        pluginStats: {
+          files: 2,
+          withReleases: 2,
+          withAnyDownloadStats: 1,
+          missingDownloadStats: 1,
+          releases: 3,
+          releasesWithDownloadStats: 2,
+          assets: 5,
+          assetsWithDownloadStats: 4,
+          totalMainDownloads: 123,
+          oldestFetchedAt: "2026-06-01T12:00:00.000Z",
+          newestFetchedAt: "2026-06-01T12:30:00.000Z",
+        },
       }),
     ).toBe(`# Status
 
@@ -206,7 +285,16 @@ describe("buildStatusMarkdown", () => {
 - Current pass: in progress (1/4, 25.0%)
 - Indexed plugins: 2 (1 present, 1 removed)
 - Plugin detail files: 2
-- HTTP cache entries: 12
+- Plugin fetch window: 2026-06-01T12:00:00.000Z to 2026-06-01T12:30:00.000Z
+- Plugins with releases: 2
+- Plugins with download stats: 1/2 (50.0%)
+- Plugins missing download stats: 1
+- Releases with download stats: 2/3 (66.7%)
+- Assets with download stats: 4/5 (80.0%)
+- Total main.js downloads: 123
+- HTTP cache entries: 12 (4 repo, 5 manifest, 2 releases, 1 other)
+- Last run API requests: 9 total (6 fetched, 2 cached 304, 1 failed)
+- Last run request modes: 5 conditional, 4 unconditional
 `);
   });
 });

@@ -1,6 +1,7 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { GitHubClient, GitHubHttpError, fetchCommunityPlugins, parseLinkHeader } from "./github.ts";
+import type { GitHubResponse } from "./github.ts";
 import { chunkForPlugin } from "./hash.ts";
 import { readJsonFile, stableStringify, writeJsonFile } from "./json.ts";
 import type {
@@ -39,6 +40,10 @@ interface GitHubRelease {
 interface HarvestPluginResult {
   data: PluginData;
   rateLimitRemaining: number | null;
+}
+
+interface GitHubRequester {
+  request<T>(pathOrUrl: string, options?: RequestInit & { conditional?: boolean }): Promise<GitHubResponse<T>>;
 }
 
 interface IndexPluginSummary {
@@ -133,6 +138,7 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
         completed: nextCursorIndex >= allPlugins.length,
         pluginCount: allPlugins.length,
         updatedAt: fetchedAt,
+        requestStats: github.stats,
       });
     }
   }
@@ -204,7 +210,7 @@ export function simplifyRelease(release: GitHubRelease): ReleaseSummary {
 }
 
 async function harvestPlugin(
-  github: GitHubClient,
+  github: GitHubRequester,
   plugin: CommunityPlugin,
   existing: PluginData | null,
   fetchedAt: string,
@@ -278,19 +284,19 @@ async function harvestPlugin(
   return { data: next, rateLimitRemaining: rateLimitRemaining ?? null };
 }
 
-async function fetchReleases(
-  github: GitHubClient,
+export async function fetchReleases(
+  github: GitHubRequester,
   owner: string,
   repoName: string,
   existingReleases: ReleaseSummary[],
 ): Promise<{ releases: ReleaseSummary[]; rateLimitRemaining: number | null }> {
   let nextUrl: string | null = `/repos/${owner}/${repoName}/releases?per_page=100`;
   const releases: ReleaseSummary[] = [];
-  let page = 1;
   let rateLimitRemaining: number | null = null;
 
   while (nextUrl) {
-    const response = await github.request<GitHubRelease[]>(nextUrl, { conditional: page === 1 });
+    // Asset download counts change without a new release tag, so release pages must always be refetched.
+    const response = await github.request<GitHubRelease[]>(nextUrl, { conditional: false });
     rateLimitRemaining = response.rateLimit.remaining;
 
     if (response.notModified) {
@@ -303,7 +309,6 @@ async function fetchReleases(
 
     const links = parseLinkHeader(response.headers.get("link"));
     nextUrl = links.next ?? null;
-    page += 1;
   }
 
   return { releases, rateLimitRemaining };

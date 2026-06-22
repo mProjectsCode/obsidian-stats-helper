@@ -62,6 +62,15 @@ export interface RateLimit {
   reset: number | null;
 }
 
+export interface GitHubRequestStats {
+  total: number;
+  fetched: number;
+  notModified: number;
+  failed: number;
+  conditional: number;
+  unconditional: number;
+}
+
 export interface HarvestOptions {
   mode: "daily" | "chunk";
   chunkIndex?: number;
@@ -80,4 +89,5 @@ export interface HarvestRunState {
   pluginCount: number;
   startedAt: string | null;
   updatedAt: string | null;
+  requestStats?: GitHubRequestStats;
 }

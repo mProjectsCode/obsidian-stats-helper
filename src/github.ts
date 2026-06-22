@@ -1,4 +1,4 @@
-import type { HttpCacheFile, RateLimit } from "./types.ts";
+import type { GitHubRequestStats, HttpCacheFile, RateLimit } from "./types.ts";
 
 export interface GitHubResponse<T> {
   status: number;
@@ -36,6 +36,14 @@ export class GitHubClient {
   private readonly apiVersion: string;
   private readonly userAgent: string;
   private readonly cache: HttpCacheFile;
+  readonly stats: GitHubRequestStats = {
+    total: 0,
+    fetched: 0,
+    notModified: 0,
+    failed: 0,
+    conditional: 0,
+    unconditional: 0,
+  };
 
   constructor(options: GitHubClientOptions) {
     this.token = options.token;
@@ -50,6 +58,7 @@ export class GitHubClient {
     const cacheKey = `${method} ${url}`;
     const cached = this.cache.entries[cacheKey];
     const headers = new Headers(options.headers);
+    const conditional = options.conditional !== false;
 
     headers.set("Accept", headers.get("Accept") ?? "application/vnd.github+json");
     headers.set("User-Agent", this.userAgent);
@@ -62,34 +71,52 @@ export class GitHubClient {
       headers.set("Authorization", `Bearer ${this.token}`);
     }
 
-    if (options.conditional !== false && method === "GET" && cached?.etag) {
+    if (conditional && method === "GET" && cached?.etag) {
       headers.set("If-None-Match", cached.etag);
     }
 
-    if (options.conditional !== false && method === "GET" && cached?.lastModified) {
+    if (conditional && method === "GET" && cached?.lastModified) {
       headers.set("If-Modified-Since", cached.lastModified);
     }
 
     const { conditional: _conditional, ...fetchOptions } = options;
-    const response = await fetch(url, { ...fetchOptions, method, headers });
+    this.stats.total += 1;
+    if (conditional) {
+      this.stats.conditional += 1;
+    } else {
+      this.stats.unconditional += 1;
+    }
+
+    let response: Response;
+    try {
+      response = await fetch(url, { ...fetchOptions, method, headers });
+    } catch (error) {
+      this.stats.failed += 1;
+      throw error;
+    }
+
     const rateLimit = readRateLimit(response.headers);
 
     if (response.status === 304) {
+      this.stats.notModified += 1;
       return { status: response.status, data: null, notModified: true, headers: response.headers, rateLimit };
     }
 
-    if (method === "GET" && response.ok) {
+    if (!response.ok) {
+      this.stats.failed += 1;
+      const body = await response.text();
+      throw new GitHubHttpError(response.status, `GitHub request failed with ${response.status} for ${url}`, body);
+    }
+
+    this.stats.fetched += 1;
+
+    if (conditional && method === "GET") {
       const etag = response.headers.get("etag") ?? undefined;
       const lastModified = response.headers.get("last-modified") ?? undefined;
 
       if (etag || lastModified) {
         this.cache.entries[cacheKey] = { etag, lastModified };
       }
-    }
-
-    if (!response.ok) {
-      const body = await response.text();
-      throw new GitHubHttpError(response.status, `GitHub request failed with ${response.status} for ${url}`, body);
     }
 
     const contentType = response.headers.get("content-type") ?? "";
