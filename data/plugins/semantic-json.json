@@ -4,8 +4,8 @@
   "description": "Turn your canvases into easy no-code JSON data structures. Share with LLMs. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "semantic-json",
-  "lastChangedAt": "2026-06-16T04:04:58.578Z",
-  "lastFetchedAt": "2026-06-16T04:04:58.578Z",
+  "lastChangedAt": "2026-06-23T04:01:09.546Z",
+  "lastFetchedAt": "2026-06-23T04:01:09.546Z",
   "manifest": {
     "author": "Zach Battin",
     "description": "Turn your canvases into easy no-code JSON data structures. Share with LLMs.",
@@ -22,22 +22,26 @@
       "assets": [
         {
           "digest": "sha256:e79a9ece8a2a5b1a6af3bf137ed3f32b5769b1380f117ddf5afe5382f378b640",
+          "downloadCount": 103,
           "name": "main.js",
           "size": 33505
         },
         {
           "digest": "sha256:d8eba4c2e5813cf15c03cb0f9ccbcc38d4f12ebfeb3a4ea33061550608ef528b",
+          "downloadCount": 96,
           "name": "manifest.json",
           "size": 262
         },
         {
           "digest": "sha256:34daba5f8405fe77a16729ab158a2c4af5c1934d3c9fe376fd8c39f5bc6baf2c",
+          "downloadCount": 95,
           "name": "styles.css",
           "size": 172
         }
       ],
       "author": "SyntaxAsSpiral",
       "description": "## Changes\n- Remove invalid `icon` property from manifest.json to comply with Obsidian plugin requirements\n\n## Files\n- main.js\n- manifest.json\n- styles.css",
+      "downloadCount": 103,
       "draft": false,
       "name": "0.4.0",
       "prerelease": false,
@@ -48,17 +52,20 @@
       "assets": [
         {
           "digest": "sha256:88985d60456371c882b8f236fe9f2efb2e002eb3b41b2a7d0ad8b7773c358b1f",
+          "downloadCount": 2,
           "name": "main.js",
           "size": 15425
         },
         {
           "digest": "sha256:5c2dc71693a889a56f81ab3a49eb3274472090b81008577616241ce84150d695",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 262
         }
       ],
       "author": "SyntaxAsSpiral",
       "description": "## 🎯 Headline Feature: Labeled Edge Embedding\r\n\r\n**Transform your Canvas edge labels into structured relationship data.**\r\n\r\nLabeled edges are now automatically embedded into connected nodes as directional `from` and `to` arrays, creating self-contained relationship data perfect for:\r\n\r\n- **Infrastructure-as-Code workflows** - Document system architecture with semantic edges (`blocks`, `triggers`, `depends-on`)\r\n- **LLM consumption** - Relationships are in-context with nodes (no ID lookup required)\r\n- **Executable graphs** - Edge labels become operational predicates for schedulers and interpreters\r\n- **Self-documenting systems** - Your Canvas becomes a living specification\r\n\r\n**Example transformation:**\r\n\r\n```json\r\n// Before: Traditional edge array\r\n{\r\n  \"nodes\": [\r\n    {\"id\": \"A\", \"type\": \"text\", \"text\": \"Start Process\"},\r\n    {\"id\": \"B\", \"type\": \"text\", \"text\": \"End Process\"}\r\n  ],\r\n  \"edges\": [\r\n    {\"id\": \"edge1\", \"fromNode\": \"A\", \"toNode\": \"B\", \"label\": \"triggers\"}\r\n  ]\r\n}\r\n\r\n// After: Pure JSON export with embedded relationships\r\n{\r\n  \"nodes\": [\r\n    {\r\n      \"id\": \"A\",\r\n      \"type\": \"text\",\r\n      \"text\": \"Start Process\",\r\n      \"to\": [{\"node\": \"B\", \"label\": \"triggers\"}]\r\n    },\r\n    {\r\n      \"id\": \"B\",\r\n      \"type\": \"text\",\r\n      \"text\": \"End Process\",\r\n      \"from\": [{\"node\": \"A\", \"label\": \"triggers\"}]\r\n    }\r\n  ]\r\n}\r\n```\r\n\r\n**Behavior:**\r\n- Labeled edges → embedded into nodes (removed from main `edges` array)\r\n- Unlabeled edges → preserved in main `edges` array (existing behavior)\r\n- Directional semantics preserved (`from` = incoming, `to` = outgoing)\r\n\r\n---\r\n\r\n## ⚡ Pure JSON Export Enhancements\r\n\r\n### Semantic Orphan Node Grouping\r\nNew option to group orphan nodes (nodes not in any group) at the top level with semantic sorting instead of spatial sorting. Perfect for structured data exports.\r\n\r\n**CLI flag:** `--group-orphan-nodes`\r\n**Plugin setting:** \"Group orphan nodes\" (default: disabled)\r\n\r\n### Spatial Child Group Sorting\r\nChild groups within hierarchical structures now sort spatially (y, x position) for predictable, consistent output ordering.\r\n\r\n### File Node Improvements\r\nFile nodes now sort by filename instead of full path, producing cleaner Pure JSON output.\r\n\r\n---\r\n\r\n## 🛠️ Build System Modernization\r\n\r\n- **Migrated from Rollup to esbuild** - Faster builds, modern tooling, better developer experience\r\n- **Modern ESLint configuration** - Flat config format with `eslint-plugin-obsidianmd`\r\n- **Improved linting** - TypeScript parser with `projectService: true`\r\n- **Better dev workflow** - Updated scripts and configurations\r\n\r\n---\r\n\r\n## 📚 Documentation\r\n\r\n- **867 lines of spec improvements** - Comprehensive updates to `semantic-json-spec.md`\r\n- **Before/after examples** - Visual comparison images\r\n- **Updated conformance tests** - Expanded test Canvas files\r\n- **CLI documentation** - Enhanced usage guide with all new options\r\n\r\n---\r\n\r\n## 🔧 Technical Improvements\r\n\r\n- Refactored settings with clearer descriptions\r\n- Improved compile.ts logic for better maintainability\r\n- Enhanced type safety throughout codebase\r\n- Better error handling in CLI\r\n\r\n---\r\n\r\n## 📦 Upgrade Notes\r\n\r\nThis release is **fully backward compatible**. Existing Canvas files will continue to work exactly as before.\r\n\r\n**To use new features:**\r\n- Enable \"Group orphan nodes\" in settings for semantic orphan grouping\r\n- Add labels to edges in Canvas to use embedded relationship export\r\n- Update CLI scripts to use new `--group-orphan-nodes` flag if desired",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.3.0",
       "prerelease": false,
@@ -69,17 +76,20 @@
       "assets": [
         {
           "digest": "sha256:aece19611575d77af895e90688aedafa7fd3290c20474d9b58cc9d540a9dd420",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 128211
         },
         {
           "digest": "sha256:602a49c7f34883d3de49805176d107608400d1c56052cef07f40451be0d0be53",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 385
         }
       ],
       "author": "SyntaxAsSpiral",
       "description": "## Features\r\n\r\n  - ✨ **Bidirectional JSON ⇄ Canvas compilation** - Close the loop! Import JSON → Canvas (visual scaffolding) → author visually → export pure JSON\r\n  - 📥 **Import JSON to canvas** command - Creates groups from objects/arrays, text nodes from primitives\r\n  - 📤 **Export as pure JSON** command - Strips Canvas metadata for clean data artifacts\r\n  - 🔧 **CLI flag: `--from-json`** - Import JSON to Canvas from command line\r\n  - ⚙️ **Strip edges when flow-sorted** setting - Edges become redundant when topology is compiled into sequence order\r\n\r\n  ## Fixes\r\n\r\n  - 🐛 Remove unused variable (childStartY)\r\n  - 🎨 Update command names to sentence case for consistency\r\n\r\n  ## Files\r\n\r\n  Attach: `main.js`, `manifest.json`",
+      "downloadCount": 4,
       "draft": false,
       "name": "0.2.0",
       "prerelease": false,
@@ -90,17 +100,20 @@
       "assets": [
         {
           "digest": "sha256:82bcef73104387df186a105e3477beec3977219886eb5270fdd1be3c23f12c5c",
+          "downloadCount": 3,
           "name": "main.js",
           "size": 47509
         },
         {
           "digest": "sha256:ee4dac579fa1aa8b434d26f8a5ce3c86f7d62d0c6846aa80b2d8449d0a3cf54b",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 273
         }
       ],
       "author": "SyntaxAsSpiral",
       "description": "First public release of Semantic JSON.\n\n**Features:**\n- Hierarchical node ordering (groups before contained nodes)\n- Topology-based edge sorting (spatial information flow)\n- Auto-compile on save (unscrambles Obsidian's z-index ordering)\n- Export command for separate .json artifacts\n- CLI tool for batch processing\n\n**Installation:**\nDownload main.js and manifest.json from this release and place them in `<vault>/.obsidian/plugins/semantic-json/`",
+      "downloadCount": 3,
       "draft": false,
       "name": "0.1.0 - Initial Release",
       "prerelease": false,
