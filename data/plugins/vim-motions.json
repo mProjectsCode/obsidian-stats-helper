@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-22T07:05:09.562Z",
-  "lastFetchedAt": "2026-06-22T07:05:09.562Z",
+  "lastChangedAt": "2026-06-23T07:01:09.549Z",
+  "lastFetchedAt": "2026-06-23T07:01:09.549Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.7.0"
+    "version": "0.9.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:7f59c15e9e038c130856c6bad541362f194b5f8c9afdd5d3f49582257b7e730a",
-          "downloadCount": 5,
+          "digest": "sha256:ed7f4eea5c874e542eb67ee3ccff3d69ce5106510bbe28a9abfa6e3550d10b01",
+          "downloadCount": 3,
           "name": "main.js",
-          "size": 65894
+          "size": 75752
         },
         {
-          "digest": "sha256:da2b3e56006b3412cad67a89c648b721a153d729a6b565e2e4b2f6d52a1cb7c2",
+          "digest": "sha256:8a46edfbaf3b661d8362db4556593deb96bfe0cb33382bf78db98f0c6bae66b6",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 604
+        },
+        {
+          "digest": "sha256:a6f5aa769b609c433d510e405edeaa208a1d72e36b9cf7631603164b27344a0c",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 6271
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Configurable multi-line scan limit** — multi-line text objects (`i*`, `a*`, `i$`, etc.) now have a configurable scan range via **Settings → Vim Motions → Multi-line text object scan range** (5–200 lines, default: 20). Users working with long-form documents can increase the limit to match delimiters spanning more than 40 lines.\r\n- **Code block exclusion in delimiter scanning** — the multi-line delimiter scanner now skips lines inside fenced code blocks (` ``` ` fences). Delimiters like `**` inside code blocks are no longer matched as text object boundaries.\r\n- E2E test for delimiter scanning across code block boundaries (`di*` should not match delimiters inside fenced code blocks).\r\n- E2E test for `vi*` on single-character content (`*x*`), documenting the codemirror-vim visual mode limitation.\r\n\r\n### Fixed\r\n\r\n- **Scrolloff dynamic line height** — scrolloff margins now use `EditorView.defaultLineHeight` to measure the actual line height instead of assuming 22px. The margin adapts automatically when the user changes font size or line height via CSS/themes.\r\n- `adjustRangeForVisualMode` no longer produces zero-width selections for single-character text object ranges — the −1 head compensation is skipped when the range is exactly 1 character wide. (The underlying codemirror-vim `makeCmSelection` bug still prevents `vi*` on `*x*` from selecting correctly, but `di*` on `*x*` now works as expected.)\r\n\r\n### Changed\r\n\r\n- `getTextwidth()` now reads directly from the plugin's internal `textwidthValue` instead of querying `vimApiRef.getOption('textwidth')`, avoiding a dual-source ambiguity where CM Vim's internal option state could return a stale default (80).\r\n- Vimrc loader skips `vim.handleEx()` for `set textwidth=N` lines and handles them entirely via `setTextwidth()` + `vim.setOption()`, preventing CM Vim's Ex handler from interfering with the plugin's textwidth state.\r\n- `syncTextwidthFromVim()` removed — the function read CM Vim's `getOption('textwidth')` which returned the stale default (80) during the `active-leaf-change` lifecycle, overwriting the correct vimrc-set value.\r\n- `findFenceLines()` and `findContainingBlock()` exported from `src/text-objects/code-block.ts` for reuse in delimiter scanning.\r\n- `MULTILINE_SCAN_LIMIT` constant removed from `delimiter.ts` — scan limit is now passed as a parameter through the text object factory chain (`createMultiLineDelimiterTextObject`, `createSmartAsteriskTextObject`, `registerTextObjects`).\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: \"Scrolloff line height assumption\" marked as fixed.\r\n- `KNOWN_LIMITATIONS.md`: \"Multi-line delimiter scan limit\" updated to note the limit is now configurable via settings.\r\n- `KNOWN_LIMITATIONS.md`: \"Multi-line delimiter nesting\" updated to note fenced code blocks are now excluded from the scan.\r\n- `KNOWN_LIMITATIONS.md`: \"Visual mode on single-character text objects\" updated from \"Under investigation\" to \"Confirmed codemirror-vim limitation\" with detailed root cause.\r\n- `KNOWN_LIMITATIONS.md`: \"`set textwidth` via vimrc\" root cause refined — identified CM Vim's `defineOption` callback resetting the value during editor initialization.\r\n- `KNOWN_LIMITATIONS.md`: \"`dG` leaves trailing newline\" updated from \"Skipped test, pending fix\" to \"Unfixable from plugin code\" with investigation findings.\r\n- `KNOWN_LIMITATIONS.md`: \"Dot-repeat of `cw`\" and \"`n`/`N` search wrap-around\" updated from \"pending fix\" to \"Confirmed codemirror-vim bug, not a test timing issue.\"\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.8.0...0.9.0",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-23T03:30:04Z",
+      "tag": "0.9.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8c15f463946f784d8366a86023582a71ff8644d825b2cdf3172cf8c5179bed16",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 75148
+        },
+        {
+          "digest": "sha256:0df77235e6821871f50a6366163b8d41f6e12d510886ab0f067d896fed364170",
           "downloadCount": 5,
           "name": "manifest.json",
           "size": 604
         },
         {
-          "digest": "sha256:3a99220e2363c9cdf72204cddf88dcc23b6f5d2cbc468e3868c533f45602d0be",
+          "digest": "sha256:a6f5aa769b609c433d510e405edeaa208a1d72e36b9cf7631603164b27344a0c",
           "downloadCount": 5,
+          "name": "styles.css",
+          "size": 6271
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 0.8.0 - 2026-06-23\r\n\r\n### Added\r\n\r\n- **Vim chord display** — pending keystrokes (e.g. `2d`, `gq`, `<C-w>h`) are shown in the status bar as you type a multi-key command, clearing when the command completes or is cancelled. Reads codemirror-vim's internal `vim.status` string directly, avoiding event-ordering issues with manual keystroke accumulation in the CM6 adapter. Togglable via **Settings → Vim Motions → Vim chord display** (on by default). ([#2](https://github.com/saberzero1/motions/issues/2))\r\n- **Customizable mode prompts** — per-mode status bar text is configurable via four text fields in **Settings → Vim Motions → Vim mode display prompt** (normal, insert, visual, replace). Defaults to `NORMAL`/`INSERT`/`VISUAL`/`REPLACE`. Supports emoji (e.g. `🟢` for normal). ([#3](https://github.com/saberzero1/motions/issues/3))\r\n- **Powerline-style status bar** — optional colored mode indicator with per-mode background colors (gruvbox-inspired: green/normal, teal/insert, amber/visual, red/replace) and a CSS border-triangle separator. No special font required — uses pure CSS. Togglable via **Settings → Vim Motions → Powerline-style status bar** (off by default). Colors are overridable via CSS custom properties (`--vim-pl-normal-bg`, `--vim-pl-normal-fg`, etc.).\r\n- **Left-aligned status bar** — the vim mode indicator and chord display are always positioned at the leftmost edge of the status bar via DOM reordering and `margin-right: auto`, matching the convention established by obsidian-vimrc-support.\r\n- `ModePrompts` interface and `DEFAULT_MODE_PROMPTS` constant exported from `settings.ts`.\r\n- `VimModeTrackerOptions` extended with `powerline` and `modePrompts` fields.\r\n- CSS classes: `vim-motions-chord`, `vim-motions-powerline`, `vim-motions-statusbar-end`.\r\n- Hint mode expanded into a full vimium-style UI navigation system ([#7](https://github.com/saberzero1/motions/issues/7)):\r\n    - **Smart label length**: single-character labels (from home row) when 9 or fewer targets, two-character labels for more.\r\n    - **Configurable hint characters**: new `hintModeLabels` setting controls the character pool for hint labels (default: `asdfghjkl`).\r\n    - **Independent settings toggle**: `enableHintMode` setting allows toggling hint mode on/off independently from workspace navigation.\r\n    - **Obsidian command**: registered as `vim-motions:show-hint-labels` — triggerable from command palette, assignable via **Settings → Hotkeys**, and usable without an open note.\r\n    - **Global hotkey**: press-to-record hotkey setting that works even when modals (settings, command palette) have focus. Uses capture-phase DOM listeners that bypass Obsidian's scope system.\r\n    - **Multi-window support**: global hotkey listener registered on workspace popout windows via `window-open` event.\r\n    - **Editor pane navigation**: `.workspace-leaf-content` is now a hint target. Selecting it calls `setActiveLeaf()` with focus and activates the editor, matching click-to-focus behavior.\r\n    - **Smarter element activation**: `contenteditable` elements receive `.focus()`, internal links use `app.workspace.openLinkText()`, Ctrl/Cmd+click opens in new pane via `MouseEvent` dispatch.\r\n    - **Backspace reset**: pressing Backspace after typing a wrong first character undims all labels and allows re-selection.\r\n    - **First-char mismatch dismissal**: pressing a character that matches no label immediately dismisses the overlay instead of waiting for a second character.\r\n    - **Auto refocus**: after hint mode completes, the active editor is refocused (150ms delay) so `<leader><leader>h` works for the next invocation.\r\n- Hint mode target selectors expanded from 9 to 24, covering: checkboxes, ribbon icons, callout folds, settings navigation items, settings controls (buttons, toggles, dropdowns), tab close buttons, search inputs, editor panes, internal links in live preview, and modal close buttons.\r\n- Selectors grouped by stability: standard HTML selectors (stable across Obsidian versions) and Obsidian-internal selectors (may change between versions).\r\n- `generateHintLabels()`, `HOME_ROW`, `ALL_KEYS`, and `TARGET_SELECTOR` exported from `hint-mode.ts` for testability.\r\n- E2E test suite `test/specs/hint-mode.e2e.ts` with 13 tests across two tiers:\r\n    - Tier 1 (baseline): overlay appearance, label rendering, Escape dismissal, first-char dimming, label completion, unmatched-char dismissal, Backspace reset.\r\n    - Tier 2 (behavior contracts): home-row first characters, no duplicate labels, consistent label length, visibility filtering, pointer-events CSS, Obsidian command registration.\r\n- `formatHotkey()` utility in `settings.ts` for displaying serialized hotkey strings in human-readable form.\r\n- CSS class `.vim-motions-hotkey-display` for the hotkey display in settings.\r\n\r\n### Changed\r\n\r\n- Hint mode registration extracted from `registerWorkspaceNavigation()` into a standalone `registerHintMode()` private method on the plugin, following the same pattern as `registerEasyMotion()`.\r\n- `createHintModeAction()` now accepts an optional `hintChars` parameter for configurable hint character pools.\r\n- `isVisible()` now checks against scrollable ancestor containers (not just the viewport) — elements scrolled out of view inside `overflow: hidden/scroll/auto` parents are excluded.\r\n- `showHints()` refactored to use `getHintPosition()` which places `.workspace-leaf-content` labels at the editor/preview content area (8px inset) rather than the top-left of the leaf container.\r\n- `waitForHintKey()` now returns `HintResult` with `ctrlKey`/`metaKey` modifier state for new-pane activation support.\r\n- `activateElement()` replaces the previous bare `.click()` with context-aware activation (focus, link resolution, modifier-based new-pane, `setActiveLeaf`).\r\n- Pop-out window compatibility: `window.innerHeight`/`scrollX`/`scrollY` replaced with `activeWindow.*` equivalents throughout hint mode.\r\n- Hotkey recorder uses `e.code` as fallback when `e.key` reports `'Unidentified'` (common for Ctrl+Space on Linux with input methods).\r\n\r\n### Fixed\r\n\r\n- Hint mode now works when no note is open (via the Obsidian command path).\r\n- Hint mode global hotkey now fires even when a modal (settings, command palette) has focus — uses capture-phase `keydown` listeners on the main window's document that bypass Obsidian's scope system.\r\n- Selecting a `.workspace-leaf-content` hint now properly focuses the editor pane via `app.workspace.setActiveLeaf()` instead of a bare `.click()` that Obsidian didn't treat as a pane activation.\r\n- Settings controls (toggles, buttons, dropdowns, navigation items) are now targetable via hint mode.\r\n- Tab close buttons (`.workspace-tab-header-inner-close-button`) are now targetable via hint mode.\r\n- Elements inside scrollable containers (e.g., settings content area) that are scrolled out of view no longer receive hint labels.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.7.0...0.8.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.8.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T23:35:29Z",
+      "tag": "0.8.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7f59c15e9e038c130856c6bad541362f194b5f8c9afdd5d3f49582257b7e730a",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 65894
+        },
+        {
+          "digest": "sha256:da2b3e56006b3412cad67a89c648b721a153d729a6b565e2e4b2f6d52a1cb7c2",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 604
+        },
+        {
+          "digest": "sha256:3a99220e2363c9cdf72204cddf88dcc23b6f5d2cbc468e3868c533f45602d0be",
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 4062
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- EasyMotion (`<leader><leader>w/j/f`) and hint mode (`<leader><leader>h`) now work with any leader key, including space (`let mapleader = \" \"`) and comma. Previously, leader keys with default Vim bindings (space → forward char, comma → reverse repeat find) were consumed immediately by codemirror-vim before the multi-key sequence could accumulate. Fixed by unmapping the leader key's conflicting default binding before registering EasyMotion `mapCommand` entries. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- Vimrc `let mapleader = \" \"` (space) now correctly sets the leader key. The parser previously split the line by whitespace, losing the space inside quotes. Added regex-first parsing for `let` to preserve quoted values containing whitespace.\r\n- Vimrc loading no longer falsely reports \"loaded but contained no commands\" when the editor isn't ready. `loadVimrc` now distinguishes \"editor not available\" (`ready: false`, retries on next event) from \"file parsed with 0 commands\" (`ready: true`). Includes a retry loop (up to 10 attempts, 100ms apart) to handle the race between `active-leaf-change` and editor initialization.\r\n- Leader-dependent features (EasyMotion, hint mode) are re-registered after vimrc loading resolves the leader key, ensuring they use the user's configured leader instead of the default backslash.\r\n- Visual mode selection on markdown text objects (`vi*`, `va*`, `vi$`, `va$`, `vi~`, `va~`, `vi=`, `va=`, `vi_`, `va_`, `` vi` ``, `` va` ``, `vil`, `val`, `viC`, `vaC`, `viB`, `vaB`, `vio`, `vao`, `vit`, `vat`) now selects the correct range — previously selected one character too far to the right. Operators (`d`, `y`, `c`) were unaffected. Root cause: codemirror-vim's `makeCmSelection` adds +1 to the head position in visual mode, and built-in text objects compensate via an internal `expandSelection` helper, but custom `defineMotion` text objects bypassed that path. ([#4](https://github.com/saberzero1/motions/issues/4))\r\n- `]b` with a single buffer no longer opens a stale file from a previous session's recent-files list.\r\n- `vgq` (visual mode `gq`) no longer triggers macro recording. The `vim-keypress` handler for macro recording previously intercepted the `q` keystroke in `gq` as a macro-record toggle. Fixed by restricting macro recording to normal mode only (matching Vim behavior), tracking previous keypress to detect `g`-prefixed operator sequences, and cancelling pending record state on mode changes. ([#5](https://github.com/saberzero1/motions/issues/5))\r\n\r\n### Added\r\n\r\n- `VimRegistration.unmapDefaultBinding(key)` — removes a key's default codemirror-vim binding (e.g. `<Space>` → `l`) so `mapCommand` multi-key sequences starting with that key can accumulate in the input buffer.\r\n- `VimrcLoadResult.ready` field — distinguishes \"editor not available\" from \"file parsed successfully\", enabling reliable retry logic for vimrc loading.\r\n- E2E tests for EasyMotion with space and comma as leader keys, verifying the `unmap` + `mapCommand` approach works for keys with default Vim bindings.\r\n- E2E test for EasyMotion surviving settings hot-reload (disable → re-enable cycle).\r\n- `getSelection()` test helper for asserting exact visual mode selections.\r\n- `loadSingleFileWorkspace()` test helper using `obsidianPage.loadWorkspaceLayout()` to set up deterministic single-file workspace state with an empty recent-files list.\r\n- 14 new E2E tests verifying exact visual mode selection for all delimiter-based text objects (`*`, `$`, `~`, `=`, `_`, `` ` ``), plus regression guards for operator mode.\r\n- E2E tests for `gq` in visual mode (wrap + no macro recording), `gqq` macro non-interference, and standalone `q` macro recording start/stop.\r\n- 3 Neovim golden comparison cases for `gq` operators (`gqq`, `Vgq`, `gqj`) added to the `g-commands` suite with content deviation registered (Markdown-aware wrapping differs from Neovim's plain-text `gq`).\r\n\r\n### Changed\r\n\r\n- `registerEasyMotion()` now calls `reg.unmapDefaultBinding(leader)` before registering `mapCommand` entries, allowing any single-character leader key to work.\r\n- `registerWorkspaceNavigation()` hint mode binding uses the resolved leader key from `LeaderRegistry` (same approach as EasyMotion).\r\n- `createHintModeAction()` return type narrowed from `ActionFn` to `() => void` (the function ignores all parameters).\r\n- `VimrcLoadResult` gains `ready: boolean` field; `loadVimrc()` returns `ready: false` when the editor adapter is unavailable.\r\n- Vimrc `active-leaf-change` callback retries `loadVimrc` up to 10 times when the editor isn't ready, then re-registers leader-dependent features after successful load.\r\n- `KNOWN_LIMITATIONS.md`: \"EasyMotion leader key conflict with `mapCommand`\" marked as fixed; added vimrc parser space-handling context.\r\n- `KNOWN_LIMITATIONS.md`: added \"Visual mode on single-character text objects\" section documenting a codemirror-vim edge case where `vi*` on `*x*` (1-char inner content) does not select correctly.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.6.0...0.7.0",
-      "downloadCount": 5,
+      "downloadCount": 13,
       "draft": false,
       "name": "0.7.0",
       "prerelease": false,
