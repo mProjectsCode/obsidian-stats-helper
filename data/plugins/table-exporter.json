@@ -4,17 +4,17 @@
   "description": "Export rendered Markdown tables in Obsidian to PNG, CSV, Excel, and PDF. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "table-exporter",
-  "lastChangedAt": "2026-06-23T07:01:09.549Z",
-  "lastFetchedAt": "2026-06-23T07:01:09.549Z",
+  "lastChangedAt": "2026-06-24T06:03:52.734Z",
+  "lastFetchedAt": "2026-06-24T06:03:52.734Z",
   "manifest": {
     "author": "shaw",
     "authorUrl": "https://github.com/wikty",
-    "description": "Export rendered Markdown tables to PNG, CSV, Excel, and PDF.",
+    "description": "Export Markdown tables and Bases views to PNG, CSV, Excel, and PDF — including virtualized Bases tables.",
     "id": "table-exporter",
     "isDesktopOnly": false,
-    "minAppVersion": "1.5.0",
+    "minAppVersion": "1.9.0",
     "name": "Table Exporter",
-    "version": "0.1.5"
+    "version": "0.2.0"
   },
   "name": "Table Exporter",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:cb7caa40a2ea8be9ee6c5d60c60e11078d5aa4f3075af8371a0fe39e0738325f",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 858304
+        },
+        {
+          "digest": "sha256:10f9009a0b8bcf6422b4b8857b14291c03ee72a8ebaa5d39b268f5311b2da01d",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 323
+        },
+        {
+          "digest": "sha256:f59b1ba306dc5fe706126cf1873f0759685c97da7b3354332deeea8eb6cfe3ce",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 2150
+        }
+      ],
+      "author": "wikty",
+      "description": "### Added\n\n- Obsidian `Bases` view support. `Bases Table` views can now be exported to `PNG`, `CSV`, `Excel (.xlsx)`, and `PDF` alongside Markdown tables.\n- Scroll-walking collector for virtualized `Bases Table` rows. The plugin walks the scroll container, deduplicates rows by content fingerprint, and restores the original scroll position when done, so a 100-row `Bases Table` exports as 100 rows instead of only the currently visible window.\n- Type-aware `Excel` and `CSV` output for `Bases` columns: `checkbox` columns become real boolean cells, `date` columns become ISO date strings, `number` columns are written as numeric cells, and link cells export readable text instead of raw control HTML.\n- Faithful `PNG` and `PDF` rendering for Markdown tables whose cells contain `callout`, `Mermaid`, or `Dataview` blocks. The export pipeline detects complex rendered content and routes through DOM capture instead of the simplified SVG matrix renderer.\n- New commands: `Export Bases view as PNG` and `Export Bases view as PDF with default options`. Existing `Export Markdown table as ...` commands continue to work and now also accept `Bases Table` views as the export source.\n- Experimental visible-area `PNG` export for `Bases Cards`, `List`, and `Map` views. A runtime notice is shown at export time so users understand the limitation.\n- `{{view}}` placeholder for the filename template, expanded from the source view's title.\n\n### Changed\n\n- Generalized internal table extraction to operate on any `HTMLElement` rather than only `HTMLTableElement`. Markdown table behavior is preserved; the change enables the `Bases` view code paths.\n- `Excel` worksheet name is now derived from the view title (sanitized to 31 characters) instead of a hardcoded `Table`.\n- Plugin notices and dialog labels now describe the source view kind (`Markdown table`, `Bases table`, `Bases cards`, etc.) instead of always saying `table`.\n- Migrated from the deprecated `app.workspace.activeLeaf` API to `getActiveViewOfType` with a `getMostRecentLeaf` fallback, so the plugin is compatible with `Bases` view leaves in addition to `Markdown` views.\n- `manifest.json` description and `package.json` keywords now explicitly mention `Bases`, so the plugin is discoverable by users searching for Bases-related export tools.\n\n### Notes\n\n- `Bases Cards`, `List`, and `Map` views currently export only the currently rendered viewport. `Bases` uses virtualized DOM rendering with element recycling for these view types, so unlike the `Table` view (which collects rows by scroll-walking), the visual views cannot yet produce a complete long-image without canvas stitching. Full long-image export for `Cards` is planned for `v0.3`.\n- `CSV` and `Excel` exports remain matrix-based and are only available for `Markdown table` and `Bases Table` sources. Attempting `CSV` / `Excel` export from a `Cards` / `List` / `Map` view produces a clear error message rather than a malformed file.\n- Upgrade from `0.1.x` is non-breaking. Existing `Markdown table` export behavior, commands, and settings are preserved. New `Bases` capabilities activate automatically when a `Bases` view is the active leaf.\n- Internal test coverage for `Bases` DOM extraction is now backed by HTML fixtures under `tests/fixtures/` to detect regression if Obsidian's `Bases` DOM structure changes in future releases.",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "Table Exporter 0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-23T16:22:47Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:8ae346e4b98b3cf264ff6353fa2f694a250e38a9bf61ef98f41298b8fd16afe9",
-          "downloadCount": 130,
+          "downloadCount": 136,
           "name": "main.js",
           "size": 847509
         },
         {
           "digest": "sha256:f4a3abc65f986c485efb532816feb6f001708fead54e84c8e59d8fbd2210f54c",
-          "downloadCount": 132,
+          "downloadCount": 138,
           "name": "manifest.json",
           "size": 277
         },
         {
           "digest": "sha256:5b30df9a0650ebffa783b088237b4570ad43337505eeae111c6e2bdd70e96051",
-          "downloadCount": 125,
+          "downloadCount": 131,
           "name": "styles.css",
           "size": 1828
         }
       ],
       "author": "wikty",
       "description": "## Fixed\n- Renamed the settings heading from `Export settings` to `Export` to satisfy Community Directory source review guidance.\n\n## Notes\n- This release is focused on Community Directory source review compatibility and does not change the plugin's feature set.",
-      "downloadCount": 130,
+      "downloadCount": 136,
       "draft": false,
       "name": "0.1.5",
       "prerelease": false,
