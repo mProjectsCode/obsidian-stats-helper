@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-23T05:02:09.529Z",
-  "lastFetchedAt": "2026-06-23T05:02:09.529Z",
+  "lastChangedAt": "2026-06-24T04:04:52.713Z",
+  "lastFetchedAt": "2026-06-24T04:04:52.713Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.21.1"
+    "version": "1.22.1"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:4561a9cc98f70ba59fc85c4463fe3afa4962ed2c0ec1c07d97a95478939ff93f",
+          "downloadCount": 379,
+          "name": "main.js",
+          "size": 1085588
+        },
+        {
+          "digest": "sha256:d43a4a750cf8248e2edd05ccb725e5d6ea1c48807d91aba858f52c71fdaa6621",
+          "downloadCount": 385,
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:e401fa4c781b5f3f17de0eba59f3a77fd20bd1e570f97b65f4eefa8d12aa4eff",
+          "downloadCount": 373,
+          "name": "styles.css",
+          "size": 17115
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changes\n\n### Highlights\n\nv1.22.0 is a **feature release** that delivers a long-requested one-click schema update workflow, Traditional Chinese as the 10th language, and an improved ingestion status bar. The schema suggestion engine now presents LLM-generated improvements in an IDE-style dual-pane diff Modal — Apply writes the new schema with automatic backup rotation, Cancel dismisses cleanly, and Open File jumps to the raw config for manual editing.\n\n- **📝 Schema one-click apply (Issue #97).** LLM-generated schema suggestions are displayed in an IDE-style dual-pane diff Modal with line-level highlighting. The Apply button writes the new schema body while preserving frontmatter, automatically rotating backups (max 3) via `core/backup-rotation.ts`. A new `core/diff.ts` module provides a line-level LCS algorithm for the diff rendering. The \"Update Schema\" command was removed from the command palette — schema updates now flow exclusively through the Lint Modal to enforce a single entry point. `parse-suggestion.ts` handles structured LLM response parsing; `apply-suggestion.ts` handles the backup-write cycle.\n- **🏷️ Schema dynamic tag sync.** Schema vocabulary is now the single source of truth — active tags defined in `schema/config.md` are automatically injected into every LLM call that needs them. The `SchemaContext` + `buildSchemaSectionTemplate` machinery from v1.21.0 Phase 1 is now wired end-to-end through the generation prompts. This eliminates the \"schema template overridden by hardcoded sections\" bug reported in #124.\n- **🇹🇼 Traditional Chinese (zh-TW) locale.** Plugin UI and wiki output now support Traditional Chinese as the 10th language (joining English, 简体中文, 日本語, 한국어, Deutsch, Français, Español, Português, Italiano). The bidirectional i18n parity guard is extended to all 10 locales. Contributed by the maintainer as part of the v1.22.0 schema initiative.\n- **📊 Ingest status bar with document name (PR #189).** Single-file ingest now shows `<doc> · Ingesting... click to cancel` in the status bar instead of the bare label. Folder batch ingest shows `[current/total] <doc> · Ingesting... click to cancel`, mirroring the progress Notice. New pure-function `core/status-bar.ts` (`buildIngestStatusBarText`) composes the text from the existing localized `ingestionStatusBar` label — no new i18n keys required, all 10 locales covered automatically. The `WikiEngine` ingestion-start callback now passes the source basename (optional param, backward-compatible). Contributed by @YounianC.\n\n### Added\n\n- Schema one-click apply: `SchemaDiffModal` class with dual-pane IDE-style diff (#97)\n- `core/diff.ts`: line-level LCS algorithm for diff rendering (#97)\n- `core/backup-rotation.ts`: backup file rotation helper (MAX_BACKUPS=3) (#97)\n- `schema/parse-suggestion.ts`: structured LLM schema suggestion response parser (#97)\n- `schema/apply-suggestion.ts`: apply suggestion with auto-backup (#97)\n- `ui/schema-diff-modal.ts`: IDE-style schema diff Modal (#97)\n- Schema dynamic tag sync: `SchemaContext` + `buildSchemaSectionTemplate` end-to-end wiring (#124)\n- Traditional Chinese (zh-TW) locale — 10th language, full UI + wiki output (#zh-Hant)\n- Ingest status bar: `core/status-bar.ts` (`buildIngestStatusBarText`) pure function (#189 / @YounianC)\n- `batchProgress` field in `main.ts` tracks folder ingest loop position (#189 / @YounianC)\n- `WikiEngine` `onIngestionStart` callback with source basename parameter (#189 / @YounianC)\n- 8 new i18n keys per language for schema diff modal UI (10 locales × 8 = 80 new translations)\n- `TOKENS_SCHEMA_SUGGESTION = 4096` constant for schema LLM call budget\n\n### Fixed\n\n- **`merge.ts` hardcoded English section headers (#188).** Both `mergeEntityPage` and `mergeConceptPage` prompt templates used hardcoded `## Related Entities` / `## Related Concepts` / `## Basic Information` / `## Description` / `## Mentions in Source` headers, ignoring the configured `wikiLanguage`. Non-English vaults got mixed-language section headers on the merge path while the create path output localized headers. Replaced with `{{section_*}}` placeholders so `applySectionLabels()` localizes consistently across both paths.\n- **`appendAliases` block-replace regex left stale items (#186).** `page-factory.ts:70` regex `/^aliases:[\\s\\S]*?(?=\\n\\S|\\n*$)/m` — the `m` flag caused `$` to match end-of-line, so the lookahead succeeded immediately at the end of the bare `aliases:` line and the lazy quantifier matched zero characters. Only the bare `aliases:` line was replaced; existing list items survived below, producing duplicate entries on every subsequent append. Fixed with an indentation-based block match that consumes all continuation lines.\n- **`apply-suggestion.ts` used `vault.delete()` fallback.** Simplified to direct `app.fileManager.trashFile` call — respects user's file deletion preference per Obsidian review rule `obsidianmd/prefer-file-manager-trash-file`. Pre-existing test mock updated accordingly.\n- **`parse-suggestion.ts` unnecessary type assertion.** `as LLMSchemaResponse` cast removed (receiver already accepts the original type). Fixes ESLint `@typescript-eslint/no-unnecessary-type-assertion` error.\n- **README.zh-Hant.md naming inconsistency.** Renamed from `README.zh-Hant.md` (dot separator) to `README_ZH-Hant.md` (underscore) to match all other non-EN READMEs (`README_CN.md`, `README_DE.md`, etc.). All 10 README language switcher links updated.\n\n### Tests\n\n- **1006 tests passing** (was 948 in v1.21.1; +58 tests), 73 test files, 0 regressions\n- New: `core/diff.test.ts` (LCS algorithm: equal lines, insert-only, delete-only, mixed)\n- New: `core/backup-rotation.test.ts` (MAX_BACKUPS=3 rotation, empty/undersized list)\n- New: `core/status-bar.test.ts` (7 tests: single-file, batch, empty filename, no batch)\n- New: `schema/parse-suggestion.test.ts` (code-fence strip, malformed JSON, valid response)\n- New: `schema/apply-suggestion.test.ts` (backup creation, body replacement, frontmatter preservation)\n- New: `schema/default-schema.test.ts` (default schema template validation)\n- New: `schema/analyze.test.ts` (schema analyze LLM call integration)\n- New: `ui/schema-diff-modal.test.ts` (Modal construction, onApply/onCancel callbacks)\n- Updated: `root/i18n-parity.test.ts` — extended to 10 locales (was 9)\n- Updated: `root/constants.test.ts` — TOKENS_SCHEMA_SUGGESTION assertion\n- Updated: `wiki/page-factory.test.ts` — #186 block-format aliases regression test\n- New: `wiki/prompts/prompt-hardcode.test.ts` additions — #188 merge.ts `{{section_*}}` placeholder assertions (2 tests: entity + concept templates)\n\n### Contributors\n\n- **@green-dalii** (maintainer) — #97 implementation (schema diff Modal + backup + LCS diff), #124 end-to-end wiring, zh-Hant locale, all 10 README updates, README_ZH-Hant.md rename, release coordination\n- **@YounianC** — PR #189 (ingest status bar: `core/status-bar.ts` + `WikiEngine` callback + `batchProgress` tracking)\n- **@DocTpoint** — #186 root-cause regex diagnosis, #188 root-cause analysis (hardcoded English headers in merge.ts)\n- **@Linate** — #97 original feature request (one-click schema apply with auto-backup)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### From Community Plugin Website\n\nVisit [karpathywiki on community.obsidian.md](https://community.obsidian.md/plugins/karpathywiki) and click **Install**.\n\n### Manual Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` from the assets below\n2. Create folder `VaultFolder/.obsidian/plugins/karpathywiki/`\n3. Copy the three files into that folder\n4. Enable the plugin in Obsidian Settings → Community plugins\n\n## Configuration\n\nAfter installation, configure your LLM provider:\n\n1. Open Settings → **Karpathy LLM Wiki**\n2. Select your provider (Anthropic, OpenAI, Gemini, DeepSeek, Kimi, GLM, MiniMax, LM Studio, OpenRouter, Ollama, or custom endpoint)\n3. Enter your API key\n4. Select a model\n\n## Full Changelog\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.21.1...1.22.0\n",
+      "downloadCount": 379,
+      "draft": false,
+      "name": "1.22.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-23T07:04:01Z",
+      "tag": "1.22.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:fa2bfdd3cb39edf85d618389713f30f423b2ff805209dc00f8fceebf33d19c76",
-          "downloadCount": 363,
+          "downloadCount": 395,
           "name": "main.js",
           "size": 1002357
         },
         {
           "digest": "sha256:5c1efc577485cd655e6a35d40d5cd8b126b93fcf0bca4b2051ac85e5c89b5c1f",
-          "downloadCount": 366,
+          "downloadCount": 400,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:a5c822bdff2b156e0f2c5e91260c409cdeb9e584bce5207e6381927aaa09978a",
-          "downloadCount": 357,
+          "downloadCount": 388,
           "name": "styles.css",
           "size": 12629
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\nv1.21.1 is a **PATCH release** addressing two issues: a `WikiEngine.createOrUpdateFile` path-resolution bug that caused 3× failed write retries under specific conditions (macOS NFC/NFD normalization), and a low-severity dev-only esbuild advisory.\n\n- **🔧 #173 Symptom A — createOrUpdateFile create-retry loop.** When `getAbstractFileByPath(path)` returns null despite the file existing on disk (macOS NFC/NFD Unicode normalization mismatch), the 3-attempt loop kept calling `vault.create()` instead of first resolving the real `TFile` via `resolveFileInVault` (a directory-level scan, not a full vault scan). The fix consults `resolveFileInVault` at the earliest attempt, eliminating the 3× failed retry overhead — the write succeeds on the first try. Reported by @Indexed-Apogrypha with detailed console traces.\n\n### Fixed\n\n- **#173 Symptom A — createOrUpdateFile NFC/NFD path resolution.** When `getAbstractFileByPath` returned null (macOS normalization mismatch), the 3-attempt loop kept calling `vault.create` instead of first resolving via `resolveFileInVault`. Now resolves at the earliest attempt. Reported by @Indexed-Apogrypha.\n\n### Changed\n\n- **esbuild 0.28.0 → 0.28.1.** Patches GHSA-g7r4-m6w7-qqqr (low severity, dev-only arbitrary file read on Windows). No impact on production users.\n\n### Tests\n\n- **941 tests passing** (was 939 in v1.21.0; +2 tests), 67 test files, 0 regressions\n- New test: `WikiEngine.createOrUpdateFile — NFC/NFD path resolution (#173 Symptom A)`: existing file resolves via directory scan when `getAbstractFileByPath` returns null (harness mock validates `vaultMarkdownScans` unchanged)\n- New test: creates a new file normally when the path genuinely does not exist\n- New test: falls back to full-vault scan after exhausted retries for persistent NFC/NFD anomaly\n\n### Contributors\n\n- **@green-dalii** (maintainer) — #173 Symptom A fix + 3 TDD test cases + harness mock, esbuild bump, release coordination\n- **@Indexed-Apogrypha** — #173 bug report with detailed console diagnostics (both Symptom A and B)\n\n---\n\n## Installation\n\n1. **From Community Plugins:** Obsidian Settings → Browse → search \"Karpathy LLM Wiki\" → Install → Enable\n2. **From Community Plugin Website:** [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) → Add to Obsidian\n3. **Manual:** Download `main.js`, `manifest.json`, `styles.css` from [Releases](https://github.com/green-dalii/obsidian-llm-wiki/releases) → drop into `{vault}/.obsidian/plugins/karpathywiki/`\n\n## Configuration\n\n- Supports Anthropic, OpenAI, DeepSeek, Gemini, MiniMax, GLM, Kimi, OpenRouter, Ollama, LM Studio, custom endpoints\n- Wiki output in 9 languages (EN/ZH/JA/KO/DE/FR/ES/PT/IT)\n\n## Full Changelog\n\n[1.21.0...1.21.1](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.21.0...1.21.1)\n",
-      "downloadCount": 363,
+      "downloadCount": 395,
       "draft": false,
       "name": "1.21.1",
       "prerelease": false,
@@ -53,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:71f2720fbb91f464b969822f674f64c50950b3e30287cab198cdd341a4994e50",
-          "downloadCount": 94,
+          "downloadCount": 96,
           "name": "main.js",
           "size": 1001733
         },
         {
           "digest": "sha256:b52cfc82e1db616e433bf77e6575637bd2affe1d5bd2da8fd0e3c3359ea1a956",
-          "downloadCount": 100,
+          "downloadCount": 102,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:b0daf38945b1d939be89ecc751709e3ced70abc369c654c5a38bff92d69bcb1b",
-          "downloadCount": 91,
+          "downloadCount": 93,
           "name": "styles.css",
           "size": 12377
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\nv1.21.0 is a **feature release** that delivers three major improvements — a pre-ingest requirements gate that stops small/local LLMs from fabricating wiki pages, an Operation History panel with insight-driven visualization, and Schema Coherence Phase 1. Italian is added as the 9th language, an incomplete-page cleaner ships, and several latent bugs are fixed.\n\n- **🛡️ Pre-ingest requirements gate (Issue #164, PR #174).** Every source file is now validated *before* any LLM call — empty/whitespace-only/frontmatter-only notes are rejected, and small/local models (e.g. Ollama gemma4, qwen-coder) no longer fabricate entity names to satisfy the JSON schema when given a blank prompt. The gate is implemented as an extensible, ordered `CONTENT_CHECKS` registry (in new `core/source-requirements.ts`) — future checks (e.g. prompt-injection detection) can be added as a single registry entry. Content-hash dedup (FNV-1a, length-prefixed) catches identical content across paths. Interactive ingests prompt before re-ingesting duplicates; folder/watcher ingests auto-skip. Defense-in-depth `isBlankSource` guard in `source-analyzer.ts` catches any future caller that bypasses the gate. Contributed by @Indexed-Apogrypha.\n- **📊 Operation History Panel (Issue #122, PR #171).** Browse recent ingestions, lint reports, and maintenance runs in a searchable, filterable UI. Insight-driven visualization: global KPI cards (8 metrics), per-entry 1-line insight, expandable details with clickable page links. Pure-function `parseLogEntries` + `HistoryModal`. Command palette entry + settings entry.\n- **🔗 Schema Coherence Phase 1 (Issue #124, PR #167).** Schema configuration (`schema/config.md`) is now the single source of truth for both system prompts and generation prompts. New `SchemaContext` shared parsed representation, `buildSchemaSectionTemplate(ctx, pageType)` extracts user-defined sections, and `buildActiveTagVocabularySection` injects custom tag vocabulary into system prompts. Eliminates the \"schema template overridden by hardcoded sections\" bug.\n- **🇮🇹 Italian locale (Issue #159, PR #159).** Plugin UI and wiki output now support Italian as the 9th language (joining English, 中文, 日本語, 한국어, Deutsch, Français, Español, Português). Contributed by @FrancoTampieri.\n- **🧹 Incomplete-page cleaner (Issue #170).** Wiki pages left in a partial state (interrupted ingest, plugin reload mid-write, LLM error after page created on disk) are automatically cleaned on startup. New `generation_complete` frontmatter flag stamped `false` at start, flipped to `true` on successful write. QuickFixes Phase 3 self-scan archives pages where the flag is stuck at `false` via `fileManager.trashFile` (recoverable from Obsidian's `.trash`). Pages without the field are treated as legacy — never wiped on upgrade.\n\n### Added\n\n- Pre-ingest requirements gate: empty/whitespace/frontmatter-only notes rejected before LLM call (#164 / PR #174)\n- Content-hash deduplication (`hashBody` FNV-1a + length prefix) for folder + watcher ingests (#164 / PR #174)\n- Re-ingest confirmation prompt for interactive ingests on duplicate content (#164 / PR #174)\n- Operation History Panel with insight-driven visualization: KPI cards, per-entry insights, clickable page links (#122 / PR #171)\n- Command palette entry: \"View Ingestion History\" (#122 / PR #171)\n- Settings panel entry: \"Operation History\" button (#122 / PR #171)\n- Schema Coherence Phase 1: `SchemaContext`, `buildSchemaSectionTemplate`, custom section + tag vocabulary injection (#124 / PR #167)\n- `setGenerationComplete()` + `findIncompletePages()` + `cleanIncompletePages()` in `core/incomplete-page-cleaner.ts` (#170)\n- QuickFixes Phase 3: incomplete-page self-scan on startup (#170)\n- Italian locale (9th language) — UI strings + wiki output format (#159 / PR #159)\n- New `core/source-requirements.ts` with extensible `CONTENT_CHECKS` registry (#164 / PR #174)\n- New `core/incomplete-page-cleaner.ts` with `generation_complete` lifecycle (#170)\n- New `core/log-parser.ts` + `core/detail-renderer.ts` for log.md structured parsing (#122 / PR #171)\n- New `ui/history-modal.ts` with `HistoryModal` class (#122 / PR #171)\n- New `ui/modals.ts` `ConfirmModal` for re-ingest prompts (#164 / PR #174)\n\n### Fixed\n\n- **Empty notes made small/local LLMs fabricate wiki pages (#164, CRITICAL).** Ingesting an empty / whitespace-only / frontmatter-only note no longer produces fabricated entity/concept pages. Large models (Claude, GPT) refused the blank input and never surfaced this bug in dev; smaller local models \"helpfully\" filled in made-up names to satisfy the JSON schema.\n- **Hardcoded Chinese error string leaked into non-Chinese UI (#172).** `WikiEngine.createOrUpdateFile()` final-fallback throw used a literal CJK string. Now uses `getText('fileWriteFailed')` with i18n coverage across all 9 locales.\n- **Duplicate entry in `createdPages` inflated report count (#173).** LLM surface-form variants of the same path could duplicate rows in the \"Created\" listing and count header. New `dedupPages()` pure-function helper applied at all three report sites.\n- **Pre-ingest requirement gate defense-in-depth.** `source-analyzer.ts` now returns `null` on blank body even if the gate is bypassed by a future caller.\n\n### Tests\n\n- **939 tests passing** (was 791 in v1.20.3; +148 tests), 67 test files, 0 regressions\n- New: `core/source-requirements.test.ts` (12 tests: `checkNonEmpty`, `checkCompatibleType`, `checkContentRequirements`, `hashBody` stability + length-prefix collision safety, extensibility)\n- New: `core/incomplete-page-cleaner.test.ts` (10 tests: `isIncomplete` edge cases, `findIncompletePages` scope filtering, `cleanIncompletePages` failure isolation)\n- New: `core/log-parser.test.ts` (multi-language log label parsing)\n- New: `core/detail-renderer.test.ts` (rendering logic)\n- New: `__tests__/__support__/wiki-engine-harness.ts` (in-memory App + LLM client + write-path tracker)\n- New: `__tests__/wiki/wiki-engine-ingest.test.ts` (7 tests: empty file → 0 wiki pages assertion, requirements gate, duplicate, interactive prompt, re-ingest confirm)\n- New: `__tests__/wiki/wiki-engine-dedup.test.ts` (4 tests: ordering, empty, no-dup, heavy-dup)\n- New: `__tests__/wiki/wiki-engine-i18n-error.test.ts` (i18n error message assertion)\n- New: `__tests__/schema/auto-maintain.test.ts` (watcher batch-context wiring)\n- New: `__tests__/root/i18n-parity.test.ts` (bidirectional parity across 9 locales)\n- New: `__tests__/schema/schema-section-template.test.ts` + `schema-context.test.ts`\n- New: `__tests__/ui/history-modal.test.ts` (HistoryModal + parser)\n- New: `__tests__/ui/settings-tag-desc.test.ts`\n- New: `__tests__/core/frontmatter.test.ts` additions: `isBlankSource` + `upsertFrontmatterField`\n\n### Contributors\n\n- **@green-dalii** (maintainer) — release coordination, triage, #170/#172/#173 implementation, all 9 README locale updates, final integration\n- **@Indexed-Apogrypha** — #164 root-cause investigation, PR #174 (pre-ingest requirements gate: `CONTENT_CHECKS` registry + `hashBody` + watcher batch-context + `buildIngestedHashes` TTL cache + write-invalidation), #122 review feedback\n- **@FrancoTampieri** — #159 (Italian locale: 9th language, full UI + wiki output translation)\n- **@DocTpoint** — #124/#122 review feedback, prior schema design discussions\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### From Community Plugin Website\n\nVisit [karpathywiki on community.obsidian.md](https://community.obsidian.md/plugins/karpathywiki) and click **Install**.\n\n### Manual Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` from the assets below\n2. Create folder `VaultFolder/.obsidian/plugins/karpathywiki/`\n3. Copy the three files into that folder\n4. Enable **Karpathy LLM Wiki** in **Settings → Community plugins**\n\n---\n\n## Configuration\n\nAfter installation:\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Select your **LLM Provider** (Anthropic, OpenAI-compatible, Gemini, Ollama, LM Studio, etc.) — 11 providers supported\n3. Enter **API Key** and **Base URL** (for custom providers)\n4. Click **Test Connection** to validate\n5. (Optional) Configure Wiki folder, language, advanced LLM parameters, auto-maintenance\n\n---\n\n## Full Changelog\n\nSee [CHANGELOG.md](https://github.com/green-dalii/obsidian-llm-wiki/blob/main/CHANGELOG.md) for the complete version history.\n\n**Compare:** [1.20.3...1.21.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.3...1.21.0)\n",
-      "downloadCount": 94,
+      "downloadCount": 96,
       "draft": false,
       "name": "1.21.0",
       "prerelease": false,
@@ -83,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:e05281343850d797e8ddc1e617b9aca3a760f1c5b41d243f77b4618632c84307",
-          "downloadCount": 522,
+          "downloadCount": 523,
           "name": "main.js",
           "size": 830204
         },
         {
           "digest": "sha256:89e36bc312398295b4e984e9ec1942578683daf169ca926821e8c3487edbf961",
-          "downloadCount": 525,
+          "downloadCount": 526,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
-          "downloadCount": 520,
+          "downloadCount": 521,
           "name": "styles.css",
           "size": 11779
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\nv1.20.3 is a **parity/latent-bug hotfix** — three write-path fixes that restore behavior that should have been there from the start. No new features, no settings changes, no API changes.\n\n- **🔧 Source-page slug collision fix (Issue #155, PR #156).** When two source files shared a basename across folders (e.g. 11× `About this course.md` across Academy courses), `slugify(basename)` produced the same slug for both — second ingest **silently overwrote** the first, and every `[[sources/<slug>]]` backlink resolved to the wrong source. Fix: every source slug is now `<basename>_<6-hex FNV-1a of full path>`. Single-computation point in `wiki-engine.ts`. Re-ingesting an existing vault renames its `sources/` pages; backlinks update in place. Contributed by @Indexed-Apogrypha.\n- **🔧 `mergeFrontmatter` alias dedup (PR #154).** Repeated re-ingests could grow the `aliases` array without bound — one real-world page accumulated the same alias block ~15× (86 duplicate lines). `mergeFrontmatter` now dedups `fm.aliases` parity with `enforceFrontmatterConstraints` (first occurrence wins, empty strings dropped). Contributed by @DocTpoint.\n- **🔧 Stage-4 `reviewed: true` guard (PR #158).** Re-ingesting an unrelated note could LLM-rewrite a curated `reviewed: true` page's body — the reviewed lock only held on the `createOrUpdatePage` path, not on Stage 4 (`updateRelatedPage`). Fix: `updateRelatedPage` now routes `reviewed: true` pages to `appendToReviewedPage` (parity with `createOrUpdatePage`). The curated body survives verbatim. Contributed by @DocTpoint.\n\n### Fixed\n\n- Source-page slug collision silently overwriting existing pages (#155) — every source slug now fingerprinted by full path\n- `mergeFrontmatter` alias array growing without bound across re-ingests — now deduped parity with `enforceFrontmatterConstraints`\n- Stage-4 `reviewed: true` pages being LLM-rewritten by unrelated re-ingests — now routed through `appendToReviewedPage`\n- tsconfig `lib` outdated for newer TypeScript language servers (`trimEnd` etc.) — bumped to ES2021\n- tsconfig vestigial `baseUrl` — removed (no `paths` map)\n\n### Tests\n\n- **791 tests passing** (was 779; +12), 53 test files, 0 regressions\n- New test suite: `src/__tests__/source-slug.test.ts` — 9 tests covering FNV-1a fingerprint determinism, length cap, re-ingest stability, basename-only collisions\n- New test suite additions: `core/frontmatter.test.ts` (+2 alias dedup tests), `wiki/page-factory.test.ts` (+1 Stage-4 reviewed guard test)\n\n### Contributors\n\n- **@green-dalii** — release coordination, triage, docs\n- **@Indexed-Apogrypha** — reported source-page collision (#155), contributed source-slug fingerprint (PR #156) with 9 unit tests + live e2e validation\n- **@DocTpoint** — contributed mergeFrontmatter alias dedup (PR #154) and Stage-4 reviewed guard (PR #158)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the Assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nNo configuration changes required. All three fixes are automatic.\n\n**Affected scenarios:**\n- **#155 fix:** any vault where source notes share filenames across folders (e.g. multiple `About this course.md` files). Re-ingesting an existing vault renames `sources/` pages but backlinks update in place — no user action needed.\n- **#154 fix:** any vault with re-ingested pages that may have accumulated duplicate aliases.\n- **#158 fix:** any vault using `reviewed: true` to lock curated pages.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.20.2...1.20.3\n",
-      "downloadCount": 522,
+      "downloadCount": 523,
       "draft": false,
       "name": "1.20.3",
       "prerelease": false,
@@ -323,26 +353,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 478,
+          "downloadCount": 481,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 489,
+          "downloadCount": 492,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 476,
+          "downloadCount": 479,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 478,
+      "downloadCount": 481,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,
@@ -803,26 +833,26 @@
       "assets": [
         {
           "digest": "sha256:cacd1526ef3a917511a716accde5913b6869ffc505490a56ba8b30a50ede93ad",
-          "downloadCount": 627,
+          "downloadCount": 628,
           "name": "main.js",
           "size": 661713
         },
         {
           "digest": "sha256:501014006b42867e41a9484d4075da8b9a72f6bea9cd8422f76fab0fb6fd3001",
-          "downloadCount": 658,
+          "downloadCount": 659,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:213622be8fe51d2cdf9eb886f2cf6620bcfaf54f86f81722b3f8bc28af20aac2",
-          "downloadCount": 620,
+          "downloadCount": 621,
           "name": "styles.css",
           "size": 6140
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Custom granularity per-type limits ignored**: In custom mode, entity and concept limits were set separately in the UI but three code paths failed to enforce them separately:\r\n    - The extraction loop merged entityLimit + conceptLimit into a single total cap, losing per-type distinction\r\n    - The LLM instruction text was vague (\"user-defined limits\") with no concrete numbers injected\r\n    - The fix-limit function used hardcoded values ({maxEntities: 3, maxConcepts: 3}) ignoring user settings entirely\r\n    - All three now read `customEntityLimit`/`customConceptLimit` dynamically from settings. Added 6 unit tests (101 total). Non-custom modes\r\n  \r\n  **Cumulative since 1.9.1** (1.10.0 was the feature release, 1.10.1 and 1.10.2 are bug fixes):\r\n  - **Minimal extraction granularity**: New option limiting extraction to ~5 items, ideal for batch processing 100+ files\r\n  - **Custom extraction granularity**: User-defined entity/concept limits (1-300 each) with conditional input fields\r\n  - **Aliases support in duplicate detection**: LLM now sees page aliases when resolving entity names, preventing duplicate stubs for synonyms\r\n  - **Slug normalization in duplicate detection**: resolvePagePath checks title/alias slugs before falling back to LLM\r\n  \r\n  ---\r\n  \r\n  ## Installation\r\n  \r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n  \r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\r\n  and click **Add to Obsidian** to install directly.\r\n  \r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n  \r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n  \r\n  ---\r\n  \r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n  \r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\r\n  detailed usage and model recommendations.\r\n  \r\n  ---\r\n  \r\n  **Full Changelog**: [1.10.1...1.10.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.10.1...1.10.2)",
-      "downloadCount": 627,
+      "downloadCount": 628,
       "draft": false,
       "name": "1.10.2 — Custom granularity per-type limits enforcement",
       "prerelease": false,
@@ -1523,26 +1553,26 @@
       "assets": [
         {
           "digest": "sha256:757650e0865d03bbf23d44cb623044eb7e282d6e094e816641353aebfbfb946b",
-          "downloadCount": 2,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 517284
         },
         {
           "digest": "sha256:059f1b20791f4e2b563b63b84365cea6b74369895a3024c2b346c1eb059a022e",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 350
         },
         {
           "digest": "sha256:5d5de01e9a50f215bffbbd10f73304bc04c386c1c68d4d30e6f4f92db0caf52a",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 3632
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's New in 1.4.0                           \r\n                                                                                                                                                             \r\n  This release consolidates all Phase 1 robustness work and passes Obsidian review bot validation.\r\n                                                                                                                                                             \r\n  ### New Features                                                    \r\n                                                                                                                                                             \r\n  - **Schema Layer** — `schema/config.md`, the third layer from Karpathy's design. Human-editable config that governs LLM operation on the Wiki (naming      \r\n  conventions, page templates, classification rules)                                                                                                         \r\n  - **Auto-Maintenance** — file watcher + periodic lint + startup health check. All default OFF to avoid surprise API costs.                                 \r\n  - **JSON Output Mode** — forces `response_format: { type: \"json_object\" }` for all structured LLM calls, eliminating malformed JSON at the source\r\n  - **Ingestion Report Modal** — structured summary window after each ingest: created/updated pages, failed items, contradictions found                      \r\n  - **Hierarchical Index** — LLM-generated tree-structured index grouped by type, with automatic flat fallback for large wikis (>25 pages)                   \r\n  - **Schema Suggestion** — LLM analyzes Wiki health and proposes schema improvements                                                                        \r\n                                                                                                                                                             \r\n  ### Bug Fixes                                                                          \r\n                                                                                                                                                             \r\n  - **Network Resilience**: 5-min timeout + exponential backoff retry (max 3) for transient connection errors\r\n  - **Fault Tolerance**: per-entity/concept try-catch with auto-retry; single page failure no longer aborts entire ingestion                                 \r\n  - **JSON Parsing Robustness**: state-machine content-quote escaping + LLM repair pipeline handles unescaped quotes, trailing commas, missing commas        \r\n  - **Index Generation Hang**: large wikis bypass LLM and use fast flat index; `max_tokens` 2000→4000                                                        \r\n  - **API Throttling**: 300ms delay between LLM calls to prevent connection errors                                                                           \r\n  - **Frontmatter Wikilinks**: source file references now use `[[path]]` format for clickable Obsidian links                                                 \r\n  - **Progress Toast**: auto-dismisses when ingestion completes                                                                                              \r\n                                                                                                                                                             \r\n  ### Compliance                                                                                                                                             \r\n                                                                                                                                                             \r\n  - ESLint + `eslint-plugin-obsidianmd` installed for local validation\r\n  - All UI text uses sentence case per Obsidian guidelines                                                                                                   \r\n  - `minAppVersion` updated to 1.4.0 to match actual API usage                                                                                               \r\n  - TypeScript 5.9.3                                                                                                                                         \r\n                                                                                                                                                             \r\n  ---                                                                                                                                                        \r\n                                                                                                                                                             \r\n  **Full Changelog**: [CHANGELOG.md](https://github.com/green-dalii/obsidian-llm-wiki/blob/main/CHANGELOG.md)",
-      "downloadCount": 2,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
