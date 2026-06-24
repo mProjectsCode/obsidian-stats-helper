@@ -1,0 +1,206 @@
+{
+  "author": "Johannes Kaindl",
+  "defaultBranch": "main",
+  "description": "Transcribe the images in a note to Markdown with a local vision LLM — fully offline, non-destructive, streaming into the sidebar. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "image-to-markdown",
+  "lastChangedAt": "2026-06-24T07:03:52.697Z",
+  "lastFetchedAt": "2026-06-24T07:03:52.697Z",
+  "manifest": {
+    "author": "Johannes Kaindl",
+    "authorUrl": "https://codeberg.org/jkaindl",
+    "description": "Transcribe images and PDFs in a note to Markdown with a local vision LLM — fully offline, non-destructive, streaming into the sidebar.",
+    "helpUrl": "https://codeberg.org/jkaindl/image-to-markdown",
+    "id": "image-to-markdown",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.8.7",
+    "name": "Image to Markdown",
+    "version": "0.4.0"
+  },
+  "name": "Image to Markdown",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2b427275510b1b8de05dd4097f45499717ee5fa524c9972d493e8441f1d391bd",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 2292263
+        },
+        {
+          "digest": "sha256:de63e1a7f90eaea0b48ab2b944b7f92dbb18664c32e1c3969d78b6e3d78428aa",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 437
+        },
+        {
+          "digest": "sha256:5454e5b4ac174cbd04556ad109728864d7b18b6af709d232b55169296e7a820e",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 3526
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Hinzugefügt\n\n- **Modell-Transparenz:** ein Refresh-Icon neben beiden Modell-Auswahlen (Sidebar + Einstellungen)\n  lädt die Modell-Liste neu — nützlich, wenn ein externer Prozess das geladene Modell des lokalen\n  Backends (MLX/LM Studio) gewechselt hat. Nach jeder Transkription gleicht die Sidebar die Auswahl\n  automatisch an das tatsächlich verwendete Modell (`response.model`) an. Ein grüner Haken neben dem\n  Dropdown zeigt, ob die Auswahl im Backend geladen ist; der Refresh gibt sichtbares Feedback\n  („N Modelle geladen\").\n\n- **Verlinkte Quellen:** reine Links auf Bilder/PDFs (`[[x.pdf]]`, `[text](x.pdf)` ohne `!`) werden\n  jetzt ebenfalls als Quelle erkannt und transkribiert; der Link im Text bleibt dabei unverändert\n  (im Gegensatz zu Embeds, die durch das Transkript ersetzt werden). Sidebar markiert solche Einträge\n  mit „linked\".",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-24T06:49:34Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8f375b676556dd83ba833c3be370f729a3361ec75e9493673957f904e6ffc032",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2289078
+        },
+        {
+          "digest": "sha256:360ab9ba4304996dfd4653a8ecd43137da508bc42596926f3e37075884664710",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 437
+        },
+        {
+          "digest": "sha256:3110edf7564b17a6f4579d983398d910b603d29e3e9d7151217b76d3eae09079",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 3065
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Hinzugefügt\n\n- **Backlink-Idempotenz:** Die Sidebar erkennt eine bereits existierende Transkript-Notiz für\n  eine Quelle (via Backlink-Index + `source_pdf`/`source_image`-Frontmatter-Filter) und zeigt\n  „vorhanden → öffnen\" an, statt erneut zu transkribieren.\n  Nur Notizen, deren Frontmatter per `source_pdf` / `source_image` auf die Quelldatei verweist,\n  zählen — ein bloßer Body-Embed (z.B. `![[datei.pdf]]`) genügt nicht (Frontmatter-Filter load-bearing).\n- **Override-Option:** Per Checkbox in der Sidebar lässt sich eine erneute Transkription erzwingen;\n  das Plugin überschreibt dann die bestehende Transkript-Notiz und erhält dabei das komplette\n  existierende Frontmatter (nur `transcribed_by`/`pages` + Body werden ersetzt).\n\n### Geändert\n\n- **PDF render scale** (`pdfRenderScale`) ist jetzt ein Slider (Bereich 1.0–4.0, Schritt 0.5)\n  statt eines freien Textfelds — direktes, gegrenztes Einstellen der Render-Auflösung.\n\n---\n\n### Bereits in 0.2.0 enthalten (erstmals mit diesem Release ausgeliefert)\n\n- **PDF-Embed-Transkription:** eingebettete PDFs werden seitenweise über die Sidebar transkribiert.\n  Seitenbereich wählbar (Default: alle), eine Transkript-Notiz pro PDF, PDF-Embed wird ersetzt.\n  Limits: `pdfMaxPages` (konfigurierbar) und `pdfRenderScale` (mobil kleiner, schützt vor OOM).\n  Umgesetzt über einen gebündelten pdf.js-Worker (Blob-URL, kein CDN, komplett offline).\n- **Konfigurierbarer PDF-Seiten-Trenner** (`pdfPageSeparator`): per Dropdown wählbar, wie Seiten\n  in der zusammengeführten Transkript-Notiz getrennt werden — fünf Optionen:\n  „Obsidian comment %% Page N %% (hidden in reading view)\" (Default), „Heading ## Page N\",\n  „Horizontal rule ---\", „Page break (HTML, for export)\" und „None (seamless text)\".\n- **Lokalisierter Titel-Suffix** für Transkript-Notizen: „(transcript)\" für Bilder bzw.\n  „(PDF transcript)\" für PDFs (folgt der UI-Sprache).\n\n_Vollständige Historie: [CHANGELOG.md](https://codeberg.org/jkaindl/image-to-markdown/src/branch/main/CHANGELOG.md)_\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-23T13:52:38Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:92464ded8fa51edde6a542f2bc0393968579a6636b58e8a3f750fd81e7ccd048",
+          "downloadCount": 19,
+          "name": "main.js",
+          "size": 43797
+        },
+        {
+          "digest": "sha256:8d38819234aabb0f751ee6d47adc051716ccc38281faf82fe8ae5c38b8a4867c",
+          "downloadCount": 16,
+          "name": "manifest.json",
+          "size": 432
+        },
+        {
+          "digest": "sha256:39071a4b3cb7a0f4aed3a84a6ebbf939e2132b738efabbcca71ceb7f5306cb02",
+          "downloadCount": 16,
+          "name": "styles.css",
+          "size": 2570
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Hinzugefügt\n\n- GitHub-Actions-Release-Pipeline (`.github/workflows/release.yml`): baut das Plugin bei einem\n  SemVer-Tag, erzeugt **Build-Provenance-Attestations** für `main.js`/`manifest.json`/`styles.css`\n  und veröffentlicht das GitHub-Release. Läuft auf der GitHub-Mirror-Seite (BRAT/Registry).",
+      "downloadCount": 19,
+      "draft": false,
+      "name": "0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T07:12:42Z",
+      "tag": "0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:92464ded8fa51edde6a542f2bc0393968579a6636b58e8a3f750fd81e7ccd048",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 43797
+        },
+        {
+          "digest": "sha256:9f40f5ab30ae75c0e05090c71bd6e3ca46481449a4de8988f2790666e4176d59",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 432
+        },
+        {
+          "digest": "sha256:39071a4b3cb7a0f4aed3a84a6ebbf939e2132b738efabbcca71ceb7f5306cb02",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 2570
+        }
+      ],
+      "author": "johannes-kaindl",
+      "description": "**Image to Markdown** transcribes the embedded images of an Obsidian note to Markdown with a local, OpenAI-compatible vision LLM. Fully offline, non-destructive, streaming live into the sidebar.\n\n## Highlights\n\n- **Sidebar view** — one card per image with live-streaming transcription (plus an expandable thinking block for reasoning models) and a copy button. Create one transcript note per image, or all at once.\n- **Commands** — \"Transcribe images in the active note\" (batch) and \"Open sidebar\"; plus an editor context-menu entry for a single image.\n- **Bilingual UI (English / Deutsch)** — every user-facing string follows Obsidian's language setting; English is canonical, German is provided automatically.\n- **Offline-first** — configurable OpenAI-compatible vision endpoint (LM Studio / MLX / Ollama); connection status + \"Test connection\", vision-capability detection + active \"Test vision\".\n- **Non-destructive & idempotent** — one transcript note per image; the image embed in the source note is replaced by an embed of the new note. The original text is never overwritten.\n\n## Changes in 0.1.2\n\n- Live streaming now uses `activeWindow.fetch` (injected stream transport) instead of the global `fetch`, satisfying the Obsidian plugin linter without suppressions. Behavior unchanged.\n- README: replaced the Community-plugins placeholder with real install instructions.\n\n## Install\n\n- **Manual:** download `main.js`, `manifest.json` and `styles.css` from this release into `<vault>/.obsidian/plugins/image-to-markdown/`, then enable under **Settings → Community plugins**.\n- **BRAT:** add `johannes-kaindl/image-to-markdown`.\n\nRequires Obsidian 1.8.7+. Code: AGPL-3.0-or-later.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T07:02:44Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f7a7f6ead91c7fcbb75c6a5ed34f19e834ec81dd863ed104249be7e316ce0a24",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 43496
+        },
+        {
+          "digest": "sha256:da849c57a327be3f77f7a221cb8502f966e252b9ad8a0d6eea46711bbe6bff71",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 432
+        },
+        {
+          "digest": "sha256:39071a4b3cb7a0f4aed3a84a6ebbf939e2132b738efabbcca71ceb7f5306cb02",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 2570
+        }
+      ],
+      "author": "johannes-kaindl",
+      "description": "**Image to Markdown** transcribes the embedded images of an Obsidian note to Markdown with a local, OpenAI-compatible vision LLM. Fully offline, non-destructive, streaming live into the sidebar.\n\n## Highlights\n\n- **Sidebar view** — one card per image with live-streaming transcription (plus an expandable thinking block for reasoning models) and a copy button. Create one transcript note per image, or all at once.\n- **Commands** — \"Transcribe images in the active note\" (batch) and \"Open sidebar\"; plus an editor context-menu entry for a single image.\n- **Bilingual UI (English / Deutsch)** — every user-facing string follows Obsidian's language setting; English is canonical, German is provided automatically.\n- **Offline-first** — configurable OpenAI-compatible vision endpoint (LM Studio / MLX / Ollama); connection status + \"Test connection\", vision-capability detection + active \"Test vision\".\n- **Non-destructive & idempotent** — one transcript note per image; the image embed in the source note is replaced by an embed of the new note. The original text is never overwritten.\n\n## Changes in 0.1.1\n\n- Network calls go through Obsidian's `requestUrl` (live streaming keeps `fetch`, which `requestUrl` cannot do).\n- `minAppVersion` raised to **1.8.7** (official `getLanguage()` API).\n- Clean against the Obsidian plugin linter (`eslint-plugin-obsidianmd`): no unsupported-API usage, `activeDocument`, no floating promises.\n\n## Install\n\n- **Manual:** download `main.js`, `manifest.json` and `styles.css` from this release into `<vault>/.obsidian/plugins/image-to-markdown/`, then enable under **Settings → Community plugins**.\n- **BRAT:** add `johannes-kaindl/image-to-markdown`.\n\nRequires Obsidian 1.8.7+. Code: AGPL-3.0-or-later.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T06:03:13Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:894ff986fbc3662d95649f418ab9b0b2c8a2d1025a15e22fdb30d8805abbdf16",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 42969
+        },
+        {
+          "digest": "sha256:ba3b8ebe5d1a077a35633c7e32f4cbe0bad9e6e01463c8d801154c53a4c3b449",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 432
+        },
+        {
+          "digest": "sha256:39071a4b3cb7a0f4aed3a84a6ebbf939e2132b738efabbcca71ceb7f5306cb02",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 2570
+        }
+      ],
+      "author": "johannes-kaindl",
+      "description": "First release of **Image to Markdown** — transcribe the embedded images of an Obsidian note to Markdown with a local, OpenAI-compatible vision LLM. Fully offline, non-destructive, streaming live into the sidebar.\n\n## Highlights\n\n- **Sidebar view** — one card per image with live-streaming transcription (plus an expandable thinking block for reasoning models) and a copy button. Create one transcript note per image, or all at once.\n- **Commands** — \"Transcribe images in the active note\" (batch) and \"Open sidebar\"; plus an editor context-menu entry for a single image.\n- **Bilingual UI (English / Deutsch)** — every user-facing string follows Obsidian's language setting; English is canonical, German is provided automatically. Detected once at load (reload to switch).\n- **Offline-first** — configurable OpenAI-compatible vision endpoint (LM Studio / MLX / Ollama); connection status + \"Test connection\", vision-capability detection + active \"Test vision\".\n- **Non-destructive & idempotent** — one transcript note per image; the image embed in the source note is replaced by an embed of the new note. The original text is never overwritten.\n\n## Install\n\n- **Manual:** download `main.js`, `manifest.json` and `styles.css` from this release into `<vault>/.obsidian/plugins/image-to-markdown/`, then enable under **Settings → Community plugins**.\n- **BRAT:** add `johannes-kaindl/image-to-markdown`.\n\nRequires Obsidian 1.4.0+. Code: AGPL-3.0-or-later. See the manual in the repository for details.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-21T21:36:25Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "johannes-kaindl/image-to-markdown"
+}
