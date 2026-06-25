@@ -4,6 +4,7 @@ import { GitHubClient, GitHubHttpError, fetchCommunityPlugins, parseLinkHeader }
 import type { GitHubResponse } from "./github.ts";
 import { chunkForPlugin } from "./hash.ts";
 import { readJsonFile, stableStringify, writeJsonFile } from "./json.ts";
+import { writePluginDownloadSummary } from "./downloadSummary.ts";
 import type {
   CommunityPlugin,
   HarvestError,
@@ -130,6 +131,7 @@ export async function runHarvest(options: HarvestOptions): Promise<void> {
 
   if (!options.dryRun) {
     await updateIndex(options.chunkCount, summaries, allPlugins, fetchedAt);
+    await writePluginDownloadSummary(fetchedAt);
 
     if (dailyState) {
       await writeJsonFile(harvestRunPath, {

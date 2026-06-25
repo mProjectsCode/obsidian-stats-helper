@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { summarizePluginDownloads } from "../src/downloadSummary.ts";
 import { parseLinkHeader } from "../src/github.ts";
 import {
   fetchReleases,
@@ -226,6 +227,66 @@ describe("fetchReleases", () => {
   });
 });
 
+describe("summarizePluginDownloads", () => {
+  test("sums non-draft release download counts", () => {
+    expect(
+      summarizePluginDownloads({
+        id: "plugin",
+        name: "Plugin",
+        author: "Author",
+        description: "Description",
+        repo: "owner/repo",
+        presentInCommunityList: true,
+        removedAt: null,
+        defaultBranch: "main",
+        manifest: null,
+        releases: [
+          {
+            tag: "1.0.0",
+            name: "1.0.0",
+            description: null,
+            author: null,
+            publishedAt: "2026-01-01T00:00:00Z",
+            prerelease: false,
+            draft: false,
+            downloadCount: 10,
+            assets: [],
+          },
+          {
+            tag: "1.1.0-beta",
+            name: "1.1.0-beta",
+            description: null,
+            author: null,
+            publishedAt: "2026-01-02T00:00:00Z",
+            prerelease: true,
+            draft: false,
+            downloadCount: 3,
+            assets: [],
+          },
+          {
+            tag: "1.2.0",
+            name: "1.2.0",
+            description: null,
+            author: null,
+            publishedAt: "2026-01-03T00:00:00Z",
+            prerelease: false,
+            draft: true,
+            downloadCount: 100,
+            assets: [],
+          },
+        ],
+        lastFetchedAt: "2026-01-04T00:00:00Z",
+        lastChangedAt: "2026-01-04T00:00:00Z",
+        errors: [],
+      }),
+    ).toEqual({
+      repo: "owner/repo",
+      downloads: 13,
+      releasesWithDownloads: 2,
+    });
+  });
+});
+
 describe("parseLinkHeader", () => {
   test("extracts relation URLs", () => {
     const links = parseLinkHeader('<https://api.github.com/repos/a/b/releases?page=2>; rel="next", <x>; rel="last"');
@@ -278,6 +339,11 @@ describe("buildStatusMarkdown", () => {
           oldestFetchedAt: "2026-06-01T12:00:00.000Z",
           newestFetchedAt: "2026-06-01T12:30:00.000Z",
         },
+        downloadSummaryStats: {
+          generatedAt: "2026-06-01T12:30:00.000Z",
+          plugins: 1,
+          totalDownloads: 123,
+        },
       }),
     ).toBe(`# Status
 
@@ -292,6 +358,7 @@ describe("buildStatusMarkdown", () => {
 - Releases with download stats: 2/3 (66.7%)
 - Assets with download stats: 4/5 (80.0%)
 - Total main.js downloads: 123
+- Download summary: 1 plugins, 123 downloads, generated at 2026-06-01T12:30:00.000Z
 - HTTP cache entries: 12 (4 repo, 5 manifest, 2 releases, 1 other)
 - Last run API requests: 9 total (6 fetched, 2 cached 304, 1 failed)
 - Last run request modes: 5 conditional, 4 unconditional

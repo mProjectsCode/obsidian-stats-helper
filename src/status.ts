@@ -1,5 +1,6 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import type { PluginDownloadSummary } from "./downloadSummary.ts";
 import type { GitHubRequestStats, HarvestRunState, HttpCacheFile } from "./types.ts";
 
 interface StatusIndexPlugin {
@@ -16,6 +17,7 @@ export interface StatusInputs {
   state: HarvestRunState | null;
   cacheStats: CacheStats;
   pluginStats: PluginStats;
+  downloadSummaryStats: DownloadSummaryStats;
 }
 
 interface CacheStats {
@@ -40,7 +42,14 @@ interface PluginStats {
   newestFetchedAt: string | null;
 }
 
+interface DownloadSummaryStats {
+  generatedAt: string | null;
+  plugins: number | null;
+  totalDownloads: number | null;
+}
+
 const indexPath = "data/index.json";
+const pluginDownloadSummaryPath = "data/plugin-downloads.json";
 const harvestRunPath = "data/state/harvest-run.json";
 const httpCachePath = "data/state/http-cache.json";
 const pluginDir = "data/plugins";
@@ -56,6 +65,7 @@ export async function writeStatusMarkdown(): Promise<void> {
   const state = await readOptionalJsonFile<HarvestRunState>(harvestRunPath);
   const cache = await readOptionalJsonFile<HttpCacheFile>(httpCachePath);
   const pluginStats = await readPluginStats();
+  const downloadSummary = await readOptionalJsonFile<PluginDownloadSummary>(pluginDownloadSummaryPath);
 
   await writeFile(
     statusPath,
@@ -64,6 +74,7 @@ export async function writeStatusMarkdown(): Promise<void> {
       state,
       cacheStats: summarizeCache(cache),
       pluginStats,
+      downloadSummaryStats: summarizeDownloadSummary(downloadSummary),
     }),
   );
 }
@@ -87,11 +98,30 @@ export function buildStatusMarkdown(inputs: StatusInputs): string {
     `- Releases with download stats: ${inputs.pluginStats.releasesWithDownloadStats}/${inputs.pluginStats.releases} (${formatPercent(inputs.pluginStats.releasesWithDownloadStats, inputs.pluginStats.releases)})`,
     `- Assets with download stats: ${inputs.pluginStats.assetsWithDownloadStats}/${inputs.pluginStats.assets} (${formatPercent(inputs.pluginStats.assetsWithDownloadStats, inputs.pluginStats.assets)})`,
     `- Total main.js downloads: ${inputs.pluginStats.totalMainDownloads}`,
+    `- Download summary: ${formatDownloadSummaryStats(inputs.downloadSummaryStats)}`,
     `- HTTP cache entries: ${formatCacheStats(inputs.cacheStats)}`,
     `- Last run API requests: ${formatRequestStats(requestStats)}`,
     `- Last run request modes: ${formatRequestModes(requestStats)}`,
     "",
   ].join("\n");
+}
+
+function summarizeDownloadSummary(summary: PluginDownloadSummary | null): DownloadSummaryStats {
+  if (!summary) {
+    return {
+      generatedAt: null,
+      plugins: null,
+      totalDownloads: null,
+    };
+  }
+
+  const entries = Object.values(summary.plugins);
+
+  return {
+    generatedAt: summary.generatedAt,
+    plugins: entries.length,
+    totalDownloads: entries.reduce((total, entry) => total + entry.downloads, 0),
+  };
 }
 
 async function readJsonFile<T>(path: string, fallback: T): Promise<T> {
@@ -268,6 +298,14 @@ function formatCacheStats(stats: CacheStats): string {
   }
 
   return `${stats.total} (${stats.repo} repo, ${stats.manifest} manifest, ${stats.releases} releases, ${stats.other} other)`;
+}
+
+function formatDownloadSummaryStats(stats: DownloadSummaryStats): string {
+  if (stats.plugins === null || stats.totalDownloads === null) {
+    return "missing";
+  }
+
+  return `${stats.plugins} plugins, ${stats.totalDownloads} downloads, generated at ${stats.generatedAt ?? "unknown"}`;
 }
 
 function formatRequestStats(stats: GitHubRequestStats | undefined): string {
