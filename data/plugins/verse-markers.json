@@ -4,8 +4,8 @@
   "description": "Inline verse numbering, linking and cross-note references. Embed verse ranges and preview nested links on hover without losing your place. For Bible, scripture, lyrics, poetry, legal docs, and more. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "verse-markers",
-  "lastChangedAt": "2026-06-24T06:03:52.734Z",
-  "lastFetchedAt": "2026-06-24T06:03:52.734Z",
+  "lastChangedAt": "2026-06-25T07:00:52.717Z",
+  "lastFetchedAt": "2026-06-25T07:00:52.717Z",
   "manifest": {
     "author": "Gabriel Renderos",
     "authorUrl": "https://github.com/gabrielrenderos",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "Verse Markers",
-    "version": "1.2.2"
+    "version": "1.3.0"
   },
   "name": "Verse Markers",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:6935df7514bb5fdcbe61cf4d3cb5092c1ba84c54ea8f7550e00f050a91bc1e93",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 90342
+        },
+        {
+          "digest": "sha256:4ec2a5922bcf6d4fad967151ce9ebd0b8b8d23d0a01130aebd6b3ae5469be77f",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 333
+        },
+        {
+          "digest": "sha256:893c88b090e2c4ae515f7f3b6f44f4982b6abb5de81b9ef4d2b3268cf678154e",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 9570
+        }
+      ],
+      "author": "gabrielrenderos",
+      "description": "## New\r\n\r\n- **Footnote visibility settings** under **Settings → Verse Markers → Show footnotes** (both toggles on by default).\r\n  - **Show footnotes in popovers** — controls the footnote definition list at the bottom of hover previews. When off, inline footnote references in the verse text stay visible and hoverable; only the bottom list is hidden.\r\n  - **Show footnotes in embeds** — controls footnotes in `![[File#verse-N]]` embeds. When off, all footnote content (superscripts and the definition list) is omitted from embeds. Toggling this setting refreshes open embeds immediately.\r\n\r\n## Fixed\r\n\r\n- **Double blockquote in single-verse hover previews** — raw verse slices already include `>` prefixes from the source, so re-wrapping them duplicated the quote bar for plain `> [N]` popovers.",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.3.0 — Footnote visibility settings & popover blockquote fix",
+      "prerelease": false,
+      "publishedAt": "2026-06-24T19:22:39Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:30dfef68b57aefa08f1fb268d2331d1468c399622f5fee0bf12cd63848aaafc7",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "main.js",
           "size": 87335
         },
         {
           "digest": "sha256:5c5478e797ee7216cc06dc96602421e95e77879a6659ec431bbbf9430fa14a82",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 333
         },
         {
           "digest": "sha256:8b8b849c99472576c5d40bd8a344ba6608a25a97758dff7813c6240bfac422f4",
-          "downloadCount": 17,
+          "downloadCount": 18,
           "name": "styles.css",
           "size": 9229
         }
       ],
       "author": "gabrielrenderos",
       "description": "### Bug\r\n\r\nA verse marker `[N]` followed by whitespace and then  a footnote (`[^id]` or `[^id]:`)  rendered as a chip that could not be edited in place. The text cursor could not land between the brackets, so attempts to insert another digit went outside the marker. Changing `[1]` to `[12]` was impossible without deleting the marker and retyping. Because the widget triggered as soon as `[^id]` appeared after the marker (on the same line or on a later line with only whitespace in between) the same bug blocked typing a multi-digit marker if a footnote was already in place inmediately after the text cursor and any type of whitespace.\r\n\r\n### Cause\r\n\r\nTo prevent Obsidian's reference-link parser from hiding the marker's `[` and `]` when it was followed by another `[`, the plugin replaced the whole `[N]` with a widget (a custom HTML element rendered in place of the source characters). The widget's range was registered through `EditorView.atomicRanges`, which makes the text cursor skip the range instead of landing inside. That skip is what blocked editing the marker.\r\n\r\n### Fix\r\n\r\n- `EditorView.atomicRanges` is no longer registered. The text cursor can enter the marker's range.\r\n- The Live Preview extension is registered at CodeMirror's highest precedence so the plugin's decorations override Obsidian's reference-link hide and the brackets stay visible without needing to register the range as atomic.\r\n- Two display modes:\r\n  - Text Cursor outside the marker: full-token replace widget renders the chip. Same appearance as before.\r\n  - Text Cursor touching the marker: the chip is replaced by a `[` widget, the native digit characters, and a `]` widget. The digits are source text — insert, delete, and arrow-key navigation work normally. Obsidian's reference-link decoration drops out while the text cursor is in the range, so the digits stay plain text.\r\n- Clicking the chip places the text cursor at one of its outer edges, which counts as touching, which switches to the editable form. From there, click a digit for fine placement.\r\n- The trigger regex is tightened to `\\s` → ` ` (single space) and broadened from `\\[\\^id\\]` → `\\[` (any opening bracket). It now matches `[N] [^id]`, `[N] [link]`, and similar; it no longer matches `[N]  [^id]` (two spaces) or `[N]\\n[^id]` (newline).\r\n\r\n### Known limitations\r\n\r\n- Clicking the chip lands the text cursor at the marker's outer edge (`matchFrom` or `matchTo`), not inside the brackets. Click a digit in the editable form for an inner position.\r\n- The `[` and `]` widgets in the editable form are atomic for drag-select. A drag that crosses one includes the widget whole or excludes it whole.\r\n- The seam positions `[|N]` and `[N|]` are not reachable by click and drag up to that positions; use arrow keys.",
-      "downloadCount": 18,
+      "downloadCount": 19,
       "draft": false,
       "name": "1.2.2 — Footnote-adjacent verse marker edit fix",
       "prerelease": false,

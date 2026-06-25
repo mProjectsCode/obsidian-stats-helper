@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-24T06:03:52.734Z",
-  "lastFetchedAt": "2026-06-24T06:03:52.734Z",
+  "lastChangedAt": "2026-06-25T07:00:52.717Z",
+  "lastFetchedAt": "2026-06-25T07:00:52.717Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.9.0"
+    "version": "0.10.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:92f047737be5063c93d47976aee54c0588db2c4a8087b8be1170d3868ed532f0",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 208025
+        },
+        {
+          "digest": "sha256:78ab886dce1052738bfb8fccef468eb54c26f565691eb9fb22f2c7c6dc6a6bfc",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:95c4293263f0d5eae2f6b0a0943df84a9ef3f9b02503a6b6e7db1a80c4538928",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 7732
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## [0.10.0] - 2026-06-25\r\n\r\n### Added\r\n\r\n- **Bundled codemirror-vim fork** — when Obsidian's built-in vim mode is disabled, the plugin provides a forked `@replit/codemirror-vim` as a CM6 extension with Neovim-parity behavioral fixes. A `window.CodeMirrorAdapter.Vim` bridge ensures ecosystem plugins (obsidian-vimrc-support, vim-im-control, etc.) work transparently.\r\n- **Async motion support** — the fork's `defineMotion` now accepts async functions returning `Promise<Pos>`, enabling EasyMotion to work natively as a motion instead of an action. Operator-pending (`d`/`c`/`y` + easymotion) and visual mode (`v` + easymotion) work through the standard vim dispatch.\r\n- **Neovim golden comparison infrastructure in fork** — 496/688 tests passing against headless Neovim, with per-step extraction, golden recording, and automated comparison (`npx tsx test/neovim/compare.ts`).\r\n- E2E tests for operator-pending easymotion (`d`/`c`/`y` + easymotion w)\r\n- E2E tests for multiline bracket text objects (`di{`/`di[`/`di<` across lines, same-line verification)\r\n- E2E tests for `%` string-awareness, `db`/`d2w` cross-line whitespace, `dd` cursor column preservation, `J` trailing whitespace\r\n- Expected-failure test cases for 6 remaining fixable deviations (dw cursor, d2w scope, dge empty, db cross-line, % quoted brackets, N after search)\r\n- **Full vim-easymotion default motion set** — all 17 default-mapped motions: find (`f`, `F`, `s`, `t`, `T`), word (`w`, `b`, `e`, `ge`, `W`, `B`, `E`, `gE`), line (`j`, `k`), search (`n`, `N`)\r\n- **Bidirectional easymotion variants** — `easyMotionBdWord`, `easyMotionBdEndWord`, `easyMotionBdWORD`, `easyMotionBdEndWORD`, `easyMotionBdLine`, `easyMotionBdTill` available as named actions for vimrc remapping\r\n- **Repeat last easymotion motion** — `easyMotionRepeat` action replays the most recent easymotion jump\r\n- **2-character combo labels** — SCTree algorithm assigns single-char labels to nearby targets and 2-char labels to distant targets when there are more targets than label characters (>26). Backspace resets after typing the first char of a 2-char label.\r\n- **Text dimming** — non-target text is dimmed when easymotion is active, making labels more visible. Controlled by **Settings → Vim Motions → EasyMotion dimming** (on by default).\r\n- **Visual mode support** — all easymotion motions work in visual mode. `v` + easymotion extends the character selection to the target, `V` + easymotion extends the line selection. Uses CM6 `dispatch({ selection })` to manipulate the selection range directly.\r\n- **EasyMotion dimming setting** — `easyMotionDimming` toggle in settings UI\r\n- Spike test `test/specs/spikes/spike19-easymotion-visual.e2e.ts` investigating CM Vim visual mode and operator-pending feasibility (6 questions answered)\r\n- E2E test file `test/specs/easymotion-comprehensive.e2e.ts` with 22 tests covering cursor landing (word, char, line, ge/gE), 2-char labels, dimming, repeat, visual mode, and edge cases (empty document, single word, empty lines, non-existent char)\r\n- E2E test file `test/specs/easymotion-visual.e2e.ts` with 4 tests covering visual mode overlay, charwise selection, linewise selection, and escape preservation\r\n- CSS classes: `.vim-motions-easymotion-shade` (dimming overlay), `.vim-motions-easymotion-label-first` and `.vim-motions-easymotion-label-second` (2-char label styling)\r\n\r\n### Fixed\r\n\r\n- **`dd` cursor column preservation** — cursor now stays at its original column after linewise delete (matching Neovim), instead of moving to first non-blank character\r\n- **`J` trailing whitespace** — join now strips trailing whitespace from the current line before adding the join space, preventing double spaces\r\n- **`di{`/`di[`/`di<` multiline** — inner bracket text objects on multiline brackets now preserve the bracket lines (producing `a{\\n}b` instead of `a{}b`), matching Neovim\r\n- **`dj`/`dk` at document boundary** — `dj` on the last line and `dk` on the first line are now no-ops (matching Neovim), instead of deleting the content\r\n- **`:s` cursor positioning** — cursor after substitute now goes to first non-blank of the last affected line instead of column 0\r\n- **`%` string-awareness** — `%` now aborts (no movement) when the first bracket candidate found via forward-seeking is inside a string token, matching Neovim\r\n- **`db`/`d2w` cross-line whitespace** — when a delete crosses a line boundary, the whitespace-only prefix before the cursor is now included in the deletion, matching Neovim\r\n- **`dge` at document start** — `ge` at the start of the document is now a no-op instead of deleting the character under cursor\r\n- **`dge` on empty lines** — `dge` on double-empty-lines now deletes both lines (matching Neovim) instead of leaving one\r\n- **`]p` tab remainder** — `]p` with `indentWithTabs` now preserves remainder spaces when indent doesn't divide evenly by tabSize\r\n- **EasyMotion visual mode** — async motions now properly update visual selection head/anchor instead of just moving cursor\r\n- **EasyMotion escape dismissal** — Escape overlay dismissal in e2e tests now uses real DOM events (`browser.keys`) instead of `Vim.handleKey` which bypasses the DOM listener\r\n- **Hint mode escape dismissal** — same fix as EasyMotion\r\n- **Workspace test isolation** — workspace tests now use `beforeEach` with `loadSingleFileWorkspace()` to prevent cascading failures from `gd` navigation\r\n- **Settings reload Y/Q test** — uses `Vim.handleKey` instead of `browser.keys` to avoid DOM event routing issues after `reloadFeatures()`\r\n- **Vim cursor styling** — fork's hardcoded `#ff9696` cursor color replaced with Obsidian CSS variables (`--interactive-accent`, `--text-on-accent`) directly in the fork's `block-cursor.ts` with fallbacks for non-Obsidian environments\r\n- **Settings notice** — when Obsidian's built-in Vim mode is enabled, the plugin settings tab shows a callout-style warning recommending to disable it, with an explanation of the fork's benefits\r\n- **`dw` on empty line cursor** — cursor after `dw` on an empty line before a whitespace-only line now positions at `ch:1` instead of `ch:0`\r\n- **Ambient type declarations** — `src/types/codemirror-vim.d.ts` provides fallback types for `vim()`, `getCM()`, and `Vim` when the fork's build artifacts are unavailable (e.g. in the community scanner's sandboxed environment)\r\n\r\n### Changed\r\n\r\n- **Recommended setup**: disabling Obsidian's built-in vim mode is now the recommended configuration. The plugin's bundled fork provides Neovim-correct behavior, async motion support, and theme-aligned cursor styling that are not available with the built-in vim engine.\r\n- **EasyMotion architecture** — EasyMotion motions are now registered via `defineMotion` (async, returning `Promise<Pos>`) instead of `defineAction`. The capture-phase operator-pending interceptor (`src/easymotion/operator-pending.ts`) has been removed — operator-pending and visual mode work natively through the fork's async motion dispatch.\r\n- **EasyMotion module refactored** from single `easymotion.ts` (243 lines) into 6 focused files: `register.ts` (data-driven registration), `targets.ts` (direction-aware target finding), `labels.ts` (SCTree algorithm), `overlay.ts` (DOM rendering with dimming and re-render support), `keypress.ts` (key capture with 2-char narrowing), `types.ts` (interfaces)\r\n- `<leader><leader>w`, `<leader><leader>j`, `<leader><leader>f` are now forward-only, matching vim-easymotion parity. Previously these scanned the entire visible viewport regardless of cursor position.\r\n- `registerEasyMotion()` now accepts a `dimming` parameter and uses a data-driven `EASYMOTION_DEFS` array for registration instead of per-motion imperative code\r\n- `showOverlay()` returns an `OverlayHandle` with `updateLabels()` for dynamic re-rendering during 2-char label narrowing\r\n- `waitForLabel()` replaces `waitForKey()` as the primary label capture function, supporting multi-char labels, backspace reset, and narrowing callbacks\r\n- Removed `test/specs/easymotion-motions.e2e.ts` — superseded by `easymotion-comprehensive.e2e.ts` with correct async test patterns for char-input motions\r\n- **Fork dependency** — `@replit/codemirror-vim` now references `https://github.com/saberzero1/codemirror-vim.git` instead of a local file path, enabling CI/scanner environments to install without local checkouts\r\n- `reportUnusedDisableDirectives` set to `off` in eslint config to avoid conflicts between local and scanner lint rule sets\r\n- Added `Obsidian` to sentence-case brands list in eslint config\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: EasyMotion operator-pending rewritten — now uses async motions natively instead of capture-phase interceptor\r\n- `KNOWN_LIMITATIONS.md`: added 8 behavioral deviation entries for fork fixes (`dd` cursor, `J` whitespace, `di{}` multiline, `dj`/`dk` boundary, `:s` cursor, `%` strings, `db` cross-line, `dw` cursor)\r\n- `KNOWN_LIMITATIONS.md`: added \"DOM keyboard events not routed after settings reload\" and \"EasyMotion visual mode label selection via DOM events\" sections\r\n- `AGENTS.md`: added codemirror-vim fork section with dual-vim architecture documentation\r\n- `README.md`: added \"Recommended setup\" section explaining benefits of disabling built-in vim\r\n- `DIFFERENCES.md` (fork): comprehensive rewrite documenting all behavioral fixes and infrastructure changes\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.9.0...0.10.0",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.10.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-24T22:34:38Z",
+      "tag": "0.10.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:ed7f4eea5c874e542eb67ee3ccff3d69ce5106510bbe28a9abfa6e3550d10b01",
-          "downloadCount": 17,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 75752
         },
         {
           "digest": "sha256:8a46edfbaf3b661d8362db4556593deb96bfe0cb33382bf78db98f0c6bae66b6",
-          "downloadCount": 18,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 604
         },
         {
           "digest": "sha256:a6f5aa769b609c433d510e405edeaa208a1d72e36b9cf7631603164b27344a0c",
-          "downloadCount": 17,
+          "downloadCount": 22,
           "name": "styles.css",
           "size": 6271
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Configurable multi-line scan limit** — multi-line text objects (`i*`, `a*`, `i$`, etc.) now have a configurable scan range via **Settings → Vim Motions → Multi-line text object scan range** (5–200 lines, default: 20). Users working with long-form documents can increase the limit to match delimiters spanning more than 40 lines.\r\n- **Code block exclusion in delimiter scanning** — the multi-line delimiter scanner now skips lines inside fenced code blocks (` ``` ` fences). Delimiters like `**` inside code blocks are no longer matched as text object boundaries.\r\n- E2E test for delimiter scanning across code block boundaries (`di*` should not match delimiters inside fenced code blocks).\r\n- E2E test for `vi*` on single-character content (`*x*`), documenting the codemirror-vim visual mode limitation.\r\n\r\n### Fixed\r\n\r\n- **Scrolloff dynamic line height** — scrolloff margins now use `EditorView.defaultLineHeight` to measure the actual line height instead of assuming 22px. The margin adapts automatically when the user changes font size or line height via CSS/themes.\r\n- `adjustRangeForVisualMode` no longer produces zero-width selections for single-character text object ranges — the −1 head compensation is skipped when the range is exactly 1 character wide. (The underlying codemirror-vim `makeCmSelection` bug still prevents `vi*` on `*x*` from selecting correctly, but `di*` on `*x*` now works as expected.)\r\n\r\n### Changed\r\n\r\n- `getTextwidth()` now reads directly from the plugin's internal `textwidthValue` instead of querying `vimApiRef.getOption('textwidth')`, avoiding a dual-source ambiguity where CM Vim's internal option state could return a stale default (80).\r\n- Vimrc loader skips `vim.handleEx()` for `set textwidth=N` lines and handles them entirely via `setTextwidth()` + `vim.setOption()`, preventing CM Vim's Ex handler from interfering with the plugin's textwidth state.\r\n- `syncTextwidthFromVim()` removed — the function read CM Vim's `getOption('textwidth')` which returned the stale default (80) during the `active-leaf-change` lifecycle, overwriting the correct vimrc-set value.\r\n- `findFenceLines()` and `findContainingBlock()` exported from `src/text-objects/code-block.ts` for reuse in delimiter scanning.\r\n- `MULTILINE_SCAN_LIMIT` constant removed from `delimiter.ts` — scan limit is now passed as a parameter through the text object factory chain (`createMultiLineDelimiterTextObject`, `createSmartAsteriskTextObject`, `registerTextObjects`).\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: \"Scrolloff line height assumption\" marked as fixed.\r\n- `KNOWN_LIMITATIONS.md`: \"Multi-line delimiter scan limit\" updated to note the limit is now configurable via settings.\r\n- `KNOWN_LIMITATIONS.md`: \"Multi-line delimiter nesting\" updated to note fenced code blocks are now excluded from the scan.\r\n- `KNOWN_LIMITATIONS.md`: \"Visual mode on single-character text objects\" updated from \"Under investigation\" to \"Confirmed codemirror-vim limitation\" with detailed root cause.\r\n- `KNOWN_LIMITATIONS.md`: \"`set textwidth` via vimrc\" root cause refined — identified CM Vim's `defineOption` callback resetting the value during editor initialization.\r\n- `KNOWN_LIMITATIONS.md`: \"`dG` leaves trailing newline\" updated from \"Skipped test, pending fix\" to \"Unfixable from plugin code\" with investigation findings.\r\n- `KNOWN_LIMITATIONS.md`: \"Dot-repeat of `cw`\" and \"`n`/`N` search wrap-around\" updated from \"pending fix\" to \"Confirmed codemirror-vim bug, not a test timing issue.\"\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.8.0...0.9.0",
-      "downloadCount": 17,
+      "downloadCount": 22,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
