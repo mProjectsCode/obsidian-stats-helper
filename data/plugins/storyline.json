@@ -4,8 +4,8 @@
   "description": "Transform your vault into a powerful book planning and writing tool. Corkboard, KanbanBoard view, timeline, plotlines,character tracking, and more. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "storyline",
-  "lastChangedAt": "2026-06-25T05:03:52.697Z",
-  "lastFetchedAt": "2026-06-25T05:03:52.697Z",
+  "lastChangedAt": "2026-06-26T04:31:28.778Z",
+  "lastFetchedAt": "2026-06-26T04:31:28.778Z",
   "manifest": {
     "author": "Jan Sandström",
     "authorUrl": "https://github.com/PixeroJan",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "StoryLine",
-    "version": "1.10.32"
+    "version": "1.10.34"
   },
   "name": "StoryLine",
   "presentInCommunityList": true,
@@ -23,27 +23,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:1c4bf52dbdaff5daff5886a0c79dcb1c59532e2fe26b63d5ed47b75404baa960",
-          "downloadCount": 544,
+          "digest": "sha256:20115bd2111d12e5f9d2d65b44439a4081afcb23d107ffa4d10d9abae66981ee",
+          "downloadCount": 185,
           "name": "main.js",
-          "size": 2837729
+          "size": 2841315
         },
         {
-          "digest": "sha256:557999b6e24478a0d87c44a0e17d06d2f795da72af9edd7c44dde820d4ed2c59",
-          "downloadCount": 587,
+          "digest": "sha256:36513e2b90037d1b83af170fcbb9f4d5d491833f0f6900c041b0da014ec7caab",
+          "downloadCount": 191,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:97f4ba9b93fdd7bab136dc3f25cdc8ded1c5a4c4c04d90cd6e1cd083e6ae3f37",
+          "downloadCount": 179,
+          "name": "styles.css",
+          "size": 295843
+        }
+      ],
+      "author": "PixeroJan",
+      "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.34\r\n\r\n### Bug Fixes\r\n\r\n- **Consistent toolbar separator line across all Codex views** — The Characters view showed a thin horizontal separator line between the StoryLine toolbar and the content area, but the Locations and Codex (Items) views did not. The shared CSS variables that the toolbar's `border-bottom` depends on are now applied to the Location and Codex containers as well, so the separator appears consistently in all three views.\r\n- **Wikilink section headers no longer parsed as tags** — A wikilink to a note section (e.g. `[[Test#Header]]`) in a Codex note body caused the word after the `#` to be interpreted as a `#tag`, showing up as a spurious tag on the codex item card and in the Story Graph. Wikilinks are now stripped from the text before tag extraction runs, matching the approach already used for plain-text name mention scanning.\r\n- **Manuscript view scroll position now restores correctly** — The cursor position was restored when switching back to the Manuscript view, but the scroll position snapped to the top of the document and only returned to the saved position once the user started typing. After restoring the cursor, the view now uses `coordsAtPos()` to find the cursor's actual screen position and scrolls the outer container so the cursor is visible, regardless of how content height changed during editor mounting.\r\n",
+      "downloadCount": 185,
+      "draft": false,
+      "name": "1.10.34",
+      "prerelease": false,
+      "publishedAt": "2026-06-25T18:00:20Z",
+      "tag": "1.10.34"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1fb8a70b06f5c1425c7076986bd75b4b15867bf0a57797ea66050eddbd0284b0",
+          "downloadCount": 155,
+          "name": "main.js",
+          "size": 2841003
+        },
+        {
+          "digest": "sha256:7438f3ebb66396d03015b9a7b8a0f06bbb4107a0b89e08685151b40bced86c4b",
+          "downloadCount": 163,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:7da0371935f1afb83e9610d4c21f1bc88c77af3bddc44ba54ed60bca576219bb",
-          "downloadCount": 539,
+          "downloadCount": 153,
+          "name": "styles.css",
+          "size": 295780
+        }
+      ],
+      "author": "PixeroJan",
+      "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.33\r\n\r\n### Bug Fixes\r\n\r\n- **Scene Snapshot no longer crashes when `notesFile` is undefined** — `SnapshotManager.saveSnapshot()` could throw `Cannot read properties of undefined (reading 'replace')` when a scene had no external notes file, because an unvalidated `undefined` value leaked into Obsidian APIs (`normalizePath`, `getAbstractFileByPath`, `stringifyYaml`) that assume a string. `MetadataParser.parseContent()` now normalizes `notesFile` (and other frontmatter string fields like `synopsis`, `storyDate`, `storyTime`, `corkboardNoteColor`, `plotgridOrigin`) through a single `normalizeFrontmatterString()` helper that coerces `undefined`/`null`/non-string YAML values to a safe `string | undefined`. `SnapshotManager.saveSnapshot()` also guards its `sceneFilePath` and `label` parameters against non-string input. *(Issue #182)*\r\n- **`getScenesGroupedBy()` no longer throws `t.startsWith is not a function`** — grouping by `act`, `chapter`, or `plotlines` crashed because non-string frontmatter values (numbers, `undefined`) reached `.startsWith()` without a type guard. The `field` argument is now coerced to a string before the `cf:` prefix check, and a previously-missing `plotlines` case has been added to the switch statement so scenes are grouped by their tags instead of falling through to `Unknown`. *(Issue #182)*\r\n\r\n### New Features\r\n\r\n- **Manuscript view remembers your cursor and scroll position** — switching away from the Manuscript view (to Codex, Plotgrid, etc.) and back, or restarting Obsidian, previously reset the cursor to the top of the document with no editor focused. The Manuscript view now captures the active editor's CM6 cursor selection and scroll position on focus loss, and after the next render eagerly mounts the previously-focused scene's editor, focuses it, and restores the exact cursor position so you resume typing right where you left off. State is also persisted to the project's `System/manuscript-state.json` so it survives an Obsidian restart. *(Discussion #183)*\r\n",
+      "downloadCount": 155,
+      "draft": false,
+      "name": "1.10.33",
+      "prerelease": false,
+      "publishedAt": "2026-06-25T10:19:41Z",
+      "tag": "1.10.33"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1c4bf52dbdaff5daff5886a0c79dcb1c59532e2fe26b63d5ed47b75404baa960",
+          "downloadCount": 613,
+          "name": "main.js",
+          "size": 2837729
+        },
+        {
+          "digest": "sha256:557999b6e24478a0d87c44a0e17d06d2f795da72af9edd7c44dde820d4ed2c59",
+          "downloadCount": 666,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:7da0371935f1afb83e9610d4c21f1bc88c77af3bddc44ba54ed60bca576219bb",
+          "downloadCount": 607,
           "name": "styles.css",
           "size": 295780
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.32\r\n\r\n### Bug Fixes\r\n\r\n- **Additional Source Folders entries now survive view refreshes** — The Character, Location, and Codex views previously created their own manager instances and re-loaded only from the project Codex folder on every refresh, wiping out entries scanned from Additional Source Folders. The views now use the plugin's shared managers and call a single `reloadEntities()` entry point that re-applies Additional Source Folders after loading the project folder, so external characters/locations/codex entries stay visible. *(Reported by @franrodalg: external characters were scanned but never appeared in the Codex view.)*\r\n- **Additional Source Folders now accepts absolute paths** — `scanExtraFolders` now converts absolute OS paths (e.g. `C:\\Users\\…\\Folder` on Windows or `/Users/…/Folder` on macOS) to vault-relative paths before passing them to the vault adapter, which only understands paths relative to the vault root. A one-time migration on load converts any absolute paths already stored in settings. The settings UI also converts paths on add. Note that folders must still be **inside the vault** — Obsidian's API cannot access files outside it.\r\n- **Romancing the Beat template corrected** — The beat sheet template previously used an incorrect 3-act / 16-beat structure. It now follows Gwen Hayes' actual four-phase, twenty-beat outline: Phase 1 (Setup), Phase 2 (Falling in Love), Phase 3 (Retreating from Love), and Phase 4 (Fighting for Love), with five beats per phase.\r\n",
-      "downloadCount": 544,
+      "downloadCount": 613,
       "draft": false,
       "name": "1.10.32",
       "prerelease": false,
@@ -54,26 +114,26 @@
       "assets": [
         {
           "digest": "sha256:3db464464d474be578dcaaf9a1829d95e3eb13a037d26cff86dbc795bae55701",
-          "downloadCount": 37,
+          "downloadCount": 38,
           "name": "main.js",
           "size": 2833070
         },
         {
           "digest": "sha256:a8226974d6821754e94c8c0729666e6f297cf8aa8dd7585a46c6c803ee0cb19f",
-          "downloadCount": 39,
+          "downloadCount": 40,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:7da0371935f1afb83e9610d4c21f1bc88c77af3bddc44ba54ed60bca576219bb",
-          "downloadCount": 36,
+          "downloadCount": 37,
           "name": "styles.css",
           "size": 295780
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.31\r\n\r\n### New Features\r\n\r\n- **Character count option for scene lengths** — A new **Count unit for scene lengths** setting under **Settings → Scene Cards** lets you choose whether scene cards, the Timeline, and the Inspector display scene length in **Words** (default) or **Characters**. Useful for prose writers — especially for those who track manuscript length in characters rather than words. The character count is stored in a new `charcount` frontmatter field alongside the existing `wordcount`, and applies the same exclusions (comments, checklists, markdown markup) as the word count.\r\n\r\n### Bug Fixes\r\n\r\n- **Corkboard notes no longer disappear** — The corkboard note editor could lose its text (while images survived) when a view refresh rebuilt the board mid-edit: the textarea's `blur`/outside-pointer handler would then write a stale empty body over the real note content. The editor now tracks whether it is still attached to the DOM, refuses to overwrite a non-empty body with an empty value from a detached textarea, and flushes the in-flight edit synchronously before marking itself detached. *(Reported: notes disappeared twice; images survived the second time.)*\r\n- **Corkboard notes no longer appear as \"Unassigned\" scenes in Plotlines** — The Plotlines (Storyline) view now filters out corkboard sticky notes before grouping, matching the existing filter in the Timeline and Board views. Sticky notes are brainstorming aids, not story scenes, so they no longer pollute the \"Unassigned\" bucket.\r\n- **Corkboard notes no longer steal sequence numbers from real scenes** — `SceneManager.createScene` no longer assigns a `sequence` number to corkboard notes, and `globalResequence` / `getNextSequence` now exclude notes from the sequence space. This eliminates the gaps in scene numbering caused by notes and fixes the symptom where Timeline reordering by number appeared not to change the numbers (notes were occupying slots in the numbering).\r\n- **Plot Grid reset no longer resurrects the grid** — Resetting the grid could make it \"disappear then reappear on its own\" because a pending debounced save (holding the pre-reset state) fired after the reset. The reset handler now cancels any in-flight debounced save before clearing the grid.\r\n- **Additional Source Folders now picks up linked notes** — `scanExtraFolders` now normalizes the folder path before the existence check, so paths like `/Test` or `Test\\` (common on Windows) no longer cause the scan to abort silently. Adding or removing a folder in **Settings → Advanced → Additional Source Folders** now triggers an immediate re-scan and view refresh, so newly linked notes appear without requiring a project switch or reload.\r\n- **Nested location dropdowns show the full ancestry** — The location autocomplete in the Inspector now displays the complete parent chain (e.g. `Forest > Old House > Scary Room`) instead of only the immediate parent, so deeply nested locations are distinguishable. Previously a three-level hierarchy collapsed to a single `Parent > Child` label, making it impossible to tell identically-named locations apart. The suggestion dropdown items also now wrap and carry a hover tooltip with the full label, so long names are no longer clipped.",
-      "downloadCount": 37,
+      "downloadCount": 38,
       "draft": false,
       "name": "1.10.31",
       "prerelease": false,
@@ -84,26 +144,26 @@
       "assets": [
         {
           "digest": "sha256:4b4562c5bfc2021fbc8fbcbd7f2c9c9db7f3453bacec55a5f7c554148e247f3b",
-          "downloadCount": 337,
+          "downloadCount": 338,
           "name": "main.js",
           "size": 2830471
         },
         {
           "digest": "sha256:057509e5bdb599c42bcc2656f52719c30af5e5cc03a4b49695ad11f7fd0b87e4",
-          "downloadCount": 377,
+          "downloadCount": 378,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:a522eef563032f38982d36b858870d236cf25c57288a59ba334aca65cfb03315",
-          "downloadCount": 330,
+          "downloadCount": 331,
           "name": "styles.css",
           "size": 295525
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.30\r\n\r\n### New Features\r\n\r\n- **Persistent Storyline (Plotlines) view state** — The Plotlines view now remembers your chosen view mode (List/Subway), sort order, Arc Point filter, and scene-tag pill visibility between sessions, matching the persistence already in place for the Board, Timeline, and Research views.\r\n- **Renaming a scene renames its linked notes file** — When you rename a scene, its companion `Scene Title - Notes.md` file is renamed to match, and the `notesFile` link is updated. *(Issue [#175](https://github.com/PixeroJan/obsidian-storyline/issues/175))*\r\n\r\n### Bug Fixes\r\n\r\n- **Empty custom fields no longer linger in frontmatter** — Clearing or deleting a Universal Field value through StoryLine now removes the entry from `universalFields` (and its mirrored top-level key) instead of leaving an empty `fieldId: ''` behind. *(Issue [#175](https://github.com/PixeroJan/obsidian-storyline/issues/175))*\r\n- **Safer act/chapter adding on mobile** — `addActs` / `addChapters` now sanitize input, dedupe, and skip no-op writes, preventing the repeated-tap loop that could corrupt project frontmatter under sync. Project frontmatter parsing also tolerates single-number or comma-string `acts`/`chapters` values produced by sync conflicts. *(Issue [#176](https://github.com/PixeroJan/obsidian-storyline/issues/176))*\r\n- **Plotline subway connector gradients** — Connectors between three or more plotlines now render a proper multi-stop gradient through every intermediate lane color instead of jumping straight from the top to the bottom lane. *(Issue [#177](https://github.com/PixeroJan/obsidian-storyline/issues/177))*\r\n- **Corkboard note editor stays visible on iOS** — Tapping a corkboard note to edit it on iOS no longer pushes the note off-screen when the soft keyboard appears; the canvas pans to keep the note in the visible area. *(Issue [#178](https://github.com/PixeroJan/obsidian-storyline/issues/178))*\r\n",
-      "downloadCount": 337,
+      "downloadCount": 338,
       "draft": false,
       "name": "1.10.30",
       "prerelease": false,
