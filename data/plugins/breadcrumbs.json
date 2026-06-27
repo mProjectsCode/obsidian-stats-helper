@@ -4,8 +4,8 @@
   "description": "Visualise the hierarchy of your vault using a breadcrumb trail or matrix view.",
   "errors": [],
   "id": "breadcrumbs",
-  "lastChangedAt": "2026-06-26T22:05:26.959Z",
-  "lastFetchedAt": "2026-06-26T22:05:26.959Z",
+  "lastChangedAt": "2026-06-27T22:00:26.961Z",
+  "lastFetchedAt": "2026-06-27T22:00:26.961Z",
   "manifest": {
     "author": "MichaelPPorter",
     "authorUrl": "https://github.com/michaelpporter",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Breadcrumbs",
-    "version": "4.19.1"
+    "version": "4.19.3"
   },
   "name": "Breadcrumbs",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:05a93019f3a8bea5d2c16278be2e44ef1dea28a2d594db6271fd10bdebc9062c",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 1898236
+        },
+        {
+          "digest": "sha256:dc04a4f4586aed744a360cffe97e19578f82d055b8d7f89332ea5738d18cb5bb",
+          "downloadCount": 17,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:a77b65859f74a8302c6708701dc3f70be315f086cb1d4e1106788d41c31e986e",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 5224
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A small quality-of-life release for date-note (and deeply-nested) trails.\n\n## Changed\n\n- **The trail view's grid now defaults to the `longest` path selection.** Date notes link up to *every* ancestor level at once (year, quarter, month, week — all directly), so the old `all` default drew every redundant path and the trail rendered as a cluttered fan of repeated ancestors. `longest` keeps only the deepest chain — `2026 → 2026-Q2 → 2026-06 → 2026-W26` — so the trail reads as a clean line.\n- **Existing trails keep their saved selection** — flip it yourself via the trail's selection dropdown (the middle control) if you want the cleaner view.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.2...4.19.3\n",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "4.19.3",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T20:45:28Z",
+      "tag": "4.19.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:915d865b70a3800fe381e46bd38e340f45c6373b6a278ab8e02d3a028e773166",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1898232
+        },
+        {
+          "digest": "sha256:7548531e8936602fc2a7a95f3121bb625b8ed0dd13bdd6428688f1f82cf348f6",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:a77b65859f74a8302c6708701dc3f70be315f086cb1d4e1106788d41c31e986e",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 5224
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A maintenance release — two user-facing bug fixes, plus six internal refactors that consolidate duplicated logic into small, tested seams (no behaviour change).\n\n## 🐛 Fixed\n\n- **The tree view's \"Merge fields\" toggle was inverted** — it separated fields when set to merge, and vice versa. It now matches its label (and the trail-view / codeblock behaviour). If you'd used it before, it will feel flipped from what you're used to — that's the fix.\n- **Renaming or deleting an edge field now updates the Dataview builder's default field.** Previously the rename/delete cascade skipped the Dataview source's default field, so it kept pointing at the old (now-invalid) field name until you fixed it by hand.\n\n## 🧹 Changed (internal — behaviour-preserving)\n\n- The seven explicit edge builders that resolve a single field from frontmatter now share one `read_edge_field` helper, and invalid-field errors consistently name the `BC-…-field` key.\n- The `typed_link` builder's inline-field parsing is now a pure, unit-tested `parse_inline_field` helper (a redundant dedup layer was removed).\n- The Tree, Matrix, and Trail views share one `useViewSettings` helper for their settings mirror + loop-safe writeback. As a side effect, the views no longer write settings to disk on mount (only on an actual edit).\n- Settings-panel callbacks route their post-change side effects through one `commitSettings(policy)` helper instead of ~140 callbacks each hand-pairing save with rebuild/refresh.\n- The WASM graph traversal is reached through a small TS facade (`traverse` / `with_traversal` / `sort_traversal`); `walk_to_roots` was extracted from the tree view. Both are now unit-tested.\n- The free-on-change/unmount lifecycle for derived WASM objects is owned by one `useOwned` rune helper instead of an identical effect hand-copied across 8 view components.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.1...4.19.2\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "4.19.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T19:41:23Z",
+      "tag": "4.19.2"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:013b24f90ecc1315d35fe8245029ff1c75edb8e56211f5d125a36fd92ae89774",
-          "downloadCount": 394,
+          "downloadCount": 419,
           "name": "main.js",
           "size": 1898579
         },
         {
           "digest": "sha256:6aa184c240da24cb956933aad59fe2c08d4b698c605bef611910a4cffb91ace8",
-          "downloadCount": 1778,
+          "downloadCount": 1935,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:eae0a43f03174b75d9100bcdab3c23c5a0d2b426966b4c6248e08f47cbb18da4",
-          "downloadCount": 378,
+          "downloadCount": 401,
           "name": "styles.css",
           "size": 4755
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- **Export to canvas** — a new command that lays out a note's neighbourhood as a native JSON Canvas (`.canvas`). Pick which edge field-groups to follow and the depth, choose left-to-right or top-to-bottom layout, and the canvas is built as a tidy tree with each parent centred over its children. Defaults are configurable under **Settings → Commands → Create canvas**; re-exporting an existing canvas prompts to overwrite or create a new one.\n- **Jump to neighbour (picker)** — a fuzzy-suggest command listing all of the active note's neighbours (grouped by field) to jump to, complementing the existing \"jump to first neighbour\" commands.\n- **Per-field jump commands** — \"Jump to first neighbour by field:`<field>`\" is now registered for every edge field, so directions like `up`/`down`/`next`/`prev` can each be bound to their own hotkey.\n\n## Fixed\n\n- Johnny.Decimal **sibling edges now work at the category level** (e.g. `11`↔`12` under area `10`), not just for delimited items (`11.01`↔`11.02`). The sibling grouping now shares the same parent resolution as the up-edge builder.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.19.0...4.19.1",
-      "downloadCount": 394,
+      "downloadCount": 419,
       "draft": false,
       "name": "4.19.1",
       "prerelease": false,
@@ -64,7 +124,7 @@
         },
         {
           "digest": "sha256:bef95aa5d75e2d66d12286548acc4fbf78c30b3985f366ff2706989ce982bb5e",
-          "downloadCount": 240,
+          "downloadCount": 241,
           "name": "manifest.json",
           "size": 478
         },
@@ -94,7 +154,7 @@
         },
         {
           "digest": "sha256:089857f935d002c984a745a9b600e3d7579d80c8d11536238c69dd50e396d863",
-          "downloadCount": 30,
+          "downloadCount": 31,
           "name": "manifest.json",
           "size": 478
         },
@@ -124,7 +184,7 @@
         },
         {
           "digest": "sha256:551727ff2b41b3153bb88489169457f3646bbcef0c59c901846e151e0b651c52",
-          "downloadCount": 146,
+          "downloadCount": 147,
           "name": "manifest.json",
           "size": 478
         },
@@ -154,7 +214,7 @@
         },
         {
           "digest": "sha256:b8aa748ba6ce056b3182a280a3172622d7d59aa9e27d6ddc80f21dbba5ba84e6",
-          "downloadCount": 755,
+          "downloadCount": 756,
           "name": "manifest.json",
           "size": 478
         },
@@ -184,7 +244,7 @@
         },
         {
           "digest": "sha256:9ce22f717f6e809a18e8e3cf9d2f4f497d635e2803c93fffb912506bbcc7c123",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 478
         },
@@ -208,26 +268,26 @@
       "assets": [
         {
           "digest": "sha256:ccea294418d38dac83f81b0d185715dcd6187c2e05e596acc4819dd564dcc871",
-          "downloadCount": 56,
+          "downloadCount": 59,
           "name": "main.js",
           "size": 1892477
         },
         {
           "digest": "sha256:9dddbea53cd07556890e6ba4634cde0c470575e90ecfd7fe4cd7bd3565c1e19c",
-          "downloadCount": 74,
+          "downloadCount": 78,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:7b7f8e2d52c76e4b389afc81281953a61319f28311366b2b68bf7d208a723402",
-          "downloadCount": 56,
+          "downloadCount": 59,
           "name": "styles.css",
           "size": 4755
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n* **List Note section scoping** — add `BC-list-note-section: \"<heading>\"` to a List Note's frontmatter to read only the list under that heading. The section runs to the next equal-or-higher-level heading (or end of file); without the field the whole note is read as before (#363).\n* **Excluded folders** — new global setting (Settings → Breadcrumbs → Excluded folders). Notes inside a listed folder are skipped by every edge builder. One path per line; matching respects folder boundaries (#358).\n* **Per-link List Note exclusion** — `BC-list-note-exclude`, a frontmatter list of wiki-links that stay in the list without becoming child edges. Useful for reference/see-also links (#365).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.15.2...4.16.0",
-      "downloadCount": 56,
+      "downloadCount": 59,
       "draft": false,
       "name": "4.16.0",
       "prerelease": false,
@@ -244,7 +304,7 @@
         },
         {
           "digest": "sha256:6003e9b7b61c00b0a2342f850aa9b838812b18d2eef81bbb8e860fd0721dac7d",
-          "downloadCount": 483,
+          "downloadCount": 485,
           "name": "manifest.json",
           "size": 478
         },
@@ -274,7 +334,7 @@
         },
         {
           "digest": "sha256:6fead3778b00fb43110af4ba37f1505110f1e1623105723881644af958207979",
-          "downloadCount": 652,
+          "downloadCount": 653,
           "name": "manifest.json",
           "size": 478
         },
@@ -304,7 +364,7 @@
         },
         {
           "digest": "sha256:928468b698180acd28a93f97e0f43069066c8cbc9453937b223c0589bf535a36",
-          "downloadCount": 659,
+          "downloadCount": 662,
           "name": "manifest.json",
           "size": 479
         },
@@ -328,26 +388,26 @@
       "assets": [
         {
           "digest": "sha256:e79d923ca0b4b1c952d9d030937a48b2695c9f84aa65272f5e2a6d34cbf141ea",
-          "downloadCount": 5233,
+          "downloadCount": 5382,
           "name": "main.js",
           "size": 1891540
         },
         {
           "digest": "sha256:307e8844e9084e7fa35f55919aadc799ba6b993da0c023439e8a71188a2330a2",
-          "downloadCount": 5455,
+          "downloadCount": 5606,
           "name": "manifest.json",
           "size": 479
         },
         {
           "digest": "sha256:201903c4455a6b82ca2041c891bf785aaf8a5b2eebd5b71b470310f5c77b4212",
-          "downloadCount": 5208,
+          "downloadCount": 5356,
           "name": "styles.css",
           "size": 4820
         }
       ],
       "author": "github-actions[bot]",
       "description": "Internal maintenance release — no user-facing behavior changes.\n\n### Performance\n\n- Debounce side/page view setting writes (Tree View, Matrix, Trail View) so rapid control changes coalesce into a single save instead of hitting disk on every change.\n- Index date-note period lookups with a basename map, replacing nested linear scans (O(n·m) → O(n)) during graph rebuilds.\n- Debounce the opt-in \"rebuild graph on layout change\" trigger so it no longer rebuilds on every editor cursor move or scroll.\n\n### Refactors\n\n- Extract a shared `validate_edge_field` helper used across all explicit edge builders.\n- Replace untyped `any` casts on Obsidian/Dataview internals with typed shapes.\n- Remove dead code, including the unused Dataview file-source path. No effect on the `dataview-from` codeblock feature.\n\n### Tests\n\n- Add unit tests for the date, list, folder, dataview, and traverse note builders.\n\n### Chores\n\n- Address Obsidian community plugin scorecard lint findings, including scoping the lint-suppression header in the generated WASM type declarations.\n- Update funding links (GitHub Sponsors, Buy Me a Coffee).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.14.1...4.14.2\n",
-      "downloadCount": 5233,
+      "downloadCount": 5382,
       "draft": false,
       "name": "4.14.2",
       "prerelease": false,
@@ -370,7 +430,7 @@
         },
         {
           "digest": "sha256:8b4a0c5f0541b9a91e04864cf7b9fc8b638e566e03b6dda4ec329311388baec8",
-          "downloadCount": 1376,
+          "downloadCount": 1377,
           "name": "manifest.json",
           "size": 398
         },
@@ -400,7 +460,7 @@
         },
         {
           "digest": "sha256:06d97c7ab5cfe08ef088872603e0b262b65a0725d67f248229b82ed1a20bb1ae",
-          "downloadCount": 764,
+          "downloadCount": 765,
           "name": "manifest.json",
           "size": 398
         },
@@ -430,7 +490,7 @@
         },
         {
           "digest": "sha256:ca06f4c97feb1900e692fcc928fa42a72a5c77243d7ef61f71114bf6119a07b2",
-          "downloadCount": 67,
+          "downloadCount": 68,
           "name": "manifest.json",
           "size": 399
         },
@@ -460,7 +520,7 @@
         },
         {
           "digest": "sha256:cffddd6977118d826582c83980bc8ee73f7290aa64d3db6e53228c7e4ccd21ee",
-          "downloadCount": 38,
+          "downloadCount": 39,
           "name": "manifest.json",
           "size": 399
         },
@@ -490,7 +550,7 @@
         },
         {
           "digest": "sha256:766a6570d9eba1944433ec8a84990cd488c2b7240a2d886db3b9c67235476321",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 398
         },
@@ -550,7 +610,7 @@
         },
         {
           "digest": "sha256:8a511ba35c22459d2366a9b7b8239a9d617b938fce62e9954101185501b4bee1",
-          "downloadCount": 456,
+          "downloadCount": 457,
           "name": "manifest.json",
           "size": 398
         },
@@ -580,7 +640,7 @@
         },
         {
           "digest": "sha256:ef274e0ec2d70e5e56bf3b69b5555fa25bf05823afd53e47e39401e62b0adc9e",
-          "downloadCount": 530,
+          "downloadCount": 531,
           "name": "manifest.json",
           "size": 398
         },
@@ -610,7 +670,7 @@
         },
         {
           "digest": "sha256:da887533bc53ae32818d67d9f87d004939b57bbfdfc1c837a231b1ca9f8b9d14",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 398
         },
@@ -1480,26 +1540,26 @@
       "assets": [
         {
           "digest": "sha256:8a46f189eab0f54ec8c8e4c59090f666b8b4f512493fb4db789fa3245bd92701",
-          "downloadCount": 41,
+          "downloadCount": 42,
           "name": "main.js",
           "size": 1220289
         },
         {
           "digest": "sha256:65c507dc75c3aa923f4d01fd170208ca5213e6a7a138fa36d3ddbe2bb7d3dbfb",
-          "downloadCount": 53,
+          "downloadCount": 54,
           "name": "manifest.json",
           "size": 406
         },
         {
           "digest": "sha256:28710c4a9f3928c9af767d8bf25cb829f36899deb02e59d06ed723ae5e80bfd5",
-          "downloadCount": 41,
+          "downloadCount": 42,
           "name": "styles.css",
           "size": 4346
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's Changed\r\n* chore: enhance multi-parent display functionality by @michaelpporter in https://github.com/SkepticMystic/breadcrumbs/pull/683\r\n* feat(views): search in Tree and Matrix side views by @michaelpporter in https://github.com/SkepticMystic/breadcrumbs/pull/691\r\n\r\n\r\n**Full Changelog**: https://github.com/SkepticMystic/breadcrumbs/compare/4.9.7...4.10.0",
-      "downloadCount": 41,
+      "downloadCount": 42,
       "draft": false,
       "name": "4.10.0",
       "prerelease": false,
@@ -2536,7 +2596,7 @@
         },
         {
           "digest": "sha256:207da205e3cba05425835241c484948274597e78e2374adfd7aefc7b21599606",
-          "downloadCount": 3545,
+          "downloadCount": 3546,
           "name": "manifest.json",
           "size": 404
         },
