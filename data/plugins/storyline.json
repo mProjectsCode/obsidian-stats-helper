@@ -4,8 +4,8 @@
   "description": "Transform your vault into a powerful book planning and writing tool. Corkboard, KanbanBoard view, timeline, plotlines,character tracking, and more. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "storyline",
-  "lastChangedAt": "2026-06-26T04:31:28.778Z",
-  "lastFetchedAt": "2026-06-26T04:31:28.778Z",
+  "lastChangedAt": "2026-06-27T05:05:27.001Z",
+  "lastFetchedAt": "2026-06-27T05:05:27.001Z",
   "manifest": {
     "author": "Jan Sandström",
     "authorUrl": "https://github.com/PixeroJan",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:20115bd2111d12e5f9d2d65b44439a4081afcb23d107ffa4d10d9abae66981ee",
-          "downloadCount": 185,
+          "downloadCount": 531,
           "name": "main.js",
           "size": 2841315
         },
         {
           "digest": "sha256:36513e2b90037d1b83af170fcbb9f4d5d491833f0f6900c041b0da014ec7caab",
-          "downloadCount": 191,
+          "downloadCount": 564,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:97f4ba9b93fdd7bab136dc3f25cdc8ded1c5a4c4c04d90cd6e1cd083e6ae3f37",
-          "downloadCount": 179,
+          "downloadCount": 521,
           "name": "styles.css",
           "size": 295843
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.34\r\n\r\n### Bug Fixes\r\n\r\n- **Consistent toolbar separator line across all Codex views** — The Characters view showed a thin horizontal separator line between the StoryLine toolbar and the content area, but the Locations and Codex (Items) views did not. The shared CSS variables that the toolbar's `border-bottom` depends on are now applied to the Location and Codex containers as well, so the separator appears consistently in all three views.\r\n- **Wikilink section headers no longer parsed as tags** — A wikilink to a note section (e.g. `[[Test#Header]]`) in a Codex note body caused the word after the `#` to be interpreted as a `#tag`, showing up as a spurious tag on the codex item card and in the Story Graph. Wikilinks are now stripped from the text before tag extraction runs, matching the approach already used for plain-text name mention scanning.\r\n- **Manuscript view scroll position now restores correctly** — The cursor position was restored when switching back to the Manuscript view, but the scroll position snapped to the top of the document and only returned to the saved position once the user started typing. After restoring the cursor, the view now uses `coordsAtPos()` to find the cursor's actual screen position and scrolls the outer container so the cursor is visible, regardless of how content height changed during editor mounting.\r\n",
-      "downloadCount": 185,
+      "downloadCount": 531,
       "draft": false,
       "name": "1.10.34",
       "prerelease": false,
@@ -54,26 +54,26 @@
       "assets": [
         {
           "digest": "sha256:1fb8a70b06f5c1425c7076986bd75b4b15867bf0a57797ea66050eddbd0284b0",
-          "downloadCount": 155,
+          "downloadCount": 156,
           "name": "main.js",
           "size": 2841003
         },
         {
           "digest": "sha256:7438f3ebb66396d03015b9a7b8a0f06bbb4107a0b89e08685151b40bced86c4b",
-          "downloadCount": 163,
+          "downloadCount": 164,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:7da0371935f1afb83e9610d4c21f1bc88c77af3bddc44ba54ed60bca576219bb",
-          "downloadCount": 153,
+          "downloadCount": 154,
           "name": "styles.css",
           "size": 295780
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.33\r\n\r\n### Bug Fixes\r\n\r\n- **Scene Snapshot no longer crashes when `notesFile` is undefined** — `SnapshotManager.saveSnapshot()` could throw `Cannot read properties of undefined (reading 'replace')` when a scene had no external notes file, because an unvalidated `undefined` value leaked into Obsidian APIs (`normalizePath`, `getAbstractFileByPath`, `stringifyYaml`) that assume a string. `MetadataParser.parseContent()` now normalizes `notesFile` (and other frontmatter string fields like `synopsis`, `storyDate`, `storyTime`, `corkboardNoteColor`, `plotgridOrigin`) through a single `normalizeFrontmatterString()` helper that coerces `undefined`/`null`/non-string YAML values to a safe `string | undefined`. `SnapshotManager.saveSnapshot()` also guards its `sceneFilePath` and `label` parameters against non-string input. *(Issue #182)*\r\n- **`getScenesGroupedBy()` no longer throws `t.startsWith is not a function`** — grouping by `act`, `chapter`, or `plotlines` crashed because non-string frontmatter values (numbers, `undefined`) reached `.startsWith()` without a type guard. The `field` argument is now coerced to a string before the `cf:` prefix check, and a previously-missing `plotlines` case has been added to the switch statement so scenes are grouped by their tags instead of falling through to `Unknown`. *(Issue #182)*\r\n\r\n### New Features\r\n\r\n- **Manuscript view remembers your cursor and scroll position** — switching away from the Manuscript view (to Codex, Plotgrid, etc.) and back, or restarting Obsidian, previously reset the cursor to the top of the document with no editor focused. The Manuscript view now captures the active editor's CM6 cursor selection and scroll position on focus loss, and after the next render eagerly mounts the previously-focused scene's editor, focuses it, and restores the exact cursor position so you resume typing right where you left off. State is also persisted to the project's `System/manuscript-state.json` so it survives an Obsidian restart. *(Discussion #183)*\r\n",
-      "downloadCount": 155,
+      "downloadCount": 156,
       "draft": false,
       "name": "1.10.33",
       "prerelease": false,
@@ -84,26 +84,26 @@
       "assets": [
         {
           "digest": "sha256:1c4bf52dbdaff5daff5886a0c79dcb1c59532e2fe26b63d5ed47b75404baa960",
-          "downloadCount": 613,
+          "downloadCount": 614,
           "name": "main.js",
           "size": 2837729
         },
         {
           "digest": "sha256:557999b6e24478a0d87c44a0e17d06d2f795da72af9edd7c44dde820d4ed2c59",
-          "downloadCount": 666,
+          "downloadCount": 667,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:7da0371935f1afb83e9610d4c21f1bc88c77af3bddc44ba54ed60bca576219bb",
-          "downloadCount": 607,
+          "downloadCount": 608,
           "name": "styles.css",
           "size": 295780
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.32\r\n\r\n### Bug Fixes\r\n\r\n- **Additional Source Folders entries now survive view refreshes** — The Character, Location, and Codex views previously created their own manager instances and re-loaded only from the project Codex folder on every refresh, wiping out entries scanned from Additional Source Folders. The views now use the plugin's shared managers and call a single `reloadEntities()` entry point that re-applies Additional Source Folders after loading the project folder, so external characters/locations/codex entries stay visible. *(Reported by @franrodalg: external characters were scanned but never appeared in the Codex view.)*\r\n- **Additional Source Folders now accepts absolute paths** — `scanExtraFolders` now converts absolute OS paths (e.g. `C:\\Users\\…\\Folder` on Windows or `/Users/…/Folder` on macOS) to vault-relative paths before passing them to the vault adapter, which only understands paths relative to the vault root. A one-time migration on load converts any absolute paths already stored in settings. The settings UI also converts paths on add. Note that folders must still be **inside the vault** — Obsidian's API cannot access files outside it.\r\n- **Romancing the Beat template corrected** — The beat sheet template previously used an incorrect 3-act / 16-beat structure. It now follows Gwen Hayes' actual four-phase, twenty-beat outline: Phase 1 (Setup), Phase 2 (Falling in Love), Phase 3 (Retreating from Love), and Phase 4 (Fighting for Love), with five beats per phase.\r\n",
-      "downloadCount": 613,
+      "downloadCount": 614,
       "draft": false,
       "name": "1.10.32",
       "prerelease": false,
@@ -900,13 +900,13 @@
         },
         {
           "digest": "sha256:e1afd88d5e16b5498839294f68639a0d800568ac340f657891edcc334979544a",
-          "downloadCount": 43,
+          "downloadCount": 44,
           "name": "main.js",
           "size": 3248513
         },
         {
           "digest": "sha256:7468f80080bb020a7fbee44a00f2bcb5d32c10b0fa32dbec58305b26312ef172",
-          "downloadCount": 100,
+          "downloadCount": 101,
           "name": "manifest.json",
           "size": 366
         },
@@ -924,14 +924,14 @@
         },
         {
           "digest": "sha256:f56001cca8df1d63ee86f8ea26ddc81057fcbb72b5f08f660ff57487ea6ac7b6",
-          "downloadCount": 43,
+          "downloadCount": 44,
           "name": "styles.css",
           "size": 251665
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n---\r\n## Version 1.9.9\r\n\r\n### Bug Fixes\r\n\r\n- **Corkboard sticky notes leaking into manuscript exports** *([#87](https://github.com/PixeroJan/obsidian-storyline/issues/87))* — Visual sticky notes from the Corkboard (stored as scene files with `corkboardNote: true`) were being included in every Manuscript / Outline / DOCX / PDF / CSV / JSON export. `ExportService.getSortedScenes()` now filters them out by default via a new `isCorkboardNoteScene()` helper. Users who *want* them in an export — e.g. to share planning notes with a co-writer — can flip the new **Include corkboard notes** toggle in the Export dialog.\r\n\r\n### New Features\r\n\r\n- **Convert any note into a scene** *([#83](https://github.com/PixeroJan/obsidian-storyline/discussions/83))* — Existing notes (or stub notes auto-created from broken `[[wikilinks]]`) can now be promoted to full StoryLine scenes in one click. New command **\"Convert note to scene\"** acts on the currently active markdown file, and a matching **\"StoryLine: Convert to scene\"** entry appears in the file-explorer right-click menu for any `.md` file that isn't already a scene. The new `SceneManager.convertFileToScene()` writes the required scene frontmatter (`type: scene`, default status, today's `created` date), assigns the next sequence number, and moves the file into the project's `Scenes/` (or `Scenes/Act N/`) folder so it shows up in every view.\r\n- **Manuscript export — title & numbering options** *([#85](https://github.com/PixeroJan/obsidian-storyline/issues/85))* — The Export dialog gained two new mutually-exclusive toggles when **Manuscript** is selected: **Include scene titles** (off ⇒ no `## Title` headings between scenes — clean prose for publisher submissions) and **Number scenes (Scene 1, Scene 2…)** (on ⇒ working titles are replaced with running numbered headings). Implemented via a new `ExportOptions` interface on `ExportService` and an updated `buildManuscriptMd()`.\r\n- **Wikilink autocomplete in the Scene Inspector's Notes / Comments field** *([#84](https://github.com/PixeroJan/obsidian-storyline/discussions/84))* — Typing `[[` in the editorial-notes textarea now pops up a fuzzy-matched list of vault notes, just like the regular Obsidian editor. Pick one with **Arrow keys + Enter**, **Tab**, or a mouse click and StoryLine inserts the wikilink for you. Powered by a new lightweight `WikilinkSuggest` component attached to the plain `<textarea>` (Obsidian's built-in `EditorSuggest` only works inside CodeMirror editors).\r\n",
-      "downloadCount": 43,
+      "downloadCount": 44,
       "draft": false,
       "name": "1.9.9",
       "prerelease": false,
