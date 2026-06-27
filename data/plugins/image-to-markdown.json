@@ -4,8 +4,8 @@
   "description": "Transcribe the images and PDFs in a note to Markdown with a local vision LLM — fully offline, non-destructive, streaming into the sidebar. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "image-to-markdown",
-  "lastChangedAt": "2026-06-26T07:03:26.971Z",
-  "lastFetchedAt": "2026-06-26T07:03:26.971Z",
+  "lastChangedAt": "2026-06-27T08:03:26.965Z",
+  "lastFetchedAt": "2026-06-27T08:03:26.965Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://jkaindl.de",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Image to Markdown",
-    "version": "0.5.0"
+    "version": "0.5.1"
   },
   "name": "Image to Markdown",
   "presentInCommunityList": true,
@@ -23,14 +23,14 @@
     {
       "assets": [
         {
-          "digest": "sha256:3de2851a655fd6f263f6a2d46dbdd0852f45474ca3935474942be553ca7e0e62",
+          "digest": "sha256:2cf8fef78b1249b440dd06adc27b1a91dce1e470c738aa77ca38c962fab7e779",
           "downloadCount": 8,
           "name": "main.js",
-          "size": 2299356
+          "size": 2300135
         },
         {
-          "digest": "sha256:146abc3ec035c8aeb6b59ac81cdbec5de6379bc6f7124ff6136c6c9c3adc4465",
-          "downloadCount": 8,
+          "digest": "sha256:4976aec8b7833ef0ecfeb5774bc99c6f0b151ce9813777beaadd340117ad56d1",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 427
         },
@@ -42,8 +42,38 @@
         }
       ],
       "author": "github-actions[bot]",
-      "description": "\n### Hinzugefügt\n\n- **Endpoint-Fallback-Liste:** statt eines einzelnen Vision-Endpoints lässt sich eine geordnete\n  Liste konfigurieren — das Plugin pingt sie der Reihe nach und nutzt den **ersten erreichbaren**\n  automatisch (re-resolved beim Sidebar-Refresh und nach einem fehlgeschlagenen Aufruf mit einem\n  Retry). So funktioniert eine einzelne gesyncte Config auf mehreren Geräten und Netzen: z.B.\n  `localhost:1234` (das Gerät, auf dem LM Studio läuft) als Erstes, dann `192.168.178.27:1234`\n  (LAN-IP, erreichbar vom iPhone/iPad via WireGuard). Im Settings-Tab gibt es ein dynamisches\n  Endpunkt-Feld pro Eintrag (leeres Feld am Ende = „Neuen hinzufügen\"; Feld leeren entfernt den\n  Eintrag beim Verlassen) mit je einem Erreichbarkeits-Icon pro Feld (Kreis-Haken / Kreis-X /\n  Ladekreis + Titeltext). Der aktive Endpoint ist markiert. Die Sidebar zeigt\n  **„verbunden via \\<Endpoint\\>\"** statt nur des Status. Migration: ein vorhandenes\n  `visionEndpoint`-Feld in `data.json` wird automatisch nach `visionEndpoints` migriert —\n  bestehende Konfigurationen bleiben ohne manuellen Eingriff funktionsfähig.\n\n- **Aktive Datei als Quelle (Etappe 3):** ist die aktive Datei selbst ein Bild oder eine PDF\n  (d.h. keine Notiz, sondern die Mediendatei wird direkt in Obsidian angezeigt), zeigt die\n  Sidebar diese Datei als einzelnen Eintrag mit dem Label **„diese Datei\"** (DE) bzw.\n  **„this file\"** (EN) an und behandelt sie als Transkriptions-Quelle. PDFs: Seitenbereich\n  wählbar wie gewohnt; Bilder: einzelne Karte. Die Transkript-Notiz wird am\n  **„Standard-Speicherort für neue Notizen\"** (`app.fileManager.getNewFileParent`) angelegt,\n  da es keine Quellnotiz gibt, neben der sie abgelegt werden könnte. Das Frontmatter enthält\n  kein `source_note`-Feld (es gibt keine Quellnotiz); `source_pdf`/`source_image`, `created`\n  und `transcribed_by` (PDFs auch `pages`) bleiben erhalten. Die Quelldatei wird **nicht\n  verändert** (kein Embed-Ersatz). Idempotenz und Override funktionieren wie gewohnt: eine\n  bereits transkribierte Datei zeigt „✓ Transkript vorhanden → öffnen\"; Override überschreibt\n  die bestehende Notiz. Ausschließlich über die Sidebar — der Command „Bilder der aktiven Notiz\n  transkribieren\" und das Kontextmenü betreffen weiterhin nur Notizen mit Embeds.",
+      "description": "\n### Behoben\n\n- **Endpunkt-Eingabe:** Beim Tippen ins Endpunkt-Feld wurde pro Tastendruck ein eigener,\n  unvollständiger Eintrag angelegt (`l`, `lo`, `loc`, …) statt eines einzigen. Die Listen-\n  Bearbeitung wird jetzt erst beim Verlassen des Felds (blur) angewandt — ein Feld = ein Eintrag.\n\n### Hinzugefügt\n\n- **Endpunkt löschen:** Jede Endpunkt-Zeile hat einen eigenen Lösch-Button (Mülleimer). Das\n  Erreichbarkeits-Status-Icon (`circle-check`/`circle-x`) links bleibt reine Anzeige.",
       "downloadCount": 8,
+      "draft": false,
+      "name": "0.5.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-26T08:30:18Z",
+      "tag": "0.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3de2851a655fd6f263f6a2d46dbdd0852f45474ca3935474942be553ca7e0e62",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 2299356
+        },
+        {
+          "digest": "sha256:146abc3ec035c8aeb6b59ac81cdbec5de6379bc6f7124ff6136c6c9c3adc4465",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 427
+        },
+        {
+          "digest": "sha256:bb7b391103c52c512d3ba10f675af02c142eb9854c7bac1a27781078606834a4",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 4343
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Hinzugefügt\n\n- **Endpoint-Fallback-Liste:** statt eines einzelnen Vision-Endpoints lässt sich eine geordnete\n  Liste konfigurieren — das Plugin pingt sie der Reihe nach und nutzt den **ersten erreichbaren**\n  automatisch (re-resolved beim Sidebar-Refresh und nach einem fehlgeschlagenen Aufruf mit einem\n  Retry). So funktioniert eine einzelne gesyncte Config auf mehreren Geräten und Netzen: z.B.\n  `localhost:1234` (das Gerät, auf dem LM Studio läuft) als Erstes, dann `192.168.178.27:1234`\n  (LAN-IP, erreichbar vom iPhone/iPad via WireGuard). Im Settings-Tab gibt es ein dynamisches\n  Endpunkt-Feld pro Eintrag (leeres Feld am Ende = „Neuen hinzufügen\"; Feld leeren entfernt den\n  Eintrag beim Verlassen) mit je einem Erreichbarkeits-Icon pro Feld (Kreis-Haken / Kreis-X /\n  Ladekreis + Titeltext). Der aktive Endpoint ist markiert. Die Sidebar zeigt\n  **„verbunden via \\<Endpoint\\>\"** statt nur des Status. Migration: ein vorhandenes\n  `visionEndpoint`-Feld in `data.json` wird automatisch nach `visionEndpoints` migriert —\n  bestehende Konfigurationen bleiben ohne manuellen Eingriff funktionsfähig.\n\n- **Aktive Datei als Quelle (Etappe 3):** ist die aktive Datei selbst ein Bild oder eine PDF\n  (d.h. keine Notiz, sondern die Mediendatei wird direkt in Obsidian angezeigt), zeigt die\n  Sidebar diese Datei als einzelnen Eintrag mit dem Label **„diese Datei\"** (DE) bzw.\n  **„this file\"** (EN) an und behandelt sie als Transkriptions-Quelle. PDFs: Seitenbereich\n  wählbar wie gewohnt; Bilder: einzelne Karte. Die Transkript-Notiz wird am\n  **„Standard-Speicherort für neue Notizen\"** (`app.fileManager.getNewFileParent`) angelegt,\n  da es keine Quellnotiz gibt, neben der sie abgelegt werden könnte. Das Frontmatter enthält\n  kein `source_note`-Feld (es gibt keine Quellnotiz); `source_pdf`/`source_image`, `created`\n  und `transcribed_by` (PDFs auch `pages`) bleiben erhalten. Die Quelldatei wird **nicht\n  verändert** (kein Embed-Ersatz). Idempotenz und Override funktionieren wie gewohnt: eine\n  bereits transkribierte Datei zeigt „✓ Transkript vorhanden → öffnen\"; Override überschreibt\n  die bestehende Notiz. Ausschließlich über die Sidebar — der Command „Bilder der aktiven Notiz\n  transkribieren\" und das Kontextmenü betreffen weiterhin nur Notizen mit Embeds.",
+      "downloadCount": 10,
       "draft": false,
       "name": "0.5.0",
       "prerelease": false,
@@ -60,7 +90,7 @@
         },
         {
           "digest": "sha256:6228aa49ced4f2272a81d23309e0fe484a61147729661c196538ac97859d9852",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 427
         },
@@ -90,7 +120,7 @@
         },
         {
           "digest": "sha256:ae18d9bec31ccda92d28459e99b190d72ab3ecfecaed3fa69d63b47aad0e01e9",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 427
         },
@@ -120,7 +150,7 @@
         },
         {
           "digest": "sha256:de63e1a7f90eaea0b48ab2b944b7f92dbb18664c32e1c3969d78b6e3d78428aa",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 437
         },
@@ -150,7 +180,7 @@
         },
         {
           "digest": "sha256:360ab9ba4304996dfd4653a8ecd43137da508bc42596926f3e37075884664710",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 437
         },
@@ -180,7 +210,7 @@
         },
         {
           "digest": "sha256:8d38819234aabb0f751ee6d47adc051716ccc38281faf82fe8ae5c38b8a4867c",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 432
         },
@@ -210,7 +240,7 @@
         },
         {
           "digest": "sha256:9f40f5ab30ae75c0e05090c71bd6e3ca46481449a4de8988f2790666e4176d59",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 432
         },
@@ -240,7 +270,7 @@
         },
         {
           "digest": "sha256:da849c57a327be3f77f7a221cb8502f966e252b9ad8a0d6eea46711bbe6bff71",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 432
         },
@@ -270,7 +300,7 @@
         },
         {
           "digest": "sha256:ba3b8ebe5d1a077a35633c7e32f4cbe0bad9e6e01463c8d801154c53a4c3b449",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 432
         },
