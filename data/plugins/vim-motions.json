@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-26T06:04:26.959Z",
-  "lastFetchedAt": "2026-06-26T06:04:26.959Z",
+  "lastChangedAt": "2026-06-27T07:03:26.961Z",
+  "lastFetchedAt": "2026-06-27T07:03:26.961Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.13.0"
+    "version": "0.15.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:2d792ae2a35d9391501c0bb3298409fb8e8a88dba0a5fdd771a068b796af12eb",
-          "downloadCount": 5,
+          "digest": "sha256:a1f9b15317d2e1a862ce6c41be65282384359359f8733e8d882945d2bed3b96a",
+          "downloadCount": 11,
           "name": "main.js",
-          "size": 227401
+          "size": 232478
         },
         {
-          "digest": "sha256:360c46a7f0e28d9c4e9cfe271bb1f7dedcc2f82517bd3c7e08ff90e5af1f281c",
+          "digest": "sha256:0875cbc684ec5aa48a33268cdc17fec1b365578c7afbed9e7f8e49fe427504fd",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:fc6d239c85c70067e71333d92df5ae6e26df1884cec2805a5c1f68e242f2d5b3",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 7877
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Bundled fork not recognized by other plugins** — ecosystem plugins that check `window.CodeMirrorAdapter.Vim` (e.g. Outliner, obsidian-vimrc-support) could miss the bundled fork due to plugin load order or Obsidian overwriting the property after the bridge was installed. The bridge now uses a property descriptor (getter) instead of a plain assignment, so reads always return the fork's Vim singleton regardless of timing. The bridge is also installed before `registerEditorExtension()` for earlier availability, and properly cleaned up on plugin unload. ([#17](https://github.com/saberzero1/motions/issues/17))\r\n- **`Vim.enterInsertMode(cm)` missing from fork API** — ecosystem plugins (Outliner, obsidian-lineage) call `Vim.enterInsertMode(cm)` to transition the editor into insert mode after custom actions. Obsidian's built-in `vim.js` exposes this method but upstream `@replit/codemirror-vim` does not. The fork now exports `enterInsertMode(cm)` on the `Vim` singleton, matching Obsidian's API surface. Without this, plugins using the bundled fork would get `TypeError: vim.enterInsertMode is not a function`. ([#17](https://github.com/saberzero1/motions/issues/17))\r\n\r\n### Changed\r\n\r\n- **Fork test count** — 1630 fork tests passing (up from 1628). Added `api_enterInsertMode` test verifying the new public API method.\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added \"`enterInsertMode` API exposure\" section documenting the Obsidian-specific API addition\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.14.0...0.15.0",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.15.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-26T18:08:38Z",
+      "tag": "0.15.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7cfc8e164c5df999c15ce058bc75cf0cd1fd16e0308452987f522850b66963b8",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 232203
+        },
+        {
+          "digest": "sha256:de4852f8f2310bb7b41ccac7e9e59c75f3b36efdd2e906546f456929a6bab860",
           "downloadCount": 6,
           "name": "manifest.json",
           "size": 605
         },
         {
-          "digest": "sha256:95c4293263f0d5eae2f6b0a0943df84a9ef3f9b02503a6b6e7db1a80c4538928",
+          "digest": "sha256:fc6d239c85c70067e71333d92df5ae6e26df1884cec2805a5c1f68e242f2d5b3",
           "downloadCount": 5,
+          "name": "styles.css",
+          "size": 7877
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Which-key for all partial keys** — the which-key overlay now triggers on any partial key sequence (operators like `d`, `c`, `y` and prefix keys like `g`, `z`, `[`, `]`), not just the leader key. After a 500ms delay, a multi-column panel at the bottom of the editor shows available continuations. Configurable via **Settings → Vim Motions → Which-key hints** with three modes: off, leader key only, all partial keys (default: off).\r\n    - Operator-pending mode (`d …`) shows grouped next-key options: single-key motions directly (`w`, `j`, `$`), multi-key prefixes collapsed (`i` → +N text objects, `a` → +N text objects)\r\n    - Partial prefix keys (`g …`, `z …`) show `getCompletions()` results from the fork's keymap introspection API\r\n    - Special keys (`<Left>`, `<C-n>`, etc.) and insert-only entries are filtered out\r\n    - Leader bindings from settings and vimrc are shown with friendly command names\r\n    - Overlay positioned at bottom of editor pane (not viewport), max 40% height, multi-column grid layout\r\n- E2E test suite `test/specs/which-key.e2e.ts` with 31 tests covering all three modes (off/leader/all), settings hot-reload, leader registry integration, and fork API integration (`getKeymap`/`getCompletions`)\r\n\r\n### Changed\r\n\r\n- **Which-key setting** — `enableWhichKey` boolean replaced with `whichKeyMode` dropdown (`'off'` | `'leader'` | `'all'`). Default changed from implicit leader-only to explicit `'off'`.\r\n- **Which-key overlay rewritten** — `WhichKeyOverlay` class generalized from leader-only to support any partial key sequence. Uses `getInputState()` for operator-pending detection and `vim.status` for partial key chord display. DOM attachment changed from `editorEl.parentElement` to `view.contentEl` for reliable positioning.\r\n- **`VimState` type fix** — `mode` field changed from required `'normal' | 'insert' | 'visual' | 'replace'` to optional `string` to match runtime behavior (the field is only set by the CM6 ViewPlugin's mode-change handler, not by the initial vim state).\r\n- **Plugin deviations reduced** — `test/neovim/deviations.ts` reduced from 20 to 10 entries. 10 deviations removed after verifying the fork now matches Neovim: `)` sentence motion, `di(` multiline, `db` cross-line, `dw` empty line, `d2w` cross-line, `dge` empty lines, `diw` word boundary, `da\"` trailing space, `:join` cursor, `:global` cursor.\r\n- **Fork test count** — 17 new fork-level tests for async motion dispatch (6), `getKeymap()` API (5), and `getCompletions()` API (6). Total: 1628 fork tests passing.\r\n- **Fork golden comparison** — re-recorded 756 golden cases from Neovim 0.12.2 with per-step state capture. 476 pass, 0 unexpected diffs, 280 known deviations (down from 284). Fixed 3 duplicate test name collisions and empty `:s` flag behavior.\r\n\r\n### Fixed\r\n\r\n- **`da\"` trailing space** — `da\"` on `say \"hello world\" end` now produces `say end` (single space) instead of `say  end` (double space). The fork's `findBeginningAndEnd` now consumes adjacent whitespace after inclusive quote expansion, matching Neovim.\r\n- **`:join` cursor position** — `:join` ex command now positions cursor at column 0 of the joined line, matching Neovim. Previously placed cursor at the join point.\r\n- **`:global` cursor position** — `:g/pattern/d` now positions cursor at the last matched line after execution, matching Neovim. Non-destructive `:g` commands leave cursor where the last sub-command placed it.\r\n- **Empty `:s` flag behavior** — `:s` with no arguments no longer preserves the `/g` flag from the previous substitution. Only the first match on the line is replaced, matching Neovim.\r\n- **`%` string-awareness** — updated `KNOWN_LIMITATIONS.md` to reflect that `%` is only partially fixed: the forward-seek check works, but `findMatchingBracket` still does positional counting without string awareness.\r\n- **Which-key graceful degradation** — `getInputState()`, `getKeymap()`, and `getCompletions()` calls in the which-key overlay now check `typeof` before invocation, preventing errors when built-in vim mode is active (these APIs are fork-only).\r\n- **Cursor shape settings in built-in mode** — cursor shape dropdowns are now disabled with an explanatory message when Obsidian's built-in vim mode is active (cursor shapes require bundled fork mode).\r\n- **g-commands golden data** — corrected incorrect Neovim recordings for `g$` (cursor ch:11→10, mode visual→normal) and `guu` (content unchanged→lowercased). Full vim-builtin e2e suite now passes 16/16.\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added \"Keymap introspection API\" section documenting `getKeymap()` and `getCompletions()`\r\n- `DIFFERENCES.md` (fork): updated \"Empty :s flag preservation\" → \"Empty :s uses default flags\", added `da\"` whitespace, `:join` cursor, `:global` cursor sections, updated golden comparison stats\r\n- `KNOWN_LIMITATIONS.md`: \"Which-key overlay scope\" section rewritten to reflect the new all-keys mode\r\n- `KNOWN_LIMITATIONS.md`: updated `%` + strings entry to \"Partially fixed\" with explanation of remaining `findMatchingBracket` limitation\r\n- `KNOWN_LIMITATIONS.md`: added `da\"`, `:join`, `:global`, `:s` empty entries to behavioral deviations table\r\n- `KNOWN_LIMITATIONS.md`: corrected `vi*` single-char status from \"Fixed\" to \"Not fixed\"\r\n- `AGENTS.md`: updated fork test count (1421→1628) and golden comparison stats\r\n- `README.md`: which-key description updated and settings list updated with new dropdown\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.13.0...0.14.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.14.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-26T17:13:41Z",
+      "tag": "0.14.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2d792ae2a35d9391501c0bb3298409fb8e8a88dba0a5fdd771a068b796af12eb",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 227401
+        },
+        {
+          "digest": "sha256:360c46a7f0e28d9c4e9cfe271bb1f7dedcc2f82517bd3c7e08ff90e5af1f281c",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:95c4293263f0d5eae2f6b0a0943df84a9ef3f9b02503a6b6e7db1a80c4538928",
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 7732
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Visual mode cursor displaced at end-of-line** — in visual mode, selecting the last character on a line no longer renders the block cursor one character past the visible line content. The fork's `measureCursor()` in `block-cursor.ts` now checks `head > line.from` instead of `letter != \"\\n\"` when adjusting the cursor position backward, correctly handling EOL on non-empty lines while still preserving empty-line behavior. ([#15](https://github.com/saberzero1/motions/issues/15))\r\n- **`set clipboard=unnamed` not syncing to system clipboard** — `set clipboard=unnamed` (or `unnamedplus`) in `.obsidian.vimrc` now actually syncs yank, delete, and change operations with the system clipboard. Previously, the option was parsed and stored but never acted upon — only explicit `\"+y` register yanks reached the clipboard. Paste (`p`/`P`) also reads from the system clipboard when the option is set. ([#16](https://github.com/saberzero1/motions/issues/16))\r\n\r\n### Added\r\n\r\n- **Surround operator (vim-surround)** — complete vim-surround implementation with all standard features. Requires bundled fork mode. ([#9](https://github.com/saberzero1/motions/issues/9))\r\n    - Core: `ds{target}` (delete), `cs{target}{replacement}` (change), `ys{motion}{replacement}` (add), `yss{replacement}` (entire line), visual `S{replacement}` (selection)\r\n    - Tag surround: `dst` (delete surrounding tag), `cst{replacement}` (change tag), `ysiw<tag>` (surround with tag), `cs\"<tag>` (delimiter to tag), visual `S<tag>` (selection with tag). Regex tag fallback for Markdown mode.\r\n    - Function wrapping: `ysiwf` + name + Enter → `name(text)`, `ysiwF` for spaced variant → `name( text )`\r\n    - Newline variants: `cS`, `yS`, `ySS`, `gS` — delimiters on separate lines with content indented one level deeper\r\n    - Count support: `2ds)` deletes 2nd-level surrounding bracket, `2ysiw*` repeats delimiter for Markdown bold (`**word**`), `2ds*` unbolds, `2cs*~` changes bold to strikethrough. Works with any quote-type delimiter (`*`, `~`, `=`, `$`).\r\n    - Insert mode: `<C-G>s{char}` inserts open delimiter, type content, close delimiter appended on Esc. `<C-G>S{char}` for newline variant.\r\n    - Dot-repeat (`.`) works for all surround commands including tags, functions, and multi-char delimiters\r\n    - All bracket/quote targets with space rules, aliases (`b`→`)`, `B`→`}`, `r`→`]`, `a`→`>`), and `t` (tag) target\r\n    - 1585 fork tests passing\r\n- E2E test suite `test/specs/surround.e2e.ts` with 66 tests covering ds/cs/ys/yss/visual S, tags (dst/cst/ysiw<tag>), function wrapping (f/F), newline variants (cS/yS/ySS/gS), count support (2ds/2cs), Markdown pairs (2ysiw*/2ds*/2cs\\*~), insert mode surround (<C-G>s), dot-repeat, and edge cases\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added surround operators section with architecture (pendingInput buffer, tag finding, newline variants, count support, dot-repeat, insert mode surround, char-repeat for Markdown pairs)\r\n- `KNOWN_LIMITATIONS.md`: \"Surround operator scope\" section — complete feature set documented with breaking changes\r\n- `README.md`: surround keybinding table with all features (tags, functions, newlines, counts, Markdown pairs, insert mode)\r\n- `test/neovim-command-index.yaml`: added 46-entry surround section (100% tested)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.12.0...0.13.0",
-      "downloadCount": 5,
+      "downloadCount": 13,
       "draft": false,
       "name": "0.13.0",
       "prerelease": false,
@@ -58,26 +118,26 @@
       "assets": [
         {
           "digest": "sha256:473ad59a997c411e4739dd108e8996c139e9892e136baf22c8eef80e46a7787d",
-          "downloadCount": 10,
+          "downloadCount": 12,
           "name": "main.js",
           "size": 212629
         },
         {
           "digest": "sha256:9b77d71cf03ab5c5dd1ae888bce9548bdbff7cf0bb7c20ac10c867fc16e39ae3",
-          "downloadCount": 11,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:95c4293263f0d5eae2f6b0a0943df84a9ef3f9b02503a6b6e7db1a80c4538928",
-          "downloadCount": 10,
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 7732
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Visual line navigation skips block MathJax in live preview** — `gj`/`gk` and `j`/`k` now navigate into rendered MathJax `$$` blocks line by line instead of skipping over them. The fork's `findPosV` detects when `moveVertically` jumps over multiple document lines (indicating a replaced widget decoration) and steps one document line instead, allowing the cursor to enter the widget's source range. Folded ranges are excluded from correction. ([#14](https://github.com/saberzero1/motions/issues/14))\r\n- **`da$` on block math `$$...$$` deletes partially** — `da$` on `$$ a + b = c $$` now correctly deletes the entire expression (producing empty string) instead of leaving `$$`. The `$` text object now uses smart disambiguation (same pattern as `i*`/`a*`): tries `$$` as delimiter first, falls back to `$` for inline math. `di$` on block math correctly produces `$$$$`.\r\n- **`)` sentence motion at end of text** — `)` at the end of the last sentence no longer moves the cursor backward to the period; it stays in place, matching Neovim\r\n- **Dot-repeat of `cw` + typed text** — `.` after `cw` correctly replays the inserted text (was a test infrastructure issue, not a vim engine bug)\r\n- **Search `n`/`N` wrap-around** — `n` after `/` search correctly wraps to the first match when reaching the end of the document (was a test infrastructure issue)\r\n- **Chord display not clearing on Escape** — pending keystrokes (e.g. `d`) in the status bar now clear when Escape is pressed. The mode tracker now listens to `vim-command-done` in addition to `vim-keypress` and `vim-mode-change`, catching the case where Escape cancels a partial command without changing mode or firing a keypress event. ([#2](https://github.com/saberzero1/motions/issues/2))\r\n- **Cursor text invisible in light mode** — the character under the block cursor now uses `--text-on-accent` (Obsidian's contrast color) instead of the syntax-highlighted color. Previously, colored text (headings, links) under the cursor was the same hue as the cursor background, making it unreadable in light themes. ([#12](https://github.com/saberzero1/motions/issues/12))\r\n\r\n### Added\r\n\r\n- **Per-mode cursor shapes** — configurable cursor shape per Vim mode: block, bar, underline, or hollow. Defaults match Neovim (`guicursor`): block for normal/visual, bar for insert, underline for replace/operator-pending. Configurable via **Settings → Vim Motions → Cursor shapes** or vimrc `set guicursor=n:block,i:bar,v:hollow,r:underline,o:underline`. Requires bundled fork mode. ([#13](https://github.com/saberzero1/motions/issues/13))\r\n- E2E test suite `test/specs/widget-navigation.e2e.ts` with 6 regression tests for gj/gk/j/k navigation through rendered MathJax `$$` blocks in live preview\r\n\r\n### Changed\r\n\r\n- `i$`/`a$` text objects now use `createSmartDollarTextObject` (tries `$$` first, falls back to `$`), matching the same disambiguation pattern as `i*`/`a*` with `createSmartAsteriskTextObject`\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.11.0...0.12.0",
-      "downloadCount": 10,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.12.0",
       "prerelease": false,

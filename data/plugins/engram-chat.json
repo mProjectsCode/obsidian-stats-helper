@@ -4,8 +4,8 @@
   "description": "The AI that remembers you. A personal intelligence with persistent memory, multi-provider AI, and full vault access. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "engram-chat",
-  "lastChangedAt": "2026-06-26T06:04:26.959Z",
-  "lastFetchedAt": "2026-06-26T06:04:26.959Z",
+  "lastChangedAt": "2026-06-27T07:03:26.961Z",
+  "lastFetchedAt": "2026-06-27T07:03:26.961Z",
   "manifest": {
     "author": "PixelAnay",
     "authorUrl": "https://github.com/PixelAnay/Engram",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Engram Chat",
-    "version": "5.0.48"
+    "version": "5.0.49"
   },
   "name": "Engram Chat",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:82fe3a2fb7fe4887dd205979079247a9f8d1dae535d2aace92215fd0896ec690",
-          "downloadCount": 10,
+          "digest": "sha256:d63bec6d6e92d8d8f2a72e3242e99a39bc2984ff43f70383b782fceef6a420ea",
+          "downloadCount": 6,
           "name": "main.js",
-          "size": 3735979
+          "size": 3738130
         },
         {
-          "digest": "sha256:72825a925aec4e3f3e0634df7414a7bce8e6e38513f194dd4cd63f00057ae4f2",
-          "downloadCount": 10,
+          "digest": "sha256:db2dbfda252f44b4b982bf76c31abb6be2c43ea8342b7874ddfd1db27f23f336",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 378
         },
         {
           "digest": "sha256:3c26bf0cef1344b9792f3504ac13428321d15d8960081090b14343d62dc4e26f",
-          "downloadCount": 9,
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 45949
+        }
+      ],
+      "author": "PixelAnay",
+      "description": "## What's New\n\n### Chat history now lives in Intelligence/Chats/\n\nYour vault's Intelligence/ folder now contains everything Engram manages:\n\n`\nIntelligence/\n├── Memory.md        ← existing memory file\n└── Chats/\n    ├── chat-xxx.json\n    ├── chat-yyy.json\n    └── ...\n`\n\nThe old .engram/chats/ hidden folder caused sync issues with iCloud, Windows file systems, and some Git setups because dot-folders are often excluded or invisible. The new Intelligence/Chats/ location is fully visible and syncs cleanly with every tool.\n\n### Automatic migration\n\nOn first load after this update, any existing chats in .engram/chats/ are **automatically moved** to Intelligence/Chats/. The old empty .engram/ folder is then deleted. You'll see a brief notice confirming how many sessions were moved. No action required.\n\n### Fully backward compatible\n\n- Users on older versions still have their sessions migrated from data.json → Intelligence/Chats/\n- The folder path is still configurable in **Settings → Advanced → Chat History**",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "v5.0.49 - Chat history moved to Intelligence/Chats",
+      "prerelease": false,
+      "publishedAt": "2026-06-26T19:24:30Z",
+      "tag": "5.0.49"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:82fe3a2fb7fe4887dd205979079247a9f8d1dae535d2aace92215fd0896ec690",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 3735979
+        },
+        {
+          "digest": "sha256:72825a925aec4e3f3e0634df7414a7bce8e6e38513f194dd4cd63f00057ae4f2",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 378
+        },
+        {
+          "digest": "sha256:3c26bf0cef1344b9792f3504ac13428321d15d8960081090b14343d62dc4e26f",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 45949
         }
       ],
       "author": "PixelAnay",
       "description": "## Bug Fixes\n\n### .engram/chats is now the true single source of truth\n\n- **Fix: Deleting a chat now permanently removes its .json file** — previously \u000bault.delete() moved the file to the OS trash without removing it from the vault index, making it appear as if nothing was deleted. Now uses \force: true for immediate, permanent removal.\n\n- **Fix: Empty 'New chat' sessions are no longer written to disk** — only sessions that have at least one message get a file in .engram/chats/. This prevents ghost files from accumulating every time you open a new chat.\n\n- **Fix: Removed stale timer field** from SessionManager left over from the pre-refactor code.\n\n- **Improve: syncChatsFromVault reads purely from disk** — the folder is now the authoritative state; no in-memory-only sessions leak into the sync result.\n\n- **Improve: Smarter handling of externally deleted sessions** — if a session is deleted on another device and synced, the plugin auto-switches to the next available chat instead of showing a blank screen.",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "v5.0.48 - Chat folder sync fix",
       "prerelease": false,
