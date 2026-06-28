@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-27T07:03:26.961Z",
-  "lastFetchedAt": "2026-06-27T07:03:26.961Z",
+  "lastChangedAt": "2026-06-28T07:01:26.961Z",
+  "lastFetchedAt": "2026-06-28T07:01:26.961Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,11 +19,131 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.15.0"
+    "version": "0.19.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:b5bc3cf897e442138e04c400f6aa5e7e8ec23623af4a4ebc6a124ab76fa8adab",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 250472
+        },
+        {
+          "digest": "sha256:2291ee91c9613225363928c7ad2577f681057f0d77490789f6845586d26a7c2e",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:e4be2c2a13345e3e4773436aba9d131cdc140a70a39512949f282f28ad4ae00e",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 8053
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **`k`/`gk` do not enter frontmatter navigation** — both `k` and `gk` now enter the properties panel when the cursor is at the top of a note. Two fixes: (1) the fork's `moveByDisplayLines` was missing the `focusBefore` check that `moveByLines` already had, and (2) the fork's `findPosV` frontmatter detection only triggered when the cursor moved into the frontmatter region (`pos.line < start.line`), but when the properties widget replaced the frontmatter lines, the cursor couldn't move up at all — now also triggers at the boundary (`pos.line === start.line`). Additionally, the plugin's `tableAwareMoveUp` motion (which overrides `k` for table separator skipping) bypassed `findPosV` entirely — it now delegates to `findPosV` when the target line is inside the frontmatter. ([#25](https://github.com/saberzero1/motions/issues/25))\r\n- **`gk`/`gj` over headings resets cursor to column 0** — `gk` (and `gj`) no longer jumps to the beginning of the line when crossing Obsidian headings in live preview. Headings are rendered with larger fonts, making them visually taller. The fork's `findPosV` widget-detection heuristic falsely treated the multi-line jump caused by the heading's height as a skipped replaced widget (e.g. MathJax) and overrode the cursor position. The heuristic now checks for actual replaced/widget decorations (`dec.point === true`) before activating, and a `posAtCoords` fallback corrects cases where `moveVertically` misresolves the goalColumn on decorated lines. ([#26](https://github.com/saberzero1/motions/issues/26))\r\n\r\n### Added\r\n\r\n- **`gD` — open link in new tab** — `gD` opens the link under the cursor in a new tab, using the same bracket-aware link detection as `gd`. External URLs open in the browser. ([#23](https://github.com/saberzero1/motions/issues/23))\r\n- **`<C-w>gd` / `<C-w>gD` — open link in split** — `<C-w>gd` opens the link under the cursor in a horizontal split, `<C-w>gD` in a vertical split. Follows the Neovim `<C-w>s`/`<C-w>v` convention (lowercase = horizontal, uppercase = vertical). ([#23](https://github.com/saberzero1/motions/issues/23))\r\n- E2E tests for `gD`, `<C-w>gd`, `<C-w>gD`: link-on-wikilink navigation (new tab, horizontal split, vertical split), no-op outside links, leaf count verification\r\n- E2E tests for `gk`/`gj` over headings: cursor horizontal position preserved across single and multiple headings, symmetry between `gk` and `gj`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: updated \"Properties navigation\" section with `k`/`gk` frontmatter fix and `tableAwareMoveUp` interaction\r\n- `KNOWN_LIMITATIONS.md`: added `gk` frontmatter entry to behavioral deviations table\r\n- `DIFFERENCES.md` (fork): updated \"Properties navigation\" section with boundary detection and dual-case `focusBefore` logic\r\n- `KNOWN_LIMITATIONS.md`: updated \"Visual line navigation and replaced widget decorations\" section with heading-aware fix and `posAtCoords` fallback\r\n- `KNOWN_LIMITATIONS.md`: updated `gj`/`gk` widgets behavioral deviation entry with heading decoration handling\r\n- `README.md`: added `gD`, `<C-w>gd`, `<C-w>gD` to workspace keyboard control table\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.18.0...0.19.0",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.19.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T21:27:46Z",
+      "tag": "0.19.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a1ab27df075a67682a6337c4d0ac595784a43a7e6e83a5b046276f25a2f637c4",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 248663
+        },
+        {
+          "digest": "sha256:ef6949fb88f3906ef3cb8a61c67a609f6ce6ac352c7e86f6934c819c2ffeb390",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:e4be2c2a13345e3e4773436aba9d131cdc140a70a39512949f282f28ad4ae00e",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 8053
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **EasyMotion dimming not visible** — the shade overlay (`.vim-motions-easymotion-shade`) was invisible because it was a child of the zero-size absolutely-positioned wrapper div. The shade is now appended directly to `scrollDOM` as a sibling of the wrapper, so its `right: 0; bottom: 0` resolves against the full editor dimensions. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion labels overlapping on dense text** — labels for adjacent targets (e.g., `<leader><leader>w` on closely spaced words) now stack vertically instead of rendering on top of each other. `renderLabels()` tracks placed label bounding boxes and offsets new labels below any overlap. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion labels on hidden text in Live Preview** — word-start targets inside hidden markdown syntax (e.g., the URL portion of `[text](url)`) no longer receive labels. `filterVisibleTargets()` deduplicates targets whose `coordsAtPos()` resolves to the same pixel position, which occurs when multiple document offsets map to the boundary of a replaced decoration. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion dimming setting required app reload** — toggling **Settings → Vim Motions → EasyMotion dimming** now takes effect immediately. The `dimming` parameter was changed from a captured `boolean` to a `() => boolean` getter, so the shade state is read at motion invocation time instead of registration time.\r\n\r\n### Added\r\n\r\n- **Label font size setting** — configurable font size for EasyMotion and hint mode labels via **Settings → Vim Motions → Label font size** (10–20px slider, default: 14). EasyMotion collision detection scales proportionally with the configured size.\r\n- **Label color customization via CSS** — label colors are now overridable via CSS custom properties. EasyMotion: `--vim-motions-em-bg`, `--vim-motions-em-fg`. Hint mode: `--vim-motions-hint-bg`, `--vim-motions-hint-fg`. All default to `--text-accent` / `--text-on-accent`.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.17.0...0.18.0",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.18.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T17:56:04Z",
+      "tag": "0.18.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c8e72ba661eac483ac18148c7def2e9dac5dd8600fbb12ac915d837af1192ef6",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 247393
+        },
+        {
+          "digest": "sha256:a2cf8c86e6013c2939ca21d34fa4c0c116a22169caa0b95fa8941b7f65901f02",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:fc6d239c85c70067e71333d92df5ae6e26df1884cec2805a5c1f68e242f2d5b3",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 7877
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Visual mode cursor displaced at end-of-line (regression)** — exiting charwise visual mode (`v$<Esc>`, `vlll<Esc>`) at end-of-line left the cursor one position past the last character. The fork's `exitVisualMode()` called `clipCursorToContent()` while `vim.visualMode` was still `true`, which allowed the cursor to land at the linebreak position; after clearing the flag, the cursor remained displaced. Fixed by clearing visual flags before `setCursor`. Also fixed a latent JS loose equality bug in `measureCursor()` where `false != \"\\n\"` evaluated to `false` due to type coercion. ([#15](https://github.com/saberzero1/motions/issues/15))\r\n- **Leader key mappings not working via vimrc** — `let mapleader = \",\"` (or space, or any custom leader) in `.obsidian.vimrc` now correctly re-registers EasyMotion, hint mode, table manipulation, and settings leader bindings with the new leader key. Previously, the initial backslash-leader `mapCommand` entries persisted in the keymap because `Vim.unmap()` could not remove `mapCommand`-created entries, and `unmapDefaultBinding` skipped non-special keys like comma. The fork now provides `Vim.removeMapCommand(keys)` for clean removal, and `VimRegistration` uses scoped leader binding tracking to selectively unregister stale bindings when the leader changes. ([#21](https://github.com/saberzero1/motions/issues/21), [#6](https://github.com/saberzero1/motions/issues/6))\r\n- **`<C-w>` workspace commands not working** — `<C-w>v`, `<C-w>h/j/k/l`, `<C-w>s`, `<C-w>c/q`, and `<C-w>o` now work correctly when Obsidian's default Ctrl+W hotkey is unbound. The fork's `matchCommand` had an `idle` entry for `<C-w>` in normal mode that consumed the key as a no-op before the second keystroke could arrive, preventing multi-key `<C-w>X` sequences from matching. The fork now deprioritizes `idle` full matches when more-specific partial matches exist (e.g. `<C-w>v`, `<C-w>h` registered via `mapCommand`). The `idle` entry still fires when no sub-commands are registered, preventing the keystroke from propagating to the browser. ([#20](https://github.com/saberzero1/motions/issues/20))\r\n\r\n### Added\r\n\r\n- Fork regression test `exit_visual_mode_cursor_clipping` covering `vlll<Esc>`, `vll<Esc>`, and `v$<Esc>` cursor positioning\r\n- E2E tests for leader key mapping behavior: comma and space leader key mappings execute correctly via `Vim.handleKey`, leader keys do not insert literal characters in normal mode, EasyMotion overlay appears with custom leader and old leader bindings are cleaned up\r\n- E2E tests for `<C-w>` workspace commands: `<C-w>v`/`<C-w>s` verify leaf count increases (split created), `<C-w>c` verifies leaf count decreases (tab closed), `<C-w>o` verifies other tabs closed, `<C-w>h/j/k/l` verify focus changes after split, `<C-w>` followed by invalid suffix (`x`) verifies the suffix does not execute as a standalone command, insert-mode `<C-w>` non-regression verifies delete-word still works\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: updated \"Visual mode cursor displaced at end-of-line\" section with `exitVisualMode` root cause and `measureCursor` coercion fix\r\n- `DIFFERENCES.md` (fork): updated \"Visual mode cursor positioning at EOL\" section with `exitVisualMode` ordering fix and strict equality fix\r\n- `KNOWN_LIMITATIONS.md`: expanded \"EasyMotion leader key conflict\" fixed section with leader re-registration and `removeMapCommand` details\r\n- `KNOWN_LIMITATIONS.md`: updated \"`<C-w>` prefix conflict\" section — removed codemirror-vim limitation framing, kept user-action requirement (unbind Obsidian's Ctrl+W hotkey)\r\n- `DIFFERENCES.md` (fork): added \"`removeMapCommand` API\" section documenting the new keymap removal method\r\n- `DIFFERENCES.md` (fork): added \"Idle key deprioritization for multi-key sequences\" section documenting the `matchCommand` fix\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.16.0...0.17.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.17.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T12:42:16Z",
+      "tag": "0.17.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:165da4b1a072de7d75aa4a4df9e945c5bcf5ef6a65d433d25f1cbd0fbdfe4947",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 246508
+        },
+        {
+          "digest": "sha256:450b8881f646183b107927000fa1ee3148cc2831e59507995c0c6650347f5c06",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:fc6d239c85c70067e71333d92df5ae6e26df1884cec2805a5c1f68e242f2d5b3",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 7877
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Cursor-aware table editing in Live Preview** — replaced the table cell bridge approach with a custom table rendering system. Tables display as themed HTML when the cursor is outside and switch to raw Markdown when editing. All vim motions, operators, and text objects work naturally on table content. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Custom `TableRenderWidget` renders markdown tables as HTML using Obsidian's CSS classes (`cm-embed-block`, `markdown-rendered`, `table-wrapper`, `table-cell-wrapper`) for full theme compatibility\r\n    - `StateField` provides `Decoration.replace` for tables the cursor is NOT in; removes decoration when cursor enters\r\n    - Table widget suppressor patches `RangeSetBuilder.prototype.add` to suppress Obsidian's interactive table widget\r\n    - Default mode: \"Cursor-aware\" — rendered table when cursor is outside, raw Markdown when editing\r\n    - \"Always raw\" mode keeps tables as plain Markdown at all times\r\n    - \"Off\" mode restores Obsidian's default interactive table editor\r\n    - Three-way setting: **Settings → Vim Motions → Table widget in live preview**\r\n    - Supports alignment markers (`:---`, `---:`, `:---:`) in rendered tables\r\n- **Vertical table cell navigation** — `]r`/`[r` moves to the same column in the next/previous row, skipping separator rows\r\n- **Table cell text objects** — `i|`/`a|` for operating on table cells with standard vim operators:\r\n    - `i|`: content between surrounding pipes (like `i(`)\r\n    - `a|`: content plus the trailing pipe\r\n    - Works with `d`, `c`, `y`, `v`: `di|` deletes cell content, `ci|` changes it, `yi|` yanks it\r\n- **Table realignment** — `:tablerealign` (short: `:tablerea`) ex command and `<Leader>tr` mapping. Computes column widths across all rows, pads cells uniformly, and respects `:---`/`---:`/`:---:` alignment markers in separator rows.\r\n- **Table auto-format on `|`** — CM6 `inputHandler` extension that realigns table columns when `|` is typed in insert mode. Typing `||` on a new line within a table generates a separator row (`|---|---|`).\r\n- **Table manipulation keybindings** — `<Leader>t` prefix commands mapped to Obsidian's built-in table commands, inspired by [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode):\r\n    - `<Leader>tm` — insert table\r\n    - `<Leader>to`/`tO` — add row below/above\r\n    - `<Leader>tJ`/`tK` — move row down/up\r\n    - `<Leader>tdd` — delete row\r\n    - `<Leader>tiL`/`tiH` — add column right/left\r\n    - `<Leader>tL`/`tH` — move column right/left\r\n    - `<Leader>tdc` — delete column\r\n    - `<Leader>tr` — realign table\r\n- **Table ex commands** — 15 ex commands for table manipulation: `:tableinsert`, `:tablerowafter`, `:tablerowbefore`, `:tablerowup`, `:tablerowdown`, `:tablerowdelete`, `:tablecolafter`, `:tablecolbefore`, `:tablecolleft`, `:tablecolright`, `:tablecoldelete`, `:tablealignleft`, `:tablealigncenter`, `:tablealignright`, `:tablerealign`\r\n- **Internalized monkey-around** — `src/util/around.ts` provides safe prototype patching with automatic removal, replacing the external `monkey-around` dependency\r\n- E2E test suite expansion: 28 tests in `table-cell-bridge.e2e.ts` (cursor-aware rendering, widget suppression, `j`/`k` navigation through tables, separator row traversal, post-edit navigation, theme class verification, alignment rendering), 24 tests in `tables.e2e.ts` (cell navigation, vertical navigation, text objects, realignment)\r\n\r\n### Fixed\r\n\r\n- **Cursor stuck on table separator after insert-mode edit** — after editing a table cell in insert mode, Obsidian's async table handler repositions the cursor, preventing `k` from crossing the separator row (`|---|---|`). Fixed with a custom `tableAwareMoveUp` motion that skips separator rows when moving up after a table edit. The motion detects the snap-back pattern and compensates by jumping two lines (over the separator) instead of one. Operator-pending context (`dk`) is excluded from the skip to preserve correct delete ranges.\r\n- **Cursor-aware table rendering** — the \"Cursor-aware\" mode now uses a custom read-only `TableRenderWidget` instead of Obsidian's interactive table widget. Tables render as themed HTML when the cursor is outside, with no async cursor snap-backs or state corruption.\r\n\r\n### Changed\r\n\r\n- Replaced `TableCellBridge` approach (per-cell vim bridge) with cursor-aware table rendering. The bridge approach required maintaining vim state across Obsidian's cell-scoped editors; the new system suppresses Obsidian's widget and provides its own themed read-only widget via a `StateField`.\r\n- `tableWidgetMode` setting default: `'cursor'` (cursor-aware rendering)\r\n- Legacy `suppressTableWidget: boolean` setting migrated: `true` → `'always'`, `false` → `'off'`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: updated table navigation section with new features (vertical nav, text objects, realignment, auto-format); documented cursor-aware mode architecture\r\n- `README.md`: updated table navigation description for cursor-aware rendering; added `i|`/`a|` to text objects table, `]r`/`[r` to navigation, table text objects section, auto-format docs, `<Leader>tr` and `:tablerealign` to commands\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.15.0...0.16.0",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.16.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-27T09:20:04Z",
+      "tag": "0.16.0"
+    },
     {
       "assets": [
         {
@@ -58,26 +178,26 @@
       "assets": [
         {
           "digest": "sha256:7cfc8e164c5df999c15ce058bc75cf0cd1fd16e0308452987f522850b66963b8",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 232203
         },
         {
           "digest": "sha256:de4852f8f2310bb7b41ccac7e9e59c75f3b36efdd2e906546f456929a6bab860",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:fc6d239c85c70067e71333d92df5ae6e26df1884cec2805a5c1f68e242f2d5b3",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 7877
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Which-key for all partial keys** — the which-key overlay now triggers on any partial key sequence (operators like `d`, `c`, `y` and prefix keys like `g`, `z`, `[`, `]`), not just the leader key. After a 500ms delay, a multi-column panel at the bottom of the editor shows available continuations. Configurable via **Settings → Vim Motions → Which-key hints** with three modes: off, leader key only, all partial keys (default: off).\r\n    - Operator-pending mode (`d …`) shows grouped next-key options: single-key motions directly (`w`, `j`, `$`), multi-key prefixes collapsed (`i` → +N text objects, `a` → +N text objects)\r\n    - Partial prefix keys (`g …`, `z …`) show `getCompletions()` results from the fork's keymap introspection API\r\n    - Special keys (`<Left>`, `<C-n>`, etc.) and insert-only entries are filtered out\r\n    - Leader bindings from settings and vimrc are shown with friendly command names\r\n    - Overlay positioned at bottom of editor pane (not viewport), max 40% height, multi-column grid layout\r\n- E2E test suite `test/specs/which-key.e2e.ts` with 31 tests covering all three modes (off/leader/all), settings hot-reload, leader registry integration, and fork API integration (`getKeymap`/`getCompletions`)\r\n\r\n### Changed\r\n\r\n- **Which-key setting** — `enableWhichKey` boolean replaced with `whichKeyMode` dropdown (`'off'` | `'leader'` | `'all'`). Default changed from implicit leader-only to explicit `'off'`.\r\n- **Which-key overlay rewritten** — `WhichKeyOverlay` class generalized from leader-only to support any partial key sequence. Uses `getInputState()` for operator-pending detection and `vim.status` for partial key chord display. DOM attachment changed from `editorEl.parentElement` to `view.contentEl` for reliable positioning.\r\n- **`VimState` type fix** — `mode` field changed from required `'normal' | 'insert' | 'visual' | 'replace'` to optional `string` to match runtime behavior (the field is only set by the CM6 ViewPlugin's mode-change handler, not by the initial vim state).\r\n- **Plugin deviations reduced** — `test/neovim/deviations.ts` reduced from 20 to 10 entries. 10 deviations removed after verifying the fork now matches Neovim: `)` sentence motion, `di(` multiline, `db` cross-line, `dw` empty line, `d2w` cross-line, `dge` empty lines, `diw` word boundary, `da\"` trailing space, `:join` cursor, `:global` cursor.\r\n- **Fork test count** — 17 new fork-level tests for async motion dispatch (6), `getKeymap()` API (5), and `getCompletions()` API (6). Total: 1628 fork tests passing.\r\n- **Fork golden comparison** — re-recorded 756 golden cases from Neovim 0.12.2 with per-step state capture. 476 pass, 0 unexpected diffs, 280 known deviations (down from 284). Fixed 3 duplicate test name collisions and empty `:s` flag behavior.\r\n\r\n### Fixed\r\n\r\n- **`da\"` trailing space** — `da\"` on `say \"hello world\" end` now produces `say end` (single space) instead of `say  end` (double space). The fork's `findBeginningAndEnd` now consumes adjacent whitespace after inclusive quote expansion, matching Neovim.\r\n- **`:join` cursor position** — `:join` ex command now positions cursor at column 0 of the joined line, matching Neovim. Previously placed cursor at the join point.\r\n- **`:global` cursor position** — `:g/pattern/d` now positions cursor at the last matched line after execution, matching Neovim. Non-destructive `:g` commands leave cursor where the last sub-command placed it.\r\n- **Empty `:s` flag behavior** — `:s` with no arguments no longer preserves the `/g` flag from the previous substitution. Only the first match on the line is replaced, matching Neovim.\r\n- **`%` string-awareness** — updated `KNOWN_LIMITATIONS.md` to reflect that `%` is only partially fixed: the forward-seek check works, but `findMatchingBracket` still does positional counting without string awareness.\r\n- **Which-key graceful degradation** — `getInputState()`, `getKeymap()`, and `getCompletions()` calls in the which-key overlay now check `typeof` before invocation, preventing errors when built-in vim mode is active (these APIs are fork-only).\r\n- **Cursor shape settings in built-in mode** — cursor shape dropdowns are now disabled with an explanatory message when Obsidian's built-in vim mode is active (cursor shapes require bundled fork mode).\r\n- **g-commands golden data** — corrected incorrect Neovim recordings for `g$` (cursor ch:11→10, mode visual→normal) and `guu` (content unchanged→lowercased). Full vim-builtin e2e suite now passes 16/16.\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added \"Keymap introspection API\" section documenting `getKeymap()` and `getCompletions()`\r\n- `DIFFERENCES.md` (fork): updated \"Empty :s flag preservation\" → \"Empty :s uses default flags\", added `da\"` whitespace, `:join` cursor, `:global` cursor sections, updated golden comparison stats\r\n- `KNOWN_LIMITATIONS.md`: \"Which-key overlay scope\" section rewritten to reflect the new all-keys mode\r\n- `KNOWN_LIMITATIONS.md`: updated `%` + strings entry to \"Partially fixed\" with explanation of remaining `findMatchingBracket` limitation\r\n- `KNOWN_LIMITATIONS.md`: added `da\"`, `:join`, `:global`, `:s` empty entries to behavioral deviations table\r\n- `KNOWN_LIMITATIONS.md`: corrected `vi*` single-char status from \"Fixed\" to \"Not fixed\"\r\n- `AGENTS.md`: updated fork test count (1421→1628) and golden comparison stats\r\n- `README.md`: which-key description updated and settings list updated with new dropdown\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.13.0...0.14.0",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.14.0",
       "prerelease": false,
