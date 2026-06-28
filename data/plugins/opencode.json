@@ -4,8 +4,8 @@
   "description": "Launch OpenCode CLI terminal sessions and browse conversation history without leaving your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "opencode",
-  "lastChangedAt": "2026-06-27T05:05:27.001Z",
-  "lastFetchedAt": "2026-06-27T05:05:27.001Z",
+  "lastChangedAt": "2026-06-28T05:01:26.961Z",
+  "lastFetchedAt": "2026-06-28T05:01:26.961Z",
   "manifest": {
     "author": "krisspy",
     "description": "Launch OpenCode CLI terminal sessions and browse conversation history without leaving your vault.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:50e3afcc199e64f963e1a2e267891a8cbbe185a4f7f69654630395f093da1a74",
-          "downloadCount": 66,
+          "downloadCount": 197,
           "name": "main.js",
           "size": 762253
         },
         {
           "digest": "sha256:f966d60611e3610d07f298e6fe2f3ca7fdf5bdf66d8409a89358fba785373573",
-          "downloadCount": 68,
+          "downloadCount": 203,
           "name": "manifest.json",
           "size": 254
         },
         {
           "digest": "sha256:230a25cc9ba001eeeea74a47f9f0ea5c998d1faba40847db04518cedbb2d2c82",
-          "downloadCount": 66,
+          "downloadCount": 198,
           "name": "styles.css",
           "size": 9933
         }
       ],
       "author": "kriss-spy",
       "description": "### Added\n\n- **PATH fallback for desktop-launched Electron** — Added PATH augmentation with common user-local binary directories (`~/.opencode/bin`, `~/.local/bin`, `~/bin`) so the Python PTY proxy can find the `opencode` CLI even when Obsidian is launched from the desktop/GNOME (where shell init files like `.bashrc`/`.zshrc` aren't read). Also resolves the executable absolute path when found. ([#24](https://github.com/kriss-spy/obsidian-opencode/issues/24))\n\n### Fixed\n\n- **Terminal not opening on Linux** — Fixed `FileNotFoundError` from `os.execvp` in the PTY proxy by ensuring the Python child process inherits an augmented `PATH` that includes common user-local binary directories. ([#24](https://github.com/kriss-spy/obsidian-opencode/issues/24))\n- **Shell injection in session export** — Validated `sessionId` format before shell interpolation in `exportSessionStreamed` to prevent shell injection via crafted session IDs.\n- **Unhandled promise rejections** — Added `void` prefix to all async command callbacks in `main.ts` (6 instances).\n- **Race condition in temp file cleanup** — Replaced direct `fs.unlinkSync` with guarded `safeUnlinkSync` in `exportSessionStreamed` to prevent crashes when `error` and `close` events fire in quick succession.\n- **Unhandled `ExportTooLargeError`** — Wrapped `exportSessionToNote` in a try-catch to prevent unhandled rejections when a session exceeds the export size limit.\n- **Stale editor server version** — Synced the `serverInfo.version` reported during WebSocket handshake from `\"1.1.1\"` to `\"1.3.10\"`.\n\n### Removed\n\n- **Dead code: `spawnTerminal`** from `opencode.ts` — Unused; PTY spawning is handled by `ptySession.ts`.\n- **Dead code: `consumeArgs`** from `sessionState.ts` — Replaced by direct field access in `opencodeTerminalView.ts`.\n- **Dead external: `node-pty`** from `esbuild.config.mjs` — Never imported; vestigial from an earlier approach.\n\n### Technical\n\n- 33 tests passing.\n- Production build verified in Electron Node.js context.\n\n**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.9...1.3.10",
-      "downloadCount": 66,
+      "downloadCount": 197,
       "draft": false,
       "name": "v1.3.10",
       "prerelease": false,
@@ -202,26 +202,26 @@
       "assets": [
         {
           "digest": "sha256:c34abab9f1589e357ac95a0bc5e7c049f15871c45415ff88a1dd56f47cd59c9d",
-          "downloadCount": 2196,
+          "downloadCount": 2197,
           "name": "main.js",
           "size": 995931
         },
         {
           "digest": "sha256:6ae9478d6b33243bd524d3fef381663972be7db46bca26aa27642a1b42ee352e",
-          "downloadCount": 2288,
+          "downloadCount": 2289,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:3d410800e2be4566a1c2c8004c35aecb07de4064e5c1af9bb8edc4d8fe415416",
-          "downloadCount": 2168,
+          "downloadCount": 2169,
           "name": "styles.css",
           "size": 4166
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.3...1.3.4",
-      "downloadCount": 2196,
+      "downloadCount": 2197,
       "draft": false,
       "name": "1.3.4",
       "prerelease": false,
@@ -382,26 +382,26 @@
       "assets": [
         {
           "digest": "sha256:f80b4657e2ea68fc458cf36fef3255f4928d0f3faf419dfe6f9c0a25907b2398",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "main.js",
           "size": 989525
         },
         {
           "digest": "sha256:ca354ce26562f2613cbc94a9e54407d53d27819b90cbd6953144080c584925b4",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:3d410800e2be4566a1c2c8004c35aecb07de4064e5c1af9bb8edc4d8fe415416",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 4166
         }
       ],
       "author": "kriss-spy",
       "description": "## What's New\n\n### WebSocket Editor Server (#4)\n- Auto-discovers vault as an OpenCode editor via lock file\n- JSON-RPC handshake with initialize / notifications/initialized\n- Sends at_mentioned messages on file drop\n- Lazy start/stop tied to terminal view lifecycle\n\n### Drag and Drop Improvements (#1, #2, #3)\n- Single internal note drops via dragManager\n- External OS file drops via dataTransfer.files fallback\n- Multi-file drops with staggered delivery\n- Vault-relative path normalization\n- No PTY keystroke injection — pure WebSocket protocol\n\n### Technical\n- Added ws dependency for WebSocket server\n- 16 tests passing\n- Production build verified in Electron Node.js context",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.2.0 - WebSocket Editor Server",
       "prerelease": false,

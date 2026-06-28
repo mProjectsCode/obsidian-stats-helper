@@ -4,8 +4,8 @@
   "description": "A full creative writing workflow: project creation, scene management, and manuscript compilation with frontmatter-native data and Bases compatibility. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "draft-bench",
-  "lastChangedAt": "2026-06-27T05:05:27.001Z",
-  "lastFetchedAt": "2026-06-27T05:05:27.001Z",
+  "lastChangedAt": "2026-06-28T05:01:26.961Z",
+  "lastFetchedAt": "2026-06-28T05:01:26.961Z",
   "manifest": {
     "author": "banisterious",
     "authorUrl": "https://github.com/banisterious",
@@ -27,26 +27,26 @@
       "assets": [
         {
           "digest": "sha256:f4142c2c18922cac8753d98f1390b900b47e5c9b2114510ca22379bf70744a7e",
-          "downloadCount": 260,
+          "downloadCount": 264,
           "name": "main.js",
           "size": 3088650
         },
         {
           "digest": "sha256:dc74f44a4234783e4e57099060ebee9059955e95ea58ee59f167534b077b16d2",
-          "downloadCount": 338,
+          "downloadCount": 345,
           "name": "manifest.json",
           "size": 517
         },
         {
           "digest": "sha256:09741df4310b83ad144effb2f068286e289527522278b4a1b0ffae3059529bd9",
-          "downloadCount": 255,
+          "downloadCount": 259,
           "name": "styles.css",
           "size": 87363
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Scanner-hygiene patch + Scrivener import fix\r\n\r\nPostinstall patches strip three `new Function(...)` literals from pdfmake's and docx's bundled vendor code, clearing the community-plugin scanner's Dynamic Code Execution recommendation. Production minification enabled in `esbuild.config.mjs` drops `main.js` from 5.83 MB to 3.09 MB (47% reduction, ~2 MB under the 5 MB Sync Standard threshold), retiring the scanner's \"main.js > 5 MB\" warning. The Scrivener RTF importer now suppresses `\\fldinst` field-instruction groups so `HYPERLINK \"scrivcmt://...\"` noise no longer leaks into imported scenes ([#37](https://github.com/banisterious/obsidian-draft-bench/issues/37)). No user-visible feature changes beyond the import fix; 1389 tests pass unchanged.\r\n\r\n### Why this matters\r\n\r\nThree scanner-driven concerns plus one corpus-driven bug:\r\n\r\n- **`new Function(...)` literals**: the scanner currently flags every `new Function` site as a Dynamic Code Execution recommendation. Three sites lived in pdfmake's and docx's bundled vendor code, all inside dead-code branches (globalThis polyfill fallbacks; an unreachable string-callback shim in `setimmediate`). The patches remove them at install time so the bundle no longer carries them.\r\n- **`main.js > 5 MB`**: Obsidian's Sync Standard has a 5,242,880-byte transfer limit; bundles over that trigger a scanner warning. Phase 3 had closed this as not-fixable for Obsidian plugins (code-splitting is off the table since the installer only fetches `main.js` + `manifest.json` + `styles.css`), but a key lever was missed: esbuild's production build carried no `minify` flag. Enabling it drops the bundle by 47% with no source change.\r\n- **#37 RTF leak**: Scrivener wraps inline comments and hyperlinks as RTF fields (`{\\field{\\*\\fldinst{HYPERLINK \"...\"}}{\\fldrslt {visible text}}}`). The custom RTF parser's MVP scope had deferred hyperlink / comment rendering but never suppressed the `\\fldinst` payload, so the instruction text was leaking into imported scenes verbatim. The fix adds `fldinst` to the parser's existing `SKIPPED_GROUP_CONTROL_WORDS` set so the suppress-depth mechanism drops the instruction group while `\\fldrslt` content still emits.\r\n\r\n### Fixed\r\n\r\n- **RTF field-instruction text no longer leaks into imported Scrivener scenes ([#37](https://github.com/banisterious/obsidian-draft-bench/issues/37)).** Real `http(s)` hyperlinks lose their URL with this change (the visible link text still renders as plain text); proper RTF-hyperlink-to-markdown rendering remains a separately deferred feature.\r\n- **Bundle no longer contains `new Function(...)` literals.** New postinstall scripts (`patch-pdfmake.js` + `patch-docx.js`) strip the dead-code branches from `node_modules/` during `npm install`. Same shape as the IE8 setImmediate `createElement('script')` patches the Charted Roots scan-cleanup arc landed earlier.\r\n- **Bundle no longer exceeds the 5 MB Sync Standard threshold.** `minify: prod` in `esbuild.config.mjs` drops `main.js` from 5,825,743 bytes to 3,088,650 bytes (47% reduction, ~2 MB under the 5,242,880-byte limit).\r\n\r\n### Internal\r\n\r\n- **Postinstall patches are idempotent and vendor-update-safe.** Each substitution carries a marker comment so re-running `npm install` is a no-op once applied. When the targeted block isn't found (vendor upgrade reshapes the surrounding code), the patch logs a warning and skips rather than silently mis-editing.\r\n- **Patches subsume the IE8 `createElement('script')` literals on esbuild's resolution path** (`pdfmake/build/pdfmake.js` and `docx/dist/index.mjs`). The pre-existing `mask-script-polyfill-literal` esbuild plugin stays in place as a no-op safety net.\r\n- **Name-introspection grep clean.** Source contains no `Function.prototype.name`, `.constructor.name`, or function `.toString()` calls, so esbuild's identifier mangling can rename freely without `keepNames: true`.\r\n\r\nMobile-supported (Android verified through 0.5.2). 1389 tests pass under minification. PDF compile verified in dev-vault before tag-push (Roboto fonts render; no error toasts; existing scene content unchanged).\r\n\r\n### Install\r\n\r\n- **Community Plugins**: [Install in Obsidian](obsidian://show-plugin?id=draft-bench), or Settings -> Community plugins -> Browse -> \"Draft Bench\" -> Install -> Enable.\r\n- **BRAT** (for pre-release access): add `banisterious/obsidian-draft-bench` as a beta plugin.\r\n- **Manual**: download `main.js`, `manifest.json`, `styles.css` from this release into `<vault>/.obsidian/plugins/draft-bench/`.",
-      "downloadCount": 260,
+      "downloadCount": 264,
       "draft": false,
       "name": "Draft Bench 0.6.4",
       "prerelease": false,
