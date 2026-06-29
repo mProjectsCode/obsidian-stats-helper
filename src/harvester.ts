@@ -205,7 +205,7 @@ export function simplifyRelease(release: GitHubRelease): ReleaseSummary {
     prerelease: release.prerelease,
     draft: release.draft,
     downloadCount: assets
-      .filter((asset) => asset.name === "main.js")
+      .filter((asset) => asset.name === "manifest.json")
       .reduce((total, asset) => total + asset.downloadCount, 0),
     assets,
   };

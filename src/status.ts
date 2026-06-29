@@ -37,7 +37,7 @@ interface PluginStats {
   releasesWithDownloadStats: number;
   assets: number;
   assetsWithDownloadStats: number;
-  totalMainDownloads: number;
+  totalManifestDownloads: number;
   oldestFetchedAt: string | null;
   newestFetchedAt: string | null;
 }
@@ -97,7 +97,7 @@ export function buildStatusMarkdown(inputs: StatusInputs): string {
     `- Plugins missing download stats: ${inputs.pluginStats.missingDownloadStats}`,
     `- Releases with download stats: ${inputs.pluginStats.releasesWithDownloadStats}/${inputs.pluginStats.releases} (${formatPercent(inputs.pluginStats.releasesWithDownloadStats, inputs.pluginStats.releases)})`,
     `- Assets with download stats: ${inputs.pluginStats.assetsWithDownloadStats}/${inputs.pluginStats.assets} (${formatPercent(inputs.pluginStats.assetsWithDownloadStats, inputs.pluginStats.assets)})`,
-    `- Total main.js downloads: ${inputs.pluginStats.totalMainDownloads}`,
+    `- Total manifest.json downloads: ${inputs.pluginStats.totalManifestDownloads}`,
     `- Download summary: ${formatDownloadSummaryStats(inputs.downloadSummaryStats)}`,
     `- HTTP cache entries: ${formatCacheStats(inputs.cacheStats)}`,
     `- Last run API requests: ${formatRequestStats(requestStats)}`,
@@ -150,7 +150,7 @@ async function readPluginStats(): Promise<PluginStats> {
     releasesWithDownloadStats: 0,
     assets: 0,
     assetsWithDownloadStats: 0,
-    totalMainDownloads: 0,
+    totalManifestDownloads: 0,
     oldestFetchedAt: null,
     newestFetchedAt: null,
   };
@@ -188,7 +188,6 @@ async function readPluginStats(): Promise<PluginStats> {
 
       if (isFiniteNumber(releaseRecord.downloadCount)) {
         stats.releasesWithDownloadStats += 1;
-        stats.totalMainDownloads += releaseRecord.downloadCount;
         pluginHasDownloadStats = true;
       }
 
@@ -199,9 +198,13 @@ async function readPluginStats(): Promise<PluginStats> {
         }
 
         stats.assets += 1;
-        if (isFiniteNumber((asset as Record<string, unknown>).downloadCount)) {
+        const assetRecord = asset as Record<string, unknown>;
+        if (isFiniteNumber(assetRecord.downloadCount)) {
           stats.assetsWithDownloadStats += 1;
           pluginHasDownloadStats = true;
+          if (assetRecord.name === "manifest.json") {
+            stats.totalManifestDownloads += assetRecord.downloadCount;
+          }
         }
       }
     }

@@ -171,7 +171,7 @@ describe("simplifyRelease", () => {
       publishedAt: "2026-01-01T00:00:00Z",
       prerelease: false,
       draft: false,
-      downloadCount: 12,
+      downloadCount: 3,
       assets: [
         { name: "main.js", size: 123, downloadCount: 12, digest: "sha256:abc" },
         { name: "manifest.json", size: 456, downloadCount: 3 },
@@ -201,7 +201,7 @@ describe("fetchReleases", () => {
               published_at: "2026-01-01T00:00:00Z",
               prerelease: false,
               draft: false,
-              assets: [{ name: "main.js", size: 100, download_count: 42 }],
+              assets: [{ name: "manifest.json", size: 100, download_count: 42 }],
             },
           ] as T,
         };
@@ -218,7 +218,7 @@ describe("fetchReleases", () => {
         prerelease: false,
         draft: false,
         downloadCount: 1,
-        assets: [{ name: "main.js", size: 100, downloadCount: 1 }],
+        assets: [{ name: "manifest.json", size: 100, downloadCount: 1 }],
       },
     ]);
 
@@ -228,7 +228,7 @@ describe("fetchReleases", () => {
 });
 
 describe("summarizePluginDownloads", () => {
-  test("sums non-draft release download counts", () => {
+  test("sums manifest.json downloads from non-draft releases", () => {
     expect(
       summarizePluginDownloads({
         id: "plugin",
@@ -250,7 +250,10 @@ describe("summarizePluginDownloads", () => {
             prerelease: false,
             draft: false,
             downloadCount: 10,
-            assets: [],
+            assets: [
+              { name: "main.js", size: 100, downloadCount: 10 },
+              { name: "manifest.json", size: 10, downloadCount: 7 },
+            ],
           },
           {
             tag: "1.1.0-beta",
@@ -261,7 +264,10 @@ describe("summarizePluginDownloads", () => {
             prerelease: true,
             draft: false,
             downloadCount: 3,
-            assets: [],
+            assets: [
+              { name: "main.js", size: 100, downloadCount: 3 },
+              { name: "manifest.json", size: 10, downloadCount: 2 },
+            ],
           },
           {
             tag: "1.2.0",
@@ -272,7 +278,7 @@ describe("summarizePluginDownloads", () => {
             prerelease: false,
             draft: true,
             downloadCount: 100,
-            assets: [],
+            assets: [{ name: "manifest.json", size: 10, downloadCount: 100 }],
           },
         ],
         lastFetchedAt: "2026-01-04T00:00:00Z",
@@ -281,7 +287,7 @@ describe("summarizePluginDownloads", () => {
       }),
     ).toEqual({
       repo: "owner/repo",
-      downloads: 13,
+      downloads: 9,
       releasesWithDownloads: 2,
     });
   });
@@ -335,7 +341,7 @@ describe("buildStatusMarkdown", () => {
           releasesWithDownloadStats: 2,
           assets: 5,
           assetsWithDownloadStats: 4,
-          totalMainDownloads: 123,
+          totalManifestDownloads: 123,
           oldestFetchedAt: "2026-06-01T12:00:00.000Z",
           newestFetchedAt: "2026-06-01T12:30:00.000Z",
         },
@@ -357,7 +363,7 @@ describe("buildStatusMarkdown", () => {
 - Plugins missing download stats: 1
 - Releases with download stats: 2/3 (66.7%)
 - Assets with download stats: 4/5 (80.0%)
-- Total main.js downloads: 123
+- Total manifest.json downloads: 123
 - Download summary: 1 plugins, 123 downloads, generated at 2026-06-01T12:30:00.000Z
 - HTTP cache entries: 12 (4 repo, 5 manifest, 2 releases, 1 other)
 - Last run API requests: 9 total (6 fetched, 2 cached 304, 1 failed)

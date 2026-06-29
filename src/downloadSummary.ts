@@ -50,11 +50,16 @@ export function summarizePluginDownloads(plugin: PluginData): PluginDownloadSumm
   let releasesWithDownloads = 0;
 
   for (const release of plugin.releases) {
-    if (release.draft || !Number.isFinite(release.downloadCount)) {
+    if (release.draft) {
       continue;
     }
 
-    downloads += release.downloadCount;
+    const manifestAssets = release.assets.filter((asset) => asset.name === "manifest.json");
+    if (manifestAssets.length === 0) {
+      continue;
+    }
+
+    downloads += manifestAssets.reduce((total, asset) => total + asset.downloadCount, 0);
     releasesWithDownloads += 1;
   }
 
