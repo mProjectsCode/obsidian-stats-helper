@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-06-28T05:01:26.961Z",
-  "lastFetchedAt": "2026-06-28T05:01:26.961Z",
+  "lastChangedAt": "2026-06-29T05:02:26.971Z",
+  "lastFetchedAt": "2026-06-29T05:02:26.971Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "ima.copilot Sync",
-    "version": "6.3.0"
+    "version": "6.4.0"
   },
   "name": "ima.copilot Sync",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:23e1ea85df8e305616ee24a2417c702993790f34e89e475fd30d5c2b3026c468",
-          "downloadCount": 433,
+          "digest": "sha256:3a3cb8e5d2c887d9a9595f480af7bc285e9e52b52376a0f554b06fce772959ef",
+          "downloadCount": 18,
           "name": "main.js",
-          "size": 796874
+          "size": 798629
         },
         {
-          "digest": "sha256:d8a7768203fe56d0cba2c02bfa0a4c0f59fd6157f7ec960396dd1d13daa5017c",
-          "downloadCount": 455,
+          "digest": "sha256:d9b6f5e5846dc76ff9eee938ca5b236343dfd991e81e017e7d82af7532afc405",
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 403,
+          "downloadCount": 17,
+          "name": "styles.css",
+          "size": 4190
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 6.4.0\n\n### 新功能\n\n- **API 请求限频保护**：新增全局节流（两次 openapi 请求间隔 ≥ 200ms）与限频码指数退避重试（10s → 30s → 90s，最多 3 次），统一处理网关层 200001、notes 业务层 20002、wiki 业务层 110021 三类「请求频率超限」错误，避免密集翻页和逐篇同步时触发限频导致同步中断\n\n### 修复\n\n- **测试连接触发限频（#2）**：测试连接不再调用 `listAllNotes` 遍历全部笔记，改为单次 `limit=1` 轻量探测（`testConnection`）；探测走不退避路径并加 15s 超时兜底，命中限频立即提示而非卡死按钮 130s\n- **非 JSON 响应崩溃**：腾讯 WAF 拦截等场景返回 HTML 时，`response.json` 解析不再抛 `TypeError`，统一包装为 `ImaApiError` 给出友好提示\n- **错误提示完善**：限频错误保留服务器原始诊断信息（`请求频率超限，请稍后重试（{原始 msg}）`），`code=0` 但缺 `data` 字段的异常空响应显式抛错\n\n## 6.3.0\n\n### 新功能\n\n- **移动端桌面使用建议**：非桌面端（手机/平板）打开插件设置页时，顶部显示双语提示框，建议用户在桌面端使用以获取「下载增强」功能带来的微信公众号和防盗链图片下载成功率提升\n\n### 修复\n\n- **知乎时间提取重构**：统一使用 `js-initialData` 提取发布时间，移除不可靠的 `.ContentItem-time` CSS 选择器文本解析\n- **知乎回答页时区修正**：修复知乎回答页 `published` 时区未正确转换的问题，`updatedTime` 优先于 `createdTime`\n- **知乎专栏 URL 匹配修复**：修复知乎专栏 URL 匹配不完整的问题，对齐 share-to-save 架构\n- **`buildWebFrontmatter` ISO 时间保护**：已有 ISO 8601 时间不再被强制转换为 UTC，避免时区信息丢失\n- **README 版权引用**：License 章节添加 defuddle 版权引用\n\n## 6.2.0\n\n### 新功能\n\n- **HTTP 工具模块**：新增集中化的请求头构建（`buildHeaders`），包含现代浏览器必发的 `Sec-Fetch-*` 系列头、`Accept-Language` 和 `Referer`，提升防盗链绕过能力\n- **Content-Type 驱动扩展名检测**：下载文件时检查 HTTP `Content-Type` 响应头，当 URL 扩展名与实际 MIME 类型不一致时（如知乎 CDN `.avis` 实际为 PNG），自动修正文件扩展名。优先级：`wx_fmt` > Content-Type > URL 扩展名\n- **Headless 三信号就绪检测**：Electron BrowserWindow 提取页面时同时检测网络空闲、DOM 稳定（MutationObserver）、内容稳定三种信号，替代原有的简单轮询，提升 JS 渲染页面提取可靠性\n- **computed style 戳记**：提取 HTML 前将 `display:none` / `visibility:hidden` / `opacity:0` 写为 inline style，使 defuddle 在 DOMParser 上下文中也能检测 CSS 隐藏元素\n- **图片并发下载 + 内容哈希去重**：同一篇笔记的图片改为 3 路并发下载，新增内容哈希去重（同批次相同内容只保存一份）和逐字节已有文件比对\n- **Node.js 下载重试**：网络错误、超时、429 限流、5xx 服务端错误自动重试（1s/2s 指数退避，最多 2 次），提升下载成功率\n- **元数据增强**：新增 Schema.org JSON-LD 解析、站点名剥离（`\"标题 | 站点名\"` → `\"标题\"`）、作者/发布日期兜底提取，改善笔记 frontmatter 质量\n- **知乎 DOM 预处理**：新增知乎专栏/问答页面专用预处理（实体链接剥离、登录弹窗移除、代码块规范化、懒加载图片修复、发布时间提取）\n- **小红书元数据增强**：从 `__INITIAL_STATE__` 提取作者、发布时间、正文内容，支持视频笔记标记\n- **文件名修缮**：`sanitizeFilename` 增加首尾点号/空格剥离（Windows 兼容）和空值 `'untitled'` 回退\n\n### 改进\n\n- CHROME_UA 升级至 Chrome 148\n- Node.js https 下载支持 HTTP 协议（非 HTTPS URL）\n- 新增 `FileDownloader.downloadToBuffer()` 方法，支持下载到内存获取 Content-Type\n- 验证码检测签名扩充至 12 条（新增 Cloudflare Turnstile、Google reCAPTCHA、hCaptcha）\n- 新增 `ElectronWebContents` / `ElectronBrowserWindow` 类型接口替换 headless 提取器中的 `any`\n- 重定向跟随增加上限控制（最多 5 次）\n\n### 修复\n\n- 修复 `listMdPathsInFolder` / `scanExistingNoteFiles` 路径翻倍 bug（`adapter.list()` 返回 vault 完整路径，重复拼接前缀导致增量同步退化为全量重下载）\n- 修复 headless 重定向后 timeout 竞态问题\n- 修复 HTTP 304 Not Modified 被误判为成功下载\n- 修复 headless 空白页面永远无法稳定退出的轮询问题\n- 修复 `convertHtmlToMarkdown` HTML 双重解析的性能浪费\n- 修复 `stripSiteName` 正则回溯（ReDoS）风险\n- 修复小红书主路径绕过 `enhanceMetadata` 导致缺失站点名剥离\n- 删除未使用的 `DefuddleResponse` 导入、空 `if (isXhs) {}` 块等代码\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.3.0...6.4.0",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "6.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-28T14:49:34Z",
+      "tag": "6.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:23e1ea85df8e305616ee24a2417c702993790f34e89e475fd30d5c2b3026c468",
+          "downloadCount": 443,
+          "name": "main.js",
+          "size": 796874
+        },
+        {
+          "digest": "sha256:d8a7768203fe56d0cba2c02bfa0a4c0f59fd6157f7ec960396dd1d13daa5017c",
+          "downloadCount": 468,
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
+          "downloadCount": 413,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.3.0\n\n### 新功能\n\n- **移动端桌面使用建议**：非桌面端（手机/平板）打开插件设置页时，顶部显示双语提示框，建议用户在桌面端使用以获取「下载增强」功能带来的微信公众号和防盗链图片下载成功率提升\n\n### 修复\n\n- **知乎时间提取重构**：统一使用 `js-initialData` 提取发布时间，移除不可靠的 `.ContentItem-time` CSS 选择器文本解析\n- **知乎回答页时区修正**：修复知乎回答页 `published` 时区未正确转换的问题，`updatedTime` 优先于 `createdTime`\n- **知乎专栏 URL 匹配修复**：修复知乎专栏 URL 匹配不完整的问题，对齐 share-to-save 架构\n- **`buildWebFrontmatter` ISO 时间保护**：已有 ISO 8601 时间不再被强制转换为 UTC，避免时区信息丢失\n- **README 版权引用**：License 章节添加 defuddle 版权引用\n\n## 6.2.0\n\n### 新功能\n\n- **HTTP 工具模块**：新增集中化的请求头构建（`buildHeaders`），包含现代浏览器必发的 `Sec-Fetch-*` 系列头、`Accept-Language` 和 `Referer`，提升防盗链绕过能力\n- **Content-Type 驱动扩展名检测**：下载文件时检查 HTTP `Content-Type` 响应头，当 URL 扩展名与实际 MIME 类型不一致时（如知乎 CDN `.avis` 实际为 PNG），自动修正文件扩展名。优先级：`wx_fmt` > Content-Type > URL 扩展名\n- **Headless 三信号就绪检测**：Electron BrowserWindow 提取页面时同时检测网络空闲、DOM 稳定（MutationObserver）、内容稳定三种信号，替代原有的简单轮询，提升 JS 渲染页面提取可靠性\n- **computed style 戳记**：提取 HTML 前将 `display:none` / `visibility:hidden` / `opacity:0` 写为 inline style，使 defuddle 在 DOMParser 上下文中也能检测 CSS 隐藏元素\n- **图片并发下载 + 内容哈希去重**：同一篇笔记的图片改为 3 路并发下载，新增内容哈希去重（同批次相同内容只保存一份）和逐字节已有文件比对\n- **Node.js 下载重试**：网络错误、超时、429 限流、5xx 服务端错误自动重试（1s/2s 指数退避，最多 2 次），提升下载成功率\n- **元数据增强**：新增 Schema.org JSON-LD 解析、站点名剥离（`\"标题 | 站点名\"` → `\"标题\"`）、作者/发布日期兜底提取，改善笔记 frontmatter 质量\n- **知乎 DOM 预处理**：新增知乎专栏/问答页面专用预处理（实体链接剥离、登录弹窗移除、代码块规范化、懒加载图片修复、发布时间提取）\n- **小红书元数据增强**：从 `__INITIAL_STATE__` 提取作者、发布时间、正文内容，支持视频笔记标记\n- **文件名修缮**：`sanitizeFilename` 增加首尾点号/空格剥离（Windows 兼容）和空值 `'untitled'` 回退\n\n### 改进\n\n- CHROME_UA 升级至 Chrome 148\n- Node.js https 下载支持 HTTP 协议（非 HTTPS URL）\n- 新增 `FileDownloader.downloadToBuffer()` 方法，支持下载到内存获取 Content-Type\n- 验证码检测签名扩充至 12 条（新增 Cloudflare Turnstile、Google reCAPTCHA、hCaptcha）\n- 新增 `ElectronWebContents` / `ElectronBrowserWindow` 类型接口替换 headless 提取器中的 `any`\n- 重定向跟随增加上限控制（最多 5 次）\n\n### 修复\n\n- 修复 `listMdPathsInFolder` / `scanExistingNoteFiles` 路径翻倍 bug（`adapter.list()` 返回 vault 完整路径，重复拼接前缀导致增量同步退化为全量重下载）\n- 修复 headless 重定向后 timeout 竞态问题\n- 修复 HTTP 304 Not Modified 被误判为成功下载\n- 修复 headless 空白页面永远无法稳定退出的轮询问题\n- 修复 `convertHtmlToMarkdown` HTML 双重解析的性能浪费\n- 修复 `stripSiteName` 正则回溯（ReDoS）风险\n- 修复小红书主路径绕过 `enhanceMetadata` 导致缺失站点名剥离\n- 删除未使用的 `DefuddleResponse` 导入、空 `if (isXhs) {}` 块等代码\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.2.0...6.3.0",
-      "downloadCount": 433,
+      "downloadCount": 443,
       "draft": false,
       "name": "6.3.0",
       "prerelease": false,

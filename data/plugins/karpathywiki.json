@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-06-28T05:01:26.961Z",
-  "lastFetchedAt": "2026-06-28T05:01:26.961Z",
+  "lastChangedAt": "2026-06-29T05:02:26.971Z",
+  "lastFetchedAt": "2026-06-29T05:02:26.971Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.0",
     "name": "Karpathy LLM Wiki",
-    "version": "1.22.4"
+    "version": "1.22.5"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:7856c7a6ca8fbf702a0af5aba61d8f1a7345d8afef53a0613175ecf923e55ae2",
-          "downloadCount": 447,
+          "digest": "sha256:a217f4c1a449c3ea6e49f5e5e02915ad4c7e87fa6f2a6307d440a5acf8b944e5",
+          "downloadCount": 44,
           "name": "main.js",
-          "size": 1102437
+          "size": 1107812
         },
         {
-          "digest": "sha256:a079d2634bca44da3ba96efbbe7fd896b89db3cedbb801ff946de614448f2630",
-          "downloadCount": 452,
+          "digest": "sha256:2ed9e3afd82ca7de582062f0a0472a46e6843c3aef10a8e807195fb4a388ce3c",
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:b862f2e382cc0acfda77c98950b2e3333e591dba5e38b992b0f47b245766ae42",
-          "downloadCount": 444,
+          "downloadCount": 43,
+          "name": "styles.css",
+          "size": 17616
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🧠 Karpathy LLM Wiki v1.22.5\n\n## Highlights\n\nv1.22.5 is a focused PATCH that **completes the OpenAI reasoning-model fix from v1.22.4** and makes Test Connection fully self-diagnostic. OpenAI's reasoning model family (`gpt-5.1+`, `gpt-5.5`, `o1`/`o3`/`o4-mini`) now works out of the box on Test Connection — they previously failed with HTTP 400 because the Chat Completions endpoint has compatibility issues for the reasoning family, even after v1.22.4's `max_tokens` ↔ `max_completion_tokens` probe fix. The new behavior routes the reasoning family to OpenAI's `/v1/responses` endpoint per OpenAI's official GPT-5.5 migration guide (\"GPT-5.5 works best in the Responses API\"). When a connection fails, users now see the provider's exact error body — e.g. `status 429: You exceeded your current quota, please check your plan and billing details` — instead of a bare `status 429`.\n\n## Fixed\n\n- **OpenAI reasoning model family no longer fails Test Connection with 400 (Issue #207 follow-up).** v1.22.4's `max_tokens` ↔ `max_completion_tokens` probe-then-cache fix was necessary but not sufficient — `gpt-5.1-chat-latest`, `gpt-5.5`, and the `o1` / `o3` / `o4-mini` reasoning families still failed Test Connection with 400 because the Chat Completions endpoint has compatibility issues for the reasoning model family. Per OpenAI's official GPT-5.5 migration guide (\"GPT-5.5 works best in the Responses API for any reasoning, tool-calling, or multi-turn use case\"), v1.22.5 routes the reasoning family to `/v1/responses` with `reasoning: { effort: 'low' }`. Detection is a pure-function `isResponsesApiModel(model, baseUrl)` export, gated to `https://api.openai.com/v1` only. `gpt-5-chat-latest`, `gpt-4.1`, `gpt-3.5-turbo`, and **all non-OpenAI baseUrls** (Ollama, LM Studio, DeepSeek, custom OpenAI-compatible endpoints) continue on `/v1/chat/completions` unchanged. Backward compatibility for non-reasoning models is fully preserved.\n- **Test Connection Notice now surfaces the provider's full error body.** Obsidian's `requestUrl` throws on 4xx (including 429) **without** populating the thrown `Error` with the provider's response body — so even v1.22.4's `extractProviderErrorMessage()` couldn't see what OpenAI actually said. v1.22.5 wraps the failing request in a 5-second-timeout `window.fetch` re-fetch and merges the provider body into the thrown `Error.message`, so the Test Connection Notice now reads e.g. `status 429: You exceeded your current quota, please check your plan and billing details` instead of bare `status 429`. The raw body is also logged at `console.warn` level for DevTools investigation. Non-OpenAI baseUrls get the same enrichment via the existing Chat Completions path.\n- **429/5xx rate-limit errors now retry with exponential backoff on the Responses API path.** v1.22.4's `withRetry` (3 attempts, 1s/2s/4s + jitter) only covered the Chat Completions path. v1.22.5 wraps the new Responses API path in the same `withRetry` so transient 429 quota bumps no longer immediately fail Test Connection.\n\n## Tests\n\n**1104 tests passing** (+28 since v1.22.4). 84 test files. Gate 1 all green: lint 0/0, tsc 0, build clean, css-lint 0.\n\nNew test coverage (28 tests in `src/__tests__/root/llm-client-responses-api.test.ts`):\n- 13 endpoint routing tests — every reasoning model in the family (`gpt-5.1` / `5.2` / `5.3` / `5.4` / `5.5` / `5.6` / `o1` / `o1-mini` / `o1-preview` / `o3` / `o3-mini` / `o3-pro` / `o4-mini`) routes to `/v1/responses`; every non-reasoning model (`gpt-5-chat-latest` / `gpt-4.1` / `gpt-4o` / `gpt-3.5-turbo`) stays on `/v1/chat/completions`\n- 3 request body shape tests — `reasoning: {effort: 'low'}`, `input` array (not `messages`), `max_output_tokens` (not `max_tokens`)\n- 1 response parsing test — `output[].content[].output_text` extraction\n- 1 custom baseUrl compatibility test — Ollama / LM Studio / DeepSeek stay on Chat Completions\n- 1 withRetry wrap test — 3 attempts on 429 with exponential backoff\n- 3 error enrichment tests — JSON `error.message`, JSON `error` as string, plain text body (Obsidian's `requestUrl` real-world throw path)\n- 6 misc tests — issue-scope regression guards, model-name detection edge cases, etc.\n\nExisting dot-naming gpt-5.x regression test (v1.22.4) and `thinking.type='disabled'` Chat Completions tests refactored to use `gpt-5-mini` / `gpt-5-nano` / `gpt-4.1` (the models that continue to exercise the Chat Completions path; the reasoning family is now covered by the new test file).\n\n## Contributors\n\n- **@green-dalii** — `isResponsesApiModel` detection, Responses API code path, `window.fetch` error re-fetch, withRetry wrap, test refactor, release engineering\n\nWe thank **@jameses-cyber** for the high-quality Issue #207 reproduction that surfaced the second half of the fix, and the architectural-pattern analysis (probe vs prefix-matching) that informed the new routing layer.\n\n## Installation\n\n### From Community Plugins\n\n*Settings → Community plugins → Browse → search \"Karpathy LLM Wiki\" → Install → Enable*\n\n*Note: Obsidian's review queue may delay the update. You can install manually in the meantime.*\n\n### From the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian**.\n\n### Manual\n\n1. Download `main.js`, `manifest.json`, `styles.css` from the **Assets** section below\n2. Place them in `<vault>/.obsidian/plugins/karpathywiki/`\n3. Reload the plugin in *Settings → Community plugins*\n\n## Configuration\n\nNo migration needed. All v1.22.4 and earlier settings are forward-compatible. Issue #207 stays open for real-world user testing — see the v1.22.5 PATCH subsection in any README for context.\n\n### What to expect on first request after upgrading\n\n- **`gpt-4.1` / `gpt-4o` / `gpt-5-chat-latest` / Anthropic users**: zero behavior change. Chat Completions path unchanged.\n- **OpenAI `gpt-5.1+` / `gpt-5.5` / `o1` / `o3` / `o4-mini` users**: Test Connection now succeeds (was failing with 400 in v1.22.4). Subsequent requests route to `/v1/responses` with `reasoning: { effort: 'low' }` — lower reasoning cost, faster latency.\n- **Test Connection failure notices**: now show the provider's exact diagnostic (e.g. `status 429: You exceeded your current quota, please check your plan and billing details`) instead of `status 429`. DevTools console shows the raw provider body at `console.warn` level for diagnosis.\n- **429 quota errors**: automatic retry up to 3 times (1s/2s/4s + jitter) before failing. Each retry re-fetches the provider body to keep the error message current.\n\n### Report any failures\n\nIf `gpt-5.1+` / `gpt-5.5` / `o1` / `o3` / `o4-mini` still fails on Test Connection after upgrading, please comment on [Issue #207](https://github.com/green-dalii/obsidian-llm-wiki/issues/207) with:\n- The exact model name (e.g. `gpt-5.5`)\n- The Test Connection Notice text (now shows the full provider error)\n- The DevTools console `console.warn` output (shows the raw provider response body)\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.22.4...1.22.5\n",
+      "downloadCount": 44,
+      "draft": false,
+      "name": "1.22.5",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T03:45:44Z",
+      "tag": "1.22.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7856c7a6ca8fbf702a0af5aba61d8f1a7345d8afef53a0613175ecf923e55ae2",
+          "downloadCount": 938,
+          "name": "main.js",
+          "size": 1102437
+        },
+        {
+          "digest": "sha256:a079d2634bca44da3ba96efbbe7fd896b89db3cedbb801ff946de614448f2630",
+          "downloadCount": 947,
+          "name": "manifest.json",
+          "size": 354
+        },
+        {
+          "digest": "sha256:b862f2e382cc0acfda77c98950b2e3333e591dba5e38b992b0f47b245766ae42",
+          "downloadCount": 932,
           "name": "styles.css",
           "size": 17616
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 🧠 Karpathy LLM Wiki v1.22.4\n\n## Highlights\n\nv1.22.4 is a focused PATCH that fixes the GPT-5.x breakage and makes Test Connection self-diagnostic. **OpenAI's `gpt-5.x` model family (5.1, 5.4-mini, 5.5, and future dot-named releases) now work out of the box** — Test Connection no longer fails with HTTP 400 for every new gpt-5.x release. Test Connection UI now shows the provider's actual error message instead of a generic \"status 400\" wrapper, so users can fix baseUrl / model name / API key issues without digging through the console.\n\n## Fixed\n\n- **GPT-5.x models no longer fail Test Connection with 400 (Issue #207).** The v1.20.0 `params.model.startsWith('gpt-5-')` prefix-matching heuristic only matched the dash-suffixed OpenAI gpt-5 family (`gpt-5-mini`, `gpt-5-nano`) and silently broke every time OpenAI shipped a new gpt-5.x release using period-suffixed names (`gpt-5.1`, `gpt-5.4-mini`, `gpt-5.5`). This was a regression of the same root-cause class as the v1.20.0 #143 fix. Replaced with a runtime probe-then-cache mechanism: first request uses `max_tokens`; if the backend rejects with 400, the plugin inspects the error to derive the alternate key (`max_completion_tokens` or vice versa) and retries. The probed key is cached on the client instance and reused for the client's lifetime. Stream path mirrors the same pattern. The new approach is **future-proof**: the API itself tells us what it wants, so any future OpenAI naming scheme is handled automatically.\n- **Test Connection UI now surfaces the provider's actual error message.** Previously, `requestUrl` errors were re-wrapped as `status 400: ${data.error.message}` (or just \"status 400\" when the response body was lost), and the provider's actual diagnostic — e.g. \"Invalid parameter: max_tokens should be max_completion_tokens\" or \"The model `gpt-missing` does not exist\" — was never visible to the user. New `extractProviderErrorMessage()` enriches the thrown error in both `createMessage` and `createMessageStream`. Test Connection is now self-diagnostic.\n\n## Changed\n\n- **Lint performance knobs centralised in `src/constants.ts`.** Yield cadences (`LINT_YIELD_EVERY_OUTER` / `_PHASE1` / `_COMPARISON`), candidate batch sizing (`LINT_CANDIDATE_TOKEN_ESTIMATE`, `LINT_MAX_INPUT_TOKENS`, `LINT_DEDUP_BATCH_SIZE`), prep batch read (`LINT_PREP_BATCH_READ`), and source-analyzer batch sizing (`SHORT_CONTENT_THRESHOLD`, `BATCH_CHARS_PER_ITEM`) now live in one place. Previously these values were duplicated or had drifted across four files — including a literal `MAX_TOKENS=16000` copy of `MAX_TOKENS_BATCH` in `batch-limits.ts`. Future lint performance tuning is now a single-file change.\n\n## Tests\n\n**1076 tests passing** (+12 since v1.22.3). 83 test files. Gate 1 all green: lint 0/0, tsc 0, build clean, css-lint 0.\n\nNew test coverage:\n- 8 pure-function tests for `detectRejectedMaxTokenKey` edge cases (param-direct detection, text-phrase detection, false-positive guards, null/empty handling)\n- 2 OpenAICompatibleClient integration tests covering the real `requestUrl` 4xx-throw behavior (`mockRejectedValueOnce`) and provider message surfacing to `error.message`\n\n## Contributors\n\n- **@green-dalii** — probe mechanism design, `extractProviderErrorMessage`, lint constants refactor, release engineering\n\nWe thank **@jameses-cyber** for the detailed Issue #207 reproduction with `gpt-5.4-mini` and `gpt-5.5`, which directly motivated the fix.\n\n## Installation\n\n### From Community Plugins\n\n*Settings → Community plugins → Browse → search \"Karpathy LLM Wiki\" → Install → Enable*\n\n*Note: Obsidian's review queue may delay the update. You can install manually in the meantime.*\n\n### From the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian**.\n\n### Manual\n\n1. Download `main.js`, `manifest.json`, `styles.css` from the **Assets** section below\n2. Place them in `<vault>/.obsidian/plugins/karpathywiki/`\n3. Reload the plugin in *Settings → Community plugins*\n\n## Configuration\n\nNo migration needed. All v1.22.3 and earlier settings are forward-compatible.\n\n### What to expect on first request after upgrading\n\n- **gpt-4 / Anthropic users**: zero behavior change. The first request uses `max_tokens` exactly as before, the backend accepts it, and the cache is never populated.\n- **gpt-5.x users**: the first request may take ~500ms longer (1 extra round-trip) while the plugin probes the correct token key. Subsequent requests are cached and unchanged.\n- **Test Connection failure notices**: now show the provider's exact diagnostic (e.g. \"The model `gpt-5.5` does not exist or you do not have access to it.\") instead of \"status 400\".\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/releases/tag/1.22.3...1.22.4",
-      "downloadCount": 447,
+      "downloadCount": 938,
       "draft": false,
       "name": "1.22.4",
       "prerelease": false,
@@ -473,26 +503,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 491,
+          "downloadCount": 494,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 502,
+          "downloadCount": 505,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 489,
+          "downloadCount": 492,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 491,
+      "downloadCount": 494,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,
@@ -953,26 +983,26 @@
       "assets": [
         {
           "digest": "sha256:cacd1526ef3a917511a716accde5913b6869ffc505490a56ba8b30a50ede93ad",
-          "downloadCount": 633,
+          "downloadCount": 634,
           "name": "main.js",
           "size": 661713
         },
         {
           "digest": "sha256:501014006b42867e41a9484d4075da8b9a72f6bea9cd8422f76fab0fb6fd3001",
-          "downloadCount": 663,
+          "downloadCount": 664,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:213622be8fe51d2cdf9eb886f2cf6620bcfaf54f86f81722b3f8bc28af20aac2",
-          "downloadCount": 625,
+          "downloadCount": 626,
           "name": "styles.css",
           "size": 6140
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Custom granularity per-type limits ignored**: In custom mode, entity and concept limits were set separately in the UI but three code paths failed to enforce them separately:\r\n    - The extraction loop merged entityLimit + conceptLimit into a single total cap, losing per-type distinction\r\n    - The LLM instruction text was vague (\"user-defined limits\") with no concrete numbers injected\r\n    - The fix-limit function used hardcoded values ({maxEntities: 3, maxConcepts: 3}) ignoring user settings entirely\r\n    - All three now read `customEntityLimit`/`customConceptLimit` dynamically from settings. Added 6 unit tests (101 total). Non-custom modes\r\n  \r\n  **Cumulative since 1.9.1** (1.10.0 was the feature release, 1.10.1 and 1.10.2 are bug fixes):\r\n  - **Minimal extraction granularity**: New option limiting extraction to ~5 items, ideal for batch processing 100+ files\r\n  - **Custom extraction granularity**: User-defined entity/concept limits (1-300 each) with conditional input fields\r\n  - **Aliases support in duplicate detection**: LLM now sees page aliases when resolving entity names, preventing duplicate stubs for synonyms\r\n  - **Slug normalization in duplicate detection**: resolvePagePath checks title/alias slugs before falling back to LLM\r\n  \r\n  ---\r\n  \r\n  ## Installation\r\n  \r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n  \r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\r\n  and click **Add to Obsidian** to install directly.\r\n  \r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n  \r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n  \r\n  ---\r\n  \r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n  \r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\r\n  detailed usage and model recommendations.\r\n  \r\n  ---\r\n  \r\n  **Full Changelog**: [1.10.1...1.10.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.10.1...1.10.2)",
-      "downloadCount": 633,
+      "downloadCount": 634,
       "draft": false,
       "name": "1.10.2 — Custom granularity per-type limits enforcement",
       "prerelease": false,
