@@ -4,8 +4,8 @@
   "description": "Track and visualize your daily macros, meals and nutrition inside your notes.",
   "errors": [],
   "id": "macros",
-  "lastChangedAt": "2026-06-28T02:02:26.967Z",
-  "lastFetchedAt": "2026-06-28T02:02:26.967Z",
+  "lastChangedAt": "2026-06-29T02:05:27.043Z",
+  "lastFetchedAt": "2026-06-29T02:05:27.043Z",
   "manifest": {
     "author": "James Spratt",
     "authorUrl": "https://github.com/JamesCliffordSpratt",
@@ -13,9 +13,9 @@
     "fundingUrl": "https://buymeacoffee.com/jamescliffordspratt",
     "id": "macros",
     "isDesktopOnly": false,
-    "minAppVersion": "1.0.0",
+    "minAppVersion": "1.4.10",
     "name": "Macros",
-    "version": "2.6.0"
+    "version": "2.6.1"
   },
   "name": "Macros",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:44d73a7e0455c875723ee875c9f72e097de0d28cf013f26386be49953ad920d7",
+          "downloadCount": 14,
+          "name": "main.js",
+          "size": 1331051
+        },
+        {
+          "digest": "sha256:c2ced594cd91dde6dbdb3b5dc05be89d6d6867df0a8aeeee9c6bb56c356c9244",
+          "downloadCount": 16,
+          "name": "manifest.json",
+          "size": 514
+        },
+        {
+          "digest": "sha256:623fb90b3f893555b2ae9c66fcd6812a52e75aac92c713050a663d27cb367ef5",
+          "downloadCount": 14,
+          "name": "styles.css",
+          "size": 195441
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Macros v2.6.1\r\n\r\nA maintenance and reliability release: faster food search, two notable bug fixes, and a full code-quality pass to meet Obsidian's new plugin review standards.\r\n\r\n## 🐛 Bug fixes\r\n\r\n- **Manual food entry — micronutrient section:** Fixed the collapsible micronutrient dropdown not opening when clicked. It now expands and collapses correctly.\r\n- **Live search — \"All\" tab:** Results no longer vanish when one food database is slow or unavailable. Previously, if Open Food Facts errored, the entire \"All\" tab returned nothing even though FatSecret and USDA had results; a failing source is now skipped instead of blanking the whole tab.\r\n- Fixed an edge-case error in search-result highlighting for queries containing special characters.\r\n\r\n## ⚡ Performance\r\n\r\n- **Much faster Open Food Facts search.** Searches now query the main (world) database directly instead of fanning out to several slow regional mirror endpoints — cutting each search from up to ~6 network requests down to 2. This speeds up both the Open Food Facts tab and the combined \"All\" tab.\r\n- The \"All\" tab now gives each food source a time budget, so a slow or unresponsive API can no longer stall the whole search.\r\n\r\n## 🔧 Under the hood\r\n\r\n- **Full type-safety pass:** added proper TypeScript types for every food-database API response (FatSecret, USDA, Open Food Facts) and the internal data flow, removing unsafe `any` usage throughout.\r\n- Brought the codebase fully in line with Obsidian's official plugin guidelines (now passes `eslint-plugin-obsidianmd` with zero issues) and updated the build toolchain (TypeScript 5, latest typescript-eslint).\r\n- Improved popout-window and cross-platform compatibility (`activeDocument` and the Obsidian `Platform` API).\r\n- Moved inline styles into CSS classes for better theme and snippet compatibility.\r\n- Set the minimum Obsidian version to **1.4.10** to match the APIs the plugin actually uses.\r\n\r\n> No changes to your data or note format — this release is fully backward compatible.\r\n",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "2.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-28T15:37:43Z",
+      "tag": "2.6.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:7673313206bdc0b7aff3331ceb62b8ff148aaa4a5e9e9d8b5d4979deb5154d19",
-          "downloadCount": 68,
+          "downloadCount": 72,
           "name": "main.js",
           "size": 1329969
         },
         {
           "digest": "sha256:3ba38e54ac1b9e14aa5da7184db32d83fbd60dec1d7e186e056b670e6c4a136f",
-          "downloadCount": 89,
+          "downloadCount": 99,
           "name": "manifest.json",
           "size": 513
         },
         {
           "digest": "sha256:261a76b0e49da1f28108b3a915b381b814bab482ecedcdb7fdb3febaa5a24ada",
-          "downloadCount": 67,
+          "downloadCount": 71,
           "name": "styles.css",
           "size": 195393
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🥗 Macros v2.6.0 — Micronutrients everywhere & a faster, smarter search\r\n\r\nThis release brings full **micronutrient support** to your food searches and notes, and gives the search experience a serious speed and reliability boost.\r\n\r\n### ✨ What's new\r\n\r\n**Micronutrients from every database**\r\nVitamins and minerals are now pulled automatically from all integrated sources — **USDA FoodData Central**, **Open Food Facts**, and **FatSecret** — wherever the data exists. No more manual entry for foods that already have the numbers.\r\n\r\n**See micronutrients right in your search results**\r\nFoods that have micronutrient data now show a clean summary of their vitamins and minerals (per 100 g) directly in the results list, so you can compare options at a glance. Foods without recorded data stay tidy and clutter-free.\r\n\r\n**Saved straight into your notes**\r\nWhen you add a food, its micronutrients are written into the note's frontmatter *and* a readable breakdown section — correctly scaled to your serving size and ready for tracking and aggregation.\r\n\r\n### ⚡ Search improvements\r\n\r\n- **Faster results** — USDA lookups now run in parallel, and Open Food Facts only reaches out to extra regional servers when it actually needs more, cutting load times noticeably.\r\n- **The \"All\" tab is fuller** — it now returns a complete page of results instead of a sparse handful.\r\n- **Infinite scroll that actually works** — just keep scrolling to load more results on any tab; it stops cleanly when there's nothing left.\r\n- **Instant tab switching** — results are cached per tab, so flipping between sources no longer triggers a slow reload.\r\n\r\n### 🌍 Localization\r\nAdded micronutrient labels in **English, Spanish, and Simplified Chinese**.\r\n\r\n---\r\n\r\n**Note:** FatSecret micronutrient coverage depends on your account tier, and many community-contributed Open Food Facts entries simply don't have vitamin/mineral data recorded — in those cases nothing is shown or saved, which is expected.\r\n\r\n💛 As always, thanks for using Macros! Found a bug or have an idea? [Open an issue](https://github.com/JamesCliffordSpratt/macros/issues).",
-      "downloadCount": 68,
+      "downloadCount": 72,
       "draft": false,
       "name": "2.6.0",
       "prerelease": false,
