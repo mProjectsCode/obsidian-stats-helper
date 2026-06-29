@@ -4,8 +4,8 @@
   "description": "Export rendered Markdown tables in Obsidian to PNG, CSV, Excel, and PDF. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "table-exporter",
-  "lastChangedAt": "2026-06-28T07:01:26.961Z",
-  "lastFetchedAt": "2026-06-28T07:01:26.961Z",
+  "lastChangedAt": "2026-06-29T07:02:26.967Z",
+  "lastFetchedAt": "2026-06-29T07:02:26.967Z",
   "manifest": {
     "author": "shaw",
     "authorUrl": "https://github.com/wikty",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:6e82042f4332444d676faaf8e17945751cb7f76447bcfa715c27d92dbedd413e",
-          "downloadCount": 34,
+          "downloadCount": 45,
           "name": "main.js",
           "size": 865048
         },
         {
           "digest": "sha256:46721c4f463ac28ee04dca97eb832f038dda638295e2ee547845e5fe043c3da8",
-          "downloadCount": 34,
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 323
         },
         {
           "digest": "sha256:f59b1ba306dc5fe706126cf1873f0759685c97da7b3354332deeea8eb6cfe3ce",
-          "downloadCount": 33,
+          "downloadCount": 44,
           "name": "styles.css",
           "size": 2150
         }
       ],
       "author": "wikty",
       "description": "### Added\n\n- Bases `Cards` and `List` views now export as one continuous long `PNG` via scroll-stitching. The plugin scroll-walks the virtualized container, captures each viewport, and stitches chunks vertically using a two-tier overlap detector — geometry-derived first (using scroll position), pixel-matching as fallback. A 50-card `Cards` Base now exports as all 50 cards rather than only the visible window.\n- Bases `Cards` and `List` `PDF` export, routed through the existing image-paged `PDF` pagination using the stitched canvas.\n- Live progress notice during scroll-walk shows percentage and chunk count, so users can see the export is making progress instead of feeling frozen.\n- Scroll-position drift detection between capture steps aborts with a clear error message (\"the Bases view was scrolled during capture\") rather than producing a garbled long-image.\n- Safety cap of `250` captured chunks prevents unbounded collection and appends a visible truncation marker when reached. Single-canvas browser limits may still cause an export to fail earlier.\n- Original scroll position is always restored after a long-image export, including when the export aborts due to user scroll or an error.\n- `tests/chunk-overlap.test.ts` — unit coverage for the overlap detection helpers (exact, anti-aliased, blank, mismatched-width, geometry-derived cases).\n- `tests/pdf.test.ts` — regression coverage for the canvas-to-PDF page slicer used by the new visual `PDF` path.\n\n### Changed\n\n- `shouldWarnVisibleSnapshot` now exempts Bases `Cards` and `List` PNG/PDF exports from the \"visible area only\" notice because they are full long-image exports.\n- Bases `Map` PNG/PDF now fails with a clear unsupported message instead of silently generating a file whose MapLibre WebGL layer is blank.\n\n### Notes\n\n- Bases `Map` export is intentionally deferred. Real regression testing with the official Maps plugin showed that the v0.2 DOM path captured controls but left the MapLibre WebGL map layer blank. v0.3 blocks that false-success path until a reliable capture design exists.\n- Known limit: very large Bases (more than ~20–30 viewport-sized chunks) may approach browser canvas height limits (commonly around 16,000 px). The 250-chunk cap prevents unbounded collection but does not guarantee that a single output canvas can be allocated; multi-canvas emit remains a candidate follow-up.\n- CSV / Excel export for `Cards` / `List` / `Map` remains out of scope. These views don't have row semantics, so data extraction is fundamentally different from visual export. Use a Bases `Table` view if you need spreadsheet output.\n- Markdown table and Bases `Table` export paths are unchanged from `0.2.1` and passed PNG/PDF regression testing. Bases `Map` now reports its unsupported WebGL limitation instead of creating a blank-map artifact.",
-      "downloadCount": 34,
+      "downloadCount": 45,
       "draft": false,
       "name": "Table Exporter 0.3.0",
       "prerelease": false,

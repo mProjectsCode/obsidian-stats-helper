@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-06-28T07:01:26.961Z",
-  "lastFetchedAt": "2026-06-28T07:01:26.961Z",
+  "lastChangedAt": "2026-06-29T07:02:26.967Z",
+  "lastFetchedAt": "2026-06-29T07:02:26.967Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b7687559184cb1a37940df303802ef97a4bec622e7286a8360cd8c7b6e1d30e0",
-          "downloadCount": 8,
+          "downloadCount": 23,
           "name": "main.js",
           "size": 134129
         },
         {
           "digest": "sha256:a569ecbf050faa1f4aff4cec6ee06422d9954240ebd1f6d7156faefe42affb20",
-          "downloadCount": 8,
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:48104ed337acf2ad4e0b9718a3a51ca6c518a4446a6e6bfdaa9f1ebb0724c6fa",
-          "downloadCount": 8,
+          "downloadCount": 22,
           "name": "styles.css",
           "size": 10863
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- Placeholder notes for recordings Plaud has not processed yet. When Plaud has a recording but reports it has no transcript or summary available (an in-band server error such as \"start trans task error\", status -12), the importer now writes a placeholder note carrying the recording ID and a link back to Plaud instead of recording a bare failure. A later successful import replaces the placeholder automatically, even under the skip or prompt duplicate policy. Controlled by a new **Write placeholder for unprocessed recordings** setting, on by default. Turn it off to keep such recordings as plain failures with no file written.\n- The import list now hides recordings that are in your Plaud trash, matching the Plaud app. Trashed recordings are usually short accidental clips with no transcript, and were the most common source of \"no content\" import failures. A new **Show trashed recordings** setting (off by default) brings them back when you want to import something you trashed in Plaud but still want in your vault.\n\n### Changed\n\n- Import errors that come from Plaud's own server now say so in plain English. When Plaud returns an error for a request (rather than the plugin failing to read the response), the failure message leads with \"This is a Plaud-side issue, not a problem with the plugin reading the data\". A \"start trans task error\" (status -12) is explained as Plaud having no transcript or summary for the recording, with the most common cause called out: audio with no detectable speech, which Plaud reports as \"No speech detected\". Plaud's raw status and message are kept at the end for troubleshooting.\n\n",
-      "downloadCount": 8,
+      "downloadCount": 23,
       "draft": false,
       "name": "0.13.0",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:85f1d1c78ba4b179b3e52e9682867c42197b3c95595628f38144a3e40be7c994",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 316
         },
@@ -83,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:2d382934b8fc7bf17b814b50cde13f16894adde955aa774979af034d95a5289a",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 127350
         },
         {
           "digest": "sha256:109b982c50e399f9871a248ce5e7d40738a3fe070014788d62c52c38b3dce606",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:48104ed337acf2ad4e0b9718a3a51ca6c518a4446a6e6bfdaa9f1ebb0724c6fa",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 10863
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- Subfolder template for the output folder. A new **Subfolder template** setting files each imported note into a dated subfolder built from the recording date, so a growing library stops piling into one flat folder. Leave it empty to keep the current single-folder layout. Tokens: `{{yyyy}}`, `{{MM}}`, `{{dd}}`, the `{{yyyy-MM}}` shorthand, `{{ww}}` (ISO week number), and `{{Q}}` (calendar quarter). For example, `{{yyyy-MM}}` files a June 2026 recording under `2026-06`, and `{{yyyy}}/W{{ww}}` files by week. Attachments follow their note into the same subfolder. The setting applies to new imports; notes you already imported stay where they are. Re-importing a recording whose template changed updates the existing note in place instead of creating a duplicate.\n- Loading indicator in the recording list while the next page is being fetched as you scroll. It now sits in a footer pinned below the list instead of scrolling away inside it, and the spinner appears the moment the fetch starts (including the background prefetch) rather than flashing only after the data arrives, so a slow load no longer reads as a frozen list.\n\n### Changed\n\n- Plaud's AI keyword list is no longer written to a `keywords:` note property by default. That list can run to hundreds of low-value entries per recording, which buried the few tags that matter and added noise to every note. Turn **Keep AI keywords as note property** back on if you want the list.\n\n### Fixed\n\n- Imported notes were missing their summary on recordings where Plaud's live summary endpoint was unavailable (common on older recordings, where it returns a \"start trans task error\"). The importer looked for the stored summary under the wrong key in the detail data, so it silently found nothing and wrote the note without a summary even though the summary was present. It now reads the stored summary correctly, including the newer format where the summary text is wrapped in a small metadata envelope. A summary that cannot be read for any reason no longer affects the transcript: the note still imports with its transcript and the summary is left out rather than failing or losing the transcript. Re-import an affected recording to backfill the missing summary.\n- Older recordings that failed to import with a Plaud \"start trans task error\" (status -12) now recover from the stored detail data instead of failing outright. The legacy transcript call is treated as best-effort: when it errors but Plaud's detail bundle still holds the transcript or summary, the note imports. A recording with no usable data from either source still reports the original error.\n- A recording whose summary Plaud advertises but cannot deliver (common on older recordings) now imports as long as a transcript exists: the note is written with a \"no summary available\" placeholder instead of failing the whole recording. Recordings with neither a summary nor a transcript still fail rather than writing an empty note.\n- Older recordings that were never \"polished\" now import using their raw transcript. The detail data carries both a raw transcript and a polished one; the importer used to follow only the polished entry, so recordings that had only the raw transcript (and also failed the legacy transcript endpoint) imported as empty failures. The raw transcript is now used as a fallback.\n- Recordings Plaud never transcribed or summarized (for example a raw clip you started but never processed) no longer count as failures. There is nothing to import for them, so they are now reported as a separate \"no content\" skip in the import summary instead of a \"start trans task error\". This is detected from the recording list up front, so these recordings are skipped without the failed lookup.\n- Plaud's internal transcript, outline, and summary data files (gzipped JSON and markdown) are no longer imported as attachments. On some older recordings these blobs appeared in the download map and leaked into the note as broken `…-assets/<id>-fileN.gz` attachment links. They are now filtered out; real attachments such as summary cards and mindmaps still import. Re-import an affected note to clear the stale `.gz` links.\n\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.12.0",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-29T02:05:27.043Z",
-  "lastFetchedAt": "2026-06-28T07:01:26.961Z",
+  "lastChangedAt": "2026-06-29T07:02:26.967Z",
+  "lastFetchedAt": "2026-06-29T07:02:26.967Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,35 +19,65 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.1.1",
     "name": "Vim Motions",
-    "version": "0.19.0"
+    "version": "0.20.0"
   },
   "name": "Vim Motions",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
+          "digest": "sha256:3d5330d32c541d2229caaf1c0a6c8f407719dcb3dca18789c1b07ec6053cb111",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 256291
+        },
+        {
+          "digest": "sha256:f59c6fdea65f21e9759b97f22fe8b1bf04129fba2dff11aae411f50439ec3cb7",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 605
+        },
+        {
+          "digest": "sha256:f483a877e74f1f4bb796ad607336590763591921197bba8a89cab46e2fb5dded",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 8169
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **`let mapleader = \",\"` (comma) and other keys with default Vim bindings not working as leader for EasyMotion** — `unmapDefaultBinding` now passes `{ includeDefaults: true }` to `vim.unmap()`, so built-in codemirror-vim bindings (e.g. `,` → `repeatLastCharacterSearch`, `;` → forward repeat) are actually removed before registering EasyMotion `mapCommand` multi-key sequences. Previously, `vim.unmap()` silently skipped `_isDefault` keymap entries, meaning the default single-key binding consumed the first keystroke before the multi-key sequence (e.g. `,,w`) could accumulate. Space as leader was unaffected because the default `<Space>` binding uses angle-bracket notation which doesn't collide with literal space in `commandMatch`. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **`gg`/`G` and other keymaps intermittently stop working** — comprehensive vim state hardening across the codemirror-vim fork and plugin to prevent keymaps from breaking until app reload. Root causes identified and fixed: stale normal-mode key prefix state persisting across focus changes, global singleton keymap corruption via `unmap()` removing default entries, incomplete `leaveVimMode()` cleanup leaking insert-mode listeners, and async motion race conditions. ([#18](https://github.com/saberzero1/motions/issues/18))\r\n    - **Fork: blur handler resets partial key prefixes** — the CM6 ViewPlugin now registers a `blur` listener on `contentDOM` that calls `clearInputState()` when the editor loses focus in normal mode. A stale prefix like `g` no longer persists across tab switches or modal opens, preventing the next keystroke from being silently swallowed.\r\n    - **Fork: `leaveVimMode()` cleanup hardened** — now removes insert-mode `change`/`keydown` listeners if the editor was destroyed while in insert mode, clears the global `lastInsertModeKeyTimer`, clears `virtualPrompt`, and resets `inputState` before nulling `cm.state.vim`.\r\n    - **Fork: default keymaps protected from `unmap()`** — default keymap entries are tagged with `_isDefault` and a frozen snapshot is stored at module init. `unmap()` now skips default entries unless explicitly requested. New `Vim.resetKeymap()` API restores defaults from the snapshot while preserving user mappings. `mapclear()` updated to use the `_isDefault` flag instead of fragile index-based partitioning.\r\n    - **Fork: async motion generation tracking** — `_commandGeneration` counter on vim state prevents stale async motion callbacks from executing after a newer command has already run. Protects EasyMotion operator-pending mode (`d` + easymotion) from race conditions.\r\n    - **Plugin: pane-switch state reset** — `active-leaf-change` handler now clears pending vim input state on all editors when switching panes, preventing partial commands from leaking across editors.\r\n    - **Plugin: `resetKeymap()` on load** — calls `Vim.resetKeymap()` during plugin `onload()` to ensure a clean keymap baseline on plugin enable/reload, recovering from any prior corruption in the same app session.\r\n\r\n### Added\r\n\r\n- **Which-key leader grouping** — leader key bindings in the which-key overlay are now grouped by prefix key, matching Neovim's which-key plugin behavior. When grouping is enabled (default), pressing the leader key shows collapsed groups (e.g. `t` → `Table (+11)`, `\\` → `EasyMotion (+17)`) instead of listing every binding individually. Pressing a group key drills down to show only bindings within that group. Configurable via **Settings → Vim Motions → Which-key leader grouping** (grouped / flat). ([#27](https://github.com/saberzero1/motions/issues/27))\r\n    - Groups are sorted first in the overlay, followed by ungrouped single-key bindings\r\n    - Group rows are visually distinct (accent color, italic) via the `.vim-motions-which-key-group` CSS class\r\n    - Grouping applies to all completions in \"all partial keys\" mode, not just leader-scoped bindings — any multi-key prefix (`g`, `z`, `[`, `]`, custom mappings) can be grouped\r\n    - Drill-down works in both \"leader key only\" and \"all partial keys\" which-key modes\r\n- **Which-key group labels** — configurable names for key groups in the which-key overlay. Prefix keys can be labeled (e.g. `\\t` → `Table`, `gr` → `LSP`) instead of showing the generic `+N keys` text. Built-in features register default labels (Table, EasyMotion) that can be overridden. Labels support `<leader>` token expansion (e.g. `<leader>t` resolves to the actual leader key + `t`). Configurable via **Settings → Vim Motions → Which-key group labels**.\r\n- E2E test suite `test/specs/vim-state-hardening.e2e.ts` with 7 tests: blur prefix recovery, `gg`/`G` after plugin reload, keymap protection via `unmap()`, `resetKeymap()` recovery after force-unmap, `leaveVimMode` cleanup from insert mode\r\n- Fork unit tests: 10 new tests for async motion generation tracking (superseded motion discarded, superseded delete discarded), keymap protection (`unmap` skips defaults, `unmap` removes user mapping preserving default, `unmap gg` preserves default, `resetKeymap` restores after force-unmap, `resetKeymap` preserves user mappings, `mapclear` preserves defaults), `leaveVimMode` cleanup (clears input state, cleanup from insert mode)\r\n- Fork test count: 1672 (up from 1660)\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added sections for blur handler, `leaveVimMode` cleanup hardening, default keymap protection (`_isDefault` tagging, `resetKeymap()`, `mapclear()` update), async motion generation tracking, `clearInputState` API exposure\r\n- `KNOWN_LIMITATIONS.md`: added \"Vim state hardening\" section documenting the multi-layered defense against intermittent keymap breakage\r\n- `README.md`: added \"Improved vim state reliability\" bullet to recommended setup section\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.19.0...0.20.0",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.20.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T00:04:31Z",
+      "tag": "0.20.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:b5bc3cf897e442138e04c400f6aa5e7e8ec23623af4a4ebc6a124ab76fa8adab",
-          "downloadCount": 11,
+          "downloadCount": 24,
           "name": "main.js",
           "size": 250472
         },
         {
           "digest": "sha256:2291ee91c9613225363928c7ad2577f681057f0d77490789f6845586d26a7c2e",
-          "downloadCount": 11,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:e4be2c2a13345e3e4773436aba9d131cdc140a70a39512949f282f28ad4ae00e",
-          "downloadCount": 11,
+          "downloadCount": 23,
           "name": "styles.css",
           "size": 8053
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **`k`/`gk` do not enter frontmatter navigation** — both `k` and `gk` now enter the properties panel when the cursor is at the top of a note. Two fixes: (1) the fork's `moveByDisplayLines` was missing the `focusBefore` check that `moveByLines` already had, and (2) the fork's `findPosV` frontmatter detection only triggered when the cursor moved into the frontmatter region (`pos.line < start.line`), but when the properties widget replaced the frontmatter lines, the cursor couldn't move up at all — now also triggers at the boundary (`pos.line === start.line`). Additionally, the plugin's `tableAwareMoveUp` motion (which overrides `k` for table separator skipping) bypassed `findPosV` entirely — it now delegates to `findPosV` when the target line is inside the frontmatter. ([#25](https://github.com/saberzero1/motions/issues/25))\r\n- **`gk`/`gj` over headings resets cursor to column 0** — `gk` (and `gj`) no longer jumps to the beginning of the line when crossing Obsidian headings in live preview. Headings are rendered with larger fonts, making them visually taller. The fork's `findPosV` widget-detection heuristic falsely treated the multi-line jump caused by the heading's height as a skipped replaced widget (e.g. MathJax) and overrode the cursor position. The heuristic now checks for actual replaced/widget decorations (`dec.point === true`) before activating, and a `posAtCoords` fallback corrects cases where `moveVertically` misresolves the goalColumn on decorated lines. ([#26](https://github.com/saberzero1/motions/issues/26))\r\n\r\n### Added\r\n\r\n- **`gD` — open link in new tab** — `gD` opens the link under the cursor in a new tab, using the same bracket-aware link detection as `gd`. External URLs open in the browser. ([#23](https://github.com/saberzero1/motions/issues/23))\r\n- **`<C-w>gd` / `<C-w>gD` — open link in split** — `<C-w>gd` opens the link under the cursor in a horizontal split, `<C-w>gD` in a vertical split. Follows the Neovim `<C-w>s`/`<C-w>v` convention (lowercase = horizontal, uppercase = vertical). ([#23](https://github.com/saberzero1/motions/issues/23))\r\n- E2E tests for `gD`, `<C-w>gd`, `<C-w>gD`: link-on-wikilink navigation (new tab, horizontal split, vertical split), no-op outside links, leaf count verification\r\n- E2E tests for `gk`/`gj` over headings: cursor horizontal position preserved across single and multiple headings, symmetry between `gk` and `gj`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: updated \"Properties navigation\" section with `k`/`gk` frontmatter fix and `tableAwareMoveUp` interaction\r\n- `KNOWN_LIMITATIONS.md`: added `gk` frontmatter entry to behavioral deviations table\r\n- `DIFFERENCES.md` (fork): updated \"Properties navigation\" section with boundary detection and dual-case `focusBefore` logic\r\n- `KNOWN_LIMITATIONS.md`: updated \"Visual line navigation and replaced widget decorations\" section with heading-aware fix and `posAtCoords` fallback\r\n- `KNOWN_LIMITATIONS.md`: updated `gj`/`gk` widgets behavioral deviation entry with heading decoration handling\r\n- `README.md`: added `gD`, `<C-w>gd`, `<C-w>gD` to workspace keyboard control table\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.18.0...0.19.0",
-      "downloadCount": 11,
+      "downloadCount": 24,
       "draft": false,
       "name": "0.19.0",
       "prerelease": false,
@@ -58,26 +88,26 @@
       "assets": [
         {
           "digest": "sha256:a1ab27df075a67682a6337c4d0ac595784a43a7e6e83a5b046276f25a2f637c4",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "main.js",
           "size": 248663
         },
         {
           "digest": "sha256:ef6949fb88f3906ef3cb8a61c67a609f6ce6ac352c7e86f6934c819c2ffeb390",
-          "downloadCount": 2,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:e4be2c2a13345e3e4773436aba9d131cdc140a70a39512949f282f28ad4ae00e",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 8053
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **EasyMotion dimming not visible** — the shade overlay (`.vim-motions-easymotion-shade`) was invisible because it was a child of the zero-size absolutely-positioned wrapper div. The shade is now appended directly to `scrollDOM` as a sibling of the wrapper, so its `right: 0; bottom: 0` resolves against the full editor dimensions. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion labels overlapping on dense text** — labels for adjacent targets (e.g., `<leader><leader>w` on closely spaced words) now stack vertically instead of rendering on top of each other. `renderLabels()` tracks placed label bounding boxes and offsets new labels below any overlap. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion labels on hidden text in Live Preview** — word-start targets inside hidden markdown syntax (e.g., the URL portion of `[text](url)`) no longer receive labels. `filterVisibleTargets()` deduplicates targets whose `coordsAtPos()` resolves to the same pixel position, which occurs when multiple document offsets map to the boundary of a replaced decoration. ([#6](https://github.com/saberzero1/motions/issues/6))\r\n- **EasyMotion dimming setting required app reload** — toggling **Settings → Vim Motions → EasyMotion dimming** now takes effect immediately. The `dimming` parameter was changed from a captured `boolean` to a `() => boolean` getter, so the shade state is read at motion invocation time instead of registration time.\r\n\r\n### Added\r\n\r\n- **Label font size setting** — configurable font size for EasyMotion and hint mode labels via **Settings → Vim Motions → Label font size** (10–20px slider, default: 14). EasyMotion collision detection scales proportionally with the configured size.\r\n- **Label color customization via CSS** — label colors are now overridable via CSS custom properties. EasyMotion: `--vim-motions-em-bg`, `--vim-motions-em-fg`. Hint mode: `--vim-motions-hint-bg`, `--vim-motions-hint-fg`. All default to `--text-accent` / `--text-on-accent`.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.17.0...0.18.0",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.18.0",
       "prerelease": false,
@@ -94,7 +124,7 @@
         },
         {
           "digest": "sha256:a2cf8c86e6013c2939ca21d34fa4c0c116a22169caa0b95fa8941b7f65901f02",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 605
         },
@@ -124,7 +154,7 @@
         },
         {
           "digest": "sha256:450b8881f646183b107927000fa1ee3148cc2831e59507995c0c6650347f5c06",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 605
         },
@@ -625,6 +655,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-06-29T02:05:27.043Z",
+  "removedAt": null,
   "repo": "saberzero1/motions"
 }

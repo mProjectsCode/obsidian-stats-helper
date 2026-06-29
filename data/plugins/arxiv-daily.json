@@ -4,8 +4,8 @@
   "description": "Daily arXiv tracker that filters and summarizes papers via LLM into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "arxiv-daily",
-  "lastChangedAt": "2026-06-28T07:01:26.961Z",
-  "lastFetchedAt": "2026-06-28T07:01:26.961Z",
+  "lastChangedAt": "2026-06-29T07:02:26.967Z",
+  "lastFetchedAt": "2026-06-29T07:02:26.967Z",
   "manifest": {
     "author": "Da-Chuan Tian",
     "description": "Daily arXiv tracker that filters and summarizes papers via LLM into your vault.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:0bb2f7d6c3ffc7a34831bc2d72aa969e4f5fbd3904c6b209a6eaead3691f854d",
-          "downloadCount": 9,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 711119
         },
         {
           "digest": "sha256:8ff157ee7ab8faaf8644924b7716e047bc08bfecd20a84d59eaf18e264d8f580",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 256
         },
         {
           "digest": "sha256:fa6928a88a3aaecae1d287b6e7b60b0dee3acff1e19642f3f8479e6f6e48fa35",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 21806
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 0.1.20\n\n### 🐛 Bug Fixes\n\n- **fix(llm): use Obsidian requestUrl for fetchModels**\n  \n  修复了使用 sub2api 等第三方 API 代理时，点击 \"Get Models\" 按钮报错 `Failed to fetch models from any endpoint` 的问题。\n\n  **Root Cause:** `fetchModels()` 直接使用了浏览器原生 `fetch()` 发送 HTTP 请求。在 Obsidian (Electron) 环境中，原生 `fetch()` 受到 CORS（跨域资源共享）和混合内容安全策略的限制。对于 HTTP（非 HTTPS）端点（如自建的 sub2api 服务），请求会被 Electron 安全层静默拦截，导致所有候选 URL 均失败。\n\n  **Fix:** 将 `fetchModels()` 改为使用 Obsidian 提供的 `requestUrl` API（通过 `HttpClient` adapter 传递）。`requestUrl` 绕过 CORS 和混合内容限制，与插件中所有其他 HTTP 请求（如 arXiv 论文抓取）保持一致。\n\n  **Affected scenarios:**\n  - 使用 HTTP 地址的 sub2api / chat2api 等 API 代理\n  - 自建的 OpenAI 兼容 API 服务（无 HTTPS）\n  - 任何未配置 CORS 头的第三方 LLM 端点\n\n### 📦 Internal\n\n- `LlmClient` 构造函数新增可选参数 `http?: HttpClient`\n- `ArxivDailyPlugin` 新增 `getHttpClient()` 公开方法\n- CLI runtime 也同步传入 `HttpClient`\n\n**Full Changelog**: https://github.com/tdccccc/arxiv-daily/compare/0.1.19...0.1.20",
-      "downloadCount": 9,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.1.20",
       "prerelease": false,
