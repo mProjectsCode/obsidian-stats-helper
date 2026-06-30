@@ -4,8 +4,8 @@
   "description": "Visualise the hierarchy of your vault using a breadcrumb trail or matrix view.",
   "errors": [],
   "id": "breadcrumbs",
-  "lastChangedAt": "2026-06-29T22:02:26.997Z",
-  "lastFetchedAt": "2026-06-29T22:02:26.997Z",
+  "lastChangedAt": "2026-06-30T22:05:27.004Z",
+  "lastFetchedAt": "2026-06-30T22:05:27.004Z",
   "manifest": {
     "author": "MichaelPPorter",
     "authorUrl": "https://github.com/michaelpporter",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Breadcrumbs",
-    "version": "4.19.4"
+    "version": "4.21.0"
   },
   "name": "Breadcrumbs",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:05a93019f3a8bea5d2c16278be2e44ef1dea28a2d594db6271fd10bdebc9062c",
-          "downloadCount": 150,
+          "digest": "sha256:26544fed4aae0a8cd4e1f6e6f927bfc8cbf4769c6127bdf2b170b652de772496",
+          "downloadCount": 60,
           "name": "main.js",
-          "size": 1898236
+          "size": 1903802
         },
         {
-          "digest": "sha256:646567ddd2ebdaabb597418d669c975190d706b91b5e1154e719499095084988",
-          "downloadCount": 417,
+          "digest": "sha256:76c51d6b23aa58bca02ec207d60914ba44b037aecca20666f74dc13779d53a2a",
+          "downloadCount": 137,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:a77b65859f74a8302c6708701dc3f70be315f086cb1d4e1106788d41c31e986e",
-          "downloadCount": 147,
+          "downloadCount": 60,
+          "name": "styles.css",
+          "size": 5224
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Features\n\n- **Edge audit — Ignore paths** — the edge audit report now has an **Ignore paths** setting (**Settings → Commands → Edge audit**). Notes inside a listed folder or path are left out of the *whole* report — orphans, dangling edges, and the field checks alike. Matching uses folder semantics (one path per line; a note matches if its path equals, or is inside, a listed path), so `Templates` covers everything under that folder. It's report-only: unlike the global **Excluded folders** setting, ignored notes still get their breadcrumb edges in the graph — they just don't clutter the audit.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.20.0...4.21.0\n",
+      "downloadCount": 137,
+      "draft": false,
+      "name": "4.21.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T09:21:06Z",
+      "tag": "4.21.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e324ea11055aa6907f0c4d8de87d65e18f3cb93aac0c2a842943859561a22cf6",
+          "downloadCount": 43,
+          "name": "main.js",
+          "size": 1902920
+        },
+        {
+          "digest": "sha256:1b3f403ad794af895324d9b489dc281415200e6a55e883eccb745b6cf46b7aa4",
+          "downloadCount": 101,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:a77b65859f74a8302c6708701dc3f70be315f086cb1d4e1106788d41c31e986e",
+          "downloadCount": 43,
+          "name": "styles.css",
+          "size": 5224
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Features\n\n- **Generate edge audit report** — a new command that walks your graph and writes a read-only Markdown report to a note in your vault (default `Breadcrumbs Edge Audit.md`; re-running overwrites it). It's purely diagnostic — it never rewrites your frontmatter. The report surfaces:\n  - **Unused fields** — edge fields defined in settings that produce no edges.\n  - **Implied-only fields** — fields only ever derived as implied edges, never explicit (expected for the reverse half of a transitive pair like `down`/`prev`).\n  - **Mergeable fields** — two or more fields whose explicit edges are strictly identical, so they're interchangeable.\n  - **Orphan notes** — notes with no breadcrumb edges in or out.\n  - **Dangling edges** — edges pointing at a note that doesn't exist.\n\n  Orphans and dangling targets render as wikilinks for click-through. Configure the output path under **Settings → Commands → Edge audit**.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.19.4...4.20.0\n",
+      "downloadCount": 101,
+      "draft": false,
+      "name": "4.20.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T23:16:23Z",
+      "tag": "4.20.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:05a93019f3a8bea5d2c16278be2e44ef1dea28a2d594db6271fd10bdebc9062c",
+          "downloadCount": 155,
+          "name": "main.js",
+          "size": 1898236
+        },
+        {
+          "digest": "sha256:646567ddd2ebdaabb597418d669c975190d706b91b5e1154e719499095084988",
+          "downloadCount": 433,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:a77b65859f74a8302c6708701dc3f70be315f086cb1d4e1106788d41c31e986e",
+          "downloadCount": 152,
           "name": "styles.css",
           "size": 5224
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Security\n\n* Pinned `undici` to `>=6.27.0` to clear an advisory flagged by the Obsidian community scanner. It was pulled in transitively (`markmap-lib` → `markmap-html-parser` → `cheerio` → `undici@6.26.0`) and is tree-shaken out of the shipped `main.js`, so there was no runtime exposure — but the lockfile reference still had to be moved out of the vulnerable range.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.3...4.19.4\n",
-      "downloadCount": 417,
+      "downloadCount": 433,
       "draft": false,
       "name": "4.19.4",
       "prerelease": false,
@@ -64,7 +124,7 @@
         },
         {
           "digest": "sha256:dc04a4f4586aed744a360cffe97e19578f82d055b8d7f89332ea5738d18cb5bb",
-          "downloadCount": 45,
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 478
         },
@@ -77,7 +137,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "A small quality-of-life release for date-note (and deeply-nested) trails.\n\n## Changed\n\n- **The trail view's grid now defaults to the `longest` path selection.** Date notes link up to *every* ancestor level at once (year, quarter, month, week — all directly), so the old `all` default drew every redundant path and the trail rendered as a cluttered fan of repeated ancestors. `longest` keeps only the deepest chain — `2026 → 2026-Q2 → 2026-06 → 2026-W26` — so the trail reads as a clean line.\n- **Existing trails keep their saved selection** — flip it yourself via the trail's selection dropdown (the middle control) if you want the cleaner view.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.2...4.19.3\n",
-      "downloadCount": 45,
+      "downloadCount": 46,
       "draft": false,
       "name": "4.19.3",
       "prerelease": false,
@@ -94,7 +154,7 @@
         },
         {
           "digest": "sha256:7548531e8936602fc2a7a95f3121bb625b8ed0dd13bdd6428688f1f82cf348f6",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 478
         },
@@ -107,7 +167,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "A maintenance release — two user-facing bug fixes, plus six internal refactors that consolidate duplicated logic into small, tested seams (no behaviour change).\n\n## 🐛 Fixed\n\n- **The tree view's \"Merge fields\" toggle was inverted** — it separated fields when set to merge, and vice versa. It now matches its label (and the trail-view / codeblock behaviour). If you'd used it before, it will feel flipped from what you're used to — that's the fix.\n- **Renaming or deleting an edge field now updates the Dataview builder's default field.** Previously the rename/delete cascade skipped the Dataview source's default field, so it kept pointing at the old (now-invalid) field name until you fixed it by hand.\n\n## 🧹 Changed (internal — behaviour-preserving)\n\n- The seven explicit edge builders that resolve a single field from frontmatter now share one `read_edge_field` helper, and invalid-field errors consistently name the `BC-…-field` key.\n- The `typed_link` builder's inline-field parsing is now a pure, unit-tested `parse_inline_field` helper (a redundant dedup layer was removed).\n- The Tree, Matrix, and Trail views share one `useViewSettings` helper for their settings mirror + loop-safe writeback. As a side effect, the views no longer write settings to disk on mount (only on an actual edit).\n- Settings-panel callbacks route their post-change side effects through one `commitSettings(policy)` helper instead of ~140 callbacks each hand-pairing save with rebuild/refresh.\n- The WASM graph traversal is reached through a small TS facade (`traverse` / `with_traversal` / `sort_traversal`); `walk_to_roots` was extracted from the tree view. Both are now unit-tested.\n- The free-on-change/unmount lifecycle for derived WASM objects is owned by one `useOwned` rune helper instead of an identical effect hand-copied across 8 view components.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.1...4.19.2\n",
-      "downloadCount": 14,
+      "downloadCount": 15,
       "draft": false,
       "name": "4.19.2",
       "prerelease": false,
@@ -118,26 +178,26 @@
       "assets": [
         {
           "digest": "sha256:013b24f90ecc1315d35fe8245029ff1c75edb8e56211f5d125a36fd92ae89774",
-          "downloadCount": 419,
+          "downloadCount": 420,
           "name": "main.js",
           "size": 1898579
         },
         {
           "digest": "sha256:6aa184c240da24cb956933aad59fe2c08d4b698c605bef611910a4cffb91ace8",
-          "downloadCount": 1936,
+          "downloadCount": 1938,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:eae0a43f03174b75d9100bcdab3c23c5a0d2b426966b4c6248e08f47cbb18da4",
-          "downloadCount": 401,
+          "downloadCount": 402,
           "name": "styles.css",
           "size": 4755
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- **Export to canvas** — a new command that lays out a note's neighbourhood as a native JSON Canvas (`.canvas`). Pick which edge field-groups to follow and the depth, choose left-to-right or top-to-bottom layout, and the canvas is built as a tidy tree with each parent centred over its children. Defaults are configurable under **Settings → Commands → Create canvas**; re-exporting an existing canvas prompts to overwrite or create a new one.\n- **Jump to neighbour (picker)** — a fuzzy-suggest command listing all of the active note's neighbours (grouped by field) to jump to, complementing the existing \"jump to first neighbour\" commands.\n- **Per-field jump commands** — \"Jump to first neighbour by field:`<field>`\" is now registered for every edge field, so directions like `up`/`down`/`next`/`prev` can each be bound to their own hotkey.\n\n## Fixed\n\n- Johnny.Decimal **sibling edges now work at the category level** (e.g. `11`↔`12` under area `10`), not just for delimited items (`11.01`↔`11.02`). The sibling grouping now shares the same parent resolution as the up-edge builder.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.19.0...4.19.1",
-      "downloadCount": 1936,
+      "downloadCount": 1938,
       "draft": false,
       "name": "4.19.1",
       "prerelease": false,
@@ -154,7 +214,7 @@
         },
         {
           "digest": "sha256:bef95aa5d75e2d66d12286548acc4fbf78c30b3985f366ff2706989ce982bb5e",
-          "downloadCount": 245,
+          "downloadCount": 247,
           "name": "manifest.json",
           "size": 478
         },
@@ -167,7 +227,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Removed\n\n- Removed the **`type: graph`** codeblock and its **`exclude-folders`** option (both added in 4.18.0). A whole-vault graph quickly exceeds Mermaid's edge limit and freezes large vaults, so the feature needs a rethink before it returns. Existing `type: graph` blocks now report an invalid type — switch to `tree`, `mermaid`, or `markmap`.\n\n### Changed\n\n- Codeblock `from:` **folder queries now match case-insensitively** (e.g. `from: '\"projects\"'` matches a `Projects/` folder), mirroring Dataview.\n- `type: markmap` with `from:` now **keeps the map within the matched notes** instead of following edges out into the rest of the vault.\n- A `breadcrumbs` codeblock with no `depth:` now **defaults to depth `[0, 5]`** instead of unbounded, so traversals on large vaults no longer hang.\n\n### Performance\n\n- Codeblock tree traversal no longer clones its ancestor set at every node (O(n²) → O(n) allocations), speeding up deep or wide trees.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.18.1...4.19.0\n",
-      "downloadCount": 245,
+      "downloadCount": 247,
       "draft": false,
       "name": "4.19.0",
       "prerelease": false,
@@ -178,26 +238,26 @@
       "assets": [
         {
           "digest": "sha256:8de07375c7bf34daa377babc250d2c64910113ececaaeba2f4059b708cbc2d99",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 1893370
         },
         {
           "digest": "sha256:089857f935d002c984a745a9b600e3d7579d80c8d11536238c69dd50e396d863",
-          "downloadCount": 35,
+          "downloadCount": 38,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:eae0a43f03174b75d9100bcdab3c23c5a0d2b426966b4c6248e08f47cbb18da4",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 4755
         }
       ],
       "author": "github-actions[bot]",
       "description": "Maintenance release — dependency updates and a security pin. No functional changes for end users.\n\n## Security\n\n- Pinned the transitive `vite` dev-dependency to **8.0.16**, clearing two advisories ([GHSA-v6wh-96g9-6wx3](https://github.com/advisories/GHSA-v6wh-96g9-6wx3), [GHSA-fx2h-pf6j-xcff](https://github.com/advisories/GHSA-fx2h-pf6j-xcff)) affecting `8.0.0`–`8.0.15`. Both are Windows dev-server issues; `vite` is only used to run the test suite and is never part of the shipped plugin, so **end users were never exposed**.\n\n## Build\n\n- Bumped JavaScript dev-dependencies (eslint, esbuild, vitest, tailwindcss, typescript-eslint and others) and the Rust/WASM crates (`itertools` 0.15, `smallvec`, `hashbrown`), and regenerated the committed `wasm/pkg/` bindings.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.18.0...4.18.1",
-      "downloadCount": 35,
+      "downloadCount": 38,
       "draft": false,
       "name": "4.18.1",
       "prerelease": false,
@@ -214,7 +274,7 @@
         },
         {
           "digest": "sha256:551727ff2b41b3153bb88489169457f3646bbcef0c59c901846e151e0b651c52",
-          "downloadCount": 150,
+          "downloadCount": 152,
           "name": "manifest.json",
           "size": 478
         },
@@ -227,7 +287,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- **New codeblock `type: graph`** — renders the whole vault (or a `from:`-scoped subset) as one Mermaid graph, instead of traversing out from a single note. Useful for an overview MOC or seeing a folder/tag's structure at a glance.\n- **`exclude-folders`** option for `type: graph` — drop folders from the graph, additive to the global Excluded folders setting (no vault-wide config change needed).\n- **Dataview Notes** now have a settings page with a configurable default field, used when a note sets `BC-dataview-note-query` without `BC-dataview-note-field`.\n\n## Changed\n\n- The codeblock `dataview-from` field is renamed to **`from`**. The name is now misleading — the Dataview dependency was removed, and Breadcrumbs parses the `#tag` / `\"folder\"` / `[[link]]` query itself. The old `dataview-from` still works as a deprecated alias and logs a console warning.\n- The Edge fields **Hide in views** toggle is renamed **Hide in side views** (it only affects the Matrix and Tree side panels).\n- The **Self is sibling** control moved from the Edge fields page to the Implied relations page.\n\n## Removed\n\n- The unused `traverse_note` default-field setting and the dead `content` / `field-prefix` codeblock fields.\n\n## Fixed\n\n- Renaming or removing an edge field now updates *every* place that referenced it — including sibling-field defaults (tag/dendron/Johnny.Decimal) and date-note period fields — so no setting is left pointing at a renamed or deleted field.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.17.0...4.18.0",
-      "downloadCount": 150,
+      "downloadCount": 152,
       "draft": false,
       "name": "4.18.0",
       "prerelease": false,
@@ -244,7 +304,7 @@
         },
         {
           "digest": "sha256:b8aa748ba6ce056b3182a280a3172622d7d59aa9e27d6ddc80f21dbba5ba84e6",
-          "downloadCount": 760,
+          "downloadCount": 762,
           "name": "manifest.json",
           "size": 478
         },
@@ -257,7 +317,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- New per-edge-field **Hide in views** toggle (Settings → Edge fields). A field marked hidden stays in its groups, codeblocks, and the graph, but is no longer rendered in the Matrix and Tree side views — handy for structural fields you don't want cluttering the panels (#132).\n\n## Fixed\n\n- Removing an edge field now also drops any transitive implied-relation rules that referenced it and clears edge-source default-field settings that pointed at it. Previously those references dangled, and a stale reverse-edge rule could surface a phantom field in the views.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.16.1...4.17.0",
-      "downloadCount": 760,
+      "downloadCount": 762,
       "draft": false,
       "name": "4.17.0",
       "prerelease": false,
@@ -274,7 +334,7 @@
         },
         {
           "digest": "sha256:9ce22f717f6e809a18e8e3cf9d2f4f497d635e2803c93fffb912506bbcc7c123",
-          "downloadCount": 30,
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 478
         },
@@ -287,7 +347,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Build\n\n* Code-quality cleanup, no functional change: removed redundant non-null assertions in the list-note section resolver, switched an array type to `T[]` syntax, and capitalized a settings placeholder to satisfy the Obsidian UI lint rule. `src/` now passes ESLint with no `@typescript-eslint` warnings.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.16.0...4.16.1",
-      "downloadCount": 30,
+      "downloadCount": 32,
       "draft": false,
       "name": "4.16.1",
       "prerelease": false,
@@ -298,26 +358,26 @@
       "assets": [
         {
           "digest": "sha256:ccea294418d38dac83f81b0d185715dcd6187c2e05e596acc4819dd564dcc871",
-          "downloadCount": 63,
+          "downloadCount": 67,
           "name": "main.js",
           "size": 1892477
         },
         {
           "digest": "sha256:9dddbea53cd07556890e6ba4634cde0c470575e90ecfd7fe4cd7bd3565c1e19c",
-          "downloadCount": 85,
+          "downloadCount": 91,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:7b7f8e2d52c76e4b389afc81281953a61319f28311366b2b68bf7d208a723402",
-          "downloadCount": 63,
+          "downloadCount": 67,
           "name": "styles.css",
           "size": 4755
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n* **List Note section scoping** — add `BC-list-note-section: \"<heading>\"` to a List Note's frontmatter to read only the list under that heading. The section runs to the next equal-or-higher-level heading (or end of file); without the field the whole note is read as before (#363).\n* **Excluded folders** — new global setting (Settings → Breadcrumbs → Excluded folders). Notes inside a listed folder are skipped by every edge builder. One path per line; matching respects folder boundaries (#358).\n* **Per-link List Note exclusion** — `BC-list-note-exclude`, a frontmatter list of wiki-links that stay in the list without becoming child edges. Useful for reference/see-also links (#365).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.15.2...4.16.0",
-      "downloadCount": 85,
+      "downloadCount": 91,
       "draft": false,
       "name": "4.16.0",
       "prerelease": false,
@@ -334,7 +394,7 @@
         },
         {
           "digest": "sha256:6003e9b7b61c00b0a2342f850aa9b838812b18d2eef81bbb8e860fd0721dac7d",
-          "downloadCount": 488,
+          "downloadCount": 490,
           "name": "manifest.json",
           "size": 478
         },
@@ -347,7 +407,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Fixed\n\n- Settings sub-pages (Edge fields, Tag notes, and every other section) rendered blank — title only, no controls — on Obsidian 1.13.1. Each sub-page now renders through the documented `SettingPage` page factory instead of the previous workaround (#713).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.15.1...4.15.2",
-      "downloadCount": 488,
+      "downloadCount": 490,
       "draft": false,
       "name": "4.15.2",
       "prerelease": false,
@@ -364,7 +424,7 @@
         },
         {
           "digest": "sha256:6fead3778b00fb43110af4ba37f1505110f1e1623105723881644af958207979",
-          "downloadCount": 655,
+          "downloadCount": 656,
           "name": "manifest.json",
           "size": 478
         },
@@ -377,7 +437,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Fixed\n\n- Detect Dataview inline fields wrapped in parentheses or brackets — `(down:: [[Note]])` and `[down:: [[Note]]]` now build edges (with or without a space after `::`), matching how Dataview itself parses these forms (#710).\n\n## Build\n\n- Bump JS dev dependencies (svelte-check 4.6, svelte 5.56.3, typescript-eslint 8.60.1, @types/node 25.9.2).\n- Add `svelte.config.mjs` so `svelte-check` 4.6 reads the Svelte config directly.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.15.0...4.15.1",
-      "downloadCount": 655,
+      "downloadCount": 656,
       "draft": false,
       "name": "4.15.1",
       "prerelease": false,
@@ -394,7 +454,7 @@
         },
         {
           "digest": "sha256:928468b698180acd28a93f97e0f43069066c8cbc9453937b223c0589bf535a36",
-          "downloadCount": 665,
+          "downloadCount": 666,
           "name": "manifest.json",
           "size": 479
         },
@@ -407,7 +467,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## ⚠ Breaking change\n\nBreadcrumbs now requires **Obsidian 1.13.0 or later**. If you're still on Obsidian 1.12, stay on [4.14.2](https://github.com/michaelpporter/breadcrumbs/releases/tag/4.14.2) — the last release that supports 1.12. Fixes for the 1.12 line are maintained on the [`1.12-compat`](https://github.com/michaelpporter/breadcrumbs/tree/1.12-compat) branch.\n\n## Features\n\n- **Searchable, navigable settings.** The settings tab now uses Obsidian 1.13's declarative settings API — every section appears in the global settings search and opens as its own page. The Breadcrumbs tab also has its own icon in the settings list.\n- **Reorganised settings.** Views lead with the in-note **Page** views (Trail, Previous/next) before the sidebar Matrix and Tree views. Edge sources are grouped by how they work: content you write (Tag, List), then names and paths (Dendron, Johnny.Decimal, Date, Regex), then link traversal (Traverse).\n- **Entry descriptions.** Every settings entry now has a short description explaining what it does.\n\n## Under the hood\n\n- Removed the legacy imperative `display()` settings path; the tab renders entirely through `getSettingDefinitions()`.\n- Expanded the README Security & Privacy disclosures (network calls, WASM module, exported linear memory, `new Function`).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.14.2...4.15.0",
-      "downloadCount": 665,
+      "downloadCount": 666,
       "draft": false,
       "name": "4.15.0",
       "prerelease": false,
@@ -418,26 +478,26 @@
       "assets": [
         {
           "digest": "sha256:e79d923ca0b4b1c952d9d030937a48b2695c9f84aa65272f5e2a6d34cbf141ea",
-          "downloadCount": 5733,
+          "downloadCount": 5920,
           "name": "main.js",
           "size": 1891540
         },
         {
           "digest": "sha256:307e8844e9084e7fa35f55919aadc799ba6b993da0c023439e8a71188a2330a2",
-          "downloadCount": 5961,
+          "downloadCount": 6148,
           "name": "manifest.json",
           "size": 479
         },
         {
           "digest": "sha256:201903c4455a6b82ca2041c891bf785aaf8a5b2eebd5b71b470310f5c77b4212",
-          "downloadCount": 5706,
+          "downloadCount": 5893,
           "name": "styles.css",
           "size": 4820
         }
       ],
       "author": "github-actions[bot]",
       "description": "Internal maintenance release — no user-facing behavior changes.\n\n### Performance\n\n- Debounce side/page view setting writes (Tree View, Matrix, Trail View) so rapid control changes coalesce into a single save instead of hitting disk on every change.\n- Index date-note period lookups with a basename map, replacing nested linear scans (O(n·m) → O(n)) during graph rebuilds.\n- Debounce the opt-in \"rebuild graph on layout change\" trigger so it no longer rebuilds on every editor cursor move or scroll.\n\n### Refactors\n\n- Extract a shared `validate_edge_field` helper used across all explicit edge builders.\n- Replace untyped `any` casts on Obsidian/Dataview internals with typed shapes.\n- Remove dead code, including the unused Dataview file-source path. No effect on the `dataview-from` codeblock feature.\n\n### Tests\n\n- Add unit tests for the date, list, folder, dataview, and traverse note builders.\n\n### Chores\n\n- Address Obsidian community plugin scorecard lint findings, including scoping the lint-suppression header in the generated WASM type declarations.\n- Update funding links (GitHub Sponsors, Buy Me a Coffee).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.14.1...4.14.2\n",
-      "downloadCount": 5961,
+      "downloadCount": 6148,
       "draft": false,
       "name": "4.14.2",
       "prerelease": false,
@@ -520,7 +580,7 @@
         },
         {
           "digest": "sha256:ca06f4c97feb1900e692fcc928fa42a72a5c77243d7ef61f71114bf6119a07b2",
-          "downloadCount": 70,
+          "downloadCount": 71,
           "name": "manifest.json",
           "size": 399
         },
@@ -533,7 +593,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Chores\n\n- **Dependency updates** — bumped `@types/obsidian-typings` alias from `obsidian-typings@^3.16.6` to `^6.13.0`, matching the runtime dep. Added `package-lock.json` for npm audit compatibility. Reduces npm audit findings from 12 to 3 (remaining 3 are SSR-only Svelte vulns inside `obsidian-calendar-ui`, unfixable without an upstream `obsidian-dataview` fix).",
-      "downloadCount": 70,
+      "downloadCount": 71,
       "draft": false,
       "name": "4.13.11",
       "prerelease": false,
@@ -1054,26 +1114,26 @@
       "assets": [
         {
           "digest": "sha256:274f877d9227dc743cecdb0793848143ff4cd360f140780515a3ffbcb0c792d1",
-          "downloadCount": 741,
+          "downloadCount": 742,
           "name": "main.js",
           "size": 1249509
         },
         {
           "digest": "sha256:ff77978180dda216abdb4c5ad603cee8877b2fab5eafd99f31bdcfb053d2aca3",
-          "downloadCount": 895,
+          "downloadCount": 896,
           "name": "manifest.json",
           "size": 395
         },
         {
           "digest": "sha256:c3383afc5b6a88626b6e3d1e746baf640f36827edd2081db75e15e60035fe85e",
-          "downloadCount": 738,
+          "downloadCount": 739,
           "name": "styles.css",
           "size": 4339
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bug Fixes\n\n- **Johnny.Decimal area→category edges now resolve** — categories like `11 Finance` were not linked to their area `10 Life Admin` because the builder only used delimiter-splitting to find parents. Splitting `\"11\"` by `\".\"` yields no parent. Area parents are now derived numerically (`floor(n/10)*10`), so `11 → 10`, `21 → 20`, etc. Area notes (exact multiples of 10) remain top-level with no parent.\n\n## Build\n\n- **Expose `GCEdgeData` field accessors in WASM bindings** — `source`, `target`, `edge_type`, and `edge_source` are now exposed as `#[wasm_bindgen(getter)]` properties, enabling type-safe access in TypeScript tests without casting.\n- **Fix TypeScript build errors in test suite** — `succ`/`fail` now return concrete types so `.data`/`.error` are accessible without discriminant narrowing; builder tests updated to `async`/`await` to satisfy the `MaybePromise<EdgeBuilderResults>` return type.",
-      "downloadCount": 895,
+      "downloadCount": 896,
       "draft": false,
       "name": "4.12.2",
       "prerelease": false,
