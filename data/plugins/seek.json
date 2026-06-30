@@ -1,0 +1,145 @@
+{
+  "author": "ryanm",
+  "defaultBranch": "main",
+  "description": "Search your vault with powerful Obsidian native hybrid semantic and keyword retrieval, in over 52 langauges. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "seek",
+  "lastChangedAt": "2026-06-30T08:04:26.952Z",
+  "lastFetchedAt": "2026-06-30T08:04:26.952Z",
+  "manifest": {
+    "author": "Ryan Manor",
+    "authorUrl": "https://github.com/ryan-manor",
+    "description": "Search your vault with hybrid semantic and lexical retrieval, powered by an on-device embedding model.",
+    "id": "seek",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.12.7",
+    "name": "Seek",
+    "version": "1.0.2"
+  },
+  "name": "Seek",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:292a53e86e0d2f3b90ccc183693e1f8fa8f02df7ff3d5f9883188254f9ced2e0",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 271364
+        },
+        {
+          "digest": "sha256:3ba8bc6ef88f445b3079d502ae556fc63aad6ba4c06adc035ec1e83eb2185e4c",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:cd46e648b0d1cc7addceb1527d0189f9cd348485523a5ba0248f0f348242fa91",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 40915
+        }
+      ],
+      "author": "ryan-manor",
+      "description": "Code-quality release addressing the second round of Obsidian community plugin-review feedback. **No user-visible change** — search, indexing, and sync behave identically to 1.0.1.\n\n### Internal\n- Replaced the remaining lint-rule suppressions with code that satisfies Obsidian's plugin guidelines directly (member access for per-device storage and the hidden compute frame, popout-safe globals); no `eslint-disable` comments remain in shipped code.\n- Switched the dev-only YAML test dependency to `yaml`.\n- Added a local reproduction of the review's lint configuration so findings are caught before submission.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T01:39:32Z",
+      "tag": "1.0.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:264a6d107a105dc2fca77510879cc4ddad5980f3b4b9890a20299f0348b1cdff",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 271250
+        },
+        {
+          "digest": "sha256:8fdbb7c0f8a68c6143e3a8d8db238a368c2bb9f05851db863c16986366059eb8",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:2f7c9cd492be970ea9d39bbccde204c921cdb2743add715a098f0ccfd08b910a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 40480
+        }
+      ],
+      "author": "ryan-manor",
+      "description": "Compatibility and code-quality release addressing the Obsidian community plugin review. **Search behavior is unchanged** — the lexical/semantic ranking is byte-identical to 1.0.0.\n\n### Fixed\n- Startup crash on iOS before 16.4: a regex feature unsupported by older WebKit prevented the plugin from loading at all on those devices.\n- Popout-window support: timers and DOM access resolve against the correct window, and the hidden background compute frame and app-visibility tracking are anchored so they survive a popout opening or closing.\n- iPad and Android tablets are now classified correctly for compute-backend selection.\n\n### Changed\n- The search command id changed from `seek-search` to `search` (Obsidian namespaces it as `seek:search`). If you bound a custom hotkey to it, rebind it once.\n\n### Internal\n- Obsidian plugin-guideline compliance: Platform API for device detection, popout-safe timers/DOM, vault-scoped storage where appropriate, typed worker/iframe messages, and dead-code removal. No user-visible search changes.\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T23:04:14Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7ae4ea6f12d7aafb69871b8960fabe31edbf0fbf9e6410576bd05b180142bbcb",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 270039
+        },
+        {
+          "digest": "sha256:eac8971ec0a6defa108e881c7de1d309058e20e41f19701df391b70372182869",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:fdb05137533d8e32f920aa0a36f7df2445df76804283203db4112af15837fd3d",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 40295
+        }
+      ],
+      "author": "ryan-manor",
+      "description": "Initial public release. Seek is a hybrid (lexical + semantic) search plugin for Obsidian, built on a quantized, sync-friendly index that stays current across devices without re-embedding on each one.\n\n### Search & relevance\n- Typed-value query filters: numeric comparison (e.g. `[price>50]`) and date ranges (`before:` / `after:`).\n- Field-weight tuning from a fresh relevance evaluation — stronger body-content weighting and a higher dense-fusion weight for better-ranked results.\n- Hardened the lexical coordination soft-AND so multi-term queries favor documents that match more of the query.\n- Dense-channel hygiene: cleaner body and heading text, with cross-surface de-duplication before embedding.\n- Converged tokenization across the surfaces that build, match, and enumerate terms.\n\n### Query filter menu\n- The `[` filter menu is keyed by property type and value shape: numeric keys show real note counts; date keys are surfaced through `before:` / `after:` instead.\n- Recency defaults to the modified date, and the `before:` / `after:` hints name the configured date field.\n\n### Sync & indexing\n- Consent-gated reindex: a version-stale index warns and waits rather than silently rebuilding.\n- A calm \"syncing from another device\" state when a newer index is arriving from a peer.\n- Mobile catch-up indexing is batched (O(N²) → ~O(N)) and stable under a large backlog.\n- Peer-ahead state survives an app relaunch, and mobile no longer grinds during catch-up.\n\n### Interface\n- Search-modal keyboard, pointer, and link-handling polish; theme-proofed filter pills.\n- The per-result score line is off by default.\n\n**Install:** download `main.js`, `manifest.json`, and `styles.css` into `<vault>/.obsidian/plugins/seek/`, then enable Seek in Community Plugins.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T20:43:55Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f183353dcb801f540c626c4437112162289f6b9f8ce83df4b7d9cbfdc04f0ff5",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 278378
+        },
+        {
+          "digest": "sha256:73447cfa51e550b6648fc6429bf57a13b858574617e4f7c262e4eab9b813c1cd",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 326
+        },
+        {
+          "digest": "sha256:c039b256056969d59c1811a8797f3cb0d8b99ef41482e7d6f7f98059bb4867d5",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 32921
+        }
+      ],
+      "author": "ryan-manor",
+      "description": "Initial release of Seek — on-device hybrid semantic + lexical search for Obsidian. Fully client-side: no backend, no telemetry. Manual/BRAT install: place main.js, manifest.json, and styles.css into <vault>/.obsidian/plugins/seek/.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-22T23:29:13Z",
+      "tag": "0.0.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "ryan-manor/Obsidian-Seek"
+}
