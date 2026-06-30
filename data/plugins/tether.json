@@ -4,8 +4,8 @@
   "description": "Sync your vault with Google Drive using your own Google Cloud credentials. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "tether",
-  "lastChangedAt": "2026-06-29T03:01:26.960Z",
-  "lastFetchedAt": "2026-06-29T03:01:26.960Z",
+  "lastChangedAt": "2026-06-30T03:01:26.979Z",
+  "lastFetchedAt": "2026-06-30T03:01:26.979Z",
   "manifest": {
     "author": "Llewellyn Paintsil",
     "authorUrl": "https://github.com/Llewellyn500",
@@ -14,11 +14,41 @@
     "isDesktopOnly": false,
     "minAppVersion": "0.15.0",
     "name": "Tether",
-    "version": "1.0.10"
+    "version": "1.0.11"
   },
   "name": "Tether",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:a77bff1bc2bc23ed0b79f0b95926b63dc7df965d9800da6e106385964c722a9a",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 101023
+        },
+        {
+          "digest": "sha256:e0dadfb4c4e990284dc303e2b1afd57b09da9966edac375c6726c5244a6a9cd0",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 298
+        },
+        {
+          "digest": "sha256:a5a3012df1dcc079aeee3a2aaa0c371b98ba2d14c226daa90c39641063b83bba",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 2520
+        }
+      ],
+      "author": "Llewellyn500",
+      "description": "## Startup Sync Direction\n- Fresh folder setup still starts with an initial Push from the local vault.\n- Configured vault startup now waits for the startup delay, pulls Google Drive changes first, then lets interval syncs push local changes afterward.\n- Plugin update startup pulls continue to run before interval pushes resume.\n\n## Stop/Resume Auto Sync\n- Added Stop/Resume Auto Sync controls in the ribbon, command palette, settings, and sync status sidebar.\n- Stop Auto Sync pauses startup and interval syncing while keeping manual Pull and Push available.\n- In-progress syncs now stop between work items after the user requests a stop.\n\n## Release Files\n- Includes `main.js`, `manifest.json`, and `styles.css` for manual Obsidian plugin installation.\n\n## Verification\n- Built locally with `npm run build`.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.0.11",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T10:00:42Z",
+      "tag": "1.0.11"
+    },
     {
       "assets": [
         {
@@ -42,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Recovery Fix\n- Pull can now recover if a previous bad sync saved an empty duplicate Drive vault root. It scans the selected Drive folder for a non-empty matching vault folder and switches back to it before downloading.\n- Pull now reports an error instead of \"complete successfully\" when the selected Drive vault root is empty.\n- Keeps the previous protections that block full local/remote wipe-outs when one side looks empty or completely mismatched.\n\n## Intended Sync Direction\n- Initial folder setup pushes local files to Drive.\n- App open and plugin update pull Drive changes first.\n- Timer sync pushes local changes after the idle delay.\n\n## Recovery Steps For An Emptied Device\n- Do not run Push from the emptied vault.\n- Confirm the real vault folder still exists in Google Drive.\n- Install 1.0.10, restart Obsidian, then run Pull.\n- If Pull says it switched from an empty Drive folder, that is the recovery path working.\n\n## Verification\n- Built locally with `npm run build`.\n- GitHub Actions release workflow passed and published `main.js`, `manifest.json`, and `styles.css`.",
-      "downloadCount": 141,
+      "downloadCount": 140,
       "draft": false,
       "name": "1.0.10",
       "prerelease": false,
@@ -72,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Tether 1.0.6\n\nThis release improves the folder picker experience when Google Drive rejects folder listing with `403 Forbidden`.\n\n### Folder picker diagnostics\n- Drive API requests now opt out of Obsidian's default 400+ throwing behavior so Tether can read Google's JSON error response body.\n- Added a structured `GoogleDriveApiError` with HTTP status, Google reason, and setup hints.\n- The folder picker now shows a clear troubleshooting checklist instead of only `Request failed, status 403` in DevTools.\n- Added a Retry button after folder fetch failures.\n\n### Setup guidance\n- Added 403 troubleshooting steps to the README, hosted setup page, and in-app setup guide.\n- The checklist covers the common causes: Google Drive API not enabled, missing Drive scopes, app still in Testing without the user added as a test user, stale tokens after changing scopes/testers, and Google Workspace admin restrictions.\n\n### OAuth error parsing\n- Token exchange now also disables Obsidian's default 400+ throwing behavior so OAuth errors like redirect URI mismatch keep their useful Google response body.\n\n### Version and assets\n- Bumped the plugin version to `1.0.6`.\n- Rebuilt `main.js`; release assets include `main.js`, `manifest.json`, and `styles.css`.\n\n### For users who hit the 403\n1. In Google Cloud, enable Google Drive API in the same project as the OAuth client.\n2. Confirm Data Access includes Drive, Drive metadata, openid, and email scopes.\n3. If the app is in Testing, add the user's Google account under Audience > Test users.\n4. If anything changed after login, log out of Tether and log in again before selecting a folder.",
-      "downloadCount": 35,
+      "downloadCount": 37,
       "draft": false,
       "name": "Tether 1.0.6",
       "prerelease": false,
@@ -102,7 +132,7 @@
       ],
       "author": "Llewellyn500",
       "description": "## What's Fixed\n\n### 🐛 Critical: Vault content now actually uploads to Google Drive on first setup\n\n**This was the #1 reported issue.** After selecting a Google Drive folder for the first time, Tether would run a pull against the empty remote folder, mark the initial pull as complete, and then **stop** — never actually pushing your vault content to Drive. The folder was created correctly, but your files never made it there.\n\nOn the next sync cycle, because the remote folder was still empty, a pull would see zero remote files and **delete your entire local vault** to match the empty remote. This is now fixed:\n\n- After the initial pull completes, Tether **immediately chains a push** to upload all your vault content to the selected Drive folder.\n- This applies to both manual sync (triggered from settings or commands) and background sync.\n\n### 🛡️ Catastrophic deletion safeguards\n\nEven with the sync flow fixed, we've added an extra safety net to prevent mass data loss:\n\n- **Pull protection:** If a pull would delete more than 80% of your tracked local files (when you have 10+ tracked files), Tether **aborts all deletions** and shows a warning notice instead of wiping your vault.\n- **Push protection:** Same safeguard for remote deletions — if a push would delete more than 80% of tracked remote files, it aborts and warns you.\n\nThis ensures that even in edge cases (network issues, API errors, corrupted state), Tether won't silently destroy your data.\n\n### 💬 Better OAuth error messages\n\nWhen Google returns a `redirect_uri_mismatch` error during login, Tether now shows the **exact redirect URI** you need to add in your Google Cloud Console, instead of a generic \"Login failed\" message:\n\n> *Redirect URI mismatch. In Google Cloud Console → Credentials → your OAuth client, add this exact Authorized redirect URI: `https://llewellyn500.github.io/obsidian-tether/oauth/callback.html`*\n\n---\n\n## After Updating\n\n1. **Update the plugin** to v1.0.5\n2. If you previously selected a folder but nothing synced, go to **Tether settings → Step 3** and re-select your folder (or click Push in Step 4)\n3. Your vault content should now upload to Google Drive immediately\n\n## Files Changed\n- `main.ts` — Fixed `manualSync()` and `backgroundSync()` to chain pull→push on initial setup\n- `sync/engine.ts` — Added deletion threshold safeguards to both pull and push deletion handlers\n- `auth/oauth.ts` — Added `redirect_uri_mismatch` error detection with actionable message\n- `manifest.json` / `package.json` — Version bump to 1.0.5\n\nFixes #1\n",
-      "downloadCount": 15,
+      "downloadCount": 16,
       "draft": false,
       "name": "v1.0.5 - Fix Initial Sync & Vault Deletion Protection",
       "prerelease": false,
@@ -132,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 65,
+      "downloadCount": 67,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,
@@ -192,7 +222,7 @@
       ],
       "author": "Llewellyn500",
       "description": "## What's changed\n\n- Reduced background sync pressure by paging Google Drive listings, streaming remote processing, batching sync-state writes, and throttling status/sidebar refreshes.\n- Prevented conflict files while actively editing by deferring open files and delaying automatic sync shortly after local vault changes.\n- Improved sign-in robustness with OAuth state validation, better pasted redirect parsing, and clearer cross-platform limitations.\n- Updated release metadata to 1.0.1.\n\n## Validation\n\n- npm run build\n\n## Note\n\n- npm audit still reports the existing moderate esbuild dev-server advisory. The available automated fix requires a breaking esbuild upgrade, so this release leaves it unchanged.",
-      "downloadCount": 0,
+      "downloadCount": 1,
       "draft": false,
       "name": "Tether 1.0.1",
       "prerelease": false,
@@ -222,7 +252,7 @@
       ],
       "author": "Llewellyn500",
       "description": "Initial community plugin release of Tether.\n\n- Sync your Obsidian vault with Google Drive using your own Google Cloud credentials.\n- Includes an in-app setup guide and sync status sidebar.\n- Supports desktop and mobile-compatible workflows, including iOS vault transfer setup.",
-      "downloadCount": 6,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
