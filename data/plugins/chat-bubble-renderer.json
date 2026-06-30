@@ -4,8 +4,8 @@
   "description": "Render Markdown chat logs as WeChat-style bubble dialogs. 将聊天记录渲染为微信风格气泡对话框。 - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "chat-bubble-renderer",
-  "lastChangedAt": "2026-06-29T07:02:26.967Z",
-  "lastFetchedAt": "2026-06-29T07:02:26.967Z",
+  "lastChangedAt": "2026-06-30T07:02:26.966Z",
+  "lastFetchedAt": "2026-06-30T07:02:26.966Z",
   "manifest": {
     "author": "bruceMTY",
     "authorUrl": "https://github.com/bruce2431",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Chat Bubble Renderer",
-    "version": "1.1.1"
+    "version": "1.2.0"
   },
   "name": "Chat Bubble Renderer",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:d20dbe5442377f616382ff2a79b2541b887eceded9cc609ae4dfa6e4f6c3540b",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1066312
+        },
+        {
+          "digest": "sha256:d2c7d7310fb4ce92de5d618f93b22e18a9fa2076b89e4e37d795944df363a46b",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 338
+        },
+        {
+          "digest": "sha256:7f4891f295eb92ad83c0803d0f4ecc3174f4098a192d50183f93d9b9c49fa10a",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 83738
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "v1.2.0：链接卡片、使用 MapLibre GL 的位置卡片、统一卡片样式\r\n\r\n- 功能：Markdown 链接渲染（[text](url) -> 内联链接）\r\n- 功能：链接卡片渲染（[链接|title](url) -> 微信风格链接卡片）\r\n- 功能：位置卡片渲染（[位置|...] -> 卡片 + MapLibre GL 地图）\r\n- 功能：打包 maplibre-gl 以支持离线地图渲染\r\n- 样式：统一卡片尺寸（固定 360px、盒阴影、无边框、8px 圆角）\r\n- 样式：文件名中间截断（保留 .pdf 扩展名）\r\n- 修复：位置卡片 DOM 结构（使用 div 而非 a 以避免 DOMParser 解析错误）\r\n- 修复：逗号和竖线格式的经纬度坐标顺序",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T08:38:01Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:a0b4c1c5dfeb1dc6455632ca894d74febb6f6d5fc7a27e7f5eaba2eba1cc3d9e",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "main.js",
           "size": 18951
         },
         {
           "digest": "sha256:5d8ee8e6527fe7855f62c9920d96e6630f4ee61b99f4873b909e8924037a583b",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 338
         },
         {
           "digest": "sha256:3748c263d41280b730c32dc881eca7c5357065cd239e55446b36e437e82d783f",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 11248
         }
       ],
       "author": "bruce2431",
       "description": "## 15 项代码优化 (v1.1.1)\r\n\r\n**性能 (3 项)**\r\n- 正则常量预编译：8 处动态 new RegExp → 7 个模块级常量\r\n- classifyContent 单次分类替代三次串行 is* 函数调用\r\n- processContent 段拼接替代第二次 content.replace 全量正则扫描\r\n\r\n**健壮性 (4 项)**\r\n- arrayBufferToBase64 逐字节迭代防 Function.apply 爆栈\r\n- nameMap 去重语义 + delete 安全检查\r\n- 合并转发 regex 加可选秒 + 多行贪婪消费\r\n- resolveFileLink 提取消除 renderFileCard/renderMergeForward 重复逻辑\r\n\r\n**Lint 清零 (8 项)**\r\n- 2×Error: style.cssText → CSS 类, ForwardPlainItem 死 import\r\n- 12×Warning: document → activeDocument\r\n- 3×Warning: setTimeout/clearTimeout → window.xxx\r\n- 5×Warning: 类型断言泛型化/移除\r\n- 4×Warning: Promise void 标记\r\n- 1×deprecated: display() → inline refresh\r\n- 1×CSS: !important 移除\r\n",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -162,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### 性能\r\n- base64 分块编码（4096 字节分块，大文件快 40x）\r\n- vault 文件查找合并为一次遍历\r\n- 300ms 轮询改为事件驱动\r\n### 设置\r\n- isSelfMessage 从设置面板读取\r\n- 支持中文逗号分隔\r\n- 新增 Reset 恢复默认按钮\r\n### 架构\r\n- classifyAndRender 统一主聊天和合并转发分类渲染\r\n- doRender 加锁防重入\r\n- pdfOnClick/renderFileCardMini 共享函数",
-      "downloadCount": 9,
+      "downloadCount": 8,
       "draft": false,
       "name": "1.0.7",
       "prerelease": false,
