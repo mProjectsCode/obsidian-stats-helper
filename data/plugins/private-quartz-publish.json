@@ -4,8 +4,8 @@
   "description": "Opt-in publish individual notes or whole folders from Obsidian to a self-hosted Quartz site. Each URL is an unguessable random slug; sharing a file link reveals only that file, sharing a folder link reveals only its bundled notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "private-quartz-publish",
-  "lastChangedAt": "2026-06-29T06:01:26.973Z",
-  "lastFetchedAt": "2026-06-29T06:01:26.973Z",
+  "lastChangedAt": "2026-06-30T06:05:26.965Z",
+  "lastFetchedAt": "2026-06-30T06:05:26.965Z",
   "manifest": {
     "author": "Arseniy Seroka",
     "authorUrl": "https://github.com/jagajaga",
@@ -23,20 +23,20 @@
       "assets": [
         {
           "digest": "sha256:3adc36ae8e9c4178591d034780053e3ada4d2cb0e149bbc370e5c235e9ef5434",
-          "downloadCount": 47,
+          "downloadCount": 48,
           "name": "main.js",
           "size": 10490
         },
         {
           "digest": "sha256:8e93d3976b32e74ed8e19a04868879fe8a431dd8d5d43719be5399589c9551da",
-          "downloadCount": 48,
+          "downloadCount": 49,
           "name": "manifest.json",
           "size": 451
         }
       ],
       "author": "jagajaga",
       "description": "Adds search to the published site and fixes a privacy leak in the reference server.\n\n**Search (server-example)** — a small, theme-matched search bar on every published page:\n- **In-page find** highlights matches and steps through them. Whitespace-flexible, so a phrase still matches when Markdown joined the words with a newline.\n- **Folder search** (only inside a published folder bundle) searches the bundle's notes by file name and content. It reads only the current folder's index — no site-wide search, nothing new exposed. The stager emits a per-bundle `_search.json` consumed by the widget.\n\n**Privacy fix (server-example)** — Quartz `--watch` never deletes output HTML when its source Markdown disappears, so an unpublished or slug-rotated page would keep serving forever. The build now sweeps any HTML whose source no longer exists and watches the content dir so unpublishes propagate to the live site within ~0.5s.\n\nPlugin binary unchanged from v1.0.7 — these changes are in the self-hosting reference server (`server-example/`).",
-      "downloadCount": 47,
+      "downloadCount": 49,
       "draft": false,
       "name": "1.0.8 — in-page & folder search + stale-URL leak fix",
       "prerelease": false,
@@ -132,7 +132,7 @@
       ],
       "author": "jagajaga",
       "description": "Polish pass before submitting to the Obsidian community plugin marketplace.\n\n**Plugin code changes (all internal — no UX change):**\n- Replaced `any` types in menu callbacks with the proper Menu / MenuItem types from obsidian\n- Replaced `window.confirm()` with a styled Modal subclass for folder publish/unpublish prompts\n- Removed plugin-injected <h2>/<h3> elements in settings tab; use Setting().setHeading() per Obsidian style guide\n\n**Server stack — much easier to deploy:**\n- docker-compose now bundles Caddy alongside stager + quartz. One `docker compose up` brings up the entire stack with automatic Let's Encrypt HTTPS.\n- New `setup.sh` wizard prompts for vault path + public domain, writes .env, pulls images from GHCR, brings the stack up.\n- Pre-built docker images pushed to GHCR via GitHub Actions on every release — no local build required.\n\n**README:**\n- Upfront warning that the plugin requires a self-hosted server (so the audience self-selects).\n- Quick-start uses `./setup.sh` as the primary path.",
-      "downloadCount": 3,
+      "downloadCount": 2,
       "draft": false,
       "name": "v1.0.5 — polish for community plugin submission",
       "prerelease": false,
@@ -156,7 +156,7 @@
       ],
       "author": "jagajaga",
       "description": "When a published folder contains subfolders, the sidebar now renders them as nested groups instead of a flat list.\n\n```\nHierarchyTest\n├─ 2025/\n│  ├─ Q1/\n│  │  └─ note B\n│  └─ note A\n├─ 2026/\n│  └─ note C\n└─ Intro\n```\n\nFolders sort before files at every level; both alphabetical with natural number ordering.\n\n**Plugin change:** publishing a folder now writes a `folder_path` frontmatter field on each note recording its position within the bundle.\n**Server side:** the stager preserves `folder_path` in the staged copy (and falls back to computing it from the vault path for legacy / data.json-only bundles). The FolderSidebar component builds a tree from these values.\n\nExisting bundle URLs keep working.",
-      "downloadCount": 2,
+      "downloadCount": 1,
       "draft": false,
       "name": "v1.0.4 — hierarchical folder sidebar",
       "prerelease": false,
