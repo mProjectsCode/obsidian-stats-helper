@@ -4,8 +4,8 @@
   "description": "Note Mate is a smart AI assistant for your vault. With Note Mate, you can easily create new notes, expand on ideas, and get insights from your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ai-note-mate",
-  "lastChangedAt": "2026-06-30T05:04:26.998Z",
-  "lastFetchedAt": "2026-06-30T05:04:26.998Z",
+  "lastChangedAt": "2026-07-01T05:02:26.968Z",
+  "lastFetchedAt": "2026-07-01T05:02:26.968Z",
   "manifest": {
     "author": "ialex32x",
     "authorUrl": "https://github.com/ialex32x",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "Note Mate",
-    "version": "1.6.0"
+    "version": "1.6.1"
   },
   "name": "Note Mate",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:88c44a79af567c37d567f06a5f98b31a59b501f0be7b31b384d10c441cbe98c4",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 1317262
+        },
+        {
+          "digest": "sha256:647bef6b82209f3c9d2518deb44ae2e1bb3e464f204666260d508bb9f290c961",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:02e1488aa6ece0de05d960755370f49c87010e7fccc1978a413b7166a73e0c2f",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 113864
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### What's new\n\n- **`create_note` replaces `create_file`** — The vault tool has been renamed and now accepts optional `frontmatter`, letting the model create structured notes with tags, aliases, and custom metadata in a single call.\n- **Save chat attachments** — The new `save_chat_attachment` tool lets the model save pasted images (and other attachments) from the current user message directly into the vault, making ephemeral paste content persistent without manual steps.\n- **Attachment export** — Session export now includes inline image references for pasted attachments, so exported Markdown fully captures the conversation's visual content.\n- **Debug mode** — A new toggle in **Settings → Note Mate → Advanced** enables debug features including a **context composition breakdown** that shows per-agent token consumption turn by turn; the breakdown is persisted and survives session reloads.\n- **`old_text` / `new_text` aliases** — The `replace_text` tool now accepts `old_text` and `new_text` as parameter aliases, matching the parameter names that models naturally produce.\n- **Handoff auto-dispatch** — `write_result` handlers now silently route scalar, array, and object values to the correct typed variant, eliminating failed tool calls when the model uses a mismatched write tool.\n- **Sub-agent model name in orchestration** — When delegation resolves a sub-agent's profile, the model name now appears in the orchestration bubble for clearer visibility into which provider handled each sub-task.\n\n### Refinements\n\n- **Leaner system prompts** — The agent system prompt has been condensed by roughly 20%, removing redundant phrasing and consolidating related rules for a tighter token footprint.\n- **Unified prompt paths** — Single-agent and multi-agent conversations now share a common prompt assembly path, reducing duplication and making prompt behaviour more predictable across setups.\n- **Conditional TODO & memory rules** — TODO and memory prompts are now injected only when the session has active TODO items or slots with memories, saving tokens on simple conversations.\n- **Short-query optimisation** — Prompt length and chat-stream schemas are trimmed for short queries, reducing overhead on quick back-and-forth exchanges.\n- **Structured follow-ups removed** — The structured follow-up suggestion variant has been retired; the simpler prompt-based follow-up path covers all use cases with less complexity.\n- **Settings tab scroll extracted** — The tab bar auto-scroll logic has been moved from the settings-components module into the settings-tab controller for cleaner separation.\n\n### Fixes\n\n- **Whitespace-only chunks filtered** — LLM responses that emit whitespace-only content chunks no longer appear as blank message units in the UI.\n- **Duplicate title input guard** — Rapid double-clicking the session title no longer creates duplicate or overlapping edit inputs.\n- **Context tooltip always visible** — The compact context usage tooltip now shows reliably in the session status area instead of sometimes being hidden.\n- **Token usage tooltip removed** — The token usage tooltip has been removed from the session switcher dropdown to avoid layout disruption.\n- **Session dropdown time layout** — The time label in the session switcher dropdown now uses flex layout, fixing alignment issues.\n- **Attachment delete button position** — The delete button on pasted attachment thumbnails is now correctly positioned relative to the thumbnail container.\n- **Post-compression token breakdown** — The context breakdown now uses token counts after compression, reflecting the actual context window usage.\n- **`custom_` prefix stripped from labels** — Sub-agent labels in bubbles no longer show a `custom_` prefix for custom agents, matching the clean display of built-in agents.\n- **Settings tab scroll behaviour** — Tab bar scrolling now correctly peeks at neighbouring tabs and responds smoothly to syncing changes.\n\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T12:25:48Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:b646f46484da743b86d6b672bcc698230adf4dc5feb4a970d40f7d375190c1a0",
-          "downloadCount": 11,
+          "downloadCount": 15,
           "name": "main.js",
           "size": 1342352
         },
         {
           "digest": "sha256:df952ad60259d493d8da24e695cba9e883f9d50885cf5010cb8556ee83fa1280",
-          "downloadCount": 11,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:2b14f8916942daebc548607518e4ce3d4d145f66eafc9b89d5e023f817588c59",
-          "downloadCount": 10,
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 113169
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### What's new\n\n- **Custom agents (experimental)** — Define your own sub-agents directly in settings. Each custom agent gets an inline system prompt, per-agent profile overrides (choose a different model per agent), and an enable/disable toggle. Built-in agents are now shown in a read-only view so you can see what's available and toggle them individually. *This is an experimental feature and will be refined in future releases.*\n- **Image paste & attachment support** — Paste images from the clipboard into the chat input; the plugin now sends them as first-class message content (referencing images from the vault via wikilinks still works as before). Currently limited to one pasted image per message.\n\n### Refinements\n\n- **Leaner tool registration** — Built-in tool registration is now centralised and injected at runtime, and per-agent tool toggles let you control which tools each agent can access.\n- **Handoff guidance at runtime** — Sub-agent handoff prompts are now constructed on-the-fly instead of being baked in, giving cleaner separation between agent configuration and prompt assembly.\n- **Stable builtin agent keys** — Built-in agent tabs now use stable keys, preventing UI glitches when settings are reloaded.\n\n",
-      "downloadCount": 11,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
