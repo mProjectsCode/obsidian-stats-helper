@@ -1,17 +1,17 @@
 # Status
 
-- Last harvest update: 2026-07-01T02:01:26.965Z
-- Current pass: in progress (2500/5250, 47.6%)
-- Indexed plugins: 5321 (5219 present, 102 removed)
-- Plugin detail files: 5321
-- Plugin fetch window: 2026-06-02T02:00:58.570Z to 2026-07-01T02:01:26.965Z
-- Plugins with releases: 5316
-- Plugins with download stats: 5267/5321 (99.0%)
+- Last harvest update: 2026-07-01T03:05:26.995Z
+- Current pass: in progress (3000/5250, 57.1%)
+- Indexed plugins: 5322 (5220 present, 102 removed)
+- Plugin detail files: 5322
+- Plugin fetch window: 2026-06-02T02:00:58.570Z to 2026-07-01T03:05:26.995Z
+- Plugins with releases: 5317
+- Plugins with download stats: 5268/5322 (99.0%)
 - Plugins missing download stats: 54
-- Releases with download stats: 72652/73134 (99.3%)
-- Assets with download stats: 229320/230893 (99.3%)
-- Total manifest.json downloads: 127132801
-- Download summary: 5316 plugins, 127132801 downloads, generated at 2026-07-01T02:01:26.965Z
-- HTTP cache entries: 15842 (5323 repo, 5332 manifest, 5187 releases, 0 other)
-- Last run API requests: 1505 total (701 fetched, 804 cached 304, 0 failed)
-- Last run request modes: 1000 conditional, 505 unconditional
+- Releases with download stats: 72662/73144 (99.3%)
+- Assets with download stats: 229356/230929 (99.3%)
+- Total manifest.json downloads: 127141170
+- Download summary: 5317 plugins, 127141170 downloads, generated at 2026-07-01T03:05:26.995Z
+- HTTP cache entries: 15844 (5324 repo, 5333 manifest, 5187 releases, 0 other)
+- Last run API requests: 1503 total (618 fetched, 885 cached 304, 0 failed)
+- Last run request modes: 1000 conditional, 503 unconditional
