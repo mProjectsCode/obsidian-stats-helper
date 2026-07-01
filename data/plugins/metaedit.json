@@ -4,8 +4,8 @@
   "description": "Manage your metadata.",
   "errors": [],
   "id": "metaedit",
-  "lastChangedAt": "2026-06-30T22:05:27.004Z",
-  "lastFetchedAt": "2026-06-30T22:05:27.004Z",
+  "lastChangedAt": "2026-07-01T22:04:26.960Z",
+  "lastFetchedAt": "2026-07-01T22:04:26.960Z",
   "manifest": {
     "author": "Christian B. B. Houmann",
     "authorUrl": "https://bagerbach.com",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "MetaEdit",
-    "version": "1.8.4"
+    "version": "1.9.0"
   },
   "name": "MetaEdit",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:725abe871b262fc0db194bbdff77ee5b91c423cad50244bec0686dc4bf112278",
+          "downloadCount": 20,
+          "name": "main.js",
+          "size": 412784
+        },
+        {
+          "digest": "sha256:0d35f1860dd38c33b34984c6b0a09a94fc50d49b4fa09bff2be144627595929a",
+          "downloadCount": 22,
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:7ed112127ad646c355888aa434c6153a482a105b7256f2a38f17075ceddd5d50",
+          "downloadCount": 20,
+          "name": "styles.css",
+          "size": 4361
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "MetaEdit 1.9.0 is the biggest release in years. Property editing now happens through Obsidian's own property widgets, new properties are created in one fluid, type-aware modal, and you can edit metadata across a whole folder in one pass. Auto Properties grew multi-select, descriptions, and learn-as-you-go values. Underneath it all, five months of hardening make every write safer than it has ever been.\n\n> [!IMPORTANT]\n> MetaEdit now requires **Obsidian 1.12.7 or newer** - the new editing experience is built directly on Obsidian's modern properties engine.\n\n## Edit properties with Obsidian's native widgets\n\n![Editing a date property with Obsidian's native date picker](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/native-date-widget.png)\n\nPick a property from MetaEdit's menu and you now get the exact widget Obsidian's Properties panel would give you: a date picker for dates, a checkbox for booleans, chips for lists, a number field for numbers. No more retyping structured values as free text - types are respected end to end, so `rating` stays a number and `started` stays a real date, both in the editor and in the file.\n\n## Create properties fluidly - types included\n\n![Creating a rating property: the key autocompletes, and the widget switches to Number automatically](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/fluid-property-create.gif)\n\n**New YAML property** opens a single row that behaves like Obsidian's own property editor:\n\n- The **key input autocompletes** from every property name in your vault.\n- The **value widget follows the type**: type a known key like `rating` and the row switches to the number widget on its own; `finished` mounts a date picker.\n- Type a value that *looks* like a date or number under the wrong type, and MetaEdit offers a one-click **\"Change to Date/Number\"** switch.\n- Keyboard-first: `⌘/Ctrl+Y` cycles the type, `⌘/Ctrl+↵` adds the property.\n\nKeys with an Auto Property hand you off to its value prompt, and `tags`/`aliases` lock to their reserved types so you can't create malformed frontmatter.\n\n## Bulk edit metadata across folders and selections\n\n![Bulk edit: right-click a folder, name the property and value, then choose a conflict policy](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/bulk-edit-flow.gif)\n\nRight-click any folder - or multi-select notes in the file explorer - and choose **Bulk edit metadata**. Name a property, give it a value, and if some notes already define it, choose exactly what happens:\n\n- **Skip** notes that already have it (nothing is overwritten),\n- **Merge into a list** without duplicating, or\n- **Overwrite** existing values - behind an explicit confirmation, because bulk edits can't be undone with `Ctrl+Z`.\n\nA summary notice reports what changed. Every write goes through MetaEdit's serialized write queue, so a bulk run can't race your other edits.\n\n## Auto Properties leveled up\n\n![A Multi-type Auto Property: description, checkbox multi-select, and a \"new\" badge for values not yet in the list](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/autoprop-multi-select.png)\n\nAuto Properties - predefined value lists for properties you edit often - learned some serious new tricks:\n\n- **Multi-select**: mark an Auto Property as *Multi* and pick several values with checkboxes; they're written as a proper YAML list.\n- **Descriptions**: add an optional note that shows up in the value prompt, so future-you remembers what the property means.\n- **Learn as you go**: type a value that isn't in the list to use it once, or save it into the choices right from the prompt - no trip to settings.\n- **Paste a list**: paste comma- or newline-separated values into a choice field in settings and it splits into one choice per entry.\n\n![Auto Properties settings: per-property cards with name, Single/Multi type, description, and values](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/autoprop-settings.png)\n\n## Smarter value entry everywhere\n\n![Renaming a tag: the prompt suggests existing tags from your vault](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/tag-rename-autocomplete.png)\n\nText prompts now autocomplete from your vault: property values are suggested ranked by how often you already use them, and tag edits suggest your existing tags. Date- and datetime-typed properties get a native picker instead of a bare text box.\n\n## A cleaner, more capable menu\n\n![MetaEdit's property menu with per-row delete and transform actions](https://raw.githubusercontent.com/chhoumann/MetaEdit/1.9.0/docs/assets/releases/1.9.0/suggester-row-actions.png)\n\n- Every YAML/Dataview row has **native, tooltipped actions**: delete the property, or transform it YAML ⇄ Dataview, right from the list.\n- **Hide file tags** from the menu (Settings → Edit Meta menu) when you only care about frontmatter and inline fields - a frontmatter `tags:` property stays editable.\n- Hide specific properties by name via the same filtering settings.\n- Nested YAML shows up as individual child rows, so structured frontmatter is no longer a wall of text.\n\n## Tags are edited where they live\n\nTag editing was rebuilt for correctness (#94, #142): rename a body `#tag` occurrence in place, or edit a frontmatter `tags:` list as a real list - MetaEdit strips stray `#` prefixes, accepts single values or comma/space-separated strings, and removes the key when you clear the last tag. Because body tags could not be deleted or transformed safely, those two actions were removed for body tags; renaming and leaf-editing stay. Vault-wide renames remain Obsidian's Tag pane territory.\n\n## For plugin developers and Templater users\n\nThe public API (`app.plugins.plugins[\"metaedit\"].api`) grew a lot this cycle:\n\n```js\nconst api = app.plugins.plugins[\"metaedit\"].api;\n\n// Nested YAML paths - read, update, or create-with-parents\nawait api.addOrUpdateYamlPath(\"book.progress.page\", 217, file);\nconst page = await api.getYamlPath(\"book.progress.page\", file);\n\n// Append a NEW inline Dataview field instance (never replaces existing ones),\n// with control over where it lands\nawait api.appendDataviewField(\"review\", \"pending\", file, { location: \"end\" });\n\n// Read every property in a file - YAML (incl. nested), inline fields, tags\nconst props = await api.getPropertiesInFile(file);\n\n// Manage Auto Properties programmatically\nconst autoProps = api.getAutoProperties();\nawait api.setAutoProperties([...autoProps, { name: \"mood\", choices: [\"😀\", \"😐\", \"😞\"] }]);\n\n// Subscribe to real metadata changes (no-op edits are filtered out)\nconst unsubscribe = api.onMetadataChange(({ file, properties, previousProperties }) => {\n  console.log(`${file.path} metadata changed`);\n});\n```\n\nNew in 1.9.0: `getYamlPath` / `updateYamlPath` / `addOrUpdateYamlPath` (nested paths with `a.b[0].c` syntax), `appendDataviewField` insert-location options, `getPropertiesInFile`, `getAutoProperties` / `setAutoProperties`, and the `onMetadataChange` subscription. See the [API docs in the README](https://github.com/chhoumann/MetaEdit#api) for the full surface.\n\n## Reliability roundup\n\nA lot of this release is invisible: it's the writes that *don't* go wrong anymore.\n\n- **Inline fields**: updates no longer append stray brackets (#127), fields behind list/quote markers and brackets are parsed (#122), writes are fence-aware so `key:: value` inside code blocks is left alone, and `[[wikilinks]]` survive multi-value edits.\n- **YAML lists** (including `tags`) are edited as native lists instead of being collapsed to a string (#94/#128), and malformed frontmatter no longer breaks parsing (#132).\n- **Kanban helper**: only the card's leading link is synced - trailing date/reference links are ignored (#126); ambiguous same-named notes are never written to (#158); a missing board property produces a single notice instead of spam (#145).\n- **Progress Properties** count only `[x]`/`[X]` tasks as complete (#145).\n- **Safety**: `__proto__`/`constructor`/`prototype` are rejected as property keys everywhere (#148, #159), frontmatter writes are hardened, and reserved keys are preserved when cloning values (#162).\n- **No lost updates**: settings and bulk writes are serialized through write queues (#147, #154, #156), and the settings tab no longer clobbers concurrently added Auto Property choices.\n- Deleting a block-list property, presence-based property lookups, and safe command no-ops (#143); well-formed duplicate-name notices and more robust modal closing (#144).\n\n## Behavior changes to know about\n\n- **Requires Obsidian 1.12.7+** (`minAppVersion` raised).\n- **Body-tag delete/transform actions were removed** - they could not target the right text safely. Rename and leaf-edit remain; frontmatter `tags:` editing is unaffected.\n- MetaEdit's suggester actions now use Obsidian's native icons and tooltips - same actions, clearer presentation.\n\n## Full changelog\n\nEvery commit since 1.8.4: [`1.8.4...1.9.0`](https://github.com/chhoumann/MetaEdit/compare/1.8.4...1.9.0)\n\n<details>\n<summary>All changes by type</summary>\n\n### Features\n\n- **create**: fluid, type-aware native YAML property creation (#170)\n- **editor**: edit properties with Obsidian's native widgets; raise minAppVersion to 1.12.7 (#168)\n- **api**: append Dataview field instances without replacing; expand public integration surface (#120)\n- **auto-properties**: description, multi-select, and learn-as-you-go values (#123); paste a list to split into choices (#139)\n- bulk edit metadata across folders and selected notes (#124)\n- assist property-value entry with autocomplete and a native date picker (#125)\n- support nested YAML path editing\n- hide file tags from the Edit Meta menu (#46, #90, #131)\n- adopt modern Obsidian APIs and raise baseline\n\n### Fixes\n\n- **suggester**: native icons + tooltips for row actions; centered flush-right (#166); robust modal close and well-formed duplicate notices (#144)\n- **controller**: fence-aware inline-field writes; `__proto__`/`constructor` guards in all frontmatter writes (#159); hardened frontmatter metadata writes\n- **parser**: preserve `[[wikilinks]]` in multi-value inline edits; parse inline fields behind list/quote markers and brackets (#122); tolerate malformed YAML frontmatter (#132)\n- **bulk**: serialize bulk frontmatter writes through the controller write queue (#147); reject `__proto__`/`constructor` as bulk property keys (#148)\n- **settings**: serialize Auto Property persistence to prevent lost updates (#154); validate auto-properties before queueing, compare-and-restore rollbacks (#156); no clobbering of concurrently added choices\n- **kanban**: don't write to ambiguous same-named notes (#158); single notice for missing board property (#145); sync only the card's leading link (#126)\n- **tags**: correct and clarify tag editing (#142); edit YAML lists (incl. tags) as native lists (#94, #128)\n- **automators**: count only `[x]`/`[X]` tasks complete; null-guard Kanban lane display (#145)\n- **api**: preserve reserved keys when cloning values (#162)\n- **core**: safe command no-op, block-list deletion, presence-based property lookups (#143); stop inline-field updates appending a stray bracket (#127)\n- Kanban helper syncs only the card's leading link, not trailing date/reference links (#126)\n\n</details>\n\n---\n\n**Install**: MetaEdit is in the Community plugins browser. Already installed? It will update on its own, or force it via Settings → Community plugins → Check for updates.\n\nFound a bug or have an idea? [Open an issue](https://github.com/chhoumann/MetaEdit/issues) - this release closed a big stack of them, and reports like yours are what drove it.\n",
+      "downloadCount": 22,
+      "draft": false,
+      "name": "1.9.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T20:40:20Z",
+      "tag": "1.9.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:d521c1fde5443eec1a82feb1e1909b81ad8bd71a6a3661cdaf278ea0b7323fee",
-          "downloadCount": 14962,
+          "downloadCount": 15011,
           "name": "main.js",
           "size": 175525
         },
         {
           "digest": "sha256:b2fb15d58cf03a69b7304d3a1458d41df78a6b4b1cf67b706c9cf3b8bf10730e",
-          "downloadCount": 15015,
+          "downloadCount": 15064,
           "name": "manifest.json",
           "size": 252
         },
         {
           "digest": "sha256:31aae3c2fa227f4f3fd531d30f934ca1f082bde864ca9728b86eb2e790fc29d2",
-          "downloadCount": 14840,
+          "downloadCount": 14888,
           "name": "styles.css",
           "size": 255
         }
       ],
       "author": "github-actions[bot]",
       "description": "## [1.8.4](https://github.com/chhoumann/MetaEdit/compare/1.8.3...1.8.4) (2026-01-22)\n\n\n### Bug Fixes\n\n* use vite 5 for vitest ([0c194e0](https://github.com/chhoumann/MetaEdit/commit/0c194e08f72641e9eecce763d972ba1258d7aef0))\n\n\n\n",
-      "downloadCount": 15015,
+      "downloadCount": 15064,
       "draft": false,
       "name": "1.8.4",
       "prerelease": false,
@@ -53,7 +83,7 @@
       "assets": [
         {
           "digest": "sha256:d521c1fde5443eec1a82feb1e1909b81ad8bd71a6a3661cdaf278ea0b7323fee",
-          "downloadCount": 112,
+          "downloadCount": 113,
           "name": "main.js",
           "size": 175525
         },
