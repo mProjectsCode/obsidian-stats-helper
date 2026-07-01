@@ -4,8 +4,8 @@
   "description": "Extended functionality to automatically search and insert citations from a Zotero library. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "citation-extended",
-  "lastChangedAt": "2026-06-30T04:03:26.967Z",
-  "lastFetchedAt": "2026-06-30T04:03:26.967Z",
+  "lastChangedAt": "2026-07-01T04:03:26.974Z",
+  "lastFetchedAt": "2026-07-01T04:03:26.974Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
@@ -23,32 +23,32 @@
       "assets": [
         {
           "digest": "sha256:f242af9c5cb6b9f24f6e6bd52bf68da5168583f8914b94fb62592939b13a3133",
-          "downloadCount": 54,
+          "downloadCount": 57,
           "name": "main.js",
           "size": 2715931
         },
         {
           "digest": "sha256:4675dac08c99e1d83bbf721969911593efbc6b39cd65940e6743b182100c9f75",
-          "downloadCount": 79,
+          "downloadCount": 82,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:3099642f13af272449ce525d61c8445898ef2a1e332ca38f1394e57c74a2d82e",
-          "downloadCount": 53,
+          "downloadCount": 56,
           "name": "styles.css",
           "size": 3037
         },
         {
           "digest": "sha256:f2f653b21d3539bd0530a1a78e23ea14737ad10aeb17aeda8d013ce3a1706491",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "versions.json",
           "size": 401
         }
       ],
       "author": "akhmialeuski",
       "description": "This release is a performance and stability overhaul of the database subsystem — incremental reloads, a worker pool, off-thread indexing — plus a major maturation of the Readwise integration.\n\n## ✨ New Features\n\n- **Incremental library reloads**: a change in one database now re-reads and re-parses only that database; every other source is served from cache. Reaction cost is proportional to the changed database, not the whole library.\n- **Worker pool with real cancellation**: multiple databases parse in parallel (load time = max, not sum); aborting a load terminates its worker immediately; file buffers move zero-copy into the worker.\n- **Off-thread search index builds**: the MiniSearch index is built inside a Web Worker (with an async chunked fallback) and swapped in atomically — large libraries no longer freeze the UI during indexing.\n- **Stale-while-revalidate search**: the search modal stays fully usable during background reloads and transient reload errors, serving results from the last loaded data.\n- **Readwise incremental sync**: after the first full download, syncs fetch only entries changed since the last sync (`updatedAfter` cursor with a clock-skew overlap) and merge them into the offline cache idempotently. The **Refresh citation database** command forces a full re-fetch to pick up items deleted in Readwise.\n- **Structured Readwise highlights**: each entry exposes `entry.highlights` (text, note, location, color, tags, URL per highlight) for `{{#each}}` templates, alongside the backward-compatible aggregated `{{note}}`.\n- **Readwise import filters**: per-database filtering by category, tags, minimum highlight count, and Reader location — applied at read time, so the offline cache stays full-fidelity.\n- **Full-text search over notes and highlights**: a query that appears only inside a Readwise highlight or BibTeX note now finds the entry; title and author matches still rank first.\n- **`zoteroPdfMarkdownLink` helpers** (#71) and an array-returning `zoteroPdfURIs` (#69) for one-click PDF links in templates.\n\n## 🐛 Bug Fixes & Improvements\n\n- **Readwise robustness**: API client hardened against malformed responses and pagination loops; a corrupt offline cache is treated as missing instead of masquerading as an empty library; ASIN is exposed via its own getter instead of ISBN; stable source identity preserves the polling timer and sync continuity across unrelated reloads.\n- **Library loading**: the load timeout now actually cancels in-flight source work; retries are always full loads; an aborted load is never cached as a failure.\n- **Parser**: LaTeX command aliases missing from `unicode2latex` are mapped; cross-platform path handling stabilized.\n- **Settings**: the library-load-timeout input is clamped and documented; the Readwise card reports truthful sync states; interval changes apply on the next poll cycle without recreating the source.\n- **Obsidian plugin review findings** resolved.\n\n## 🔧 Under the Hood\n\n- New `npm run bench` benchmark suite (index build, search hot path, sorting over real adapters, normalization pipeline, BibLaTeX parse throughput, full reload cycle); the underlying bottleneck analysis is committed as `docs/performance-analysis.md`.\n- A minimal id-correlated worker RPC replaces `promise-worker`, which supported neither transferables, nor pooling, nor real cancellation.\n- Hot-path getters (`year`, `authorString`, `issuedDate`) are memoized via a shared `Entry.memo()` helper — a year-sort of 10k entries no longer allocates hundreds of thousands of `Date` objects.\n- Architecture documentation expanded: loading flow, source lifecycle, search index build, worker protocol, Readwise incremental sync.\n- Test suite grew from 1105 to 1264 tests, maintaining 95%+ statement coverage.\n\n---\n\n_Full Changelog_: https://github.com/akhmialeuski/obsidian-citation-extended/compare/0.5.1...0.6.0\n",
-      "downloadCount": 79,
+      "downloadCount": 82,
       "draft": false,
       "name": "v0.6.0",
       "prerelease": false,
