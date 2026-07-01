@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-06-30T07:02:26.966Z",
-  "lastFetchedAt": "2026-06-30T07:02:26.966Z",
+  "lastChangedAt": "2026-07-01T07:04:26.993Z",
+  "lastFetchedAt": "2026-07-01T07:04:26.993Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -16,10 +16,10 @@
       "Ko-Fi": "https://ko-fi.com/saberzero1"
     },
     "id": "vim-motions",
-    "isDesktopOnly": true,
-    "minAppVersion": "1.1.1",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.2.3",
     "name": "Vim Motions",
-    "version": "0.21.2"
+    "version": "0.23.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:38a972ba5e22af7a0836143ba962ca4a1d614fd60d81af1b97ddad5301d7fcb8",
+          "downloadCount": 14,
+          "name": "main.js",
+          "size": 296072
+        },
+        {
+          "digest": "sha256:778cb690f4d0cf1bcf88053bd41c6ba58ddff8978fe30b26cd9527b937839c9b",
+          "downloadCount": 15,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:79d717de4d6c9f233745eac515742a45889f561befe92af6879569399eed76ae",
+          "downloadCount": 14,
+          "name": "styles.css",
+          "size": 8451
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Declarative settings API (`getSettingDefinitions`)** — implemented Obsidian's 1.13.0+ declarative settings API with a version guard. On Obsidian 1.13.0+, plugin settings appear in Obsidian's global settings search and use the new declarative rendering pipeline. On older versions, the existing imperative `display()` method continues to work unchanged. No `minAppVersion` bump required.\r\n    - `getSettingDefinitions()` returns all settings organized into groups (Vim features, Vim engine, Jump navigation, Status bar, Mode prompts, Cursor shapes, Vimrc & key bindings, Leader key bindings, Which-key hints, Which-key group/command labels, Advanced)\r\n    - `getControlValue()`/`setControlValue()` overrides handle dot-notation keys for nested settings (`modePrompts.normal`, `cursorShapes.insert`), clear vimrc overrides on user change, and trigger `reloadFeatures()` for settings that require it\r\n    - Vimrc-overridden settings are disabled via `disabled: () => isOverridden(key)` predicates\r\n    - Complex sections (leader bindings, which-key group/command labels, hotkey recorder) use `render` callbacks delegating to the existing imperative rendering methods\r\n    - `styles.css`: added `.vim-motions-hidden` utility class for render callback placeholder rows\r\n\r\n### Documentation\r\n\r\n- `README.md`: updated Settings section to note settings search compatibility on Obsidian 1.13.0+\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.22.0...0.23.0",
+      "downloadCount": 15,
+      "draft": false,
+      "name": "0.23.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T23:00:35Z",
+      "tag": "0.23.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:df78e0378db06442d1680bfd38c3c1972c852d6e49ba26b3c8cadf58ae57a0f7",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 281502
+        },
+        {
+          "digest": "sha256:b02239c1773079c5af4b91ab0a767fc69b037923f577658055eda09c5e6e3a8a",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:b6bbe044dceb0df4622007ed5e1d8fbf6d9341e9b30e4cb34704c91bcb1679f9",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 8407
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Mobile support** — the plugin is no longer desktop-only. Changed `isDesktopOnly` to `false` in `manifest.json`. EasyMotion and hint mode are disabled on mobile via `Platform.isMobile` guards because they depend on `activeDocument`/`activeWindow` (desktop-only Obsidian globals). All other features (core vim, text objects, navigation, workspace commands, vimrc, status bar, tables, surround) work on mobile. ([#30](https://github.com/saberzero1/motions/issues/30))\r\n    - `src/main.ts`: added `Platform.isMobile` guards to skip EasyMotion and hint mode registration on mobile (in `onload`, `reloadFeatures`, and `reregisterLeaderFeatures`)\r\n    - `eslint.config.mts`: added `@codemirror/*` and `@lezer/*` to `import/no-nodejs-modules` allow list — `eslint-plugin-obsidianmd` enables this rule when `isDesktopOnly: false`\r\n\r\n### Fixed\r\n\r\n- **EasyMotion big-WORD regex crashes on iOS < 16.4** — `BIG_WORD_START_RE` used a lookbehind assertion (`(?<=\\s|^)\\S`) which is not supported on iOS versions before 16.4. Rewritten as a two-pass scanner: first checks start-of-line for non-whitespace, then finds `\\s\\S` transitions mid-line. The `obsidianmd/regex-lookbehind` lint rule (enabled when `isDesktopOnly: false`) caught this. ([#30](https://github.com/saberzero1/motions/issues/30))\r\n- **`import/no-nodejs-modules` false positives on `@codemirror/*` imports** — `eslint-plugin-obsidianmd` enables this rule when `isDesktopOnly: false` in `manifest.json`. The existing `import/core-modules` setting does not affect this rule's allow list. Added explicit `allow` entries for all `@codemirror/*` and `@lezer/*` packages to the rule configuration.\r\n- **Configurable insert mode escape timeout** — `set insertmodeescapetimeout=N` (alias `imet`, range 100–5000ms, default: 1000ms) controls how long the plugin waits between keystrokes when matching the `insertmodeescape` sequence (e.g. `jk`). Matches Neovim's `timeoutlen` default of 1000ms. Previously hardcoded at 200ms — too tight for normal typing. Configurable via vimrc, Settings UI (**Settings → Vim Motions → Vim engine → Insert mode escape timeout**), or runtime `Vim.setOption('insertmodeescapetimeout', 500)`. ([#31](https://github.com/saberzero1/motions/issues/31))\r\n- **Vimrc ↔ Settings parity** — all plugin settings are now configurable via `.obsidian.vimrc` in addition to the Settings UI. When vimrc is enabled (the default), vimrc values override the corresponding Settings UI values. Settings overridden by vimrc are shown as disabled controls in the settings tab with a note indicating the vimrc directive that set them (e.g., \"Set by vimrc: `set scrolloff=10`\").\r\n    - **Boolean feature toggles** via `set`/`set no`: `textobjects`, `navigation`, `hardwrap`, `listcontinuation`, `tablenav`, `workspacenav`, `easymotion`, `easymotiondimming`, `hintmode`, `statusbar`, `chorddisplay`, `powerline`\r\n    - **Number options** via `set <option>=<value>`: `scrolloff` (0–20), `scanlimit` (5–200), `labelfontsize` (10–20)\r\n    - **String options**: `easymotionlabels`, `hintlabels`\r\n    - **Enum options**: `tablewidget` (off/cursor/always), `whichkey` (off/leader/all), `whichkeygrouping` (flat/grouped)\r\n    - **Mode prompt customization** via `let g:mode_prompt_normal = \"N\"` (and insert/visual/replace)\r\n    - **Which-key group labels** via `whichkeygroup <leader>t Table` — name key prefix groups in the which-key popup\r\n    - **Which-key command labels** via `whichkeylabel <leader>w Save file` — describe individual bindings in the which-key popup\r\n    - **Reverse-direction settings** — clipboard, tabstop, shiftwidth, expandtab, insertmodeescape, and textwidth now have Settings UI controls (previously vimrc-only)\r\n    - **Priority rule**: vimrc values override Settings UI values when `enableVimrc` is true. Overrides are in-memory only — the on-disk settings file always reflects UI-set values. Changing an overridden setting in the UI clears the override for the current session.\r\n    - **List merge**: which-key group labels and command labels from vimrc are merged with labels configured in Settings. Vimrc entries appear as read-only rows; the \"Add\" button remains active for user additions. Vimrc wins on conflict.\r\n    - **`source` directive fix**: settings and `guicursor` in sourced vimrc files now propagate correctly (pre-existing bug where `onCursorShapeChange` was not passed to recursive `loadVimrcFile` calls)\r\n    - **`vimrcLoading` flag fix**: the flag is now reset to `false` after successful vimrc load, enabling runtime `:set` commands to trigger immediate `reloadFeatures()`\r\n- **Vimrc `set` command routing** — all known `set` options are now handled directly in the vimrc loader via a `KNOWN_SET_OPTIONS` mapping table, calling `onSettingOverride` directly instead of relying on `defineOption` callback dispatch through `vim.handleEx`. This ensures reliable settings override regardless of codemirror-vim initialization order. Unknown options fall through to `handleEx` for forward compatibility.\r\n- **Spurious `defineOption` callback prevention** — `registerVimOptions` now uses a `registered` flag to prevent `defineOption` callbacks from firing during initial option registration (codemirror-vim calls `setOption(name, defaultValue)` internally during `defineOption`). Without this guard, every option with a truthy default would spuriously populate `vimrcOverrides` and trigger `reloadFeatures` during plugin startup.\r\n- E2E test suite `test/specs/vimrc-settings.e2e.ts` with 11 tests covering boolean/number/string/enum option overrides, mode prompts, which-key labels, override tracking, and combined overrides\r\n- **`set insertmodeescape=jk` not working (frame-perfect timing required)** — the `InsertEscapeHandler` listened to `vim-keypress` events, which only fire for keys processed by codemirror-vim as vim commands. In insert mode, regular character keys bypass vim entirely and go through CM6's text input pipeline — the handler never saw them. Rewrote to use DOM `keydown` events on the editor element, correctly intercepting keystrokes in insert mode. Also fixed the `insertmodeescape` vim option not storing its value for `getOption()` retrieval (callback returned `undefined` instead of the stored value). ([#31](https://github.com/saberzero1/motions/issues/31))\r\n- **`dk` not deleting in operator-pending mode** — `dk` (delete current and previous line) was a no-op because `tableAwareMoveUp` was registered with `context: 'normal'`, causing it to be filtered out in operator-pending mode. CM Vim's keymap search then failed to fall through to the default `k` motion. Removed the context restriction since the motion already handles operator-pending mode internally via its `hasOperator` check.\r\n- **Cursor snaps to formatting mark boundary in Live Preview** — placing the cursor inside formatted text (`*italic*`, `**bold**`, `` `code` ``, `~~strike~~`, `==highlight==`) would snap to the delimiter boundary instead of the intended position. Obsidian's Live Preview uses `Decoration.replace({})` to hide formatting marks on inactive lines, creating zero-width gaps that cause CM6's position mapping to collapse. Fixed by intercepting `Decoration.replace({})` via `RangeSetBuilder.prototype.add` patching (same pattern as the table widget suppressor) and suppressing empty replace decorations whose text matches known formatting marks (`*`, `**`, `_`, `__`, `` ` ``, `~~`, `==`). A `StateField` tracks the current document for text extraction. CSS styling (`color: transparent`) hides the now-visible marks on inactive lines while preserving their positional space.\r\n- **`%` bracket matching skips brackets in strings and comments** — the fork's `scanForBracket` fallback now calls `getTokenTypeAt()` for each bracket candidate and skips brackets inside `\"string\"` or `\"comment\"` tokens. Previously, positional stack counting would match a bracket inside a string literal. Note: in Markdown mode, Lezer does not classify double-quoted text as string tokens, so this primarily benefits languages with proper syntax trees.\r\n- **`<<`/`>>` indent respects `shiftwidth` and `expandtab`** — the fork's indent operator now reads the vim options `shiftwidth` and `expandtab` (via `getOption()`) before falling back to CM6's `tabSize` and `indentWithTabs`. When `set shiftwidth=2` or `set expandtab` is set in `.obsidian.vimrc`, the indent operator uses those values for both visual-block and line-by-line indentation.\r\n- **`V` linewise visual cursor at end of line instead of column 0** — linewise visual mode (`V`, `Vj`, etc.) now positions the cursor at column 0 of the head line, matching Neovim. The fork's `makeCmSelection` was setting `head.ch = lineLength(line)` for display, which placed the cursor at the end of the line. A `ViewPlugin` with `Decoration.line` now provides the full-line visual highlight independently of the CM6 selection head position.\r\n- **Vimrc map re-application** — vimrc key mappings are now re-applied 200ms after initial load as a safety net against CM Vim initialization timing. If the initial `applyVimrcMaps` call runs before the CM6 vim extension has fully settled, the delayed retry ensures mappings take effect.\r\n\r\n### Changed\r\n\r\n- **`minAppVersion` bumped to 1.2.3** — required for `setDisabled()` API on settings controls (used to disable vimrc-overridden settings in the UI). Obsidian 1.2.3 was released March 2023.\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: replaced \"Desktop only\" section with \"Mobile support\" section documenting `Platform.isMobile` guards and feature-by-platform compatibility matrix\r\n- `README.md`: updated Requirements from \"Desktop only\" to \"Desktop and mobile\" with link to known limitations\r\n- `KNOWN_LIMITATIONS.md`: added \"Insert mode escape\" section documenting the `keydown`-based handler, configurable timeout, and the `vim-keypress` event limitation; updated `vi*` single-character status to fixed via formatting mark suppression; updated `%` + strings to note Lezer limitation in Markdown; updated `<<` unindent entry to note fork fix; removed `V` linewise cursor deviation; updated `nmap L $` section with investigation findings; added \"Formatting mark suppression\" section\r\n- `README.md`: added `insertmodeescapetimeout` to number options table and vimrc example; added insert mode escape timeout to settings list\r\n- `DIFFERENCES.md` (fork): added sections for `scanForBracket` string/comment awareness, indent operator `shiftwidth`/`expandtab` support, linewise visual cursor positioning with decoration-based highlight\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.21.2...0.22.0",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.22.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T22:20:33Z",
+      "tag": "0.22.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:08703de5a36c7fa000dc332e9988d6ad56fcb619f4b7e20b1156ce78b91a1aae",
-          "downloadCount": 12,
+          "downloadCount": 30,
           "name": "main.js",
           "size": 259735
         },
         {
           "digest": "sha256:6d32956e4ddb18e7469287ce88792c2cfbff1522f5732aa9881d9ec713fd7284",
-          "downloadCount": 13,
+          "downloadCount": 30,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:f483a877e74f1f4bb796ad607336590763591921197bba8a89cab46e2fb5dded",
-          "downloadCount": 12,
+          "downloadCount": 28,
           "name": "styles.css",
           "size": 8169
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Plugin fails to load when built-in Vim mode is enabled** — three fork-only API methods were called unconditionally, but do not exist on Obsidian's built-in Vim API. When built-in Vim mode is enabled (or when another plugin pre-installs `window.CodeMirrorAdapter.Vim` with the built-in API), `getVimApi()` returns the built-in Vim object and the calls throw `TypeError: … is not a function`. Added `typeof` guards to all three call sites and marked the methods as optional in the `VimApi` type definition. ([#29](https://github.com/saberzero1/motions/issues/29))\r\n    - `vim.resetKeymap()` in `onload()` — prevented the plugin from loading entirely\r\n    - `vimApi.clearInputState(cm, 'pane-switch')` in the `active-leaf-change` handler — crashed on every tab switch when a partial key buffer was pending\r\n    - `this.vim.removeMapCommand(reg.keys)` in `VimRegistration.removeRegistration()` — crashed during plugin unload or feature toggle when cleaning up `mapCommand` registrations\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.21.1...0.21.2",
-      "downloadCount": 13,
+      "downloadCount": 30,
       "draft": false,
       "name": "0.21.2",
       "prerelease": false,
@@ -58,26 +118,26 @@
       "assets": [
         {
           "digest": "sha256:3ac80ec2a8aa0b1ae155498622977c594ca99e241959d75a1b0ac6ac5a5e21f4",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "main.js",
           "size": 259617
         },
         {
           "digest": "sha256:0b3091c180d76684be87c496dc467b843007d4350c30da0a7cc1e16c7feaa098",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 605
         },
         {
           "digest": "sha256:f483a877e74f1f4bb796ad607336590763591921197bba8a89cab46e2fb5dded",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 8169
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Space-as-leader key mappings not matching in codemirror-vim** — `Vim.map(' j', 'gj')` and `Vim.mapCommand(' w', ...)` stored literal space in the keymap (`' j'`), but `vimKeyFromEvent` produces `'<Space>'` on key press. The `commandMatch` string comparison never found a match, so leader-prefixed sequences silently failed. The fork now normalizes literal spaces to `<Space>` in `_mapCommand` (both `keys` and `toKeys`), `unmap()`, and `removeMapCommand()`. Existing angle-bracket groups (`<C-Space>`, `<S-Space>`) are preserved. This is the root-cause fix for the space-as-leader issue — the 0.21.0 plugin-side fix (`unmapDefaultBinding` centralization) was necessary but not sufficient without this keymap normalization. ([#21](https://github.com/saberzero1/motions/issues/21))\r\n- **Vimrc map commands registered twice** — `nmap`, `nnoremap`, and other map commands in `.obsidian.vimrc` were processed once correctly via `deferredMaps` (the plugin's own parser) and then a second time via `vim.handleEx()` (codemirror-vim's ex command parser). The `handleEx` path splits arguments on whitespace, so `nmap <leader>j gj` with space as leader became `nmap j gj` — a bare `j → gj` mapping without the leader prefix. This double-registration was masked for non-space leaders (comma, backslash) because whitespace splitting doesn't affect those characters. Added `continue` after the `deferredMaps.push()` block, matching the pattern used by all other handled command types (`let`, `source`, `set`). ([#21](https://github.com/saberzero1/motions/issues/21))\r\n\r\n### Documentation\r\n\r\n- `DIFFERENCES.md` (fork): added \"Key string normalization for `map`/`mapCommand`\" section documenting `normalizeKeyString` and the `_mapCommand`/`unmap`/`removeMapCommand` normalization points\r\n- `KNOWN_LIMITATIONS.md`: updated \"EasyMotion leader key conflict\" fixed section with fork-side key normalization details\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.21.0...0.21.1",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.21.1",
       "prerelease": false,
