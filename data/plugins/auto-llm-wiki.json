@@ -4,8 +4,8 @@
   "description": "Maintain a Karpathy-style LLM Wiki with AI-assisted ingest, query, lint, and previewed file changes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "auto-llm-wiki",
-  "lastChangedAt": "2026-07-01T22:04:26.960Z",
-  "lastFetchedAt": "2026-07-01T06:01:26.966Z",
+  "lastChangedAt": "2026-07-02T06:01:26.975Z",
+  "lastFetchedAt": "2026-07-02T06:01:26.975Z",
   "manifest": {
     "author": "youzhixiaomutou",
     "description": "Maintain a Karpathy-style LLM Wiki with AI-assisted ingest, query, lint, and previewed file changes.",
@@ -13,35 +13,95 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Auto LLM Wiki",
-    "version": "0.1.7"
+    "version": "0.1.9"
   },
   "name": "Auto LLM Wiki",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
+          "digest": "sha256:7b2ce4b12bd8d79210e5d9f4f7fe0c3db3d5a9ab7b54d4c9b78e931991b176ea",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 6249089
+        },
+        {
+          "digest": "sha256:da26f0af717dff8f7a3cff0642afc50898b085cd54db342767d109820fb943a3",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 292
+        },
+        {
+          "digest": "sha256:e2c7c7155672f1d2f8da44ee53c3cf2b7b1295b2aa5e63b84615ac004cb6dd30",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 3724
+        }
+      ],
+      "author": "youzhixiaomutou",
+      "description": "## Summary\n- Query now uses Karpathy-style index-first retrieval: read the index, and for larger wikis ask the model which pages are relevant, then answer from only those (instead of dumping an arbitrary first-20). Caps prompt size and improves relevance.\n- Change plans now apply atomically: the whole plan is validated first (rejecting create-over-existing and folder-occupied paths) and rolled back on failure, so the vault is never left half-written.\n- Auto ingest now polls the raw folder on a configurable interval (default 15s, 0 disables) so files changed outside Obsidian (e.g. dragged in) are caught without a restart; scans stay silent when nothing changed.\n- The ingest command is renamed to \"Ingest changed raw files\" to match its behavior.\n\n## Verification\n- npm test (189 passing)\n- npm run build",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T02:56:11Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bf9265efef0e06ee21f5ff6d42a5bdedc7553d520c15b8a61648b1647b5ab7e5",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 6244653
+        },
+        {
+          "digest": "sha256:9b5cc0df4766f1e7c5ebd6a3ec232a7dd0cc7180a62b75bc03b2458cbd64b103",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 292
+        },
+        {
+          "digest": "sha256:e2c7c7155672f1d2f8da44ee53c3cf2b7b1295b2aa5e63b84615ac004cb6dd30",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 3724
+        }
+      ],
+      "author": "youzhixiaomutou",
+      "description": "## Summary\n- Retry transient endpoint errors (network, 429, 5xx) with exponential backoff and honor `Retry-After`; non-retryable 4xx are not retried.\n- Add a request timeout (default 900s, configurable in settings) so slow local or reasoning models no longer hang indefinitely; a timeout is not retried to avoid concurrent duplicate requests.\n- Detect truncated completions via `finish_reason: \"length\"` and surface a clear error; OCR keeps partial transcription instead of aborting the batch.\n- Skip re-reading/re-hashing unchanged raw files via an mtime+size fast-path, re-stamping drifted/legacy entries so the skip engages for existing vaults.\n- Fix production wiring so `requestUrl` returns 4xx/5xx status (throw:false) and status-based retry and structured errors actually apply.\n- Detect the UI language via `localStorage` instead of `getLanguage()` to stay within the declared minAppVersion, and use `Setting.setHeading()` for the settings title.\n- Document the new setting and reliability behavior (English + Simplified Chinese).\n\n## Verification\n- npm test (172 passing)\n- npm run build",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T10:30:34Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:e9c70b00440718c18dbaa7e29493655cb04ffeba7d464a37c2fcd71128de76d0",
-          "downloadCount": 320,
+          "downloadCount": 321,
           "name": "main.js",
           "size": 6240529
         },
         {
           "digest": "sha256:0ff769d8b28085ce5d5eef7a04b3510121738e89e85f34694eadc9e544ab70d7",
-          "downloadCount": 340,
+          "downloadCount": 341,
           "name": "manifest.json",
           "size": 283
         },
         {
           "digest": "sha256:92311b693d9939994f146189ed85c820b15109ff6adebaf5f6e7ecd1c796a504",
-          "downloadCount": 309,
+          "downloadCount": 310,
           "name": "styles.css",
           "size": 3561
         }
       ],
       "author": "youzhixiaomutou",
       "description": "## Summary\n- Add stable OpenXML content fingerprints for `.docx`, `.xlsx`, and `.pptx` raw sources.\n- Ignore Office `docProps/*` metadata-only changes so reopening files does not trigger repeated auto ingest or OCR.\n- Keep PDF/images/legacy Office on pre-parse binary hashes and preserve text/HTML/RTF extracted-content hashes.\n\n## Verification\n- npm test\n- npm run build\n- Bundle scan confirmed no dynamic script element creation in main.js\n",
-      "downloadCount": 340,
+      "downloadCount": 341,
       "draft": false,
       "name": "0.1.7",
       "prerelease": false,
@@ -259,6 +319,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-01T22:04:26.960Z",
+  "removedAt": null,
   "repo": "youzhixiaomutou/auto-llm-wiki"
 }
