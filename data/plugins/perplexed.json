@@ -4,8 +4,8 @@
   "description": "Generate source-cited research content from Perplexity, Anthropic Claude, Perplexica, or local LM Studio — directly into your notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "perplexed",
-  "lastChangedAt": "2026-07-01T05:02:26.968Z",
-  "lastFetchedAt": "2026-07-01T05:02:26.968Z",
+  "lastChangedAt": "2026-07-02T05:04:26.975Z",
+  "lastFetchedAt": "2026-07-02T05:04:26.975Z",
   "manifest": {
     "author": "The Lossless Group",
     "authorUrl": "https://lossless.group",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:703b907a9eb02e51d9cdec28c4aae11af9415aca381cf3f866fe5a50eab2f42d",
-          "downloadCount": 249,
+          "downloadCount": 263,
           "name": "main.js",
           "size": 351317
         },
         {
           "digest": "sha256:64a1066a7517197b6b89d909ea86ac023f988b59aa9503a905bf2b602158331a",
-          "downloadCount": 251,
+          "downloadCount": 265,
           "name": "manifest.json",
           "size": 427
         },
         {
           "digest": "sha256:f0c6588465c988a5fb28d4ab9ce9a32a1e7dabe1be1fffc72fcb8a365e07d63b",
-          "downloadCount": 248,
+          "downloadCount": 262,
           "name": "styles.css",
           "size": 28906
         }
       ],
       "author": "github-actions[bot]",
       "description": "**0.3.0 turns Perplexed into a serious analyst tooling layer for Venture Capital, Private Equity, and equities-trading workflows. Three new directory templates produce 6-9K-word cited analyst drafts in a single Perplexity Deep Research run. Underneath them, four infrastructure fixes turn deep-research from a brittle \"might work\" workflow into something you can put real analyst time behind.**\n\n## Why care?\n\nIf your work involves naming the actual companies in a market category, mapping who's playing where in an emerging market, or profiling the open specs an investment thesis depends on — 0.3.0 is the release where Perplexed becomes a serious analyst tooling layer, not just a notes-with-citations plugin.\n\n**Three new directory templates.** Each produces a 6-9K-word cited analyst draft in a single Perplexity Deep Research run. Each was designed for the kind of document a VC analyst, PE associate, or equities-trading desk strategist hands to a partner or IC:\n\n- **Market-category profiles** (`concepts/Market-Categories/`) name the companies in a category, sorted into three explicit financial-stage tiers — Incumbents (public / late-stage private / PE-owned), Challengers (Series C+ scale-ups), Innovators (Pre-Seed through Series B) — with separate *Why Now* / *What's Happening* sections covering CAGR and category-creation momentum, and a fully-sourced Industry Coverage section sub-grouped into Market Reports (Gartner, IDC, Forrester, ABI) / Industry Articles / Financial News (Bloomberg, FT, Pitchbook).\n- **Market-map drafts** (`lost-in-public/market-maps/`) produce the analyst memo itself — 4-8 sub-segments, 20-40 named innovator cards with funding stage and lead investor, Market Dynamics with cited sizing data and capital concentration, and a Frontier section with open questions framed as questions.\n- **Standards-and-specs profiles** (`Sources/Standards-and-Specs/`) turn an open protocol or convention into a strategic-context document — five-way authority typing (de-jure / consortium / vendor-led-open / community / de-facto), three-tier structural adoption framing plus notable holdouts, named editors, stewardship-transition stories, named public critics with their arguments. Surfaces what an analyst needs to know about a spec: is it surviving its originating vendor, who has it captured, who's working to break the capture.\n\n**Four infrastructure fixes** — each one solving a class of \"deep-research silently produces broken output\" failure mode that would otherwise have kept the analyst-grade workflow brittle:\n\n- **Per-chunk idle-timeout discipline.** The timer that decides \"is this stream still alive?\" is now armed per-chunk, not once per request. A healthy slow stream completes naturally regardless of total duration; a silently-stalled one fails in seconds, not at the wall-clock ceiling. Ported from the legacy `PerplexityModal` flow into the directory-template runtime.\n- **Per-template `request-timeout-ms:` cft override.** Becomes the optional absolute wall-clock ceiling (belt-and-suspenders backstop on top of the idle timer). Set to `0` to disable entirely and rely on idle-only safety — the recommended setting for the two new analyst-grade templates.\n- **Per-template `max-tokens:` cft override.** Fixes the silent-truncation pathology where Perplexity's default output cap (~8,192 tokens, ~6K words for `sonar-deep-research`) was ending the stream cleanly mid-template — full sources footer, no Notice, no truncation flag, looking like a healthy completion that just happened to be missing the back half. The three deep-research templates ship with `max-tokens: 24000` (~18K-word budget).\n- **Strengthened rendering-discipline partials.** `mermaid-discipline.md` rewritten with paired BAD/GOOD examples throughout, the `&amp;` escape rule, an explicit `\\n` vs `<br/>` ban, a six-item self-check before emit, and a simplify-rather-than-break ethos. New `latex-discipline.md` partial covers Obsidian MathJax delimiters and `$` escaping. Both wired into `concept-profile.md`.\n\n## Diagnostic vocabulary for streaming failures\n\n| Symptom | Cause |\n|---|---|\n| Mid-sentence cutoff (ends with a partial word); no sources footer; \"stream went idle\" Notice or no Notice at all | Wall-clock timer (`request-timeout-ms:`) or idle timer (`stream-idle-timeout-ms:`) fired during streaming |\n| Clean section-end cutoff; **sources footer renders correctly with all citations**; no Notice | Perplexity `max_tokens` cap; stream completed via `finish_reason: \"length\"` |\n\nThe three streaming knobs (`request-timeout-ms`, `stream-idle-timeout-ms`, `max-tokens`) are independent — a template can hit any of them, all of them, or none. The three new deep-research templates set all three generously so analyst-grade runs land reliably.\n\n## Editorial discipline diverges by template\n\nThe three new deep-research templates share a common technical substrate but apply different editorial stances on big tech:\n\n- **Market-map** caps big tech at 1-of-5-10 in any sub-bucket to counteract training-data bias — the analyst's job is to name the named operators driving the curve.\n- **Standards-and-specs** names big tech freely in the Incumbents tier (large dominant implementations) and aggressively in the Innovators tier (where the next extensions come from). Suppression would distort the implementation landscape.\n- **Market-category** names big tech as the FIRST move in Incumbents because for a category profile, knowing the incumbents IS the work product.\n\nEach template's system prompt states its editorial stance explicitly so a future template-modifier doesn't accidentally cross-pollinate the wrong stance across templates.\n\n## Upgrade notes\n\n**Vault template drift — the gotcha worth five seconds of attention.** If your `Content-Dev/Templates/concept-profile.md` was seeded before today, it may be missing the `{{include: mermaid-discipline}}` and `{{include: latex-discipline}}` directives. Without them, every concept-profile run generates Mermaid with no rendering rules in scope at all, producing broken diagrams 4-of-5 times. Open the file, find the *Defining and Describing* section, and insert both directives immediately after the \"render a `mermaid` codefence here\" instruction. The re-seed button won't add them — it only writes missing files.\n\n**Re-seed pulls in the new templates and the new partial.** The seven shipped templates plus the two partials are bundled into `main.js`. After upgrading, click *Settings → Directory templates → Re-seed templates* to write the new files into your vault. The button only adds files whose filenames don't already exist; nothing existing gets overwritten. You'll see `market-map-profile.md`, `standards-and-specs-profile.md`, `market-category-profile.md` appear in templates and `latex-discipline.md` appear in partials.\n\n**Backward compatibility.** All cft-block additions are opt-in. Templates that don't declare the new knobs inherit sensible defaults. The four pre-0.3.0 templates (concept, vocabulary, source, toolkit) run unchanged.\n\n**Plugin-level default request timeout bumped 10 min → 30 min.** Visible in *Settings → Directory templates → Request timeout (ms)*. If you had previously set a custom value, it's preserved.\n\n## Deferred to 0.4.x\n\nThree follow-ups that surfaced during the 0.3.0 work cycle:\n\n- A `cf_finish_reason` frontmatter stamp on every run — would have made the max-tokens diagnostic instant instead of an investigation.\n- A \"Continue directory template on current file\" command — for runs cut off by max-tokens, would re-prompt with only the missing sections plus URL-keyed citation merge.\n- A \"diff and patch user files\" mode for re-seed — the vault-drift bug we caught is structural: re-seed only writes missing files, so partial/template improvements never reach users who've already seeded.\n\n## Compatibility\n\n`minAppVersion: 1.8.10` — unchanged from 0.2.1. Desktop-only — unchanged. No new external dependencies; the three new templates and two partials are bundled into `main.js` at build time. The cleanup pipeline behavior (think-block wrap, image-marker swap, sources footer) is unchanged.\n",
-      "downloadCount": 251,
+      "downloadCount": 265,
       "draft": false,
       "name": "0.3.0",
       "prerelease": false,
@@ -144,7 +144,7 @@
       "assets": [
         {
           "digest": "sha256:13a83476aa2544b9ab1d020be04dd2866032923f107fd5f870dac741a186d3fd",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 244841
         },
