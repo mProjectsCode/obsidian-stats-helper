@@ -4,8 +4,8 @@
   "description": "Decks - Spaced repetition flashcards plugin with FSRS algorithm.",
   "errors": [],
   "id": "decks",
-  "lastChangedAt": "2026-07-01T03:05:26.995Z",
-  "lastFetchedAt": "2026-07-01T03:05:26.995Z",
+  "lastChangedAt": "2026-07-02T03:05:26.982Z",
+  "lastFetchedAt": "2026-07-02T03:05:26.982Z",
   "manifest": {
     "author": "Xherdi Lika",
     "authorUrl": "https://github.com/dscherdi",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.10",
     "name": "Decks",
-    "version": "2.4.1"
+    "version": "2.4.4"
   },
   "name": "Decks",
   "presentInCommunityList": true,
@@ -29,14 +29,98 @@
           "size": 34523
         },
         {
-          "digest": "sha256:588d637c7ccbd4dd79f02f68d12a830b8145c30e297ac5d6aa4932785df9bb05",
-          "downloadCount": 7,
+          "digest": "sha256:a2d273f60f3973b3941b3017b8bb9eda7296a2bccc79864bf8512e47cf25469d",
+          "downloadCount": 19,
           "name": "main.js",
-          "size": 5037771
+          "size": 5113484
         },
         {
-          "digest": "sha256:bb49c29d21a7cf0a5bec4d1dff02680145329e895bfb13960693eaed5028035b",
-          "downloadCount": 8,
+          "digest": "sha256:71f6975835f52bcf8a55c4c49a4d665c0c78af198947e5f5b7ac34055113269b",
+          "downloadCount": 20,
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:331a523a7311e940ff66800218d1b0fe2ac2e56d53ff6a49e629c1878ccf3a15",
+          "downloadCount": 0,
+          "name": "README.md",
+          "size": 24963
+        },
+        {
+          "digest": "sha256:f63c4d2fbd1ba66893505554af3e4e2359de334d075a0a3ed0d6525f8a62eb56",
+          "downloadCount": 19,
+          "name": "styles.css",
+          "size": 137209
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Decks 2.4.4 — reliability & performance\n\nA fix-and-speed release: decks can no longer be wrongly removed on startup, Obsidian opens faster with Decks installed, and the deck list refreshes much quicker in large vaults.\n\n#### **Fixed: decks no longer disappear on reload**\n\nBefore Obsidian finished indexing your notes on startup, Decks could briefly see flashcard files as \"missing\" and remove those decks. Decks now only removes a deck when its source file is **actually gone** from the vault — never because the vault is still loading — so your decks stay put across reloads.\n\n#### **Faster startup**\n\nThe database no longer loads on Obsidian's critical startup path — the plugin hands off and finishes initializing in the background, so the window appears sooner. The deck list still paints instantly from saved data once ready.\n\n#### **Faster deck list in big vaults**\n\nRefreshing deck stats used to run several database queries per deck (and again per tag group) — hundreds of round-trips with many decks. It now uses a couple of batched queries for the whole vault, so the list updates near-instantly no matter how many decks you have.\n\n> Upgrade-safe: nothing in your vault changes.\n",
+      "downloadCount": 20,
+      "draft": false,
+      "name": "2.4.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T18:13:13Z",
+      "tag": "2.4.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "downloadCount": 0,
+          "name": "LICENSE",
+          "size": 34523
+        },
+        {
+          "digest": "sha256:0c13304d9c8c8857726535549a16083ca116f0a0b2487e0a5ba555e0bb44d62f",
+          "downloadCount": 17,
+          "name": "main.js",
+          "size": 5109489
+        },
+        {
+          "digest": "sha256:aea5077f4cc8a8affc8933a852cc3c10b15cdd461fa776359583fac4fdd40aa4",
+          "downloadCount": 18,
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:331a523a7311e940ff66800218d1b0fe2ac2e56d53ff6a49e629c1878ccf3a15",
+          "downloadCount": 0,
+          "name": "README.md",
+          "size": 24963
+        },
+        {
+          "digest": "sha256:f63c4d2fbd1ba66893505554af3e4e2359de334d075a0a3ed0d6525f8a62eb56",
+          "downloadCount": 16,
+          "name": "styles.css",
+          "size": 137209
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Decks 2.4.3 — global daily study cap\n\nPer-deck limits multiply once you have lots of decks — 13 decks × 100 reviews is 1300 cards a day, which isn't much of a limit. **2.4.3 adds a single daily cap across all decks** so you can actually control your total study load.\n\nTurn it on in **Settings → Review sessions → Global daily card cap** and set a number (e.g. 100).\n\n#### **One budget for the whole day**\n\n- The cap counts **both new and review cards** studied today across every deck combined. Once you hit it, Decks stops serving cards from all decks — new *and* review — until the study day rolls over.\n- It works **on top of** your per-deck limits: a card is only served when both its deck's limit and the global cap have room.\n- The study day boundary is the one you already set with **\"Study day starts at\"**, so late-night reviews count the way you'd expect.\n\n#### **See where you stand**\n\n- The deck panel's statistics now show a **\"Cards today\"** counter (e.g. `40/100`), turning accented once you reach the cap.\n- As the budget runs down, each deck's **Due/New** counts shrink toward `0`, so the list reflects what you can actually study right now.\n\n#### **Fixes & polish**\n\n- **Natural (number-aware) deck sorting.** Decks with numbers in their names now sort the way you'd read them — `Урок 1, 2, 3 … 10, 11, 12` instead of `1, 10, 11, 2, 3`. Works with any language/script, in the deck list, tag groups, and the flashcard manager's deck picker.\n\n> Upgrade-safe: the daily cap is **off by default** — nothing changes until you enable it. Nothing in your vault is touched.\n",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "2.4.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T14:10:56Z",
+      "tag": "2.4.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "downloadCount": 0,
+          "name": "LICENSE",
+          "size": 34523
+        },
+        {
+          "digest": "sha256:aee628defd905480b20264a7332079de5818fc359dccea591b7fe76937bc2439",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 5083906
+        },
+        {
+          "digest": "sha256:7b816b14526016b40b3eda8e73aac0189dfe2d70abf5222ef4de0ea31c387f44",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 381
         },
@@ -54,8 +138,50 @@
         }
       ],
       "author": "github-actions[bot]",
+      "description": "### Decks 2.4.2 — maintenance\n\nA small hardening release with no changes to how you use Decks.\n\n- **Safer engine loading:** the SQLite engine used to read Anki `.apkg` files on import now loads as a bundled module instead of injecting a script element at runtime. This removes a dynamic-script pattern flagged by Obsidian's plugin review — behaviour is identical; Anki import works exactly as before.\n\n> Upgrade-safe: nothing in your vault changes.\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "2.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T12:43:44Z",
+      "tag": "2.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "downloadCount": 0,
+          "name": "LICENSE",
+          "size": 34523
+        },
+        {
+          "digest": "sha256:588d637c7ccbd4dd79f02f68d12a830b8145c30e297ac5d6aa4932785df9bb05",
+          "downloadCount": 29,
+          "name": "main.js",
+          "size": 5037771
+        },
+        {
+          "digest": "sha256:bb49c29d21a7cf0a5bec4d1dff02680145329e895bfb13960693eaed5028035b",
+          "downloadCount": 32,
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:331a523a7311e940ff66800218d1b0fe2ac2e56d53ff6a49e629c1878ccf3a15",
+          "downloadCount": 0,
+          "name": "README.md",
+          "size": 24963
+        },
+        {
+          "digest": "sha256:f739421002895692c97b71276fb265312daa0c1efa24b06dcb0c1d1b388d5287",
+          "downloadCount": 28,
+          "name": "styles.css",
+          "size": 137111
+        }
+      ],
+      "author": "github-actions[bot]",
       "description": "### Decks 2.4.1 — parse multiple header levels per profile\n\nA deck profile could only turn **one** header level into card fronts. Now a single profile can parse **several levels at once** — so `##` and `###` sections in the same note both become cards, without splitting the note across separate decks or profiles.\n\n#### **Pick additional levels**\n\nThe **Header level** dropdown in a profile still sets the **primary** level. Below it, a new **Additional header levels** selector lets you switch on any other levels (H1–H6) you also want treated as cards. Pick **Title** as the primary level and the extra selector hides — whole-note mode is unchanged.\n\n#### **Each header is its own card**\n\nEvery selected header becomes an independent card (siblings, not nested): a parent header's back is just the text before its first sub-header, and a header that contains only sub-headers — with no body text of its own — produces no card. Cloze and image-occlusion cards are detected at every selected level too.\n\n#### **New cards still use one level**\n\nWriting is unchanged: cards you create by hand, generate, or import (Anki / Spaced Repetition) are still written at the profile's **primary** level, and editing a card keeps its existing header depth. The extra levels only affect how existing notes are **read**.\n\n> Upgrade-safe: existing profiles keep their single level (no extra levels added). Turning levels on or off re-parses that profile's decks on the next sync.\n",
-      "downloadCount": 8,
+      "downloadCount": 32,
       "draft": false,
       "name": "2.4.1",
       "prerelease": false,
@@ -72,13 +198,13 @@
         },
         {
           "digest": "sha256:599e4507098b6dbe094fec41a08145ce2ec9dd472d84322882c87b382009ba43",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "main.js",
           "size": 5021528
         },
         {
           "digest": "sha256:4389c6968d3aebae5091206f380f4a82582dc369cf3cdd279ade6811c3fe7588",
-          "downloadCount": 26,
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 381
         },
@@ -90,14 +216,14 @@
         },
         {
           "digest": "sha256:6313bc7986e2c3d5918903aa77c1ca2ee7a5d5fd793a910f95da185d8535ff5a",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "styles.css",
           "size": 136906
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Decks 2.4.0 Release Notes\n\n### 🚀 Major Addition: Import from Anki\n\nComing from Anki? Decks 2.4.0 introduces a built-in one-click importer that brings your entire collection across — **your decks, cards, media, and review history come with you.** Point it at an Anki `.apkg` export and you keep studying with FSRS-6, picking up your reviews exactly where Anki left them.\n\nTo get started, open the importer from the deck panel toolbar or run the **\"Import from Anki\"** command, choose your `.apkg` file and a target folder, and import.\n\n### How the Importer Works\n\n* **Completely non-destructive:** Your Anki collection is never touched. The import is additive — it writes new files into a target folder you choose, nested under the `#decks/anki` tag. Re-importing the same file simply overwrites what it generated (and refreshes media).\n* **Every note type becomes a clean card:** Basic notes become auto-laid-out tables or headers; **cloze** deletions are preserved — including clozes written inside `$…$` MathJax; **multi-field / templated** notes get an auto-generated template so they render the way you designed them; and **image-occlusion** cards come across as native Decks occlusion.\n* **Media and math come too:** Audio and images are copied into your vault and play/render in review; images keep their original size; LaTeX/MathJax is preserved; Anki tags are grouped and sorted into readable sections.\n* **Your schedule resumes, it doesn't restart:** Each card's scheduling state and full review history are translated to FSRS-6, so cards appear already due on the right date with the right interval.\n* **Big, media-heavy decks stay smooth:** Large decks are automatically split into capped, subfoldered files — by both card count and media-embed count — so a deck with thousands of audio clips still opens quickly in Obsidian.\n* **Live progress:** A progress bar tracks every phase as it runs — reading the collection, writing decks, copying media, syncing, and importing review history — so large imports never look stuck.\n\nBoth legacy and modern (compressed) `.apkg` exports are supported.\n",
-      "downloadCount": 26,
+      "downloadCount": 27,
       "draft": false,
       "name": "2.4.0",
       "prerelease": false,
