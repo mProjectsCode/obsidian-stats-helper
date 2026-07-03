@@ -4,8 +4,8 @@
   "description": "A dashboard for organizing and consuming RSS feeds, YouTube channels, and podcasts with smart tagging, media playback, and seamless content flow.",
   "errors": [],
   "id": "rss-dashboard",
-  "lastChangedAt": "2026-07-02T03:05:26.982Z",
-  "lastFetchedAt": "2026-07-02T03:05:26.982Z",
+  "lastChangedAt": "2026-07-03T03:03:26.966Z",
+  "lastFetchedAt": "2026-07-03T03:03:26.966Z",
   "manifest": {
     "author": "Aditya Amatya",
     "authorUrl": "https://github.com/amatya-aditya",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:4efe41aa7329217f93e18623ab6ebd27840edbdbc4bc78de264ddc5d4d57f341",
-          "downloadCount": 33,
+          "downloadCount": 487,
           "name": "main.js",
           "size": 909384
         },
         {
           "digest": "sha256:be98e6df8e576a73fd842cf069c847293255f84b55591202fc50d7edbe66143d",
-          "downloadCount": 35,
+          "downloadCount": 639,
           "name": "manifest.json",
           "size": 425
         },
         {
           "digest": "sha256:087c088ac646003f944f5e44c5f4115d6318c27dc6598ab1926e2f80578fee3a",
-          "downloadCount": 30,
+          "downloadCount": 482,
           "name": "styles.css",
           "size": 319427
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 2.4.0 - July 1, 2026\r\n\r\n> RSS Dashboard 2.4 focuses on sync reliability at scale: Shard Storage v2 separates settings, user state, and article content to eliminate cross-device race conditions, joined by deeper auto-tagging (feed source, individual feed, and folder), richer podcast controls, and continued Community Plugin compliance remediation.\r\n\r\n---\r\n\r\n### Headline Features\r\n\r\n#### Shard Storage v2 — resolving sync race conditions\r\n\r\n- Added Shard Storage mode v2 to improve sync reliability across devices. This mode introduces a new `user-state.json` file alongside `data.json`, storing per-article state — read/unread, favorited, saved, tags, and play progress. Feed shard files now contain only article content and the GUID used to link back to `user-state.json`. `data.json` now stores only plugin settings.\r\n- This separation resolves race conditions that previously caused some sync tools (e.g. Remotely Save, WebDAV-based sync) to overwrite read/star/tag changes when a feed refresh on another device landed at the same time.\r\n- v2 is opt-in: existing users on Legacy or v1 storage can migrate via the new \"Vault location (v2 — split user state)\" option in the Storage settings tab. A confirmation prompt explains the change before migration runs. Future versions will likely force users to migrate from v1 to v2.\r\n- Updated [docs/storage-vault-shards-guide.md](../../docs/storage-vault-shards-guide.md) to include v2 documentation and a comparison of all three storage modes.\r\n\r\n#### Smarter auto-tagging: by feed source, individual feed, and folder\r\n\r\n- Added three ways to auto-tag articles, which can be combined: by feed source, by individual feed, and by folder, with folder tags cascading to descendant feeds.\r\n- **Feed source**: `Settings > Tags > Auto Tagging` now supports multi-tag auto-tagging based on feed source (for example, apply \"RSS\" to all RSS feeds, or \"YouTube\" to all YouTube feeds).\r\n- **Individual feed**: A new \"Custom auto-tags\" dropdown in the Add/Edit feed window layers feed-specific tags on top of any enabled feed-source tags.\r\n- **Folder**: Right-click any sidebar folder and choose **Auto-tag feeds in folder...** to assign tags that cascade to all feeds in that folder and its descendants, with support for targeting subfolders. Choose \"Sync folder auto-tags\" to add newly selected tags and remove deselected ones while leaving manual and other rule tags untouched, or \"Remove all tags\" to strip every tag in scope.\r\n- See [docs/tags-primer.md](../../docs/tags-primer.md) for full precedence rules and examples.\r\n\r\n#### Multi-select sidebar folders\r\n\r\n- Added ability to control+click and shift+click select multiple folders in the sidebar. This allows you to filter and view only the articles contained within those folders.\r\n\r\n#### Podcast player upgrades\r\n\r\n- Added `Settings > Media > Podcast player` default play speed, applied automatically when an episode loads.\r\n- Added an \"Autoplay\" toggle in the playlist bar to automatically continue to the next episode, or keep playback limited to the current episode when disabled.\r\n\r\n#### Sidebar feed fetch status\r\n\r\n- Added a red (!) icon next to the unread badge indicating a feed that failed to fetch. Hover, right-click \"View fetch error,\" or long-press on mobile/tablet to see the failure reason.\r\n- Added a toggle in the Sidebar settings tab to enable/disable the feed fetch status icon.\r\n\r\n### Feed Management and Workflow Improvements\r\n\r\n- Added Obsidian URI support for one-click feed subscription via `obsidian://rss-dashboard?action=add-feed&url=<encoded-feed-url>`, including parameter validation and unsupported-action notices. [GH FR #126](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/126)\r\n- Added `Settings > General > Saved article open location` to control where saved articles open. [GH FR #131](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/131)\r\n- Added `{{image}}` to the Article Saving template, inserting the cover image URL when one exists. [GH FR #128](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/128)\r\n- Added `,` keybind to mark the current article read and advance to the next. [GH FR #138](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/138)\r\n- Added an \"Auto\" option to the Proxy dropdown in General Settings, cycling through all configured proxies instead of a single fixed choice. Enabled by default.\r\n- Added a configurable startup refresh delay (in seconds, default 5) to reduce processing load immediately after launch.\r\n- Added two new dedicated settings tabs, **Storage** and **Sidebar**, consolidating options previously spread across other tabs.\r\n\r\n### Stability and Quality of Life\r\n\r\n#### Saving articles to vault\r\n\r\n- [GH Issue #127](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/127) covered several distinct problems, now resolved:\r\n  - Certain feeds with malformed XML could corrupt the saved article; added a cleaner helper to sanitize feed XML (e.g. [beehiiv.com](https://rss.beehiiv.com/feeds/40ZQ7CSldT.xml)).\r\n  - Substack's `content:encoded` XML schema wasn't handled properly by the parsing helper, causing articles and images to save incorrectly.\r\n  - Resolved a format discrepancy between saving an article via the dashboard card versus the reader toolbar; both paths now resolve to the same saved note.\r\n\r\n#### Cross-platform sync reliability\r\n\r\n- Added a bootstrap pointer that saves metadata config locally so the app knows where to look on restart.\r\n- Changed the default storage type for fresh installs from Legacy JSON to Shard Storage v2, while retaining Legacy JSON as an option for existing users.\r\n- Added a variable-length sync nonce (`_syncNonce` + `_syncPad`) to every `saveData` call, appending a random 1-2kb string so `data.json`'s file size always changes on save — ensuring Obsidian Sync reliably detects and uploads settings changes even when the underlying data itself is unchanged.\r\n- Resolves [GH Issue #142](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/142) and [GH Issue #140](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/140).\r\n- Added step-by-step cross-platform sync instructions to [README.md ## Syncing Across Devices](README.md).\r\n\r\n#### Card rendering and display fixes\r\n\r\n- Fixed some feeds not properly rendering card previews (e.g. [World History Encyclopedia](https://www.worldhistory.org/rss/)).\r\n- Fixed laggy rendering on some feeds (NPR).\r\n- Fixed preview images not appearing on cards for feeds without a provided image URL.\r\n- Fixed cards showing a blank gray state instead of summary text due to pixel trackers being misinterpreted as images.\r\n- Fixed date misalignment inside the card toolbar.\r\n- Fixed some feeds (e.g. TED Talks) not properly showing summary text inside cards.\r\n\r\n#### Mobile and interface fixes\r\n\r\n- Fixed RSS feed profile favicon size overflow on Android, where sidebar favicons (used by Mastodon feeds) rendered at massive sizes instead of the intended 16x16px; added explicit `max-width`, `max-height`, and touch-device CSS constraints.\r\n- Fixed mobile sidebar tags issue where tapping a checked row failed to uncheck it.\r\n- Fixed the inline viewer not rendering the reader toolbar.\r\n- Fixed some sidebar icons not rendering properly.\r\n- Fixed the \"All Feeds\" spinner not animating on mobile/tablet during a refresh-all.\r\n- Fixed some broken favicons causing unnecessary internal retry loops while attempting to resolve.\r\n\r\n### Commnuity Plugin Audit remediation\r\n\r\n- Addressed the remaining issues on the Obsidian Community Plugin Audit (https://community.obsidian.md/plugins/rss-dashboard)\r\n- Rewrote how media progress (YouTube iframe embeds) is stored to remove dynamic `<script>` element creation, which had been flagged as a red/critical audit risk; added a CI/CD ESLint rule to prevent regressions. This unforunately breaks the YouTube saved progress feature (see below)\r\n- Completely eliminated all Node.js/Electron `fs` and `path` usages from production plugin code.\r\n- Eliminated all superfluous `!important` declarations; documented remaining necessary declarations that pass audit.\r\n\r\n### Known issues\r\n\r\n#### YouTube saved progress\r\n\r\n- **Known Issue:** YouTube watch progress is currently not being saved. This is due to YouTube API limitations in Obsidian's Electron environment (specifically, cross-origin `postMessage` blocks from the `app://` protocol). Previously, this was handled by a dynamic `<script>` injection of the YouTube IFrame API, but that had to be removed during the 2.3.0 plugin audit as a potential security violation. We are continuing to monitor for upstream Electron or API workarounds. See [YouTube progress not being saved](../../docs/bugs/bug_report_yt_progress.md).\r\n",
-      "downloadCount": 35,
+      "downloadCount": 639,
       "draft": false,
       "name": "2.4.0",
       "prerelease": false,
@@ -156,7 +156,7 @@
         },
         {
           "digest": "sha256:b59b213a23d6a812ad2cf35eef1d540f6edcbb8bfeee6e54b78374d81bc84df5",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "obsidian-rss-dashboard.zip",
           "size": 254211
         },
@@ -870,7 +870,7 @@
         },
         {
           "digest": "sha256:fb083dbb6e38c0e903d9f75c3270eb8ddb1694a1bdde6e6a48f30e128321bebd",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 162350
         }
