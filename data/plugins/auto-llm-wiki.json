@@ -4,8 +4,8 @@
   "description": "Maintain a Karpathy-style LLM Wiki with AI-assisted ingest, query, lint, and previewed file changes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "auto-llm-wiki",
-  "lastChangedAt": "2026-07-02T06:01:26.975Z",
-  "lastFetchedAt": "2026-07-02T06:01:26.975Z",
+  "lastChangedAt": "2026-07-03T06:04:26.971Z",
+  "lastFetchedAt": "2026-07-03T06:04:26.971Z",
   "manifest": {
     "author": "youzhixiaomutou",
     "description": "Maintain a Karpathy-style LLM Wiki with AI-assisted ingest, query, lint, and previewed file changes.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Auto LLM Wiki",
-    "version": "0.1.9"
+    "version": "0.1.10"
   },
   "name": "Auto LLM Wiki",
   "presentInCommunityList": true,
@@ -21,27 +21,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:439341e5c95e8a48a5748061305df9b42a1583d6ffa4354668bf228ac967fdda",
+          "downloadCount": 16,
+          "name": "main.js",
+          "size": 6253829
+        },
+        {
+          "digest": "sha256:d05aa4c084ad24ab3eed1fc3782dc72c72300ae761c8926fb0b22bcc20bd1291",
+          "downloadCount": 18,
+          "name": "manifest.json",
+          "size": 293
+        },
+        {
+          "digest": "sha256:32253f88c1ec368b38465030207f2b79872c300127cd4dccfec22a00c6f77295",
+          "downloadCount": 16,
+          "name": "styles.css",
+          "size": 3872
+        }
+      ],
+      "author": "youzhixiaomutou",
+      "description": "## Summary\n- Query now files worthwhile answers back into the wiki as a new/updated page and records the query in the log, so explorations compound in the knowledge base.\n- New reviewed **lint** command reconciles the wiki against the current raw sources: it treats the wiki as a synthesis distilled from many sources, prefers revising a page over deleting it, and prunes only truly orphaned pages (whose raw source was removed). Findings appear in the preview summary — no report page is written.\n- Change-plan parsing is now robust to chatty replies: fenced JSON, prose containing stray braces, and an example/schema object emitted before the real plan are all handled (whole-reply JSON is used when present).\n- Delete operations are always reviewed (never auto-applied), are confined to the lint flow (ingest/query no longer propose deletions), cannot remove the index or log, and reject deleting a missing file or a same-path delete+write in one plan.\n- Raw scanning isolates per-file failures and runs with bounded concurrency: one unreadable file (or a failed OCR call) no longer aborts the whole batch — the rest still ingest and skipped files are reported.\n- Content fingerprints widened to 64-bit; a legacy 8-char fingerprint upgrades in place without re-ingesting the file.\n- Settings cleanup (unified the numeric second-based controls; dropped a removed legacy key) and distinct badge styles for delete/prepend operations in the preview.\n\n## Verification\n- npm test (225 passing)\n- npm run build\n",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "0.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T10:23:48Z",
+      "tag": "0.1.10"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:7b2ce4b12bd8d79210e5d9f4f7fe0c3db3d5a9ab7b54d4c9b78e931991b176ea",
-          "downloadCount": 3,
+          "downloadCount": 7,
           "name": "main.js",
           "size": 6249089
         },
         {
           "digest": "sha256:da26f0af717dff8f7a3cff0642afc50898b085cd54db342767d109820fb943a3",
-          "downloadCount": 4,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 292
         },
         {
           "digest": "sha256:e2c7c7155672f1d2f8da44ee53c3cf2b7b1295b2aa5e63b84615ac004cb6dd30",
-          "downloadCount": 3,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 3724
         }
       ],
       "author": "youzhixiaomutou",
       "description": "## Summary\n- Query now uses Karpathy-style index-first retrieval: read the index, and for larger wikis ask the model which pages are relevant, then answer from only those (instead of dumping an arbitrary first-20). Caps prompt size and improves relevance.\n- Change plans now apply atomically: the whole plan is validated first (rejecting create-over-existing and folder-occupied paths) and rolled back on failure, so the vault is never left half-written.\n- Auto ingest now polls the raw folder on a configurable interval (default 15s, 0 disables) so files changed outside Obsidian (e.g. dragged in) are caught without a restart; scans stay silent when nothing changed.\n- The ingest command is renamed to \"Ingest changed raw files\" to match its behavior.\n\n## Verification\n- npm test (189 passing)\n- npm run build",
-      "downloadCount": 4,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.1.9",
       "prerelease": false,

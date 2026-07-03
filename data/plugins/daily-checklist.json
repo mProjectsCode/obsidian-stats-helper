@@ -4,21 +4,111 @@
   "description": "A minimal sidebar checklist for daily routines, with optional sync to your daily note. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "daily-checklist",
-  "lastChangedAt": "2026-07-01T22:04:26.960Z",
-  "lastFetchedAt": "2026-07-01T06:01:26.966Z",
+  "lastChangedAt": "2026-07-03T06:04:26.971Z",
+  "lastFetchedAt": "2026-07-03T06:04:26.971Z",
   "manifest": {
     "author": "Matt Maiorana",
     "authorUrl": "",
     "description": "A minimal sidebar checklist for daily routines, with optional sync to your daily note.",
     "id": "daily-checklist",
     "isDesktopOnly": false,
-    "minAppVersion": "1.5.0",
+    "minAppVersion": "1.7.2",
     "name": "Daily Checklist",
-    "version": "1.0.5"
+    "version": "1.0.8"
   },
   "name": "Daily Checklist",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ee1537737b9094c49fd2ee859d6d11bdb13ee9b9ae13f75154c66613aa1feffa",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 33477
+        },
+        {
+          "digest": "sha256:e6d40470c45b630ce45b403a67e30ce3207a0c67a0d2ed28fc2b5918092ad9c5",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 290
+        },
+        {
+          "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 8596
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This patch release resolves a further round of Obsidian plugin-checker findings and simplifies the settings autocomplete.\n\n### Changed\n\n- Switched the folder autocomplete to `vault.getAllFolders()` and the template-file autocomplete to `vault.getMarkdownFiles()`, replacing the previous `getAllLoadedFiles()` + `instanceof` filtering. More direct and lets the API do the type narrowing.\n- Bumped `minAppVersion` from `1.6.0` to `1.7.2`. The awaited `workspace.revealLeaf()` signature and `vault.getAllFolders()` both require newer APIs than `1.6.0` declared; `1.7.2` is the correct floor.\n- Renamed the \"Daily Checklist callout\" settings heading to \"Callout\" — settings headings should not repeat the plugin name.\n- Raised the TypeScript `lib` from `ES2018` to `ES2019` so `String.prototype.trimEnd` is properly typed. Under `ES2018` the checker treated `trimEnd()` results as `any`, producing false unsafe-call warnings.\n- Removed a redundant `as DailyChecklistSettings` assertion on the settings merge in `loadSettings`.\n\n### Notes\n\n- No settings, daily-note write behavior, or user-visible functionality changed.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T06:28:45Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:da71bac8c9130e443b8ab87f11cc9ef7524ca7eb568ab7273e5d44ff4928fbdc",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 33600
+        },
+        {
+          "digest": "sha256:950cd4c0ff84c89537a072a9cf48c0a59e56fa6284121be5b25bb95e773b67b8",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 290
+        },
+        {
+          "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 8596
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This patch release addresses plugin-checker warnings from the Obsidian community review.\n\n### Changed\n\n- Replaced raw `createEl(\"h3\")` section headings in the settings tab with `new Setting(...).setHeading()`, as required for a consistent settings UI.\n- Bumped `minAppVersion` from `1.5.0` to `1.6.0` to correctly declare the requirement for `workspace.revealLeaf`, and added `await` to both call sites.\n- Replaced `document` with `activeDocument` in all event listener registrations (drag-handle `mouseup`, `visibilitychange`) for popout window compatibility.\n- Refactored the `visibilitychange` handler from `async/await` to a `.then().catch()` chain so it no longer returns a Promise into a void event listener slot.\n- Added `.catch(console.error)` to all `saveSettings().then(...)` chains in mutation handlers.\n- Added explicit type annotations for the `moment` call and the `vault.process` callback parameter to suppress `@typescript-eslint/no-unsafe-*` warnings in environments where the Obsidian re-exports resolve to `any`.\n- Typed the `loadData()` return value as `Record<string, unknown> | null` to eliminate the unsafe-assignment chain through `loadSettings`.\n- Removed five redundant `as HTMLInputElement` type assertions on `createEl(\"input\")` calls; replaced one `as HTMLElement | null` querySelector cast with `querySelector<HTMLElement>`.\n- Renamed the command: `id` from `open-daily-checklist` → `open`, `name` from `Open Daily Checklist` → `Open` (Obsidian prepends the plugin name automatically).\n\n### Notes\n\n- The vault enumeration note (`getAllLoadedFiles()` in the folder/file autocomplete suggesters) is a Behavior-level checker note that applies equally to the previous hand-rolled implementation. It is expected and cannot be removed without dropping autocomplete entirely.\n- No settings, daily-note write behavior, or user-visible functionality changed.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T21:50:54Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:965c492992c1ac32d5ef7b73c9040a182cfc9edf6d0fec7d1b501dd829c3fbfd",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 33334
+        },
+        {
+          "digest": "sha256:775f388c1e2d8ce9aeb23d8c03fbaf21d7e909e41a62454d7cd92a9bf750fefd",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 290
+        },
+        {
+          "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 8596
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This patch release fixes a runtime error on visibility change and replaces the hand-rolled settings autocomplete with Obsidian's native suggest API.\n\n### Fixed\n\n- Fixed `TypeError: leaf.view.refresh is not a function` thrown in `onVisibilityChange` (and defensively in `refreshViews`) when a Daily Checklist leaf existed but its view had not yet finished initializing. Both sites now use an `instanceof DailyChecklistView` guard instead of an unchecked cast.\n\n### Changed\n\n- Replaced the hand-rolled `TextInputSuggest` abstract class (manual DOM creation, `getBoundingClientRect` positioning, `document.body.appendChild`, `window` scroll/resize listeners, and `new Scope` keymap management) with subclasses of Obsidian's native `AbstractInputSuggest`. Obsidian now owns all popup lifecycle; the plugin supplies only `getSuggestions`, `renderSuggestion`, and `selectSuggestion`.\n- Removed the `.dc-suggest` CSS block — the native suggest popup is themed by Obsidian.\n\n### Notes\n\n- No settings, daily-note write behavior, or user-visible functionality changed.\n- Clears the plugin-checker warnings that flagged `document`/`window` usage, manual listener accumulation, and `innerHTML`.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T10:08:11Z",
+      "tag": "1.0.6"
+    },
     {
       "assets": [
         {
@@ -113,7 +203,7 @@
       "assets": [
         {
           "digest": "sha256:457863974869e8069cac58263c3fc2e6d7fd5310c2ebaa2fedf766502c9b7e8c",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 37486
         },
@@ -170,6 +260,6 @@
       "tag": "1.0.1"
     }
   ],
-  "removedAt": "2026-07-01T22:04:26.960Z",
+  "removedAt": null,
   "repo": "mattmaiorana/daily-checklist"
 }
