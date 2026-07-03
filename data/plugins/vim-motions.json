@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-02T07:01:27.018Z",
-  "lastFetchedAt": "2026-07-02T07:01:27.018Z",
+  "lastChangedAt": "2026-07-03T07:01:26.990Z",
+  "lastFetchedAt": "2026-07-03T07:01:26.990Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -17,9 +17,9 @@
     },
     "id": "vim-motions",
     "isDesktopOnly": false,
-    "minAppVersion": "1.2.3",
+    "minAppVersion": "1.4.10",
     "name": "Vim Motions",
-    "version": "0.24.0"
+    "version": "0.27.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,117 @@
     {
       "assets": [
         {
+          "digest": "sha256:5b9a056f4b4a3d22e0f2018f397c876d948bd1b60349be69490f3875bf503197",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 318127
+        },
+        {
+          "digest": "sha256:90c285bbe8844f2bea29c694817ca1ec672269fa09a901ee6e3225f5bf4048d4",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 607
+        },
+        {
+          "digest": "sha256:43ef4ebdb888ed41127320bbfcc6bcbae27dfce038036e19f73c6a5f7174510a",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 11287
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Vimium-style hint actions in non-editor views** — hint mode now supports multiple actions via a key-tree dispatch when a non-editor view (graph, PDF, canvas, etc.) is focused. `f` activates (click/focus), `F` opens in a new pane, `yf` yanks the target's URL or text to clipboard, `df` closes the target tab or pane. Count prefix works: `3f` activates three targets sequentially. In editor context, `<leader><leader>h` (unchanged) triggers hints with Ctrl/Cmd modifier during label selection upgrading to open-in-new-pane.\r\n    - `src/ui/hint-mode.ts`: refactored into action-dispatch architecture with `HintTarget` type classification (`link`/`pane`/`tab`/`button`/`input`/`generic`), four action functions (`hintActivate`/`hintOpenNew`/`hintYank`/`hintClose`), `createHintActions()` factory, count support via `requestAnimationFrame` recursion, modifier-based action upgrade, `el.isConnected` validation, clipboard fallback\r\n    - `src/workspace/global-key-handler.ts`: added `Y_PENDING`/`D_PENDING` states to `SeqState` enum, `hintActions` constructor parameter, `f`/`F`/`y`/`d` dispatch in IDLE and COUNT states, `handleYPending`/`handleDPending` handlers, `chordText()` updates\r\n    - `src/main.ts`: `registerHintMode()` → `registerHintActions()`, `hintModeAction` → `hintActions` field, stale hotkey closure fix (indirection pattern), `reloadFeatures()` reset, three new Obsidian commands\r\n    - New Obsidian commands: `vim-motions:hint-open-new-pane`, `vim-motions:hint-yank`, `vim-motions:hint-close`\r\n    - E2E tests: 10 new tests covering non-editor `f`/`F`/`yf`/`df`, modifier upgrade, escape, invalid sequence reset, command registration\r\n\r\n### Fixed\r\n\r\n- **Global key handler intercepts navigation keys in Obsidian settings modal** — `j`/`k`/`g`/`z`/`:` and other navigation keys were consumed by GlobalKeyHandler when the settings modal was open. Navigation keys are now suppressed when `.modal-container` is detected in the DOM via `isModalOpen()`. Hint actions (`f`/`F`/`yf`/`df`) still work in modals — they use a separate `shouldInterceptHints()` gate that does not check for modals.\r\n- **Hint mode labels re-trigger instead of selecting label characters** — pressing `f` to activate hint mode, then typing a label character that is also `f`, would re-trigger hint mode via GlobalKeyHandler instead of being captured by the label selection handler. Fixed by adding an `isHintModeActive()` flag (exported from `hint-mode.ts`) that makes GlobalKeyHandler bail entirely during label selection.\r\n- **Settings toggles not responding to hint activation** — Obsidian's toggle controls (`.checkbox-container`, a `<label>` element) required `pointerdown`/`pointerup` events before `click` to trigger the toggle handler. Added full pointer event sequence dispatch for generic element activation.\r\n- **Settings dropdowns cycling to wrong element on Obsidian 1.13+** — Obsidian 1.13+ adds hidden `<select class=\"dropdown is-measuring\">` shadow copies of every dropdown for layout measurement. These shadow selects have only 1 option and are positioned at the same coordinates as the real dropdown, causing hint labels to sometimes target the measurement copy. Fixed by filtering out elements with the `is-measuring` class during target discovery.\r\n- **Settings controls require Escape before re-activating hints** — after activating a toggle or cycling a dropdown in the settings modal, focus remained on the control element, preventing GlobalKeyHandler from intercepting `f` for the next hint activation. Fixed by blurring the activated element (and any focused child) after activation when inside a `.modal-container`.\r\n- **Dropdowns only focus but don't change value** — `<select>` elements cannot be programmatically opened in Chromium. Changed activation behavior to cycle to the next option value and dispatch a `change` event, giving immediate feedback instead of requiring manual Arrow key interaction.\r\n- **Broadened form control selectors** — `STANDARD_SELECTORS` now includes `input:not([type=\"hidden\"]):not([disabled])`, `textarea:not([disabled])`, and `select:not([disabled])` to ensure all visible form controls (text inputs, search bars, dropdowns) receive hint labels regardless of their Obsidian-specific parent structure. Removed redundant Obsidian-specific selectors that were subsets of the broader standard selectors. Changed `.setting-item-control .checkbox-container` to `.checkbox-container` to match toggles rendered by Obsidian 1.13+'s declarative settings API outside the traditional `.setting-item-control` parent.\r\n\r\n### Changed\r\n\r\n- **Scrolloff cap raised from 20 to 9999** — the `scrolloff` setting now accepts values up to 9999 (previously capped at 20), enabling the standard Vim pattern of `set scrolloff=999` to keep the cursor vertically centered while scrolling. The Settings UI control has been changed from a slider to a validated number input field. Affects all four validation points: Settings UI (structured + manual rendering), vimrc `set scrolloff=N` / `set so=N`, and the vim `defineOption` callback. The underlying CSS `scrollMargins` implementation was already uncapped. ([#40](https://github.com/saberzero1/motions/issues/40))\r\n    - `src/settings.ts`: structured definition changed from `type: 'slider'` to `type: 'number'` with `max: 9999`; manual rendering changed from `.addSlider()` to `.addText()` with `type='number'`, `min='0'`, `max='9999'`, integer clamping, and fallback to default 5 on invalid input\r\n    - `src/vimrc/loader.ts`: `scrolloff` and `so` option definitions updated from `max: 20` to `max: 9999`\r\n    - `src/vim/options.ts`: `defineOption` callback validation updated from `n <= 20` to `n <= 9999`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: added \"Hint mode actions\" section documenting the vimium-style key-tree, context split, modifier upgrade, target classification, settings gating, modal behavior, clipboard fallback, and stale target handling\r\n- `KNOWN_LIMITATIONS.md`: updated \"Global workspace navigation\" supported keys to include hint actions (`f`/`F`/`yf`/`df`)\r\n- `KNOWN_LIMITATIONS.md`: updated \"Scrolloff line height assumption\" section to document the raised cap and centered-cursor pattern\r\n- `README.md`: updated hint mode section with vimium-style actions, non-editor key table, and new Obsidian commands\r\n- `README.md`: updated workspace keyboard control table with hint action keys\r\n- `README.md`: updated scrolloff range from 0–20 to 0–9999 in number options table and settings list; updated scrolloff description to mention `set scrolloff=999` for centered cursor\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.26.0...0.27.0",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.27.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T23:50:11Z",
+      "tag": "0.27.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4a55ee83b93914d8f86b434e6fe1aa00994718f93475dba136a466e9531823a4",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 313233
+        },
+        {
+          "digest": "sha256:af54d7084ed9862b8a5f42f162eddc1e9f445b37e1b70741f62181a7d0da6af7",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 607
+        },
+        {
+          "digest": "sha256:6b34f4de047271cdcb8933bf753096f5c64b6eb892bfe5c98bdceba45ddaf4dc",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 11189
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Stale jumpList markers crash vim state on document switch** — `gg`, `G`, and other motions with `toJumplist: true` threw `RangeError: Invalid position N in document of length M` when switching between documents of different lengths (especially with PDF++ plugin). The global jumpList stored `Marker` objects with absolute offsets from the previous (longer) document. When `jumpList.add()` called `curMark.find()` on a stale marker, `posFromIndex` passed the old offset to `doc.lineAt()` without bounds checking, crashing through `processMotion` → `processCommand` → the `cm.operation()` try-catch, which wiped and re-initialized vim state. Subsequent keystrokes fell through to default CM6 text insertion. ([#18](https://github.com/saberzero1/motions/issues/18))\r\n    - Fork: `posFromIndex` now clamps offset to `[0, doc.length]`, mirroring `indexFromPos` bounds checking\r\n    - Fork: `Marker.find()` catches exceptions and returns `null` for stale markers (all callers already handle `null`)\r\n    - Fork: `Marker.update()` catches `RangeError` from `mapPos()` when marker offset exceeds the changeset's starting document length, setting `offset = null`\r\n    - Plugin: `reloadFeatures()` now calls `vim.resetKeymap()` to match `onload()` behavior, closing a defense gap where 33 settings-triggered reloads could corrupt the keymap without recovery\r\n    - 5 new fork tests (posFromIndex clamping, negative offset, valid offset, marker doc-shrink, gg/G with stale jumpList)\r\n    - 3 new plugin e2e tests (gg after doc switch, G after doc switch, gg/G after reloadFeatures on shorter doc)\r\n- **Visual line mode (V) highlight doesn't match Obsidian theme** — the linewise selection highlight used hardcoded rgba colors via the fork's `EditorView.baseTheme`, which didn't adapt to Obsidian themes. The fork's `&light`/`&dark` CSS variants never activated because Obsidian doesn't add `cm-dark`/`cm-light` classes to `.cm-editor`. Added a CSS override in `styles.css` using `var(--text-selection)` (Obsidian's accent-derived selection color) at specificity 0-3-0, which beats both the fork's base theme (0-2-0) and Obsidian's code block background (0-2-1) without `!important`. ([#38](https://github.com/saberzero1/motions/issues/38))\r\n- **Visual line mode highlight invisible inside code blocks** — the linewise selection `Decoration.line()` class competed with Obsidian's `HyperMD-codeblock-bg` class on the same `.cm-line` element. The code block background (applied at specificity 0-2-1 via `.cm-s-obsidian div.HyperMD-codeblock-bg`) won the specificity fight. Fixed by the same CSS override above — specificity 0-3-0 beats 0-2-1. ([#38](https://github.com/saberzero1/motions/issues/38))\r\n- **Visual block select (Ctrl-V) on EOL displaces cursor rightward** — `makeCmSelection` in the fork's block mode branch added `+1` to `toCh` for inclusive selection without per-line clamping. When `$` (end-of-line) set `toCh` to the actual line length, `toCh + 1` pushed the cursor one position past the last character. Fixed by clamping `toCh` and `fromCh` to each line's length inside the per-line loop, since each line in a block selection has a different length. The `$` motion's `Infinity` return for `ch` is preserved upstream — clamping only happens at the selection-building stage. ([#38](https://github.com/saberzero1/motions/issues/38))\r\n- **Formatting mark transaction filter corrupts visual selections** — the `EditorState.transactionFilter` in `formatting-mark-fix.ts` snapped cursor positions past formatting marks (`**`, `*`, `` ` ``, `~~`, `==`) for all selection changes, including visual mode selections. When extending a visual selection across formatted text in Live Preview, the filter's `snapRange` function modified the selection head to a formatting mark boundary, causing the selection to jump or collapse unexpectedly. Fixed by adding a `range.empty` guard that skips snapping for non-empty (visual) selections — the formatting mark correction is only needed for normal-mode cursor movement. ([#38](https://github.com/saberzero1/motions/issues/38))\r\n    - Fork: `makeCmSelection` block mode now clamps `toCh`/`fromCh` per-line via `lineLength(cm, top + i)`\r\n    - Plugin: `formatting-mark-fix.ts` skips `snapRange` when `range.empty` is false\r\n    - Plugin: `styles.css` adds `.cm-editor .cm-line.cm-vim-linewise-selection` override with `var(--text-selection)` fallback chain\r\n- **Visual block `$` delete cursor deviation** — `<C-v>jj$d` leaves cursor at `ch:1` instead of Neovim's `ch:0` after deleting to EOL. This is a pre-existing cursor-after-block-delete positioning issue in the fork (content is correct, only cursor position differs). Registered as a known deviation in `test/neovim/deviations.ts`.\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: updated \"Formatting mark cursor correction in Live Preview\" section to document the visual mode bypass\r\n- `KNOWN_LIMITATIONS.md`: updated \"Block visual mode\" section test coverage count (13 → 15 golden tests)\r\n- `DIFFERENCES.md` (fork): added \"Block visual EOL cursor clamping\" section documenting `makeCmSelection` per-line clamp\r\n- `README.md`: updated recommended setup to mention theme-aligned visual line highlighting\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.25.0...0.26.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.26.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T16:44:29Z",
+      "tag": "0.26.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:36da0151e8096ca798018b3b2f0682e75eaaca2da62c4c91ef7ba16ad51074f6",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 313025
+        },
+        {
+          "digest": "sha256:e53ecbaa2637e4851bded72f72fcaf1110a931735154556ea6874811c8b05709",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 607
+        },
+        {
+          "digest": "sha256:bea0e78f42570a92c7c27bf90f34d3c7cd39614597387ce89dfb9225d95e256a",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 10963
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Vim engine settings changed via Settings UI not taking effect** — changing clipboard, tabstop, shiftwidth, expandtab, insertmodeescape, insertmodeescapetimeout, or textwidth in **Settings → Vim Motions → Vim engine** only persisted the value to disk but did not push it to the vim engine via `vim.setOption()`. The setting appeared to save but had no effect until Obsidian was reloaded. The same settings worked correctly when set via `.obsidian.vimrc` because the vimrc loader explicitly calls `vim.setOption()`. Fixed by adding `vim.setOption()` calls to each vim engine setting's `onChange` handler in `src/settings.ts`. For clipboard and textwidth, the module-level state helpers (`setClipboardOption`, `setTextwidth`) are also called to match the vimrc loader's behavior. ([#39](https://github.com/saberzero1/motions/issues/39))\r\n\r\n### Added\r\n\r\n- **Style Settings integration** — powerline status bar colors and jump label colors are now customizable via the [Style Settings](https://github.com/obsidian-community/obsidian-style-settings) plugin. The `styles.css` file includes a `/* @settings */` block exposing 12 color pickers with separate light/dark mode defaults: powerline background and text for each vim mode (normal, insert, visual, replace), EasyMotion label background/text, and hint mode label background/text. The plugin triggers `parse-style-settings` on load/unload so Style Settings discovers the configuration automatically. Users without Style Settings are unaffected — the existing CSS variable fallback chain (`--vim-pl-*-bg` → Obsidian theme variable → hardcoded fallback) continues to work identically. ([#37](https://github.com/saberzero1/motions/issues/37))\r\n- **Global workspace navigation** — workspace keyboard commands (`<C-w>h/j/k/l`, `gt/gT`, `H/L`, `:q`, scroll keys, etc.) now work across ALL Obsidian views, not just markdown editors. When a non-editor view (PDF, graph, canvas, image, backlinks, etc.) is focused, a capture-phase keydown handler intercepts workspace-relevant keystrokes and dispatches them via Obsidian's command system. When a CodeMirror editor is focused, codemirror-vim handles everything as before — no regression. ([#35](https://github.com/saberzero1/motions/issues/35))\r\n    - **Navigation**: `<C-w>h/j/k/l` (focus pane), `<C-w>v/s` (split), `<C-w>c/q` (close), `<C-w>o` (close others), `gt/gT` (next/prev tab), `Ngt` (Nth tab), `H/L` (prev/next tab), `Ctrl-o/Ctrl-i` (history back/forward)\r\n    - **Scrolling**: `j/k` (line scroll), `gg/G` (top/bottom), `Ctrl-d/u` (half page), `Ctrl-f/b` (full page), with count prefix support (`5j` = 5 lines)\r\n    - **Ex command line**: `:` opens a standalone command modal with tab-completion for 34 globally-safe ex commands (`:q`, `:wq`, `:e {file}`, `:sp`, `:vs`, `:ob {cmd}`, etc.)\r\n    - **Chord display**: pending keystrokes (`<C-w>`, `g`, `3`) shown in status bar via `setGlobalChord()` on `VimModeTracker`\r\n    - **Sequence timeout**: multi-key sequences reset after 1000ms (matches vim's `timeoutlen`)\r\n    - **Popout window support**: handler installed on all windows via `workspace.on('window-open')`\r\n    - **Input suppression**: keys not intercepted in text inputs, contentEditable, modals, command palette, or IME composition\r\n    - **Scroll target detection**: DOM tree-walking finds the largest scrollable container in arbitrary views (same approach as obsidian-vim-keynav)\r\n    - New file: `src/workspace/global-key-handler.ts` — `GlobalKeyHandler` class with `shouldIntercept()`, `SequenceStateMachine`, scroll target detection\r\n    - New file: `src/ui/global-ex-command.ts` — `GlobalExCommandModal` extending Obsidian's `SuggestModal`\r\n    - `src/vim/mode-tracker.ts`: added `setGlobalChord(text)` method for non-editor chord display\r\n    - `src/workspace/navigation.ts`: exported `executeCommand()` for reuse by global handler\r\n    - E2E test suite `test/specs/global-nav.e2e.ts` with 15 tests covering navigation, scrolling, ex commands, input suppression, sequence timeout, and no-regression\r\n- **`H`/`L` tab switching in non-editor views** — repurposes `H`/`L` (screen top/bottom in editors) for previous/next tab navigation when a non-editor view is focused, matching [obsidian-vim-keynav](https://github.com/guoang/obsidian-vim-keynav) conventions\r\n- **`Ctrl-o`/`Ctrl-i` history navigation in non-editor views** — maps to `app:go-back` / `app:go-forward` when no editor is focused (in editor context, codemirror-vim uses these for the within-file jumplist)\r\n- **Custom vimrc file path** — new setting to load vimrc from a custom vault path instead of the default `.obsidian.vimrc`. Useful when using Obsidian Sync, which skips dotfiles. The setting provides file-suggest autocompletion filtered to `*.vimrc` files in the vault. Leave empty to use the default `.obsidian.vimrc`. Changing the path triggers a full vimrc reload. ([#34](https://github.com/saberzero1/motions/issues/34))\r\n    - `src/settings.ts`: added `vimrcPath: string` to `VimMotionsSettings` interface and defaults, added `vimrcPath` to `RELOAD_KEYS`, added file-suggest text input below the \"Load .obsidian.vimrc\" toggle\r\n    - `src/ui/vimrc-file-suggest.ts`: new file — `VimrcFileSuggest` extends Obsidian's `AbstractInputSuggest<TFile>` to autocomplete vault files ending in `.vimrc`\r\n    - `src/vimrc/loader.ts`: `getVimrcPath()`, `loadVimrc()`, and `resolveLeaderKey()` accept optional `customPath` parameter\r\n    - `src/main.ts`: passes `settings.vimrcPath` to loader functions\r\n    - E2E test suite `test/specs/vimrc-custom-path.e2e.ts` with 7 tests covering custom path loading, default fallback, non-existent path resilience, and non-dotfile path for Sync compatibility\r\n\r\n### Changed\r\n\r\n- **`<C-w>o`, `:only`, `:qa`, `:xall` now close ALL view types** — previously filtered by `getViewType() === 'markdown'`, leaving PDFs/images/etc. open. Now closes all tabs regardless of view type, matching Neovim behavior. Same change applied to `g<C-t>` (goto Nth tab) which now counts all leaves, not just markdown.\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: added \"Global workspace navigation\" section documenting Ctrl-d/f/b Obsidian hotkey prerequisite and scroll target limitations; updated \"Vimrc hot-reload\" section to note that vim engine settings now hot-reload via Settings UI\r\n- `KNOWN_LIMITATIONS.md`: updated \"Vimrc hot-reload\" section to document custom vimrc path behavior\r\n- `README.md`: updated workspace keyboard control section with global navigation commands, scrolling keys, and standalone ex command line; added hotkey unbinding note for Ctrl-d/f/b; updated Vim engine settings section to note immediate hot-reload\r\n- `README.md`: updated powerline status bar description to mention Style Settings support; updated label colors description to mention Style Settings\r\n- `README.md`: updated vimrc support section, settings list, and quality of life to document custom vimrc path setting\r\n- `styles.css`: added `/* @settings */` block with Style Settings variable bindings; powerline CSS variables moved from local definitions to inline fallbacks for Style Settings compatibility\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.24.0...0.25.0",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.25.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-02T10:48:08Z",
+      "tag": "0.25.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3a4bd3bfc4f628bcaad0011bea77133af2c6878f1dd87e725be220d9dfa2a919",
-          "downloadCount": 25,
+          "downloadCount": 37,
           "name": "main.js",
           "size": 299510
         },
         {
           "digest": "sha256:abf04bef744b165b19699e1f72793bd60c8b5fd7352ee7accabc7296bfb9d5e3",
-          "downloadCount": 26,
+          "downloadCount": 38,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:207c69bfe0f8503555f965dbceb30e3ebd6db48c40684d541d7b58344e7cf390",
-          "downloadCount": 25,
+          "downloadCount": 37,
           "name": "styles.css",
           "size": 8213
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Changed\r\n\r\n- **Formatting mark cursor fix rewritten** — replaced `RangeSetBuilder.prototype` monkey-patching with a CM6 `EditorState.transactionFilter` that corrects cursor positioning near formatting marks in Live Preview. The new approach walks the Lezer syntax tree to identify formatting mark nodes and snaps cursor endpoints that land inside mark ranges to the nearest boundary. Includes end-of-line boundary handling to prevent cursor oscillation when formatting marks extend to the line end (e.g. `**he**` with no trailing content). This eliminates conflicts with obsidian-latex-suite ([#32](https://github.com/saberzero1/motions/issues/32)) and fixes formatting marks being visible in live preview ([#33](https://github.com/saberzero1/motions/issues/33)). The `'always'` formatting mark mode has been removed (users are migrated to `'cursor'`).\r\n\r\n### Added\r\n\r\n- **Block visual insert (`I`/`A`), change (`c`/`C`)** — `CTRL-V` block visual mode now supports `I` (insert at left column), `A` (append at right column), `c` (change block), and `C` (change to EOL) with multi-cursor editing on all selected lines. Text appears on all lines in real-time as you type (unlike Neovim, where text only appears on the primary cursor until `<Esc>`). Short lines that don't reach the block column are skipped, matching Neovim behavior. Dot-repeat (`.`) works for block insert operations. Block visual delete (`d`), yank (`y`), paste (`p`/`P`), indent (`>`/`<`), replace (`r`), and case toggle (`~`) were already working.\r\n    - Fork: `enterInsertMode` preserves `wasInVisualBlock` before `exitVisualMode` clears the flag\r\n    - Fork: `selectForInsert` skips lines shorter than the block column instead of clipping\r\n    - Fork: `operators.change` adds a `vim.visualBlock` path for block change and block change-to-EOL\r\n    - Fork: `exitInsertMode` positions cursor at the block's left column via `blockInsertLeft` instead of the standard `ch - 1`, matching Neovim's cursor placement after block `A`\r\n    - Fork: `makeCmSelection` block mode treats `fromCh === toCh` (zero-width block) the same as `fromCh < toCh`, fixing `C` on zero-width blocks\r\n    - Fork: `repeatInsertModeChanges` uses `blockInsertLeft` for cursor placement after dot-repeat instead of hardcoded `+1`\r\n- Neovim golden comparison tests for block visual: 13 golden test cases in `test/specs/vim-builtin/visual-block-golden.e2e.ts` covering insert, append, change, change-to-EOL, delete, case toggle, replace, short-line handling, block yank/paste, zero-width block C, zero-width block I, A cursor position, and upward selection\r\n- Spike test suite `test/specs/spikes/spike-block-insert.e2e.ts` with 10 tests covering all block visual insert scenarios\r\n- Command index entries: `CTRL-V_I`, `CTRL-V_A`, `CTRL-V_c`, `CTRL-V_C`, `q`, `@`, `@@`\r\n- Neovim golden comparison tests for marks: 5 golden test cases in `test/specs/vim-builtin/marks-golden.e2e.ts` covering `ma`/`'a`, `` `b ``, `'.`, `''`, ` `` `\r\n- Neovim golden comparison tests for macros: 5 golden test cases in `test/specs/vim-builtin/macros-golden.e2e.ts` covering `qa`/`@a`, `2@a`, `@@`, `3@a`, insert replay\r\n- Expanded register golden tests: 3 new cases (`\"Ayy` append, `\"0p` numbered register, `\"a`/`\"b` independent) in `normal-yank-put` suite\r\n- Expanded search/replace golden tests: 2 new cases (`:%s` global, `:2,3s` range) in `ex-commands-builtin` suite\r\n- Formatting mark cursor golden tests: 3 new cases (`w` through `**`, `f` past `**`, `e` through backticks) in `normal-motions` suite\r\n\r\n### Fixed\r\n\r\n- **Vimrc `whichkeygroup`/`whichkeylabel` commands crash on load** — `defineEx('whichkeygroup', 'wkg', ...)` threw `Error: (Vim.defineEx) \"wkg\" is not a prefix of \"whichkeygroup\"` because `defineEx` requires the short form to be an actual starting substring of the command name, not an arbitrary abbreviation. Same issue for `whichkeylabel`/`wkl`. Fixed by changing the prefixes to valid substrings: `whichkeyg` and `whichkeyl`. User-facing vimrc syntax (`whichkeygroup`, `whichkeylabel`) is unchanged. The `set whichkeygrouping`/`set wkg` option alias (handled by a separate `KNOWN_SET_OPTIONS` path) was already correct and unaffected. ([#31](https://github.com/saberzero1/motions/issues/31))\r\n- **Block visual mode deviations removed** — all `CTRL-V` block visual deviations in `test/neovim/deviations.ts` have been removed. Block insert/change now matches Neovim output with zero deviations: cursor position after `A` exit is correct, short lines are skipped, and zero-width blocks work for all operators.\r\n- **Golden recording infrastructure** — `test/neovim/record-golden.ts` now sends `<Esc><Esc>` before each test case to reset Neovim to normal mode, preventing stale visual/insert mode state from leaking between test cases. This fixed 5 pre-existing incorrect golden values in `g-commands.json` (3 mode corrections) and `visual-mode.json` (1 mode correction, 1 cursor + mode correction).\r\n- **Search dispatch in test wrapper** — `test/neovim/test-wrapper.ts` now detects `/pattern\\n` and `?pattern\\n` search sequences and dispatches the search + post-keys separately with a settle pause, improving reliability for search-dependent golden tests.\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: added \"Block visual mode (CTRL-V) insert not supported (Fixed)\" section\r\n- `DIFFERENCES.md` (fork): added \"Block visual insert (`I`/`A`), change (`c`/`C`)\" section documenting all 6 fork changes\r\n- `README.md`: added block visual insert/change to recommended setup section\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.23.0...0.24.0",
-      "downloadCount": 26,
+      "downloadCount": 38,
       "draft": false,
       "name": "0.24.0",
       "prerelease": false,
@@ -58,26 +148,26 @@
       "assets": [
         {
           "digest": "sha256:38a972ba5e22af7a0836143ba962ca4a1d614fd60d81af1b97ddad5301d7fcb8",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "main.js",
           "size": 296072
         },
         {
           "digest": "sha256:778cb690f4d0cf1bcf88053bd41c6ba58ddff8978fe30b26cd9527b937839c9b",
-          "downloadCount": 25,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:79d717de4d6c9f233745eac515742a45889f561befe92af6879569399eed76ae",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "styles.css",
           "size": 8451
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Declarative settings API (`getSettingDefinitions`)** — implemented Obsidian's 1.13.0+ declarative settings API with a version guard. On Obsidian 1.13.0+, plugin settings appear in Obsidian's global settings search and use the new declarative rendering pipeline. On older versions, the existing imperative `display()` method continues to work unchanged. No `minAppVersion` bump required.\r\n    - `getSettingDefinitions()` returns all settings organized into groups (Vim features, Vim engine, Jump navigation, Status bar, Mode prompts, Cursor shapes, Vimrc & key bindings, Leader key bindings, Which-key hints, Which-key group/command labels, Advanced)\r\n    - `getControlValue()`/`setControlValue()` overrides handle dot-notation keys for nested settings (`modePrompts.normal`, `cursorShapes.insert`), clear vimrc overrides on user change, and trigger `reloadFeatures()` for settings that require it\r\n    - Vimrc-overridden settings are disabled via `disabled: () => isOverridden(key)` predicates\r\n    - Complex sections (leader bindings, which-key group/command labels, hotkey recorder) use `render` callbacks delegating to the existing imperative rendering methods\r\n    - `styles.css`: added `.vim-motions-hidden` utility class for render callback placeholder rows\r\n\r\n### Documentation\r\n\r\n- `README.md`: updated Settings section to note settings search compatibility on Obsidian 1.13.0+\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.22.0...0.23.0",
-      "downloadCount": 25,
+      "downloadCount": 26,
       "draft": false,
       "name": "0.23.0",
       "prerelease": false,
