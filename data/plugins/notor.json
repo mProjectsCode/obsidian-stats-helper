@@ -4,8 +4,8 @@
   "description": "A transparent, extensible, autonomous-capable AI assistant for note taking and knowledge management. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "notor",
-  "lastChangedAt": "2026-07-03T03:03:26.966Z",
-  "lastFetchedAt": "2026-07-03T03:03:26.966Z",
+  "lastChangedAt": "2026-07-04T03:03:26.985Z",
+  "lastFetchedAt": "2026-07-04T03:03:26.985Z",
   "manifest": {
     "author": "Zach Mueller",
     "authorUrl": "https://github.com/zachmueller",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Notor",
-    "version": "0.10.0"
+    "version": "0.10.2"
   },
   "name": "Notor",
   "presentInCommunityList": true,
@@ -22,14 +22,74 @@
     {
       "assets": [
         {
+          "digest": "sha256:3a7bf0a2cbde5d61d97b0e98fb2e06670d5ccd229f52bf28510b0cf1e8d483ae",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 5810391
+        },
+        {
+          "digest": "sha256:09f86b5d87ffd3412dc121a3ffb978ddeac0b2ea01c617b8561cc32aefe63497",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 305
+        },
+        {
+          "digest": "sha256:51cea9481d73f87527db4edcbf090619ceb1dd6fa5a65b4d93aa67e9cae62030",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 100362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Bug Fixes\r\n- **Orchestration recovery:** Clicking **Dismiss** on the \"Orchestration '…' was interrupted. Resume it?\" notice now persists your decision. Previously Dismiss only closed the toast, so the same notices reappeared on every Obsidian restart/reload. Dismissing now marks the session as cancelled (a terminal state), so the load-time recovery scan no longer re-offers it.\r\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.10.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T09:03:37Z",
+      "tag": "0.10.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:499674541f2ea0aedfd6993a9c5ba242334214ab4f7effb8db1b6a5e7234726a",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 5810220
+        },
+        {
+          "digest": "sha256:146109a74477c373840c13d63877b41be5a80714cd866be1e97d54cc16ec241a",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 305
+        },
+        {
+          "digest": "sha256:51cea9481d73f87527db4edcbf090619ceb1dd6fa5a65b4d93aa67e9cae62030",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 100362
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Bug Fixes\r\n- **Stop control for orchestration runs** — a run registry now tracks live runs, exposes a Stop button in the UI, aborts cleanly, and tears down on plugin unload.\r\n- **Code-step visibility** — code steps and their logs now surface in the Run tree, and an `orchestration.log` captures code-step output.\r\n- **Runtime API v1 handshake** — extensions can declare a minimum API version (`notor-min-api`) and read `utils.api.version` for forward-compatible behavior.\r\n- Fixed an inert Stop button on stale or background orchestration runs.\r\n- Honest stop reasons: stream errors now route to a dedicated failure channel, and errored/cancelled turns are reported accurately instead of as success.\r\n- Corrected wind-down, errored-turn, and child-cost accounting.\r\n- Made history and session writes atomic (remove-before-rename) to prevent corruption on overwrite.\r\n- `emit_event` is now classified as a read operation so it is no longer blocked in Plan mode.\r\n- Manual workflow chats now stay attached to the active conversation.\r\n- Child-flow ledger entries are matched by (step, flow, ordinal) for reliable recovery.\r\n\r\n### Reliability & Safety\r\n- Added a per-flow single-instance guard and a recovery liveness guard with offered resume and schedule-origin recovery.\r\n- Added execution timeouts for tools and automations via a shared `withTimeout`.\r\n- All six persisted formats now carry a `schema_version` stamp with append conversion.\r\n- Gated `utils.webview` on the webview tool being enabled; narrowed live-manager utils members to safer facades.\r\n\r\n### Internal / Architecture\r\n- Guided models to stage large tool-parameter payloads.\r\n- Decomposed `launch.ts` into focused responsibility modules behind a thin barrel; introduced `OrchestrationHost`; lazy-loaded orchestration layers.\r\n- Unified tool-policy evaluation into a single superset path (`evaluateToolPolicy`) and removed the legacy branch; threaded `policyCtx` through the run loop, sub-agents, and orchestration.\r\n- Extensive new test coverage (unit + live e2e) across all six architecture findings.\r\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.10.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T06:09:42Z",
+      "tag": "0.10.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3a014f86f6fd5a1d632c5769e6daaa5d9b0255c37671ef252cded39e6d7b729c",
-          "downloadCount": 25,
+          "downloadCount": 49,
           "name": "main.js",
           "size": 5796086
         },
         {
           "digest": "sha256:b1002046b41d31a8e6d8fb09c60e1a30c01bfe097b2c3e045d4a1b04d04ead3b",
-          "downloadCount": 38,
+          "downloadCount": 63,
           "name": "manifest.json",
           "size": 305
         },
@@ -42,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n\r\n- **Orchestration engine.** Define multi-step flows that chain LLM turns, programmatic code steps, and nested sub-flows into automated, repeatable workflows. Highlights:\r\n  - Flow schema and core execution engine built on a generalized RunLoop substrate\r\n  - Session workspace, task tracking, crash recovery, and step edges\r\n  - Programmatic **code steps** for deterministic logic between LLM turns\r\n  - **Flow composition** — flows can invoke child flows via `run_flow`, with cascading guardrails and child-run metadata\r\n  - **Interactive pause** and step→workflow hand-off\r\n  - Per-turn progress **Notices** so long-running flows report status as they go\r\n  - **Direct scheduling** so flows can be launched on a schedule (and via hooks)\r\n  - Unified **run-tree view** with an inline peek card and typed activity entries\r\n  - New **orchestration-creator** persona plus reference example flows to get started\r\n- **Fork & re-run tool** conversation fork mode.\r\n- Added a toggle controlling whether orchestrations open their notes in the editor.\r\n",
-      "downloadCount": 38,
+      "downloadCount": 63,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -293,7 +353,7 @@
       "assets": [
         {
           "digest": "sha256:96a106baeccaa3b53fc8d48fa86f1555293b1cbbbd0c93bbb92f04f1277ba360",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "main.js",
           "size": 5435425
         },
