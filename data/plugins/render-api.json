@@ -4,8 +4,8 @@
   "description": "Expose dataview/Tasks rendering results via REST API and MCP Server. Let AI tools access your vault's rendered content programmatically. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "render-api",
-  "lastChangedAt": "2026-07-04T01:04:26.978Z",
-  "lastFetchedAt": "2026-07-03T08:04:26.986Z",
+  "lastChangedAt": "2026-07-04T08:02:26.974Z",
+  "lastFetchedAt": "2026-07-04T08:02:26.974Z",
   "manifest": {
     "author": "caesarloo",
     "authorUrl": "https://github.com/caesarloo",
@@ -14,35 +14,65 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Render API",
-    "version": "0.2.2"
+    "version": "0.2.3"
   },
   "name": "Render API",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
+          "digest": "sha256:151457efe4d640217547d49fb44173a3c72292279f998ecda5f854a4b1e0541a",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 109747
+        },
+        {
+          "digest": "sha256:906dd4af04a9f1da57655b200c949a4d12bb59c2e270f45f311478798be06aea",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 363
+        },
+        {
+          "digest": "sha256:68f2a31f89624bfe2542efe0e2bd6480820ed2b0a1d4c32998b30ce3ea1e33bb",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 1247
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Render API v0.2.3\n\n## What's Changed\n\n### Settings Page Redesign\n- Settings reorganized into functional groups: **Language → Server → Rendering → MCP → Debug → Available Tools**\n- **Available Tools** list is now dynamic — reload_plugin and settings entries appear/disappear based on their debug toggles\n- Default values shown inline when a setting differs from default (e.g. `(默认: 27123)`)\n- Removed dead settings: `enableDataview`, `enableMarkdownRender`, `corsOrigin`\n\n### Security Toggles\n- **New `enableSettingsEndpoint` setting** (default: off) — controls the `POST /settings` REST endpoint. When disabled, returns 403.\n- **`enableMcpReloadPlugin`** now gates **both** the MCP `reload_plugin` tool (hidden from `tools/list`) and the REST `/reload` endpoint (returns 403).\n- Both toggles can only be re-enabled from the Obsidian settings UI — remote bypass is blocked.\n\n### Stdio Mode Auth\n- `mcp-server.js` now reads `RENDER_API_KEY` from the environment and includes it as `X-API-Key` on every HTTP request.\n- Settings page auto-generates `env.RENDER_API_KEY` in the stdio config snippet.\n\n### Bug Fixes\n- **`adapter.basePath` crash**: Obsidian's `.basePath` getter calls `getFullPath(undefined)` internally → `path.join(undefined)` throws. Replaced `adapter.basePath` with `adapter.getBasePath?.()` throughout.\n- **`inlineImages` adapter fallback**: `adapter.readBinary(filePath)` with vault-relative paths caused `path` module errors. Removed the broken fallback — files not found via vault API are now skipped cleanly.\n- **Obsidian console `ERR_FILE_NOT_FOUND`**: `preprocessWikiEmbeds` now generates `file:///` absolute paths instead of `app://` URLs where possible, reducing console noise.\n\n### i18n\n- Full Chinese translations for all new settings (reload_plugin, settings endpoint, tool descriptions).\n- Setting descriptions use \"跟随Obsidian\"/\"Follow Obsidian\" for language default hint.\n\n## Files\n\n- `main.js` — plugin code (includes embedded MCP server)\n- `manifest.json` — plugin metadata\n- `styles.css` — plugin styles\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "Render API v0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T04:28:16Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:589ec04b1fe210760ec534c41d853160c83614dcac67edebf28629a01f35f9c5",
-          "downloadCount": 13,
+          "downloadCount": 16,
           "name": "main.js",
           "size": 76549
         },
         {
           "digest": "sha256:3c6588cb19b2845a68713c9829d69b2adec9a38b859fee69173fe299c4b6adf4",
-          "downloadCount": 13,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:68f2a31f89624bfe2542efe0e2bd6480820ed2b0a1d4c32998b30ce3ea1e33bb",
-          "downloadCount": 13,
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 1247
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Render API v0.2.2\n\n## What's Changed\n\n### Image Inlining (Major)\n\n- **Wiki embed images** (`![[path/to/image.png]]`) are now automatically read from the vault, converted to base64 data URIs, and embedded inline in the rendered HTML. Previously these produced `app://obsidian.md/...` URLs that could not be resolved outside of Obsidian, or caused internal rendering errors with Chinese-language file paths.\n- **Markdown image syntax** (`![alt](path)`) also gains data-URI inlining via the post-processing pipeline.\n- **`render_markdown`** now accepts an optional `sourcePath` parameter, allowing relative attachment paths to be resolved correctly.\n\n### Other Fixes\n\n- ESLint warnings: `requestAnimationFrame` → `window.requestAnimationFrame`, explicit regex callback types.\n- README updated with explanations for the 3 community-marketplace review warnings (identity info, filesystem access, clipboard).\n\n## Files\n\n- `main.js` — plugin code (includes embedded MCP server)\n- `manifest.json` — plugin metadata\n- `styles.css` — plugin styles\n",
-      "downloadCount": 13,
+      "downloadCount": 16,
       "draft": false,
       "name": "Render API v0.2.2",
       "prerelease": false,
@@ -53,13 +83,13 @@
       "assets": [
         {
           "digest": "sha256:e31df7daf5817d31f59b87a1f3d6e9a3a0056f94227cca6702655e5a32d86836",
-          "downloadCount": 2,
+          "downloadCount": 24,
           "name": "main.js",
           "size": 70016
         },
         {
           "digest": "sha256:a3f973385a31031bfcf6ff35428881d047bc0ebffb8366cad4c8a54b4529de60",
-          "downloadCount": 2,
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 353
         },
@@ -72,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.2.1 Release Notes\n\n## Bug Fixes\n\n- **Hermes Streamable HTTP compatibility** — Added `POST /mcp` route for direct JSON-RPC handling (Hermes sends POST directly, unlike the old GET+POST SSE pattern). Fixes 404 error when using `url:` mode with Hermes Agent.\n\n## Settings UI Improvements\n\n- **Transport options merged** — Simplified to two clear choices: Stdio (subprocess) and URL (Streamable HTTP). The same URL endpoint supports both SSE and Streamable HTTP protocols automatically.\n- **Actual vault path** — Stdio config now shows the real path instead of `<.obsidian>` placeholder.\n- **Agent selector** — Dropdown to choose Hermes Agent or Claude Desktop config, with one-click copy.\n- **Environment selector** — Choose Windows or WSL runtime. WSL mode auto-detects gateway IP via `os.networkInterfaces()` with a \"Detect\" button.\n- **Stdio config includes `--port`** — Ensures mcp-server.js connects to the correct HTTP server port.\n- **Config code blocks now have a border** — Visually distinct from other settings.\n- **Dropdown no longer scrolls to top** — Scroll position is preserved on re-render.\n",
-      "downloadCount": 2,
+      "downloadCount": 24,
       "draft": false,
       "name": "Render API v0.2.1",
       "prerelease": false,
@@ -713,7 +743,7 @@
       "assets": [
         {
           "digest": "sha256:576dd5c8287916faacefd6f099f1236dc305c269a9842b7cfb7b426c111288ba",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "main.js",
           "size": 25461
         },
@@ -860,6 +890,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-04T01:04:26.978Z",
+  "removedAt": null,
   "repo": "caesarloo/render-api"
 }
