@@ -1,21 +1,21 @@
 {
   "author": "takeshy",
   "defaultBranch": "master",
-  "description": "AI chat, workflow automation, and semantic search powered by Google Gemini. - This plugin has not been manually reviewed by Obsidian staff.",
+  "description": "AI chat, workflow automation, semantic search (RAG), LLM Wiki (OKF), and dashboards with reading memos powered by Google Gemini. Works on both desktop and mobile. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "gemini-helper",
-  "lastChangedAt": "2026-07-04T04:01:26.972Z",
-  "lastFetchedAt": "2026-07-04T04:01:26.972Z",
+  "lastChangedAt": "2026-07-05T04:02:26.985Z",
+  "lastFetchedAt": "2026-07-05T04:02:26.985Z",
   "manifest": {
     "author": "takeshy",
     "authorUrl": "https://github.com/takeshy",
-    "description": "AI assistant with chat, workflow automation, and semantic search (RAG). Powered by Gemini API.",
+    "description": "AI chat, workflow automation, semantic search (RAG), LLM Wiki (OKF), and dashboards with reading memos powered by Google Gemini. Works on both desktop and mobile.",
     "fundingUrl": "https://buymeacoffee.com/takeshy",
     "id": "gemini-helper",
     "isDesktopOnly": false,
     "minAppVersion": "1.10.0",
     "name": "Gemini Helper",
-    "version": "1.17.2"
+    "version": "1.17.6"
   },
   "name": "Gemini Helper",
   "presentInCommunityList": true,
@@ -23,27 +23,117 @@
     {
       "assets": [
         {
+          "digest": "sha256:54cf0800c9f1c12a8e0ec075f8479693c60226e949fbcf7d0a7be2a2c58638fc",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 2028667
+        },
+        {
+          "digest": "sha256:c6cc154542bd4f1bd90d1829564b5094da0dfea316c81babfa9cce16df218875",
+          "downloadCount": 16,
+          "name": "manifest.json",
+          "size": 426
+        },
+        {
+          "digest": "sha256:072643f931ecce3720f990ae6271a94f5b8e8a9b35a1f4ffcc66a3f8fd22c262",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 225430
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\r\n<img width=\"590\" height=\"1278\" alt=\"IMG_0143\" src=\"https://github.com/user-attachments/assets/dfe66419-21ad-468d-b94d-96e8025acbbf\" />\r\n\r\n\r\n### Fixed\r\n\r\n  - Improved mobile dashboard memo interactions.\r\n    - Memo creation now opens in a modal on mobile instead of using a cramped inline composer.\r\n    - The mobile memo modal has a larger auto-growing input area.\r\n    - The Add memo button is visually clearer and no longer looks inactive.\r\n    - Dashboard bottom spacing is handled at the page scroll level, so Obsidian’s mobile footer does not permanently\r\n    cover controls while keeping widget content areas usable.\r\n\r\n  - Fixed File widget controls on mobile.\r\n    - File widgets now keep their move handle available on mobile when the memo panel is open.\r\n    - File widget controls remain visible when focus is inside the widget.\r\n\r\n  - Fixed dashboard widget deletion flow.\r\n    - Delete widget confirmation now appears after the settings panel closes, instead of being hidden behind it.\r\n\r\n  - Fixed ID generation on Obsidian mobile.\r\n    - Replaced direct `crypto.randomUUID()` usage for widget/memo IDs with a mobile-safe fallback",
+      "downloadCount": 16,
+      "draft": false,
+      "name": "1.17.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T00:12:54Z",
+      "tag": "1.17.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71d0e0c637ed9cbd67d85cb0f889b0e36dc2ea77c63c69175ee00c292e19c45a",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 2023628
+        },
+        {
+          "digest": "sha256:dc5197eddbcfb24c35e723a24ab9e26bf253fa669d3e4f965bb636794756af27",
+          "downloadCount": 18,
+          "name": "manifest.json",
+          "size": 373
+        },
+        {
+          "digest": "sha256:06743a1329b76c4b548ebed09253d2190bad5ead0fc5e77597fd634fbb5b4110",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 220793
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Mobile hotfix release.\r\n\r\n🐛 Fixes\r\n\r\n- Fixed the plugin failing to load on mobile (TypeError: undefined is not an object (evaluating 'fL.createRequire')). The fflate library — introduced in 1.17.3 for EPUB reading and the built-in OKF help bundle — was bundled in its Node.js flavor, which calls require(\"module\").createRequire at plugin load. Node builtins don't exist in the mobile WebView, so every mobile launch crashed. The bundle now uses fflate's browser build (only sync APIs are used, so nothing else changes).\r\n- Widened the chat input on mobile. The textarea was squeezed between two button columns; it now spans the full width, with the attach/tool buttons and send/collapse buttons on a second row below. Desktop layout is unchanged.\r\n- Memo-quote anchor lookup and smooth scrolling now work correctly inside EPUB/HTML iframes (cross-realm instanceof checks silently failed for framed content before).\r\n\r\n🛠️ Diagnostics & code quality\r\n\r\n- Fatal startup errors are now visible on mobile, where the developer console is unreachable: a persistent notice shows the error, and the full message and stack trace are written to gemini-helper-load-error.log in the vault root.\r\n- Addressed Obsidian community review warnings: cross-window-safe DOM checks, in-app ConfirmModal instead of native confirm(), document access scoped to the owning node, typed JSON.parse results, and removal of !important from the dashboard maximize styles (inline styles are now skipped while a widget is maximized instead).\r\n",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "1.17.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T21:56:20Z",
+      "tag": "1.17.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5041659abc07279751c4868c09fbb2d38838557ab315168c4ead3595d1d9ba51",
+          "downloadCount": 28,
+          "name": "main.js",
+          "size": 2022879
+        },
+        {
+          "digest": "sha256:73bef90b36ce5e4832ade70799d8881553c622218ade23eeea4660f49d00673e",
+          "downloadCount": 33,
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:74c697f5c5f727b331bc9a74db588ae54cd15a5408d3edb875808f0547250234",
+          "downloadCount": 27,
+          "name": "styles.css",
+          "size": 220449
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "✨ New\r\n<img width=\"900\" height=\"520\" alt=\"dashboard_arrange\" src=\"https://github.com/user-attachments/assets/886d608a-9bde-4d05-803c-aeaf5bf6e960\" />\r\n<img width=\"900\" height=\"520\" alt=\"dashboard_memo\" src=\"https://github.com/user-attachments/assets/72f9bd7f-b5d0-4f2e-8ea7-0fcc34b21461\" />\r\n<img width=\"1118\" height=\"486\" alt=\"memolist\" src=\"https://github.com/user-attachments/assets/77bc347e-5206-4134-a090-e5c6b5122eb5\" />\r\n\r\n- File widget reading memos — select text in a File widget (Markdown, HTML, PDF, EPUB) and right-click to Copy, Ask AI, or Add to memo. Memos are stored under Dashboards/Memos/, link back to the quoted text, and can be edited or deleted from a memo panel.\r\n- MemoList widget — an index of all reading-memo files across the dashboard; clicking a row maximizes the file with its memo panel open.\r\n- Built-in OKF help bundle — chat can now answer questions about Gemini Helper's own features (setup, tools, skills, workflows, RAG, dashboards, security, troubleshooting) without needing a separate OKF directory.\r\n- Dashboard editing no longer needs a separate edit mode: drag to move, drag the corner handle to resize, and use each widget's gear/maximize buttons directly.",
+      "downloadCount": 33,
+      "draft": false,
+      "name": "1.17.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T12:29:59Z",
+      "tag": "1.17.3"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:be616e2ff07815302e6a444c24b77bc71f324eeee26c28e5929843b4c2f8d540",
-          "downloadCount": 165,
+          "downloadCount": 187,
           "name": "main.js",
           "size": 1936783
         },
         {
           "digest": "sha256:783cca486b7d1a3e78cdb8ad700324f63cb6e2ec8957babd3b3387ec11dcd92b",
-          "downloadCount": 274,
+          "downloadCount": 345,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:86ce277cfe0e3cefa30d25730448c52de299869973a38b36a12e8baa9cba781a",
-          "downloadCount": 163,
+          "downloadCount": 174,
           "name": "styles.css",
           "size": 205420
         }
       ],
       "author": "github-actions[bot]",
       "description": "Fixed the OKF-all-on-at-startup bug by persisting bundle selection",
-      "downloadCount": 274,
+      "downloadCount": 345,
       "draft": false,
       "name": "1.17.2",
       "prerelease": false,
@@ -54,7 +144,7 @@
       "assets": [
         {
           "digest": "sha256:7f59bb6f65f220a99bc2b83272391bf153a5474d1a64460b279d26e1250f17e2",
-          "downloadCount": 33,
+          "downloadCount": 34,
           "name": "main.js",
           "size": 1936522
         },
@@ -126,7 +216,7 @@
         },
         {
           "digest": "sha256:e0c377e23ae3812371b8782c062e3073f325f19ed3ab95fdf194b17194a897a8",
-          "downloadCount": 89,
+          "downloadCount": 90,
           "name": "styles.css",
           "size": 204863
         }
@@ -666,7 +756,7 @@
         },
         {
           "digest": "sha256:84da160796722ddb11f77c26b7254b862b175bfd6cfe6d96a735a4483b295054",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 162410
         }

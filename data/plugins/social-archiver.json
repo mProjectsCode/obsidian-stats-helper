@@ -4,8 +4,8 @@
   "description": "Archive social media posts from various platforms. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "social-archiver",
-  "lastChangedAt": "2026-07-04T04:01:26.972Z",
-  "lastFetchedAt": "2026-07-04T04:01:26.972Z",
+  "lastChangedAt": "2026-07-05T04:02:26.985Z",
+  "lastFetchedAt": "2026-07-05T04:02:26.985Z",
   "manifest": {
     "author": "Hyungyun Lim",
     "authorUrl": "https://github.com/hyungyunlim",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:9f483ec2733d5ca2ceec6fcb99ab3543a920f6012d101358fa88152f9a1716de",
-          "downloadCount": 22,
+          "downloadCount": 86,
           "name": "main.js",
           "size": 3847840
         },
         {
           "digest": "sha256:d1f2a86242783901980024d0ec6c4863f3c8656fea3d4b16c7ea205bbe878939",
-          "downloadCount": 25,
+          "downloadCount": 147,
           "name": "manifest.json",
           "size": 453
         },
         {
           "digest": "sha256:3d8379b6de18f2ef41532f7568235ba08537807c944c08d0df7ca5f2248d7714",
-          "downloadCount": 21,
+          "downloadCount": 83,
           "name": "styles.css",
           "size": 264112
         }
       ],
       "author": "github-actions[bot]",
       "description": "Reliability release for large-vault sync.\n\n- Fixed HTTP 429 rate-limit floods during full library sync on large vaults (2,500+ archives): linked-archive lookups now use one bulk index request instead of one request per archive, and all sync retries honor the server's `Retry-After`.\n- Added a shared client-side request throttle so library sync, linked-archive sync, and mobile queue sync no longer compete for the same server rate-limit budget.\n- Mobile sync queue items are no longer permanently stranded when a rate limit hits mid-sync — they stay pending and retry automatically; per-item failure notices are collapsed into a single summary.\n- Fixed recurring \"File already exists.\" errors during author profile sync on case-insensitive file systems and when notes are created concurrently.",
-      "downloadCount": 25,
+      "downloadCount": 147,
       "draft": false,
       "name": "4.2.0",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:b2687e5cffa5d8a0b7c513a7b56dc173b556807ffd2631130af63c2d2471ae6e",
-          "downloadCount": 73,
+          "downloadCount": 75,
           "name": "main.js",
           "size": 3842730
         },
         {
           "digest": "sha256:64906a7a7b3b6b30a9d5ee2b8210f5b3475d9ca3e102a86ee0d1b95eedb03357",
-          "downloadCount": 118,
+          "downloadCount": 120,
           "name": "manifest.json",
           "size": 454
         },
         {
           "digest": "sha256:3d8379b6de18f2ef41532f7568235ba08537807c944c08d0df7ca5f2248d7714",
-          "downloadCount": 73,
+          "downloadCount": 75,
           "name": "styles.css",
           "size": 264112
         }
       ],
       "author": "github-actions[bot]",
       "description": "Patch release for series grouping and internal lint cleanup.\n\n- Fixed series episodes silently ungrouping when the `seriesId` frontmatter property is stored as a list (e.g. via Obsidian's Properties UI).\n- Removed remaining unnecessary type assertions flagged after the TypeScript 6 upgrade (CLI core, ESLint config).\n- Added regression coverage for series id normalization.",
-      "downloadCount": 118,
+      "downloadCount": 120,
       "draft": false,
       "name": "4.1.11",
       "prerelease": false,
@@ -82,27 +82,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:eeecde3b0480bb60f5be0834d954ef306cab52533ebddd7f4bd0f1653da5ee96",
+          "downloadCount": 1,
+          "name": "local-media-helper-latest.json",
+          "size": 635
+        },
+        {
+          "digest": "sha256:e5d1765eebb32b3e46f47864e1258e0daa4a9f68524b81d3c5bceabbeb97d3fb",
+          "downloadCount": 2,
+          "name": "SHA256SUMS",
+          "size": 222
+        },
+        {
+          "digest": "sha256:97a51a841af7bf0d3d72c874bc1a14e05131a0e9db5999551bb96c499d4f8478",
+          "downloadCount": 2,
+          "name": "social-archiver-local-media-helper-0.2.0-macos-arm64.pkg",
+          "size": 2275982
+        }
+      ],
+      "author": "hyungyunlim",
+      "description": "Adds the **Reader AI Chat bridge** so the Social Archiver Chrome extension's Reader Mode can chat with the Claude Code CLI running on your Mac. The existing media features (`dash_mux`, `hls_remux`) are unchanged and fully backward compatible.\n\n## New\n\n- **AI chat endpoints** — new `ai_chat` capability with `GET /ai/providers` (detects your local Claude Code CLI) and `POST /ai/chat` (SSE stream). Same pairing-token auth as the media endpoints. The extension's reader drawer talks to these to answer questions about the article you're reading, using your own Claude Code login.\n- **Model selection** — the drawer's model picker (Default / Sonnet / Opus / Haiku) is passed through to the CLI.\n- **Session continuity** — follow-up turns resume the same CLI session, so the assistant remembers earlier messages in the conversation.\n\n## Reliability\n\n- CLI detection is **pre-warmed at startup** and served stale-while-revalidate, so the first chat after a helper restart no longer times out on the one-time cold spawn cost (previously this could make the drawer falsely show \"Install the local helper\").\n\n## Security\n\nThe article text is treated as untrusted web content. The spawned CLI runs with **all tools disabled** (`--disallowedTools`), from an empty scratch working directory (no project settings loaded), under a wall-clock timeout, with a cap of 2 concurrent chats.\n\n## Requirements\n\n- macOS. AI chat additionally requires the [Claude Code CLI](https://claude.com/claude-code) installed and signed in. Chats run on your own Claude Code login and count toward your plan.\n\n## Install\n\nDownload and open `social-archiver-local-media-helper-0.2.0-macos-arm64.pkg` below — it is signed with a Developer ID and notarized by Apple. After installing, pair it from the extension's Options page.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "Local Media Helper v0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T00:51:24Z",
+      "tag": "local-helper-v0.2.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c59ee3ab392bd2441d6598ccd5d03e6aa1801fd1637ad3f619987bb510425791",
-          "downloadCount": 74,
+          "downloadCount": 85,
           "name": "main.js",
           "size": 3838651
         },
         {
           "digest": "sha256:c1e5a369ac43b079da2052a2c50f8ba5a58a0e45990ce612fa6bfe953a028af2",
-          "downloadCount": 177,
+          "downloadCount": 188,
           "name": "manifest.json",
           "size": 454
         },
         {
           "digest": "sha256:3d8379b6de18f2ef41532f7568235ba08537807c944c08d0df7ca5f2248d7714",
-          "downloadCount": 72,
+          "downloadCount": 73,
           "name": "styles.css",
           "size": 264112
         }
       ],
       "author": "hyungyunlim",
       "description": "Patch release for Obsidian local executor AI actions and media-note sync.\n\n- Fixed Obsidian executor handling for AI action comment jobs such as Summary, Fact Check, Glossary, Reformat, and Custom.\n- Prevented `comment.glossary` requests from failing as `UNKNOWN` when routed through the local executor path, and uploaded generated comment results back to the worker.\n- Restored audio download/transcription suggestions for meeting and audio notes with local audio attachments, while preserving podcast behavior.\n- Included composed-post title, preview, and full-content fields in create/update sync payloads.\n- Added regression coverage for the glossary executor upload flow and audio-note media suggestions.",
-      "downloadCount": 177,
+      "downloadCount": 188,
       "draft": false,
       "name": "4.1.10",
       "prerelease": false,
@@ -305,7 +335,7 @@
         },
         {
           "digest": "sha256:a6634b2cfea73f36b4f91a41756c197ae60b08aea8f3bec882ced1f0880f7df1",
-          "downloadCount": 193,
+          "downloadCount": 194,
           "name": "styles.css",
           "size": 261733
         }
