@@ -4,8 +4,8 @@
   "description": "Calendar view with integrated daily, weekly, monthly, quarterly, and yearly notes. An update of the Calendar plugin. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "calendar-plus",
-  "lastChangedAt": "2026-07-04T05:02:27.040Z",
-  "lastFetchedAt": "2026-07-04T05:02:27.040Z",
+  "lastChangedAt": "2026-07-05T05:02:26.996Z",
+  "lastFetchedAt": "2026-07-05T05:02:26.996Z",
   "manifest": {
     "author": "Matt Maiorana",
     "authorUrl": "https://github.com/mattmaiorana",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:4e1a783dd73064881e142b7546fd66d81e654346aa095f7638c521b1c4647560",
-          "downloadCount": 69,
+          "downloadCount": 105,
           "name": "main.js",
           "size": 372303
         },
         {
           "digest": "sha256:8fb796abc444f9389cf932031c3d2b9ecd3fb62b400ae9e74947ab1803895b30",
-          "downloadCount": 70,
+          "downloadCount": 106,
           "name": "manifest.json",
           "size": 348
         },
         {
           "digest": "sha256:41ed2757d90f58597246433dba8f15a29aa795b38dfdd43c23f99a86ad81640d",
-          "downloadCount": 69,
+          "downloadCount": 105,
           "name": "styles.css",
           "size": 3300
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nA batch of correctness and reliability fixes from a full code review, plus documentation. No new settings; `minAppVersion` unchanged at 1.8.7.\n\n- **Featured images clear correctly when the source image changes.** Deleting or renaming an image that a day cell uses now updates the cell instead of leaving a broken/blank background until the note is reopened.\n- **Second daily notes highlight reliably.** Opening or creating a second daily note now applies its grey highlight immediately (previously it could fail to appear, especially on mobile), and a rapid double Alt-click no longer tries to create it twice.\n- **Steadier calendar under load.** A failing note read no longer blanks a day cell; the confirm-to-create dialog always closes even if creation fails; and thumbnail-cache object URLs are cleaned up more carefully (no leaks when closing the calendar mid-generation, re-saving an image, or running two calendar views).\n- **Fewer redundant recomputations** when navigating months within the same year.\n- **Docs:** clarified how folders work in the date format (the filename must identify the period on its own — nesting like `YYYY/MM/…` is supported as long as the full date stays in the filename).\n\n",
-      "downloadCount": 70,
+      "downloadCount": 106,
       "draft": false,
       "name": "2.1.11",
       "prerelease": false,
@@ -53,13 +53,13 @@
       "assets": [
         {
           "digest": "sha256:735b649e9086b05e5f0c27cde738dc0999e3f642fbfea1dc73771eea8d1f8143",
-          "downloadCount": 162,
+          "downloadCount": 172,
           "name": "main.js",
           "size": 365428
         },
         {
           "digest": "sha256:4dca6d8a8bf3c6af56f14fb671e87cfd7712d9d4f4e201681489b900059bcf46",
-          "downloadCount": 167,
+          "downloadCount": 177,
           "name": "manifest.json",
           "size": 348
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nSmall fixes. No new settings; `minAppVersion` unchanged at 1.8.7.\n\n- **Fixed:** a hidden featured image now stays hidden when you rename or move its note (previously the image reappeared, because the hidden-note list tracked the old path).\n- **Internal:** thumbnail generation uses `activeDocument` for popout-window compatibility (clears an Obsidian plugin-checker warning; no behavior change).\n\n",
-      "downloadCount": 167,
+      "downloadCount": 177,
       "draft": false,
       "name": "2.1.10",
       "prerelease": false,
@@ -743,26 +743,26 @@
       "assets": [
         {
           "digest": "sha256:b0b1500cf2a9fa50fff24f1723e76588877e33f7ba00b4a3df50e648dba07415",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 165471
         },
         {
           "digest": "sha256:546f8e3208f144bf01e41c2161eeb26e31add3a769b57b6096f48138d9e65c2d",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 315
         },
         {
           "digest": "sha256:b331f0cb6878db59b0bf96d681f51921325cbd32028aeae900c67a4d62c2af72",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 2665
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nFocus: clear the remaining Moment / type-resolution checker warnings from the 1.7.12 baseline, plus two small independent type-shape cleanups. No intended user-visible behavior change.\n\nCode quality (no behavior change)\n- Routed all runtime `moment` usage through `src/types/moment.ts` instead of importing `moment` directly from `\"obsidian\"`. Six source files (and the two missed `const { moment } = window;` destructures in `src/settings.ts`) now `import { moment } from \"src/types/moment\"`. The seam casts Obsidian's bundled moment to a small local `MomentFactory` interface covering the call signatures and static methods Calendar Plus actually uses, so the Obsidian checker no longer treats `moment()` / `moment.locale()` / `moment.localeData()` / `moment.weekdays()` etc. as error-typed. This clears the cluster of `unsafe-assignment` / `unsafe-call` / `unsafe-member-access` warnings that cascaded from every Moment call site in `periodicNoteHelpers.ts`, `main.ts`, `localization.ts`, and `calendar-ui/utils.ts`.\n- Runtime moment still comes from Obsidian's bundled `moment` export — the cast is type-only, the underlying value is unchanged, and `window.moment` access remains gone.\n- Simplified `ILocaleOverride` to plain `string` (the prior `\"system-default\" | string` union flattened to `string` anyway) and documented the `\"system-default\"` sentinel in JSDoc, satisfying the checker's redundant-literal-in-union warning without depending on the `(string & {})` idiom (which the locally-pinned `@typescript-eslint` v4.20.0 `ban-types` rule rejects).\n- Typed the `month` accumulator in `getMonth` (`src/ui/calendar-ui/utils.ts`) as `IMonth` instead of letting it infer to `any[]`, clearing the unsafe-return warning. The function's declared return type was already `IMonth`; the local annotation just makes the accumulator's type match.\n\nKnown remaining warnings\n- The single non-blocking `no-restricted-imports` warning on `src/types/moment.ts:2` (the type-only `import type { ... } from \"moment\"`) remains intentional — it's the central seam.\n- `localStorage.getItem(\"language\")` and the Svelte component instance typing warnings on `this.calendar` are still deferred per `FUTURE_PLANS.md` §2 and §5.\n\n",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "1.7.13",
       "prerelease": false,
