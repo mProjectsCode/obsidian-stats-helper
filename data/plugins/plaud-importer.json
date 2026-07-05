@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-04T07:04:26.972Z",
-  "lastFetchedAt": "2026-07-04T07:04:26.972Z",
+  "lastChangedAt": "2026-07-05T07:01:26.967Z",
+  "lastFetchedAt": "2026-07-05T07:01:26.967Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.19.0"
+    "version": "0.20.0"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:cb9aa025ba3990a3f1380ce7afe0e56a4f1932d6af8d1aabc2ac47ab9957574e",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 174701
+        },
+        {
+          "digest": "sha256:5b05da90fd484722a519785725cedecf8b11e3180360b0891d20ce37a7c482fe",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:82ec6297fd4c1159b46e6c92a669ce83ec9d58eff95ef349b145a23db12c5d5e",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 11933
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **Configurable note name template.** A new setting builds each note's name from a template, using the same `{{...}}` tokens as the subfolder setting plus a `{{title}}` token. Put the date wherever you like, before or after the title: `{{yyyy}}-{{MM}}-{{dd}} {{title}}` gives `2026-07-03 Team sync`, and `{{title}} {{yyyy}}-{{MM}}-{{dd}}` gives `Team sync 2026-07-03`. Preset buttons fill in ISO, US, and EU orders, or type your own with named-month (`{{MMM}}`), 2-digit-year (`{{yy}}`), week (`{{ww}}`), and quarter (`{{Q}}`) tokens. The default reproduces the previous `YYYY-MM-DD` naming, so nothing changes unless you set it. The name has to be usable as a filename, so a template with a slash, colon, or unknown token is rejected. The `date` property inside each note stays `YYYY-MM-DD` for Dataview and sorting.\n- **Rename an imported recording from Obsidian.** A new \"Rename recording\" command and a \"Rename imported recording\" item in a note's right-click menu rename a Plaud note and its attachments folder together, so the `-assets` folder and the note's embedded images stay in sync. If you rename a Plaud note yourself (from the file explorer or the built-in rename), the plugin now moves its attachments folder to match automatically. By default the rename is local; see the title write-back setting below to also update the title in Plaud.\n- **Optionally update the title in Plaud when you rename.** A new setting, \"Update the recording title on rename\" (off by default), can push a rename back to Plaud so the recording's title there matches your note name. With it off, the Rename recording command asks each time whether to update Plaud, and a file-explorer rename stays local. With it on, both the command and a file-explorer rename update Plaud automatically. The title sent is your new note name exactly, including any date prefix, so Plaud matches what you see in Obsidian. This is the only change the plugin writes back to Plaud; everything else is read-only. After an update, the note's sync marker is refreshed so background sync does not re-import the recording just because you renamed it.\n\n### Changed\n\n- On import, the recording's own date is placed in each note's name by the template, replacing any date already in the title, so notes sort by day in the file explorer and every name reads the same way. A title with no date gets the recording date. A title that starts with a date, in any common form (including one glued to text such as `04/13-Meeting`), has that date removed and the recording's date used instead. The date always comes from the recording, the same value as the note's `date` property, so a title whose date was edited or written differently ends up with the recording's date. Existing notes are not renamed; this applies to new imports.\n- **A changed recording's note is now renamed to match, instead of being left at its old name.** When background auto-sync or a manual re-import picks up a recording whose name changed in Plaud, the plugin renames the existing note and its attachments folder to the current name before updating the content, rather than overwriting the old-named note in place. Combined with the date-prefix and note-name-template changes above, a synced recording whose note does not yet follow your current naming is renamed on its next change, so several notes can move at once as a backlog re-syncs. Only recordings that changed in Plaud, or that you re-import by hand, are affected; notes are moved, not duplicated, and their embedded attachments move with them.\n\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.20.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T23:29:31Z",
+      "tag": "0.20.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:6cffb45c685c463277e35bba32b42eac0ff68328284c3cbdf9aac5066a8b9668",
-          "downloadCount": 17,
+          "downloadCount": 27,
           "name": "main.js",
           "size": 160623
         },
         {
           "digest": "sha256:6135cd4e78f0c8718db7c5eed17b9bf7ed378ed7deb3ab93a6788892bf6a6602",
-          "downloadCount": 18,
+          "downloadCount": 31,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2bdfd19f08eb69beb65eaa0e19f1d33e731b9d3214e09b6038e2a1004505b640",
-          "downloadCount": 17,
+          "downloadCount": 27,
           "name": "styles.css",
           "size": 11089
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- Imported notes now record which Plaud folder each recording is in. Every note gets a `plaud-folder` frontmatter field holding the folder name(s), so you can find and group recordings by their Plaud folder in Obsidian, for example with Dataview. A recording that is not filed in a folder gets no field.\n\n### Fixed\n\n- Plaud folder tags now appear as readable names. A recording filed in a Plaud folder used to write the folder's internal id (a long code) into the note's `tags`; imported notes now use the folder name instead. Names are converted to valid tag form, so spaces and symbols become dashes.\n\n",
-      "downloadCount": 18,
+      "downloadCount": 31,
       "draft": false,
       "name": "0.19.0",
       "prerelease": false,
@@ -113,13 +143,13 @@
       "assets": [
         {
           "digest": "sha256:fb2d270eb20d665cfbb4440f19953b673855d061f0e3df996105f406e759d302",
-          "downloadCount": 20,
+          "downloadCount": 30,
           "name": "main.js",
           "size": 145811
         },
         {
           "digest": "sha256:55766cc1b214d8b48a50fa49a90e64e8848015c400e207533f031e1374ea8a05",
-          "downloadCount": 22,
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 316
         },
@@ -132,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- Audio import is now fully best-effort: if the note's attachment folder cannot be created, the audio step logs and skips instead of letting the error escape, so a folder problem never fails the recording's import. Internal, no change to a normal import.\n\n### Changed\n\n- Documentation only: corrected the `parseAudioTempUrl` code comment (the audio URL is at the top level of the response, not inside a `data` envelope) and reattached a comment that had detached from its function. No behavior change.\n\n",
-      "downloadCount": 22,
+      "downloadCount": 32,
       "draft": false,
       "name": "0.17.1",
       "prerelease": false,

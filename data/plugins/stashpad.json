@@ -4,8 +4,8 @@
   "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "stashpad",
-  "lastChangedAt": "2026-07-04T07:04:26.972Z",
-  "lastFetchedAt": "2026-07-04T07:04:26.972Z",
+  "lastChangedAt": "2026-07-05T07:01:26.967Z",
+  "lastFetchedAt": "2026-07-05T07:01:26.967Z",
   "manifest": {
     "author": "Human",
     "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Stashpad",
-    "version": "0.133.0"
+    "version": "0.143.4"
   },
   "name": "Stashpad",
   "presentInCommunityList": true,
@@ -21,27 +21,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:c3b1afa2e827eb1fdcd3c0301383e7630d491a72c3aa8fd2f1a02b7d782de302",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 825263
+        },
+        {
+          "digest": "sha256:a9e1d2ddf81589b580ed676d247da920b42542e356abfaa7bbe401b624a7721d",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 349
+        },
+        {
+          "digest": "sha256:9ab2c240de6792ad07527f0a1ee6e2df6b6ee7d014ea4601d2df830531aa7ae0",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 194758
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This release completes a major reworking of Stashpad's encryption into a **strictly\nper-folder** model, and folds in composer and note-creation improvements.\n\n## Encryption is now fully per-folder\n\nStashpad encryption no longer uses a single vault-wide password or a central key\nfile. Each encrypted folder owns its own password and key, stored in a `.stashkey`\nfile *inside that folder* (so the key travels with the content it protects). A\nfolder with no password of its own — and no encrypted parent to inherit one from —\nis simply not encrypted. This removes the whole class of sync conflicts a shared\ncentral key file could cause, and makes sharing a single folder straightforward:\nhand over that folder's password.\n\nExisting vaults keep working: any legacy central key file is still read for\nbackward compatibility and its folder keys migrate to the new per-folder format\nautomatically. Once everything has migrated, a new settings action lets you retire\nthe old key file.\n\n---\n\n### 0.142.0\n\n- Removed per-folder key **rotation**. Changing a folder's password is now always a\n  fast in-place re-wrap of the existing key; there is no separate re-encrypt-all\n  \"rotate\" pass. To fully invalidate a key, remove the folder's encryption and\n  re-encrypt it under a new password.\n\n### 0.142.1\n\n- Added an optional **recovery password** per folder — a second password that also\n  unlocks the folder, as a backup if the main one is lost. Manage it (add / change /\n  remove) from the per-folder encryption settings.\n\n### 0.142.2\n\n- Removed the device-approval \"Collaborators\" UI (member lists and join\n  requests). Sharing an encrypted folder is done by sharing that folder's password\n  out-of-band. Content that was already unlockable stays unlockable.\n\n### 0.142.3\n\n- A folder can now be given its **own password without first setting up vault-wide\n  encryption** — per-folder encryption stands on its own. Setting a folder password\n  can be the first (and only) encryption in a vault.\n\n### 0.142.4\n\n- Encryption settings copy clarified for the per-folder model (a vault with only\n  per-folder passwords no longer reads as \"not set up\").\n\n### 0.142.5\n\n- Note IDs are now **de-duplicated at creation** — Stashpad never mints an ID that\n  already exists in the vault, closing a rare collision window.\n- Composer: toggling the Enter-mode (send vs. newline) no longer re-renders the\n  whole note list.\n\n### 0.142.6\n\n- Composer: split-mode toggles now update the composer **in place** instead of\n  triggering a full list re-render.\n\n### 0.142.7\n\n- Composer button row reordered; mobile layout reworked so the buttons no longer\n  overlap; the current destination is shown in place.\n\n### 0.143.0\n\n- Encryption is now **strictly per-folder**. The vault-wide password, the shared\n  password, device identities, and the central-key-file unlock path are all\n  removed. A folder with no password of its own (or inherited) is not encrypted —\n  there is no vault-wide fallback key. Legacy key files remain readable for\n  backward compatibility, and their folder keys migrate to `.stashkey` files.\n- The top-level Encryption settings are reduced to a single content-based **\"Remove\n  all encryption\"** action; passwords are set, changed, and recovered per folder.\n- Notes are no longer auto-unlocked at startup — each folder unlocks on demand\n  (silently, from the keychain, if you chose to remember it there).\n\n### 0.143.1\n\n- The **\"Remove all encryption\"** action is hidden when nothing is encrypted.\n- Fixed unlocked notes whose titles were hidden while encrypted showing as\n  \"(untitled)\" — the re-encrypt review dialog and the \"Previously encrypted\" view\n  now resolve the note's real (now-readable) title.\n- The **\"Remember on this device\"** checkbox in the password dialog is now checked\n  by default (untick it to require re-typing).\n- Added \"(lock)\" to the **\"Encrypt & delete\"** and **\"Encrypt everything\n  applicable\"** command names for discoverability.\n- The per-folder **\"Folder\"** picker is now a heading-sized selector.\n- New command **\"Delete selection to Obsidian's trash (unencrypted)\"** — deletes\n  the selection through Obsidian's own trash, bypassing encrypted-trash.\n- Notifications now carry **jump buttons**: the secure-delete notice offers \"Open\n  Trash\", and restore notices offer \"Go to folder\".\n\n### 0.143.2\n\n- New manual, reversible **\"Retire the old encryption keyfile\"** settings action\n  (shown only when a legacy key file is still present). It moves the old key file\n  and its backups into a dated `retired-keyfile-…` folder — nothing is deleted —\n  and refuses if any folder's key still lives only in the old file.\n\n### 0.143.3\n\n- The retire action now verifies each parked file byte-for-byte before removing the\n  original, so an interrupted or truncated write can never leave a corrupt backup.\n\n### 0.143.4\n\n- The **\"Delete (unencrypted)\"** command routes to Obsidian's own trash (system\n  trash or `.trash`, per your Obsidian setting), keeping deleted items out of any\n  folder's encrypted trash.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.143.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T02:37:45Z",
+      "tag": "0.143.4"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:cf44785604e08397921074bc3e97777a7155f114ec20a284fa7c555d5eb1d1cc",
-          "downloadCount": 11,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 805891
         },
         {
           "digest": "sha256:9209c4681b9298fcd0fc93c35b72dd6169d334545da9f9c8e08d3db256646cec",
-          "downloadCount": 15,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 349
         },
         {
           "digest": "sha256:0dd81b385f9a76c7385ff00e26a3e5b8c77b0cd1990ccff031190335b305c758",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 190193
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.133.0 — Closing a Stashpad-opened tab returns you to the tab you came from\n\nOpening a note in the editor already returned focus to the originating Stashpad\ntab when that editor tab was closed. This release makes the same behavior\nuniversal: **search results and the aggregate views now do it too.**\n\n- **Search results** — opening a search hit in a new tab and then closing it now\n  returns you to the tab you searched from, instead of Obsidian's default of\n  jumping to the tab on the right.\n- **Aggregate views** — the same return-to-origin behavior on close for the\n  **All encrypted**, **All archived**, and **All tasks** views, plus the **Trash**\n  view. Works whether the view was opened from a Stashpad tab or the command\n  palette.\n\nInternally, the return-to-origin logic (previously duplicated across the\neditor-open, new-Stashpad-tab, and folder-open paths) is now a single shared\nhelper, so every current and future tab-opener behaves consistently.",
-      "downloadCount": 15,
+      "downloadCount": 26,
       "draft": false,
       "name": "0.133.0",
       "prerelease": false,
