@@ -4,8 +4,8 @@
   "description": "Gamify your academic workflow with XP and levels. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "scholar-quest",
-  "lastChangedAt": "2026-07-04T06:01:26.962Z",
-  "lastFetchedAt": "2026-07-04T06:01:26.962Z",
+  "lastChangedAt": "2026-07-05T06:04:26.965Z",
+  "lastFetchedAt": "2026-07-05T06:04:26.965Z",
   "manifest": {
     "author": "Zhao-Jun Yong",
     "authorUrl": "https://buymeacoffee.com/zhaojun0425",
@@ -24,20 +24,20 @@
       "assets": [
         {
           "digest": "sha256:b869d444be3a11d9eee04576a8d254828b607396102abe6b02daa5a5a7549061",
-          "downloadCount": 88,
+          "downloadCount": 100,
           "name": "main.js",
           "size": 298773
         },
         {
           "digest": "sha256:f2709843a7c45282852ad01256328f839a7534f69f1381cda0a2ca8910166bb7",
-          "downloadCount": 86,
+          "downloadCount": 98,
           "name": "manifest.json",
           "size": 341
         }
       ],
       "author": "Zhao-Jun-Yong",
       "description": "## Bug fixes\n\nFive XP re-award and snapshot corruption bugs, all sharing the same root cause: startup metadata events (Obsidian re-indexing the vault on launch) were indistinguishable from live user edits, so XP was awarded again for historical activity on every reload.\n\n**What was happening:** On startup, Obsidian fires `metadata:changed` and `vault:create` events for every file in the vault. The plugin had no way to tell these apart from genuine user edits, so it re-awarded paper XP, atomic-note development XP, and writing progress XP on every reload — flooding the 500-entry activity log and pushing out the career-init entry.\n\n**The fix:** All three XP-awarding paths now check `file.stat.mtime >= loadedAt`. If the file was last modified before the plugin loaded, no XP is awarded — the snapshot is updated and guards are bootstrapped silently instead.\n\n### Fixes\n\n- **Sources** (`paper-skimmed` / `paper-completed`): paper XP re-awarded on every Obsidian reload when snapshot keywords were stale\n- **Ideas** (`atomic-note-developed`): development XP re-awarded on startup for notes edited between sessions; 60-min cooldown always expired after a restart\n- **Projects** (`writing-progress`): writing XP re-awarded on startup for project files edited between sessions; `peakWordCount` also advanced silently, shifting the threshold\n- **`onFileCreate` snapshot wipe**: Obsidian fires `create` events for all pre-existing files during startup indexing; the handler was overwriting every snapshot unconditionally, erasing `completedAt`/`skimmedAt`, `lastDevelopmentAt`, `peakWordCount`, and daily writing state — the source of missing guards that let the above bugs fire\n- **Career calibration double-XP**: re-opening the career wizard searched the activity log for the previous `career-init` entry to subtract old XP before adding the new value; if the log had overflowed the entry was missing, old XP was not subtracted, and new XP stacked on top — fixed by deriving `prevXP` from the stored `careerData` object via the new `calcCareerXP()` function\n\n### Tests\n\n87 tests (9 new covering startup-guard behaviour).",
-      "downloadCount": 86,
+      "downloadCount": 98,
       "draft": false,
       "name": "1.5.0 — Fix XP re-award on reload",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "A warm personal knowledge review space for Obsidian vaults. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "knowlery",
-  "lastChangedAt": "2026-07-04T06:01:26.962Z",
-  "lastFetchedAt": "2026-07-04T06:01:26.962Z",
+  "lastChangedAt": "2026-07-05T06:04:26.965Z",
+  "lastFetchedAt": "2026-07-05T06:04:26.965Z",
   "manifest": {
     "author": "Jay Jiang",
     "authorUrl": "https://github.com/JayJiangCT",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.12.2",
     "name": "Knowlery",
-    "version": "0.6.1"
+    "version": "0.7.0"
   },
   "name": "Knowlery",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:9dc98148d8cc8fd707fc9b0fa05f82a98a368db0e385ea8825075203d3143e5d",
-          "downloadCount": 4,
+          "digest": "sha256:54b033066da87759d560bcbf1564c7948b3c44f4c84162d6e3a21a14d9262ae2",
+          "downloadCount": 5,
           "name": "main.js",
-          "size": 838514
+          "size": 842735
         },
         {
-          "digest": "sha256:b3cdad1d1f34dae62546fca859248788081fd223cc5382a9b372cb132cdc19d4",
-          "downloadCount": 4,
+          "digest": "sha256:43fedbc0c32f1b28c44d2ba76957ed59d3febaac42b24924b0854fa4372f01bd",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 269
         },
         {
           "digest": "sha256:8947f60228ebdea5b19c1f7f8fcfabef85733fb7ca36cdce78298df33b2fee69",
-          "downloadCount": 4,
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 131378
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Theme: one core, two shells — Knowlery's knowledge-base lifecycle is now available as\na standalone CLI, while the Obsidian plugin remains the premium shell over the same\ncore and the same workspace format. Developed spec-first; the accepted specs live in\n`specs/0.7.0/`.\n\n### New features\n\n- **The `knowlery` CLI** (`npm i -g knowlery`). The full workspace lifecycle without\n  Obsidian:\n  - `knowlery init` scaffolds a workspace — byte-for-byte the same file tree the\n    plugin's setup wizard produces, verified by test. A folder initialized by the CLI\n    opens in Obsidian with zero migration, and vice versa.\n  - `knowlery sync` applies the same skill/rule/migration updates the plugin runs on\n    upgrade (one shared implementation, so the shells cannot drift), reporting exactly\n    which files changed; running it twice is a true no-op.\n  - `knowlery health` checks config integrity plus knowledge-page counts, with CI-ready\n    exit codes and `--json`.\n  - `knowlery query` / `knowlery stale` expose the deterministic retrieval and\n    staleness engines — output byte-identical to the in-app commands and the\n    vault-embedded script.\n  - `knowlery bundle install|list|uninstall` brings the receiving side of knowledge\n    bundles to the CLI, with every 0.5.0 safety property intact (path-safety, version\n    gate, conformance gate).\n- **Environment-adaptive skills.** `/ask` and `/cook` teach a three-transport retrieval\n  ladder (in-app command → global CLI → embedded script); `/cook`, `/organize`, and\n  `vault-conventions` keep preferring Obsidian CLI but gain a headless write path with\n  the same conventions; `/audit` now uses `obsidian orphans`/`unresolved`/`deadends`\n  and the staleness report's dangling-sources category instead of manual traversal.\n- **Retrieval-aware compiling.** `/cook` records nicknames, abbreviations, and\n  cross-language titles into `aliases` frontmatter — names that are written down can be\n  found, closing the alias and cross-language retrieval gaps the 0.6.0 evaluation\n  quantified.\n- **Sync downgrade guard.** The workspace records which Knowlery version last synced\n  it; an older plugin or CLI refuses to sync rather than silently downgrade skill\n  content a newer one already upgraded.\n\n### Improvements\n\n- Lifecycle logic (init, skill/rule sync, migrations, health, bundle install) is\n  inverted onto a platform-neutral file interface with an Obsidian implementation and\n  a node implementation — a pure refactor with zero behavior change, guarded by a\n  purity test over the whole inverted set.\n- Optional tool installs (Claudian, agent CLIs) moved from the shared setup logic into\n  the Obsidian setup wizard where they belong.\n\n### Compatibility notes\n\n- The npm package ships only the CLI; the Obsidian plugin continues to install from\n  the community directory or GitHub releases. Plugin and CLI share one version number\n  and always release together.\n- The `aliases` compiling convention and the updated skills reach existing vaults\n  through the normal builtin-skill auto-sync; custom or forked skills are untouched.\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T22:31:31Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9dc98148d8cc8fd707fc9b0fa05f82a98a368db0e385ea8825075203d3143e5d",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 838514
+        },
+        {
+          "digest": "sha256:b3cdad1d1f34dae62546fca859248788081fd223cc5382a9b372cb132cdc19d4",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 269
+        },
+        {
+          "digest": "sha256:8947f60228ebdea5b19c1f7f8fcfabef85733fb7ca36cdce78298df33b2fee69",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 131378
         }
       ],
       "author": "github-actions[bot]",
       "description": "Community plugin review compliance release. Functionally identical to 0.6.0.\n\n### Fixes\n\n- Removed the dynamic-code patterns the plugin scanner flagged in bundled dependency\n  internals: legacy-browser polyfills in jszip's dependency chain (`<script>`-element\n  fallbacks), js-yaml's `!!js/function` type, and gray-matter's eval-based JS\n  frontmatter engine are replaced at build time with inert shims — none of that code\n  was ever executed by Knowlery.\n- Removed every `eslint-disable` directive from the source: the live snapshot now uses\n  window timers through an injectable indirection, and the generated retrieval-script\n  module lints clean without a blanket disable.\n- **`minAppVersion` raised to 1.12.2** (the Obsidian version that introduced the CLI\n  handler API behind `knowlery:query` / `knowlery:stale`), replacing rule suppressions\n  with an accurate requirement.\n- Releases now ship with build provenance attestations and a changelog-derived\n  description.\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.6.1",
       "prerelease": false,
@@ -53,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:79e799f01a4bd513a478c0152f27349cbf02758530b9425fcd95cea8f6075877",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 846614
         },
         {
           "digest": "sha256:84158ed6b27a66894e8dfccbc98602bc56ea5287c5431cd9f595386de8588f04",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 268
         },
         {
           "digest": "sha256:8947f60228ebdea5b19c1f7f8fcfabef85733fb7ca36cdce78298df33b2fee69",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 131378
         }
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.6.0",
       "prerelease": false,
@@ -113,13 +143,13 @@
       "assets": [
         {
           "digest": "sha256:d2d32379e1d3617a61ce59719a4fd2bbb2c6ff794be17a1d6ac80eb52d93d95d",
-          "downloadCount": 62,
+          "downloadCount": 72,
           "name": "main.js",
           "size": 503959
         },
         {
           "digest": "sha256:2c77bfbe6282b310f0d58b1f0e48062232aae809393678d5d67bf749bf9c24bc",
-          "downloadCount": 160,
+          "downloadCount": 170,
           "name": "manifest.json",
           "size": 268
         },
@@ -132,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 160,
+      "downloadCount": 170,
       "draft": false,
       "name": "0.4.0",
       "prerelease": false,
