@@ -4,8 +4,8 @@
   "description": "Enhance your data flow with AI-powered tools for note-taking, task management, templates, and so much more.",
   "errors": [],
   "id": "systemsculpt-ai",
-  "lastChangedAt": "2026-07-04T00:00:26.990Z",
-  "lastFetchedAt": "2026-07-04T00:00:26.990Z",
+  "lastChangedAt": "2026-07-05T00:01:26.976Z",
+  "lastFetchedAt": "2026-07-05T00:01:26.976Z",
   "manifest": {
     "author": "SystemSculpt",
     "authorUrl": "https://systemsculpt.com",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:0bb6af9db584422346a29290e85ea89dc067122573b2fd0019c0485d754b78cb",
-          "downloadCount": 323,
+          "downloadCount": 352,
           "name": "main.js",
           "size": 14630544
         },
         {
           "digest": "sha256:8c109efd8b0daee74a6c9159c3cbd8b3483b0f6a21bb07b3a1d0929777ef0544",
-          "downloadCount": 339,
+          "downloadCount": 368,
           "name": "manifest.json",
           "size": 414
         },
         {
           "digest": "sha256:9db040c8986eb3c0888eeac39aaf82d958bd2f0385ea48d4b81a11387d3f8419",
-          "downloadCount": 291,
+          "downloadCount": 306,
           "name": "styles.css",
           "size": 734867
         }
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.10.0\n\n## What's New\n\nSystemSculpt 5.10.0 is a focused security, privacy, and reliability release. It came out of a deep audit of the plugin and closes a cluster of correctness gaps: a secret no longer reaches a debug log, a syncable policy can no longer smuggle a blanket command-approval wildcard, rate limits now degrade gracefully, semantic search can no longer silently misalign, and settings failures are no longer swallowed. Every change shipped failing-test-first with a permanent CI guard, so the behaviors stay fixed.\n\n## Highlights\n\n### Security & privacy\n\n- **License key kept out of logs.** The chat debug request log previously captured the full request headers, including your SystemSculpt license key. The debug payload is now redacted; the real request is unchanged.\n- **No blanket command approval via sync.** A Studio agent policy can no longer carry a bare `*` wildcard that would auto-approve every CLI command. The wildcard is stripped when policies are parsed, ignored by the approval gate, and scrubbed from any policy already on disk.\n- **License validity downgrades only on an authoritative rejection.** A real `401`/`403` from the license service now correctly marks the license invalid, while transient/network errors preserve your last-known-good state instead of locking you out on a blip.\n\n### Reliability\n\n- **Rate limits degrade gracefully.** The client now honors the server's `Retry-After` on a managed `429`, classifies bring-your-own-key `429`s as transient, and performs a bounded, abort-aware retry — with a guarantee that already-streamed content can never be replayed. This is the client complement to the server-side OpenRouter hardening.\n- **Streams stop when a chat view closes.** Closing a chat now aborts its in-flight request instead of leaving the network stream, token spend, and render loop running in the background.\n- **Honest edit-tool results.** The filesystem agent's edit tool now reports zero or partial edits accurately instead of claiming success when nothing (or only some) of the requested changes applied, and it skips no-op writes.\n- **Settings failures are surfaced.** If saving (or backing up) settings fails — disk full, permissions, a sync lock — the error is now logged and shown once via a de-duplicated notice, instead of being silently swallowed and lost on reload.\n\n### Semantic search\n\n- **Embedding vectors stay aligned with their chunks.** Whitespace-only or empty inputs no longer shift the returned vectors out of alignment with their source chunks, which could silently corrupt semantic-search results. The provider now returns one slot per input and asserts the counts match.\n\n### Developer experience\n\n- **The CSS linter is now actually enforced.** The Obsidian-override hygiene linter that ships with the repo is wired into the check gate (locally and in CI), with a guard test proving it fails on an unscoped selector — so the rule it was written to catch is finally guaranteed.\n- Removed a dead token-counter code path (and its orphaned support files) that referenced a dependency that was never installed.\n\n## Upgrade Notes\n\n- No manual action is required; settings migrate automatically on update.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Verification\n\nEvery change in this release landed through its own pull request with the full CI matrix green — the unit suite and built-bundle integration suite, plus the macOS and Windows end-to-end lanes — and an automated review pass. Each fix added or tightened a permanent test guard at the cheapest layer that catches the regression. The release additionally ran the native release matrix: macOS desktop baselines, the Windows clean-install and desktop-baselines GitHub end-to-end check for the released commit, and the Android sync and runtime smoke lanes.\n",
-      "downloadCount": 339,
+      "downloadCount": 368,
       "draft": false,
       "name": "5.10.0",
       "prerelease": false,
@@ -96,7 +96,7 @@
         },
         {
           "digest": "sha256:778b55e02cfe8af4c41f362376817116a6043385c151b1b10c391471cf138ec2",
-          "downloadCount": 131,
+          "downloadCount": 132,
           "name": "styles.css",
           "size": 730123
         }
@@ -234,7 +234,7 @@
       "assets": [
         {
           "digest": "sha256:b106965c7296e1d845fbb78e266008ebe1094d0214b5f689befb0d46f9c435a5",
-          "downloadCount": 76,
+          "downloadCount": 77,
           "name": "main.js",
           "size": 14381277
         },
@@ -246,7 +246,7 @@
         },
         {
           "digest": "sha256:125193e2f51ec272227e75ba23ecdd444a2990caebc1354994259dce99b96c2f",
-          "downloadCount": 75,
+          "downloadCount": 76,
           "name": "styles.css",
           "size": 743718
         }
@@ -1314,7 +1314,7 @@
         },
         {
           "digest": "sha256:360eb866ab9b2d34dc8b1375b07b3ffcdc36c33ef297d98763900fbd006be30e",
-          "downloadCount": 617,
+          "downloadCount": 618,
           "name": "styles.css",
           "size": 607646
         },
@@ -3690,7 +3690,7 @@
           "size": 2377730
         },
         {
-          "downloadCount": 2087,
+          "downloadCount": 2088,
           "name": "manifest.json",
           "size": 380
         },
@@ -3702,7 +3702,7 @@
       ],
       "author": "SystemSculpt",
       "description": "Enhanced Recording and Chat Experience\n\n**Summary:**\nThis release introduces significant improvements to the recording and chat functionalities, providing users with more control and a seamless interaction experience. Additionally, various enhancements to AI model management and user interface refinements ensure a more efficient and user-friendly environment.\n\n**Highlights:**\n- **New Features**: Added force stop functionality for the recording module, empowering users to manage recordings more effectively.\n- **User Interface**: Enhanced chat input with a loading state and improved layout, ensuring a smoother and more intuitive user experience.\n- **Performance**: Introduced a loading spinner and disabled input during processing in the chat view to provide clear feedback and prevent interruptions.\n- **AI Model Management**: Added new AI models and settings for better model visibility in the BrainModule and UnifiedAIService, allowing users to customize their AI interactions.\n- **Model Selection**: Implemented provider checkboxes and a refresh button in the model selection modal, enabling easier filtering and updating of available models.\n- **Template Handling**: Added remember selected template functionality and improved the BlankTemplateModal with system template input and directory suggestions, enhancing user convenience.\n- **Transcription Enhancements**: Included a language parameter in transcription settings and updated the custom whisper prompt to support vocabulary customization for more accurate transcriptions.\n- **Bug Fixes**: Updated priorityMaxOutputTokens values for various AI models to ensure consistent performance and reliability.\n\n**Note:** As the sole developer of SystemSculpt, I am dedicated to continuously enhancing the application's features and performance. This update reflects my commitment to providing you with a robust and user-friendly experience through meticulous improvements and thoughtful additions.",
-      "downloadCount": 2087,
+      "downloadCount": 2088,
       "draft": false,
       "name": "0.7.0",
       "prerelease": false,
