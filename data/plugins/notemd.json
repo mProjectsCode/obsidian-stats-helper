@@ -4,8 +4,8 @@
   "description": "Integrates with various LLMs to process notes, generate wiki-links, and create concept notes",
   "errors": [],
   "id": "notemd",
-  "lastChangedAt": "2026-07-05T02:05:26.991Z",
-  "lastFetchedAt": "2026-07-05T02:05:26.991Z",
+  "lastChangedAt": "2026-07-06T02:05:26.992Z",
+  "lastFetchedAt": "2026-07-06T02:05:26.992Z",
   "manifest": {
     "author": "jacob",
     "authorUrl": "https://github.com/Jacobinwwey",
@@ -24,13 +24,13 @@
       "assets": [
         {
           "digest": "sha256:52c9c7ef63dd6dab7120f611ce8ae8608f8d0eab3dcf66215d1f8a23184ef469",
-          "downloadCount": 212,
+          "downloadCount": 227,
           "name": "main.js",
           "size": 4596379
         },
         {
           "digest": "sha256:63719753819ee748d5f5acae3d8bd18bd77e9eb5987d6565a0304439085768dd",
-          "downloadCount": 222,
+          "downloadCount": 240,
           "name": "manifest.json",
           "size": 582
         },
@@ -42,14 +42,14 @@
         },
         {
           "digest": "sha256:7476d9f9fd383b97718b6c23f48aec9aaeb8c6d9cc2ba24a954a82c0db5fa612",
-          "downloadCount": 174,
+          "downloadCount": 188,
           "name": "styles.css",
           "size": 50919
         }
       ],
       "author": "Jacobinwwey",
       "description": "# Notemd v1.9.3\n\n## Highlights\n\n- **Slidev export is now a real multi-format workflow, not a demo-only path**: HTML, standalone HTML, PDF, PNG, and PPTX are verified through the same source-preparation and rendered-convergence pipeline.\n- **PPTX export now prioritizes visible native editability**: normal slide text, code text, and table-cell text are emitted as visible Office-native objects instead of transparent selectable overlays.\n- **The reported PPTX page 17-29 occlusion issue is fixed**: code-background rectangles and other native shapes are sorted below visible text, so the editable text remains visible in PowerPoint.\n\n## Major Upgrades\n\n- Added the Slidev export workflow with environment probing, local Slidev fork detection, full Slidev skill reference loading, source preparation, layout audit, and per-format output routing.\n- Added standalone HTML bundling with offline `file://` support, relative asset handling, Vue component transformation fixes, and maintainer acceptance evidence.\n- Added editable PPTX export with visible native text boxes, rich text runs, Office font policy reporting, paragraph spacing, code text extraction, hyperlink relationships, and native DrawingML tables.\n- Added PPTX report contracts for editable text coverage, table-cell rich text coverage, fallback-only element kinds, font portability, transparent overlay detection, and rendered-HTML visual reference checks.\n- Added layout-quality gates for overflowing content, tables, code fences, slot layouts, Mermaid source preservation, and rendered deck geometry.\n\n## Fixes And Robustness\n\n- Fixed the layer ordering bug that allowed code-background rectangles to sit above visible text in complex PPTX slides.\n- Removed the transparent-text fallback from the default visible-native PPTX route; editable text is now the displayed text.\n- Fixed table-cell rich text preservation and reporting so native table output can be verified independently from suppressed overlay text boxes.\n- Fixed table-owned decoration diagnostics so inline table decoration is reported as table-owned residue instead of an unsupported table root.\n- Hardened Slidev export verification so real `architecture.zh-CN.md` acceptance checks the local Slidev fork, full skill reference count, rendered visual gate, Mermaid source preservation, PPTX editability, and generated artifact ignore status.\n- Tightened release workflow contracts around numeric tags, required release assets, bilingual release notes, and reusable release helper scripts.\n\n## Comparative Summary\n\n- **Before**: the Slidev export buttons could produce HTML-like artifacts, but the workflow did not consistently prove environment readiness, full skill usage, standalone behavior, or PPTX quality.\n- **After**: the export path reports the installed tools, local Slidev fork, full skill root, skill reference count, output files, and PPTX quality metrics from the real vault source.\n- **Before**: PPTX editability was partly misleading because transparent text could be selectable while visible text remained image-owned.\n- **After**: visible slide text and table-cell text are emitted as native editable Office text; Mermaid/SVG geometry remains explicitly fallback-owned instead of being over-claimed.\n- **Before**: native code backgrounds could be written after text in PPTX XML, which made pages 17-29 visually hide text behind background rectangles.\n- **After**: background images, native shapes, native tables, and native text are sorted into deterministic layers, and the real deck XML gate shows zero code-background rectangles after text on pages 17-29.\n\n## Verification\n\n- `runuser -u jacob -- env HOME=/home/jacob PLAYWRIGHT_BROWSERS_PATH=/home/jacob/.cache/ms-playwright bash -lc 'cd /home/jacob/obsidian-NotEMD && npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format pptx --output-subfolder export/test-slidev-1.9.3-layer-release --sample-slides all --timeout-ms 600000 --no-screenshots --require-pptx-visual-match --json'`\n- PPTX XML inspection for slides 17-29:\n  - `totalCodeBackgroundAfterText = 0`\n  - `totalNativeShapeAfterText = 0`\n  - `totalTransparentishAlpha = 0`\n  - `totalTableOverlayText = 0`\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.3`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `obsidian help`\n- `obsidian-cli help`\n- `git diff --check`\n\n---\n\n# Notemd v1.9.3\n\n## 亮点\n\n- **Slidev 导出现在是可验收的多格式工作流，而不是演示路径**：HTML、standalone HTML、PDF、PNG 与 PPTX 都走同一套 source preparation 与 rendered convergence 管线。\n- **PPTX 导出现在优先保证可见原生可编辑性**：普通正文、代码文本与表格单元格文字会输出为可见的 Office 原生对象，而不是透明可选中 overlay。\n- **已修复第 17-29 页文字被遮挡的问题**：代码背景矩形与其他原生 shape 会被排序到可见文字下方，PowerPoint 中的可编辑文字保持可见。\n\n## 主要升级\n\n- 新增 Slidev 导出工作流，包含环境检测、本地 Slidev fork 识别、完整 Slidev skill reference 加载、源文件准备、布局审计与多格式输出路由。\n- 新增 standalone HTML bundle，支持离线 `file://`、相对资源处理、Vue component transformation 修复，并补充维护者验收证据。\n- 新增 editable PPTX 导出能力，包含可见原生文本框、rich text runs、Office 字体策略报告、段落间距、代码文本抽取、超链接关系与原生 DrawingML 表格。\n- 新增 PPTX 报告契约，覆盖可编辑文字、表格单元格 rich text、fallback-only 元素类型、字体可移植性、透明 overlay 检测与 rendered-HTML 视觉参考。\n- 新增布局质量门禁，覆盖内容溢出、表格、代码 fence、slot layout、Mermaid 源保留与渲染 deck 几何。\n\n## 修复与鲁棒性\n\n- 修复了代码背景矩形在复杂 PPTX 页面中可能位于可见文字上方的层级排序问题。\n- 从默认 visible-native PPTX 路径移除透明文字 fallback；可编辑文字现在就是实际显示的文字。\n- 修复表格单元格 rich text 的保留与报告，使 native table 输出不再依赖被 suppress 的 overlay 文本框来证明。\n- 修复 table-owned decoration 诊断：表格内部 inline 装饰现在报告为 table-owned residue，而不是 unsupported table root。\n- 加强 Slidev 导出验证：真实 `architecture.zh-CN.md` 验收会检查本地 Slidev fork、完整 skill reference 数量、渲染视觉门禁、Mermaid 源保留、PPTX 可编辑性与生成产物 ignore 状态。\n- 收紧发布流程契约：numeric tag、必需 release assets、中英双语 release notes 与复用发布脚本均有测试覆盖。\n\n## 对比摘要\n\n- **改动前**：Slidev export 按钮可以产出类 HTML 文件，但没有稳定证明环境可用性、完整 skill 使用、standalone 行为或 PPTX 质量。\n- **改动后**：导出路径会报告已安装工具、本地 Slidev fork、完整 skill root、skill reference 数量、输出文件与真实 vault 源文件的 PPTX 质量指标。\n- **改动前**：PPTX 可编辑性存在误导，透明文字可能可选中，但实际显示文字仍由图片层承担。\n- **改动后**：可见正文与表格单元格文字会输出为 Office 原生可编辑文字；Mermaid/SVG geometry 仍明确归属 fallback，不夸大为已完全原生可编辑。\n- **改动前**：PPTX XML 中原生代码背景可能写在文字之后，导致第 17-29 页文字被背景矩形遮挡。\n- **改动后**：background image、native shape、native table、native text 按确定性层级排序，真实 deck 的 XML gate 显示第 17-29 页没有任何 code background 位于文字之后。\n\n## 验证\n\n- `runuser -u jacob -- env HOME=/home/jacob PLAYWRIGHT_BROWSERS_PATH=/home/jacob/.cache/ms-playwright bash -lc 'cd /home/jacob/obsidian-NotEMD && npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format pptx --output-subfolder export/test-slidev-1.9.3-layer-release --sample-slides all --timeout-ms 600000 --no-screenshots --require-pptx-visual-match --json'`\n- 第 17-29 页 PPTX XML 检查：\n  - `totalCodeBackgroundAfterText = 0`\n  - `totalNativeShapeAfterText = 0`\n  - `totalTransparentishAlpha = 0`\n  - `totalTableOverlayText = 0`\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.3`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `obsidian help`\n- `obsidian-cli help`\n- `git diff --check`\n",
-      "downloadCount": 222,
+      "downloadCount": 240,
       "draft": false,
       "name": "Notemd 1.9.3",
       "prerelease": false,
@@ -240,7 +240,7 @@
       "assets": [
         {
           "digest": "sha256:87ced0893feafa8ef00f41e2750bd41f4e86d22002c46bf8bab6d0296ade032b",
-          "downloadCount": 28,
+          "downloadCount": 29,
           "name": "main.js",
           "size": 4778236
         },
@@ -288,7 +288,7 @@
         },
         {
           "digest": "sha256:4dfe14da4dac9adcbce8ca6535ea296a8b858beff5626065d6b260e993e3c7fd",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "README.md",
           "size": 76786
         },
