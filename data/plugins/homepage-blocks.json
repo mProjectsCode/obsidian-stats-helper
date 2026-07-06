@@ -4,8 +4,8 @@
   "description": "A composable, drag-and-drop homepage. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "homepage-blocks",
-  "lastChangedAt": "2026-07-05T03:04:26.972Z",
-  "lastFetchedAt": "2026-07-05T03:04:26.972Z",
+  "lastChangedAt": "2026-07-06T04:01:26.971Z",
+  "lastFetchedAt": "2026-07-06T04:01:26.971Z",
   "manifest": {
     "author": "Alfio Caprino",
     "authorUrl": "https://github.com/acaprino",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:d5feafb4edf64c7f86305448b640f2a0f87455c4ad4539ec9d39132756fb081e",
-          "downloadCount": 366,
+          "downloadCount": 380,
           "name": "main.js",
           "size": 535512
         },
         {
           "digest": "sha256:9c566f3825e58a751f83469b7c0e0b1670c9317dad2d714c5a78275548aed4f7",
-          "downloadCount": 400,
+          "downloadCount": 420,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:0791d9e57e4cf9e628daedeeedc98bc362a2a57e2ee327df40a599a3c09a8879",
-          "downloadCount": 329,
+          "downloadCount": 343,
           "name": "styles.css",
           "size": 108293
         }
       ],
       "author": "acaprino",
       "description": "Compliance/maintenance release for the Obsidian community review platform: resolves the \"Local Storage\" scan finding.\n\n## Fixed\n- Voice dictation consent flag now persists via Obsidian's official `App.loadLocalStorage`/`App.saveLocalStorage` API instead of raw `window.localStorage`. The official API scopes keys by real vault ID automatically — strictly better than the previous vault-name suffix, which could collide between two vaults sharing a name. Consent stays per-device and per-vault by design: a synced `data.json` or a shared layout pointing at someone else's API endpoint never inherits it.\n- `minAppVersion` raised from 1.7.2 to 1.8.7 (the `@since` version of the new API), hence the minor version bump.\n\n## Notes\n- The consent storage key changed, so existing voice-dictation users will see the one-time consent dialog once more on their next recording. Migrating the old key would have required keeping a raw `localStorage` read in the code, defeating the remediation.\n- The \"Vault Enumeration\" scan finding is an informational capability disclosure, not a violation: `getMarkdownFiles()` powers the Recent files, Vault search, Quotes list, Random note, and Embedded note suggester features, with all enumeration lazy and feature-gated. No code change applicable.\n\nFull gate: tsc clean, eslint clean, 156/156 tests passing, zero `localStorage`/`sessionStorage` references in the bundled `main.js`.\n",
-      "downloadCount": 400,
+      "downloadCount": 420,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -113,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:3d6bd39c444832b8bfb3ebb10ff89d964285c52f5085138c083b8aef4750c8a0",
-          "downloadCount": 23,
+          "downloadCount": 24,
           "name": "main.js",
           "size": 518392
         },
         {
           "digest": "sha256:50386499a4b11472d0198fff3af44f92b1ada5aaae76cb46a1b87409b0def07c",
-          "downloadCount": 80,
+          "downloadCount": 81,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:0fa22a8001d2aacf32bf23471ffc2d7b6952b23beb574ae075a59ecee9f19b09",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 104779
         }
       ],
       "author": "acaprino",
       "description": "## Highlights\n\n### Security\n- **Voice API keys encrypted at rest** — AES-GCM-256 with a non-extractable device key stored in IndexedDB; plaintext keys migrate on the next save.\n- **First-use consent modal** per provider (Whisper / Gemini) before any audio upload, remembered locally per device.\n- **Mobile fallback** — the voice block disables itself on platforms missing `MediaRecorder` / `navigator.mediaDevices` with a clear message.\n- **Import sanitizer** — layout imports now strip `apiKey` and unknown config fields; the confirm dialog shows a dropped-count so you can see what changed.\n- **Video embed** no longer grants `clipboard-write` to the embedded player; lightbox ESC respects open modals and contenteditable fields.\n\n### Reliability\n- **Save-layout disk errors** surface as a Notice (was previously swallowed, which caused silent reverts on next launch).\n- **Tag cache** invalidates on vault events — quotes and random-note blocks always see fresh results after renames or tag edits.\n- **MediaRecorder race** fixed — rapid stop→start no longer corrupts the new recording with stale chunks.\n- **Auto-height batch** is now exception-safe (`setStatic(true)` restored via `finally`).\n\n### UX\n- **Hover highlight** toggle subtly lifts blocks on mouseover and reveals the collapse chevron.\n- **Block settings modal** split into tabs (Header · Body · Card · Content) for faster navigation.\n- **README** now documents the voice-dictation data flow, endpoints, and revocation steps.\n\n## Under the hood\n\n- `GridLayout.ts` 1,671 → ~950 LOC. Extracted: `Scheduler`, `AutoHeightManager`, `ResponsiveColumnsManager`, `BlockSettingsModal`, `RemoveBlockConfirmModal`.\n- `main.ts` 686 → 351 LOC. Extracted: `HomepageSettingTab`, `ConfirmPresetModal`, `validation` (with the `validateLayout`-is-idempotent contract).\n- **vitest + happy-dom + fake-indexeddb** harness with **70 tests** covering validation round-trips, migration idempotence, crypto round-trips, import sanitization, tag cache, Scheduler, newId, dailySeed.\n- esbuild strips `console.debug/log/info/trace` in production (retains `error/warn`).\n- `@typescript-eslint/no-floating-promises` enforced; all ObsidianReviewBot ESLint rules passing.\n\n## Compatibility\n\n- `minAppVersion`: **1.5.0** (unchanged).\n- Existing `data.json` files migrate in place. Plaintext API keys will be encrypted on the next save. **No manual action required.**\n\n## Install\n\nDownload `main.js`, `manifest.json`, and `styles.css` from this release into `<vault>/.obsidian/plugins/homepage-blocks/`, then enable the plugin in Settings → Community plugins.\n",
-      "downloadCount": 80,
+      "downloadCount": 81,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
