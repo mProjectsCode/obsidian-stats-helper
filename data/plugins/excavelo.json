@@ -4,8 +4,8 @@
   "description": "Transform raw memos into structured notes (meeting minutes, 1:1s, daily) using Claude. Works with Claude Code subscription or Anthropic API key. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "excavelo",
-  "lastChangedAt": "2026-07-05T06:04:26.965Z",
-  "lastFetchedAt": "2026-07-05T06:04:26.965Z",
+  "lastChangedAt": "2026-07-06T06:01:26.977Z",
+  "lastFetchedAt": "2026-07-06T06:01:26.977Z",
   "manifest": {
     "author": "bibleCode21",
     "authorUrl": "https://github.com/bibleCode21",
@@ -15,11 +15,41 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "ExcaVelo",
-    "version": "1.3.3"
+    "version": "1.4.0"
   },
   "name": "ExcaVelo",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ec89eca26615cdfdedb58d913720cf8566b7a9db80010b37bdb0321de31ba9f0",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 92270
+        },
+        {
+          "digest": "sha256:9713157925e7e1513df4e50441b4136629b96300c122a5994b018217789fdf00",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 373
+        },
+        {
+          "digest": "sha256:97f3c60c870da436bf070383bd2f0122a15a2cae64431c84d2dbb26cf234ffbe",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 2391
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\n\n- **STT transcript input** (`[!stt]` callout). Link speech-to-text transcript files into a transform; the meeting templates recover details, figures, and decisions the memo omits. The memo stays the authoritative record — it wins on conflict, small talk is ignored, and garbled passages are marked (\"(STT 손상 구간)\"), never guessed.\n- **Git history input** (`[!git]` callout, desktop only). Name local repositories (one path per line, several repos per callout, optional `since:`/`until:`) and their commit history (message + diffstat) feeds the transform. Branch names pasted into the memo (`branch-name  subject` lines from git output) are looked up in every listed repository and contribute exactly their own commits (default-branch history subtracted) — built for one-branch-per-issue workflows. A `branches:<glob>` token scans matching branches instead.\n- **Model selection.** CLI path: alias dropdown (sonnet / opus / haiku / Claude Code default) plus custom id input. API paths: \"Load model list\" fetches the endpoint's catalog into a dropdown. Templates can pin a model via `model` frontmatter.\n- **Plugin language setting** (auto / en / ko); auto follows Obsidian's app language. Template chooser shows `description_ko` frontmatter when the locale is Korean.\n- **Four new starter templates**: `meeting` (cross-team, selective by design), `task-meeting` (internal, detail kept), `work-report` (narrative report from git history), `work-log` (dated 업무내역 changelog for non-developer readers). `meeting-minutes` is superseded by the meeting/task-meeting split.\n\n### Changed\n\n- **Preservation-first output contract.** The global OUTPUT RULES now enforce item-level completeness for the raw memo: every fact, name, number, date, and decision survives into the output, output length scales with input, and inference is quarantined to explicitly labeled sections. All starter templates were rebuilt around this contract (policy: `docs/prd.md`).\n- **API providers call their HTTP endpoints via Obsidian `requestUrl`** instead of the Anthropic/OpenAI SDKs — bypasses CORS, behaves identically on mobile, and drops both SDK dependencies from the bundle. The Anthropic path keeps the cacheable system block and adds best-effort cost reporting.\n- **Claude Code CLI runner hardened**: binary detection cascade (setting hint > PATH > native installer > npm prefixes incl. nvm/volta), Windows `.cmd` shim support with the prompt on stdin only, process-tree kill on timeout, and JSON recovery when diagnostics leak onto stdout.\n- Default CLI timeout raised from 120s to 720s — long transcripts on opus routinely need minutes. Nested settings now deep-merge so old `data.json` files gain new fields safely.\n- Default template is now `meeting`.\n- pnpm pinned to 11.9.0 via corepack; `pnpm-workspace.yaml` allowlists esbuild's postinstall.\n\n### Removed\n\n- `@anthropic-ai/sdk` and `openai` dependencies.\n- `meeting-minutes` starter template (superseded; existing copies in vaults are untouched).\n\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "v1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T07:41:17Z",
+      "tag": "1.4.0"
+    },
     {
       "assets": [
         {

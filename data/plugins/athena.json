@@ -4,8 +4,8 @@
   "description": "Your Second Brain — chat with the LLM of your choice (Claude, GPT, Gemini, or local CLI), ingest URLs, manage knowledge, run projects. Powered by Gryphon. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "athena",
-  "lastChangedAt": "2026-07-05T06:04:26.965Z",
-  "lastFetchedAt": "2026-07-05T06:04:26.965Z",
+  "lastChangedAt": "2026-07-06T06:01:26.977Z",
+  "lastFetchedAt": "2026-07-06T06:01:26.977Z",
   "manifest": {
     "author": "POLLEO.AI",
     "authorUrl": "https://www.polleo.ai",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.0.0",
     "name": "Athena",
-    "version": "1.6.5"
+    "version": "1.7.0"
   },
   "name": "Athena",
   "presentInCommunityList": true,
@@ -23,26 +23,56 @@
       "assets": [
         {
           "digest": "sha256:87910e7e1a0193725def13a47a7e40ddb4879bebdccc8446c8afb6e2b8ac5abb",
-          "downloadCount": 13,
+          "downloadCount": 1,
           "name": "main.js",
           "size": 1648149
         },
         {
-          "digest": "sha256:93cf531bbf3129bfe8c051a53b745ba5826a8cc4706566ee9e4f44c53f46d258",
-          "downloadCount": 13,
+          "digest": "sha256:398880a21e5bf17d3a062e3567015b126d413187ff408f8fb905e19f9dfc80bb",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 358
         },
         {
           "digest": "sha256:2a810787af3006fcea18cb538987fedbe10e9a0a75cd0e5bc3805e0ea8b055f4",
-          "downloadCount": 13,
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 34365
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nHeadline: **capture quality — papers keep their full text, and LinkedIn/X posts come in clean.** Saved papers now carry the whole PDF, not just the abstract; LinkedIn and X captures are stripped of feed scaffolding so what you keep is the post and its comments; and the health check now audits your social and paper captures for the ones worth re-capturing. No change to the bundled assistant (Gryphon 2.7.0).\n\n### Added\n\n- **The health check now audits your captures.** `kb lint` flags LinkedIn/X posts that came in thin, chrome-laden, or truncated, and papers saved abstract-only — so you can spot the low-quality ones and re-capture them, instead of finding out later when a summary is missing half the content.\n\n### Fixed\n\n- **Saved papers now include the full text, not just the abstract.** Clipping or adding an arXiv paper downloaded the PDF but saved only the abstract into the local copy, so the summary and search saw a fraction of the paper. Athena now reads the whole PDF and saves the complete text alongside the abstract. The health check lists older papers still saved abstract-only so you can re-capture them.\n- **Clipping a PDF paper no longer shows a spurious \"failed.\"** A PDF you clipped from the browser can't be read as a web page, so Athena re-fetches it in the background — but when two of its watchers raced to capture the same paper, the second one reported a failure even though the paper had already been saved correctly. Re-capturing an already-saved paper is now treated as success, so the false \"failed\" is gone.\n- **Cleaner saved LinkedIn posts.** A LinkedIn post clipped from the browser used to drag in a pile of feed scaffolding — the byline \"profile card\", a profile-image link before every commenter, the share menu (Copy / LinkedIn / Facebook / X), \"Report this post/comment\" links, bare reaction counts, the \"X is an Influencer\" badge, and stray timestamps — sometimes more chrome than post. All of it is now stripped at capture, so the saved copy is the post and the comment text (including the arXiv/GitHub links people drop in the comments, which are preserved and queued for capture).\n\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Athena 1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-06T03:49:28Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:87910e7e1a0193725def13a47a7e40ddb4879bebdccc8446c8afb6e2b8ac5abb",
+          "downloadCount": 15,
+          "name": "main.js",
+          "size": 1648149
+        },
+        {
+          "digest": "sha256:93cf531bbf3129bfe8c051a53b745ba5826a8cc4706566ee9e4f44c53f46d258",
+          "downloadCount": 15,
+          "name": "manifest.json",
+          "size": 358
+        },
+        {
+          "digest": "sha256:2a810787af3006fcea18cb538987fedbe10e9a0a75cd0e5bc3805e0ea8b055f4",
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 34365
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nHeadline: **the bundled assistant gets safer, and slide-deck talks capture cleanly.** This release moves the bundled Gryphon assistant to 2.7.0, which now asks before running package-install commands and flags reverse-shell command shapes — closing two common ways a booby-trapped project tries to get code onto your machine. reveal.js slide-deck extraction moves to the upstream capture engine (more reliable, and nested vertical slides are now captured), and re-captures no longer spawn duplicate pages.\n\n### Security\n\n- **The bundled assistant now blocks package installs by default.** Gryphon 2.7.0 flags commands that install software (`pip`, `npm` / `pnpm` / `yarn` / `bun`, `gem`, `cargo`, `go`, `brew`, `apt` / `dnf` / `yum`, `conda`, `poetry`, and similar) for your approval before they run — even when you've set auto-approve — because working in your vault never needs to install software. This closes a common attack: an innocent-looking \"install the requirements\" step that quietly does more than it claims. A **Block package installation** switch (Settings → Security) is on by default; turn it off if a workflow genuinely needs to install packages.\n- **Reverse-shell and payload-staging commands are now recognized.** Command shapes used to open a reverse shell — a live connection that hands remote control of your machine to someone else — plus the DNS lookups sometimes used to fetch a hidden payload, now surface for your approval instead of running silently. Ordinary interactive shells and everyday commands are unaffected.\n\n### Changed\n\n- **Slide-deck talk pages capture more reliably.** reveal.js decks now extract through the upstream capture engine instead of an Athena-side fallback — cleaner per-slide text, and nested vertical slides (a slide inside a slide) are captured instead of dropped or merged.\n\n### Fixed\n\n- **Re-capturing a page no longer creates a duplicate.** When you re-clip or re-add a source and the title comes out slightly different the second time, Athena used to create a second page for the same source. It now recognizes the existing page by its underlying saved file and updates that one instead of spawning a duplicate.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "Athena 1.6.5",
       "prerelease": false,
