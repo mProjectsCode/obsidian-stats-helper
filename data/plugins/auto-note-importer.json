@@ -4,8 +4,8 @@
   "description": "Sync notes bidirectionally between your vault and Airtable, SeaTable, or Supabase databases.",
   "errors": [],
   "id": "auto-note-importer",
-  "lastChangedAt": "2026-07-06T02:05:26.992Z",
-  "lastFetchedAt": "2026-07-06T02:05:26.992Z",
+  "lastChangedAt": "2026-07-07T02:04:26.988Z",
+  "lastFetchedAt": "2026-07-07T02:04:26.988Z",
   "manifest": {
     "author": "uppinote",
     "authorUrl": "https://github.com/uppinote20",
@@ -27,26 +27,26 @@
       "assets": [
         {
           "digest": "sha256:44cb5c3fe711e2d6ba93d50fd6ff1b1ec1c8d7d0a633abb62c2b9500b4f9db5e",
-          "downloadCount": 101,
+          "downloadCount": 104,
           "name": "main.js",
           "size": 119732
         },
         {
           "digest": "sha256:5ed8b726ac80b24f46b2469c4e3e4d0c4c319998c576b1b6657d174aecadc128",
-          "downloadCount": 118,
+          "downloadCount": 121,
           "name": "manifest.json",
           "size": 441
         },
         {
           "digest": "sha256:9ca3f176d978c592b35416911482c37cb385c3b9d8251fec7b2351a8d44823a9",
-          "downloadCount": 65,
+          "downloadCount": 68,
           "name": "styles.css",
           "size": 6464
         }
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- Prevent frontmatter edits from overwriting structured remote fields (#108)\n  - Introduces `isPushable` to the `FieldTypeMapper` interface, stricter than `!isReadOnly`, to exclude object-shaped fields (Airtable `barcode`/collaborators, SeaTable `collaborator`/`geolocation`, Supabase `json`/`jsonb`) from push payloads\n  - Fixes a data-loss bug where a jsonb column with an empty frontmatter placeholder was overwritten with `null` on push\n  - Fail-closed for unknown types — unrecognized field types are treated as not pushable\n\n### Performance\n- Cache verification result on credential form to skip redundant `verifySetup` probe on Save (#112)\n  - A successful connection test sets a 60-second freshness fingerprint, allowing the next Save to skip the `verifySetup` network probe\n  - Fingerprint is invalidated on any field edit, probe failure, or `needsSetup` — a changed or bad credential can never ride a stale \"verified\" result past the save gate\n  - Primarily affects Supabase (the only provider that implements `verifySetup`)\n\n### Refactoring\n- Unify exhaustiveness guards behind a shared `assertNever` helper (#113)\n  - Adds `src/utils/assertNever` — enforces switch/if exhaustiveness at compile time (missing cases after union extension fail to compile) and throws at runtime\n  - Routes all five throwing exhaustiveness guards (sync mode/scope, conflict mode, setup-requirement kind, credential type) through the helper\n  - Upgrades `migration.ts`'s guard to a real `satisfies never` check that catches missing cases at compile time\n\n### Testing\n- Add cross-provider `FieldTypeMapper` parity contract tests (#111)\n  - Registry-driven test suite that validates all registered mappers satisfy shared invariants: `filenameSafe ⊆ subfolderSafe`, no subfolder-safe type maps to `attachment`/`link`/`unknown`, and prototype-chain names fail closed\n  - Automatically covers future providers the moment they register a mapper\n  - Sorts `FILENAME_SAFE_TYPES` in Airtable and SeaTable mappers for deterministic test output\n\n### Maintenance\n- Bump CI artifact and attest actions to Node 24 runtimes (#106)\n  - `actions/upload-artifact` v4.6.2 → v7.0.1 (Node 24)\n  - `actions/download-artifact` v4.3.0 → v8.0.1 (Node 24)\n  - `actions/attest-build-provenance` v2.4.0 → v4.1.0 (Node 24)\n  - Preemptive update ahead of GitHub's Node 20 runner removal on 2026-09-16\n- Upgrade TypeScript 4.7.4 → 5.9.3 and `@typescript-eslint` v5 → v8 (#109)\n  - Updates ESLint toolchain to `@typescript-eslint` v8 (ESLint 8 retained, no config churn)\n  - Replaces `const _exhaustive: never` workaround with idiomatic `satisfies never` (TS 4.9+)\n  - No runtime changes — compiler-only upgrade, emitted JS is identical\n",
-      "downloadCount": 118,
+      "downloadCount": 121,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
