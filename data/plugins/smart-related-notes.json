@@ -4,8 +4,8 @@
   "description": "Surface notes most semantically similar to the one you're reading in a left-sidebar panel, powered by a small multilingual embedding model that runs entirely on your machine. Private and offline. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "smart-related-notes",
-  "lastChangedAt": "2026-07-05T22:04:26.994Z",
-  "lastFetchedAt": "2026-07-05T08:05:26.993Z",
+  "lastChangedAt": "2026-07-07T08:05:26.999Z",
+  "lastFetchedAt": "2026-07-07T08:05:26.999Z",
   "manifest": {
     "author": "Saiki77",
     "authorUrl": "https://github.com/Saiki77",
@@ -14,41 +14,143 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Smart Related Notes",
-    "version": "2.0.1"
+    "version": "2.1.2"
   },
   "name": "Smart Related Notes",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
+          "digest": "sha256:e0edba8e8c58050138dca868c3d20130c818021336665f28721c32ac24e724a8",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 625633
+        },
+        {
+          "digest": "sha256:a0a7907f19526fa4940d07ebb1748bdae40ec4009c5b18e21572982bf0fcd8d8",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 426
+        },
+        {
+          "digest": "sha256:19249f3b62144dec7ce3eeb98bdcf11d619c94ad04d733d254e6da49ddc979bc",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 8975
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Streamlined install + community-review fixes\n\nReleases now ship exactly the three files Obsidian installs (`main.js`, `manifest.json`, `styles.css`) — the runtime zip is gone. Instead, the plugin **downloads the pinned ONNX runtime once (~24 MB) into its own folder on first use** and serves it locally from then on, so **every** install method (community directory, BRAT, manual) now works offline after first run — previously only the full-zip install did.\n\n- The cached runtime is **integrity-checked against byte sizes pinned at build time**: interrupted downloads, leftovers from older installs, or a proxy serving garbage are detected and cleanly re-downloaded instead of causing cryptic startup errors.\n- Runtime download tries jsdelivr first, then unpkg — one blocked CDN no longer breaks first-run setup.\n- Existing installs that already have the runtime folder (e.g. from the 2.1.x zips) keep using it — no re-download.\n- Internal changes for the community-plugin automated review (no `fetch` in plugin code; assets are read through the vault API / `requestUrl`).\n\nSee [2.1.1](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.1) and [2.1.0](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.0) for the idle memory-release feature this builds on.",
+      "downloadCount": 12,
+      "draft": false,
+      "name": "2.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-06T11:25:14Z",
+      "tag": "2.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5d04682770ce3cac6da28f65884c92cb937c0c371ae858e4318b96f7bb818d94",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 625043
+        },
+        {
+          "digest": "sha256:a33f7970daad00045e955ba1585556a3faebe330a27c516015170b24b1babf26",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 426
+        },
+        {
+          "digest": "sha256:ca81125f0352a7a6c9a5d24bfda45f4819592c041723265de2832d90575659df",
+          "downloadCount": 2,
+          "name": "smart-related-notes.zip",
+          "size": 9278873
+        },
+        {
+          "digest": "sha256:19249f3b62144dec7ce3eeb98bdcf11d619c94ad04d733d254e6da49ddc979bc",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 8975
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## More aggressive memory release\n\nNew choices for **\"Unload model when idle\"**:\n\n- **Right after use (30 seconds)** — the embedding engine is torn down half a minute after its last piece of work, so it effectively only exists *during* indexing/search bursts.\n- **After 1 minute**\n\n30 seconds is the floor rather than \"instant\" because a respawn costs a few seconds of background CPU and note edits are re-indexed on a 20-second pause — anything shorter would tear the engine down between consecutive edits and immediately respawn it.\n\nWith the aggressive settings, the first search or `[[` suggestion after a pause shows the keyword/recency fallback for a few seconds while the engine reloads (the panel says \"Loading the embedding model…\"), then results upgrade.\n\nSee [2.1.0](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.0) for the underlying change (engine in a terminable worker, memory actually returned to the OS, offline/CDN fix, detailed error messages).\n\n**Installing manually?** Use `smart-related-notes.zip` (it includes the bundled ONNX runtime). Installs of just `main.js` fall back to the CDN.\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "2.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T18:11:48Z",
+      "tag": "2.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a45a8d1eb26f877b9ac7b08d1f2a16356636229b41725403a17ab3bd49375e47",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 624953
+        },
+        {
+          "digest": "sha256:b41b14eb178419d913e0d8d60f99781b610adcc233743a692106bca56b2b62a1",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 426
+        },
+        {
+          "digest": "sha256:88733981989b6c1cdba120e9bb0653db02e5c0ff7f2be74edfd687c034a39dbe",
+          "downloadCount": 0,
+          "name": "smart-related-notes.zip",
+          "size": 9278842
+        },
+        {
+          "digest": "sha256:19249f3b62144dec7ce3eeb98bdcf11d619c94ad04d733d254e6da49ddc979bc",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 8975
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Memory: the plugin now frees its RAM when idle\n\nThe embedding engine (transformers.js + ONNX runtime) now runs in its own worker and is **shut down after 15 minutes without indexing or searching** (configurable via the new **\"Unload model when idle\"** setting), returning its memory — previously hundreds of MB to several GB held until Obsidian quit — to the system. It reloads automatically in a few seconds on next use, with no re-download. Ranking when switching notes never needs the engine and is unaffected.\n\nAlso in this release:\n\n- **Fixed: model/device/speed changes leaked memory** — each change stacked another copy of the engine's memory on top of the old one.\n- **Fixed: offline use & CDN dependency** — 2.0.x silently ignored its bundled ONNX runtime and always fetched it from jsdelivr's CDN. Full installs now use the shipped copy (works offline; fixes *\"could not load the embedding model\"* on networks that block the CDN).\n- **Fixed: changing the model mid-index** could save an index mixing old- and new-model vectors; the rebuild now restarts cleanly.\n- **Better errors**: model-load failures now say *what* failed (ONNX runtime fetch vs. model download, with the URL/model named) right in the notice — please include it when reporting issues.\n- Search shows \"Loading the embedding model…\" while the engine warms up instead of waiting silently; smoother typing during rebuilds (inference left the main thread).\n\n**Installing manually?** Use `smart-related-notes.zip` (it includes the bundled ONNX runtime). Installs of just `main.js` fall back to the CDN.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "2.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T17:57:49Z",
+      "tag": "2.1.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c8ebf79bab1023b272168feea2783279631e8a92cff059d11949a523d6c712c2",
-          "downloadCount": 98,
+          "downloadCount": 101,
           "name": "main.js",
           "size": 616433
         },
         {
           "digest": "sha256:6f3f22b5ea1b97f9e4c99fac62a23617a33cde7c2edb7c8f8750c5cae93ad53b",
-          "downloadCount": 99,
+          "downloadCount": 102,
           "name": "manifest.json",
           "size": 426
         },
         {
           "digest": "sha256:901c1e01eb06f4289e6f88abb87abe65f07a97ee773486bc643d43c6909c240c",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "smart-related-notes.zip",
           "size": 9276159
         },
         {
           "digest": "sha256:19249f3b62144dec7ce3eeb98bdcf11d619c94ad04d733d254e6da49ddc979bc",
-          "downloadCount": 63,
+          "downloadCount": 66,
           "name": "styles.css",
           "size": 8975
         }
       ],
       "author": "github-actions[bot]",
       "description": "2.0.1\n\n",
-      "downloadCount": 99,
+      "downloadCount": 102,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
@@ -1712,6 +1814,6 @@
       "tag": "1.0.0"
     }
   ],
-  "removedAt": "2026-07-05T22:04:26.994Z",
+  "removedAt": null,
   "repo": "saiki77/smart-related-notes"
 }

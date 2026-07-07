@@ -4,8 +4,8 @@
   "description": "A vault-scoped writing companion that lives in your sidebar — hatches an ASCII pet per vault and reacts to how you write. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "bestest-buddy",
-  "lastChangedAt": "2026-07-06T08:05:26.992Z",
-  "lastFetchedAt": "2026-07-06T08:05:26.992Z",
+  "lastChangedAt": "2026-07-07T08:05:26.999Z",
+  "lastFetchedAt": "2026-07-07T08:05:26.999Z",
   "manifest": {
     "author": "Nathan King",
     "description": "A vault-scoped writing companion that lives in your sidebar — hatches an ASCII pet per vault and reacts to how you write.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:a84cdcc595b221ba9204ef3c6baa7361c78acfb3ac17f5522529620ccec18afd",
-          "downloadCount": 34,
+          "downloadCount": 36,
           "name": "main.js",
           "size": 53537
         },
         {
           "digest": "sha256:3bc53007f72c2fc3c8f201edf32964e785b878e919277c428ed0b0d495d220b7",
-          "downloadCount": 35,
+          "downloadCount": 37,
           "name": "manifest.json",
           "size": 302
         },
         {
           "digest": "sha256:546790c6994cf3a43b4e7c8a815315c7c8e504a600e7372ba9687a5ff6a3518d",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "styles.css",
           "size": 15884
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bestest Buddy 1.1.0\n\nThis release fixes two issues found in a code review of 1.0.0 — one privacy, one API cost. No action needed: existing data is cleaned up automatically on first load.\n\n### Privacy: note content is no longer stored in plugin data (#26)\n\nPreviously, the event log persisted to `data.json` could include excerpts of your notes and your direct chat messages — up to 8 KB per event, unencrypted, inside your vault's `.obsidian` folder.\n\n- Note excerpts and chat messages are now stripped from every event before it is saved; the persisted log contains only event type, timestamp, and note title.\n- A one-time data migration (schema v2) scrubs previously stored note content from `data.json` the first time the plugin loads after updating.\n- Cursor excerpts sent to the LLM are now capped at 320 characters everywhere.\n- The **Include current note context** setting description now accurately states that it applies to both direct replies and ambient reactions, and that note content is never stored in plugin data.\n\n### Fixed: hover-petting could fire unbounded LLM calls (#26)\n\nPetting the buddy by hovering over the sprite triggered an LLM reaction with no cooldown or in-flight guard, so repeated hovering could stack up paid API requests. Pet reactions are now rate-limited to one every 30 seconds and skipped while another request is in flight — the hearts animation still plays on every pet.\n\n**Full changelog:** https://github.com/nateking-dev/bestest-buddy/compare/1.0.0...1.1.0",
-      "downloadCount": 35,
+      "downloadCount": 37,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -58,7 +58,7 @@
         },
         {
           "digest": "sha256:dbc41f39567ee0ad90b931cc9aa74ce948e11771deb4d5185d526e22a5e23c56",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 302
         },
@@ -71,7 +71,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Bestest Buddy 1.0.0\n\nA vault-scoped writing companion for Obsidian. Bestest Buddy hatches a persistent ASCII pet for each vault, watches how you write, and reacts with short, in-context observations — a companion that lives in your sidebar, not a chatbot you converse with.\n\nIt's built around three principles:\n\n- **One buddy per vault** — generated from a vault seed and stable until you reset it.\n- **Reactive, not conversational** — it responds to writing bursts, pauses, revisions, new notes, and direct questions with brief quips.\n- **Lightweight and non-intrusive** — short replies, a compact panel, cooldowns to avoid nagging, and **no autonomous edits to your notes**.\n\n```\n   .----.\n  / ×  × \\      Capy Scribbles\n |   --   |     Common Capybara\n  `-____-´\n```\n\n## Features\n\n**Vault-scoped companion.** Each vault gets its own deterministically generated buddy with persistent traits:\n- **Name** and **personality** (LLM-generated, with a local fallback)\n- **Species** — one of 18: duck, goose, blob, cat, dragon, octopus, owl, penguin, turtle, snail, ghost, axolotl, capybara, cactus, robot, rabbit, mushroom, chonk\n- **Rarity** — common, uncommon, rare, epic, legendary, mythic (weighted rolls, so a mythic is genuinely rare and gets an animated rainbow sprite, background, and nameplate)\n- **Hat** — none, crown, top hat, propeller, halo, wizard, beanie, tiny duck\n- **Eye style** — one of `·` `✦` `×` `◉` `@` `°`\n- **Shiny** state and an optional custom **sprite color**\n- **Stats** — GRAMMARING, PATIENCE, CHAOS, WISDOM, SNARK\n\n**Sidebar panel.** A dedicated right-sidebar view with a header (name, rarity, species, hat, shiny, personality), an animated ASCII sprite, a speech bubble that reveals replies word-by-word then fades, session/mood indicators, pattern hints, action buttons (hatch/pet, mute/unmute, ask about the current note, reset), and a compact direct-chat input. **Minimal mode** shows only the sprite.\n\n**Animated sprite.** Idle loop with occasional blinks, a speaking animation while a bubble is visible, a petting animation with floating hearts, and a quieter \"settled\" microstate after a long idle period.\n\n**Ambient writing reactions.** When enabled and not muted, the buddy occasionally reacts to vault activity — opening a daily note, creating a note, writing in a burst, sustaining a session, making a large revision cut, pausing, or returning after a pause. Reactions are gated by cooldown, probability, session state, and your snark level, so they punctuate rather than interrupt. In **Chatty** mode a periodic tick lets it comment on the text near your cursor.\n\n**Direct chat & note awareness.** Message the buddy from the panel or ask it about the current note. Replies are short, grounded in the buddy's personality and session state, and — when note context is enabled — informed by your current selection (or the full note if nothing is selected).\n\n**Session, mood & pattern tracking.** A lightweight model of your session drives the UI and reactions:\n- **Session modes:** idle, starting, flowing, revising, stuck, returning\n- **Moods:** quiet, curious, pleased, concerned, sleepy\n- **Patterns:** repeated long pauses, revision loop, sustained momentum, stop-start session, fresh-page exploration\n\n**Customization.** Override any visible trait via the Customize commands — species, eye style, hat, rarity, sprite color (presets or a custom `#rrggbb` hex), shiny, and individual stats. Overrides are stored separately from the generated companion, so \"reset appearance to generated\" restores the original at any time.\n\n## LLM providers & fallbacks\n\nThe buddy uses an LLM for two jobs: generating its name and personality at hatch time, and generating short reactions and direct replies.\n\n| Provider | Endpoint | Example model |\n| --- | --- | --- |\n| OpenAI | `https://api.openai.com/v1/responses` | `gpt-4.1-mini` |\n| Claude (Anthropic) | `https://api.anthropic.com/v1/messages` | `claude-haiku-4-5-20251001` |\n\nIf no API key is configured or a request fails, hatching falls back to local name/personality generation and reactions fall back to local rule-based text — the plugin remains fully functional without any API key, just less varied.\n\n## Privacy & data\n\n- All state lives in the plugin's per-vault `data.json` (vault seed, hatched companion, appearance overrides, mute state, the 20 most recent events, mood/session state, settings).\n- The only network calls are to the provider endpoint you configure. Note title and excerpts are sent only when *Include current note context* is enabled, and direct-chat context is truncated before sending.\n- API keys are stored in plugin data and masked in the settings UI.\n\n## What it does not do (by design)\n\n- No autonomous edits or writes to your notes.\n- No long-form, assistant-style responses.\n- No full chat-transcript UI.\n- No syncing buddies across vaults.\n- No network calls other than to the configured provider.\n\n## Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the assets below and copy them into `<your-vault>/.obsidian/plugins/bestest-buddy/`, then enable **Bestest Buddy** under Settings → Community plugins. Requires Obsidian **1.7.2+**. Works on desktop and mobile.\n\n## Notes\n\nThis 1.0.0 release incorporates the Obsidian community-plugin review fixes: `revealLeaf` awaited with `minAppVersion` 1.7.2, settings headings that don't repeat the plugin name, no unsupported CSS font keywords, native `module.builtinModules` in the build, void-returning modal callbacks, and removal of unnecessary assertions and unused symbols.\n\nAuthor: **Nathan King**, with thanks to contributor **Owen McGrath**. Licensed under MIT.",
-      "downloadCount": 0,
+      "downloadCount": 1,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

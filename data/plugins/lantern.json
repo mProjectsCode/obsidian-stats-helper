@@ -4,8 +4,8 @@
   "description": "Local semantic search and a grounded, cited chat agent for your vault — powered by a locally-installed qmd. Requires the qmd CLI. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lantern",
-  "lastChangedAt": "2026-07-06T08:05:26.992Z",
-  "lastFetchedAt": "2026-07-06T08:05:26.992Z",
+  "lastChangedAt": "2026-07-07T08:05:26.999Z",
+  "lastFetchedAt": "2026-07-07T08:05:26.999Z",
   "manifest": {
     "author": "Bartosz Porzezinski",
     "authorUrl": "https://github.com/jokerwashere",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:f0f3e2181587b2b592db203dca7443dcab66343301e9eb56b51d530d46e49aef",
-          "downloadCount": 3,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 162332
         },
         {
           "digest": "sha256:b9dfca7ccce2736a1ee75bdd17b5376d44ba9d19f15dfe1bd3fef20a4d75a47a",
-          "downloadCount": 5,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 403
         },
         {
           "digest": "sha256:c49ca85d43fa69eb9b3904c923bbc9a3ba6edf460b8f5dbff3f5e48527d3464f",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 24699
         }
       ],
       "author": "github-actions[bot]",
       "description": "Patch: type `moment` locally so the plugin audit stops flagging it.\n\nThe community-plugin audit lints **without installing dependencies**, so Obsidian's `moment` re-export (`export const moment: typeof import('moment')`) can't resolve — it becomes an error type that propagates through every date call, tripping `@typescript-eslint/no-unsafe-*` across the daily-note code. (The `moment` devDependency added in 1.6.1 couldn't help: the audit never runs `npm install`.)\n\nFix: `src/search/dailyNotes.ts` now casts Obsidian's `moment` to a narrow local `MomentFactory` / `MomentInstance` type, so the date code is type-safe whether or not the `moment` module resolves. Verified by reproducing the audit env (`mv node_modules/moment` away): the raw pattern fires all four warnings; the cast → 0. Removed the ineffective `moment` devDependency.\n\nTypes-only — `moment` still comes from Obsidian's bundle at runtime. `main.js` unchanged.",
-      "downloadCount": 5,
+      "downloadCount": 7,
       "draft": false,
       "name": "1.6.3",
       "prerelease": false,
@@ -114,26 +114,26 @@
       "assets": [
         {
           "digest": "sha256:7a09494a6778783ed547901471a83c6a1cc6eb19c5cf4462ce307d40fce2f222",
-          "downloadCount": 60,
+          "downloadCount": 61,
           "name": "main.js",
           "size": 161948
         },
         {
           "digest": "sha256:ce943b6125ecb1e879c5a32311afb9cd330465eb5a1d5b349ceadfb151c304bc",
-          "downloadCount": 61,
+          "downloadCount": 62,
           "name": "manifest.json",
           "size": 403
         },
         {
           "digest": "sha256:c49ca85d43fa69eb9b3904c923bbc9a3ba6edf460b8f5dbff3f5e48527d3464f",
-          "downloadCount": 25,
+          "downloadCount": 26,
           "name": "styles.css",
           "size": 24699
         }
       ],
       "author": "github-actions[bot]",
       "description": "**llama.cpp server feature parity** — four recent llama-server capabilities, wired into the grounded chat agent.\n\n- **Parallel tool calls** — read-only tools requested in one turn run concurrently; a batch containing a write tool stays sequential. A `search_vault` + `search_references` + `read_file` turn is now one round trip, not three.\n- **Perf + cache readout** — the per-answer footer reports generation speed and KV prompt-cache reuse — `… · 41 tok/s · 1.2k cached` — read from `timings.predicted_per_second` and `usage.prompt_tokens_details.cached_tokens`.\n- **Answer now** — a persistent button that ends an over-thinking model's reasoning mid-stream (`reasoning_control` → `POST /v1/chat/completions/control`), then stops tool-calling and forces the answer. No-ops gracefully where the endpoint is absent.\n- **Cold-start awareness** — reads the router's `/v1/models` `status.value`; a sleeping/loading model shows \"Waking the model (cold start…)\" instead of a blank wait, and the settings model picker shows each model's load state.\n\nStill read-only out of the box. Needs the [qmd](https://github.com/tobi/qmd) CLI plus a local OpenAI-compatible LLM (llama-server / LM Studio). Obsidian 1.7.2+.",
-      "downloadCount": 61,
+      "downloadCount": 62,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,

@@ -1,0 +1,265 @@
+{
+  "author": "mdfriday",
+  "defaultBranch": "main",
+  "description": "Sync your Obsidian vault across devices using CouchDB — with end-to-end encryption, selective sync, and live sync. Desktop & Mobile. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "mdfriday-sync",
+  "lastChangedAt": "2026-07-07T08:05:26.999Z",
+  "lastFetchedAt": "2026-07-07T08:05:26.999Z",
+  "manifest": {
+    "author": "sunwei",
+    "authorUrl": "https://mdfriday.com",
+    "description": "Sync your vault across devices using CouchDB — with end-to-end encryption, selective sync, and live sync. Desktop & Mobile.",
+    "id": "mdfriday-sync",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.13.0",
+    "name": "MDFriday Sync",
+    "version": "26.7.8"
+  },
+  "name": "MDFriday Sync",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2cdfcd06b2d8d365f0c7bc6341e5feae1c17cdf37dc0964b98e0797c437a674a",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1621687
+        },
+        {
+          "digest": "sha256:21bc0ad94b1ac636931b004e60434e0d7dcc9c37e21db56bf402f28235aa8f3c",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 331
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.8\r\n\r\n> Released: July 7, 2026  发布日期：2026 年 7 月 7 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis release introduces a major **architectural refactor**: the sync core logic (`sync/core/` + `sync/features/`) has been extracted into a standalone NPM package [`@mdfriday/sync-core`](https://www.npmjs.com/package/@mdfriday/sync-core), and several mobile/desktop compatibility bugs are fixed.\r\n\r\n本版本引入重大**架构重构**：将同步核心逻辑（`sync/core/` + `sync/features/`）提取为独立 NPM 包 [`@mdfriday/sync-core`](https://www.npmjs.com/package/@mdfriday/sync-core)，并修复了多个移动端 / 桌面端兼容性问题。\r\n\r\n---\r\n\r\n## 🏗️ Architecture Change / 架构变更\r\n\r\n### Sync Core extracted to `@mdfriday/sync-core@0.1.0`\r\n\r\nThe following directories have been extracted to a separate, independently publishable NPM package:\r\n\r\n以下目录已提取为独立 NPM 包：\r\n\r\n- `src/sync/core/` — PouchDB、CouchDB 复制逻辑、加密、服务层\r\n- `src/sync/features/` — ConnectionMonitor、HiddenFileSync、NetworkEvents、OfflineTracker、ServerConnectivity、ConnectionFailure\r\n\r\n**Benefits / 优势：**\r\n\r\n| 维度 | 效果 |\r\n|------|------|\r\n| 代码隔离 | sync 核心与 Obsidian API 完全解耦 |\r\n| 独立测试 | sync-core 可在无 Obsidian 环境下单元测试 |\r\n| 版本管理 | sync 核心可独立发布、独立迭代 |\r\n| 复用性 | 其他非 Obsidian 项目可直接引用 `@mdfriday/sync-core` |\r\n\r\n**Adapter layer / 适配层** (留在插件内，不变):\r\n\r\n新增三个 Obsidian 适配器，将 sync-core 的平台无关接口桥接到 Obsidian API：\r\n\r\n- `ObsidianDomEventRegistrar` — 封装 `Plugin.registerDomEvent`\r\n- `ObsidianVaultFileLister` — 封装 `vault.adapter.*` 全部文件操作\r\n- `ObsidianHttpClient` — 封装 `requestUrl`\r\n\r\n---\r\n\r\n## 🐛 Bug Fixes / 错误修复\r\n\r\n### 1. Mobile: `Attempting to load NodeJS package: \"path\"` / 移动端加载 Node.js 模块报错\r\n\r\n**Root cause / 根本原因:**  \r\n`src/foundry/index.ts` 在顶层 `import * as nodePath from 'path'`，在 Obsidian mobile（无 Node.js 运行时）直接报错。\r\n\r\n**Fix / 修复:**  \r\nesbuild 中将 `path` 从 externals 移除，改为 alias 到 `path-browserify`（浏览器兼容实现）：\r\n```javascript\r\n// esbuild.config.mjs\r\nalias: { 'path': 'path-browserify' }\r\n```\r\n\r\n---\r\n\r\n### 2. Mobile: `Attempting to load NodeJS package: \"http\"/\"https\"` / 移动端加载 http/https 报错\r\n\r\n**Root cause / 根本原因:**  \r\n`src/http.ts` 顶层存在 `import * as http from 'http'` 和 `import * as https from 'https'`，但这两个 import 实际上**完全未被使用**（所有 HTTP 调用均通过 Obsidian 的 `requestUrl`）。\r\n\r\n**Fix / 修复:**  \r\n直接删除这两行无用 import。\r\n\r\n---\r\n\r\n### 3. `this.adapter.getRoot is not a function` / HiddenFileSync 运行时崩溃\r\n\r\n**Root cause / 根本原因:**  \r\n`IVaultFileLister` 接口扩展后增加了 `getRoot()`、`stat()`、`read()`、`write()` 等方法，但 `ObsidianVaultFileLister` 适配器只实现了 `list()`，其余方法均缺失。\r\n\r\n**Fix / 修复:**  \r\n完整实现 `ObsidianVaultFileLister`，全部委托给 `plugin.app.vault` 和 `plugin.app.vault.adapter`：\r\n\r\n```typescript\r\n// 现在完整实现：\r\nlist() / stat() / exists() / read() / readBinary()\r\nwrite() / writeBinary() / setMtime() / remove() / mkdir()\r\ncreateFolder() / getRoot() / configDir\r\n```\r\n\r\n---\r\n\r\n### 4. `_changes` long-poll 请求间歇性 timeout 日志 / 日志噪音\r\n\r\n**Root cause / 根本原因:**  \r\n`FridayServiceHub.connect()` 对所有 PouchDB HTTP 请求统一施加 30s 客户端超时，而 CouchDB `_changes` 长轮询的 heartbeat 也是 30s，导致二者**竞态**：timeout 与 heartbeat 同时到期，随机一方先触发。\r\n\r\n**Impact / 影响:**  \r\n仅产生 console 日志噪音，PouchDB 的 `retry: true` 确保同步自动重试继续，**不影响实际同步功能**。\r\n\r\n**Fix / 修复:**  \r\n`_changes` 请求跳过客户端超时（与原始 livesync 行为一致），其余请求保留 30s 超时：\r\n\r\n```typescript\r\nconst isChanges = reqUrl.includes('/_changes');\r\nconst result = isChanges\r\n    ? await requestPromise          // _changes: 不加客户端超时\r\n    : await Promise.race([...]);    // 普通请求: 保留 30s 超时\r\n```\r\n\r\n---\r\n\r\n## 📦 New Dependency / 新增依赖\r\n\r\n| 包 | 版本 | 用途 |\r\n|----|------|------|\r\n| `@mdfriday/sync-core` | `^0.1.0` | 同步核心逻辑（原 `src/sync/sync-core/`）|\r\n| `path-browserify` | latest | 替代 Node.js `path`，支持 mobile |\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility Matrix / 版本兼容矩阵\r\n\r\n| Obsidian version / Obsidian 版本 | Plugin version received / 获得的插件版本 |\r\n|---|---|\r\n| < 1.0.0 | Not installable / 无法安装 |\r\n| 1.0.0 – 1.3.x | v26.7.1 |\r\n| 1.4.0 – 1.7.1 | v26.7.2 |\r\n| 1.7.2 – 1.12.x | v26.7.3 |\r\n| ≥ 1.13.0 | v26.7.8 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Sync core package** / 同步核心包：[npmjs.com/package/@mdfriday/sync-core](https://www.npmjs.com/package/@mdfriday/sync-core)\r\n- **Sync core source** / 同步核心源码：[github.com/mdfriday/sync-core](https://github.com/mdfriday/sync-core)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T00:31:48Z",
+      "tag": "26.7.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:59cadaec345e26946cc6a9d927c19868051ed3c41a3907eb91f7da96622355c7",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1598723
+        },
+        {
+          "digest": "sha256:455b066df569c4332e4554d3deadcfea41661277caf9a832ac6700217f0e20b4",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 331
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.6\r\n\r\n> Released: July 5, 2026 · 发布日期：2026 年 7 月 5 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis release resolves a large batch of **`@typescript-eslint/no-unsafe-member-access` warnings** from the Obsidian plugin review — covering all four priority tiers identified during analysis.\r\n\r\n本版本修复了 Obsidian 插件审核中大量的 **`@typescript-eslint/no-unsafe-member-access` 警告**，覆盖分析中确定的全部四个优先级。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\nNone. / 无。\r\n\r\n---\r\n\r\n## ✅ Fixes / 修复内容\r\n\r\n### Warning: `@typescript-eslint/no-unsafe-member-access` — Resolved across all files\r\n\r\n> **Total scope**: 300+ warning locations across 30+ files, organized into 4 priority tiers.\r\n> \r\n> **总规模**：30+ 个文件中 300+ 处警告，按 4 个优先级分层处理。\r\n\r\n---\r\n\r\n#### Tier 1 — Trivial casts (P1) / 极简修复\r\n\r\n| File / 文件 | Change / 修改 |\r\n|---|---|\r\n| `services/license.ts` | 6 catch blocks: `error.message` → `(error as Error).message` |\r\n| `sync/SyncStatusDisplay.ts` | `plugin as any` → `as unknown as PluginWithSettings`; `app.setting` access via typed cast |\r\n| `foundry/index.ts:121` | `(merged as any)[k]` → `(merged as Record<string, unknown>)[k]` |\r\n| `setting.ts:628` | `error.message` → `(error as Error).message` |\r\n\r\n---\r\n\r\n#### Tier 2 — Service type declarations (P2) / 服务类型声明\r\n\r\n| File / 文件 | Change / 修改 |\r\n|---|---|\r\n| `main.ts` | `foundryAuthService?: any` → `ObsidianAuthService`; imported proper types from `foundry/types.ts` |\r\n| `http.ts` | Asset form field: `value.data/contentType/filename` typed as `{ data: BlobPart; filename: string; contentType?: string }`; `Blob.name` accessed via intersection type `Blob & { name?: string }` |\r\n\r\n---\r\n\r\n#### Tier 3 — Foundry API response typing (P3) / Foundry API 响应类型化\r\n\r\n**`foundry/index.ts`** and **`foundry/mobile.ts`** — both files received:\r\n\r\n新增接口 / New interfaces added:\r\n```typescript\r\ninterface TrialResponseItem    { license_key, email, password, validity_days }\r\ninterface DeviceItem           { id, device_name, device_type, status, last_seen_at }\r\ninterface IpItem               { ip_address, city, region, country, status, last_seen_at }\r\ninterface UsageResponseRaw     { license_key, plan, features, devices, ips, disks }\r\n```\r\n\r\n`ActivationApiResponse` extended with: `success?: boolean`, `user.user_dir?: string`\r\n\r\nAll `res.data?.data?.[0]` HTTP response extraction points now carry explicit type assertions:\r\n```typescript\r\n// Before / 之前\r\nconst d = res.data?.data?.[0];          // any\r\n\r\n// After / 之后\r\nconst d = res.data?.data?.[0] as TrialResponseItem | undefined;\r\n```\r\n\r\n`buildLicenseInfoFromActivation(data: any)` → `data: ActivationApiResponse`  \r\n`buildLicenseInfoFromStored(stored: any)` → `stored: StoredLicenseShape`\r\n\r\n`setNested`/`getNested` utility functions: `obj: any` → `Record<string, unknown>` with full type-safe traversal.\r\n\r\n---\r\n\r\n#### Tier 4 — LiveSync core files (P4) / LiveSync 核心文件\r\n\r\n21 files received file-level `eslint-disable` with descriptive comments explaining the intentional use of untyped PouchDB/CouchDB internal values:\r\n\r\n21 个文件添加了带描述性注释的文件级 `eslint-disable`：\r\n\r\n**Pure third-party adapted code (文件级禁用 — 完全适配自第三方代码):**\r\n- `sync/core/pouchdb/pouchdb-browser.ts`\r\n- `sync/core/pouchdb/pouchdb-http.ts`\r\n- `sync/core/pouchdb/chunks.ts`\r\n- `sync/core/pouchdb/encryption.ts`\r\n- `sync/core/pouchdb/ReplicatorShim.ts`\r\n- `sync/core/replication/couchdb/LiveSyncReplicator.ts`\r\n- `sync/core/worker/bgWorker.ts` / `bgWorker.splitting.ts` / `bgWorker.encryption.ts` / `bg.worker.ts`\r\n- `sync/core/common/LSError.ts` / `utils.ts`\r\n- `sync/core/managers/ChunkManager.ts` / `EntryManager/EntryManager.ts`\r\n- `sync/core/API/DirectFileManipulatorV2.ts`\r\n- `sync/features/ConnectionFailure/index.ts`\r\n- `sync/features/HiddenFileSync/index.ts`\r\n- `sync/utils/hiddenFileUtils.ts`\r\n\r\n**Our adapter code (适配层 — 与 PouchDB 集成导致无法避免的类型不确定性):**\r\n- `sync/FridayServiceHub.ts`\r\n- `sync/FridaySyncCore.ts`\r\n- `sync/features/ServerConnectivity/index.ts`\r\n\r\n---\r\n\r\n## ✅ Verification / 验证\r\n\r\n- `npm run tsc-check` — no new TypeScript errors introduced / 无新增 TypeScript 错误\r\n- `npm test` — **101 / 101 tests pass** (unchanged from before) / **101 / 101 测试全部通过**\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility / 版本兼容\r\n\r\nNo change to `minAppVersion`. / `minAppVersion` 无变化。\r\n\r\n| Obsidian version | Plugin version |\r\n|---|---|\r\n| 1.7.2 – 1.12.x | v26.7.3 |\r\n| ≥ 1.13.0 | v26.7.6 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T01:16:55Z",
+      "tag": "26.7.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8ab95effe8d1f3f3dc8ffa217d5cd85187d89c992b9e7364620b2154c7c08bde",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1599057
+        },
+        {
+          "digest": "sha256:f30c9cf7fe6392c50b7f105eca1f5288b786880cdd0d5a175056e2ffc0c3c482",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 331
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.6\r\n\r\n> Released: July 5, 2026 · 发布日期：2026 年 7 月 5 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis release resolves a large batch of **`@typescript-eslint/no-unsafe-member-access` warnings** from the Obsidian plugin review — covering all four priority tiers identified during analysis.\r\n\r\n本版本修复了 Obsidian 插件审核中大量的 **`@typescript-eslint/no-unsafe-member-access` 警告**，覆盖分析中确定的全部四个优先级。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\nNone. / 无。\r\n\r\n---\r\n\r\n## ✅ Fixes / 修复内容\r\n\r\n### Warning: `@typescript-eslint/no-unsafe-member-access` — Resolved across all files\r\n\r\n> **Total scope**: 300+ warning locations across 30+ files, organized into 4 priority tiers.\r\n> \r\n> **总规模**：30+ 个文件中 300+ 处警告，按 4 个优先级分层处理。\r\n\r\n---\r\n\r\n#### Tier 1 — Trivial casts (P1) / 极简修复\r\n\r\n| File / 文件 | Change / 修改 |\r\n|---|---|\r\n| `services/license.ts` | 6 catch blocks: `error.message` → `(error as Error).message` |\r\n| `sync/SyncStatusDisplay.ts` | `plugin as any` → `as unknown as PluginWithSettings`; `app.setting` access via typed cast |\r\n| `foundry/index.ts:121` | `(merged as any)[k]` → `(merged as Record<string, unknown>)[k]` |\r\n| `setting.ts:628` | `error.message` → `(error as Error).message` |\r\n\r\n---\r\n\r\n#### Tier 2 — Service type declarations (P2) / 服务类型声明\r\n\r\n| File / 文件 | Change / 修改 |\r\n|---|---|\r\n| `main.ts` | `foundryAuthService?: any` → `ObsidianAuthService`; imported proper types from `foundry/types.ts` |\r\n| `http.ts` | Asset form field: `value.data/contentType/filename` typed as `{ data: BlobPart; filename: string; contentType?: string }`; `Blob.name` accessed via intersection type `Blob & { name?: string }` |\r\n\r\n---\r\n\r\n#### Tier 3 — Foundry API response typing (P3) / Foundry API 响应类型化\r\n\r\n**`foundry/index.ts`** and **`foundry/mobile.ts`** — both files received:\r\n\r\n新增接口 / New interfaces added:\r\n```typescript\r\ninterface TrialResponseItem    { license_key, email, password, validity_days }\r\ninterface DeviceItem           { id, device_name, device_type, status, last_seen_at }\r\ninterface IpItem               { ip_address, city, region, country, status, last_seen_at }\r\ninterface UsageResponseRaw     { license_key, plan, features, devices, ips, disks }\r\n```\r\n\r\n`ActivationApiResponse` extended with: `success?: boolean`, `user.user_dir?: string`\r\n\r\nAll `res.data?.data?.[0]` HTTP response extraction points now carry explicit type assertions:\r\n```typescript\r\n// Before / 之前\r\nconst d = res.data?.data?.[0];          // any\r\n\r\n// After / 之后\r\nconst d = res.data?.data?.[0] as TrialResponseItem | undefined;\r\n```\r\n\r\n`buildLicenseInfoFromActivation(data: any)` → `data: ActivationApiResponse`  \r\n`buildLicenseInfoFromStored(stored: any)` → `stored: StoredLicenseShape`\r\n\r\n`setNested`/`getNested` utility functions: `obj: any` → `Record<string, unknown>` with full type-safe traversal.\r\n\r\n---\r\n\r\n#### Tier 4 — LiveSync core files (P4) / LiveSync 核心文件\r\n\r\n21 files received file-level `eslint-disable` with descriptive comments explaining the intentional use of untyped PouchDB/CouchDB internal values:\r\n\r\n21 个文件添加了带描述性注释的文件级 `eslint-disable`：\r\n\r\n**Pure third-party adapted code (文件级禁用 — 完全适配自第三方代码):**\r\n- `sync/core/pouchdb/pouchdb-browser.ts`\r\n- `sync/core/pouchdb/pouchdb-http.ts`\r\n- `sync/core/pouchdb/chunks.ts`\r\n- `sync/core/pouchdb/encryption.ts`\r\n- `sync/core/pouchdb/ReplicatorShim.ts`\r\n- `sync/core/replication/couchdb/LiveSyncReplicator.ts`\r\n- `sync/core/worker/bgWorker.ts` / `bgWorker.splitting.ts` / `bgWorker.encryption.ts` / `bg.worker.ts`\r\n- `sync/core/common/LSError.ts` / `utils.ts`\r\n- `sync/core/managers/ChunkManager.ts` / `EntryManager/EntryManager.ts`\r\n- `sync/core/API/DirectFileManipulatorV2.ts`\r\n- `sync/features/ConnectionFailure/index.ts`\r\n- `sync/features/HiddenFileSync/index.ts`\r\n- `sync/utils/hiddenFileUtils.ts`\r\n\r\n**Our adapter code (适配层 — 与 PouchDB 集成导致无法避免的类型不确定性):**\r\n- `sync/FridayServiceHub.ts`\r\n- `sync/FridaySyncCore.ts`\r\n- `sync/features/ServerConnectivity/index.ts`\r\n\r\n---\r\n\r\n## ✅ Verification / 验证\r\n\r\n- `npm run tsc-check` — no new TypeScript errors introduced / 无新增 TypeScript 错误\r\n- `npm test` — **101 / 101 tests pass** (unchanged from before) / **101 / 101 测试全部通过**\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility / 版本兼容\r\n\r\nNo change to `minAppVersion`. / `minAppVersion` 无变化。\r\n\r\n| Obsidian version | Plugin version |\r\n|---|---|\r\n| 1.7.2 – 1.12.x | v26.7.3 |\r\n| ≥ 1.13.0 | v26.7.6 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-05T00:40:52Z",
+      "tag": "26.7.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73ea004277caa377734d78487237b8d3f297e4a3b162dc805f0c19b44872f925",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1598409
+        },
+        {
+          "digest": "sha256:8eddb79378634802723a2f242febedf69a5fe184312c5b7cbc87cd5199cb0621",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 331
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.5\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis is a **hotfix release** that corrects the `minAppVersion` from `1.7.2` to `1.13.0`, fixing the final Obsidian plugin review error.\r\n\r\n本版本是一个**热修复版本**，将 `minAppVersion` 从 `1.7.2` 更正为 `1.13.0`，修复了 Obsidian 插件审核中最后一个错误。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\n**Requires Obsidian ≥ 1.13.0** (was ≥ 1.7.2 in v26.7.4).\r\n\r\n**要求 Obsidian ≥ 1.13.0**（v26.7.4 要求 ≥ 1.7.2）。\r\n\r\nUsers on an older Obsidian version will automatically receive a compatible older plugin version via the `versions.json` fallback — no manual action required.  \r\n旧版本 Obsidian 用户将通过 `versions.json` 回退机制自动获取兼容的旧插件版本，无需手动操作。\r\n\r\n---\r\n\r\n## 🐛 Bug Fix / 错误修复\r\n\r\n### Final `minAppVersion` correction / 最终 `minAppVersion` 修正\r\n\r\n**Error from Obsidian plugin review (v26.7.4 / minAppVersion: 1.7.2):**\r\n\r\n```\r\nError: Uses Obsidian APIs newer than the declared `minAppVersion`\r\n  obsidianmd/no-unsupported-api\r\n  src/sync/SyncStatusDisplay.ts:85\r\n```\r\n\r\n**Root cause / 根本原因:**\r\n\r\n`SyncStatusDisplay.ts:85` accesses `this.plugin.settings`, which maps to `Plugin.settings` — a property added to Obsidian's `Plugin` base class in **1.13.0**, confirmed directly from the type definition:\r\n\r\n`SyncStatusDisplay.ts:85` 访问了 `this.plugin.settings`，对应 `Plugin.settings` 属性，该属性在 Obsidian **1.13.0** 中加入基类，直接来源于类型定义文件的标注：\r\n\r\n```typescript\r\n// node_modules/obsidian/obsidian.d.ts\r\n/**\r\n * Plugin settings. Assign loaded data here in `onload`.\r\n * @since 1.13.0\r\n */\r\nsettings?: unknown;\r\n```\r\n\r\n**Fix / 修复:**\r\n\r\n```json\r\n// manifest.json\r\n{ \"minAppVersion\": \"1.13.0\" }   // was \"1.7.2\" in v26.7.4\r\n\r\n// versions.json\r\n{\r\n  \"26.7.4\": \"1.13.0\",\r\n  \"26.7.5\": \"1.13.0\"\r\n}\r\n```\r\n\r\nNo code changes in this release. / 本版本无代码变更。\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility Matrix / 版本兼容矩阵\r\n\r\n| Obsidian version / Obsidian 版本 | Plugin version received / 获得的插件版本 |\r\n|---|---|\r\n| < 1.0.0 | Not installable / 无法安装 |\r\n| 1.0.0 – 1.3.x | v26.7.1 |\r\n| 1.4.0 – 1.7.1 | v26.7.2 |\r\n| 1.7.2 – 1.12.x | v26.7.3 |\r\n| ≥ 1.13.0 | v26.7.5 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*See [release-notes-26.7.2.md](./release-notes-26.7.2.md) for the full list of compliance changes introduced in the v26.7.x series.*\r\n\r\n*完整的 26.7.x 系列合规变更列表请参见 [release-notes-26.7.2.md](./release-notes-26.7.2.md)。*\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T14:24:25Z",
+      "tag": "26.7.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73ea004277caa377734d78487237b8d3f297e4a3b162dc805f0c19b44872f925",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1598409
+        },
+        {
+          "digest": "sha256:1f69cece6eca284943afbe7f1c2e36cab944a70225c5e484ee2ee147679979a4",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.4\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis is a **hotfix release** that corrects the declared `minAppVersion` from `1.4.0` to `1.7.2`.  \r\nVersion 26.7.3 still flagged two Obsidian APIs that require a version higher than `1.4.0`. This release properly aligns the minimum Obsidian version with every API in use.\r\n\r\n本版本是一个**热修复版本**，将 `minAppVersion` 从 `1.4.0` 更正为 `1.7.2`。  \r\n26.7.3 版本仍有两处 Obsidian API 需要高于 `1.4.0` 的版本。本版本将声明的最低 Obsidian 版本与所有使用的 API 正确对齐。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\n**Requires Obsidian ≥ 1.7.2** (was ≥ 1.4.0 in v26.7.3).\r\n\r\n**要求 Obsidian ≥ 1.7.2**（v26.7.3 要求 ≥ 1.4.0）。\r\n\r\nUsers on an older Obsidian version will automatically receive an older compatible plugin version via the `versions.json` fallback mechanism — no manual action required.  \r\n旧版本 Obsidian 用户将通过 `versions.json` 回退机制自动获取兼容的旧插件版本，无需手动操作。\r\n\r\n---\r\n\r\n## 🐛 Bug Fix / 错误修复\r\n\r\n### Plugin review error: remaining `minAppVersion` mismatch / 插件审核错误：`minAppVersion` 声明仍不匹配\r\n\r\n**Remaining error after v26.7.3 (minAppVersion: 1.4.0):**\r\n\r\n```\r\nError: Uses Obsidian APIs newer than the declared `minAppVersion`\r\n  obsidianmd/no-unsupported-api\r\n  src/sync/FridayServiceHub.ts:580\r\n  src/sync/SyncStatusDisplay.ts:85\r\n```\r\n\r\n**Root cause / 根本原因:**\r\n\r\nTwo APIs used in the codebase require Obsidian **1.7.2**, which is higher than the `1.4.0` declared in v26.7.3:\r\n\r\n以下两处 API 要求 Obsidian **1.7.2**，高于 v26.7.3 中声明的 `1.4.0`：\r\n\r\n| API | Introduced in / 引入版本 | Used in / 使用位置 |\r\n|---|---|---|\r\n| `FileManager.trashFile(file)` | **1.7.2** | `FridayServiceHub.ts:580` |\r\n| Plugin settings access pattern | **1.7.2** | `SyncStatusDisplay.ts:85` |\r\n\r\n> **Why `fileManager.trashFile()` and not the older `vault.trash()`?**  \r\n> The Obsidian review team itself recommended migrating from `Vault.trash()` to `FileManager.trashFile()` to respect the user's system trash preference. Rather than reverting to the deprecated pattern, we declare the correct minimum version.\r\n>\r\n> **为何使用 `fileManager.trashFile()` 而非旧版 `vault.trash()`？**  \r\n> Obsidian 审核团队在审查过程中主动推荐将 `Vault.trash()` 迁移到 `FileManager.trashFile()`，以遵循用户的系统回收站偏好。与其回退到已过时的用法，不如声明正确的最低版本要求。\r\n\r\n**Fix / 修复:**\r\n\r\n```json\r\n// manifest.json\r\n{\r\n  \"minAppVersion\": \"1.7.2\"   // was \"1.4.0\" in v26.7.3\r\n}\r\n\r\n// versions.json\r\n{\r\n  \"26.7.1\": \"1.0.0\",   // basic Obsidian APIs only\r\n  \"26.7.2\": \"1.4.0\",   // ButtonComponent.setDisabled, vault.createFolder, etc.\r\n  \"26.7.3\": \"1.7.2\",   // (same as 26.7.4 — correction made here)\r\n  \"26.7.4\": \"1.7.2\"    // FileManager.trashFile() + associated APIs\r\n}\r\n```\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility Matrix / 版本兼容矩阵\r\n\r\n| Obsidian version / Obsidian 版本 | Plugin version received / 获得的插件版本 |\r\n|---|---|\r\n| < 1.0.0 | Not installable / 无法安装 |\r\n| 1.0.0 – 1.3.x | v26.7.1 |\r\n| 1.4.0 – 1.7.1 | v26.7.2 |\r\n| ≥ 1.7.2 | v26.7.4 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*See [release-notes-26.7.2.md](./release-notes-26.7.2.md) for the full list of compliance changes introduced in the v26.7.x series.*\r\n\r\n*完整的 26.7.x 系列合规变更列表请参见 [release-notes-26.7.2.md](./release-notes-26.7.2.md)。*\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T14:07:10Z",
+      "tag": "26.7.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73ea004277caa377734d78487237b8d3f297e4a3b162dc805f0c19b44872f925",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 1598409
+        },
+        {
+          "digest": "sha256:670059c3cda091b979cbbee1c314b546d3c2aba48f45cc566f602b0b4173efb4",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.3\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis is a **hotfix release** that corrects the declared `minAppVersion` from `1.0.0` to `1.4.0`.  \r\nVersion 26.7.2 introduced several Obsidian APIs that were added after version 1.0.0, causing the plugin review process to flag an error. This release aligns the declared minimum with the APIs actually in use.\r\n\r\n本版本是一个**热修复版本**，将 `minAppVersion` 从 `1.0.0` 更正为 `1.4.0`。  \r\n26.7.2 版本中使用了若干在 1.0.0 之后才引入的 Obsidian API，导致插件审核流程报错。本版本将声明的最低版本与实际使用的 API 对齐。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\n**Requires Obsidian ≥ 1.4.0** (was ≥ 1.0.0 in previous release).\r\n\r\n**要求 Obsidian ≥ 1.4.0**（上一版本要求 ≥ 1.0.0）。\r\n\r\nObsidian 1.4.0 was released in 2023 and is already installed by the vast majority of users — no action is required for most users.  \r\nObsidian 1.4.0 发布于 2023 年，绝大多数用户已安装该版本或更新版本，无需额外操作。\r\n\r\n---\r\n\r\n## 🐛 Bug Fix / 错误修复\r\n\r\n### Plugin review error: `minAppVersion` too low / 插件审核错误：`minAppVersion` 声明过低\r\n\r\n**Error from Obsidian plugin review:**\r\n\r\n```\r\nError: Uses Obsidian APIs newer than the declared minAppVersion\r\n  obsidianmd/no-unsupported-api\r\n  src/setting.ts:565, src/setting.ts:584, src/setting.ts:605, src/setting.ts:630\r\n  src/setting.ts:782-784\r\n  src/sync/FridayServiceHub.ts:496, src/sync/FridayServiceHub.ts:580\r\n  src/sync/FridaySyncCore.ts:1526\r\n  src/sync/SyncStatusDisplay.ts:85\r\n  src/sync/features/HiddenFileSync/index.ts:353\r\n```\r\n\r\n**Root cause / 根本原因:**\r\n\r\nThe following Obsidian APIs used in v26.7.2 were introduced after version 1.0.0:\r\n\r\n以下 v26.7.2 中使用的 Obsidian API 均在 1.0.0 版本之后才引入：\r\n\r\n| API | Minimum version / 最低要求 | Used in / 使用位置 |\r\n|---|---|---|\r\n| `ButtonComponent.setDisabled()` | 1.4.0 | `setting.ts` |\r\n| `ExtraButtonComponent.setIcon()` / `.setTooltip()` | 1.4.0 | `setting.ts` |\r\n| `FileManager.trashFile()` | 1.3.5 | `FridayServiceHub.ts` |\r\n| `Vault.createFolder()` returning `Promise<TFolder>` | 1.x | `FridaySyncCore.ts`, `HiddenFileSync` |\r\n\r\n**Fix / 修复:**\r\n\r\n```json\r\n// manifest.json\r\n{\r\n  \"minAppVersion\": \"1.4.0\"  // was \"1.0.0\"\r\n}\r\n\r\n// versions.json\r\n{\r\n  \"26.7.3\": \"1.4.0\"\r\n}\r\n```\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*See [release-notes-26.7.2.md](./release-notes-26.7.2.md) for the full list of changes introduced in the v26.7.x series.*\r\n\r\n*完整的 26.7.x 系列变更列表请参见 [release-notes-26.7.2.md](./release-notes-26.7.2.md)。*\r\n\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "26.7.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T01:01:04Z",
+      "tag": "26.7.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73ea004277caa377734d78487237b8d3f297e4a3b162dc805f0c19b44872f925",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 1598409
+        },
+        {
+          "digest": "sha256:90d830accf38800c3edbaac35711df6dcc1cdfc9c0abc8f462e8cb49ca2055db",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 12050
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# MDFriday Sync — Release Notes v26.7.2\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis is a quality release focused entirely on **Obsidian plugin review compliance**. No new user-facing features are introduced — every change improves code quality, API correctness, and CSS standards to meet the [Obsidian Community Plugin](https://github.com/obsidianmd/obsidian-releases) submission requirements.\r\n\r\n本版本是一个专注于 **Obsidian 插件审核合规** 的质量版本。不包含任何新用户功能，所有变更均为提升代码质量、API 正确性和 CSS 规范，以满足 [Obsidian 社区插件](https://github.com/obsidianmd/obsidian-releases) 提交要求。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\nNone. / 无。\r\n\r\n---\r\n\r\n## ✅ Fixes & Improvements / 修复与改进\r\n\r\n### API Compliance / API 合规\r\n\r\n#### `manifest.json`\r\n- **`minAppVersion` bumped** `0.15.0` → `1.0.0` to match the actual Obsidian APIs used throughout the codebase  \r\n  将 `minAppVersion` 从 `0.15.0` 提升至 `1.0.0`，与代码中实际使用的 Obsidian API 版本对齐\r\n- **Plugin description** no longer contains the word \"Obsidian\" (Obsidian review policy)  \r\n  插件描述中移除了 \"Obsidian\" 一词（符合 Obsidian 审核政策）\r\n\r\n---\r\n\r\n### Heading & Style API / 标题与样式 API\r\n\r\n- Replaced all direct `createEl(\"h2\"/\"h3\", ...)` calls in `setting.ts` with `new Setting(el).setName(...).setHeading()` — the Obsidian-recommended way to render settings section headings  \r\n  将 `setting.ts` 中所有直接的 `createEl(\"h2\"/\"h3\")` 调用替换为 `new Setting(...).setName(...).setHeading()`\r\n\r\n- Removed all `element.style.*` direct assignments; replaced with:\r\n  - `element.show()` / `element.hide()` for visibility\r\n  - `element.setCssStyles({ ... })` for dynamic inline styles\r\n  - CSS classes for static styles  \r\n  移除所有直接的 `element.style.*` 赋值，改用 Obsidian API 推荐方式\r\n\r\n---\r\n\r\n### `navigator` API → Obsidian `Platform` API\r\n\r\nIn `src/foundry/index.ts` and `src/foundry/mobile.ts`, all OS-detection via `navigator.userAgent` replaced with Obsidian's `Platform` API:\r\n\r\n```ts\r\n// Before / 之前\r\nconst ua = navigator.userAgent;\r\nif (ua.includes('Mac')) ...\r\n\r\n// After / 之后\r\nimport { Platform } from 'obsidian';\r\nif (Platform.isMacOS) ...\r\n```\r\n\r\n---\r\n\r\n### `fetch` → Obsidian `requestUrl`\r\n\r\nAll bare `fetch()` calls replaced with Obsidian's built-in `requestUrl` which routes through the native network layer (required for cross-platform mobile support):\r\n\r\n| File / 文件 | Change / 变更 |\r\n|---|---|\r\n| `FridaySyncCore.ts` | DB connectivity check |\r\n| `ServerConnectivity/index.ts` | Server reachability ping |\r\n| `FridayServiceHub.ts` (×2) | PouchDB HTTP adapter + timeout-wrapped batch fetch |\r\n\r\nThe PouchDB HTTP handler wraps `requestUrl` results back into a `Response`-compatible object so the existing PouchDB replication logic is unaffected.  \r\nPouchDB HTTP 处理器将 `requestUrl` 结果包装回兼容 `Response` 对象，现有 PouchDB 同步逻辑不受影响。\r\n\r\n---\r\n\r\n### File Deletion: `Vault.trash()` / `Vault.delete()` → `FileManager.trashFile()`\r\n\r\n```ts\r\n// Before / 之前\r\nawait vault.trash(file, false);\r\nawait vault.delete(file);\r\n\r\n// After / 之后\r\nawait this.core.app.fileManager.trashFile(file);\r\n```\r\n\r\nUses the user's system trash preference rather than hard-deleting files.  \r\n使用用户的系统回收站偏好，而非直接删除文件。\r\n\r\n---\r\n\r\n### Popout Window Compatibility / 弹出窗口兼容性\r\n\r\nAll global timer and DOM globals updated for popout window compatibility:\r\n\r\n| Before / 之前 | After / 之后 | Files changed |\r\n|---|---|---|\r\n| `setTimeout(...)` | `window.setTimeout(...)` | 11 files |\r\n| `clearTimeout(...)` | `window.clearTimeout(...)` | 6 files |\r\n| `setInterval(...)` | `window.setInterval(...)` | 2 files |\r\n| `clearInterval(...)` | `window.clearInterval(...)` | 1 file |\r\n| `requestAnimationFrame(...)` | `window.requestAnimationFrame(...)` | 1 file |\r\n| `document.querySelector(...)` | `activeDocument.querySelector(...)` | 4 files |\r\n| `globalThis.*` | `window.*` | 6 files |\r\n\r\n---\r\n\r\n### Promise Handling / Promise 处理\r\n\r\n- Three async event listeners in `setting.ts` (plan badge click, sync toggle change, reset button click) converted from `addEventListener('click', async () => {...})` to `addEventListener('click', () => { void (async () => {...})(); })` — avoids returning a Promise where `void` is expected  \r\n  三个异步事件监听器改为使用 `void` 包装的 IIFE 模式，避免在期望 `void` 的地方返回 Promise\r\n\r\n- Added `void` operator to all floating (unawaited) Promise calls:\r\n  - `this.processQueue()` in `FridayServiceHub.ts`\r\n  - `savePatterns()` in `setting.ts`\r\n  - `this.persistChanges()` in `OfflineTracker/index.ts`\r\n  - `this.performHealthCheck()` in `ConnectionMonitor/index.ts`  \r\n  为所有未 `await` 的浮动 Promise 调用添加 `void` 操作符\r\n\r\n- `onunload()` in `main.ts` changed from `async` to synchronous; cleanup uses `void this.syncService.stopSync()` (fire-and-forget)  \r\n  `onunload()` 由 `async` 改为同步，清理工作通过 `void` 触发即弃\r\n\r\n---\r\n\r\n### Type Safety / 类型安全\r\n\r\n- **`foundry/index.ts`**: Defined `ActivationApiResponse`, `ActivationApiFeatures`, `StoredLicenseShape`, `SyncConfigShape` interfaces for API responses; replaced `data: any` parameters with typed parameters — eliminates dozens of `no-unsafe-member-access` warnings  \r\n  为 API 响应定义具体接口类型，替换 `data: any` 参数\r\n\r\n- **`foundry/types.ts`**: `loginWithLicense` return type `ObsidianLicenseResult<{}>` → `ObsidianLicenseResult<object>`  \r\n  返回类型中的空对象类型 `{}` 改为 `object`\r\n\r\n- **`sync/core/common/types.ts`**: Simplified duplicate union members  \r\n  `string | (string | undefined)` → `string | undefined`\r\n\r\n- **`FridayStorageEventManager.ts`**: Added `instanceof TFile` guards before all `as TFile` casts; vault event callbacks wrapped in arrow functions for correct `this` binding  \r\n  在 TFile 类型断言前添加 `instanceof` 检查；Vault 事件改用箭头函数包装确保正确的 `this` 绑定\r\n\r\n- **Unlinted `eslint-disable` comments**: All 12 bare `// eslint-disable-next-line` directives now specify the exact rule name and include a description explaining why the suppression is necessary  \r\n  所有 eslint-disable 注释现在都指定了具体规则名称并附有解释\r\n\r\n---\r\n\r\n### Node.js Built-in Imports / Node.js 内置模块导入\r\n\r\n- `src/foundry/index.ts`: Removed `getNodeModules()` pattern that used `require('fs')` and `require('path')` inside functions; replaced with top-level `import * as fs from 'fs'` and `import * as nodePath from 'path'`  \r\n  移除函数内 `require()` 模式，改为顶层静态导入\r\n\r\n- `src/main.ts`: `require('path')` → `import * as nodePath from 'path'`  \r\n- `src/http.ts`: `require('http'/'https')` → static imports  \r\n- `src/sync/SyncStatusDisplay.ts`: `require('obsidian')` → added `Menu` / `MenuItem` to existing obsidian import  \r\n- `src/sync/core/mods.ts`: Removed Node.js `crypto` module fallback (Obsidian/Electron always has `window.crypto`)  \r\n  移除 Node.js crypto 回退（Obsidian/Electron 始终提供 `window.crypto`）\r\n\r\n---\r\n\r\n### `.obsidian` Hard-coded Paths → `vault.configDir`\r\n\r\nSync ignore patterns now use `this.app.vault.configDir` instead of the hard-coded string `.obsidian`:\r\n\r\n```ts\r\n// Before / 之前\r\n\"\\\\.obsidian\\\\/workspace\",\r\n\r\n// After / 之后\r\nconst configDir = this.app.vault.configDir;  // respects user config\r\nconst c = configDir.replace(/\\./g, '\\\\.').replace(/\\//g, '\\\\/');\r\n`${c}\\\\/workspace`\r\n```\r\n\r\nApplied in `main.ts` (`initializeDefaultIgnorePatterns`) and `setting.ts` (`updateSelectiveSyncSettings`). The module-level constant `DEFAULT_INTERNAL_IGNORE_PATTERNS` in `sync/types.ts` is now backed by a `getDefaultInternalIgnorePatterns(configDir)` factory function.\r\n\r\n---\r\n\r\n### `localStorage` → Obsidian Storage APIs\r\n\r\n- `FridaySyncCore.ts`, `FridayServiceHub.ts`: PouchDB salt/key-value storage remains in `localStorage` (technical requirement — PouchDB sets these keys internally and no Obsidian API equivalent exists for prefix-based iteration)  \r\n  PouchDB 内部存储保留 `localStorage`（技术限制，Obsidian API 不支持前缀迭代）\r\n\r\n---\r\n\r\n### Other Minor Fixes / 其他小修复\r\n\r\n| Fix / 修复 | Location / 位置 |\r\n|---|---|\r\n| `Object.prototype.hasOwnProperty.call(obj, key)` instead of `obj.hasOwnProperty(key)` | `configForDoc.ts:193` |\r\n| Lexical `const` inside `case` block wrapped in `{ }` | `FridayStorageEventManager.ts:637` |\r\n| `FileManager.trashFile()` instead of deprecated vault methods | `FridayServiceHub.ts:573-575` |\r\n| `getSyncConfig()` return type `any \\| null` → `ObsidianSyncConfig \\| null` | `licenseState.ts:294` |\r\n| Duplicate union type members removed | `types.ts:20-24` |\r\n| `Promise<any> \\| any` union → `(...args: any[]) => any` | `ServiceBackend.ts:6-19` |\r\n| Empty catch blocks now have explanation comments | `foundry/index.ts`, `foundry/mobile.ts` |\r\n\r\n---\r\n\r\n## 🎨 CSS Fixes / CSS 修复\r\n\r\n### Removed CSS Masks (`css-masks` partial-support warning)\r\n\r\nThe `.friday-premium-btn` rainbow gradient border was previously implemented using `mask` / `-webkit-mask` / `mask-composite` (partially supported in Obsidian 1.4.5). Replaced with the `background-clip: padding-box / border-box` double-layer technique — no masks needed, wider compatibility:\r\n\r\n```css\r\n/* Before — used CSS masks (partially supported) */\r\n.friday-premium-btn::before {\r\n    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);\r\n    mask-composite: exclude;\r\n    -webkit-mask-composite: xor;\r\n}\r\n\r\n/* After — background-clip gradient border (fully supported) */\r\n.friday-premium-btn {\r\n    border: 2px solid transparent;\r\n    background:\r\n        linear-gradient(var(--background-primary), var(--background-primary)) padding-box,\r\n        linear-gradient(120deg, #ff6a6a, ..., #bd93f9) border-box;\r\n}\r\n```\r\n\r\n---\r\n\r\n### Eliminated All `!important` Declarations\r\n\r\nReplaced 50+ `!important` declarations with proper CSS specificity:\r\n\r\n| Before / 之前 | After / 之后 |\r\n|---|---|\r\n| `.friday-section-title { margin-top: 40px !important; }` | `.setting-item-heading.friday-section-title { margin-top: 40px; }` |\r\n| `.friday-sync-header-container .friday-section-title { border-bottom: none !important; }` | `.friday-sync-header-container .setting-item-heading.friday-section-title { border-bottom: none; }` |\r\n| Progress bar `.livesync-status-progressbar { opacity: 1 !important; }` | `.livesync-status div.livesync-status-progressbar { opacity: 1; }` (higher specificity) |\r\n| Plan badge `padding-top: 6px !important` | Removed (value was identical to base `.friday-plan-badge { padding: 6px 16px }`) |\r\n\r\n**Result**: `styles.css` now contains **0** `!important` declarations. / `styles.css` 现在包含 **0** 个 `!important` 声明。\r\n\r\n---\r\n\r\n### Fixed Unknown Type Selector\r\n\r\n```css\r\n/* Before — type selector (linter error) */\r\n.livesync-status-progressbar livesync-progressbar-track { ... }\r\n\r\n/* After — class selector (correct) */\r\n.livesync-status-progressbar .livesync-progressbar-track { ... }\r\n```\r\n\r\n---\r\n\r\n## 📦 Other Infrastructure / 其他基础设施\r\n\r\n### LICENSE File Added / 添加 LICENSE 文件\r\n\r\nApache-2.0 `LICENSE` file added to the repository root. / 在仓库根目录添加了 Apache-2.0 `LICENSE` 文件。\r\n\r\n### GitHub Actions Updated / GitHub Actions 更新\r\n\r\n`.github/workflows/release.yml` upgraded:\r\n- Actions updated from v3 → v4 (`checkout`, `setup-node`)\r\n- Added `permissions: id-token: write, attestations: write`\r\n- Added `actions/attest-build-provenance@v2` step to cryptographically sign `main.js` and `styles.css` release artifacts  \r\n  添加构建来源证明步骤，对发布产物进行加密签名\r\n\r\n### Removed Unused Dependency / 移除未使用依赖\r\n\r\n`builtin-modules` (devDependency) removed from `package.json` — it was never imported anywhere in the codebase.  \r\n从 `package.json` 移除了从未使用的 `builtin-modules` 开发依赖。\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*This release contains no changes visible to end users — it is entirely a code quality and compliance release.*\r\n\r\n*本版本不包含任何对终端用户可见的变更，完全是代码质量和合规性修复版本。*\r\n\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "26.7.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T00:35:47Z",
+      "tag": "26.7.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:959d3d6bb2e09743883efeca49599e0d55ac88226223a4cbd00b8c7cb28d4db9",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 1596314
+        },
+        {
+          "digest": "sha256:b28bc93be734f05c053ef00bd3f78845af127d239cabc3ea3c3dc692200a23ea",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 340
+        },
+        {
+          "digest": "sha256:a15cab09cf7284043407d8b4cc49a53aa85d025b33e94b13bba96b414af6d96b",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 12206
+        }
+      ],
+      "author": "sunwei",
+      "description": "# MDFriday Sync — Release Notes v26.7.1\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 🎉 First Release / 首次发布\r\n\r\nWe are excited to announce the **first public release** of **MDFriday Sync** — a free, open-source, end-to-end encrypted vault synchronization plugin for Obsidian, supporting both Desktop and Mobile.\r\n\r\n我们非常高兴地宣布 **MDFriday Sync** 的**首个正式版本**发布。这是一款免费、开源、端对端加密的 Obsidian 笔记库同步插件，同时支持桌面端与移动端。\r\n\r\n---\r\n\r\n## ✨ What's New / 新特性\r\n\r\n### 🔄 Live Sync via CouchDB / 基于 CouchDB 的实时同步\r\n\r\nVault changes are pushed to a CouchDB server and pulled to all connected devices in seconds — no polling, no delay.\r\n\r\n笔记库的任何变更都会即时推送到 CouchDB 服务器，并实时同步到所有已连接设备，无需轮询，延迟极低。\r\n\r\n---\r\n\r\n### 🔒 End-to-End Encryption / 端对端加密\r\n\r\nAll content is encrypted on your device using **AES-256 / HKDF** before it ever leaves. The server stores only ciphertext — your data cannot be read even if the server is compromised.\r\n\r\n所有内容在离开设备前均使用 **AES-256 / HKDF** 在本地加密。服务器仅存储密文，即便服务器遭到入侵，您的数据也无法被读取。\r\n\r\n---\r\n\r\n### 🕵️ Path Obfuscation / 路径混淆\r\n\r\nOptionally hashes file paths before storage so the server cannot infer your folder structure or file names.\r\n\r\n可选功能：在存储前对文件路径进行哈希处理，使服务器无法推断您的目录结构或文件名。\r\n\r\n---\r\n\r\n### 📁 Selective Sync / 选择性同步\r\n\r\nFine-grained control over what gets synced. Toggle each category independently:\r\n\r\n精细控制同步范围，可按类别独立开启或关闭：\r\n\r\n| Category / 类别 | File Types / 文件类型 |\r\n|---|---|\r\n| Images / 图片 | `bmp png jpg jpeg gif svg webp avif` |\r\n| Audio / 音频 | `mp3 wav m4a 3gp flac ogg oga opus` |\r\n| Video / 视频 | `mp4 webm ogv mov mkv` |\r\n| PDF | `pdf` |\r\n| Themes / 主题 | `.obsidian/themes/` |\r\n| Snippets / 代码片段 | `.obsidian/snippets/` |\r\n| Plugins / 插件 | `.obsidian/plugins/` |\r\n\r\n---\r\n\r\n### 🚫 Custom Ignore Patterns / 自定义忽略规则\r\n\r\nDefine gitignore-style patterns to exclude folders or file types from sync (e.g. `attachments/`, `*.tmp`, `private/**`).\r\n\r\n支持 gitignore 格式的自定义忽略规则，可排除特定目录或文件类型（如 `attachments/`、`*.tmp`、`private/**`）。\r\n\r\n---\r\n\r\n### ⚙️ Hidden File Sync / 隐藏文件同步（`.obsidian/`）\r\n\r\nKeep your Obsidian configuration — themes, snippets, plugin settings — in sync across all devices, with smart per-device exclusions for workspace state, cache, and device-specific files.\r\n\r\n跨设备同步 Obsidian 配置（主题、代码片段、插件设置），并智能排除工作区状态、缓存及设备特有文件，避免冲突。\r\n\r\nDefault exclusions / 默认排除项：\r\n- `.obsidian/workspace` · `.obsidian/workspace.json` · `.obsidian/workspace-mobile.json`\r\n- `.obsidian/cache`\r\n- `node_modules/` · `.git/`\r\n- `plugins/mdfriday-sync` *(this plugin's own data / 本插件自身数据)*\r\n\r\n---\r\n\r\n### 📶 Offline Support & Auto-Reconnect / 离线支持与自动重连\r\n\r\nChanges made while offline are queued locally and replayed automatically once connectivity is restored. Network interruptions are detected and reconnection is handled transparently.\r\n\r\n离线时产生的变更会暂存本地，网络恢复后自动同步。网络中断时自动检测并重连，无需手动干预。\r\n\r\n---\r\n\r\n### 📊 Real-Time Status Indicator / 实时状态指示器\r\n\r\nA compact status display in the editor corner shows live sync progress, connection state, and recent log entries at a glance.\r\n\r\n编辑器角落的紧凑状态显示器，实时展示同步进度、连接状态及最新日志，一目了然。\r\n\r\n---\r\n\r\n### 🌐 Desktop & Mobile / 桌面端与移动端全支持\r\n\r\nWorks on all Obsidian platforms without any platform-specific workarounds. Mobile uses Obsidian's own Vault API for full compatibility.\r\n\r\n在所有 Obsidian 平台上开箱即用，无需特定平台的特殊处理。移动端使用 Obsidian 原生 Vault API，兼容性完整。\r\n\r\n---\r\n\r\n### 🌏 Bilingual UI / 中英双语界面\r\n\r\nThe Settings panel is fully localized in **English** and **Simplified Chinese (简体中文)**. Language is detected automatically from Obsidian's locale.\r\n\r\n设置面板完整支持**英语**与**简体中文**，根据 Obsidian 语言设置自动切换。\r\n\r\n---\r\n\r\n### 🔑 License Key Activation / 许可证密钥激活\r\n\r\nActivate the managed backend with a single license key from [mdfriday.com](https://mdfriday.com). Database provisioning, authentication, and connection credentials are all handled automatically — no CouchDB configuration required.\r\n\r\n在 [mdfriday.com](https://mdfriday.com) 获取许可证密钥，一键激活托管后端。数据库配置、身份验证、连接凭据均自动完成，无需手动配置 CouchDB。\r\n\r\n---\r\n\r\n### 🏢 Enterprise & Self-Host Support / 企业版与自托管支持\r\n\r\nPoint the plugin at any **CouchDB v3+** instance or run your own backend with **[hugoverse](https://github.com/mdfriday/hugoverse)** — MDFriday's fully open-source backend. Enterprise users can configure a custom API URL via the Enterprise Settings panel.\r\n\r\n支持对接任意 **CouchDB v3+** 实例，或使用 MDFriday 完全开源的后端 **[hugoverse](https://github.com/mdfriday/hugoverse)** 自托管。企业用户可在设置面板中配置自定义 API 地址。\r\n\r\n---\r\n\r\n## 🛠 Technical Highlights / 技术亮点\r\n\r\n| Item / 项目 | Detail / 详情 |\r\n|---|---|\r\n| Sync core / 同步核心 | Built on [Self-hosted LiveSync](https://github.com/vrtmrz/obsidian-livesync) |\r\n| Encryption / 加密 | AES-256-GCM + HKDF key derivation |\r\n| Chunking / 分块 | Rabin-Karp content-defined chunking |\r\n| Local DB / 本地数据库 | PouchDB (IndexedDB) |\r\n| Remote DB / 远端数据库 | CouchDB v3+ |\r\n| Conflict resolution / 冲突处理 | CouchDB multi-version concurrency control |\r\n| Build / 构建 | esbuild, TypeScript 5, tree-shaking |\r\n| Test / 测试 | Vitest unit tests for core logic |\r\n| Min Obsidian version / 最低版本 | 0.15.0 |\r\n\r\n---\r\n\r\n## 🚀 Getting Started / 快速开始\r\n\r\n1. Install **MDFriday Sync** from Obsidian's Community Plugins  \r\n   在 Obsidian 社区插件市场安装 **MDFriday Sync**\r\n\r\n2. Open **Settings → MDFriday Sync** and enter your license key  \r\n   进入 **设置 → MDFriday Sync**，输入许可证密钥\r\n\r\n3. Toggle **Enable Sync** — live sync starts immediately  \r\n   开启**启用同步**开关，实时同步立即开始\r\n\r\n4. On your first device, click **Upload local data to cloud** to seed the remote database  \r\n   在第一台设备上点击**上传本地数据到云端**，初始化远端数据库\r\n\r\n5. On additional devices, enter the same credentials + passphrase → **Download data from cloud**  \r\n   在其他设备上输入相同凭据和密码短语 → 点击**从云端下载数据**\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*Thank you for being an early adopter of MDFriday Sync. Your feedback shapes the next release!*\r\n\r\n*感谢您成为 MDFriday Sync 的早期用户。您的反馈将推动下一个版本的持续改进！*\r\n\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "26.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T22:53:33Z",
+      "tag": "26.7.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "mdfriday/obsidian-sync"
+}
