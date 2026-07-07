@@ -280,6 +280,21 @@ describe("summarizePluginDownloads", () => {
             downloadCount: 100,
             assets: [{ name: "manifest.json", size: 10, downloadCount: 100 }],
           },
+          {
+            tag: "legacy",
+            name: "legacy",
+            description: null,
+            author: null,
+            publishedAt: "2025-12-31T00:00:00Z",
+            prerelease: false,
+            draft: false,
+            downloadCount: 0,
+            assets: [{ name: "manifest.json", size: 10 }] as Array<{
+              name: string;
+              size: number;
+              downloadCount: number;
+            }>,
+          },
         ],
         lastFetchedAt: "2026-01-04T00:00:00Z",
         lastChangedAt: "2026-01-04T00:00:00Z",

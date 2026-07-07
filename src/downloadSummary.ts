@@ -54,7 +54,9 @@ export function summarizePluginDownloads(plugin: PluginData): PluginDownloadSumm
       continue;
     }
 
-    const manifestAssets = release.assets.filter((asset) => asset.name === "manifest.json");
+    const manifestAssets = release.assets.filter(
+      (asset) => asset.name === "manifest.json" && Number.isFinite(asset.downloadCount),
+    );
     if (manifestAssets.length === 0) {
       continue;
     }
