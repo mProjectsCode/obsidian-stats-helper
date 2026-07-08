@@ -4,8 +4,8 @@
   "description": "Sync individual vault subfolders with collaborators via GitHub — automatic push/pull, no manual commits, with side-by-side conflict resolution. Super simple, full data ownership, completely free. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "conote-git",
-  "lastChangedAt": "2026-07-07T07:04:26.988Z",
-  "lastFetchedAt": "2026-07-07T07:04:26.988Z",
+  "lastChangedAt": "2026-07-08T07:02:26.991Z",
+  "lastFetchedAt": "2026-07-08T07:02:26.991Z",
   "manifest": {
     "author": "Maximilian Witte",
     "authorUrl": "https://github.com/maximilianwitte",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "CoNote Git",
-    "version": "0.1.6"
+    "version": "0.1.8"
   },
   "name": "CoNote Git",
   "presentInCommunityList": true,
@@ -22,8 +22,68 @@
     {
       "assets": [
         {
+          "digest": "sha256:c95907d185bee8efae4ccdd34faa45d01786b2e6ad41688c5a300be4d3f01efb",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 361056
+        },
+        {
+          "digest": "sha256:96c06f26cbad5c207541467c90071d02535f5ff19e4a5405876be92cd546e0db",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 375
+        },
+        {
+          "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 5184
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\nFixes the 73 `no-unsafe-*` ESLint warnings from Obsidian's automated review (previously showing under `src/core/gitBackend.ts`, `sync.ts`, `syncState.ts`, and `main.ts`).\n\n**Root cause:** the reviewer's type-checking environment doesn't resolve ambient Node.js types, so raw `fs`/`path`/`crypto` calls type as `any` and cascade into every downstream usage — even though `isomorphic-git`'s own types resolve fine there. (An earlier attempt in 0.1.7 to fix this via `package.json` dependency placement turned out to be a no-op; this release addresses the actual cause.)\n\n**Fix:** added `src/core/nodeApi.ts`, a small facade with explicit hand-written interfaces for exactly the Node functions this plugin uses, cast through `unknown` so the `any`-ness can't propagate regardless of what ambient types are available wherever the code is checked. `isomorphic-git` calls get their own typed view (`gitFs`) since they need the full fs surface.\n\nNo functional changes — this is purely a type-safety / review-compliance release.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T15:39:38Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0ed7b449788f7ae3a25ef3522422d264d6cde9721fb270268539d0a7bba2d671",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 361110
+        },
+        {
+          "digest": "sha256:112c1c609c822e7c88f906853ea81cc4b288238b6679d70802e021ddd4812ccc",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 375
+        },
+        {
+          "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 5184
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\nAddresses feedback from the Obsidian plugin review:\n\n- Moved `@types/node` to `dependencies` — fixes a cascade of `no-unsafe-*` lint warnings caused by `fs`, `path`, and `crypto` (Node built-ins) resolving as untyped in the review's build environment. Type-only change, no runtime effect.\n- Switched `document` to `activeDocument` in the folder-badge cleanup code, for popout-window compatibility.\n- Release workflow now attaches build provenance attestations (Sigstore/OIDC) to `main.js`, `manifest.json`, and `styles.css`, so anyone can cryptographically verify these assets were built from this repository:\n  ```\n  gh attestation verify main.js --repo Maximilianwte/Obsidian_CoNote_Git\n  ```\n\nNo functional changes to sync behavior — this release is purely about code-quality and supply-chain review feedback.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T12:53:50Z",
+      "tag": "0.1.7"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:d24edb71f3883b270584d13fb5666f93d28f92fbb2d53f05ae203fd56a73d2a0",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 361104
         },

@@ -4,8 +4,8 @@
   "description": "View and edit JSON files with a Tree/Source toggle. Renders JSON code blocks in Markdown notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "json-editor",
-  "lastChangedAt": "2026-07-07T07:04:26.988Z",
-  "lastFetchedAt": "2026-07-07T07:04:26.988Z",
+  "lastChangedAt": "2026-07-08T07:02:26.991Z",
+  "lastFetchedAt": "2026-07-08T07:02:26.991Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://github.com/johannes-kaindl",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:2a90bd1e7c3d0993868478970552208695766b73cef79f287a6535710115c6eb",
-          "downloadCount": 158,
+          "downloadCount": 166,
           "name": "main.js",
           "size": 86935
         },
         {
           "digest": "sha256:d8dcfaaec636cec1c7bbcd7305c2a85b3ce67aaea8a36559277424feb3ec3ea3",
-          "downloadCount": 160,
+          "downloadCount": 168,
           "name": "manifest.json",
           "size": 327
         },
         {
           "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
-          "downloadCount": 122,
+          "downloadCount": 130,
           "name": "styles.css",
           "size": 27711
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n**Eval-free JSON Schema validation + a clean community-review report.** Replaces the Ajv validator with the eval-free [`@cfworker/json-schema`](https://github.com/cfworker/cfworker), and drives the type-aware ESLint findings from the `community.obsidian.md` review to zero. The plugin bundle is ~52% smaller.\n\n### Changed\n- **JSON Schema validation now uses `@cfworker/json-schema` instead of Ajv.** It is an eval-free, tree-walking validator (no `new Function` / no `eval`), so the automated review's \"dynamic code execution\" disclosure no longer applies. The bundle drops from ~176 KB to ~85 KB. Supported drafts are a superset of before (draft-04/07/2019-09/2020-12 vs. draft-07-only); the public validation contract (inline row errors + the error-count banner) is unchanged.\n- **`format` keywords are now enforced.** The previous Ajv build ran without `ajv-formats`, so `format` (`email`, `uri`, `date-time`, …) was a no-op annotation. The new validator enforces formats in draft-07 mode, so a value that violates a `format` constraint in an (opt-in) companion schema now reports an error. A structurally malformed companion schema (e.g. `{\"type\": 123}`) is still rejected via draft-07 meta-validation; a merely cosmetic, non-URI `$id` no longer disables validation for the whole file.\n\n### Fixed\n- **The community-review ESLint warnings are now zero.** The review's type-aware linter resolved `obsidian` to the Vitest mock (via a `tsconfig.json` `paths` alias), so every Obsidian-typed expression was flagged as `no-unsafe-*` and one assertion as `no-unnecessary-type-assertion`. The mock alias is gone from `tsconfig.json` (real Obsidian types now resolve), the Vitest mock moved to `tests/__mocks__/`, and the redundant assertions were removed. None of this changes runtime behavior. A committed `npm run lint:portal` guard now mirrors the review so the warnings cannot silently come back.\n\n### Internal\n- Added `tsconfig.test.json` (editor typing of tests against the mock), `eslint.portal.config.mjs` + `npm run lint:portal`, and `src/core/draft07-meta-schema.ts`. The Vitest suite (601 tests) pins the new validator's error granularity and format behavior.",
-      "downloadCount": 160,
+      "downloadCount": 168,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,
