@@ -4,18 +4,18 @@
   "description": "Comprehensive financial dashboard with Beancount integration. Features unified entry management, live BQL queries, connection validation, auto-starting backend, and streamlined settings. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "beancount-finance",
-  "lastChangedAt": "2026-07-07T06:02:26.990Z",
-  "lastFetchedAt": "2026-07-07T06:02:26.990Z",
+  "lastChangedAt": "2026-07-08T06:04:27.038Z",
+  "lastFetchedAt": "2026-07-08T06:04:27.038Z",
   "manifest": {
-    "author": "Mukund Shelake",
-    "authorUrl": "https://mukundshelake.me",
+    "author": "mkshp",
+    "authorUrl": "https://github.com/mkshp-dev",
     "description": "Manage your Beancount ledger from your vault. Supports live BQL queries, transaction management, net worth tracking, balance sheets, income statements, and automated price fetching.",
     "fundingUrl": "https://buymeacoffee.com/mkshp",
     "id": "beancount-finance",
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Beancount Ledger",
-    "version": "2.2.2"
+    "version": "2.2.4"
   },
   "name": "Beancount Ledger",
   "presentInCommunityList": true,
@@ -23,27 +23,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:14f46945280aac66fb2b1aa23d3a4a8e6924d4511339716d9c9bfa0548fb98fc",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 847995
+        },
+        {
+          "digest": "sha256:d0a0eef4a6ccee7a0a6fc91dfb7be4067388c02760a3f7853dc6902bc76cc549",
+          "downloadCount": 15,
+          "name": "manifest.json",
+          "size": 447
+        },
+        {
+          "digest": "sha256:b005fb00a9e2ee5221e6876b22a25130babc85f06b0c03eb2f235e6425398a5c",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 18900
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Smallest patch to change the authorUrl in manifest",
+      "downloadCount": 15,
+      "draft": false,
+      "name": "2.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T14:48:06Z",
+      "tag": "2.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:14f46945280aac66fb2b1aa23d3a4a8e6924d4511339716d9c9bfa0548fb98fc",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 847995
+        },
+        {
+          "digest": "sha256:e1c77139c1086a4b3f2853e8d974ae8f46acb6725040f1fb1ad89eccf9b24182",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 464
+        },
+        {
+          "digest": "sha256:b005fb00a9e2ee5221e6876b22a25130babc85f06b0c03eb2f235e6425398a5c",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 18900
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- **Settings: Remove redundant path fields for cross-device portability** — Removed `beancountFilePath` and `structuredFolderPath` from the plugin settings interface and `data.json`. Both fields stored absolute OS-level paths that broke portability when settings were synced across machines with different usernames or directory layouts. Since v2.0.0 enforces vault-only file access, the main ledger path can always be derived at runtime as `structuredFolderName + \"/ledger.beancount\"` via the existing `getMainLedgerPath()` utility. Updated all call sites (`directives.ts`, `sidebar-view.ts`, `beancount-lint.ts`, `ConnectionSettings.svelte`, `OnboardingModal.svelte`) to use `getMainLedgerPath()` or guard on `structuredFolderName` instead. Added an explicit `sourcePath` parameter to `migrateToStructuredLayout()` so onboarding no longer needs to write a temporary path into settings. The onboarding trigger in `main.ts` now checks `structuredFolderName` as the source of truth for setup completion. Addresses portability concern raised in discussion #245.\r\n\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "2.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T14:05:23Z",
+      "tag": "2.2.3"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:47bd48e6f68f94afcf5fbcf541b8d0d1e4f07389a13a9c52ca0a7819bd6ab78e",
-          "downloadCount": 47,
+          "downloadCount": 49,
           "name": "main.js",
           "size": 848205
         },
         {
           "digest": "sha256:ab088999a2613f649ac97fa2cdbf039d4dd636ef31a23522099da41594341581",
-          "downloadCount": 54,
+          "downloadCount": 57,
           "name": "manifest.json",
           "size": 452
         },
         {
           "digest": "sha256:b005fb00a9e2ee5221e6876b22a25130babc85f06b0c03eb2f235e6425398a5c",
-          "downloadCount": 46,
+          "downloadCount": 48,
           "name": "styles.css",
           "size": 18900
         }
       ],
       "author": "github-actions[bot]",
       "description": "- **Onboarding Wizard: Improve UI/UX flow and navigation gating** — Updated the setup wizard to allow users to skip or proceed past the Python/prerequisites check step. Added a warning callout if Beancount is missing while allowing layout setup to proceed, clarified that ledger files must be vault-relative, updated placeholders, and added Cancel/Exit button triggers to Step 2.\r\n\r\n- **File Organization: Safe Folder name renaming with validation** — Redesigned the **Folder name** setting field with an interactive Edit/Save/Cancel lifecycle. Added validation checks for folder existence and invalid characters, physically renaming the structured layout folder in the Obsidian vault, and dynamically updating configuration paths (`beancountFilePath` and `structuredFolderPath`) under the hood to prevent write/query path mismatches.\r\n\r\n- **Codebase Cleanup: Remove obsolete settings, unused parameters, and redundant scripts** — Removed dead advanced settings panels and file autocomplete modal helpers from the settings view, eliminated unused parameters and variables from controllers, processors, and layout utilities, and removed redundant script files (`test-build.js` and the checked-in detection script artifact) to simplify the codebase and improve maintainability.\r\n\r\n",
-      "downloadCount": 54,
+      "downloadCount": 57,
       "draft": false,
       "name": "2.2.2",
       "prerelease": false,
@@ -84,7 +144,7 @@
       "assets": [
         {
           "digest": "sha256:8ecc0970e503805e2160f65007580af55f2881210d0ff4896e7bda6ac9a3eef4",
-          "downloadCount": 175,
+          "downloadCount": 176,
           "name": "main.js",
           "size": 849099
         },
@@ -1194,7 +1254,7 @@
       "assets": [
         {
           "digest": "sha256:a724b6d8c22b669130452025d17d5959b5e3caee6af01496753536fb401d24db",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "obsidian-finance-plugin.zip",
           "size": 179715
         }
