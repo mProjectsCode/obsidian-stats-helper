@@ -4,8 +4,8 @@
   "description": "Integrate with Zotero, create literature notes, and insert citations from a Zotero library.",
   "errors": [],
   "id": "zotlit",
-  "lastChangedAt": "2026-07-07T00:00:26.979Z",
-  "lastFetchedAt": "2026-07-07T00:00:26.979Z",
+  "lastChangedAt": "2026-07-08T00:02:26.981Z",
+  "lastFetchedAt": "2026-07-08T00:02:26.981Z",
   "manifest": {
     "author": "AidenLx",
     "authorUrl": "https://github.com/aidenlx",
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:207c76783889756061680802a31dd7cc551a32b7f97a95de91f996e484d376a8",
-          "downloadCount": 10,
+          "digest": "sha256:56ee57cefd18d21c43d9ffb240dcd7dec1908064e1240a0daefe13d47ec8559b",
+          "downloadCount": 15,
           "name": "main.js",
-          "size": 874739
+          "size": 876213
         },
         {
-          "digest": "sha256:7219ad2205c58610d6d482db185ed55ede64710c3db61ac9a08335afdb912568",
-          "downloadCount": 11,
+          "digest": "sha256:cc3838688427829ce635ebf2127ad07abdc10e382a98d34173f1083b3bb0af1c",
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 396
         },
         {
           "digest": "sha256:2e654422881f88842f9f7ecf57b84096558c491ffecabcc044faac4f86653519",
-          "downloadCount": 9,
+          "downloadCount": 16,
+          "name": "styles.css",
+          "size": 18837
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "ZotLit Obsidian plugin v2.0.0-alpha.4",
+      "downloadCount": 24,
+      "draft": false,
+      "name": "2.0.0-alpha.4",
+      "prerelease": true,
+      "publishedAt": "2026-07-07T03:10:14Z",
+      "tag": "2.0.0-alpha.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:207c76783889756061680802a31dd7cc551a32b7f97a95de91f996e484d376a8",
+          "downloadCount": 15,
+          "name": "main.js",
+          "size": 874739
+        },
+        {
+          "digest": "sha256:7219ad2205c58610d6d482db185ed55ede64710c3db61ac9a08335afdb912568",
+          "downloadCount": 19,
+          "name": "manifest.json",
+          "size": 396
+        },
+        {
+          "digest": "sha256:2e654422881f88842f9f7ecf57b84096558c491ffecabcc044faac4f86653519",
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 18837
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Highlights\r\n\r\n- Zotero notes can now be imported into Obsidian as standalone Markdown files.\r\n- Literature notes now support a metadata-only update mode.\r\n- Citation rendering now carries CSL citation details such as locators, locator labels, suppress-author markers, prefixes, and suffixes.\r\n- Annotation comments in the annotation view now render as sanitized HTML instead of showing raw HTML.\r\n- Annotation excerpt images are imported lazily, so note operations avoid unnecessary image work unless the template actually renders the image.\r\n\r\n## Zotero Note Import\r\n\r\n- Added Zotero-side menu actions for importing selected Zotero notes into Obsidian.\r\n- Added Zotero-side menu actions for importing child notes from selected literature items.\r\n- Added Obsidian commands and context menu actions for imported notes:\r\n  - Import child notes from Zotero.\r\n  - Update an imported note from Zotero.\r\n- Added a batch import flow in Obsidian with loading, confirmation, progress, skipped, failed, and summary states.\r\n- Imported notes are written to the configured imported-note folder, defaulting to `zotero_notes`.\r\n- Imported notes include frontmatter with the Zotero note identity so ZotLit can match the file later.\r\n- Zotero note HTML is converted to Markdown, including embedded images, annotation excerpts, annotation citations, and Zotero-created annotation paragraphs.\r\n- Added a setting under Note import for rendering Zotero annotation paragraphs through the ZotLit annotation template.\r\n- Imported notes are create-on-link by default: calling `note.noteLink()` in a template imports the child note if needed and links existing imported notes when present.\r\n- Reimport and overwrite prompts now warn before replacing local edits to imported notes.\r\n\r\n## Literature Notes\r\n\r\n- Added **Update literature note metadata** in Obsidian.\r\n- Added **Update note metadata in Obsidian** in the Zotero companion plugin.\r\n- Metadata-only updates refresh managed frontmatter without replacing the managed note body region.\r\n- Full updates continue to refresh both managed metadata and the managed body region.\r\n- Overwrite keeps unmanaged frontmatter keys while replacing the note body with the ZotLit note template.\r\n- Child-note links are now available in note, content, and frontmatter templates through `zt.notes`.\r\n- The default content template now renders a `Notes` section before `Annotations` when child notes exist.\r\n- Child notes linked through templates are imported only when the template actually renders `note.noteLink()`.\r\n\r\n## Citations And Templates\r\n\r\n- Added a CSL data pipeline for Zotero items and citation template rendering.\r\n- Citation templates now receive `zt.citations`, an array of citation items containing:\r\n  - the cited item as `c.item`;\r\n  - locator and label data;\r\n  - `labelShort` abbreviations such as `p.`, `chap.`, and `fig.`;\r\n  - `suppressAuthor`;\r\n  - `prefix` and `suffix`.\r\n- `zt.items` remains available in citation templates as the bare cited item array.\r\n- Default `cite` and `cite2` templates now emit Pandoc-style citations with locator support, for example `[@smith2024, p. 62]` and `-@smith2024`.\r\n- Imported Zotero-note citations can resolve from the live Zotero item first, then embedded item data, then a visible `KEY?` sentinel for unresolved citekeys.\r\n- Annotation templates can now opt into `zt.citation`, a page-pinned citation rendered from the parent item and the annotation page label.\r\n- The annotation view has a new **Copy citation** action.\r\n\r\n## Annotation Rendering\r\n\r\n- Annotation comments in the annotation view now render as sanitized HTML instead of raw markup.\r\n- Shared color-mark rendering improves highlight, underline, and callout output across note import and annotation rendering.\r\n- Blank runs inside rendered callouts are collapsed more consistently.\r\n- Standalone attachment annotations now handle missing parent literature items more safely.\r\n- Annotation and attachment template contexts now better handle parent-item stubs and standalone attachments.\r\n\r\n## Zotero Companion\r\n\r\n- Zotero item menus are grouped under a ZotLit submenu when both literature-item and note-item actions are available.\r\n- Batch update and batch import actions use Obsidian listener fallbacks when protocol URLs are too long.\r\n- Listener fallbacks now use `PUT` requests for literature-note updates and Zotero-note imports.\r\n- Zotero now shows a specific update-required message when the Obsidian plugin rejects an incompatible protocol version.\r\n- Batch import failures now show import-specific unreachable-Obsidian messages.\r\n- Zotero menu labels now pluralize correctly for multi-item selections.\r\n\r\n## Reliability Fixes\r\n\r\n- Fixed template and note-index readiness gates so note creation and writes wait for required services.\r\n- Fixed group-library citekey resolution.\r\n- Fixed CRLF frontmatter loss during overwrite.\r\n- Fixed child-note creation races before the note index catches up.\r\n- Fixed filename truncation safety.\r\n- Fixed handling for trashed items during batch import.\r\n- Fixed the v1 `template.filename` migration path so the migration skips it instead of incorrectly transforming it.\r\n- Fixed attachment folder creation so folders are created at import time.\r\n- Updated Drizzle dependencies to `1.0.0-rc.4`.\r\n\r\n## Compatibility Notes\r\n\r\n- Update both ZotLit plugins together: Obsidian `2.0.0-alpha.3` pairs with Zotero `2.0.0-alpha.2`.\r\n- Custom citation templates that read `zt.items` directly can keep doing so for bare item data. To access locators, suppress-author markers, prefixes, or suffixes, switch to `zt.citations`.\r\n- Custom citation templates that previously mapped items as `c.citationKey` should use `c.item.citationKey` when iterating `zt.citations`.\r\n- Template `noteLink()` calls can now return `null` when ZotLit cannot resolve a note link.\r\n- Imported Zotero notes are not implicitly kept in sync. Use the reimport/update action when you want to replace an imported note with the latest Zotero content.\r\n",
-      "downloadCount": 11,
+      "downloadCount": 19,
       "draft": false,
       "name": "2.0.0-alpha.3",
       "prerelease": true,
@@ -143,7 +173,7 @@
       "assets": [
         {
           "digest": "sha256:7fc9fbee93876b2e8a26424cf9bf6046cc66e3be8d5153f93fe1a95691860913",
-          "downloadCount": 12,
+          "downloadCount": 35,
           "name": "zotlit-zotero-2.0.0-alpha.2.xpi",
           "size": 36306
         }
@@ -161,7 +191,7 @@
       "assets": [
         {
           "digest": "sha256:9fa9ba0c59dc0270317b1114bea6bcdf44cf36b34750a7f0ba8065f10c6ac879",
-          "downloadCount": 85,
+          "downloadCount": 87,
           "name": "zotlit-zotero-2.0.0-alpha.1.xpi",
           "size": 35254
         }
@@ -197,7 +227,7 @@
       "assets": [
         {
           "digest": "sha256:f50da13ae2c00011874501cc4cc5cb6f853dcf36a9fe4c427bd4a606483360da",
-          "downloadCount": 9,
+          "downloadCount": 37,
           "name": "update-beta.json",
           "size": 598
         }
@@ -215,32 +245,32 @@
       "assets": [
         {
           "digest": "sha256:c1aaf3ca46e97a9fbcf65322eb94711b72189a4ceec2dc00ade7829860b34be9",
-          "downloadCount": 5911,
+          "downloadCount": 5983,
           "name": "main.js",
           "size": 821366
         },
         {
           "digest": "sha256:4f281df70ebeeb66f6e6b866fa7dd14241b64e5135052b05b49dd5bd0dc2d4c5",
-          "downloadCount": 6873,
+          "downloadCount": 6944,
           "name": "manifest.json",
           "size": 305
         },
         {
           "digest": "sha256:a60a3007bed992c82e52657ae6307771a5b0cd34a93aedded34bd5a4fe0bee56",
-          "downloadCount": 5780,
+          "downloadCount": 5849,
           "name": "styles.css",
           "size": 14685
         },
         {
           "digest": "sha256:7d77aa349ee84cc8fe456b5663dd8db17f3419d91a193ee97ccf12613a83500a",
-          "downloadCount": 688,
+          "downloadCount": 690,
           "name": "zotlit.zip",
           "size": 836714
         }
       ],
       "author": "aidenlx",
       "description": "- support Zotero 8+ with native citekey thanks to @Ascarshen !\r\n- support latest obsidian installer versions and future versions up to electron 41",
-      "downloadCount": 6873,
+      "downloadCount": 6944,
       "draft": false,
       "name": "1.1.12",
       "prerelease": false,
@@ -269,7 +299,7 @@
         },
         {
           "digest": "sha256:1c5ac4e6510962845c25120074a4aff7b5450d8a475b751ff32ee372dc586a18",
-          "downloadCount": 1150,
+          "downloadCount": 1151,
           "name": "zotlit.zip",
           "size": 830141
         }
@@ -1214,7 +1244,7 @@
     {
       "assets": [
         {
-          "downloadCount": 21837,
+          "downloadCount": 21858,
           "name": "zotero-obsidian-note-1.0.1.xpi",
           "size": 25927
         }
@@ -1376,7 +1406,7 @@
     {
       "assets": [
         {
-          "downloadCount": 1485,
+          "downloadCount": 1486,
           "name": "zotero-obsidian-note-0.2.0.xpi",
           "size": 26449
         }
@@ -1506,7 +1536,7 @@
     {
       "assets": [
         {
-          "downloadCount": 44,
+          "downloadCount": 45,
           "name": "main.js",
           "size": 2830410
         },
