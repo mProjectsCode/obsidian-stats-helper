@@ -4,8 +4,8 @@
   "description": "Execute code inside your notes: Shiki syntax highlighting with 65+ themes, live streaming output, inline Matplotlib and Plotly graphs, shared variables, and styled HTML and PDF export with outputs. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "code-suite",
-  "lastChangedAt": "2026-07-07T03:01:26.981Z",
-  "lastFetchedAt": "2026-07-07T03:01:26.981Z",
+  "lastChangedAt": "2026-07-08T03:02:26.985Z",
+  "lastFetchedAt": "2026-07-08T03:02:26.985Z",
   "manifest": {
     "author": "Felix Leopold",
     "authorUrl": "https://github.com/felixleopold",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "CodeSuite",
-    "version": "1.16.0"
+    "version": "1.16.3"
   },
   "name": "CodeSuite",
   "presentInCommunityList": true,
@@ -22,27 +22,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:0bd8da731a041705813aa4cbf443181ded8f477eb842158fec8f99790789ae38",
-          "downloadCount": 56,
+          "digest": "sha256:755e89cd7f89df7bbfad20ae9cc434ff72dc1d83a425fe359ad536c913728602",
+          "downloadCount": 17,
           "name": "main.js",
-          "size": 4086591
+          "size": 4087432
         },
         {
-          "digest": "sha256:cd2bef9f7a6dbf749ae4c1b2128c0f370f9b76f55ee75d7bcd139d57cf91f4ce",
-          "downloadCount": 63,
+          "digest": "sha256:d7c853699ac57678b8bd9cabfb3025a1f33eea32f057ac2eef9b91689cdc85b4",
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 422
         },
         {
           "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
-          "downloadCount": 55,
+          "downloadCount": 17,
+          "name": "styles.css",
+          "size": 36044
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Maintenance release: clears the remaining Obsidian plugin-reviewer warnings. No functional changes.\n\n## Bug Fixes\n\n- **Cleared the remaining `@typescript-eslint/no-unnecessary-type-assertion` warnings** from the plugin review ([#43](https://github.com/felixleopold/obsidian-code-suite/issues/43)). Four `window.setTimeout(...) as unknown as number` casts and a Shiki `loadTheme` cast were genuinely redundant and removed; the file-picker `File & { path }` cast became a type annotation; and the two `frontmatter as Record<string, unknown>` casts now route through a small `toRecord()` helper whose `unknown → Record` narrowing is valid in every type environment. Rounds out the type-safety cleanup started in 1.16.2.\n\n## Upgrade Notes\n\n- No action needed — internal type-safety changes only, no effect on behavior.\n",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "1.16.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T14:05:25Z",
+      "tag": "1.16.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:755e89cd7f89df7bbfad20ae9cc434ff72dc1d83a425fe359ad536c913728602",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 4087432
+        },
+        {
+          "digest": "sha256:35619ea671605a2630cf61613d28264143c634adb1ad2c78ec26b04da424e4ab",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 422
+        },
+        {
+          "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 36044
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Maintenance release: type-safety cleanup for the Obsidian plugin reviewer. No functional changes.\n\n## Bug Fixes\n\n- **Cleared ~200 `@typescript-eslint/no-unsafe-*` warnings** from the plugin review ([#43](https://github.com/felixleopold/obsidian-code-suite/issues/43)). Node built-ins are reached through Electron's `window.require` bridge; the old `as typeof import(\"fs\")` casts resolved to `any` in any environment without `@types/node` (including the reviewer), which cascaded into unsafe-access warnings across `main.ts`, `executor.ts`, and `settings.ts`. A new `src/node-builtins.ts` provides hand-written, self-contained type definitions for exactly the `fs`/`path`/`os`/`child_process`/`process` surface we use, so the code stays fully typed regardless of `@types/node`.\n\n## Upgrade Notes\n\n- No action needed — this is an internal type-safety change with no effect on behavior.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.16.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T13:51:16Z",
+      "tag": "1.16.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c02e50bf3912b948771c5995aecee9b37fecc741233e968c7bb3ab03a97c64ad",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 4087517
+        },
+        {
+          "digest": "sha256:b4b71446e90c86f8076f3a5709971401942874e5720d80f08b2f8d7f3d9c8109",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 422
+        },
+        {
+          "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 36044
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Bash, zsh, and sh code blocks now run under WSL on Windows.\n\n## Bug Fixes\n\n- **WSL shells on Windows can now find the script** — the temp file was handed to WSL as a Windows path (`C:\\…\\code.sh`), which WSL can't resolve (backslashes are mangled and the file lives at `/mnt/c/…` in WSL's filesystem), so blocks failed with `No such file or directory` ([#42](https://github.com/felixleopold/obsidian-code-suite/issues/42)). The path is now translated to its `/mnt/c/…` form before it's passed to WSL bash/zsh/sh.\n\n## What's New\n\n- **WSL path translation** setting (Windows only, under Languages) — *Auto-detect* (default) applies the translation when the shell interpreter looks like WSL; force it *On* for a custom WSL setup, or *Off* if your `bash`/`zsh`/`sh` is Git Bash, Cygwin, or MSYS.\n\n## Upgrade Notes\n\n- No action needed. On WSL the fix applies automatically; the setting is only there if you need to override the detection.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.16.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-07T13:17:46Z",
+      "tag": "1.16.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0bd8da731a041705813aa4cbf443181ded8f477eb842158fec8f99790789ae38",
+          "downloadCount": 66,
+          "name": "main.js",
+          "size": 4086591
+        },
+        {
+          "digest": "sha256:cd2bef9f7a6dbf749ae4c1b2128c0f370f9b76f55ee75d7bcd139d57cf91f4ce",
+          "downloadCount": 73,
+          "name": "manifest.json",
+          "size": 422
+        },
+        {
+          "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
+          "downloadCount": 65,
           "name": "styles.css",
           "size": 36044
         }
       ],
       "author": "github-actions[bot]",
       "description": "HTML and PDF exports now reproduce Obsidian callouts and LaTeX math, and embedded html-block previews no longer clip in PDFs.\n\n## What's New\n\n- **Callouts in exports** — `.callout` blocks render in standalone HTML and PDF with their theme colours, icons, and any custom callout types, lifted from the live note so they track your active theme.\n- **LaTeX math in exports** — inline and block equations (MathJax) are fully typeset and self-contained in the exported file, including the shared SVG glyph cache so every reference resolves offline.\n\n## Bug Fixes\n\n- Embedded **html-block previews no longer collapse to a 60px sliver** in PDF export — the hidden print window keeps `requestAnimationFrame` firing (background throttling disabled) and waits for every preview iframe to report its final height before printing.\n- **Display equations no longer overflow or get clipped** — they render as a scaled, centred block instead of living in a scroll container that a PDF page can't scroll.\n\n## Upgrade Notes\n\n- No action needed. Re-export any note that uses callouts or math to pick up the richer output.\n",
-      "downloadCount": 63,
+      "downloadCount": 73,
       "draft": false,
       "name": "1.16.0",
       "prerelease": false,
@@ -53,26 +143,26 @@
       "assets": [
         {
           "digest": "sha256:9c516c35dd678a7fd46ae2ca4348ddcaae8d154c0ffbc7dac8f79ad2be05eb80",
-          "downloadCount": 153,
+          "downloadCount": 154,
           "name": "main.js",
           "size": 4082890
         },
         {
           "digest": "sha256:b2b5a9709ee20861e4435518521cb07b805923bc5e3022f873288396230d11b9",
-          "downloadCount": 154,
+          "downloadCount": 155,
           "name": "manifest.json",
           "size": 422
         },
         {
           "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
-          "downloadCount": 117,
+          "downloadCount": 118,
           "name": "styles.css",
           "size": 36044
         }
       ],
       "author": "github-actions[bot]",
       "description": "A cleaner, tab-organized settings panel — every setting regrouped into five navigable sections.\r\n\r\n## What's New\r\n\r\n- **Tabbed settings** — the CodeSuite settings tab is now split into five sections — **Appearance**, **Execution**, **Languages**, **Files**, and **Advanced** — with a tab bar at the top instead of one long scroll ([#31](https://github.com/felixleopold/obsidian-code-suite/issues/31)).\r\n- **Built to Obsidian's settings style guide** — sentence-case headings, no redundant section labels, and a tab bar themed entirely with Obsidian's CSS variables so it matches every theme and wraps on mobile.\r\n- **\"Collapse code blocks by default\" moved to Appearance**, where it belongs — it controls inline code blocks, not embedded files.\r\n\r\n## Upgrade Notes\r\n\r\n- No action needed. Every setting keeps its current value and meaning — only the layout changed.\r\n- If a setting is hard to find, check its new tab: themes and code-block display → **Appearance**; run options, working directory, environment variables, and plots → **Execution**; interpreter paths and shell/PHP options → **Languages**; embedded and vault code files → **Files**; experimental features and baked-output sharing → **Advanced**.\r\n",
-      "downloadCount": 154,
+      "downloadCount": 155,
       "draft": false,
       "name": "1.15.0",
       "prerelease": false,
