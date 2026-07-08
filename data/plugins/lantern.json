@@ -4,8 +4,8 @@
   "description": "Local semantic search and a grounded, cited chat agent for your vault — powered by a locally-installed qmd. Requires the qmd CLI. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lantern",
-  "lastChangedAt": "2026-07-07T08:05:26.999Z",
-  "lastFetchedAt": "2026-07-07T08:05:26.999Z",
+  "lastChangedAt": "2026-07-08T08:03:27.006Z",
+  "lastFetchedAt": "2026-07-08T08:03:27.006Z",
   "manifest": {
     "author": "Bartosz Porzezinski",
     "authorUrl": "https://github.com/jokerwashere",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:f0f3e2181587b2b592db203dca7443dcab66343301e9eb56b51d530d46e49aef",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "main.js",
           "size": 162332
         },
         {
           "digest": "sha256:b9dfca7ccce2736a1ee75bdd17b5376d44ba9d19f15dfe1bd3fef20a4d75a47a",
-          "downloadCount": 7,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 403
         },
         {
           "digest": "sha256:c49ca85d43fa69eb9b3904c923bbc9a3ba6edf460b8f5dbff3f5e48527d3464f",
-          "downloadCount": 5,
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 24699
         }
       ],
       "author": "github-actions[bot]",
       "description": "Patch: type `moment` locally so the plugin audit stops flagging it.\n\nThe community-plugin audit lints **without installing dependencies**, so Obsidian's `moment` re-export (`export const moment: typeof import('moment')`) can't resolve — it becomes an error type that propagates through every date call, tripping `@typescript-eslint/no-unsafe-*` across the daily-note code. (The `moment` devDependency added in 1.6.1 couldn't help: the audit never runs `npm install`.)\n\nFix: `src/search/dailyNotes.ts` now casts Obsidian's `moment` to a narrow local `MomentFactory` / `MomentInstance` type, so the date code is type-safe whether or not the `moment` module resolves. Verified by reproducing the audit env (`mv node_modules/moment` away): the raw pattern fires all four warnings; the cast → 0. Removed the ineffective `moment` devDependency.\n\nTypes-only — `moment` still comes from Obsidian's bundle at runtime. `main.js` unchanged.",
-      "downloadCount": 7,
+      "downloadCount": 10,
       "draft": false,
       "name": "1.6.3",
       "prerelease": false,
@@ -54,26 +54,26 @@
       "assets": [
         {
           "digest": "sha256:70f6a756e19246d4860322c909351b91a6764d68b956513b4410fb834f3ac012",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 162337
         },
         {
           "digest": "sha256:461e3d666644afa8b6bac51b140ee14b4d0754ae908082270ca4ae0ffc1e3951",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
         {
           "digest": "sha256:c49ca85d43fa69eb9b3904c923bbc9a3ba6edf460b8f5dbff3f5e48527d3464f",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 24699
         }
       ],
       "author": "github-actions[bot]",
       "description": "Tooling patch — cut so the store re-validates.\n\nDeclares `moment` as a direct devDependency. Obsidian's `moment` re-export was only a *transitive* dep of obsidian, so a clean install typed it as `any` — tripping `@typescript-eslint/no-unsafe-*` across the daily-note code (`resolveDateWord` / `.format()` / `.clone()` / `.subtract()`). Pinning `moment@2.29.4` (Obsidian's own version) as a direct devDependency resolves the types.\n\nTypes-only: `moment` comes from the `obsidian` re-export and stays external, so `main.js` is byte-identical to 1.6.1. No behavior change — this release exists only to trigger store re-validation.",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.6.2",
       "prerelease": false,

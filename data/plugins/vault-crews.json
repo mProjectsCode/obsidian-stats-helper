@@ -1,0 +1,86 @@
+{
+  "author": "Johannes Kaindl",
+  "defaultBranch": "main",
+  "description": "Run autonomous local LLM agent teams (crews) on your vault via LM Studio - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "vault-crews",
+  "lastChangedAt": "2026-07-08T08:03:27.006Z",
+  "lastFetchedAt": "2026-07-08T08:03:27.006Z",
+  "manifest": {
+    "author": "Johannes Kaindl",
+    "authorUrl": "https://jkaindl.de",
+    "description": "Run autonomous local LLM agent teams (crews) on your vault via LM Studio.",
+    "fundingUrl": "",
+    "id": "vault-crews",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "Vault Crews",
+    "version": "0.2.0"
+  },
+  "name": "Vault Crews",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:62c0aea083c751e6f86ac2dda6b56d386c2b47e8b2d66e2a08bd8f5d9b77c52f",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 92775
+        },
+        {
+          "digest": "sha256:867e56c6288f91ec2d36e8afc435685fb210e2939b7a1f5ecb17e777a46ec500",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 308
+        },
+        {
+          "digest": "sha256:d84326699ce04601759b2de62cb370b207d441275f363dad5ce16853ca49c148",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 5932
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n\n### Changed\n\n- **Git-free snapshot undo.** \"Undo last run\" no longer relies on the vault being a git\n  repository. Before a run writes a note, the plugin snapshots that note's pre-run state\n  (copy-on-write, write-ahead) into a hidden store under\n  `.obsidian/plugins/vault-crews/undo/<runId>/`, via the Obsidian vault/adapter API only.\n  Undo restores changed notes from the snapshot and moves run-created notes to the\n  Obsidian trash (never a hard delete). This works in **every** vault, not just git repos.\n- **Honest conflict warning.** If a note was edited after the run but before undo (detected\n  via content hash), the confirmation dialog warns before rolling it back — never a silent\n  overwrite.\n- **New setting \"Undo history depth\"** (default 15) controls how many recent runs keep an\n  undo snapshot; older snapshots are pruned automatically.\n\n### Removed\n\n- **All `child_process` and `node:fs` usage.** The git-backed undo (system `git commit` /\n  `git revert`) is gone, so the plugin no longer performs shell execution or direct\n  filesystem access — removing both Community-store review \"Behavior\" warnings. Vaults that\n  want a permanent versioned history can still run git themselves; the run logs\n  (`run.md`) remain the durable human-readable record.",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-06T22:53:05Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0b39a11060a4d65433aa33cfa47ba0a629ce9041dfe00bb3e156cec64656f6f8",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 93579
+        },
+        {
+          "digest": "sha256:7ed1fb83fa40379e3b6b5c015283ca12600130d3a25e4fc04653c7a05fbca267",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 307
+        },
+        {
+          "digest": "sha256:d84326699ce04601759b2de62cb370b207d441275f363dad5ce16853ca49c148",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 5932
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **Deterministic crew pipeline.** A crew (\"team\") runs as a fixed sequence of three\n  task kinds — `collector` (deterministic context gathering), `llm` (one schema-bound\n  chat completion), `actions` (deterministic application of a validated action list).\n  The model decides *content* only, inside narrow contracts; the orchestrator decides\n  flow, paths and writes.\n- **Constrain-then-verify before every write.** Every LLM output is extracted,\n  validated against a built-in versioned schema, and source-bound (no invented paths or\n  enum values), with a one-shot repair pass for malformed JSON.\n- **One git commit per run with one-click undo.** Every run — ok, partial, failed or\n  aborted — ends in exactly one commit covering only the files it touched plus its run\n  log. Undo survives a dirty working tree (stash-wrapped `git revert`).\n- **Run panel with hub navigation.** A single view with internal tabs (Crews · History),\n  a persistent status line carrying the one cancel button, and honest cooperative-abort\n  feedback (a run that finished before the abort landed says so rather than freezing).\n- **Two shipped example crews**, installable via a command: Task-Triage and\n  Daily-Briefing.\n- **Full in-vault observability.** Each run writes a human-readable `run.md` (Bases-\n  compatible) and a machine-readable state file.\n- **Local-model-aware LM Studio client** — context length probing, thinking suppression,\n  JIT stall timeout, ordered endpoint fallback.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-06T06:12:29Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "johannes-kaindl/vault-crews"
+}
