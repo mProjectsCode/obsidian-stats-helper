@@ -4,8 +4,8 @@
   "description": "Chat with Claude Code, Codex, Gemini CLI, and more via the Agent Client Protocol — right from your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "agent-client",
-  "lastChangedAt": "2026-07-07T04:03:27.039Z",
-  "lastFetchedAt": "2026-07-07T04:03:27.039Z",
+  "lastChangedAt": "2026-07-08T04:04:27.000Z",
+  "lastFetchedAt": "2026-07-08T04:04:27.000Z",
   "manifest": {
     "author": "RAIT-09",
     "authorUrl": "https://github.com/RAIT-09",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:2acfc4cf90a59f9f6d3ba0dafa5e09648d06fdfe91d7ee648e8e8dadbbd0bba8",
-          "downloadCount": 8553,
+          "downloadCount": 9052,
           "name": "main.js",
           "size": 798589
         },
         {
           "digest": "sha256:8fe877d1a8c6b298eb9a2e30ea38d2573e9400bf2f6d2498d0e2486214a53c56",
-          "downloadCount": 20889,
+          "downloadCount": 22668,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:20452335a3fa171cbf4ded03fdbcb84c098a0e395e87212269d30e312de8f4c5",
-          "downloadCount": 8451,
+          "downloadCount": 8948,
           "name": "styles.css",
           "size": 49360
         }
       ],
       "author": "github-actions[bot]",
       "description": "✨ **Feature Release (v0.11.0)**\r\n\r\nThis release introduces the Session Manager for tracking multiple chats at a glance, moves API keys into Obsidian's Keychain, teaches agents to write Obsidian-flavored Markdown from the first message, and overhauls how agents launch in WSL mode.\r\n\r\n### 🌟 New:\r\n\r\n- **🪟 Session Manager**: A new sidebar view that lists every open chat (sidebar and floating) with live status icons — ready, generating, awaiting permission, or error. Click a session to focus it, or rename and close it from the context menu; truncated titles and agent names reveal their full text on hover. Open it from the chat header menu or the command palette. (#270, #324)\r\n- **🏷 Session Title in Tab Header**: Sidebar chat tabs now show the session title (derived from your first message, or the name you set via Rename) instead of a static \"Agent client\", so multiple tabs are individually identifiable. (#293)\r\n- **🔑 Secure API Key Storage**: API keys are now stored in Obsidian's Keychain (secret storage) instead of plain text in the plugin's data file. Existing keys are migrated automatically on first load with a notification, and debug logs no longer contain sensitive values. (#219)\r\n- **📝 Obsidian Markdown Prompt Injection**: Short formatting instructions are added to the first message of each session so agents produce output that renders correctly in Obsidian. Enabled by default — each instruction can be toggled individually under Settings → Prompt injection:\r\n  - Math formulas: use `$...$` / `$$...$$` instead of `\\(...\\)` (#218)\r\n  - Note references: use `[[Note Name]]` wikilink syntax\r\n  - Tables: leave a blank line before Markdown tables\r\n\r\n### 🔧 Improvements:\r\n\r\n- **🔄 Remembers All Session Options**: The plugin now remembers and restores every agent option you change (such as reasoning effort), not just the model and mode. (#325)\r\n- **🔐 Permission Request Redesign**: Permission options now appear as a vertical full-width list with color-coded icons instead of a row of colored buttons. The layout stays stable regardless of option name length, long names truncate with a tooltip showing the full text, and \"always reject\" options are now visually distinct from one-time rejects. (#314)\r\n- **🎨 Themed Toolbar Dropdowns**: The mode, model, and config selectors in the input toolbar were rebuilt as theme-aware menus instead of native dropdowns, so they match Obsidian's look in any theme. (#252)\r\n- **📌 Context Note Badge**: The active note badge is now always visible and stays in sync with the Auto-mention setting, so you can always see what context will be attached to your message. (#253)\r\n- **🔑 API Keys in WSL Mode**: The API key field now works in WSL mode — your key is forwarded into WSL automatically, so you no longer need to add it to `~/.profile`. (#312)\r\n- **🍎 Sturdier Command Auto-Detect on macOS**: Auto-detect now falls back to known install locations (e.g. Homebrew) when the shell PATH lookup comes up empty. (#302)\r\n- **📦 ACP SDK 0.28.1**: Updated the Agent Client Protocol SDK from 0.14.1 to 0.28.1. (#336)\r\n\r\n### 🐛 Fixes:\r\n\r\n- **🐧 WSL Agent & Terminal Launch**: Fixed agents failing to start in WSL mode on some distributions (e.g. RHEL8) — exiting before connecting — and commands or paths containing spaces breaking. Agent startup and terminal commands now launch more robustly. (#312, #304)\r\n- **📜 Scroll Position on Tab Switch**: Fixed a chat's scroll position jumping upward when switching to another tab and back. Each tab now keeps its place. (#321)\r\n- **📝 Trailing Reply Not Saved**: Fixed the final part of an agent's reply sometimes not being saved, so it could go missing after reopening the session. (#320)\r\n- **🔐 Stuck Permission Buttons**: Fixed permission buttons remaining on screen after canceling a response. (#326)\r\n- **📐 Wide Math Equations**: Fixed wide display math being clipped instead of scrolling horizontally. (#322)\r\n- **⌨ Slash Commands vs Auto-Mention**: Fixed auto-mention context corrupting slash command detection — commands like `/compact` now work reliably even with a note open. (#255, #256)\r\n- **🔄 Saved Mode Restore Race**: Fixed the mode/model selectors briefly showing the agent's defaults after starting a new session — a message sent in that window could run in the wrong mode. Saved selections are now restored before the session becomes ready. (#281)\r\n- **🕑 Session History Ordering**: Fixed sessions not moving to the top of the history list after new activity. (#257)\r\n- **⚙ Settings Propagation**: Fixed changes made in the settings tab not applying to already-open chat views. (#254)\r\n- **🔐 Auto-Allow Toggle**: Fixed the \"Auto-allow permissions\" setting not taking effect on already-running agents until restart. (#248)\r\n- **🛠 Debug Mode Toggle**: Fixed the Debug mode setting requiring a plugin reload to take effect. (#247)\r\n- **📎 Attachment Remove Button**: Fixed the attachment remove button losing its icon when the attachment list changed. (#246)\r\n- **🔌 Plugin Reload Race**: Fixed an \"Attempting to register an existing view type\" error when the plugin is reloaded or updated rapidly. (#244)\r\n\r\n### ⚠️ Breaking Changes:\r\n\r\n- **Obsidian 1.11.4 or later is now required** (for the Keychain-based secret storage).\r\n- **API key storage location changed**: keys move from the plugin's `data.json` to Obsidian's Keychain. Migration is automatic — no action needed, but plain-text keys will no longer appear in `data.json`.\r\n\r\n### 🚀 Upgrade:\r\n\r\nUpdate from v0.10.6 — requires Obsidian 1.11.4 or later. API keys are migrated to Obsidian's Keychain automatically on first load. Markdown prompt injection is enabled by default; you can disable it under Settings → Prompt injection.\r\n\r\n--------\r\n\r\n### 👋 New Contributors\r\n\r\n- @hajimiHenry made their first contribution in #218\r\n- @betamod made their first contribution in #219\r\n- @Zbrooklyn made their first contribution in #252\r\n- @mimoralea made their first contribution in #304\r\n- @haydenfd made their first contribution in #317\r\n\r\n--------\r\n\r\n**Thank you for your continued support! Your feedback helps make this plugin better for everyone.** 🙏",
-      "downloadCount": 20889,
+      "downloadCount": 22668,
       "draft": false,
       "name": "0.11.0",
       "prerelease": false,
@@ -114,26 +114,26 @@
       "assets": [
         {
           "digest": "sha256:ab75c49b43589ef783ef61ee514ddd5f3775276cecf3610fddcfa0395fa5fb7c",
-          "downloadCount": 11946,
+          "downloadCount": 11948,
           "name": "main.js",
           "size": 763871
         },
         {
           "digest": "sha256:758708104f3c159f91003ad8b3968acfc06a610d96f68f08edfbd8b55ff0cb29",
-          "downloadCount": 19898,
+          "downloadCount": 19900,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:1e44cbcee201c966a8eb845e5d4a0ecdbe8846ce23066a8a07e25d527831bf70",
-          "downloadCount": 11855,
+          "downloadCount": 11857,
           "name": "styles.css",
           "size": 50217
         }
       ],
       "author": "github-actions[bot]",
       "description": "🔧 **Improvement & Bug Fix Release (v0.10.6)**\r\n\r\nThis release warns Gemini CLI users about Google's upcoming account-login shutdown and makes agent error messages actually readable.\r\n\r\n### 🌟 New:\r\n\r\n- **🔔 Gemini CLI Discontinuation Notice**: Google is retiring account login for Gemini CLI (Pro/Ultra/free tiers) on June 18, 2026. When the Gemini CLI agent is selected, a notice now appears above the input with a link to a migration guide explaining how to keep using Gemini with an API key. (#296)\r\n\r\n### 🐛 Fixes:\r\n\r\n- **🚨 Readable Agent Error Messages**: Fixed errors showing a useless \"[object Object]\" when creating a session, sending a message, or managing session history. The actual cause reported by the agent (e.g., \"Claude Code process exited with code 1\") is now shown directly in the UI instead of only in the developer console. (#294, #297)\r\n\r\n### 🚀 Upgrade:\r\n\r\nSimply update from v0.10.5 — no configuration needed.\r\n\r\n--------\r\n\r\n**Thank you for your continued support! Your feedback helps make this plugin better for everyone.** 🙏\r\n",
-      "downloadCount": 19898,
+      "downloadCount": 19900,
       "draft": false,
       "name": "0.10.6",
       "prerelease": false,
@@ -144,26 +144,26 @@
       "assets": [
         {
           "digest": "sha256:d45606f3bc21ff8d09c9e7362e30a3f4dbd351d44581e40f25c0795988082644",
-          "downloadCount": 7723,
+          "downloadCount": 7730,
           "name": "main.js",
           "size": 761146
         },
         {
           "digest": "sha256:9bb311cf76e6d9015a45f63eb576f095156eba27c9feba2bc9e379564e2ed1a5",
-          "downloadCount": 20041,
+          "downloadCount": 20048,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:fb520fff60f30f0a554565de4b85d632b34ec0931cca8635f35cf680540eb107",
-          "downloadCount": 7638,
+          "downloadCount": 7645,
           "name": "styles.css",
           "size": 49994
         }
       ],
       "author": "github-actions[bot]",
       "description": "🔧 **Maintenance Release (v0.10.5)**\r\n\r\n### 🐛 Fixes:\r\n\r\n- **📦 React Downgraded to 18**: Downgraded React from 19 to 18 to pass Obsidian's automated review. The new review system (launched May 12) flagged React 19's internal hoistable-resources code as dynamic `<script>` element creation, which would have caused the plugin to be removed from the Community directory. The plugin uses no React 19-specific APIs, so behavior is unchanged.\r\n\r\n### 🚀 Upgrade:\r\n\r\nSimply update from v0.10.4 — no configuration needed.\r\n\r\n--------\r\n\r\n**Thank you for your continued support! Your feedback helps make this plugin better for everyone.** 🙏\r\n",
-      "downloadCount": 20041,
+      "downloadCount": 20048,
       "draft": false,
       "name": "0.10.5",
       "prerelease": false,
@@ -174,26 +174,26 @@
       "assets": [
         {
           "digest": "sha256:75b88e9cac63bbd18d9e04e6a5ec207793719655b0ba5367af51455ab0b0d291",
-          "downloadCount": 168,
+          "downloadCount": 170,
           "name": "main.js",
           "size": 812156
         },
         {
           "digest": "sha256:4cf72f3dc17bf605b770bf6bf291d0f5d5d8724bbb4aa6d6311e3951551c0785",
-          "downloadCount": 184,
+          "downloadCount": 185,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:fb520fff60f30f0a554565de4b85d632b34ec0931cca8635f35cf680540eb107",
-          "downloadCount": 168,
+          "downloadCount": 169,
           "name": "styles.css",
           "size": 49994
         }
       ],
       "author": "github-actions[bot]",
       "description": "🐛 **Bug Fix Release (v0.10.4)**\r\n\r\n### 🐛 Fixes:\r\n\r\n- **🐧 WSL Session Restore**: Fixed restoring a session from history in WSL mode causing the agent to lose all conversation context. The restored session was immediately overwritten by a new empty session due to a path format mismatch between Windows and WSL paths. Also fixed an incorrect directory banner appearing after restore. (#286)\r\n\r\n### 🚀 Upgrade:\r\n\r\nSimply update from v0.10.3 — no configuration needed.\r\n\r\n--------\r\n\r\n**Thank you for your continued support! Your feedback helps make this plugin better for everyone.** 🙏\r\n",
-      "downloadCount": 184,
+      "downloadCount": 185,
       "draft": false,
       "name": "0.10.4",
       "prerelease": false,
@@ -234,26 +234,26 @@
       "assets": [
         {
           "digest": "sha256:78a8e8c31093da2f043827dde2b3cac74942c725747416390c0001652c515801",
-          "downloadCount": 8898,
+          "downloadCount": 8903,
           "name": "main.js",
           "size": 790090
         },
         {
           "digest": "sha256:c239a9e96973cc57f95adf7afad266da49634aa15d312c203c5bef6e3b9fe2ca",
-          "downloadCount": 62035,
+          "downloadCount": 62040,
           "name": "manifest.json",
           "size": 340
         },
         {
           "digest": "sha256:369525a4765230a22d1964cac1bc78a184bd0f50807c31b1875ec9dbab534b84",
-          "downloadCount": 8684,
+          "downloadCount": 8689,
           "name": "styles.css",
           "size": 50097
         }
       ],
       "author": "github-actions[bot]",
       "description": "🐛 **Bug Fix Release (v0.10.2)**\r\n\r\n### 🐛 Fixes:\r\n\r\n- **🪟 WSL Distribution Names with Dots**: Fixed \"Invalid WSL distribution name\" error when specifying versioned distribution names like `Ubuntu-22.04`. (#223)\r\n\r\n### 🚀 Upgrade:\r\n\r\nSimply update from v0.10.1 — no configuration needed.\r\n\r\n--------\r\n\r\n**Thank you for your continued support! Your feedback helps make this plugin better for everyone.** 🙏",
-      "downloadCount": 62035,
+      "downloadCount": 62040,
       "draft": false,
       "name": "0.10.2",
       "prerelease": false,
@@ -306,7 +306,7 @@
         },
         {
           "digest": "sha256:369525a4765230a22d1964cac1bc78a184bd0f50807c31b1875ec9dbab534b84",
-          "downloadCount": 4221,
+          "downloadCount": 4222,
           "name": "styles.css",
           "size": 50097
         }
@@ -504,7 +504,7 @@
       "assets": [
         {
           "digest": "sha256:70495cfa096aa4e8767043e2de166200f63fa74d9ef34f44226bf352b809a739",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "main.js",
           "size": 773877
         },
@@ -636,7 +636,7 @@
         },
         {
           "digest": "sha256:ddab83c3b0eeda2a19f421a6346d3cdf6aec16055620b24641bfbe176036e5ba",
-          "downloadCount": 623,
+          "downloadCount": 624,
           "name": "styles.css",
           "size": 49875
         }
@@ -2106,7 +2106,7 @@
         },
         {
           "digest": "sha256:641e421bee55524ce7c0ac3f7c246c023eb38e30dec988c704ff38dbb7da2320",
-          "downloadCount": 34,
+          "downloadCount": 35,
           "name": "styles.css",
           "size": 19256
         }
@@ -2244,7 +2244,7 @@
       "assets": [
         {
           "digest": "sha256:fc128e477727e4601168455d6fba813e617d4df92ac63b7adf298ea60077c688",
-          "downloadCount": 30,
+          "downloadCount": 31,
           "name": "main.js",
           "size": 324089
         },
