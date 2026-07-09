@@ -4,8 +4,8 @@
   "description": "Sync your Obsidian vault across devices using CouchDB — with end-to-end encryption, selective sync, and live sync. Desktop & Mobile. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "mdfriday-sync",
-  "lastChangedAt": "2026-07-08T08:03:27.006Z",
-  "lastFetchedAt": "2026-07-08T08:03:27.006Z",
+  "lastChangedAt": "2026-07-09T08:00:26.992Z",
+  "lastFetchedAt": "2026-07-09T08:00:26.992Z",
   "manifest": {
     "author": "sunwei",
     "authorUrl": "https://mdfriday.com",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:2cdfcd06b2d8d365f0c7bc6341e5feae1c17cdf37dc0964b98e0797c437a674a",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "main.js",
           "size": 1621687
         },
         {
           "digest": "sha256:21bc0ad94b1ac636931b004e60434e0d7dcc9c37e21db56bf402f28235aa8f3c",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 331
         },
         {
           "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 12050
         }
       ],
       "author": "github-actions[bot]",
       "description": "# MDFriday Sync — Release Notes v26.7.8\r\n\r\n> Released: July 7, 2026  发布日期：2026 年 7 月 7 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis release introduces a major **architectural refactor**: the sync core logic (`sync/core/` + `sync/features/`) has been extracted into a standalone NPM package [`@mdfriday/sync-core`](https://www.npmjs.com/package/@mdfriday/sync-core), and several mobile/desktop compatibility bugs are fixed.\r\n\r\n本版本引入重大**架构重构**：将同步核心逻辑（`sync/core/` + `sync/features/`）提取为独立 NPM 包 [`@mdfriday/sync-core`](https://www.npmjs.com/package/@mdfriday/sync-core)，并修复了多个移动端 / 桌面端兼容性问题。\r\n\r\n---\r\n\r\n## 🏗️ Architecture Change / 架构变更\r\n\r\n### Sync Core extracted to `@mdfriday/sync-core@0.1.0`\r\n\r\nThe following directories have been extracted to a separate, independently publishable NPM package:\r\n\r\n以下目录已提取为独立 NPM 包：\r\n\r\n- `src/sync/core/` — PouchDB、CouchDB 复制逻辑、加密、服务层\r\n- `src/sync/features/` — ConnectionMonitor、HiddenFileSync、NetworkEvents、OfflineTracker、ServerConnectivity、ConnectionFailure\r\n\r\n**Benefits / 优势：**\r\n\r\n| 维度 | 效果 |\r\n|------|------|\r\n| 代码隔离 | sync 核心与 Obsidian API 完全解耦 |\r\n| 独立测试 | sync-core 可在无 Obsidian 环境下单元测试 |\r\n| 版本管理 | sync 核心可独立发布、独立迭代 |\r\n| 复用性 | 其他非 Obsidian 项目可直接引用 `@mdfriday/sync-core` |\r\n\r\n**Adapter layer / 适配层** (留在插件内，不变):\r\n\r\n新增三个 Obsidian 适配器，将 sync-core 的平台无关接口桥接到 Obsidian API：\r\n\r\n- `ObsidianDomEventRegistrar` — 封装 `Plugin.registerDomEvent`\r\n- `ObsidianVaultFileLister` — 封装 `vault.adapter.*` 全部文件操作\r\n- `ObsidianHttpClient` — 封装 `requestUrl`\r\n\r\n---\r\n\r\n## 🐛 Bug Fixes / 错误修复\r\n\r\n### 1. Mobile: `Attempting to load NodeJS package: \"path\"` / 移动端加载 Node.js 模块报错\r\n\r\n**Root cause / 根本原因:**  \r\n`src/foundry/index.ts` 在顶层 `import * as nodePath from 'path'`，在 Obsidian mobile（无 Node.js 运行时）直接报错。\r\n\r\n**Fix / 修复:**  \r\nesbuild 中将 `path` 从 externals 移除，改为 alias 到 `path-browserify`（浏览器兼容实现）：\r\n```javascript\r\n// esbuild.config.mjs\r\nalias: { 'path': 'path-browserify' }\r\n```\r\n\r\n---\r\n\r\n### 2. Mobile: `Attempting to load NodeJS package: \"http\"/\"https\"` / 移动端加载 http/https 报错\r\n\r\n**Root cause / 根本原因:**  \r\n`src/http.ts` 顶层存在 `import * as http from 'http'` 和 `import * as https from 'https'`，但这两个 import 实际上**完全未被使用**（所有 HTTP 调用均通过 Obsidian 的 `requestUrl`）。\r\n\r\n**Fix / 修复:**  \r\n直接删除这两行无用 import。\r\n\r\n---\r\n\r\n### 3. `this.adapter.getRoot is not a function` / HiddenFileSync 运行时崩溃\r\n\r\n**Root cause / 根本原因:**  \r\n`IVaultFileLister` 接口扩展后增加了 `getRoot()`、`stat()`、`read()`、`write()` 等方法，但 `ObsidianVaultFileLister` 适配器只实现了 `list()`，其余方法均缺失。\r\n\r\n**Fix / 修复:**  \r\n完整实现 `ObsidianVaultFileLister`，全部委托给 `plugin.app.vault` 和 `plugin.app.vault.adapter`：\r\n\r\n```typescript\r\n// 现在完整实现：\r\nlist() / stat() / exists() / read() / readBinary()\r\nwrite() / writeBinary() / setMtime() / remove() / mkdir()\r\ncreateFolder() / getRoot() / configDir\r\n```\r\n\r\n---\r\n\r\n### 4. `_changes` long-poll 请求间歇性 timeout 日志 / 日志噪音\r\n\r\n**Root cause / 根本原因:**  \r\n`FridayServiceHub.connect()` 对所有 PouchDB HTTP 请求统一施加 30s 客户端超时，而 CouchDB `_changes` 长轮询的 heartbeat 也是 30s，导致二者**竞态**：timeout 与 heartbeat 同时到期，随机一方先触发。\r\n\r\n**Impact / 影响:**  \r\n仅产生 console 日志噪音，PouchDB 的 `retry: true` 确保同步自动重试继续，**不影响实际同步功能**。\r\n\r\n**Fix / 修复:**  \r\n`_changes` 请求跳过客户端超时（与原始 livesync 行为一致），其余请求保留 30s 超时：\r\n\r\n```typescript\r\nconst isChanges = reqUrl.includes('/_changes');\r\nconst result = isChanges\r\n    ? await requestPromise          // _changes: 不加客户端超时\r\n    : await Promise.race([...]);    // 普通请求: 保留 30s 超时\r\n```\r\n\r\n---\r\n\r\n## 📦 New Dependency / 新增依赖\r\n\r\n| 包 | 版本 | 用途 |\r\n|----|------|------|\r\n| `@mdfriday/sync-core` | `^0.1.0` | 同步核心逻辑（原 `src/sync/sync-core/`）|\r\n| `path-browserify` | latest | 替代 Node.js `path`，支持 mobile |\r\n\r\n---\r\n\r\n## 🔄 Version Compatibility Matrix / 版本兼容矩阵\r\n\r\n| Obsidian version / Obsidian 版本 | Plugin version received / 获得的插件版本 |\r\n|---|---|\r\n| < 1.0.0 | Not installable / 无法安装 |\r\n| 1.0.0 – 1.3.x | v26.7.1 |\r\n| 1.4.0 – 1.7.1 | v26.7.2 |\r\n| 1.7.2 – 1.12.x | v26.7.3 |\r\n| ≥ 1.13.0 | v26.7.8 (latest / 最新) |\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Sync core package** / 同步核心包：[npmjs.com/package/@mdfriday/sync-core](https://www.npmjs.com/package/@mdfriday/sync-core)\r\n- **Sync core source** / 同步核心源码：[github.com/mdfriday/sync-core](https://github.com/mdfriday/sync-core)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "26.7.8",
       "prerelease": false,
@@ -53,7 +53,7 @@
       "assets": [
         {
           "digest": "sha256:59cadaec345e26946cc6a9d927c19868051ed3c41a3907eb91f7da96622355c7",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 1598723
         },
@@ -83,7 +83,7 @@
       "assets": [
         {
           "digest": "sha256:8ab95effe8d1f3f3dc8ffa217d5cd85187d89c992b9e7364620b2154c7c08bde",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "main.js",
           "size": 1599057
         },
@@ -173,26 +173,26 @@
       "assets": [
         {
           "digest": "sha256:73ea004277caa377734d78487237b8d3f297e4a3b162dc805f0c19b44872f925",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 1598409
         },
         {
           "digest": "sha256:670059c3cda091b979cbbee1c314b546d3c2aba48f45cc566f602b0b4173efb4",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:336430e3684c002648957fdf7e1a04565da0cf5e04c50f8b25e5489db5cb8a52",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 12050
         }
       ],
       "author": "github-actions[bot]",
       "description": "# MDFriday Sync — Release Notes v26.7.3\r\n\r\n> Released: July 4, 2026 · 发布日期：2026 年 7 月 4 日\r\n\r\n---\r\n\r\n## 📋 Overview / 概述\r\n\r\nThis is a **hotfix release** that corrects the declared `minAppVersion` from `1.0.0` to `1.4.0`.  \r\nVersion 26.7.2 introduced several Obsidian APIs that were added after version 1.0.0, causing the plugin review process to flag an error. This release aligns the declared minimum with the APIs actually in use.\r\n\r\n本版本是一个**热修复版本**，将 `minAppVersion` 从 `1.0.0` 更正为 `1.4.0`。  \r\n26.7.2 版本中使用了若干在 1.0.0 之后才引入的 Obsidian API，导致插件审核流程报错。本版本将声明的最低版本与实际使用的 API 对齐。\r\n\r\n---\r\n\r\n## 🔧 Breaking Changes / 破坏性变更\r\n\r\n**Requires Obsidian ≥ 1.4.0** (was ≥ 1.0.0 in previous release).\r\n\r\n**要求 Obsidian ≥ 1.4.0**（上一版本要求 ≥ 1.0.0）。\r\n\r\nObsidian 1.4.0 was released in 2023 and is already installed by the vast majority of users — no action is required for most users.  \r\nObsidian 1.4.0 发布于 2023 年，绝大多数用户已安装该版本或更新版本，无需额外操作。\r\n\r\n---\r\n\r\n## 🐛 Bug Fix / 错误修复\r\n\r\n### Plugin review error: `minAppVersion` too low / 插件审核错误：`minAppVersion` 声明过低\r\n\r\n**Error from Obsidian plugin review:**\r\n\r\n```\r\nError: Uses Obsidian APIs newer than the declared minAppVersion\r\n  obsidianmd/no-unsupported-api\r\n  src/setting.ts:565, src/setting.ts:584, src/setting.ts:605, src/setting.ts:630\r\n  src/setting.ts:782-784\r\n  src/sync/FridayServiceHub.ts:496, src/sync/FridayServiceHub.ts:580\r\n  src/sync/FridaySyncCore.ts:1526\r\n  src/sync/SyncStatusDisplay.ts:85\r\n  src/sync/features/HiddenFileSync/index.ts:353\r\n```\r\n\r\n**Root cause / 根本原因:**\r\n\r\nThe following Obsidian APIs used in v26.7.2 were introduced after version 1.0.0:\r\n\r\n以下 v26.7.2 中使用的 Obsidian API 均在 1.0.0 版本之后才引入：\r\n\r\n| API | Minimum version / 最低要求 | Used in / 使用位置 |\r\n|---|---|---|\r\n| `ButtonComponent.setDisabled()` | 1.4.0 | `setting.ts` |\r\n| `ExtraButtonComponent.setIcon()` / `.setTooltip()` | 1.4.0 | `setting.ts` |\r\n| `FileManager.trashFile()` | 1.3.5 | `FridayServiceHub.ts` |\r\n| `Vault.createFolder()` returning `Promise<TFolder>` | 1.x | `FridaySyncCore.ts`, `HiddenFileSync` |\r\n\r\n**Fix / 修复:**\r\n\r\n```json\r\n// manifest.json\r\n{\r\n  \"minAppVersion\": \"1.4.0\"  // was \"1.0.0\"\r\n}\r\n\r\n// versions.json\r\n{\r\n  \"26.7.3\": \"1.4.0\"\r\n}\r\n```\r\n\r\n---\r\n\r\n## 🔗 Links / 相关链接\r\n\r\n- **Plugin source** / 插件源码：[github.com/mdfriday/obsidian-sync](https://github.com/mdfriday/obsidian-sync)\r\n- **Backend source** / 后端源码：[github.com/mdfriday/hugoverse](https://github.com/mdfriday/hugoverse)\r\n- **Website** / 官网：[mdfriday.com](https://mdfriday.com)\r\n- **License / 开源协议**：Apache-2.0\r\n\r\n---\r\n\r\n*See [release-notes-26.7.2.md](./release-notes-26.7.2.md) for the full list of changes introduced in the v26.7.x series.*\r\n\r\n*完整的 26.7.x 系列变更列表请参见 [release-notes-26.7.2.md](./release-notes-26.7.2.md)。*\r\n\r\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "26.7.3",
       "prerelease": false,
