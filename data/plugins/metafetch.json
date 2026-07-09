@@ -4,8 +4,8 @@
   "description": "Pull OpenGraph metadata from any URL into note frontmatter — title, image, description, publisher — via OpenGraph.io or Microlink. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "metafetch",
-  "lastChangedAt": "2026-07-05T06:04:26.965Z",
-  "lastFetchedAt": "2026-07-05T06:04:26.965Z",
+  "lastChangedAt": "2026-07-09T06:01:26.991Z",
+  "lastFetchedAt": "2026-07-09T06:01:26.991Z",
   "manifest": {
     "author": "The Lossless Group",
     "authorUrl": "https://lossless.group",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:6cc1be604d49a8e2c9cd1fcf3ddf5de759093a9e6e1e83dc00afb469832f5855",
-          "downloadCount": 84,
+          "downloadCount": 85,
           "name": "main.js",
           "size": 47579
         },
         {
           "digest": "sha256:5300d86bd85e745de82e1de27fc64a3b0877cb113ad002ca663257e336db86d0",
-          "downloadCount": 82,
+          "downloadCount": 83,
           "name": "manifest.json",
           "size": 392
         },
         {
           "digest": "sha256:f8fafc92d322ef294fa4722cfbf38259dad40d1eb2bd7c2ca83566b5d601a167",
-          "downloadCount": 46,
+          "downloadCount": 47,
           "name": "styles.css",
           "size": 8883
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Every release asset of Metafetch is now cryptographically attested back to its source code — install with the same proof-of-build verification GitHub uses for its own releases.**\n\n## Why care?\n\nWhen you install a community plugin, you trust that the bytes downloaded into `<vault>/.obsidian/plugins/metafetch/` were actually built from the source code you can read on GitHub. Most plugins ask you to take that on faith. Starting with 0.1.6, Metafetch ships with **GitHub artifact attestations** — a sigstore-backed cryptographic signature linking each `main.js`, `manifest.json`, and `styles.css` back to the exact commit and GitHub Actions workflow run that produced it.\n\nYou can verify any release asset before you enable the plugin:\n\n```bash\ngh attestation verify main.js --repo lossless-group/metafetch\n```\n\nIf the file came out of a legitimate build of the source repo, the command exits 0 and tells you which workflow run produced it. If anything's been tampered with mid-flight — a compromised CDN, a maliciously-edited release attachment — the verification fails.\n\nThis is the same security primitive GitHub uses for its own first-party tooling. It costs you nothing to verify and gives you a real answer to \"do I trust this install?\"\n\n## What it changes for users\n\n**Installing from inside Obsidian:** nothing. The Community Plugins directory pulls the latest release assets the same way it always has. The attestations sit alongside the release as metadata, unobtrusive.\n\n**Installing manually or auditing what's in your vault:** you can now verify before you copy files in. Drop the three release assets into a folder, run `gh attestation verify` against each, then move them into `.obsidian/plugins/metafetch/` only after the cryptographic check passes.\n\n**For the curious:** each verify run tells you which GitHub Actions workflow run built the asset, when, from which commit. Provenance trail is fully reconstructible.\n\n## A note about vault enumeration\n\nThe Obsidian Community Plugins scorecard surfaces a recommendation: *\"Vault Enumeration: This plugin reads the full list of markdown files in your vault.\"* That's accurate, and it's by design — the **Batch Fetch** command walks markdown files in the vault to find the ones with a `url:` frontmatter field, so it knows which notes to process. The enumeration happens **only when you explicitly run the batch command**, never on plugin load or as a background activity. The single-file *Fetch Open Graph Data* command doesn't enumerate at all — it operates on the active note only.\n\n## How the build pipeline works now\n\nA GitHub Actions workflow (`.github/workflows/release.yml`) fires on every 3-digit-semver tag push. In a clean Ubuntu runner it:\n\n1. Checks out the tagged commit\n2. Installs dependencies via pnpm (frozen lockfile)\n3. Builds `main.js` + `styles.css` via the same `pnpm build` you'd run locally\n4. Signs the three release assets via [`actions/attest-build-provenance@v1`](https://github.com/actions/attest-build-provenance), which uses OIDC + sigstore to bind each file to the workflow run that produced it\n5. Creates the GitHub Release with the three core assets attached and the marketing copy pulled from `release-notes/<tag>.md` in the repo\n\nResult: provenance is enforced by infrastructure, not by maintainer discipline. Manual `gh release create` from a developer's local machine is no longer the path — every release goes through the workflow.\n\n## The Lossless Group plugin family\n\nMetafetch sits alongside three sibling plugins, all by [The Lossless Group](https://lossless.group):\n\n| Plugin | What it does |\n|---|---|\n| [**Cite Wide**](https://community.obsidian.md/plugins/cite-wide) | Stable hex-identifier citations + URL-based dedupe + LLM-paste research conversion |\n| [**Image Gin**](https://community.obsidian.md/plugins/image-gin) | Recraft + Ideogram image generation, Magnific stock search, ImageKit CDN, drag-gate |\n| [**Perplexed**](https://community.obsidian.md/plugins/perplexed) | Source-cited research from Perplexity, Claude, Perplexica, or LM Studio + per-directory templates |\n| **Metafetch** | Pull OpenGraph metadata into note frontmatter via OpenGraph.io or Microlink |\n\nIf Metafetch (or any of the family) saves you time, [buy us a coffee](https://coff.ee/losslessgroup). The plugins are free; the coffee keeps the next one coming.\n\n## Under the hood — what shipped in this commit\n\n- Added `.github/workflows/release.yml` — the build-attest-release workflow described above\n- Added `release-notes/0.1.6.md` (this file) — the convention going forward: each release's marketing copy lives in the repo at this path before the tag is pushed, so the workflow can pick it up. Per the marketing-doctrine codified in `content-farm/context-v/skills/changelog-conventions/SKILL.md` *\"These are marketing artifacts, not internal documentation.\"*\n- Version bumped 0.1.5 → 0.1.6 across `manifest.json`, `package.json`, `versions.json`\n- No source-code changes — the vault-enumeration behavior the scorecard surfaces is the existing Batch Fetch implementation, called only when the user invokes the batch command\n",
-      "downloadCount": 82,
+      "downloadCount": 83,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,

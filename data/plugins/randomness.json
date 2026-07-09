@@ -4,8 +4,8 @@
   "description": "Random generator engine. Render `randomness` codeblocks inline with rich text output, plus support for legacy Inspiration Pad Pro 3 .ipt files. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "randomness",
-  "lastChangedAt": "2026-07-08T06:04:27.038Z",
-  "lastFetchedAt": "2026-07-08T06:04:27.038Z",
+  "lastChangedAt": "2026-07-09T06:01:26.991Z",
+  "lastFetchedAt": "2026-07-09T06:01:26.991Z",
   "manifest": {
     "author": "Josh",
     "description": "Random generators for TTRPGs and creative writing: tables, dice, NPC portraits, locked rolls, a sidebar browser, and one-click town content. Reads .rdm generator files (and legacy .ipt).",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:41554f8b3a5a597c818a0e067cf82838baa75c5223aa78dc80d42647e7427c62",
-          "downloadCount": 155,
+          "downloadCount": 164,
           "name": "main.js",
           "size": 182789
         },
         {
           "digest": "sha256:2e8eb45bf0e1e32d09b67ad5c8bb58237a94a6a24957af493fbe3e1aca3f5433",
-          "downloadCount": 199,
+          "downloadCount": 209,
           "name": "manifest.json",
           "size": 345
         },
         {
           "digest": "sha256:de37204315af122190d80044107875609457fbca3c0a18ed25ea5b26d821cd3b",
-          "downloadCount": 120,
+          "downloadCount": 129,
           "name": "styles.css",
           "size": 20023
         }
       ],
       "author": "github-actions[bot]",
       "description": "Feature release: reference tables across files without `Use:`, plus a\nrevamped, beginner-friendly example tutorial.\n\n### Added\n- **Auto-discovery by table name.** A `randomness` codeblock or an inline\n  `rdm:` call can now reference a table by name (`[@TavernName]`) with no\n  `Use:` line — the plugin finds the generator file that defines it\n  anywhere under your Generator root and pulls it in automatically,\n  following that file's own `Use:` graph transitively. It is\n  lowest-priority and purely additive: anything you define locally or\n  import with `Use:` always wins, so discovery can never shadow your own\n  tables. Previously this resolved only via the JS API.\n- **Example tutorial covering all four usage styles.** The \"Add examples\"\n  button now ships a guided, heavily-commented set — inline in a note, a\n  self-contained codeblock, standalone `.rdm` generators, and referencing\n  a `.rdm` file from a note — plus a plain-language \"Start Here\" note.\n\n### Changed\n- **\"Add examples\" installs into its own `Randomness Examples`\n  sub-folder** under the Generator root, so the tutorial stays grouped and\n  is easy to remove in one move.\n\n### Fixed\n- **Error messages are readable in every theme.** Codeblock and inline\n  error boxes used a red-on-red colour pairing that was unreadable in many\n  dark themes; they now use a neutral panel background with a red accent.\n\n### Tests\n- New `autoDiscover` suite (discovery, transitive discovery, the\n  no-shadow guarantee, and dynamic/unknown references) plus updated\n  bundled-examples coverage.\n",
-      "downloadCount": 199,
+      "downloadCount": 209,
       "draft": false,
       "name": "Randomness 1.2.0",
       "prerelease": false,
@@ -82,7 +82,7 @@
       "assets": [
         {
           "digest": "sha256:fc00274d2adfebdc2d8f5aa6bb38f1f8991d54192870eb30f917fe7e27420f82",
-          "downloadCount": 50,
+          "downloadCount": 54,
           "name": "fantasy-ink-parts-pack-v1.0.0.zip",
           "size": 6666019
         }
@@ -220,26 +220,26 @@
       "assets": [
         {
           "digest": "sha256:b835344ff8a79d6f9327faee987c5cbd7182073fe2d7be26d21e1cb7e8572103",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "main.js",
           "size": 116277
         },
         {
           "digest": "sha256:b455274e60f420629afd78fc25ba7841708e82eb2ebb6ce98767def5c3ba0c58",
-          "downloadCount": 13,
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 336
         },
         {
           "digest": "sha256:657e16e7667e0ce1e661e2930d9f4c3ee644fd8d4920a772b9600dd2ee80858a",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "styles.css",
           "size": 15421
         }
       ],
       "author": "github-actions[bot]",
       "description": "This is a substantial release covering real-world IPP3 compatibility,\nbetter first-run setup, and a thorough reference-guide rewrite. Most\ncommunity generators that previously rendered empty or crashed should\nnow render correctly, and new users can get from \"just installed\" to\n\"rolling a working generator\" in two clicks.\n\n### Fixed (IPP3 compatibility)\nSix independent fixes uncovered while loading real community\ngenerators (`Dungeon_Room_Description.ipt` and\n`Ultimate_Powers_Character_Generator.ipt`).\n\n- **Variable names are now case-insensitive.** `{$Prompt1}`,\n  `{$prompt1}`, and `{$PROMPT1}` all refer to the same value. IPP3\n  is case-insensitive for variable names; we were storing prompts\n  as lowercase and accidentally treating mixed-case references as\n  unset (empty string). Affects user `Set:` variables too — `Set:\n  Foo=x` followed by `{$foo}` now works.\n\n- **Lookup tables without explicit `Roll:` now auto-infer.** IPP3\n  authors commonly omit the `Roll:` directive on lookup tables;\n  the engine is supposed to infer `1d<max-range>` from the items.\n  We required explicit `Roll:` and returned empty otherwise.\n\n- **`[[when]…[end]]` (outer-bracket-wrapped conditional) now\n  evaluates.** When an IPP3 conditional is wrapped in an outer\n  `[…]` (a common idiom in `Set:` values), the engine could\n  either infinite-loop or render empty. The content parser now\n  detects whether `[[…]]` is an Obsidian wiki-link or an IPP3\n  wrapped expression by looking for structural markers (`[when]`,\n  `[do]`, `[else]`, `[end]`, `[@`, `[#`, `[$`) inside the bracket\n  pair. Wiki-links continue to pass through unchanged.\n\n- **`&` line continuation now respects directive boundaries.** Per\n  the IPP3 manual, `&` continuation is for *table item* lines.\n  Some community files put `&` after a `Set:` directive too, which\n  caused the engine to suck following body content into the Set's\n  value and emit nothing. `Set:`, `Define:`, `Roll:`, `Type:`,\n  `Table:`, `Use:`, `Prompt:`, and other directives now terminate\n  at end-of-line; only item lines continue across `&`.\n\n- **Arithmetic on variables now adds numerically.** When two\n  variables hold numeric strings (the form `Set: A=5` produces),\n  expressions like `{{$A}+{$B}}` now compute `8` rather than\n  concatenating to `\"53\"`. Explicit string literals like `'5'+'3'`\n  still concatenate, preserving documented behaviour.\n\n- **Marker-form literal_bracket no longer infinite-recurses.**\n  A defensive guard in the `literal_bracket` render path that\n  previously triggered on any text starting with `[` now checks\n  for exact marker text (`[when]`, `[when not]`, `[do]`, `[else]`,\n  `[end]`), so genuine wrapped expressions re-parse correctly\n  while stray markers emit as literal text.\n\n### Fixed (UX)\n- **Error messages in `.ipt` views are now readable.** The error\n  bar was painted with red text on a red background, making the\n  message invisible. The bar now uses the normal text colour\n  against a muted background; the red is preserved on the left\n  border and heading so it still reads as an error at a glance.\n\n- **Missing-`Use:` errors are actionable.** Files that depend on\n  `.ipt` files not in the vault now display a hint suggesting the\n  user download the referenced file from the community pack, and\n  noting that Randomness finds files by name anywhere in the\n  vault.\n\n- **The \"red error\" in the in-app reference guide is gone.**\n  Five places in the reference used inline triple-backticks to\n  represent a `randomness` codeblock visually. Obsidian's reader\n  sometimes parsed those as actual fenced codeblocks with\n  `randomness` as the language, which then triggered the\n  plugin's codeblock processor to render an error *inside* the\n  reference view. All five rewritten to use single-backtick\n  inline code.\n\n- **Reference guide syntax examples corrected throughout.**\n  Several examples used outdated or wrong syntax: `[table]` for\n  table calls (should be `[@table]`), `!set name=...` for\n  variables (should be `Set: name=...`), `N[table]` for\n  repetition (should be `[@N table]`), and\n  `[when expr][do …][else …][end]` for conditionals (should be\n  `[when]expr[do]…[else]…[end]`). All rewritten to match what\n  the parser actually accepts.\n\n### Added\n- **Generator-root folder helpers in settings.** When the\n  Generator root path is set but the folder doesn't exist yet,\n  a **Create folder** button appears under it. Once the folder\n  exists, an **Add examples** button writes five bundled\n  example `.ipt` files plus a README into it. Makes first-time\n  setup a two-click experience instead of \"open file explorer,\n  create folder, come back, type path\".\n\n- **Five bundled example generators** (`01-greetings.ipt` →\n  `05-treasure-dictionary.ipt`) demonstrating the language\n  features in progressive order — basics, sub-table composition,\n  variables/prompts/dice/inline tables, lookup tables, and\n  dictionary tables with conditionals. Each is heavily commented;\n  they're meant as both runnable examples and a learning\n  resource.\n\n- **New reference-guide sections** for **Lookup tables**,\n  **Dictionary tables**, **Prompts**, **Variable arithmetic**,\n  and **Getting started** — each with multiple worked examples.\n  Many additional examples added throughout existing sections.\n\n### Tests\n- Added 12 regression tests in\n  `__tests__/integration/ipp3-compat.test.ts` covering each IPP3\n  compatibility fix, plus 6 in\n  `__tests__/integration/bundled-examples.test.ts` verifying every\n  shipped example produces output. Total: 975 tests across 39\n  suites, all green.\n",
-      "downloadCount": 13,
+      "downloadCount": 14,
       "draft": false,
       "name": "Randomness 1.0.14",
       "prerelease": false,
@@ -292,7 +292,7 @@
         },
         {
           "digest": "sha256:233bb850068052037b22e0da63a3643414344aa1a6579e7a88e22382073737b0",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 14783
         }
