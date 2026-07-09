@@ -4,8 +4,8 @@
   "description": "Automatically update created, modified, and last-viewed dates in frontmatter when editing notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "frontmatter-date-manager",
-  "lastChangedAt": "2026-07-08T05:02:26.991Z",
-  "lastFetchedAt": "2026-07-08T05:02:26.991Z",
+  "lastChangedAt": "2026-07-09T05:04:27.004Z",
+  "lastFetchedAt": "2026-07-09T05:04:27.004Z",
   "manifest": {
     "author": "SmetDenis",
     "authorUrl": "https://github.com/SmetDenis",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:1f3e27c759e073ded5b4b5485a316ba265a8ea8040766d733210a364397b6afb",
-          "downloadCount": 44,
+          "downloadCount": 54,
           "name": "main.js",
           "size": 1177325
         },
         {
           "digest": "sha256:795f344217a602528ec73254585ce7ad48fdb36fa72aae1e004f18720b033d92",
-          "downloadCount": 44,
+          "downloadCount": 54,
           "name": "manifest.json",
           "size": 324
         },
         {
           "digest": "sha256:b1410ec4d90cb09785a65ce36df3b1eed6b74753c628325c19789ce1c3e3865e",
-          "downloadCount": 42,
+          "downloadCount": 52,
           "name": "styles.css",
           "size": 12915
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release 1.2.1\n\n> Compare: [`1.2.0...1.2.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.2.0...1.2.1) · 7 commits\n\nA stability and polish release focused entirely on stopping unnecessary writes to your notes. The plugin now leaves a note alone when its dates are already correct, and it no longer disturbs the note you are actively editing. No new settings, no behavior you have to opt into - existing vaults just get quieter.\n\n## Highlights\n\n- **No more cursor jumps while typing.** When the plugin stamps `updated` or `viewed` on a note that is open in the editor, it now preserves the file's modified time so Obsidian does not reload the note. Your cursor, text selection, and scroll position stay put mid-edit.\n- **No more redundant re-stamping.** If `updated` (or `viewed`) already reflects when the file was last changed, the plugin skips the write entirely. Notes that an external sync or script has already stamped no longer get \"shaken\" by a needless rewrite.\n\n---\n\n## 🐛 Fixed\n\n- **The open note reloaded and the cursor jumped while typing** - stamping frontmatter without pinning the modified time made Obsidian treat the plugin's own write as an external change and reload the note into the editor, throwing the cursor, selection, and scroll position while the user was still typing (the reported \"storm\"). The automatic single-file writes now pin `{ ctime, mtime }` whenever the target note is open in a Markdown editor leaf, so Obsidian does not reload it; a note that is not open in any editor is still written normally so its Properties view and Dataview refresh immediately. Bulk operations are deliberately left untouched. ([56e47d6](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/56e47d6))\n- **Notes were re-stamped even when the date was already current** - after an external script or sync had already written a correct `updated` value, the plugin would still rewrite it a moment later, churning the file's modified time and fighting sync (\"shaking\" the note); under a coarse date format, re-opening the same note on the same day could likewise rewrite the same `viewed` value. A freshness guard now skips the write when the on-disk value already covers the change: a raw value-identity check (the value would not actually differ) plus a signed 5-second freshness window (`updated` is within 5 seconds of, or ahead of, the file's modified time). A deliberately future-dated value is never clobbered, and a genuinely stale value is still updated as before. ([55133cf](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/55133cf), [32ce362](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/32ce362))\n\n## 💅 UX & polish\n\n- **Honest feedback from the \"Update timestamps for current file\" command** - the command previously always reported \"Timestamps updated.\" even when nothing was written. It now reflects the real outcome: \"Timestamps updated.\" only on an actual write, \"Timestamps will update shortly.\" when the write is briefly deferred by the minimum-time-between-saves limit, and \"Timestamps are already up to date.\" when the freshness guard skipped a no-op. New notice strings ship in all 21 interface languages. ([55133cf](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/55133cf))\n\n## 🧰 Internal & maintenance\n\n*No action needed by users; listed for completeness.*\n\n- Bumped the community-review linter `eslint-plugin-obsidianmd` to `^0.4.1` (the Obsidian review bot always runs the latest) and adopted Obsidian's `createDiv()`/`createSpan()` helpers in the settings tab and the bulk-operation chrome, which the linter's improved rule scoping newly flagged. The rendered interface is unchanged - these are equivalent element-creation calls. ([a195489](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/a195489))\n- Bumped `picomatch` from 4.0.4 to 4.0.5 (the runtime glob dependency behind the file-filter rules; a patch bump with no behavior change). ([24ad4d4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/24ad4d4))\n- Patched development-only dependencies to clear security advisories (`undici`, `vite`, `js-yaml`, pulled in by the test and e2e toolchain). Runtime dependencies and the shipped plugin bundle are unchanged; `npm audit` now reports zero vulnerabilities. ([aca454e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/aca454e))\n\n---\n\n**Full changelog:** [`1.2.0...1.2.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.2.0...1.2.1)\n",
-      "downloadCount": 44,
+      "downloadCount": 54,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,

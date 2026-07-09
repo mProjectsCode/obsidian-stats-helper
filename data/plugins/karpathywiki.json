@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-07-08T05:02:26.991Z",
-  "lastFetchedAt": "2026-07-08T05:02:26.991Z",
+  "lastChangedAt": "2026-07-09T05:04:27.004Z",
+  "lastFetchedAt": "2026-07-09T05:04:27.004Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:57bfbcb90b6dce4bb6980a3548c35333f8a23e4fb32fba1494aa9e1f09885deb",
-          "downloadCount": 1654,
+          "downloadCount": 2077,
           "name": "main.js",
           "size": 3135453
         },
         {
           "digest": "sha256:352549e2ccf369e8e4538a8f4c317eca5914d614d19f96f0c00e6d8e339d06bf",
-          "downloadCount": 1666,
+          "downloadCount": 2096,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:27a126d6eea06e7a3d849e26af320c4742a2497cef224e52d0ee3e2a4f1a8f4f",
-          "downloadCount": 1617,
+          "downloadCount": 2036,
           "name": "styles.css",
           "size": 27037
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 🐛 Karpathy LLM Wiki v1.23.2\n\n## Highlights\n\nv1.23.2 is a **PATCH release** with five merged PRs — bug fixes, refactor, and UX polish. 1431 tests passing across 108 files. No new user-facing settings.\n\nThis release fixes two critical bugs: graph cache not invalidating after ingest (same-session queries returned stale results), and weak local models routing RAG to wrong pages via [[sources/...]] fuzzy-mismatch. Two code quality PRs from @DocTpoint consolidate the frontmatter serializer and add deterministic section-header fixup for `wikiLanguage: de`. Two UX improvements addressing user feedback round out the batch: semantic progress notifications that don't spam the user, and a turn indicator with hover-revealed question text in the Query Wiki panel.\n\nThe project license has been upgraded from MIT to Apache 2.0 with DCO.\n\n## Changes\n\n- **🛠️ Prompt-candidate isolation for sources (#234).** The LLM candidate list now excludes `wiki/sources/` pages by default, so weaker local models no longer emit fuzzy-mismatched `[[sources/<wrong-slug>|<correct-label>]]` links that route RAG to the wrong page. Program-generated related-page matching (`source-analyzer.ts:421`) is unaffected.\n- **🔄 Live PPR graph invalidation on ingest.** Any ingest that touches `wiki/` now invalidates the cached PPR graph in every open Query panel — ingests in the same Obsidian session finally become visible to follow-up queries.\n- **🔁 Streaming-preserving client wrapper.** `wrapWithAdvancedSettings` rewritten as composition (`Object.create(client)` + explicit `createMessage` override). Eliminates the v1.23.0-era streaming regression where class-based SDK clients silently fell back to non-streaming because spread `{ ...client }` dropped `createMessageStream` from the prototype chain.\n- **🧩 Frontmatter serializer consolidation (@DocTpoint, PR #238).** `mergeFrontmatter` / `enforceFrontmatterConstraints` / `mergeDuplicatePages` now delegate to a single `serializeFrontmatter` writer. Behavior unchanged (YAML-equivalent), but new fields like the upcoming `supersedes:` flag (v1.24.0) only need to be threaded in one place.\n- **📝 Canonical section headers (@DocTpoint, PR #241).** Local-model section garbles under `wikiLanguage: de` (e.g. `Erwägungen…`, `Erwurnungen…` for the canonical `Erwähnungen in der Quelle`) are now snapped back to the canonical label via bounded Levenshtein distance on write — silent drop from Tier-B retrieval is eliminated.\n- **🖱️ Query turn indicator + retrieval label UX #219, #221.** A right-edge dot per conversation turn, with hover preview of the original question, IntersectionObserver-driven active highlight, and click-to-scroll. The `🔍 N page(s) · …` retrieval label is now clickable — click to expand the list of retrieved pages inline. Generation completion scrolls to the user's question rather than the answer tail.\n- **📋 Semantic progress notifications (#219).** Manual operations show Notice + status bar; background operations (watch-mode auto-ingest, periodic lint, startup QuickFixes) show only the status bar. No new user-facing setting — channel selection is derived from operation type. Lint completion Notices now respect `NOTICE_NORMAL` / `NOTICE_ERROR` timeouts instead of persisting until manually dismissed.\n- **📜 License upgrade to Apache 2.0 + DCO.** NOTICE file lists all 6 human code contributors alphabetically. CONTRIBUTING.md includes a License & DCO section. Existing contributions are not retroactively affected; future commits must include `Signed-off-by:`.\n\n## Tests\n\n- **1431 tests passing** across 108 files (+45 since v1.23.1).\n- New test files: `src/__tests__/core/progress-notification.test.ts`, `src/__tests__/wiki/turn-indicator.test.ts`, `src/__tests__/core/section-header-canonicalizer.test.ts`, `src/__tests__/core/wrapWithAdvancedSettings.test.ts`, `src/__tests__/wiki/page-factory-sources-filter.test.ts`, `src/__tests__/wiki/query-view-graph-invalidation.test.ts`.\n\n## Contributors\n\n- **@DocTpoint** — PR #238 (frontmatter serializer consolidation, `serializeFrontmatter` single writer) and PR #241 (section header canonicalizer, bounded Levenshtein on write). Also originally filed the #234 prompt-candidate isolation issue.\n- **@green-dalii** — Maintainer. PR #239 (sources/ isolation + graph cache invalidation + wrap refactor) and PR #240 (semantic notifications + turn indicator + retrieval label + Notice TTLs + dynamic status bar).\n- **@YounianC** — Listed in NOTICE for prior code contributions.\n- **@Indexed-Apogrypha (Matthew Harper)** — Listed in NOTICE for prior code contributions.\n- **@dmarchevsky** — Listed in NOTICE for prior code contributions.\n- **@FrancoTampieri** — Listed in NOTICE for prior code contributions.\n\n## Installation\n\n- **From Community Plugins** — Obsidian Settings → Community Plugins → Browse → search \"Karpathy LLM Wiki\" → Install → Enable.\n- **From Community Plugin Website** — https://community.obsidian.md/plugins/karpathywiki\n- **Manual Installation** — Download `main.js`, `manifest.json`, and `styles.css` from the [1.23.2 release assets](https://github.com/green-dalii/obsidian-llm-wiki/releases/tag/1.23.2), place them in `{vault}/.obsidian/plugins/karpathywiki/`, and enable the plugin in Obsidian Settings → Community Plugins.\n\n## Configuration\n\nNo new settings in this release. See [README](https://github.com/green-dalii/obsidian-llm-wiki) for full configuration reference.\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.23.1...1.23.2\n",
-      "downloadCount": 1666,
+      "downloadCount": 2096,
       "draft": false,
       "name": "1.23.2",
       "prerelease": false,
@@ -605,7 +605,7 @@
         },
         {
           "digest": "sha256:e021a414862bf587605b342d63f6404d2485c60c077eecb7aadb658c3d4d5957",
-          "downloadCount": 142,
+          "downloadCount": 143,
           "name": "styles.css",
           "size": 9859
         }
@@ -623,26 +623,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 525,
+          "downloadCount": 527,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 537,
+          "downloadCount": 539,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 523,
+          "downloadCount": 525,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 537,
+      "downloadCount": 539,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,
@@ -1103,26 +1103,26 @@
       "assets": [
         {
           "digest": "sha256:cacd1526ef3a917511a716accde5913b6869ffc505490a56ba8b30a50ede93ad",
-          "downloadCount": 644,
+          "downloadCount": 645,
           "name": "main.js",
           "size": 661713
         },
         {
           "digest": "sha256:501014006b42867e41a9484d4075da8b9a72f6bea9cd8422f76fab0fb6fd3001",
-          "downloadCount": 674,
+          "downloadCount": 675,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:213622be8fe51d2cdf9eb886f2cf6620bcfaf54f86f81722b3f8bc28af20aac2",
-          "downloadCount": 636,
+          "downloadCount": 637,
           "name": "styles.css",
           "size": 6140
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Custom granularity per-type limits ignored**: In custom mode, entity and concept limits were set separately in the UI but three code paths failed to enforce them separately:\r\n    - The extraction loop merged entityLimit + conceptLimit into a single total cap, losing per-type distinction\r\n    - The LLM instruction text was vague (\"user-defined limits\") with no concrete numbers injected\r\n    - The fix-limit function used hardcoded values ({maxEntities: 3, maxConcepts: 3}) ignoring user settings entirely\r\n    - All three now read `customEntityLimit`/`customConceptLimit` dynamically from settings. Added 6 unit tests (101 total). Non-custom modes\r\n  \r\n  **Cumulative since 1.9.1** (1.10.0 was the feature release, 1.10.1 and 1.10.2 are bug fixes):\r\n  - **Minimal extraction granularity**: New option limiting extraction to ~5 items, ideal for batch processing 100+ files\r\n  - **Custom extraction granularity**: User-defined entity/concept limits (1-300 each) with conditional input fields\r\n  - **Aliases support in duplicate detection**: LLM now sees page aliases when resolving entity names, preventing duplicate stubs for synonyms\r\n  - **Slug normalization in duplicate detection**: resolvePagePath checks title/alias slugs before falling back to LLM\r\n  \r\n  ---\r\n  \r\n  ## Installation\r\n  \r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n  \r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\r\n  and click **Add to Obsidian** to install directly.\r\n  \r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n  \r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n  \r\n  ---\r\n  \r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n  \r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\r\n  detailed usage and model recommendations.\r\n  \r\n  ---\r\n  \r\n  **Full Changelog**: [1.10.1...1.10.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.10.1...1.10.2)",
-      "downloadCount": 674,
+      "downloadCount": 675,
       "draft": false,
       "name": "1.10.2 — Custom granularity per-type limits enforcement",
       "prerelease": false,
@@ -1583,26 +1583,26 @@
       "assets": [
         {
           "digest": "sha256:b41cd06f20a73f5a6905bf61051eb601549cb18deb49ab0321414aa7313f2f58",
-          "downloadCount": 147,
+          "downloadCount": 148,
           "name": "main.js",
           "size": 620185
         },
         {
           "digest": "sha256:c45de1d38f996ce3552e1057341f23d5c4fd8da5fd661d964da2eb3fa2f2c9c4",
-          "downloadCount": 149,
+          "downloadCount": 150,
           "name": "manifest.json",
           "size": 352
         },
         {
           "digest": "sha256:e4becdf4e50f527d3a53ad09b81edbae18a57346781bc13ebff09bf07072465d",
-          "downloadCount": 145,
+          "downloadCount": 146,
           "name": "styles.css",
           "size": 3644
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🔐 Supply Chain Security Enhancement                                                                           \r\n                                                                                                                    \r\n  This release adds **GitHub artifact attestations** — cryptographic proof that release assets were built from the  \r\n  source repository, preventing supply chain attacks.                                                               \r\n                                                                                                                    \r\n  **No functional changes** — Same as v1.7.8, now with verifiable build provenance. Your existing wiki, settings,   \r\n  and content remain intact.\r\n                                                                                                                    \r\n  ---                                                             \r\n\r\n  ## 🔎 What Are Artifact Attestations?                                                                             \r\n   \r\n  GitHub artifact attestations provide **cryptographic proof** that release files (`main.js`, `styles.css`) were    \r\n  actually built from this repository's source code, not tampered with during the build process.\r\n                                                                                                                    \r\n  **Why this matters:**                                                                                             \r\n  - **Supply chain security**: Prevents malicious actors from injecting compromised code between build and release\r\n  - **Trust verification**: Users can independently verify release authenticity                                     \r\n  - **Transparency**: Complete audit trail from source → build → release                                            \r\n                                                                                                                    \r\n  **Technical details:**                                                                                            \r\n  - Uses GitHub Actions `attest-build-provenance@v1` action                                                         \r\n  - Generates SLSA (Supply-chain Levels for Software Artifacts) provenance                                          \r\n  - Attestations stored in GitHub's Sigstore infrastructure                                                         \r\n  - Verifiable via `gh attestation verify` CLI command                                                              \r\n                                                                                                                    \r\n                                                                                                        \r\n  ---                                                                                                               \r\n  🔐 Security Benefits                                                                                              \r\n                                                                                                                    \r\n  For users:                                                      \r\n  - Download with confidence — verify assets came from source code                                                  \r\n  - Protection against supply chain attacks (malicious code injection)                                              \r\n  - Transparent audit trail from commit → build → release                                                           \r\n                                                                                                                    \r\n  For the community:                                                                                                \r\n  - Meets Obsidian plugin security submission requirements                                                          \r\n  - Aligns with GitHub's recommended security best practices                                                        \r\n  - Sets precedent for secure plugin distribution                                                                   \r\n                                                                                                                    \r\n  Reference:                                                                                                        \r\n  - https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attest\r\n  ations-to-establish-provenance-for-builds                                                                         \r\n  - https://slsa.dev/provenance/v1                                                                                  \r\n                                                                                                                    \r\n  ---                                                                                                               \r\n  📋 Full Changelog\r\n                                                                                                                    \r\n  See CHANGELOG.md for complete technical details.                \r\n                                                                                                                    \r\n  ---                                                                                                               \r\n  🙏 Credits                                                                                                        \r\n                                                                                                                    \r\n  - Concept: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f\r\n  - Author: Greener-Dalii                                                                                           \r\n  - Platform: https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin                                       \r\n  - Security: https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artif\r\n  act-attestations-to-establish-provenance-for-builds",
-      "downloadCount": 149,
+      "downloadCount": 150,
       "draft": false,
       "name": "1.7.9 — Cryptographic Provenance Verification (Artifact Attestations)",
       "prerelease": false,
@@ -1895,7 +1895,7 @@
         },
         {
           "digest": "sha256:ce13951bc72256585e5d4c84ef3f99270f868b65aebf43489984aa62c391e842",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 3292
         }
