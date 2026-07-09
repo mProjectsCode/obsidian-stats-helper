@@ -4,17 +4,18 @@
   "description": "Advanced audio recording with input device and folder configuration. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "advanced-audio-recorder",
-  "lastChangedAt": "2026-07-08T04:04:27.000Z",
-  "lastFetchedAt": "2026-07-08T04:04:27.000Z",
+  "lastChangedAt": "2026-07-09T04:01:26.977Z",
+  "lastFetchedAt": "2026-07-09T04:01:26.977Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
-    "description": "Advanced audio recording with input device and folder configuration.",
+    "description": "Record, play, and transcribe audio in your vault: multi-track recording, a waveform player with bookmarks, format conversion, cleanup, and speech-to-text (Whisper, Deepgram, Gemini, offline).",
+    "fundingUrl": "https://coff.ee/akhmelevskiy",
     "id": "advanced-audio-recorder",
     "isDesktopOnly": true,
     "minAppVersion": "1.6.6",
     "name": "Advanced Audio Recorder",
-    "version": "1.5.0"
+    "version": "2.0.1"
   },
   "name": "Advanced Audio Recorder",
   "presentInCommunityList": true,
@@ -22,27 +23,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:05400009da385c1c1dfc72fbe58a648c1674906254c9e9f110376f00bdd391ee",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 2719878
+        },
+        {
+          "digest": "sha256:9fd5e9ec5ff7f05705ee60c85c1ef35d27341b087a9a693512c6432f39e74a37",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 482
+        },
+        {
+          "digest": "sha256:93fdee645863f719bc8591caca6d2710bd7e1439d48e7b4991a8c12fcc7657b2",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 16038
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A small maintenance release on top of 2.0.0 with no functional change for users.\n\n## Fixes\n\n- The transcription HTTP client now reaches `fetch` through `window` instead of suppressing the `no-restricted-globals` lint rule with an inline directive, which the project's lint setup forbids. Behavior is unchanged: `fetch` is still used deliberately so a transcription request can be aborted through its `AbortSignal`, and Obsidian's `requestUrl` remains the fallback for endpoints that refuse CORS.\n\n## Internal\n\n- The release workflow now triggers on prefix-less version tags and publishes the built `dist` artifacts, so future releases build and publish through CI instead of by hand.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+; desktop-only. Fully backward compatible with 2.0.0.\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/2.0.0...2.0.1\n",
+      "downloadCount": 13,
+      "draft": false,
+      "name": "2.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-08T10:58:44Z",
+      "tag": "2.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ddfa7e8e2706ff1956386e3263c2ce549956a06786540893f6210ab95cdc0822",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 2719871
+        },
+        {
+          "digest": "sha256:155cfdef2b36f7090265b62eb75644ecb51f9111225dd1a641535e128a162166",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 482
+        },
+        {
+          "digest": "sha256:93fdee645863f719bc8591caca6d2710bd7e1439d48e7b4991a8c12fcc7657b2",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 16038
+        }
+      ],
+      "author": "akhmialeuski",
+      "description": "This major release grows the plugin from a recorder into a full record, clean up, and transcribe suite. The headline additions are **speech-to-text** across four engines, **on-demand audio cleanup**, and **markers and chapters while recording**, on top of a large internal refactor. Existing recordings, the recorder, and stored settings are unaffected, and the new pipelines are opt-in.\n\n## New: Speech-to-text\n\nTranscribe any recording into a note and/or into sidecar transcript files, with four selectable engines:\n\n- **Whisper API** on any OpenAI-compatible host (OpenAI or Groq), which returns no speaker labels.\n- **Deepgram**, a pre-recorded API that diarizes a whole request with stable speaker labels.\n- **Google Gemini**, multimodal whole-file transcription with diarization; a recording longer than the per-request cap is split into parts so one request never outlasts the timeout or truncates its output, at the cost of speaker numbering resetting between parts.\n- **Offline whisper.cpp**, fully local with no upload and no API key.\n\nSpeaker diarization is offered only for the engines that support it (Deepgram and Gemini) and is gated against the engine capability, so a stored preference left over from a diarizing engine never produces bad output on an engine that cannot diarize. Transcripts render as Markdown into a note and save as **JSON, SRT, WebVTT, or plain text** sidecar files. Optional **LLM post-processing** rewrites the raw transcript. The transcribe dialog is configurable per run, each engine has a managed **model picker**, requests honor a **configurable timeout** with an elapsed timer, and progress is **minimizable**. Requests are **abortable**, and a part that would overrun an engine token or duration limit is subdivided automatically while already-transcribed parts are kept on a partial failure.\n\n## New: Audio cleanup\n\nOn-demand **noise removal and loudness leveling** for a recording, processed in bounded in-memory segments so a long file does not exhaust memory. The cleaned result is linked back into the note and primed for the enhanced player.\n\n## New: Markers and chapters while recording\n\nBookmarks and chapters can now be added **during** a live recording, complementing the player-side markers introduced in 1.5.0. The recording view also gains input-processing toggles and live recording feedback.\n\n## Player fixes\n\nBoth known issues from 1.5.0 are resolved:\n\n- Distinct embeds of the same file now play independently instead of sharing one playback (fixes #38).\n- A probed embed upgrades in place instead of rebuilding the whole note, so a large note no longer lags on first open (fixes #39).\n- `mp4` files that reported a zero length now show their real duration, and Live Preview audio embeds no longer blank the note.\n\n## Performance\n\n- Transcription requests are abortable, container metadata is read through a cheap probe, WAV encoding yields to the interface instead of freezing it, and buffer copies are reduced across the pipeline.\n\n## Internal\n\n- New `src/audio` and `src/markers` domains; `AudioPlayer` decomposed into controller and view collaborators; `RecordingManager` split into marker coordination, a recorder factory, and error mapping; `Settings.ts` split into schema, serialization, validation, and labels modules; a unified action registry now backs the menus, the command palette, and hotkeys.\n- Toolchain modernized to TypeScript 6.0 with `noUncheckedIndexedAccess`, mediabunny 1.50.4, and an ES2022 bundle. 1440 tests across 103 suites.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+; desktop-only as before. Backward compatible: existing recordings, the recorder, and stored settings are unaffected, legacy LLM settings are migrated automatically, and both transcription and cleanup are opt-in.\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/1.5.0...2.0.0\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "2.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-08T10:27:02Z",
+      "tag": "2.0.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:cc4ca71de98f7707ff78731cc1e9a46a08756353d1ec724632706b7cf9e66a9a",
-          "downloadCount": 148,
+          "downloadCount": 149,
           "name": "main.js",
           "size": 2627239
         },
         {
           "digest": "sha256:7fa8832957987d1702e1ab35e5fbe3b7c84f545010c12480fce869f7c9e367eb",
-          "downloadCount": 159,
+          "downloadCount": 160,
           "name": "manifest.json",
           "size": 311
         },
         {
           "digest": "sha256:e45c887a24d7192a0b37ce71be3b0cc0acf8135af02a236776e24437bec78b5f",
-          "downloadCount": 108,
+          "downloadCount": 109,
           "name": "styles.css",
           "size": 10781
         }
       ],
       "author": "akhmialeuski",
       "description": "## Enhanced audio player\n\nThis release adds an **Enhanced audio player** that replaces Obsidian's built-in audio embed with a richer player, in both Reading view and Live Preview. It is **off by default** — enable it under Settings → Audio player → \"Enhanced audio player\".\n\n### Features\n\n- **Waveform seek bar** with click / drag / keyboard seeking. Peaks are decoded lazily (only when the player nears the viewport), progressively (drawn as they fill in), through a low-rate decoder, and cached per file revision — so a long recording never blocks the interface and scrolling a note with many players does not redecode.\n- **Playback speed**, **skip ±10s**, **volume**, **mute**, **loop**, and an elapsed / total **time display**.\n- **Timecode links**: a `#t=` offset (`90`, `1:30`, `1:02:03`) seeks a live player instead of opening the file, plus a \"copy timestamp link\" action.\n- **Markers and chapters**: per-recording bookmarks and chapters stored in a sidecar file next to the recording (they survive a reinstall and travel with the vault, and follow rename / delete). Editable in Live Preview, read-only (still clickable) in Reading view.\n- Audio-only files are taken over; files that carry video and unsupported files keep Obsidian's built-in player. The container is classified from its content, not its extension.\n\n### Settings\n\nA master toggle reveals two window toggles — **Show waveform** and **Markers and chapters**. The remaining controls are fixed. Player setting changes apply immediately to open players.\n\n## Known issues\n\n- **#38** — Multiple embeds of the **same file** in one note currently share one playback, so playing or seeking one moves the other's progress display instead of being independent.\n- **#39** — On a **large note**, the background media probe triggers a full note rebuild on first open, so a big note lags even with a short (5-second) recording; the cost scales with note size, not audio length.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+. Backward compatible: existing recordings and the recorder are unaffected, and the enhanced player is opt-in.\n",
-      "downloadCount": 159,
+      "downloadCount": 160,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
