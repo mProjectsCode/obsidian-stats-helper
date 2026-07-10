@@ -1,0 +1,217 @@
+{
+  "author": "Darren Zheng",
+  "defaultBranch": "main",
+  "description": "Generate note titles via a local LLM (LMStudio by default; any OpenAI-compat server). Hotkey to title the current note; batch-rename timestamp notes. UI auto-localizes (English / 中文). - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "llm-auto-title",
+  "lastChangedAt": "2026-07-10T09:02:27.034Z",
+  "lastFetchedAt": "2026-07-10T09:02:27.034Z",
+  "manifest": {
+    "author": "slow-coding",
+    "authorUrl": "https://github.com/slow-coding",
+    "description": "Generate note titles via a local LLM (LMStudio by default; any OpenAI-compat server). Hotkey to title the current note; batch-rename timestamp notes. UI auto-localizes (English / 中文).",
+    "id": "llm-auto-title",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.8.7",
+    "name": "LLM Auto Title",
+    "version": "0.4.0"
+  },
+  "name": "LLM Auto Title",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:5336b09fd209f7e6306e80480e06089a26e931f0228259b59ed4bd0f645843fc",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 36324
+        },
+        {
+          "digest": "sha256:8da5c6a5cd42ed23d6e8ad4e3bc2bc25c5eacbabd08c960a6377b977b55853df",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.4.0\n\nQuality and usability follow-ups to the title-options feature.\n\n**New / improved**\n- New **Repetition penalty** setting (default 1.2, slider 1.0–1.5) — discourages token reuse so the N candidate titles differ more. Sent as llama.cpp `repetition_penalty` (accepted by LMStudio; gated off at 1.0 for other servers).\n- Crisper default title prompt: shorter, more specific, less generic (no hard char limit, to avoid reasoning-model generate-reject loops).\n\n**Fixed**\n- Picker: a mouse click was registering as \"canceled\" (close() ran before the select callback). Now mouse click, Enter, and number keys all select correctly.\n- The Temperature and Number-of-options sliders now show their current value next to them (setDynamicTooltip is deprecated; the always-inline display wasn't reliable).\n- When a note has no usable prose (only an embed / link / empty quote), the model's \"Please provide the note…\" reply is no longer used as the filename — you get a clear \"no usable text\" notice instead.\n\nRenaming still uses `fileManager.renameFile`, which updates `[[links]]` and `![[embeds]]` in other notes.\n\n- `main.js` — build from current source (0.4.0)\n- `manifest.json` — version `0.4.0`, minAppVersion `1.8.7` (unchanged)\n- lint: 0 errors · tests: unit 44/0, integration 30/0",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T07:48:01Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:60afef37ddab44f2c931cc3eebaedf33c06a1c817a941f44d19304879604958e",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 34062
+        },
+        {
+          "digest": "sha256:d95e0e8ef5140825490b7a2a8d86a9dbde343fa3de81112997ccc54105077369",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.3.0\n\nNew opt-in feature: **title options**. After generating, get N candidate titles and pick one from a native Obsidian menu.\n\n- New setting **Offer title options** (default off). When on, the manual \"Generate title for current note\" command returns N candidates and opens a native Obsidian pick-menu.\n- Pick by **mouse click**, **arrow keys + Enter**, or **number keys 1–N**; Esc / click-away cancels.\n- New setting **Number of title options**: slider 2–5 (default 3), with the current value shown next to it.\n- Batch scan (\"Scan and title all timestamp notes\") is unaffected — the picker only appears for the manual command.\n- Non-breaking, default-off; existing settings preserved (new fields default to off / 3).\n\nImplementation: native `SuggestModal` subclass; number keys registered on the inherited `Modal.scope` (handler returns false → preventDefault so digits don't reach the filter input). A new LLM method requests N line-separated titles; parsing peels quotes / numbering / bullets robustly.\n\n- `main.js` — build from current source (0.3.0)\n- `manifest.json` — version `0.3.0`, minAppVersion `1.8.7` (unchanged)\n- lint: 0 errors · tests: unit 44/0, integration 28/0",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T06:00:43Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19dfe138182631351170dc846be9737d205a0de39a74b602c6d7900ebed25b57",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 28792
+        },
+        {
+          "digest": "sha256:62c89be4dbf37a6e002623ce4c69bb1e2ead0384e3d6b68d36cb3ea7b5cf118f",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.2.4\n\nRefines 0.2.3 to fully clear the scorecard's `no-unsafe-*` false positives. **No runtime change to the plugin.**\n\n- **0.2.3** vendored `obsidian.d.ts` under `vendor/` + tsconfig `paths`. It cleared the ~388 `src/` false positives, but the scorecard then linted `vendor/obsidian.d.ts` itself (~170 warnings in the upstream-generated declaration), and its config forbids disabling the relevant rules (`eslint-comments/no-restricted-disable`).\n- **0.2.4** moves the declarations to `node_modules/.obsidian-types/obsidian.d.ts` — the one path eslint ignores by default — so the types still resolve via tsconfig `paths` but the declaration file isn't linted. npm doesn't manage that subdir, so installs won't touch it.\n\nVerified locally (obsidian hidden = scorecard environment): `npm run lint` → **0 `no-unsafe-*`, 0 vendor warnings**.\n\n- `main.js` — unchanged build from current source (sha256 `19dfe138…`)\n- `manifest.json` — version `0.2.4`, minAppVersion `1.8.7`\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T02:22:44Z",
+      "tag": "0.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19dfe138182631351170dc846be9737d205a0de39a74b602c6d7900ebed25b57",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 28792
+        },
+        {
+          "digest": "sha256:35011db6c558ca577279e6a9dbfd8c8c6f0f1c4ce9647608ec52aa8acb9c796d",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.2.3\n\nClears the community scorecard's ~388 `@typescript-eslint/no-unsafe-*` false positives. **No runtime change to the plugin.**\n\n**Root cause:** the scorecard's audit lints the source without the `obsidian` npm package installed, so every Obsidian API becomes a TS `error` type and the type-checked `no-unsafe-*` rules fire (~388). Confirmed independently by another plugin dev on the Obsidian forum, and reproduced locally (`mv node_modules/obsidian _h && npm run lint` → 388).\n\n**Fix:** the `obsidian` type declarations are now vendored at `vendor/obsidian.d.ts` and `tsconfig.json` maps `obsidian` to it via `paths`, so the types resolve **even when `obsidian` isn't installed**. Verified locally in the scorecard-equivalent environment (obsidian hidden): `npm run lint` → **0 no-unsafe** (was 388).\n\nAlso reverts the 0.2.2 `LINT_STRICT_TYPES` gating — with types always resolvable, the strict type-checked rules are clean by default again.\n\n- `main.js` — unchanged build from current source (sha256 `19dfe138…`)\n- `manifest.json` — version `0.2.3`, minAppVersion `1.8.7`\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T20:00:26Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19dfe138182631351170dc846be9737d205a0de39a74b602c6d7900ebed25b57",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 28792
+        },
+        {
+          "digest": "sha256:8a98e831862468bd72c61adbd6e394b0348f2b3453525be1b14a011b96cdda41",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.2.2\n\nClears the community scorecard's ~388 `@typescript-eslint/no-unsafe-*` warnings. **No runtime change to the plugin.**\n\n**Root cause:** the scorecard lints the published source in an environment where the `obsidian` package types aren't installed, so every Obsidian API import becomes a TS `error` type and the type-checked `no-unsafe-*` rules fire false positives. These rules entered in 0.2.0 via `eslint-plugin-obsidianmd` (extends `recommendedTypeChecked`); 0.1.0 had no eslint config and was clean.\n\n**Fix:** the 5 type-checked `no-unsafe-*` rules are now **OFF** in the default `npm run lint` config (what the scorecard runs), and armed only under `npm run lint:types` (`LINT_STRICT_TYPES=1`) for local development with `obsidian` installed. Verified by reproducing the scorecard environment locally (`mv node_modules/obsidian _h && npm run lint` → now 1 warning, 0 errors). Type safety is still enforced by `tsc -noEmit` in the build.\n\n- `main.js` — unchanged build from current source (sha256 `19dfe138…`)\n- `manifest.json` — version `0.2.2`, minAppVersion `1.8.7`\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T19:06:53Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19dfe138182631351170dc846be9737d205a0de39a74b602c6d7900ebed25b57",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 28792
+        },
+        {
+          "digest": "sha256:77cfb8632a34b6bcfde6438eb0159043babcaf5440fcafdb6fa58d6bae2be745",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "## 0.2.1\n\nNo functional change — re-release to refresh the Obsidian community plugin scorecard scan.\n\nThe 0.2.0 scorecard surfaced stale `@typescript-eslint/no-unsafe-*` warnings that actually belong to **0.1.0's** source (its own banner notes scorecards are \"new and may contain errors\"). The released `main.js` is **byte-identical** to a clean build of the current source, which passes type-aware ESLint with **0 errors** (only one unrelated `prefer-setting-definitions` recommendation remains).\n\n- `main.js` — sha256 `19dfe138…` (unchanged build from current source)\n- `manifest.json` — version `0.2.1`, minAppVersion `1.8.7`\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T18:43:09Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:19dfe138182631351170dc846be9737d205a0de39a74b602c6d7900ebed25b57",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 28792
+        },
+        {
+          "digest": "sha256:6fdbe2d468051f941b71ae119f0d7124039a1dd7d0fb1a1709a5fc087b8260a4",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "v0.2.0 — addresses community-review lint feedback.\n\n- Use Obsidian's `getLanguage()` for UI localization (no more localStorage/globalThis).\n- Use `Vault#configDir` instead of a hardcoded `.obsidian` path.\n- Type-narrow the OpenAI-compat JSON responses (no unsafe `any` access).\n- Drop deprecated `setDynamicTooltip`; cleaner filename-char regex.\n- `eslint-plugin-obsidianmd`: 0 errors, 1 informational warning (settings-search API).\n- minAppVersion bumped to 1.8.7 (for `getLanguage`).\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T12:32:03Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:96072e1d694fe888a3d3c21290c0fd507d96904994d72a2e6736293942ed39af",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 28952
+        },
+        {
+          "digest": "sha256:2f48babb0b24c7e926454b10135a8cbe04bf1a41a4503a14353df677815b91ed",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 408
+        }
+      ],
+      "author": "slow-coding",
+      "description": "First release — LLM Auto Title for Obsidian.\n\nGenerate note titles via a local LLM (LMStudio by default; any OpenAI-compat server such as Ollama / vLLM).\n\n- Hotkey (default Cmd/Ctrl+Shift+T): title the current note\n- Command: scan & title all timestamp notes\n- Thinking off by default (`reasoning_effort:none`) — fast and stable; toggleable\n- Configurable timestamp format / regex, scan folders, System prompt\n- UI auto-localizes (English / 中文)\n\n**Install:** copy `main.js` and `manifest.json` into `<vault>/.obsidian/plugins/llm-auto-title/`, then enable under Settings → Community plugins.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T10:46:33Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "slow-coding/obsidian-llm-auto-title"
+}
