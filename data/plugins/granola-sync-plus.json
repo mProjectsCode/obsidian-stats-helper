@@ -4,8 +4,8 @@
   "description": "Sync your Granola AI meeting notes to your vault with customizable settings. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "granola-sync-plus",
-  "lastChangedAt": "2026-07-09T04:01:26.977Z",
-  "lastFetchedAt": "2026-07-09T04:01:26.977Z",
+  "lastChangedAt": "2026-07-10T04:01:27.010Z",
+  "lastFetchedAt": "2026-07-10T04:01:27.010Z",
   "manifest": {
     "author": "Danny McClelland",
     "authorUrl": "https://github.com/dannymcc/",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:c52d3de67d6dd58c0902e5c8a4bbab3a820564cc5a5241b892ca776ad4d87efd",
-          "downloadCount": 606,
+          "downloadCount": 615,
           "name": "main.js",
           "size": 110501
         },
         {
           "digest": "sha256:8fad5a0d35dc9c1bb2ac56aeb180b562eabe4758c9b8e97a237d887e4841949e",
-          "downloadCount": 1389,
+          "downloadCount": 1431,
           "name": "manifest.json",
           "size": 361
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
-          "downloadCount": 564,
+          "downloadCount": 572,
           "name": "styles.css",
           "size": 1070
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.11.1\n\n\n### Fixed\n- **🔐 macOS encrypted-credentials path now actually decrypts on Granola 7.255+**: 1.11.0 added the right code paths but two implementation details prevented them from running on real installs. The Keychain lookup was for account `Granola` but the real account is `Granola Key`, so `find-generic-password` silently returned \"item not found\" and the encrypted path fell back to the plain `stored-accounts.json` — itself a startup-only snapshot, hence the bug stayed hidden for the first ~6h of every Granola session. Once the Keychain lookup worked, decryption still failed because the `.enc` files are not Chromium os_crypt v10 payloads. Granola uses a two-level scheme: `storage.dek` is an os_crypt v10 envelope wrapping a base64-encoded 32-byte DEK, and the `*.json.enc` files are AES-256-GCM (`[12-byte nonce][ciphertext][16-byte tag]`, empty AAD) using that DEK. The plugin now performs both steps correctly, with strict base64-alphabet validation on the wrapped DEK. Reported in [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58) and [#61](https://github.com/dannymcc/Granola-to-Obsidian/issues/61).\n\n### Known issues\n- **6h JWT staleness after Granola has been running a session**: `stored-accounts.json.enc` is written by Granola only at app startup, so the access token inside expires roughly 6h after the desktop app was launched. After that, the plugin's freshness check correctly identifies all file-based sources as expired and 401s on the next sync. The only continuously-fresh source is `granola.db` (SQLCipher); a reader for that is in active investigation on the `investigate/granola-db` branch and tracked in [#58](https://github.com/dannymcc/Granola-to-Obsidian/issues/58). **Workaround until then**: restart Granola to rewrite the encrypted snapshot with a fresh token.\n\n### Credits\n- Huge thanks to [@francescocinori-ops](https://github.com/francescocinori-ops) for the reverse-engineering (wrong Keychain account, two-level format hypothesis, GCM layout arithmetic) and to [@chuckchuck512](https://github.com/chuckchuck512) for independent corroboration plus the catch that the DEK is base64-wrapped inside the v10 envelope. This release shipped because both of you ran patches against real installs and reported back precisely.\n\n---\n\n### 📦 Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` below\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all three files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\nBuilds are signed with [GitHub artifact attestations](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.",
-      "downloadCount": 1389,
+      "downloadCount": 1431,
       "draft": false,
       "name": "Granola Sync Plus 1.11.1",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:22997ad3d657d4bd60c711ce89a92cb7cad8ca5905ae21eb74a7be0958a86bac",
-          "downloadCount": 172,
+          "downloadCount": 173,
           "name": "main.js",
           "size": 99970
         },
@@ -132,7 +132,7 @@
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
-          "downloadCount": 171,
+          "downloadCount": 172,
           "name": "styles.css",
           "size": 1070
         },
