@@ -4,8 +4,8 @@
   "description": "Real AI agent for your vault. Coworker, Copilot & thinking partner, that maintains your memory & knowledge, adapts to your workflows, uses plugins, skills & tools with full safety controls. BYOK & MCP - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-operator",
-  "lastChangedAt": "2026-07-09T05:04:27.004Z",
-  "lastFetchedAt": "2026-07-09T05:04:27.004Z",
+  "lastChangedAt": "2026-07-10T05:02:27.027Z",
+  "lastFetchedAt": "2026-07-10T05:02:27.027Z",
   "manifest": {
     "author": "Sebastian Hanke",
     "authorUrl": "https://github.com/pssah4",
@@ -23,13 +23,13 @@
       "assets": [
         {
           "digest": "sha256:9be434f81182b52d671b6485034cfa9375bde1283ff7e71ea7f8b102184b0640",
-          "downloadCount": 6,
+          "downloadCount": 13,
           "name": "locale-de.json",
           "size": 243060
         },
         {
           "digest": "sha256:f215303868b3f0678fde93e79363cccdd0f38d2b2d4a6aa432faf9739eb63546",
-          "downloadCount": 1,
+          "downloadCount": 3,
           "name": "locale-es.json",
           "size": 246171
         },
@@ -41,19 +41,19 @@
         },
         {
           "digest": "sha256:ad15d5b3ad67231988e988310b02794a8c5f71cb4224635e551ed52e10eb5732",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "locale-ja.json",
           "size": 281269
         },
         {
           "digest": "sha256:8e6995602ccc72c77f02e81eeb255b8526f0af5150907a786d6b2d7e062cac41",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "locale-ko.json",
           "size": 256182
         },
         {
           "digest": "sha256:5a3fd781237cfca211577bf01843657cc1fd6c1e7c75557bc798f6a280e48b6d",
-          "downloadCount": 4,
+          "downloadCount": 7,
           "name": "locale-ru.json",
           "size": 334701
         },
@@ -65,37 +65,37 @@
         },
         {
           "digest": "sha256:39b766945be699a1e7826996ca0ef913be858a6be39561fd1d37dd1c370301ae",
-          "downloadCount": 18,
+          "downloadCount": 32,
           "name": "locale-zh.json",
           "size": 218649
         },
         {
           "digest": "sha256:1a935c95e3de02d7262a9ee24231ec8e036da40f77407130006a045ebfdef7c6",
-          "downloadCount": 23,
+          "downloadCount": 38,
           "name": "office-bundle.js",
           "size": 1730917
         },
         {
           "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
-          "downloadCount": 27,
+          "downloadCount": 45,
           "name": "ort-wasm-simd-threaded.wasm",
           "size": 12942611
         },
         {
           "digest": "sha256:2142ebde1906e2dc8c096133e53d8c4029cf55dc36aea609b1f5a2fd49daa268",
-          "downloadCount": 26,
+          "downloadCount": 44,
           "name": "pdfjs-bundle.js",
           "size": 1656082
         },
         {
           "digest": "sha256:6c2dc66f300d0e10e2f50dadbc225a52443132645023eb5524483123c20b73f3",
-          "downloadCount": 22,
+          "downloadCount": 34,
           "name": "plugin-source.json",
           "size": 8234518
         },
         {
           "digest": "sha256:e5e8080f5c04c7f65f4b8608cce32c79ee3c00422c9b4ef1ecd1a7af5f435060",
-          "downloadCount": 29,
+          "downloadCount": 47,
           "name": "reranker-bundle.js",
           "size": 630937
         }
@@ -113,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:8a8ca08a469da52d9b16be2d1d0b008881c028684754759ed5e7b237fe419ab4",
-          "downloadCount": 136,
+          "downloadCount": 219,
           "name": "main.js",
           "size": 4743076
         },
         {
           "digest": "sha256:213a5e2e91822e855348c5032989ee7571b65c87de8ece1d52306f9581fa7724",
-          "downloadCount": 153,
+          "downloadCount": 250,
           "name": "manifest.json",
           "size": 411
         },
         {
           "digest": "sha256:5bfc51d37e58b7e981a6a4d79919859e1b78f61ee0183011a9e22bfd1b6080aa",
-          "downloadCount": 136,
+          "downloadCount": 217,
           "name": "styles.css",
           "size": 217024
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Vault Operator v3.2.2\n\nFaster agent turns, working block references. This release fixes the root causes behind slow meeting-summary runs and dead block links, hardens two tool paths, and clears the 2026-07-07 review-bot scan.\n\n### Fixed\n- The TypeScript sandbox (evaluate_expression) failed every call with \"window.__si_polyfill is not a function\". A post-build rename that keeps a bundled dependency polyfill away from the review bot's telemetry heuristic also renamed the sandbox heap sampler's timer call. Both affected call sites now use the plugin's timeout-based scheduler, and a source-level test bans the pattern permanently.\n- The approval-card countdown used the same broken timer call (latent, same fix).\n- Meeting-summary skill: block references now resolve. Block anchors attach to the surrounding paragraph, so in single-paragraph transcripts every anchor but the last was dead. The skill now splits paragraphs at each anchor, verifies every reference before finishing, and inserts all anchors in one pass instead of one edit round-trip per anchor.\n\n### Improved\n- read_file reads large files in sequential 50,000-character chunks via a new offset parameter instead of detouring through search results and temp files.\n- read_document called on a plain-text file (.md, .txt) returns a capped fallback read that points back to read_file instead of a hard error.\n- 46 review-bot findings from the 2026-07-07 scan resolved across 23 files, plus a follow-up compliance pass.\n\n### Security\n- Delta security audit over all changes since 3.2.1: rating Low, all findings resolved. read_document output now carries the same untrusted-content boundary as read_file, the new offset parameter validates its input, and a source hygiene issue that made one file unreviewable in diffs is fixed.\n\n### Install\nInstall or update via Obsidian Settings -> Community plugins -> Browse -> \"Vault Operator\".\n\n### Optional assets\nOptional downloads (semantic reranker, self-development source bundle, office document support, PDF parser, UI language packs) are published under the separate tag `3.2.2-assets` and installed on demand from the plugin's Settings, never silently. SHA-256 hashes are pinned in the plugin code and verified before any file is persisted.\n",
-      "downloadCount": 153,
+      "downloadCount": 250,
       "draft": false,
       "name": "3.2.2",
       "prerelease": false,
@@ -275,7 +275,7 @@
         },
         {
           "digest": "sha256:2142ebde1906e2dc8c096133e53d8c4029cf55dc36aea609b1f5a2fd49daa268",
-          "downloadCount": 107,
+          "downloadCount": 108,
           "name": "pdfjs-bundle.js",
           "size": 1656082
         },
@@ -341,7 +341,7 @@
         },
         {
           "digest": "sha256:2142ebde1906e2dc8c096133e53d8c4029cf55dc36aea609b1f5a2fd49daa268",
-          "downloadCount": 105,
+          "downloadCount": 106,
           "name": "pdfjs-bundle.js",
           "size": 1656082
         },
@@ -443,7 +443,7 @@
         },
         {
           "digest": "sha256:ce8d25316fa57a38b9e22b021fe20370af6655f7607db55905bda1cdedfde44f",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "styles.css",
           "size": 212110
         }
@@ -641,7 +641,7 @@
         },
         {
           "digest": "sha256:5e69ee47d7945e598244b03c0818af98e3570d63125de45e0cacfbf3de526fba",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "styles.css",
           "size": 206667
         }
@@ -5747,7 +5747,7 @@
         },
         {
           "digest": "sha256:9267aae36e75866444c6c7c9418981244b303c8ad6c51952ab4aefb0a0e430ab",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 119727
         }
@@ -5807,7 +5807,7 @@
         },
         {
           "digest": "sha256:5ffe027f02910cd34240baa6d32714435f81a427fee492821df81a962f93e654",
-          "downloadCount": 1,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 112957
         }
@@ -5927,7 +5927,7 @@
         },
         {
           "digest": "sha256:24564eff2641cb0337fb615e8dadca0b2ac39598219f3cd0bc3d2457c22d2129",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 111980
         }
@@ -5957,7 +5957,7 @@
         },
         {
           "digest": "sha256:d3dd8a4c32031ce9313e3077a7adc0e3328716a784475fbaa71e6dc187e7d77e",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 111248
         }
