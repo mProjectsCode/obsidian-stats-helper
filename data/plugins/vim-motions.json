@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-09T07:01:27.106Z",
-  "lastFetchedAt": "2026-07-09T07:01:27.106Z",
+  "lastChangedAt": "2026-07-10T07:02:27.027Z",
+  "lastFetchedAt": "2026-07-10T07:02:27.027Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.44.1"
+    "version": "0.46.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:f211f1dc547e55327b69add562839e8347eb3205501110bbc6f166e6364773c9",
+          "downloadCount": 19,
+          "name": "main.js",
+          "size": 726428
+        },
+        {
+          "digest": "sha256:3c6d7a639b236874d0e26e0835d20f4ea02961647893c0074bb1e0069bb50863",
+          "downloadCount": 18,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:06c55a54f092f87ad6168d11969ca74f7fec5fe2039824387f37e73d6917510e",
+          "downloadCount": 18,
+          "name": "styles.css",
+          "size": 23528
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Which-key overlay hidden behind status bar** — the which-key popup (both editor-level and global workspace) was positioned at `bottom: 0` of its container, causing the bottom rows to be obscured by Obsidian's status bar. The overlay now detects the status bar height and adds `padding-bottom` to keep content above it. In split views, padding is only applied when the editor pane's bottom edge is adjacent to the status bar (top splits are unaffected).\r\n    - Plugin: `src/ui/which-key.ts` (status bar height detection with `getBoundingClientRect` adjacency check), `src/ui/global-which-key.ts` (same padding for global which-key)\r\n\r\n### Added\r\n\r\n- **Remappable keybindings** — every plugin keybinding is now user-remappable across all contexts (editor, oil explorer, picker, global workspace navigation). See the [remapping guide](https://saberzero1.github.io/motions/configuration/remapping) for details.\r\n    - **46 new ex command aliases** for editor-context actions: structural navigation (`:nextheading`, `:prevheading`, `:nextheading1`–`6`, `:prevheading1`–`6`, `:nextlistitem`, `:prevlistitem`, `:nextlink`, `:prevlink`, `:nextbuffer`, `:prevbuffer`), table navigation (`:tablenextcell`, `:tableprevcell`, `:tablenextrow`, `:tableprevrow`), workspace navigation (`:focuspaneleft`/`right`/`up`/`down`, `:splitvertical`, `:splithorizontal`, `:closetab`, `:closeothertabs`, `:nexttab`, `:prevtab`, `:gototab`, `:gotodefinition`, `:foldclose`/`open`/`toggle`/`all`, `:unfoldall`, `:documentoutline`, `:openurl`, `:docstats`, `:renamenote`, `:showbacklinks`, `:opengotofile`, `:contextactions`, `:charinfo`), and hint mode (`:hintactivate`, `:hintopennew`, `:hintyank`, `:hintclose`). Users can remap any keybinding via `nmap key :excommand<CR>` in vimrc or `vim.keymap.set('n', 'key', ':excommand<CR>')` in Lua.\r\n    - Plugin: `src/keybindings/action-registry.ts` (new: `exCommandFromMotion`/`exCommandFromAction` helpers), `src/motions/register.ts`, `src/workspace/navigation.ts`, `src/main.ts`\r\n- **Oil explorer remappable keybindings** — all 9 oil keybindings are now user-remappable via Lua autocmds or vimrc\r\n    - **9 oil ex commands**: `:oilopen`, `:oilparent`, `:oilroot`, `:oilrefresh`, `:oilclose`, `:oiltogglehidden`, `:oilcyclesort`, `:oilyankpath`, `:oilreveal`\r\n    - **8 new Lua functions** in `vim.obsidian.oil`: `parent()`, `root()`, `refresh()`, `toggle_hidden()`, `cycle_sort()`, `yank_path()`, `reveal()`, `open_entry()`\r\n    - **`OilEnter`/`OilLeave` autocmd events** — fire when entering/leaving an oil buffer, enabling Neovim-style buffer-local keymaps\r\n    - Oil defaults now registered as `vim.noremap` mappings pointing to ex commands (previously `mapCommand`), making them visible in `:map` output and overridable by user mappings\r\n    - Plugin: `src/oil/keybindings.ts` (refactored), `src/lua/api.ts`, `src/lua/obsidian-api.ts`, `src/lua/loader.ts`, `src/main.ts`\r\n- **Picker keybinding configurability** — picker modal keybindings (`<C-n>`, `<C-p>`, `<C-x>`, `<C-v>`, `<C-t>`, `<C-d>`, `<C-u>`) are now configurable via Lua\r\n    - `vim.obsidian.pick_keymap()` accepts a table of action→key arrays with snake_case field names\r\n    - Custom keymap persisted in settings and applied to all picker instances including tag sub-pickers\r\n    - Plugin: `src/picker/types.ts` (`PickerKeymap`, `matchesPickerKey`), `src/picker/picker.ts` (refactored keydown handler), `src/picker/sources/tags.ts`, `src/settings.ts`, `src/lua/api.ts`, `src/lua/obsidian-api.ts`, `src/lua/loader.ts`, `src/main.ts`\r\n- **Global workspace navigation remappable keybindings** — non-editor keybindings (`<C-w>*`, `gt`/`gT`, `j`/`k` scroll, `H`/`L`, `:`) are now remappable\r\n    - `vim.obsidian.keymap.set`/`del` now operate on the live `GlobalMappingRegistry` at runtime (previously only at config-load time)\r\n    - **`:gmap key :command`** — new ex command to add global keybindings from the editor command line or non-editor `:` modal\r\n    - **`:gunmap key`** — new ex command to remove global keybindings\r\n    - **`:gmaps`** — renamed from `:gmap` (display-only) to avoid collision with the new mapping command\r\n    - All 26 default global mappings tagged with stable `name` fields for documentation\r\n    - Plugin: `src/workspace/global-mapping-registry.ts`, `src/workspace/global-defaults.ts`, `src/ui/global-ex-command.ts`, `src/workspace/commands.ts`, `src/lua/loader.ts`, `src/main.ts`\r\n- **Remapping guide** — new documentation page `docs/configuration/remapping.md` with examples for all 4 remapping contexts (editor, oil, picker, global)\r\n\r\n### Changed\r\n\r\n- **`:gmap` (display)** renamed to **`:gmaps`** — the `:gmap` command now creates global keybindings instead of displaying them. Use `:gmaps` to list all active global mappings.\r\n- **Autocmd events** — 15 → 17 supported events (added `OilEnter`, `OilLeave`)\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/remapping.md`: new unified remapping guide\r\n- `docs/features/oil-explorer.md`: added remapping section with ex commands table, Lua examples, vimrc examples, and `vim.obsidian.oil` function reference\r\n- `docs/features/ex-commands.md`: added navigation/action/oil/hint/global mapping ex command tables; updated command count to 100+\r\n- `docs/reference/keybindings.md`: added ex command column to oil table; added remapping section link\r\n- `docs/configuration/lua-config.md`: added `vim.obsidian.oil` namespace (10 functions), `OilEnter`/`OilLeave` autocmd events, `vim.obsidian.pick_keymap()` API\r\n- `docs/configuration/vimrc.md`: updated `:gmap`/`:gunmap`/`:gmaps` documentation\r\n- `docs/configuration/index.md`: added remapping guide to quick links\r\n- `KNOWN_LIMITATIONS.md`: updated keybinding remappability section to \"Implemented\" across all contexts; updated autocmd event count to 16\r\n- `AGENTS.md`: updated change-to-page routing table with `configuration/remapping.md`\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.45.0...0.46.0",
+      "downloadCount": 18,
+      "draft": false,
+      "name": "0.46.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T22:18:44Z",
+      "tag": "0.46.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3f7cd1966a81b8a4252ff67a019d58c460aca137a9b331f36df69e8685be5e2b",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 718165
+        },
+        {
+          "digest": "sha256:70f332163de1cae9183742aa58f8e766c4056408c627854d715ae5f3ee973f58",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:06c55a54f092f87ad6168d11969ca74f7fec5fe2039824387f37e73d6917510e",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 23528
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **`gk`/`gj` takes extra keypress to traverse non-wrapped headings** — `gk` required two presses to cross a heading line that was visually tall (large font/line-height) but did not wrap. CM6's `moveVertically` saw the heading's line block as spanning multiple `defaultLineHeight` steps, causing a spurious within-line cursor move before crossing to the adjacent line. The fork's `findPosV` now detects when `moveVertically` stays on the same document line with negligible Y-coordinate change (less than half `defaultLineHeight` via `coordsAtPos` comparison) and force-moves to the adjacent document line. Legitimate wrapped-line navigation (Y delta ≥ threshold) is unaffected. ([#26](https://github.com/saberzero1/motions/issues/26))\r\n    - Fork: `src/cm_adapter.ts` (`findPosV` Y-delta spurious move detection)\r\n\r\n### Added\r\n\r\n- **Oil explorer** — [oil.nvim](https://github.com/stevearc/oil.nvim)-inspired file explorer that renders vault directories as editable buffers. Create, rename, delete, and move files with standard vim commands, then commit all changes with `:w`. ([oil.nvim](https://github.com/stevearc/oil.nvim)-inspired)\r\n    - **`:Oil [path]`** opens the current file's directory (or a specified path) as an editable buffer in a new tab. Each line represents a file or folder with a concealed entry ID. The buffer is a regular markdown file — all existing vim features (EasyMotion, surround, text objects, which-key, status bar) work natively.\r\n    - **File operations via vim commands**: `o` (new line) + `:w` creates a file, `dd` + `:w` deletes, `cw` + `:w` renames. Filenames without an extension default to `.md`. Names ending with `/` create folders. Renames update backlinks via `app.fileManager.renameFile()`. Deletes respect user trash settings via `app.fileManager.trashFile()`.\r\n    - **Cross-directory moves**: `dd` in one oil buffer, `p` in another, `:w` moves the file. The diff engine detects moves by matching entry IDs across buffers.\r\n    - **Navigation keybindings** (active only in oil buffers): `<CR>` open/enter, `-` parent directory, `~` vault root, `q` close, `<C-l>` refresh, `g.` toggle hidden files, `gs` cycle sort order, `y.` yank file path\r\n    - **Auto-refresh**: vault event listeners (create/delete/rename) with 200ms debounce refresh open oil buffers when files change externally\r\n    - **Confirmation dialog**: shown when deleting files exceeding the configurable threshold (default: 1)\r\n    - **Stale file cleanup**: orphaned temp files from previous sessions are removed on plugin startup\r\n    - **Tab title**: reflects current directory (e.g., `oil~notes`) and updates on navigation\r\n    - **`:w`/`:wq`/`:x`/`:update` dispatch**: active file path is checked for the `oil~` prefix — oil commits route through the diff/validate/execute pipeline; normal files save normally\r\n    - **Global ex command**: `:Oil` available in the non-editor `:` command modal (same pattern as picker commands)\r\n    - **Setting gate**: `:Oil` command and keybindings only registered when the `oilExplorer` setting is enabled (default: on)\r\n    - Plugin: `src/oil/` (manager.ts, cache.ts, diff.ts, actions.ts, render.ts, parser.ts, extensions.ts, keybindings.ts, types.ts), `src/workspace/commands.ts` (`:w` dispatch, `:Oil` registration), `src/main.ts` (OilManager/OilKeybindingManager lifecycle), `src/settings.ts` (4 settings), `src/ui/global-ex-command.ts` (`:Oil` in global modal), `src/workspace/global-defaults.ts` (oil manager threading), `styles.css` (file explorer hiding)\r\n- **Oil explorer Lua API** — `vim.obsidian.oil.open(path)` opens oil for a directory, `vim.obsidian.oil.close()` closes the active oil buffer and cleans up the temp file\r\n    - Plugin: `src/lua/api.ts` (`oilOpen`/`oilClose` callbacks), `src/lua/obsidian-api.ts` (`vim.obsidian.oil` sub-table), `src/lua/loader.ts` (callback wiring)\r\n- **Oil explorer settings** — 4 new settings in **Settings → Vim Motions → File explorer**:\r\n    - `oilExplorer` (toggle, default: on) — enable/disable the oil explorer\r\n    - `oilShowHiddenFiles` (toggle, default: off) — show dotfiles in oil views\r\n    - `oilConfirmDeleteThreshold` (slider, 1–20, default: 1) — confirmation dialog threshold\r\n    - `oilDefaultSort` (dropdown: name/mtime/size, default: name) — directory sort order\r\n    - Plugin: `src/settings.ts`\r\n- **Oil explorer e2e test suite** — 10 regression tests covering: `:Oil` opens temp file, regular markdown view, vault file listing with concealment, current-directory default, file creation, folder creation, file deletion, file rename, no-op save, and temp file exclusion from listings\r\n    - Plugin: `test/specs/oil-poc.e2e.ts`\r\n- **`wdio.conf.mts` workspace cleanup** — `onPrepare` hook deletes stale `workspace.json` before e2e tests to prevent flaky failures from leftover workspace state\r\n- Spike test for reporter's exact content (`spike-gk-issue26-repro.e2e.ts`, 6 tests: full-document gk/gj traversal, consecutive h2 headings, long wrapped line, h2-longline-h2 transitions)\r\n\r\n### Changed\r\n\r\n- **Oil temp file hiding** — oil temp files (`oil~*.md`) are hidden from the file explorer via a static CSS prefix selector (`[data-path^=\"oil~\"]`) in `styles.css`, and from search/graph/quick switcher via Obsidian's `userIgnoreFilters` mechanism. User-configured ignore filters are preserved — oil only adds/removes its own entries.\r\n\r\n### Documentation\r\n\r\n- `docs/features/oil-explorer.md`: new feature page covering overview, opening commands, file operations, navigation, configuration, and implementation details\r\n- `docs/features/index.md`: added oil explorer entry to workspace & commands section\r\n- `docs/reference/keybindings.md`: added Oil explorer keybinding table (13 entries)\r\n- `docs/configuration/settings.md`: added File explorer settings group (4 settings)\r\n- `KNOWN_LIMITATIONS.md`: added oil explorer section with cross-directory move requirements, temp file mechanism, and dotfile limitation\r\n- `KNOWN_LIMITATIONS.md`: updated \"Visual line navigation\" section with three-correction architecture (multi-line clamp, tall non-wrapped line detection, column 0 fallback); updated test coverage note\r\n- Fork `DIFFERENCES.md`: updated \"Widget-aware vertical navigation\" section with Y-delta spurious move detection\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.44.1...0.45.0",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.45.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T20:03:09Z",
+      "tag": "0.45.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c544cf94836f117b0d2644c600fb716063876d36853d12702759cd5532d4a3d5",
-          "downloadCount": 11,
+          "downloadCount": 45,
           "name": "main.js",
           "size": 698105
         },
         {
           "digest": "sha256:aa38de374eccd2846f4cb2e5df4b17138e93aa900329b897acc13f7420f21572",
-          "downloadCount": 11,
+          "downloadCount": 45,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:daea47d403cf92286e03f65a44e803bab0a31381deffd40ab8bd946af4d6fc6a",
-          "downloadCount": 11,
+          "downloadCount": 45,
           "name": "styles.css",
           "size": 23433
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Removed\r\n\r\n- **nucleo-matcher-wasm dependency removed** — the WASM-based fuzzy matcher from the Helix editor has been removed. The `nucleo` and `auto` picker engine options are no longer available. The bundled wasm-bindgen glue code contained a `fetch()` call (in the unused async init path) that triggered the Obsidian community directory scanner's network request warning, along with other WASM-related scanner flags. Since uFuzzy performs comparably and nucleo was disabled by default, the dependency has been dropped entirely to eliminate scanner warnings and reduce bundle size.\r\n    - Plugin: `src/picker/matcher-nucleo.ts` (deleted), `src/picker/matcher.ts` (nucleo branch and `auto`/`nucleo` engine options removed), `src/settings.ts` (`pickerMatcherEngine` type narrowed to `'ufuzzy' | 'obsidian'`, dropdown options reduced), `esbuild.config.mjs` (WASM binary loader plugin removed), `package.json` (`nucleo-matcher-wasm` dependency removed)\r\n    - Tests: `test/unit/picker/matcher.test.ts` (nucleo engine removed from test matrix, nucleo-specific test suite removed), `test/bench/matcher.bench.ts` (nucleo benchmarks removed), `test/specs/picker.e2e.ts` (nucleo removed from engine switching test)\r\n    - Docs: `KNOWN_LIMITATIONS.md` (nucleo entries removed from engine list, limitations, and bundle size section), `docs/configuration/settings.md` (engine options updated), `docs/index.md` (0.44.0 summary updated), `ACKNOWLEDGEMENTS.md` (nucleo attribution removed), `AGENTS.md` (nucleo-matcher-wasm fork section removed)\r\n\r\n### Changed\r\n\r\n- **Picker matching engine** — setting reduced from four options (`ufuzzy`, `nucleo`, `obsidian`, `auto`) to two (`ufuzzy`, `obsidian`). Default remains `ufuzzy`.\r\n- **Bundle size** — production bundle reduced by ~193KB (embedded WASM binary) plus ~30KB of wasm-bindgen glue code.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.44.0...0.44.1",
-      "downloadCount": 11,
+      "downloadCount": 45,
       "draft": false,
       "name": "0.44.1",
       "prerelease": false,
@@ -118,26 +178,26 @@
       "assets": [
         {
           "digest": "sha256:45c6f07147bae8eb9e7c4d2ed27e5bc2a8ad407c119db219308f2f690c51a18b",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "main.js",
           "size": 698461
         },
         {
           "digest": "sha256:075e909fce5a3bd0559df051036e31d5f3a4e0cd4a3fedd42828a927fd425bea",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:1624a11cd3c609b79977f65996de0839e03460d4641f080616d8388a3f5bc231",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 20679
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Mobile opt-in setting and toggle command** — the plugin is now disabled by default on mobile devices. A new `enableOnMobile` setting (default: off) controls whether the plugin activates on mobile. When disabled, the plugin skips all Vim engine initialization — no editor extensions, event listeners, commands, or status bar elements are registered — leaving Obsidian's editor in its default state. The settings tab and a toggle command (`Vim Motions: Toggle enable on mobile`) remain accessible even when the plugin is disabled, so users can re-enable without needing a desktop device. Changing the setting requires an Obsidian reload. Hardware keyboard users on tablets can opt in; soft-keyboard-only users are no longer stuck in Normal mode with no way to escape. ([#52](https://github.com/saberzero1/motions/issues/52))\r\n    - Plugin: `src/settings.ts` (`enableOnMobile` in `VimMotionsSettings` interface, `DEFAULT_SETTINGS`, `getSettingDefinitions()` Mobile group, `display()` Mobile toggle), `src/main.ts` (early return in `onload()` when `Platform.isMobile && !enableOnMobile`, `toggle-enable-on-mobile` command registered before the gate)\r\n- **`showConfigNotifications` setting** — a new toggle in **Settings → Vim Motions → Vimrc & key bindings → Show config load notifications** (default: on) controls whether the plugin shows Obsidian Notice popups when vimrc or init.lua files are loaded on startup. When disabled, success and informational notifications (\"loaded N commands from …\", \"loaded but contained no commands\", \"no config files found\") are suppressed. Error notifications (lua syntax/runtime errors) and single-mode \"not found\" warnings (e.g. configMode is `lua` but no init.lua exists) always show regardless of this setting.\r\n    - Plugin: `src/settings.ts` (`showConfigNotifications` in `VimMotionsSettings` interface, `DEFAULT_SETTINGS`, toggle in Vimrc & key bindings group), `src/main.ts` (notification gating in vimrc loading, lua loading, and dual-mode fallback)\r\n\r\n### Changed\r\n\r\n- **Config load notifications scoped and improved** — startup notifications for vimrc and init.lua loading are now better scoped. \"Not found\" messages only appear when the specific config type is the sole configured mode (e.g. configMode is `vimrc` but no vimrc exists) and now include the searched path. In dual-mode (`lua-vimrc`), \"no config files found\" lists both searched paths. Success and empty-file notifications respect the new `showConfigNotifications` setting. Error notifications (lua parse/runtime errors) always show.\r\n    - Plugin: `src/main.ts` (vimrc notification block, lua notification block, dual-mode fallback notification)\r\n- **Picker preview pane renders markdown** — picker preview windows now render file content through Obsidian's `MarkdownRenderer.render()` instead of displaying raw markdown text in `<pre><code>` blocks. Headings, bold, italic, code blocks, images, links, callouts, and other markdown formatting are fully rendered. Links inside the preview are non-interactive (click-through disabled via `pointer-events: none`). For positional previews (grep, live grep, headings, marks), the rendered markdown is displayed alongside a line-number gutter that highlights the target line. `Component` lifecycle is managed per preview update (`load()` on render, `unload()` on preview change and modal close) to prevent memory leaks. Plain-string previews (commands, registers) remain unchanged. The picker modal now uses a fixed height (50vh) to prevent layout shifts when switching between files, and the result count element reserves its line height when empty.\r\n    - Plugin: `src/picker/picker.ts` (`renderMarkdownPreview` method, `Component` lifecycle, `PreviewResult` dispatch), `src/picker/types.ts` (`PreviewResult` interface, `PreviewReturn` union type), `src/picker/sources/preview-utils.ts` (returns `PreviewResult` with `sourcePath` and optional `lineRange`), `styles.css` (rendered preview content, positional gutter, fixed modal height)\r\n\r\n### Fixed\r\n\r\n- **Cursor-aware table widget does not render inline markdown** — images, bold, italic, math, links, and other inline formatting inside table cells were displayed as plain text when the cursor-aware table widget was active. The `TableRenderWidget` used `textContent` to populate cells, which strips all markup. Replaced with `MarkdownRenderer.render()` to process cell content through Obsidian's markdown pipeline. Plain text is shown instantly as a fallback while the async render completes. The `<p>` wrapper added by `MarkdownRenderer` is unwrapped to avoid block-level spacing in cells. `Component` lifecycle is managed per widget (`load()` in `toDOM`, `unload()` in `destroy`) to prevent memory leaks. `editorInfoField` provides `app` and `sourcePath` from the editor state for correct relative image path resolution. ([#50](https://github.com/saberzero1/motions/issues/50))\r\n    - Plugin: `src/vim/table-render-widget.ts` (`renderCell` function, `MarkdownRenderer.render()` integration, `Component` lifecycle, `editorInfoField` for app/sourcePath access)\r\n- **`:obcommand` unavailable in Lua-only config mode** — `vim.cmd('obcommand ...')` failed with \"Not an editor command\" when `configMode` was set to `lua` (without vimrc). The `obcommand` ex command was only registered inside `registerVimrcExCommands()`, which only runs when vimrc loading is enabled. Moved `obcommand` registration to `registerObCommand()` alongside `ob`, sharing the same handler. Both commands are now available in all config modes (lua, vimrc, lua-vimrc, settings-only). Additionally, `:obcommand` with no arguments now opens the command picker (matching `:ob` behavior) instead of silently doing nothing.\r\n    - Plugin: `src/workspace/commands.ts` (`registerObCommand` registers both `ob` and `obcommand`), `src/vimrc/loader.ts` (removed duplicate `obcommand` registration and unused `executeCommandById` helper)\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/settings.md`: added Mobile section with `enableOnMobile` setting; added `showConfigNotifications` toggle to Vimrc & key bindings table\r\n- `docs/getting-started/installation.md`: added Mobile section with enable instructions\r\n- `KNOWN_LIMITATIONS.md`: updated Mobile support section with opt-in setting, toggle command, and revised platform feature table; added config load notification scoping section under Config file resolution\r\n- **7 new e2e tests** — `config-notifications.e2e.ts` covering: lua loaded notification shown/suppressed, lua error notification always shown even when suppressed, lua empty-file notification shown/suppressed, notification includes config file path, setting default verification\r\n- **Shared test helpers** — `setPluginSetting`, `getNotices`, `getVimMotionsNotices`, `dismissNotices` added to `test/helpers.ts`\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.41.0...0.42.0",
-      "downloadCount": 19,
+      "downloadCount": 20,
       "draft": false,
       "name": "0.42.0",
       "prerelease": false,
@@ -178,26 +238,26 @@
       "assets": [
         {
           "digest": "sha256:9f673a69439ca3ae86fdbba417a078a4338acac29f68c0fa2e77865e2b1cf835",
-          "downloadCount": 43,
+          "downloadCount": 45,
           "name": "main.js",
           "size": 653899
         },
         {
           "digest": "sha256:6a9b6446b260a435fd1e530335efbf5844c733960ee81d30875c2fb316ed307b",
-          "downloadCount": 44,
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:62bfea89c21a4171b57ba1c94257e692614a675c27c4eb711b265ab909e688b7",
-          "downloadCount": 43,
+          "downloadCount": 45,
           "name": "styles.css",
           "size": 16352
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **`vim.keymap.set` leader bindings appear in which-key** — leader-prefixed keymaps registered via `vim.keymap.set` with a `desc` option now automatically appear in the which-key overlay, matching `vim.obsidian.leader.add` behavior. Group labels from `vim.obsidian.whichkey.add()` work with both `vim.keymap.set` and `vim.obsidian.leader.add` bindings. Buffer-local keymaps (`buffer = 0`) are excluded from global which-key. ([#27](https://github.com/saberzero1/motions/issues/27))\r\n    - Plugin: `src/lua/api.ts` (leader prefix auto-detection in `vim.keymap.set`), `src/main.ts` (consume `luaResult.leaderBindings` in LeaderRegistry)\r\n- **Synthetic `BufEnter` for initial file** — `BufEnter` autocmds now fire for the file already open when the plugin loads, matching Neovim behavior. Previously, `BufEnter` only fired on subsequent file opens.\r\n    - Plugin: `src/lua/autocmd.ts` (`activate()` accepts `initialFilePath`), `src/lua/loader.ts` (passes current file path)\r\n\r\n### Fixed\r\n\r\n- **`vim.cmd()` broken at runtime** — `vim.cmd()` called from function-mapped keymaps, autocmd callbacks, timer callbacks, and user commands silently failed because commands were queued but never executed after initial load. Fixed with a `runtimeExHandler` that executes commands immediately via `vim.handleEx()`. Cleanup on plugin unload prevents stale callbacks. ([#49](https://github.com/saberzero1/motions/issues/49), [#27](https://github.com/saberzero1/motions/issues/27))\r\n    - Plugin: `src/lua/loader.ts` (`runtimeExHandler`, `activateRuntimeExHandler`, `deactivateRuntimeExHandler`), `src/main.ts` (wire runtime handler, cleanup in `onunload`)\r\n- **Function-callback keymaps lost after feature reload** — `vim.keymap.set` with function callbacks registered keymaps that were silently destroyed when `reloadFeatures()` called `vim.resetKeymap()`. String-RHS keymaps survived but function callbacks did not. Fixed by moving `applyLuaMaps()` to run after `reloadFeatures()` and clearing `luaActionNames` in `loadLuaConfigForTest()`.\r\n    - Plugin: `src/main.ts` (`applyLuaMaps` ordering, `loadLuaConfigForTest` cleanup)\r\n- **Space as leader key breaks which-key** — `vim.g.mapleader = \" \"` with which-key in \"all\" mode now works correctly: space doesn't move the cursor, bindings execute, and grouped which-key displays. The \"leader-only\" mode still has a known limitation (see KNOWN_LIMITATIONS.md). ([#49](https://github.com/saberzero1/motions/issues/49))\r\n- **Surround nvim-surround parity (19 golden test fixes)** — comprehensive alignment with [nvim-surround](https://github.com/kylechui/nvim-surround) semantics. Golden comparison tests passing: 54 → 73 out of 74. ([#41](https://github.com/saberzero1/motions/issues/41))\r\n    - `ds}` / `ds]` / `ds)` / `ds>` now preserve inner spaces (only opening bracket forms `ds{` / `ds[` / `ds(` / `ds<` strip spaces)\r\n    - `csbBysaBb` chain — `_surroundType` gating prevents stale replacement leaking across different surround operation types\r\n    - `csba..` dot-repeat — search position offset by replacement delimiter width for correct nested pair iteration\r\n    - `dsb` on multiline content — cursor clamped to valid line length after bracket deletion\r\n    - Count-prefixed `ds`/`cs` (`2dsb`, `3dsb`, `2csbB`, `3csbr`) — changed from \"find Nth pair\" to \"apply N times\" semantics, matching nvim-surround\r\n    - `ys` with line-crossing motions (`ysjb`, `ys2jB`) — linewise motions now expand range to full lines\r\n    - `ySS`/`VSB`/`cS`/`yS`/`gS` newline indentation — single-line content no longer gets extra 2-space indent, matching nvim-surround\r\n    - `VS` (linewise visual surround) — selection expanded to full lines, uses newline wrapping mode\r\n    - Visual block `Ctrl-V $ S}` — each line wrapped individually instead of entire block\r\n    - `dsf` — new operator: delete surrounding function call (`some_func(args)` → `args`), with nested call support\r\n    - Fork: `src/vim.js` — `deleteSurroundPair` space/cursor, `findSurroundingFunction`, count loops, linewise/block visual handling, `_surroundType` dot-repeat isolation\r\n    - Fork: `src/types.ts` — `_surroundType` field on `InputStateInterface`\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/lua-config.md`: added leader key subsection with `vim.g.mapleader` examples and ordering warning; added tip callout comparing `vim.cmd()` vs `vim.obsidian.leader.add()` for leader bindings\r\n- `docs/configuration/which-key.md`: added \"Automatic labels from vim.keymap.set\" section documenting `desc` option integration with which-key and group label composition with `wk.add()`\r\n- `KNOWN_LIMITATIONS.md`: added 7 Lua runtime entries (4 fixed, 3 open); updated test coverage (9 → 43 e2e tests); updated surround parity section\r\n- **34 new e2e tests across 4 suites** — `lua-runtime.e2e.ts` (8 tests: runtime vim.cmd execution from all callback contexts), `lua-leader-whichkey.e2e.ts` (9 tests: leader binding registration and which-key integration), `lua-space-leader.e2e.ts` (7 tests: space as leader key with regression coverage), `lua-doc-examples.e2e.ts` (10 tests: every documented Lua runtime callback example)\r\n- **Shared test helpers extracted** — `loadLuaConfig`, `focusEditor`, `setWhichKeyMode`, `hasWhichKeyOverlay`, `waitForWhichKey`, `getWhichKeyKeys`, `getWhichKeyDescriptions`, `getWhichKeyGroups`, `getLeaderBindings`, `getLeaderKey`, `getPluginSetting` moved to `test/helpers.ts` from local definitions\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.39.0...0.40.0",
-      "downloadCount": 44,
+      "downloadCount": 46,
       "draft": false,
       "name": "0.40.0",
       "prerelease": false,

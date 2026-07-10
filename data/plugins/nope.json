@@ -4,8 +4,8 @@
   "description": "Not anOther Pdf Exporter. Export notes to publication-ready PDFs via Pandoc and the Eisvogel LaTeX template. Docker-powered toolchain, no LaTeX install required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "nope",
-  "lastChangedAt": "2026-07-09T07:01:27.106Z",
-  "lastFetchedAt": "2026-07-09T07:01:27.106Z",
+  "lastChangedAt": "2026-07-10T07:02:27.027Z",
+  "lastFetchedAt": "2026-07-10T07:02:27.027Z",
   "manifest": {
     "author": "Wanja Zemke",
     "authorUrl": "https://github.com/MrIwan",
@@ -14,11 +14,41 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.0",
     "name": "Nope",
-    "version": "0.5.0"
+    "version": "0.6.0"
   },
   "name": "Nope",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:5c6dcf8479e86a8a5980f327fa095a2b8166d29bab6070de295e1a2cb9fe0aad",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 2141595
+        },
+        {
+          "digest": "sha256:3c9291d5de44cd44c34bf0a6bd65b7c326bf9b1b3654e8cf16cb9cbb6ee571b8",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 426
+        },
+        {
+          "digest": "sha256:3a2e94705c72d90a61535f4bb58b641c1c7dcd4f43fa6193982447a2b1f131eb",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 4358
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Distribution release: the pipeline image now comes prebuilt from GHCR. First setup drops from a 5–15 minute local build to a 1–3 minute pull and every install runs the exact same image. The new image is pulled automatically on the first export after the update.\r\n\r\n## New\r\n\r\n- **Prebuilt pipeline image.** Every release ships a ready-built multi-arch image at `ghcr.io/mriwan/nope-pipeline:<version>` (linux/amd64 and linux/arm64. The plugin pulls it by default instead of building locally. \r\n- **\"Use prebuilt image\" toggle** (Settings → Docker, on by default). Turn it off to build everything locally from the shipped Dockerfile.\r\n- **\"Image tag override\" setting.** Pin a specific image tag.\r\n- **Build provenance attestation.** Images are built by a public GitHub Action from the repo's Dockerfile and carry a signed attestation: `gh attestation verify oci://ghcr.io/mriwan/nope-pipeline:0.6.0 -R MrIwan/obsidian-nope`.",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T09:14:34Z",
+      "tag": "0.6.0"
+    },
     {
       "assets": [
         {
@@ -29,7 +59,7 @@
         },
         {
           "digest": "sha256:fd87b092bd7acff7e13853a507b1449d223e80e426f5c05f218425e4ca04738c",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 426
         },
@@ -42,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Architecture release: the pipeline runs standalone, mermaid needs no browser anymore and every export path is covered by automated tests. The image is rebuilt automatically on first export after the update.\r\n\r\n## New\r\n\r\n- **Extra LaTeX packages.** New settings section: list tlmgr packages (e.g. `cancel pgfplots`), installed into the image as an extra layer. Survives plugin updates; changes trigger an automatic rebuild (cached, seconds). Demo in `example-vault/Minimal LaTex/`.\r\n- **Per-feature example docs + automated pipeline tests.** `example-vault/Features/` holds one small export doc per feature (tables, citations, glossary, mermaid, …); `tests/run-tests.sh` exports all of them (plus the integration docs) headless and asserts on the output — runs on every push via GitHub Actions.\r\n\r\n## Changed\r\n\r\n- **Mermaid renders without a browser.** [merman](https://github.com/Latias94/merman) (headless Rust Mermaid, pinned 0.7.0) replaces mermaid-cli + Puppeteer + Chromium — chromium, node and npm are gone from the image. Ends the recurring \"Failed to launch the browser process\" breakage and most likely fixes mermaid on Windows.\r\n- **Pipeline resolves vault references itself.** Custom templates, branding overrides, bibliography/CSL and citation notes are materialized inside the container (`nope-prepare.lua`) instead of the plugin — only Bases still need the Obsidian API. The pipeline is fully usable standalone (`docker compose run pipeline <doc>.md`); errors surface as `>>> NOPE-ERROR:` in the log. Preview watch mode now also picks up branding/bib changes.\r\n- **One \"Add structured note\" command.** The ten \"Add …\" scaffold commands are merged into a single command that opens a fuzzy picker (table, mermaid, theorem, …). Hotkeys on the old individual commands need to be re-assigned.\r\n\r\n## Fixes\r\n\r\n- **Umlauts in folder names work again.** The container ran without a UTF-8 locale, so pandoc mangled non-ASCII characters in paths (`Geschäftsbericht/` → replacement characters) and every embed in such folders resolved to `[Not found]`. `build.sh` now forces `C.UTF-8`.\r\n- **Highlights with umlauts no longer crash the export.** `==highlight==` spans containing non-ASCII characters (ä/ö/ü/ß) broke pdflatex inside `soul`'s `\\hl{}`. All templates now load `soulutf8` (guarded, no-op where unavailable).\r\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.5.0",
       "prerelease": false,
@@ -53,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:428b01f0bf4ffb765c12d0e4f9f2bc5c36b7be1e689721439ac76176e9798f22",
-          "downloadCount": 4,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 2119090
         },
         {
           "digest": "sha256:09999d7adb259014910e40f8d593580a35fa81ad2c2be1557e7819ce76aafb47",
-          "downloadCount": 5,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 426
         },
         {
           "digest": "sha256:3a2e94705c72d90a61535f4bb58b641c1c7dcd4f43fa6193982447a2b1f131eb",
-          "downloadCount": 4,
+          "downloadCount": 6,
           "name": "styles.css",
           "size": 4358
         }
       ],
       "author": "github-actions[bot]",
       "description": "\r\n## New\r\n\r\n- **Extra LaTeX packages.** New settings section: list tlmgr packages (e.g. `cancel pgfplots`), installed into the image as an extra layer. Survives plugin updates; changes trigger an automatic rebuild (cached, seconds). Demo in `example-vault/Minimal LaTex/`.",
-      "downloadCount": 5,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.4.4",
       "prerelease": false,

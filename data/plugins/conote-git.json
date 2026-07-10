@@ -4,8 +4,8 @@
   "description": "Sync individual vault subfolders with collaborators via GitHub — automatic push/pull, no manual commits, with side-by-side conflict resolution. Super simple, full data ownership, completely free. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "conote-git",
-  "lastChangedAt": "2026-07-09T07:01:27.106Z",
-  "lastFetchedAt": "2026-07-09T07:01:27.106Z",
+  "lastChangedAt": "2026-07-10T07:02:27.027Z",
+  "lastFetchedAt": "2026-07-10T07:02:27.027Z",
   "manifest": {
     "author": "Maximilian Witte",
     "authorUrl": "https://github.com/maximilianwitte",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "CoNote Git",
-    "version": "0.1.8"
+    "version": "0.1.9"
   },
   "name": "CoNote Git",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:c95907d185bee8efae4ccdd34faa45d01786b2e6ad41688c5a300be4d3f01efb",
-          "downloadCount": 7,
+          "digest": "sha256:fa7054489b9ca0e9cbcf095a025130d67ea9b5ae31d70f79f4de649d6555f0de",
+          "downloadCount": 4,
           "name": "main.js",
-          "size": 361056
+          "size": 361321
         },
         {
-          "digest": "sha256:96c06f26cbad5c207541467c90071d02535f5ff19e4a5405876be92cd546e0db",
-          "downloadCount": 7,
+          "digest": "sha256:4438ef03686eed34ebd388368e1586bebec3b3fa04cf8bb740cf8c0d0b1d7f56",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 375
         },
         {
           "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
-          "downloadCount": 7,
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 5184
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\n### Smarter auto-pull\nThe plugin no longer pulls from GitHub on every poll tick regardless of what you're doing. It now only auto-pulls when the note you currently have open lives inside one of your synced folders (or the entire vault, if that's what you sync). No more background GitHub traffic for folders you're not even looking at.\n\nAs a bonus, pulling now also happens immediately the moment you open a note inside a synced folder, instead of waiting for the next scheduled poll — so switching into a synced folder gets you fresh content right away.\n\n\"Sync now\" and the one-time pull on startup are unchanged — both still cover every synced folder, since those are explicit, deliberate actions rather than the background poll.\n\nNo changes to push behavior — edits still auto-commit and push after inactivity as before.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T13:48:22Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c95907d185bee8efae4ccdd34faa45d01786b2e6ad41688c5a300be4d3f01efb",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 361056
+        },
+        {
+          "digest": "sha256:96c06f26cbad5c207541467c90071d02535f5ff19e4a5405876be92cd546e0db",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 375
+        },
+        {
+          "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 5184
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\nFixes the 73 `no-unsafe-*` ESLint warnings from Obsidian's automated review (previously showing under `src/core/gitBackend.ts`, `sync.ts`, `syncState.ts`, and `main.ts`).\n\n**Root cause:** the reviewer's type-checking environment doesn't resolve ambient Node.js types, so raw `fs`/`path`/`crypto` calls type as `any` and cascade into every downstream usage — even though `isomorphic-git`'s own types resolve fine there. (An earlier attempt in 0.1.7 to fix this via `package.json` dependency placement turned out to be a no-op; this release addresses the actual cause.)\n\n**Fix:** added `src/core/nodeApi.ts`, a small facade with explicit hand-written interfaces for exactly the Node functions this plugin uses, cast through `unknown` so the `any`-ness can't propagate regardless of what ambient types are available wherever the code is checked. `isomorphic-git` calls get their own typed view (`gitFs`) since they need the full fs surface.\n\nNo functional changes — this is purely a type-safety / review-compliance release.",
-      "downloadCount": 7,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.1.8",
       "prerelease": false,

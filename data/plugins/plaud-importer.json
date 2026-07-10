@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-09T07:01:27.106Z",
-  "lastFetchedAt": "2026-07-09T07:01:27.106Z",
+  "lastChangedAt": "2026-07-10T07:02:27.027Z",
+  "lastFetchedAt": "2026-07-10T07:02:27.027Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.27.2"
+    "version": "0.30.0"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,27 +22,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:167b16bbaa28597a9174723acc638aa20d67ecb960977b9c828d4bd07bb9da12",
-          "downloadCount": 6,
+          "digest": "sha256:928b094819a6fbfb22c6000f38d82b46e0a76b8eb21b9917450298632d36282c",
+          "downloadCount": 8,
           "name": "main.js",
-          "size": 211627
+          "size": 213835
         },
         {
-          "digest": "sha256:4a0c9eed1460a701be3b81fedbfeed878cd2860b0d488fa39b7822e4134bb220",
-          "downloadCount": 6,
+          "digest": "sha256:db74a6cb3b7af636653773bb87e40169c98ed53ee79c0c5a6a3f9f500d957ca2",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 6,
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **New `plaud-industry` frontmatter property.** Plaud carries a topical/industry classification alongside each summary, separate from the summary category. When present it is now written as its own `plaud-industry` property instead of being folded into `plaud-category`, so the two never mix. It is left off for recordings where Plaud provides no industry value. A matching `{{industry}}` token is available in the extra-frontmatter value field.\n\n### Fixed\n\n- **The `plaud-category` property no longer duplicates `plaud-template`.** Plaud's current summary format stores the template (summary-type) name in the same field the plugin reads for the category, so both properties came out with the identical value, for example both showing \"Deep Summary Transcript\". The plugin now omits `plaud-category` when its value would only repeat `plaud-template`. If Plaud ever provides a category that genuinely differs from the template, it is written as before.\n\n",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.30.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T23:45:15Z",
+      "tag": "0.30.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d69e399d03d8550c45df728b88d61026cd7b4e615e4c0b27351b2aa689074225",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 213472
+        },
+        {
+          "digest": "sha256:6b8d5cb3d0e9ed7dd4457d8f6381d7c35387228f16c133d6caf0acdc166b89c9",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **The background session refresh no longer opens `web.plaud.ai` tabs in your default browser.** The refresh timer's delay is computed from the stored token's expiry, and for a long-lived token (an expiry 137 days out was observed) that delay overflowed the browser's 32-bit timer limit (about 24.8 days) and fired immediately instead of months later. The needless refresh then failed, retried on a backoff up to hourly, and every retry opened a hidden sign-in window whose login page leaked popup tabs into your default browser. The schedule is now capped safely below the timer limit, and a timer that wakes early re-arms without refreshing while the token still has plenty of life, so a valid token is never refreshed for no reason.\n\n### Changed\n\n- **A background refresh never opens a sign-in window anymore, not even a hidden one.** It uses only the silent, windowless renewal. If that fails, the plugin pauses and shows the one-click Reconnect prompt instead of loading Plaud's site in the background; only clicking Sign in or Reconnect ever opens a window.\n- **A hung refresh request can no longer wedge the plugin.** Each renewal call is bounded by a 30-second timeout, so a stalled connection now counts as a failed refresh instead of silently blocking every later refresh and the Sign in button until Obsidian restarts.\n\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.29.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T22:49:18Z",
+      "tag": "0.29.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c9002b240c2ea95df17c59d77b5fd1011655ea8ee6da0575b96d21e02a69cabd",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 214056
+        },
+        {
+          "digest": "sha256:23a2fca7a2f8ab7757af22a7c6fe14d88cb30b8c3b58a4d4627f994f907455d6",
+          "downloadCount": 14,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **New setting \"Preserve unknown frontmatter on re-import\" (on by default).** When a re-import overwrites a note, any frontmatter property you added yourself, or that another tool wrote, is now kept instead of being dropped. Before this, a re-import rebuilt the whole frontmatter block from the plugin's own fields plus your declared extra-frontmatter rows, so a property that downstream automation wrote straight into the note was lost on the next overwrite. Reserved plugin fields still refresh, and you can still let the plugin manage a specific property by adding it as an extra-frontmatter row with preserve turned off. Turn the setting off to restore the old rebuild-from-scratch behavior.\n\n### Fixed\n\n- **The `plaud-model`, `plaud-template`, `plaud-headline`, `plaud-category`, and `plaud-summary-id` frontmatter fields are populated again.** After Plaud moved AI summaries onto a newer generation path, the plugin fetched only the summary text and dropped all of this metadata, so notes (and any MP3 you uploaded) came in with none of those properties. The plugin now reads the metadata from the same recording detail it already downloads, so the fields return. The template value now prefers Plaud's readable template name (for example \"Adaptive Summary\") over its internal code. If a future Plaud change relocates a field again, the import still succeeds without it and a debug log names the field that could not be found.\n- **A placeholder stub's `plaud-placeholder` marker no longer lingers after real content arrives.** The marker was missing from the plugin's reserved-key set; it is now reserved, so a later real import clears it as intended.\n\n",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "0.28.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T15:10:08Z",
+      "tag": "0.28.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:167b16bbaa28597a9174723acc638aa20d67ecb960977b9c828d4bd07bb9da12",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 211627
+        },
+        {
+          "digest": "sha256:4a0c9eed1460a701be3b81fedbfeed878cd2860b0d488fa39b7822e4134bb220",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 13,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Recordings in Plaud's trash are now recognized correctly.** Plaud's trash flag can arrive as a number or string rather than a strict boolean, so the plugin was treating every recording as not-trashed. That left the new \"Trashed\" badge and the \"Hide trashed\" filter with nothing to act on. The flag is now read in all its forms, so trashed recordings show the badge (when \"Hide trashed\" is off) and the filter works.\n\n",
-      "downloadCount": 6,
+      "downloadCount": 13,
       "draft": false,
       "name": "0.27.2",
       "prerelease": false,
@@ -53,26 +143,26 @@
       "assets": [
         {
           "digest": "sha256:ea2e42c46f2ef08fec25f06d9e31df29013dd8cc66b2432c23400256909e0ac4",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 211572
         },
         {
           "digest": "sha256:75a7d6e33536e7ecbe905d06ed875afe1dcb92bbf18f4529f5f6d41aea54600f",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **The import dialog no longer gets stuck on an empty list.** When automatic sync had already imported your newest recordings, opening the dialog with \"Hide already-processed\" on could leave the list blank with nothing to scroll, so older recordings you had not imported yet were unreachable. The dialog now pages past fully-hidden recordings on its own until it finds ones to import. When there is genuinely nothing to import it says so and tells you to turn off a filter to review existing notes, instead of showing a blank panel with a misleading \"scroll to browse\" hint.\n\n### Changed\n\n- **The filter toggles are now one compact \"Hide:\" group on a single line** (Processed, Updates, Ignored, Trashed), so they no longer wrap and take up less room. Each keeps its full description in a tooltip.\n- **Recordings in Plaud's trash now show a \"Trashed\" badge** when \"Hide trashed\" is turned off, so they are no longer indistinguishable from your live recordings.\n\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.27.1",
       "prerelease": false,
