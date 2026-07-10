@@ -4,8 +4,8 @@
   "description": "Search and create book notes using the Google Books API. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "book-search-plus",
-  "lastChangedAt": "2026-07-09T03:03:26.979Z",
-  "lastFetchedAt": "2026-07-09T03:03:26.979Z",
+  "lastChangedAt": "2026-07-10T03:03:27.042Z",
+  "lastFetchedAt": "2026-07-10T03:03:27.042Z",
   "manifest": {
     "author": "Curtis McHale",
     "authorUrl": "https://github.com/curtismchale",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:aec218343a2c3573daa64bde56b4fa6a4e26c44d17f18a2292cfa67b3d7746d2",
-          "downloadCount": 1273,
+          "downloadCount": 1311,
           "name": "main.js",
           "size": 176975
         },
         {
           "digest": "sha256:9a391531d5b043224026db119fa2ad800ce765eb91dcc3bbd6e266f13ee18df3",
-          "downloadCount": 3907,
+          "downloadCount": 3993,
           "name": "manifest.json",
           "size": 345
         },
         {
           "digest": "sha256:6a8633bb4655b48c21ca3cba449985c894b04cbf2f5a19c49ae073bb6dbda0e5",
-          "downloadCount": 1229,
+          "downloadCount": 1265,
           "name": "styles.css",
           "size": 868
         }
       ],
       "author": "curtismchale",
       "description": "This release responds to the Obsidian community plugin reviewer with both lint/code-quality work and new template capabilities.\n\n### Build\n\n- Add `eslint-plugin-obsidianmd` with flat ESLint config (`eslint.config.mjs`) and integrate TypeScript-aware linting as standard practice.\n- Replace `@typescript-eslint/eslint-plugin` + `@typescript-eslint/parser` with `typescript-eslint` v8.\n- Replace `builtin-modules` package with Node's built-in `node:module#builtinModules` in `esbuild.config.mjs`, removing one devDependency (fixes #19).\n- Scope the husky pre-commit hook to staged files only — prettier and eslint now run on staged `.ts` files instead of the whole tree. `tsc --noEmit` still runs project-wide.\n- Upgrade `eslint-plugin-obsidianmd` to 0.2.7.\n\n### Features / Changes\n\n- **Suggesters:** Replace custom `TextInputSuggest`/`Suggest` (popper.js) with Obsidian's built-in `AbstractInputSuggest` for `FolderSuggest`, `FileSuggest`, and `FileNameFormatSuggester`.\n- **Templates:** Replace `new Function()` implied eval in `executeInlineScriptsTemplates` with a safe regex-based expression evaluator supporting `book.prop`, `book.prop || \"fallback\"`, and `book.prop || book.other` patterns.\n- **Templates:** Add `{{list:key}}`, `{{enum:key}}`, and `{{wikilist:key}}` modifier syntax to `replaceVariableSyntax` so array fields like `authors` and `categories` can be emitted as YAML block lists, comma-joined strings, or wikilinked block lists without inline script workarounds (fixes #18). See the README's _Authors as separate entries_ section for usage and pitfalls.\n\n### Bug Fixes\n\n- Quote any frontmatter value containing a colon, not just colon-followed-by-space, so titles like `Cosmos:A Personal Voyage` no longer produce invalid YAML when written into properties (fixes #8).\n- `toStringFrontMatter` now serializes `string[]` values as YAML block lists instead of coercing them to a comma-joined string, so default frontmatter fields like `authors` and `categories` produce valid multi-value YAML.\n- Mask the Naver client secret input with `type=\"password\"` for parity with the Google API key field (fixes #20).\n- Use `activeDocument`/`activeWindow` globals throughout for popout window compatibility.\n- Use `moment.locale()` / `moment.locales()` (namespace form) instead of `window.moment.*` in settings, search modal, and Google Books API.\n- Fix UI text to use sentence case in settings, search modal, and service provider modal.\n- Prevent floating promises in `onload`, ribbon callbacks, and command palette handlers.\n- Fix implicit `any` variables that caused unsafe type inference.\n- Fix `String(unknown)` calls that could produce `[object Object]` — replaced with typed `safeToString` helper.\n- Replace `activeDocument.createDocumentFragment()` with Obsidian's `createFragment()` global in settings, modals, and suggest views.\n- Replace `createEl('div', ...)` with `createDiv(...)` and `createElement('a')` with `createEl('a')` to satisfy `prefer-create-el` lint rule.\n- Remove stale `eslint-disable` directives for `prefer-active-doc` in `template.ts` and `utils.ts`.\n\n### Security\n\n- Issue #14 (security audit) completed — no real findings. Audit notes are in the closed-issue thread.",
-      "downloadCount": 3907,
+      "downloadCount": 3993,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,
@@ -84,26 +84,26 @@
       "assets": [
         {
           "digest": "sha256:95489ada9b9bd8da6a6d6263b7150c808eb3748cac6260ae91e5170ff8165f07",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "main.js",
           "size": 376639
         },
         {
           "digest": "sha256:10a3d8b940e0268ad59482cde6d737cb1c66faad1d8a438b2f57e4527e2ce337",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 349
         },
         {
           "digest": "sha256:6a8633bb4655b48c21ca3cba449985c894b04cbf2f5a19c49ae073bb6dbda0e5",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 868
         }
       ],
       "author": "curtismchale",
       "description": "First release of **Book Search Plus**, a fork of [obsidian-book-search-plugin](https://github.com/anpigon/obsidian-book-search-plugin) v0.7.5 by anpigon. The upstream plugin has been inactive since October 2024. This release applies several bug fixes and build improvements.\n\n## Install via BRAT\n\nThis plugin is not in the Obsidian community directory. Install it using [BRAT](https://github.com/TfTHacker/obsidian42-brat):\n\n1. Install BRAT from the Obsidian community plugin directory.\n2. In BRAT's settings, click **Add Beta Plugin** and enter `curtismchale/obsidian-book-search-plus`.\n3. Enable Book Search Plus in Settings → Community plugins.\n\n## What changed from upstream v0.7.5\n\n### Bug Fixes\n\n- **Google Books API 503 errors** — The API returns intermittent 503 responses unrelated to rate limiting. The plugin now retries up to 4 times with exponential backoff (1s, 2s, 4s) before failing.\n- **Search modal focus** — When the search dialogue opens, focus now lands on the title input field instead of the locale dropdown, so you can type immediately without pressing Tab. ([upstream #132](https://github.com/anpigon/obsidian-book-search-plugin/issues/132))\n- **Commas stripped from filenames** — Filename formats like `{{author}}, {{title}}` no longer have the comma removed. Comma was incorrectly treated as an illegal filename character. ([upstream #54](https://github.com/anpigon/obsidian-book-search-plugin/issues/54))\n\n### Build\n\n- Minification removed — the output is readable and debuggable.\n- Sourcemaps included in all builds.\n- `main.js` tracked in git for direct installation from the repository.\n- `shell.nix` added for a reproducible development environment (Node 20 + pnpm 9).\n\n---\n\n> Some work on this fork is assisted by [Claude Code](https://claude.ai/code).",
-      "downloadCount": 16,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
