@@ -4,8 +4,8 @@
   "description": "Habit tracker with streaks, charts, and statistics. Log daily habits from a carousel dashboard or sidebar panel, pause habits without losing streaks, and export printable PDF reports. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "habits",
-  "lastChangedAt": "2026-07-09T08:00:26.992Z",
-  "lastFetchedAt": "2026-07-09T08:00:26.992Z",
+  "lastChangedAt": "2026-07-10T08:01:27.042Z",
+  "lastFetchedAt": "2026-07-10T08:01:27.042Z",
   "manifest": {
     "author": "James Clifford Spratt",
     "authorUrl": "https://github.com/JamesCliffordSpratt",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Habits",
-    "version": "1.1.1"
+    "version": "1.2.0"
   },
   "name": "Habits",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:c7a77400732b6ba6649fbcb3341b18585ba7b48089fa95e35829aecc343d7fcd",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 1120463
+        },
+        {
+          "digest": "sha256:a772d49a08ed7a873fa4bfb4f22a9464dbc0fcf2f213ef426136fa738b65c577",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 406
+        },
+        {
+          "digest": "sha256:fcc0472ce0aa69c74605acfcb479ca15f544ac7e2fe5bae97af9597eb838d53e",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 34588
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 1.2.0 — Weekly & monthly habits\r\n\r\nHabits can now run on a **weekly** or **monthly** schedule, not just daily. Pick a frequency when you create or edit a habit, and the plugin takes care of the rest.\r\n\r\n### New\r\n- **Frequency picker** — every habit can be Daily, Weekly, or Monthly. Weekly habits are due on a weekday you choose; monthly habits on a day of the month you choose.\r\n- **Cards appear only when due** — weekly and monthly habits show up in the dashboard and sidebar panel on their due date only, so your list stays focused on what actually needs doing today. A gentle \"nothing due\" message appears on empty days.\r\n- **Smart month-end handling** — for monthly habits, a day that a month doesn't have rolls to that month's **last day**. Set the 31st and February fires on the 28th (29th in leap years), April on the 30th, and so on — you never skip a month.\r\n\r\n### Streaks & stats\r\n- Streaks now count **periods, not days**: a weekly habit's streak is consecutive weeks completed, a monthly habit's is consecutive months.\r\n- Completion rates and perfect days ignore the days a habit isn't due, so off-days no longer drag your numbers down.\r\n- Habit pages adapt their charts: the activity chart plots each recent **due date** (labelled with the date it falls on) and a rolling completion-rate trend, with tiles relabelled to \"Weeks completed\" / \"Months completed\".\r\n\r\n### Notes\r\n- Fully backward compatible — existing habits are treated as Daily with no changes.\r\n- To log a weekly or monthly due date you missed, step back to it with the dashboard's date arrows.",
+      "downloadCount": 13,
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T13:12:36Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3ecfc14ba48387586c1b6652dcce088d749a8609fbad5d8a5807d973387fd1d6",
-          "downloadCount": 45,
+          "downloadCount": 49,
           "name": "main.js",
           "size": 1114829
         },
         {
           "digest": "sha256:9ea8aa244cb459d441349dedbe741f425b0e8f1ec13d93b64f481cec930fe168",
-          "downloadCount": 45,
+          "downloadCount": 49,
           "name": "manifest.json",
           "size": 406
         },
         {
           "digest": "sha256:43517b21ba5862b1a89f427f70bc58e63402b861302300f6337b5cd15357861e",
-          "downloadCount": 44,
+          "downloadCount": 48,
           "name": "styles.css",
           "size": 34176
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Habits 1.1.0\r\n\r\nTwo new features, a safer dependency chain, and a stack of polish.\r\n\r\n### ✨ New\r\n\r\n- **💬 Per-day comments** — every dashboard card now has a comment flap along its bottom edge. Click it and the card flips over (with a 3D animation) to a comment box for the selected day — ideal for noting why a habit was missed or what made a great day work. Days with a comment show an accent-tinted speech bubble, comments live in your habit note's frontmatter alongside your records, and they can be included in PDF reports via a new export toggle. Can be disabled in settings.\r\n- **🌍 Localization** — Habits is now available in **English, Spanish, French, German, and Simplified Chinese**, following your Obsidian language setting. Everything is translated: dashboard, sidebar panel, stats, export dialog, settings, menus, and notices.\r\n\r\n### 🔒 Security & dependencies\r\n\r\n- Upgraded jsPDF to v4, resolving all published advisories against jspdf and dompurify (including [GHSA-w532-jxjh-hjhj](https://github.com/advisories/GHSA-w532-jxjh-hjhj)) — `npm audit` is clean\r\n- Removed jsPDF's unused dynamic `<script>` injection from the bundle — its `pdfobjectnewwindow`/`pdfjsnewwindow` output modes (which this plugin never uses; PDF export only ever calls `output(\"arraybuffer\")`) created a `<script>` element to load code from a CDN. A build step now strips that capability from `main.js` entirely, clearing the community scorecard's dynamic-code-execution flag\r\n- Replaced the deprecated `builtin-modules` package with Node's built-in `node:module` API\r\n- Release assets (`main.js`, `manifest.json`, `styles.css`) are now published with **GitHub artifact attestations**, so you can cryptographically verify they were built from this repository\r\n\r\n### 🐛 Fixes & polish\r\n\r\n- Long habit names stay on a single line and truncate with a proper ellipsis; tooltips always show the full name\r\n- Tighter card title spacing so more of each name fits — \"Drink Water\" no longer truncates at four cards per view\r\n- The comment indicator on the card flap now correctly shows its accent tint\r\n- Assorted card layout refinements\r\n\r\n### 📦 Installation\r\n\r\nHabits is available in the **Obsidian community plugin browser**: open **Settings → Community plugins → Browse**, search for \"Habits\", then install and enable. Already using Habits? This update will appear under **Settings → Community plugins → Check for updates**.\r\n\r\nFound a bug or have an idea? [Open an issue](https://github.com/JamesCliffordSpratt/obsidian-habits/issues).\r\n",
-      "downloadCount": 45,
+      "downloadCount": 49,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,

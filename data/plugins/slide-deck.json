@@ -4,8 +4,8 @@
   "description": "Turn a Markdown note into a slide deck and export it to PDF or a PNG image series, with live readability checks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "slide-deck",
-  "lastChangedAt": "2026-07-09T08:00:26.992Z",
-  "lastFetchedAt": "2026-07-09T08:00:26.992Z",
+  "lastChangedAt": "2026-07-10T08:01:27.042Z",
+  "lastFetchedAt": "2026-07-10T08:01:27.042Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://jkaindl.de",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:550945f738930124a0ade7236a44d822f6cd95f839512152157064beafa74225",
-          "downloadCount": 1,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 5220212
         },
         {
           "digest": "sha256:43a808becdf049af10e3866f04a3e5c64dd1dab2c3e60d9461e3c1325d608c42",
-          "downloadCount": 1,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:cc14f78214949b4af4147d2f3737896123c8d06d01bc05bdbf6b4bc60fc37079",
-          "downloadCount": 1,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 4301
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nFirst release to ship local-LLM deck generation (developed but never released on 0.4.x)\nalongside the new design system.\n\n### Added\n- **Generate a deck from a note with a local LLM** — a sidebar view (ribbon 🪄) turns the active\n  note into a slide deck via an OpenAI-compatible local endpoint (LM Studio / Ollama). Model\n  picker from the endpoint, streaming with a non-streaming fallback for the CORS \"ping ✓, stream ✗\"\n  asymmetry, a retry cap, and an \"AI (local)\" settings group. No cloud, no telemetry.\n- Generated decks record their origin (`source: \"[[Note]]\"` backlink) and the model used\n  (`model:` in frontmatter).\n\n### Changed (BREAKING)\n- **Design system**: modular type scale (ratio 1.25), spacing tokens, vertical rhythm, alignment\n  axioms (lists never line-centered; hero layouts center blocks). Existing decks render\n  differently (better).\n- **Built-in themes replaced**: shiro 白 (new default, light), kuro 黒, sumi 墨, kairo 回路,\n  kurenai 紅. Legacy keys (default, dark, serif, high-contrast) resolve silently via aliases;\n  a persisted `defaultTheme` migrates on load.\n- Dark built-ins use a real dark highlight.js scheme and mermaid \"dark\" (fixes light mermaid on\n  dark themes); kuro carries an atmosphere layer (grain, glow, vignette) and warm, semantically\n  separated callout hues.\n- User themes inherit the code/mermaid scheme from shiro; new optional character tokens\n  (display style/weight/tracking, eyebrow font — see THEMING-GUIDE) and a `/* sd-label */` meta\n  for readable dropdown names.\n- LLM deck prompts: hero layouts restricted to sparse content, bullet budgets, kicker convention.\n\n### Fixed\n- **Plugin failed to re-enable or update** (\"could not be loaded\") — the themes-folder hide built\n  its stylesheet in the main-window realm but adopted it into `activeDocument`; adopting a\n  constructed stylesheet across documents throws `NotAllowedError`. Now built in the active\n  document's own realm.\n- **Settings tab rendered blank on Obsidian < 1.13** — the imperative `display()` fallback is\n  restored (walks the same `getSettingDefinitions`), so the tab works on public Obsidian again.\n- **Export layout**: two-column stagger (phantom grid cell), the missing `cover` layout alias,\n  and `header/footer/paginate` landing in the body instead of the frontmatter.\n\n### Compatibility\n- **`minAppVersion` back to 1.8.7** (reverses the 0.4.0 raise to 1.13.0). 0.4.0 was effectively\n  gated to Obsidian Catalyst/Insider; 0.5.0 runs on public Obsidian again.\n\n### Internal\n- Regression net: canonical testdeck fixture + per-slide HTML and owned-CSS snapshots + targeted\n  guards (separator vs. `<hr>`, embed refs with spaces/em-dash, callout token cascade).\n- Shared modules vendored from obsidian-kit (ThinkSplitter, parseSSE, endpoint, mergeSettings).",
-      "downloadCount": 1,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.5.0",
       "prerelease": false,
@@ -84,26 +84,26 @@
       "assets": [
         {
           "digest": "sha256:27cd4cdcd7f1b4588460e8294205c3f089d70c7de406a07aba0160a3169adcba",
-          "downloadCount": 23,
+          "downloadCount": 25,
           "name": "main.js",
           "size": 5151028
         },
         {
           "digest": "sha256:f1152ce171520e28ed568340c9a198487364a333c38d11e988eba81e37284f25",
-          "downloadCount": 23,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:e7ac1585c8f1d02e6f11884d507dc10dbdd4ef645c187a499c817310e82fe266",
-          "downloadCount": 23,
+          "downloadCount": 25,
           "name": "styles.css",
           "size": 3431
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nMaintenance release for the Obsidian community-plugin review — no user-facing behaviour change.\n\n### Changed\n\n- **Obsidian lint compliance** — cleared every `eslint-plugin-obsidianmd` finding from the\n  community-plugin review without inline `eslint-disable` comments:\n  - Static inline styles (off-screen iframe staging, the deck-scale transform origin, the\n    preview overflow clip) moved into CSS classes (`styles.css` / `STRUCTURE_CSS`); only\n    genuinely per-render values (the fit scale and box size) stay inline via `setProperty`.\n  - The realm-safe HTML insertion in the renderer no longer uses `innerHTML` — it parses with\n    `DOMParser` and imports nodes via `importNode` + `replaceChildren` (verified equivalent,\n    including Mermaid SVG namespacing).\n  - `processFrontMatter` access is typed instead of suppressed.\n  - The two remaining file-scoped overrides (a lazy `require(\"electron\")`, a shadowed\n    deprecated `display()`) are unavoidable and documented in `eslint.config.mjs`.\n- **README** — refreshed for the 0.3.0 template model (nine templates, density modifiers, deck\n  slots, smart layout inference, media-fill) and bumped the release badge.\n\n### Fixed\n\n- CHANGELOG 0.3.0 incorrectly said \"eleven\" templates; the template count is **nine**.",
-      "downloadCount": 23,
+      "downloadCount": 25,
       "draft": false,
       "name": "0.3.1",
       "prerelease": false,
