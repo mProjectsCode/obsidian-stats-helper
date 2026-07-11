@@ -4,8 +4,8 @@
   "description": "Lina — Privacy-Focused AI Note Assistant - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lina",
-  "lastChangedAt": "2026-07-10T08:01:27.042Z",
-  "lastFetchedAt": "2026-07-10T08:01:27.042Z",
+  "lastChangedAt": "2026-07-11T08:04:28.018Z",
+  "lastFetchedAt": "2026-07-11T08:04:28.018Z",
   "manifest": {
     "author": "Anselmo Pinheiro",
     "authorUrl": "https://github.com/anselmopinheiro",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.1",
     "name": "Lina",
-    "version": "0.1.8"
+    "version": "0.1.9"
   },
   "name": "Lina",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:767a0a5d45288762c7ec5d2504a982fbd5aae2562a4d61467dc1250dcf646697",
-          "downloadCount": 4,
+          "digest": "sha256:92f1b07edc083aceb604e1ffee343624819f7a5715bf0e7628b5fab2c932abb3",
+          "downloadCount": 7,
           "name": "main.js",
-          "size": 515812
+          "size": 520252
         },
         {
-          "digest": "sha256:3a3b2d10651f263d224d63a99987895e63700b74be2373c0e9ac2e95ab5eea20",
-          "downloadCount": 3,
+          "digest": "sha256:4375669e0411a90810d043f905a863ba89d4d41063167bb4bbfb3a5a7ad50f24",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 352
         },
         {
           "digest": "sha256:edc76112985ab3c0fd54141b90b17bfaaf81e97a7c26bddaabe0ecfe1272bf4e",
-          "downloadCount": 3,
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 6020
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Lina 0.1.9\r\n\r\nThis is an important stability release for Lina.\r\n\r\nIt improves how Lina handles its local text index, especially in large vaults, vaults synced with OneDrive or similar services, and vaults where many notes were imported at once.\r\n\r\n## Fixed\r\n\r\n- Prevented Obsidian from becoming unresponsive or showing a blank white window when Lina tries to load an oversized `.lina/index/chunks.jsonl` file.\r\n- Added defensive loading for `.lina/index/chunks.jsonl`.\r\n- Added defensive handling for empty, truncated, or corrupted `.lina/index/notes.json` files.\r\n- Prevented automatic file-change updates from creating partial text indexes when no valid index exists.\r\n- Automatic updates now only run after a valid text index has already been created.\r\n- Invalid or incomplete index files are handled safely and no longer break the plugin.\r\n- Improved stability after large note imports, including OneNote imports or similar bulk-import workflows.\r\n\r\n## Indexing behaviour\r\n\r\nThe first text index creation is now clearly documented as a manual step.\r\n\r\nWhen Lina is installed or enabled for the first time, it does not automatically build the full text index. To start using Lina search, create the index manually from the Lina panel or by using the rebuild index command.\r\n\r\nAfter a valid index exists, Lina can keep it updated automatically through incremental updates.\r\n\r\nThis behaviour is intentional and helps keep Obsidian responsive in large vaults, on mobile devices, and in vaults synced with OneDrive or similar services.\r\n\r\n## Technical safeguards\r\n\r\n- Maximum chunk index file size: `50 MiB`\r\n- Maximum indexed chunks loaded at once: `100000`\r\n- Defensive parsing of `chunks.jsonl`\r\n- Defensive parsing of `notes.json`\r\n- Automatic updates require a valid existing text index\r\n- Rebuild/full index creation remains manual only\r\n\r\n## Notes\r\n\r\nIf Lina search results appear incomplete after updating, rebuild the Lina text index manually from the Lina panel.\r\n\r\nNo changes were made to the user interface, commands, settings, providers, embeddings, ranking logic, or search behaviour outside these stability fixes.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T21:46:12Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:767a0a5d45288762c7ec5d2504a982fbd5aae2562a4d61467dc1250dcf646697",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 515812
+        },
+        {
+          "digest": "sha256:3a3b2d10651f263d224d63a99987895e63700b74be2373c0e9ac2e95ab5eea20",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 352
+        },
+        {
+          "digest": "sha256:edc76112985ab3c0fd54141b90b17bfaaf81e97a7c26bddaabe0ecfe1272bf4e",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 6020
         }
       ],
       "author": "github-actions[bot]",
       "description": "This is an important stability release.\r\n\r\n## Fixed\r\n\r\n- Added defensive loading for Lina index chunk files.\r\n- Prevented Obsidian from becoming unresponsive or showing a blank white window when Lina tries to read an oversized or partially corrupted `.lina/index/chunks.jsonl` file.\r\n- Improved resilience after large note imports, including imports from OneNote or other bulk-import plugins.\r\n- Invalid JSONL lines in the chunk index are now skipped safely instead of breaking the whole index load.\r\n- Oversized chunk index files are now ignored safely with a warning instead of being fully loaded into memory.\r\n\r\n## Technical details\r\n\r\nLina now checks the chunk index file size before reading it and limits the number of chunks loaded into memory.\r\n\r\nAdded safeguards:\r\n\r\n- Maximum chunk index file size: `50 MiB`\r\n- Maximum indexed chunks loaded at once: `100000`\r\n\r\nThese limits are intended to protect the Obsidian renderer from excessive memory usage while preserving normal behaviour for valid indexes.\r\n\r\n## Notes\r\n\r\nIf Lina search results appear incomplete after updating, rebuild the Lina index from the plugin controls.\r\n\r\nNo changes were made to the user interface, providers, embeddings, ranking logic, settings, or search behaviour outside this stability fix.",
-      "downloadCount": 3,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.1.8",
       "prerelease": false,
@@ -53,13 +83,13 @@
       "assets": [
         {
           "digest": "sha256:6b8a03d4d89f8747ef1b60862bcc73a8b98111bcd3c5cfc0c3c3a956250dde5e",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "main.js",
           "size": 489558
         },
         {
           "digest": "sha256:7d4e264f8caf809674d2d1f571ec6ec67ddf40a4b3f856aeae61480fde4ab138",
-          "downloadCount": 22,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 352
         },
@@ -72,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Lina 0.1.7\r\n\r\nThis alpha release adds the first version of Lina’s contextual command input, making it possible to interact with the active note or selected text directly from the Lina sidebar.\r\n\r\n### Added\r\n\r\n- Added the `/ask` contextual command.\r\n  - Uses the current text selection when available.\r\n  - Falls back to the active note when there is no selection.\r\n  - Preserves the selected text when focus moves from the editor to the Lina input.\r\n  - Shows a safe context summary before the AI response.\r\n  - Allows copying the response.\r\n  - Allows inserting or replacing text only after explicit confirmation.\r\n\r\n- Added the `/tags` contextual command.\r\n  - Suggests tags for the current selection or active note.\r\n  - Shows suggested tags with checkboxes.\r\n  - Applies only the selected tags after confirmation.\r\n  - Avoids duplicating existing tags.\r\n\r\n- Added the `/yaml` contextual command.\r\n  - Suggests frontmatter/YAML fields for the current selection or active note.\r\n  - Shows suggested fields with checkboxes.\r\n  - Applies only selected fields after confirmation.\r\n  - Does not overwrite existing frontmatter values automatically.\r\n\r\n- Added `docs/commands.md` with the current and reserved slash commands.\r\n\r\n### Improved\r\n\r\n- Improved contextual AI safety and transparency.\r\n- Contextual commands now show:\r\n  - the context source;\r\n  - the active note name;\r\n  - the approximate context size;\r\n  - whether a preserved selection was used.\r\n- Plain text without a slash continues to run the normal search flow.\r\n- The Lina input is now prepared to evolve into a broader contextual command box.\r\n\r\n### Privacy and safety\r\n\r\n- Contextual AI commands respect the configured content exclusions.\r\n- `/ask`, `/tags`, and `/yaml` revalidate the final context immediately before any provider call.\r\n- If the active note or selected content matches excluded terms, nothing is sent to the AI provider.\r\n- AI-generated content is never applied to notes automatically.\r\n- Applying AI output requires explicit user action and confirmation.\r\n\r\n### Notes\r\n\r\nLina is still in alpha. Features may change, and users should continue testing with non-critical notes before relying on the plugin in production workflows.\r\n\r\n",
-      "downloadCount": 22,
+      "downloadCount": 25,
       "draft": false,
       "name": "0.1.7",
       "prerelease": false,
@@ -89,7 +119,7 @@
         },
         {
           "digest": "sha256:c9ab57b578f5a0d19bb42aa632a9a6307396e4adb9f1e9cde66f75b54871b426",
-          "downloadCount": 45,
+          "downloadCount": 47,
           "name": "manifest.json",
           "size": 352
         },
@@ -102,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Lina 0.1.6 alpha\r\n\r\nThis alpha release focuses on safer indexing, better hybrid search control, improved AI suggestion flow, quieter indexing feedback, mobile fixes and release hardening.\r\n\r\n## Highlights\r\n\r\n* Added configurable hybrid search weights.\r\n* Improved control over textual and semantic search balance.\r\n* Added Mistral as a selectable provider/model option.\r\n* Improved AI suggestion organisation.\r\n* Separated suggested note titles from the main AI analysis flow.\r\n* Fixed indexing and AI-context exclusion for configured sensitive terms.\r\n* Improved mobile behaviour for indexing and tag suggestions.\r\n* Removed intrusive toast notifications during indexing.\r\n* Hardened release validation for Community Plugin assets.\r\n\r\n## Added\r\n\r\n### Configurable hybrid search weights\r\n\r\nHybrid search weights can now be configured in the plugin settings.\r\n\r\nUsers can adjust the balance between:\r\n\r\n* textual search weight\r\n* semantic search weight\r\n\r\nThis makes it possible to tune Lina depending on the vault, language, note structure and embedding quality.\r\n\r\n### Mistral option\r\n\r\nMistral has been added as an available provider/model option in the settings.\r\n\r\nRemote provider support is still evolving, so this should be treated as part of the provider configuration groundwork rather than a fully validated replacement for the currently functional Ollama workflow.\r\n\r\n## Improved\r\n\r\n### Hybrid search control\r\n\r\nHybrid search is now more flexible because the textual and semantic weights can be adjusted by the user.\r\n\r\nThis is useful because different vaults may behave better with different balances:\r\n\r\n* more textual weight for precise keyword-based notes\r\n* more semantic weight for conceptual or loosely connected notes\r\n* balanced weights for mixed search behaviour\r\n\r\n### AI suggestion structure\r\n\r\nAI analysis output is now better organised.\r\n\r\nThe suggestion flow was adjusted so that:\r\n\r\n* YAML/frontmatter and tag suggestions appear at the beginning of the suggestion output\r\n* tasks and analysis content are placed later in the output\r\n* suggested note titles are handled separately\r\n* title changes require confirmation instead of being mixed into the main suggestion output\r\n\r\nThis keeps AI suggestions clearer and reduces the risk of accidental note changes.\r\n\r\n### Suggested note title flow\r\n\r\nSuggested note titles are now treated as a separate suggestion.\r\n\r\nInstead of mixing title changes into the general analysis output, Lina now presents the title suggestion separately and requires confirmation before any title-related action is applied.\r\n\r\n### Less intrusive indexing feedback\r\n\r\nIndexing no longer produces repeated toast notifications while processing notes.\r\n\r\nThis keeps the Obsidian interface quieter, especially during larger indexing operations or automatic index updates.\r\n\r\n### Mobile behaviour and indexing\r\n\r\nSeveral mobile-related behaviours were improved:\r\n\r\n* fixed cases where notes were not being indexed correctly on mobile\r\n* fixed the maximum suggested tags behaviour on mobile\r\n* reduced intrusive feedback during indexing\r\n* improved indexing behaviour in mobile scenarios\r\n\r\n### Documentation and release metadata\r\n\r\nREADME and plugin documentation were cleaned up to better reflect the current alpha status.\r\n\r\nThe documentation now separates implemented features, limitations and roadmap items more clearly.\r\n\r\n## Fixed\r\n\r\n### Sensitive term exclusion\r\n\r\nFixed an issue where configured sensitive terms could still be included in the local index or AI-related context.\r\n\r\nConfigured sensitive terms are now excluded from:\r\n\r\n* index content\r\n* AI analysis context\r\n\r\nThis improves privacy safeguards, especially for users who keep personal, credential-like or sensitive notes inside their vault.\r\n\r\nImportant: users who had already indexed a vault before this fix should rebuild the Lina index so the previous indexed data is replaced.\r\n\r\n### Mobile indexing issues\r\n\r\nFixed mobile-related indexing issues that could prevent some notes from being indexed correctly.\r\n\r\n### Suggested tags limit on mobile\r\n\r\nFixed an issue affecting the maximum number of suggested tags on mobile.\r\n\r\n### Indexing notifications\r\n\r\nFixed excessive toast notifications during indexing.\r\n\r\nLina should now avoid repeatedly interrupting the user while the index is being created or updated.\r\n\r\n## Release hardening\r\n\r\nRelease checks were improved to validate the expected Community Plugin release files:\r\n\r\n* `manifest.json`\r\n* `main.js`\r\n* `styles.css`\r\n\r\nThe release validation now focuses on the required distributable assets.\r\n\r\n## Validation\r\n\r\nValidated for this release:\r\n\r\n* dependencies install successfully with `npm ci`\r\n* build completes successfully\r\n* typecheck command is available\r\n* release-check command is available\r\n* required release files are present\r\n* working tree was clean after validation\r\n\r\n## Known limitations\r\n\r\nLina is still in alpha.\r\n\r\nCurrent limitations remain:\r\n\r\n* embeddings are still generated manually\r\n* mobile support is improving but not fully validated for all workflows\r\n* AI analysis uses retrieved hybrid-search context, not automatic full-vault reading\r\n* text search is not intended to replace Obsidian's native search\r\n* remote AI providers are still being expanded gradually\r\n\r\n## Upgrade note\r\n\r\nAfter updating to 0.1.6, users who rely on exclusions or sensitive-term filtering should rebuild the Lina index.\r\n",
-      "downloadCount": 45,
+      "downloadCount": 47,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,
@@ -119,7 +149,7 @@
         },
         {
           "digest": "sha256:0639ea3afc8023c106ce8363c3b4a9d3b1e8b994e82e7b4a4c6b4280ec597b26",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 352
         },
@@ -132,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "This is the initial public release of Lina, an AI-powered Obsidian plugin designed to enhance note-taking, knowledge management, and personal productivity through intelligent assistance.\r\n\r\nLina brings semantic search, smart organisation, and connected thinking directly into your Obsidian workflow, helping you move from isolated notes to a structured and meaningful knowledge system.\r\n\r\nKey features\r\nSemantic search across your notes for natural, intent-based discovery\r\nSmart organisation tools to help structure and maintain your knowledge base\r\nLinked notes and relationship mapping to connect ideas automatically\r\nAI-assisted workflows for writing, summarising, and exploring your notes\r\nLightweight and fast integration with Obsidian\r\nVision\r\n\r\nLina is built as a personal knowledge assistant that grows with your notes. The goal is to reduce friction in managing information and to help users think more clearly through connected knowledge.\r\n\r\nStatus\r\n\r\nThis is an early release (alpha). Features are actively evolving and improvements are ongoing.\r\n\r\nFeedback, suggestions, and contributions are welcome.",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "0.1.5",
       "prerelease": false,
@@ -149,7 +179,7 @@
         },
         {
           "digest": "sha256:952b6f2fcd2f3be0bccd4733d9cf961b7ba2c8a6f8df507d60a0c5a7d82090fc",
-          "downloadCount": 2,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 352
         },
@@ -162,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "This is the initial public release of Lina, an AI-powered Obsidian plugin designed to enhance note-taking, knowledge management, and personal productivity through intelligent assistance.\r\n\r\nLina brings semantic search, smart organisation, and connected thinking directly into your Obsidian workflow, helping you move from isolated notes to a structured and meaningful knowledge system.\r\n\r\nKey features\r\nSemantic search across your notes for natural, intent-based discovery\r\nSmart organisation tools to help structure and maintain your knowledge base\r\nLinked notes and relationship mapping to connect ideas automatically\r\nAI-assisted workflows for writing, summarising, and exploring your notes\r\nLightweight and fast integration with Obsidian\r\nVision\r\n\r\nLina is built as a personal knowledge assistant that grows with your notes. The goal is to reduce friction in managing information and to help users think more clearly through connected knowledge.\r\n\r\nStatus\r\n\r\nThis is an early release (alpha). Features are actively evolving and improvements are ongoing.\r\n\r\nFeedback, suggestions, and contributions are welcome.",
-      "downloadCount": 2,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.1.3",
       "prerelease": false,
@@ -185,7 +215,7 @@
         },
         {
           "digest": "sha256:ecdbe8ad438951fd7c5b65c0409904460cb62c26fe89d0f1c99edc6ff2dd0931",
-          "downloadCount": 4,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 362
         },
@@ -204,7 +234,7 @@
       ],
       "author": "anselmopinheiro",
       "description": "This is the initial public release of Lina, an AI-powered Obsidian plugin designed to enhance note-taking, knowledge management, and personal productivity through intelligent assistance.\r\n\r\nLina brings semantic search, smart organisation, and connected thinking directly into your Obsidian workflow, helping you move from isolated notes to a structured and meaningful knowledge system.\r\n\r\nKey features\r\nSemantic search across your notes for natural, intent-based discovery\r\nSmart organisation tools to help structure and maintain your knowledge base\r\nLinked notes and relationship mapping to connect ideas automatically\r\nAI-assisted workflows for writing, summarising, and exploring your notes\r\nLightweight and fast integration with Obsidian\r\nVision\r\n\r\nLina is built as a personal knowledge assistant that grows with your notes. The goal is to reduce friction in managing information and to help users think more clearly through connected knowledge.\r\n\r\nStatus\r\n\r\nThis is an early release (alpha). Features are actively evolving and improvements are ongoing.\r\n\r\nFeedback, suggestions, and contributions are welcome.",
-      "downloadCount": 4,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -227,7 +257,7 @@
         },
         {
           "digest": "sha256:c5a9fd9525ce9217aa6c400c92aed29268d29ae46892327a9538a9324a5a6d94",
-          "downloadCount": 2,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 362
         },
@@ -246,7 +276,7 @@
       ],
       "author": "anselmopinheiro",
       "description": "Release description\r\n\r\nThis is the initial public release of Lina, an AI-powered Obsidian plugin designed to enhance note-taking, knowledge management, and personal productivity through intelligent assistance.\r\n\r\nLina brings semantic search, smart organisation, and connected thinking directly into your Obsidian workflow, helping you move from isolated notes to a structured and meaningful knowledge system.\r\n\r\nKey features\r\nSemantic search across your notes for natural, intent-based discovery\r\nSmart organisation tools to help structure and maintain your knowledge base\r\nLinked notes and relationship mapping to connect ideas automatically\r\nAI-assisted workflows for writing, summarising, and exploring your notes\r\nLightweight and fast integration with Obsidian\r\nVision\r\n\r\nLina is built as a personal knowledge assistant that grows with your notes. The goal is to reduce friction in managing information and to help users think more clearly through connected knowledge.\r\n\r\nStatus\r\n\r\nThis is an early release (alpha). Features are actively evolving and improvements are ongoing.\r\n\r\nFeedback, suggestions, and contributions are welcome.",
-      "downloadCount": 2,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.1.1",
       "prerelease": false,
@@ -269,7 +299,7 @@
         },
         {
           "digest": "sha256:685172e59bf3b4f5e63999b2009aee39ff721e8b1e9c9bd882167bf753405d7a",
-          "downloadCount": 0,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 360
         },
@@ -288,7 +318,7 @@
       ],
       "author": "anselmopinheiro",
       "description": "Release description\r\n\r\nThis is the initial public release of Lina, an AI-powered Obsidian plugin designed to enhance note-taking, knowledge management, and personal productivity through intelligent assistance.\r\n\r\nLina brings semantic search, smart organisation, and connected thinking directly into your Obsidian workflow, helping you move from isolated notes to a structured and meaningful knowledge system.\r\n\r\nKey features\r\nSemantic search across your notes for natural, intent-based discovery\r\nSmart organisation tools to help structure and maintain your knowledge base\r\nLinked notes and relationship mapping to connect ideas automatically\r\nAI-assisted workflows for writing, summarising, and exploring your notes\r\nLightweight and fast integration with Obsidian\r\nVision\r\n\r\nLina is built as a personal knowledge assistant that grows with your notes. The goal is to reduce friction in managing information and to help users think more clearly through connected knowledge.\r\n\r\nStatus\r\n\r\nThis is an early release (alpha). Features are actively evolving and improvements are ongoing.\r\n\r\nFeedback, suggestions, and contributions are welcome.\r\n",
-      "downloadCount": 0,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.0",
       "prerelease": false,
