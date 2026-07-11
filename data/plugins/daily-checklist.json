@@ -4,8 +4,8 @@
   "description": "A minimal sidebar checklist for daily routines, with optional sync to your daily note. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "daily-checklist",
-  "lastChangedAt": "2026-07-10T06:02:27.024Z",
-  "lastFetchedAt": "2026-07-10T06:02:27.024Z",
+  "lastChangedAt": "2026-07-11T06:00:26.989Z",
+  "lastFetchedAt": "2026-07-11T06:00:26.989Z",
   "manifest": {
     "author": "Matt Maiorana",
     "authorUrl": "",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Daily Checklist",
-    "version": "1.0.8"
+    "version": "1.0.9"
   },
   "name": "Daily Checklist",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:ee1537737b9094c49fd2ee859d6d11bdb13ee9b9ae13f75154c66613aa1feffa",
-          "downloadCount": 35,
+          "digest": "sha256:df2a491c3b5207dcf411927adbdfbb30d30c230e6538f8957d2886cc3f1c1ebd",
+          "downloadCount": 2,
           "name": "main.js",
-          "size": 33477
+          "size": 36442
         },
         {
-          "digest": "sha256:e6d40470c45b630ce45b403a67e30ce3207a0c67a0d2ed28fc2b5918092ad9c5",
-          "downloadCount": 35,
+          "digest": "sha256:307a7aa7e16ca5362a8ffc1c49da7a70cf542a0c290dd08e3fc6968ecc07bfcf",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 290
         },
         {
           "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
-          "downloadCount": 33,
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 8596
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This release hardens correctness and the daily-note write path based on a full-codebase review. No user-facing feature changes; no change to what the plugin writes to notes.\n\n### Fixed\n\n- **Duplicate item names no longer corrupt state.** Adding or renaming an item to a name already in the list is now rejected with a notice (at all three entry points). Previously, deleting one of two same-named items removed both, renames hit the wrong row, and both shared a single checked state.\n- **Items named like `Object.prototype` members are no longer permanently checked.** Checked-state reads now use an own-property guard (`isItemChecked`), so an item named `toString`, `constructor`, `valueOf`, etc. behaves normally.\n- **A hand-corrupted `data.json` can no longer silently break the writer.** `dailyNoteFolder`, `dailyNoteDateFormat`, and `dailyNoteTemplatePath` are now coerced to defaults when non-string, so the write path can't throw on `.trim()`. `writeChecklistToDailyNote` gained the same boolean type-guard the other toggles have.\n- **Midnight-boundary writes target the correct day.** Each mutation now captures a single timestamp and threads it through the daily reset and the note write, so a mutation that straddles local midnight can't write the previous day's checks into the new day's note.\n- **Foreground-sync no longer clobbers an unsaved mutation.** The visibility-change reload is skipped while a settings save is in flight.\n- **Daily-note writes are serialized.** Overlapping mutations now queue through a single promise chain, so a slower earlier write can't overwrite a newer state.\n- **Popout-window listener leak.** The `visibilitychange` handler captures its document once, so it always detaches from the document it attached to.\n\n### Changed\n\n- The settings-tab item editor no longer renders dead drag handles on mobile (drag-reorder is desktop-only, matching the sidebar).\n\n### Notes\n\n- Remaining low-priority review items (touchscreen-laptop drag gating, append-time trailing-whitespace trim, multi-leaf sidebar sync) are documented in `FUTURE_PLANS.md`.\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T04:19:26Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ee1537737b9094c49fd2ee859d6d11bdb13ee9b9ae13f75154c66613aa1feffa",
+          "downloadCount": 40,
+          "name": "main.js",
+          "size": 33477
+        },
+        {
+          "digest": "sha256:e6d40470c45b630ce45b403a67e30ce3207a0c67a0d2ed28fc2b5918092ad9c5",
+          "downloadCount": 39,
+          "name": "manifest.json",
+          "size": 290
+        },
+        {
+          "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
+          "downloadCount": 37,
           "name": "styles.css",
           "size": 8596
         }
       ],
       "author": "github-actions[bot]",
       "description": "This patch release resolves a further round of Obsidian plugin-checker findings and simplifies the settings autocomplete.\n\n### Changed\n\n- Switched the folder autocomplete to `vault.getAllFolders()` and the template-file autocomplete to `vault.getMarkdownFiles()`, replacing the previous `getAllLoadedFiles()` + `instanceof` filtering. More direct and lets the API do the type narrowing.\n- Bumped `minAppVersion` from `1.6.0` to `1.7.2`. The awaited `workspace.revealLeaf()` signature and `vault.getAllFolders()` both require newer APIs than `1.6.0` declared; `1.7.2` is the correct floor.\n- Renamed the \"Daily Checklist callout\" settings heading to \"Callout\" — settings headings should not repeat the plugin name.\n- Raised the TypeScript `lib` from `ES2018` to `ES2019` so `String.prototype.trimEnd` is properly typed. Under `ES2018` the checker treated `trimEnd()` results as `any`, producing false unsafe-call warnings.\n- Removed a redundant `as DailyChecklistSettings` assertion on the settings merge in `loadSettings`.\n\n### Notes\n\n- No settings, daily-note write behavior, or user-visible functionality changed.\n",
-      "downloadCount": 35,
+      "downloadCount": 39,
       "draft": false,
       "name": "1.0.8",
       "prerelease": false,
