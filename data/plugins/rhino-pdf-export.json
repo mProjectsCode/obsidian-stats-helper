@@ -4,8 +4,8 @@
   "description": "Export notes as styled PDF with configurable themes, logos, headers/footers, and legal notices. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "rhino-pdf-export",
-  "lastChangedAt": "2026-07-10T03:03:27.042Z",
-  "lastFetchedAt": "2026-07-10T03:03:27.042Z",
+  "lastChangedAt": "2026-07-11T03:00:27.030Z",
+  "lastFetchedAt": "2026-07-11T03:00:27.030Z",
   "manifest": {
     "author": "Degun",
     "authorUrl": "https://github.com/degun-osint",
@@ -13,9 +13,9 @@
     "fundingUrl": "https://ko-fi.com/degun",
     "id": "rhino-pdf-export",
     "isDesktopOnly": true,
-    "minAppVersion": "1.4.0",
+    "minAppVersion": "1.4.10",
     "name": "Rhino PDF Export",
-    "version": "1.2.0"
+    "version": "1.3.2"
   },
   "name": "Rhino PDF Export",
   "presentInCommunityList": true,
@@ -23,27 +23,117 @@
     {
       "assets": [
         {
+          "digest": "sha256:0c13a17450571550a9b9b9fc0faa0655355df07365182eb2ba61aeaea3cc3b5d",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 2405902
+        },
+        {
+          "digest": "sha256:ba6c56c04d82d6932238579413d88042bdd98ad3993c2823f6e0a9fde8ccef7f",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 366
+        },
+        {
+          "digest": "sha256:6723381791c36c63f84338371fd28d5fb324bed3bce8c962555827835f67e1e7",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 2968
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/degun-osint/obsidian-rhino-pdf-export/compare/1.3.1...1.3.2",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T16:11:41Z",
+      "tag": "1.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bb56a3a50e5c5303d05a36b98e76468b6bb5fadb297913973b2620fdf22214d9",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 2405833
+        },
+        {
+          "digest": "sha256:8786faf911467366d7437fb9e40da7f73ef9354bdd73cabff29521439aa9b9a7",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 366
+        },
+        {
+          "digest": "sha256:6723381791c36c63f84338371fd28d5fb324bed3bce8c962555827835f67e1e7",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 2968
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/degun-osint/obsidian-rhino-pdf-export/compare/1.3.0...1.3.1",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T15:48:27Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:aa38e9453b7fe26403290a403e68efa9226d660d0aac0a27150197a9b76b0f36",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2406156
+        },
+        {
+          "digest": "sha256:b7089c0b8897975198dba009123d4196f5f5178f3b6ad995a140edad982e1d00",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 365
+        },
+        {
+          "digest": "sha256:9c9588a8027ad860fbe60283fddf611dba6d357bff02e83e8318d9771e1a1367",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 2832
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Configuration is now layered: **the theme carries the defaults, the note overrides them, the export modal has the last word.**\n\n## ⚠️ Breaking change\n\n`rhino-pdf` frontmatter must now be **valid YAML**. The plugin used to parse it itself, leniently; it now reads what Obsidian already parsed. Quote any value containing `{`, `:` or `#`:\n\n```yaml\nrhino-pdf:\n  paginationFormat: \"{page} / {pages}\"   # `{` would open a flow mapping\n  primaryColor: \"#e63946\"                # `#` would start a comment\n```\n\nUnknown or invalid keys are ignored instead of applied, and the export modal shows a badge listing them.\n\n## Highlights\n\n- **\"This document\" section** in the export modal — subtitle, cover, table of contents, watermark and classification, changeable right before exporting. **Save to note** writes them into the note's frontmatter so a one-off tweak becomes reproducible; **Save as theme default** promotes them to the theme.\n- **New frontmatter keys**: `theme:` pins a theme per note, `order:` sorts chapters in a merged export (no more `01-` prefixes), `coverInfo:` persists the cover info block — its checkboxes used to reset on every open.\n- **Embedded fonts**: point a theme at font files in your vault and they are inlined into the PDF, so it renders identically on any machine. Family, weight and style are read from the file itself, not guessed from its name; variable fonts report their real range. *Import from folder* configures a whole family in one click.\n- **Fully offline**: Inter and JetBrains Mono are bundled. Exporting no longer requests anything from Google Fonts — a document can be produced air-gapped, and producing it reveals nothing.\n- **Quick export command**: no dialog, straight to a PDF next to the note.\n- **Duplicate any theme**, built-ins included. Starting from Minimal used to mean retyping it.\n- Merged folder exports honour each note's page-break settings; batch and single-note exports now share the same overrides and precedence.\n\n## Fixed\n\n- An empty value in the modal now clears a value set by the theme — truthiness checks made it impossible to remove a theme's subtitle.\n- A watermark containing `</script>` no longer breaks the render.\n- The theme editor's margins are four inputs and the watermark sliders are sliders; all of them used to discard invalid input without a word.\n- `lastOutputDir` and any future setting are actually persisted.\n\nFull notes in the [changelog](https://github.com/degun-osint/obsidian-rhino-pdf-export/blob/1.3.0/CHANGELOG.md).\n\n**Full Changelog**: https://github.com/degun-osint/obsidian-rhino-pdf-export/compare/1.2.0...1.3.0",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-10T15:23:08Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:0b33360960dc1ee991f422cd2647f765160a370b8e00624d381148f594e17867",
-          "downloadCount": 171,
+          "downloadCount": 174,
           "name": "main.js",
           "size": 2132592
         },
         {
           "digest": "sha256:a58a7416f4feff3971b0985e7bb946b423d477fd07c15759bec45d88b4170ad2",
-          "downloadCount": 190,
+          "downloadCount": 193,
           "name": "manifest.json",
           "size": 365
         },
         {
           "digest": "sha256:2828b4d4ff326f4ec184a1d4ebc6c4cde4f3a1c81ac617d57221be58ff77fc84",
-          "downloadCount": 134,
+          "downloadCount": 137,
           "name": "styles.css",
           "size": 1438
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/degun-osint/obsidian-rhino-pdf-export/compare/1.1.1...1.2.0",
-      "downloadCount": 190,
+      "downloadCount": 193,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
