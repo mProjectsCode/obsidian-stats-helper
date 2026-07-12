@@ -4,8 +4,8 @@
   "description": "AI-powered multi-view project planner and habit tracker: Kanban, Timeline, Calendar, and more over your vault notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "marvis",
-  "lastChangedAt": "2026-07-11T05:03:27.002Z",
-  "lastFetchedAt": "2026-07-11T05:03:27.002Z",
+  "lastChangedAt": "2026-07-12T05:03:26.999Z",
+  "lastFetchedAt": "2026-07-12T05:03:26.999Z",
   "manifest": {
     "author": "Mahdi Massahi",
     "description": "AI-powered multi-view project planner and habit tracker: Kanban, Timeline, Calendar, and more over your vault notes.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:ef85944568e03af7eb545025552aaa3df8763bf661d7a9aea2fdac98ee645046",
-          "downloadCount": 220,
+          "downloadCount": 227,
           "name": "main.js",
           "size": 549228
         },
         {
           "digest": "sha256:fa0f87d8a25595418743bd6b7ae15c44d0b55b9e7c5a350a08fdc17a7d89dcc3",
-          "downloadCount": 221,
+          "downloadCount": 229,
           "name": "manifest.json",
           "size": 283
         },
         {
           "digest": "sha256:1588305f5e165ae3631e2dfd6a81e28bdaea8519729f3c05db1c1bde7ba58a2c",
-          "downloadCount": 183,
+          "downloadCount": 188,
           "name": "styles.css",
           "size": 101449
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Changed\n\n- Calendar Week and Month chips (events, tasks, logs/habits) now fill with the project colour at the same low-opacity tint used in Day view, instead of only carrying a coloured border. Project membership is readable at a glance across all three calendar modes; chips without a project keep their plain background.\n\n### Performance\n\n- Indexer now coalesces vault and `metadataCache` events into a single 60ms flush. Bursty change streams (Apple Calendar sync, iCloud bursts, vault reload) previously triggered hundreds of cascading store updates and React re-renders; they now collapse to one. (`src/index/indexer.ts`)\n- Habit views (Today, Review, Habit table, Habit card) no longer re-derive `Object.values(s.logs)` on every store mutation. The list selector returned a new array on every tick, defeating Zustand's identity check and causing every habit view to re-run `completionCounts` / `dayCounts` / `bonusTickDays` / `computeStreak` per habit. Subscribers now read the logs map directly and group logs by habit name once per render, collapsing the worst case from O(habits × logs) to O(logs + habits). (`src/views/Habits.tsx`, `src/views/shared/HabitCard.tsx`, `src/views/table/HabitTable.tsx`)\n- Search filter caches the lowercased haystack per task and per habit in a `WeakMap` instead of rebuilding the (up-to-8000-char) body string on every keystroke. List-valued filter fields also pre-build their lookup `Set`s once per call. (`src/filter/filterEngine.ts`)\n- Project lookup by name now goes through a memoised `Map<name, Project>` (`useProjectByName` in `src/views/context.ts`) instead of an `Object.values(projects).find(...)` per row in every chip, bar, and table row.\n- Timeline `dayIndex` is now an arithmetic offset rather than a linear scan; for a 500-bar / 720-day chart this cuts ~1.5 M comparisons per render. (`src/views/Timeline.tsx`)\n- Timeline now caches parsed RRules and the resulting occurrence arrays in a `WeakMap` keyed by the event reference + range, instead of re-parsing every recurring event over a ±2-year window on every filter change. (`src/utils/recurrence.ts`)\n- `PlannerView` skips React re-renders when `layout-change` fires without an actual change in the assistant-leaf state. Tab focus, sidebar resize, and other layout events no longer rebuild the entire React tree. (`src/views/PlannerView.tsx`)\n\n### Added\n\n- Drag-to-reorder for habits in the Today view. Each row now exposes a grip handle on hover; dragging persists a fractional `order` to the habit's frontmatter so the new sequence carries across both Today and Review modes (and survives reloads). Uses the same dnd-kit + fractional-indexing pattern as Kanban cards.\n- Status and priority rows in Settings now have up/down arrow buttons to reorder them. The Kanban view follows this order for its columns, so users who accidentally remove and re-add a status can move it back into place instead of being stuck with the new column at the end.\n\n### Fixed\n\n- Reordering a status or priority in Settings did not update the open Kanban view until the plugin was reloaded. The `columns` memo in `src/views/Kanban.tsx` depended on the whole `settings` object reference, which doesn't change when `settings.statuses` is replaced in-place; the memo now depends on `settings.statuses` and `settings.priorities` directly so reorders take effect immediately.\n",
-      "downloadCount": 221,
+      "downloadCount": 229,
       "draft": false,
       "name": "0.2.4",
       "prerelease": false,
@@ -58,7 +58,7 @@
         },
         {
           "digest": "sha256:39a60f7b8fd835093c1b288b9ce9c8ceef07969c469a08facf8bb9438396d3f9",
-          "downloadCount": 170,
+          "downloadCount": 171,
           "name": "manifest.json",
           "size": 282
         },
@@ -71,7 +71,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\n\n- Calendar view opened on the 1st of the month regardless of the persisted mode, so reopening on Day or Week dropped the user on day 1 instead of today's slot. The initial cursor now mirrors the mode (today for Day/Week, first-of-month for Month), and switching between modes also snaps onto today's slot so each mode opens on a useful range.\n",
-      "downloadCount": 170,
+      "downloadCount": 171,
       "draft": false,
       "name": "0.2.3",
       "prerelease": false,
@@ -88,7 +88,7 @@
         },
         {
           "digest": "sha256:6539f3276aacc497ef74f4c2a19ab4b89e15d87a04a71887c4e62014d2855e23",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 282
         },
@@ -101,7 +101,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\n\n- Archived events were rendering in the Calendar and Timeline views. They now respect the existing `Include archived` filter toggle (same behaviour as archived tasks/habits) — hidden by default, visible when the toggle is on. `Event.archived` is parsed from frontmatter or an `/archive/` path segment, matching tasks.\n- Recurring events with `BYDAY` were rendering one weekday too late for users in positive UTC offsets — e.g. a `FREQ=WEEKLY;BYDAY=TU,FR` event appeared on Wednesday/Saturday. `rrule.js` interprets `dtstart`'s UTC components, but `eventStartDate` constructs the anchor in local time, so local midnight Tuesday looks like Monday late-evening in UTC and the weekday resolution shifts forward. Switched the recurrence pipeline to floating-UTC dates: anchors and the query range are converted UTC-side-up before expansion, and occurrences are converted back to local Dates for display.\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.2.2",
       "prerelease": false,
@@ -118,7 +118,7 @@
         },
         {
           "digest": "sha256:3e5fd1ab0fdd380e54d7cef96a1b3fd0ccadae664488584fc3119052df728a1e",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 282
         },
@@ -131,7 +131,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\n\n- App becoming unresponsive to subsequent actions after a task property edit. The task action bar was calling `activeDocument.createDiv()` (which tries to append to the document root and throws `HierarchyRequestError: Only one element on document allowed`), aborting the Zustand store subscriber chain mid-tick and leaving the React tree out of sync until reload. Switched to the bare `createDiv()` / `createSpan()` / `createEl()` globals that return a detached element; same pattern fixed in `QuickCreateModal`.\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.2.1",
       "prerelease": false,
@@ -148,7 +148,7 @@
         },
         {
           "digest": "sha256:95709bfc4148ffecb05b3a0370770ffc7ec5a7885f64160b97d880fa703b3371",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 282
         },
@@ -161,7 +161,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Added\n\n![](docs/screenshots/habit-today.png)\n![](docs/screenshots/habit-review.png)\n\n- **Habit tracker.** Daily, weekly, and monthly habits stored as markdown notes (`kind: habit`) under each project, with a configurable target count per period and optional goal/milestone link. Completions are normal logs with a `habit: [[…]]` backlink, so they index, search, and appear in Calendar/Table/Logs alongside everything else.\n- **Today view** for habits — project-accented title, goal, cadence pill (e.g. `3× daily`), inline pip progress (target + gold-sparkle bonus slots), live streak chip, and a left-side check button as the primary tick action. A `[<] [date] [Today] [>]` day-bar with ←/→ keyboard nav lets you backfill yesterday or browse past days; streak math always reflects real \"now.\"\n- **Review view** for habits — two-pane heatmap with a fixed sidebar of habit rows and a horizontally-scrolling grid of the last N days (configurable in settings, default 60). Square cells, green for in-target ticks, gold-sparkle for bonus, intensity-shaded for partial periods. Strictly read-only.\n- **Habits surface elsewhere** — Table view gains a Habits tab (editable target/state/project/frequency, bulk archive/delete); FilterBar exposes Frequency + State chip groups on the Habits view; Calendar renders habit logs with a repeat icon and gold backdrop; CreateMenuModal gets a Habit tab; palette commands for *Open habits*, *Create habit*, *Log habit completion*; new `H-N` stable codes.\n- **AI assistant — habit visibility.** Two new read-only tools (`list_habits`, `get_habit_review`) returning the same shape Today and Review render. `get_planning_snapshot` extended with a `habits` block (active count, due-today list, on-streak list) so the model surfaces pending habits on open-ended planning prompts without a second tool call. The system instruction now mentions habits exist.\n\n### Fixed\n\n- **Delete command** generalised. The *Delete task* command and the file/editor-menu *Delete marvis task* items were gated on `kind === \"task\"`, so opening a habit log (or any non-task Marvis note) and triggering delete silently did nothing. The command is now *Delete note* and the menu items adapt their label per kind (`Delete marvis log`, `Delete marvis habit`, …) — they accept any Marvis kind and dispatch to the appropriate service.\n\n### Changed\n\n- Main view tabs reordered: Habits now sits between Calendar and Table.\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.2.0",
       "prerelease": false,
@@ -178,7 +178,7 @@
         },
         {
           "digest": "sha256:7d91656a0459ed9c1405786e46543b3ebc2b6aaaf924c2241c8486b01107667c",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 265
         },
@@ -191,7 +191,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/Mahdi-Massahi/obsidian-marvis/compare/0.1.1...0.1.2",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,
@@ -208,7 +208,7 @@
         },
         {
           "digest": "sha256:f72663ede3dea858523880c337f6fcb061b5b1fe241b2cf41e790847fd79f37b",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 265
         },
@@ -221,7 +221,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/Mahdi-Massahi/obsidian-marvis/compare/0.1.0...0.1.1",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.1.1",
       "prerelease": false,
@@ -238,7 +238,7 @@
         },
         {
           "digest": "sha256:57f8154d1788570875e99bf2445a1f387950b922face6fa525d78cf19037b404",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 255
         },
@@ -251,7 +251,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/Mahdi-Massahi/marvis/commits/0.1.0",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.1.0",
       "prerelease": false,

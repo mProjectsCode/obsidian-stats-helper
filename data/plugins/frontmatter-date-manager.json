@@ -4,8 +4,8 @@
   "description": "Automatically update created, modified, and last-viewed dates in frontmatter when editing notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "frontmatter-date-manager",
-  "lastChangedAt": "2026-07-11T05:03:27.002Z",
-  "lastFetchedAt": "2026-07-11T05:03:27.002Z",
+  "lastChangedAt": "2026-07-12T05:03:26.999Z",
+  "lastFetchedAt": "2026-07-12T05:03:26.999Z",
   "manifest": {
     "author": "SmetDenis",
     "authorUrl": "https://github.com/SmetDenis",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:1f3e27c759e073ded5b4b5485a316ba265a8ea8040766d733210a364397b6afb",
-          "downloadCount": 83,
+          "downloadCount": 93,
           "name": "main.js",
           "size": 1177325
         },
         {
           "digest": "sha256:795f344217a602528ec73254585ce7ad48fdb36fa72aae1e004f18720b033d92",
-          "downloadCount": 85,
+          "downloadCount": 98,
           "name": "manifest.json",
           "size": 324
         },
         {
           "digest": "sha256:b1410ec4d90cb09785a65ce36df3b1eed6b74753c628325c19789ce1c3e3865e",
-          "downloadCount": 79,
+          "downloadCount": 87,
           "name": "styles.css",
           "size": 12915
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Release 1.2.1\n\n> Compare: [`1.2.0...1.2.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.2.0...1.2.1) · 7 commits\n\nA stability and polish release focused entirely on stopping unnecessary writes to your notes. The plugin now leaves a note alone when its dates are already correct, and it no longer disturbs the note you are actively editing. No new settings, no behavior you have to opt into - existing vaults just get quieter.\n\n## Highlights\n\n- **No more cursor jumps while typing.** When the plugin stamps `updated` or `viewed` on a note that is open in the editor, it now preserves the file's modified time so Obsidian does not reload the note. Your cursor, text selection, and scroll position stay put mid-edit.\n- **No more redundant re-stamping.** If `updated` (or `viewed`) already reflects when the file was last changed, the plugin skips the write entirely. Notes that an external sync or script has already stamped no longer get \"shaken\" by a needless rewrite.\n\n---\n\n## 🐛 Fixed\n\n- **The open note reloaded and the cursor jumped while typing** - stamping frontmatter without pinning the modified time made Obsidian treat the plugin's own write as an external change and reload the note into the editor, throwing the cursor, selection, and scroll position while the user was still typing (the reported \"storm\"). The automatic single-file writes now pin `{ ctime, mtime }` whenever the target note is open in a Markdown editor leaf, so Obsidian does not reload it; a note that is not open in any editor is still written normally so its Properties view and Dataview refresh immediately. Bulk operations are deliberately left untouched. ([56e47d6](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/56e47d6))\n- **Notes were re-stamped even when the date was already current** - after an external script or sync had already written a correct `updated` value, the plugin would still rewrite it a moment later, churning the file's modified time and fighting sync (\"shaking\" the note); under a coarse date format, re-opening the same note on the same day could likewise rewrite the same `viewed` value. A freshness guard now skips the write when the on-disk value already covers the change: a raw value-identity check (the value would not actually differ) plus a signed 5-second freshness window (`updated` is within 5 seconds of, or ahead of, the file's modified time). A deliberately future-dated value is never clobbered, and a genuinely stale value is still updated as before. ([55133cf](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/55133cf), [32ce362](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/32ce362))\n\n## 💅 UX & polish\n\n- **Honest feedback from the \"Update timestamps for current file\" command** - the command previously always reported \"Timestamps updated.\" even when nothing was written. It now reflects the real outcome: \"Timestamps updated.\" only on an actual write, \"Timestamps will update shortly.\" when the write is briefly deferred by the minimum-time-between-saves limit, and \"Timestamps are already up to date.\" when the freshness guard skipped a no-op. New notice strings ship in all 21 interface languages. ([55133cf](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/55133cf))\n\n## 🧰 Internal & maintenance\n\n*No action needed by users; listed for completeness.*\n\n- Bumped the community-review linter `eslint-plugin-obsidianmd` to `^0.4.1` (the Obsidian review bot always runs the latest) and adopted Obsidian's `createDiv()`/`createSpan()` helpers in the settings tab and the bulk-operation chrome, which the linter's improved rule scoping newly flagged. The rendered interface is unchanged - these are equivalent element-creation calls. ([a195489](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/a195489))\n- Bumped `picomatch` from 4.0.4 to 4.0.5 (the runtime glob dependency behind the file-filter rules; a patch bump with no behavior change). ([24ad4d4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/24ad4d4))\n- Patched development-only dependencies to clear security advisories (`undici`, `vite`, `js-yaml`, pulled in by the test and e2e toolchain). Runtime dependencies and the shipped plugin bundle are unchanged; `npm audit` now reports zero vulnerabilities. ([aca454e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/aca454e))\n\n---\n\n**Full changelog:** [`1.2.0...1.2.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.2.0...1.2.1)\n",
-      "downloadCount": 85,
+      "downloadCount": 98,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:b2229abe5581d48564f111db5a2af1b5e951f1eec2f807f466a852062104c697",
-          "downloadCount": 182,
+          "downloadCount": 185,
           "name": "manifest.json",
           "size": 324
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 1.2.0\n\n> Compare: [`1.1.1...1.2.0`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.1.1...1.2.0) · 6 commits\n\nThis release makes the plugin speak your language and adds an opt-in way to track how often each note is edited. The entire interface is now translated into 21 languages and follows Obsidian's own language setting automatically, and a new optional edit-activity counter lets you answer \"which notes do I work on most?\" from Bases or Dataview. Both additions are built around the plugin's core safety rule: your note data is never reordered, clobbered, or written without a real change.\n\n## Highlights\n\n- **The whole interface now follows Obsidian's language.** Every settings control, bulk dialog, command, notice, and status-bar label ships in 21 languages and switches automatically with your Obsidian language - no plugin setting to flip, with English used per string wherever a translation is missing.\n- **Optional edit-activity counter.** Turn on a number property (default `updated_count`, off by default) that goes up by one on each real edit, so you can sort or filter your most-worked notes in Bases or Dataview.\n\n---\n\n## ✨ New\n\n- **Multilingual interface (21 languages)** - the full UI - the settings tab, all five bulk dialogs, shared bulk dialog chrome, the download notices, and every command, notice, and status-bar label - is now translated and follows Obsidian's configured language, resolved once when the plugin loads. English and Russian are hand-checked; the other 19 are machine-generated baselines. Missing translations fall back to English per string, so a partial translation never breaks the interface, and every locale is now required to declare all keys (enforced at compile time and by a completeness test), so no string can silently revert to English from a forgotten key. The RTL languages (`ar`, `fa`) mirror correctly via logical CSS. ([87a92b4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/87a92b4), [eb265e4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/eb265e4))\n- **Edit-activity counter (`updated_count`)** - an opt-in number property, off by default, that increases by one on each real edit so you can sort or filter your most-edited notes in Bases or Dataview. It rides the existing modified-date write as a single update (a native unquoted number, never an extra or no-op write) and counts real edits only - not a missing-`created` fill, a rate-limited retry, or an out-of-order-date fix. Because the 2-second debounce and the minimum-time-between-saves setting coalesce a burst of typing into one increment, it is an approximate activity signal rather than an exact edit history. The count is read back from the property on disk each time, so a value merged in by sync is respected rather than overwritten; any corrupt or foreign value (text, a decimal, a negative, a list) is normalized to a safe whole number instead of failing; and the counter property can never share a name with the created, updated, or last-viewed date - both the settings and the write step reject a name collision, so it can never clobber a date. ([ae339fa](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/ae339fa))\n\n## 🧰 Internal & maintenance\n\n*No action needed by users; listed for completeness.*\n\n- Added a generated project-documentation set under `docs/` for AI-assisted development. ([70bd0cb](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/70bd0cb))\n- Added translated READMEs (German, Japanese, Russian, Simplified Chinese). ([f834115](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/f834115))\n- Updated `.gitignore` patterns. ([32829c4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/32829c4))\n\n## Breaking changes / Migration\n\n- **Minimum Obsidian version raised to 1.11.0** (from 1.4.11). The multilingual interface relies on Obsidian's language-detection API, so the supported floor moves up. If you are on Obsidian 1.11.0 or newer (the current public release is the 1.12.x line) there is nothing to do - update the plugin as usual. If you are on an older Obsidian, update Obsidian to 1.11.0 or newer to receive this and future versions; the plugin will keep running on the version you already have installed. ([87a92b4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/87a92b4))\n\n---\n\n**Full changelog:** [`1.1.1...1.2.0`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.1.1...1.2.0)\n",
-      "downloadCount": 182,
+      "downloadCount": 185,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:55cde3d3ca3bec628b1fb780c895000c684628cb5922a94080aac6136b552558",
-          "downloadCount": 106,
+          "downloadCount": 109,
           "name": "manifest.json",
           "size": 324
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 1.1.1\n\n> Compare: [`1.1.0...1.1.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.1.0...1.1.1) · 4 commits\n\nA privacy and supply-chain focused maintenance release. The bulk preview tables no longer reach for the clipboard - the \"export the full diff\" escape hatch now saves a local file instead, which removes the \"Clipboard Access\" capability label from the Obsidian community safety scorecard. Release builds also gain verifiable provenance. No settings, commands, or default behavior change.\n\n## Highlights\n\n- **Preview export no longer uses the clipboard.** Every bulk modal's \"Download full preview\" button (formerly \"Copy full preview\") now writes the complete diff to a `.tsv` file in your downloads folder instead of copying it. The plugin no longer accesses `navigator.clipboard` at all, dropping the \"Clipboard Access\" disclosure from the safety scorecard.\n- **Verifiable release downloads.** The release now ships SLSA build provenance attestations for `main.js`, `manifest.json`, and `styles.css`, so the published assets can be cryptographically traced back to this repository's CI.\n\n---\n\n## 🗑️ Removed\n\n- **Clipboard access (\"Copy full preview\")** - The full-diff export on every bulk preview (populate, rename, reformat, find out-of-order dates) and on the post-run failure table used to copy the diff to the system clipboard via `navigator.clipboard`, which surfaced a \"Clipboard Access\" capability label on the Obsidian community safety scorecard. It is replaced by a \"Download full preview\" button that saves the complete diff (every changed row, not just the visible page) as a `.tsv` file to your downloads folder via a transient in-memory link - no clipboard, and no vault file is written. The button is desktop-only: the HTML `download` attribute is unreliable in Obsidian's mobile (Capacitor) webview, so on mobile it is hidden and the full diff stays readable in the on-screen paginated table. ([3c30d65](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/3c30d65))\n\n## 🧰 Internal & maintenance\n\n*No action needed by users; listed for completeness.*\n\n- Release workflow now generates SLSA build provenance attestations for the published `main.js`, `manifest.json`, and `styles.css`, and runs the full strict gate (format, lint, typecheck-e2e, test, build) before publishing so a failing check blocks the release instead of shipping a broken build. ([2a8834d](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/2a8834d))\n- Regenerated the store and README screenshots at 1200x800 (3:2) to match the community store image rules. ([3a943ef](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/3a943ef))\n- Added a contributing guide, security policy, code of conduct, and GitHub issue / pull-request templates. ([b754921](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/b754921))\n\n---\n\n**Full changelog:** [`1.1.0...1.1.1`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.1.0...1.1.1)\n",
-      "downloadCount": 106,
+      "downloadCount": 109,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:a60354ae61b6f5c8bf40a02153d84d86191dd5c0ac2e9abc9e7d4b262467e454",
-          "downloadCount": 14,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 324
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 1.1.0\n\n> Compare: [`1.0.1...1.1.0`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.0.1...1.1.0) · 59 commits\n\nThis release adds a new bulk tool for finding and fixing out-of-order dates, makes date reformatting safe for ambiguous day/month values, and hardens the whole plugin against corrupt settings, sync churn, and silent data loss. Every bulk preview now pages through the *complete* diff and tells you exactly which files failed and why.\n\n## Highlights\n\n- **Find & fix out-of-order dates.** A new bulk tool detects notes where the last-edited date is earlier than the creation date and fixes them with a strategy you choose. Auto-update also prevents this from happening going forward (opt-in, off by default).\n- **Reformat no longer corrupts ambiguous dates.** Values like `01/05/2024` (where day and month are both plausible) are left untouched by default instead of being silently guessed.\n- **Previews never hide changes.** Bulk dry-runs page through the *full* diff and can copy the complete preview as TSV.\n- **No more \"check the console.\"** Failed files now show the real reason inline.\n\n---\n\n## ✨ New\n\n- **Find & fix out-of-order dates (last-edited earlier than created)** - a detection-first bulk tool that auto-scans on open, shows the full list with a delta column and a tolerance hint, and fixes with a chosen strategy (`created -> updated`, `updated -> created`, or `max of all`). Auto-update can also prevent the situation during normal editing, with a one-time-per-session notice. Disabled by default. ([a44727b](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/a44727b), [014e9b9](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/014e9b9), [8823cda](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/8823cda), [697680e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/697680e))\n- **Safe reformatting of ambiguous day/month dates** - genuinely ambiguous slash/dot dates (`01/05/2024`, `01.05.2024`) are left unchanged by default. The preview counts them and offers an inline day/month order control, pre-suggested from your OS locale but never applied silently; converted rows are flagged for review. Unambiguous values (e.g. `25/12`) still convert. ([4362c9c](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/4362c9c))\n- **Ignore several properties at once, shown as chips** - the \"Ignore these properties\" field now splits a comma-separated entry into multiple keys (or add one at a time with Enter / the + button), de-duplicates them, and shows each as a compact, removable chip. ([1af4ded](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/1af4ded))\n- **Paginated previews + \"Copy full preview\"** - bulk dry-runs page through the complete in-memory diff (Prev / Next, 100 rows per page) instead of capping at 100 rows and hiding files on large vaults. A neutral \"Copy full preview\" button exports the entire diff as TSV to the clipboard (no vault file written). ([2ee50fe](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/2ee50fe))\n- **Real failure reasons in bulk tools and the single-file command** - when files fail to update, the modal now shows a paginated `File | Error` table (with copy) instead of pointing at a console that is empty in production builds. ([8a25276](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/8a25276))\n\n## 🐛 Fixed\n\n- **Unix-seconds dates parsed as 1970** - numeric timestamps in the `t` format (Unix seconds) were parsed as milliseconds and collapsed to ~1970. Worst case: \"Reformat existing dates\" rewrote every date in a `t`-format vault as a corrupted 1970 value. Units are now disambiguated by magnitude. ([6b97676](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/6b97676))\n- **Bulk writes preserved `mtime`** - populate, rename, and reformat passed `{ctime, mtime}` to `processFrontMatter`, so bulk edits did not show in an open editor until reload, left the hash cache stale, and could let a stray event spuriously re-stamp `updated`. Bulk writes now follow the same safe path as every other write. ([edcb2a3](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/edcb2a3))\n- **\"Rebuild hash cache\" was lost on reload** - the rebuild mutated the cache only in memory and could skip already-cached files. It now persists to disk and re-hashes every eligible file. ([975116a](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/975116a))\n- **New files from Templater / Daily Notes / QuickAdd were skipped** - files created and populated during the new-file delay window never got a follow-up, so they stayed without `created`/`updated` until the next manual edit. The settled file is now processed once the window expires. ([2bee743](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/2bee743))\n- **Rate-limited `updated` could be silently dropped** - when `updated` was rate-limited while `created` was missing, the plugin wrote `created` and discarded the pending `updated` bump for that edit. The whole update is now deferred to the retry so `updated` is stamped once the limit expires. ([d62d824](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/d62d824))\n- **`0 = no limit` for max cache entries was unreachable** - an explicit `0` was treated as falsy and reset to the default. A `0` is now correctly read as \"unlimited.\" ([0d32eb4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/0d32eb4))\n- **A corrupt `data.json` could crash startup** - a wrong-typed field in an externally edited or sync-rewritten settings file crashed `onload`, leaving the plugin and its settings tab unrecoverable. A boundary validator now coerces wrong-typed fields back to safe defaults while preserving unknown keys. ([52b17fe](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/52b17fe))\n- **Opening a `Canvas.md` with last-viewed enabled could damage it** - the file-open path missed the Canvas guard and wrote frontmatter into Canvas files. It now reuses the single ignore-decision source of truth. ([39bd1b4](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/39bd1b4))\n- **Some settings descriptions rendered as `[object DocumentFragment]`** - file-filter and date-format descriptions are now built with the realm-safe `createFragment()` and render correctly. ([247f4a7](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/247f4a7))\n- **Timers in pop-out windows** - all timer calls are now window-scoped for correct behavior in pop-out windows. ([e67de6e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/e67de6e))\n- **Out-of-order-dates modal looked safe when it wasn't** - the irreversibility warning was computed before a strategy was chosen and never re-rendered, so a destructive fix appeared safe. It now updates live with the selected strategy, alongside a delta column and tolerance hint. ([e2e03bd](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/e2e03bd), [a6c286f](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/a6c286f))\n\n## 🗑️ Removed\n\n- **\"Overwrite all timestamps\" bulk action** - it claimed to write the current date/time but actually stamped each file's filesystem `mtime`, and writing \"now\" across a whole vault is harmful (identical timestamps, lost edit history, sync churn). The real needs are already covered by \"Populate from filesystem\" and the per-file update command. ([62bd8ac](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/62bd8ac))\n\n## 💅 UX & polish\n\n- **Plain-language wording** throughout settings and modals - \"property\" instead of \"frontmatter key\", \"date\" / \"date & time\" instead of \"timestamp\", out-of-order dates described plainly, with implementation jargon (`inversion`, `ctime`/`mtime`) removed from visible text. ([7ba8ef5](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/7ba8ef5))\n- **Destructive Run buttons are now red** across the bulk modals (red iff the operation replaces or deletes existing values; blue iff it only adds missing values). Reformat is always red because it rewrites existing dates in place. ([17ab02e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/17ab02e), [269483e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/269483e))\n\n## 🧰 Internal & maintenance\n\n*No action needed by users; listed for completeness.*\n\n- Unified the five bulk modals onto shared building blocks (write / scan / execute / chrome / pagination / export), removing duplicated logic. ([ff27a70](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/ff27a70))\n- Added an end-to-end test suite that drives the built plugin inside a real Obsidian (WebdriverIO, pinned to 1.12.7), plus generated store screenshots. ([37ca2dc](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/37ca2dc), [1768679](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/1768679), [e1abe61](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/e1abe61))\n- Enabled Dependabot, bumped dependencies, and tightened lint to match the community review bot (descriptions on directive comments, no review-blocked eslint-disables, CSS without `:has()`). ([b8a9e58](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/b8a9e58), [782b68a](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/782b68a), [658492f](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/658492f), [64f6c0e](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/64f6c0e))\n- Renamed the local-testing env var `OBSIDIAN_VAULT` -> `OBSIDIAN_VAULT_TEST`. ([5df5c3c](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commit/5df5c3c))\n\n---\n\n**Full changelog:** [`1.0.1...1.1.0`](https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.0.1...1.1.0)\n",
-      "downloadCount": 14,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -143,13 +143,13 @@
       "assets": [
         {
           "digest": "sha256:995fdbefccf1c2f0b3cd35708e786838e50e995111c42046fe7830720a93aadc",
-          "downloadCount": 150,
+          "downloadCount": 151,
           "name": "main.js",
           "size": 306010
         },
         {
           "digest": "sha256:de9fbe1b4e58edc7cc5538bda59f20ee6ce01d189b572016456c7846398bd284",
-          "downloadCount": 472,
+          "downloadCount": 475,
           "name": "manifest.json",
           "size": 324
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/SmetDenis/obsidian-frontmatter-date-manager/compare/1.0.0...1.0.1",
-      "downloadCount": 472,
+      "downloadCount": 475,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:c4373023d538fd3d0d305abbf3b82c46663198de762d4479f3c326b1b6ad997e",
-          "downloadCount": 5,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 324
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/SmetDenis/obsidian-frontmatter-date-manager/commits/1.0.0",
-      "downloadCount": 5,
+      "downloadCount": 8,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
