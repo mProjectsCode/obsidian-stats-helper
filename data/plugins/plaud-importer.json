@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-11T07:00:27.010Z",
-  "lastFetchedAt": "2026-07-11T07:00:27.010Z",
+  "lastChangedAt": "2026-07-12T07:00:27.005Z",
+  "lastFetchedAt": "2026-07-12T07:00:27.005Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b0d448e4a052145f8e980446f16fb75e9dfe81a7114b0b6968348de4f8578801",
-          "downloadCount": 19,
+          "downloadCount": 29,
           "name": "main.js",
           "size": 215424
         },
         {
           "digest": "sha256:da34bba62394e84554c9541c995655b06c9a9ef7e298dc77ecca0e3ab40cf2d0",
-          "downloadCount": 17,
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 17,
+          "downloadCount": 27,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Reconnecting a Google or Apple (SSO) account no longer sends you to a dead end.** When a Google or Apple session lapsed during background auto-sync, the pause notice's Reconnect button opened the email sign-in window, where Google and Apple logins do not work. Reconnect now detects an SSO account and reopens the browser bookmarklet sign-in that actually works for it, and pasting the fresh token resumes the paused sync. Email and password accounts keep using the sign-in window as before.\n- **A Google or Apple session that cannot be renewed silently stops retrying instead of hammering Plaud hourly.** Those accounts keep their renewable session in your browser, not the plugin, so the silent background refresh can never succeed for them. It used to keep retrying about hourly forever. It now stops after its short backoff and waits for you to reconnect (auto-sync still recovers on its next run and via the Reconnect notice), which also avoids Plaud's per-hour refresh limit. Email and password sessions keep retrying as before, since their failures may be temporary.\n\n### Changed\n\n- **Clearer explanation of why Google and Apple accounts reconnect about daily.** The sign-in help and README now state that Plaud keeps the renewable session in your own browser, out of the plugin's reach, so SSO accounts cannot be refreshed silently the way email and password accounts can.\n\n",
-      "downloadCount": 17,
+      "downloadCount": 27,
       "draft": false,
       "name": "0.30.1",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:928b094819a6fbfb22c6000f38d82b46e0a76b8eb21b9917450298632d36282c",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "main.js",
           "size": 213835
         },
         {
           "digest": "sha256:db74a6cb3b7af636653773bb87e40169c98ed53ee79c0c5a6a3f9f500d957ca2",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **New `plaud-industry` frontmatter property.** Plaud carries a topical/industry classification alongside each summary, separate from the summary category. When present it is now written as its own `plaud-industry` property instead of being folded into `plaud-category`, so the two never mix. It is left off for recordings where Plaud provides no industry value. A matching `{{industry}}` token is available in the extra-frontmatter value field.\n\n### Fixed\n\n- **The `plaud-category` property no longer duplicates `plaud-template`.** Plaud's current summary format stores the template (summary-type) name in the same field the plugin reads for the category, so both properties came out with the identical value, for example both showing \"Deep Summary Transcript\". The plugin now omits `plaud-category` when its value would only repeat `plaud-template`. If Plaud ever provides a category that genuinely differs from the template, it is written as before.\n\n",
-      "downloadCount": 15,
+      "downloadCount": 16,
       "draft": false,
       "name": "0.30.0",
       "prerelease": false,
@@ -83,13 +83,13 @@
       "assets": [
         {
           "digest": "sha256:d69e399d03d8550c45df728b88d61026cd7b4e615e4c0b27351b2aa689074225",
-          "downloadCount": 6,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 213472
         },
         {
           "digest": "sha256:6b8d5cb3d0e9ed7dd4457d8f6381d7c35387228f16c133d6caf0acdc166b89c9",
-          "downloadCount": 5,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 316
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **The background session refresh no longer opens `web.plaud.ai` tabs in your default browser.** The refresh timer's delay is computed from the stored token's expiry, and for a long-lived token (an expiry 137 days out was observed) that delay overflowed the browser's 32-bit timer limit (about 24.8 days) and fired immediately instead of months later. The needless refresh then failed, retried on a backoff up to hourly, and every retry opened a hidden sign-in window whose login page leaked popup tabs into your default browser. The schedule is now capped safely below the timer limit, and a timer that wakes early re-arms without refreshing while the token still has plenty of life, so a valid token is never refreshed for no reason.\n\n### Changed\n\n- **A background refresh never opens a sign-in window anymore, not even a hidden one.** It uses only the silent, windowless renewal. If that fails, the plugin pauses and shows the one-click Reconnect prompt instead of loading Plaud's site in the background; only clicking Sign in or Reconnect ever opens a window.\n- **A hung refresh request can no longer wedge the plugin.** Each renewal call is bounded by a 30-second timeout, so a stalled connection now counts as a failed refresh instead of silently blocking every later refresh and the Sign in button until Obsidian restarts.\n\n",
-      "downloadCount": 5,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.29.0",
       "prerelease": false,

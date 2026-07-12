@@ -4,8 +4,8 @@
   "description": "View and edit JSON files with a Tree/Source toggle. Renders JSON code blocks in Markdown notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "json-editor",
-  "lastChangedAt": "2026-07-11T07:00:27.010Z",
-  "lastFetchedAt": "2026-07-11T07:00:27.010Z",
+  "lastChangedAt": "2026-07-12T07:00:27.005Z",
+  "lastFetchedAt": "2026-07-12T07:00:27.005Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://github.com/johannes-kaindl",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.7",
     "name": "JSON Editor",
-    "version": "1.9.0"
+    "version": "1.10.1"
   },
   "name": "JSON Editor",
   "presentInCommunityList": true,
@@ -22,27 +22,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:2a90bd1e7c3d0993868478970552208695766b73cef79f287a6535710115c6eb",
-          "downloadCount": 186,
+          "digest": "sha256:d64a356459f3ceee4e74e6d4b30819dd26f62ce534b9534a2a9ca78e3cb9115d",
+          "downloadCount": 10,
           "name": "main.js",
-          "size": 86935
+          "size": 108794
         },
         {
-          "digest": "sha256:d8dcfaaec636cec1c7bbcd7305c2a85b3ce67aaea8a36559277424feb3ec3ea3",
-          "downloadCount": 186,
+          "digest": "sha256:836dff036c1b45d35d0ee86799cd696842a96950773ef71efed870d7b301626f",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 328
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **`.jsonc` files no longer falsely trigger the lossy-number guard.** The big-integer detector scanned the raw text and skipped string contents but not comments, so a hyphenated word in a comment (e.g. `App-Konfiguration`) was read as the literal `-` (`Number(\"-\")` = `NaN`) and mis-flagged as an unrepresentable number — disabling tree editing on perfectly safe files. The detector now skips `//` and `/* */` comments and ignores any literal without a digit. `.json` behavior is unchanged.",
+      "downloadCount": 10,
+      "draft": false,
+      "name": "1.10.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T14:36:56Z",
+      "tag": "1.10.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:28e2fab145174b12cba6e9bd19e2177a0b2f1a1f8d62661a358a7163a3b7f158",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 108613
+        },
+        {
+          "digest": "sha256:427984548188bc19d866e2485ec9989a16b1e5dba774e61f0132515a5f5548fb",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 328
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **`.jsonc` file support with comment-preserving tree editing.** JSONC files (JSON with `//` and `/* */` comments and trailing commas) now open in the same Tree/Source editor. Every structural edit in the tree — edit value, add/delete, rename, change type, reorder — is applied as a targeted text edit on the source (via Microsoft's [`jsonc-parser`](https://github.com/microsoft/node-jsonc-parser)), so **comments and formatting survive editing and saving**. Opening and saving an unedited `.jsonc` file is byte-for-byte identical. `.json` files are unchanged — they stay strict (a comment is still a parse error).\n- **`` ```jsonc `` code blocks** in Markdown notes render as a read-only tree, tolerating comments (analogous to the existing `` ```json `` block).\n\n### Known limitations\n- Reordering rows in a `.jsonc` file moves each element with its same-line trailing comment; a free-standing comment line keeps its absolute position, so after a reorder it may sit next to a different element. No comment is ever lost — full positional fidelity on reorder is a future improvement.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.10.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T14:11:18Z",
+      "tag": "1.10.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8864e30ed0959c8f811819ff300337fe66c9b8c5ce8aaa21ef4ca274e16f36e1",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 87106
+        },
+        {
+          "digest": "sha256:ad810a3cf44437f3b941def334c079dd7cfb5f4670c3e6394e81c13824b67280",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 327
         },
         {
           "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
-          "downloadCount": 148,
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 27711
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n**Maintenance release.** No user-facing behavior changes — internal robustness and release tooling only.\n\n### Changed\n- Settings are now loaded through a small shared `mergeSettings` helper (vendored from `obsidian-kit`). It shallow-merges stored settings over the defaults exactly as before, with added reference-safety (default array/object values are cloned so a later mutation can't reach back into the defaults). Every setting in this plugin is a primitive, so the observable behavior is identical; this is a maintenance alignment with the other Obsidian plugins in the family.\n\n### Internal\n- Adopted the unified one-command release toolkit (`npm run release` / `scripts/release.mjs`): version bump → CHANGELOG → tag → Codeberg release → GitHub dual-push mirror, replacing the retired Woodpecker mirror config.\n- Documentation path/reference updates for the `obsidian-plugins/` umbrella repository layout.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.9.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T12:38:00Z",
+      "tag": "1.9.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2a90bd1e7c3d0993868478970552208695766b73cef79f287a6535710115c6eb",
+          "downloadCount": 189,
+          "name": "main.js",
+          "size": 86935
+        },
+        {
+          "digest": "sha256:d8dcfaaec636cec1c7bbcd7305c2a85b3ce67aaea8a36559277424feb3ec3ea3",
+          "downloadCount": 189,
+          "name": "manifest.json",
+          "size": 327
+        },
+        {
+          "digest": "sha256:0bf3f41ae7fd61e227f72cc2b3ed08f2b574c2f57602c897fe152ecdb7ef4199",
+          "downloadCount": 149,
           "name": "styles.css",
           "size": 27711
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n**Eval-free JSON Schema validation + a clean community-review report.** Replaces the Ajv validator with the eval-free [`@cfworker/json-schema`](https://github.com/cfworker/cfworker), and drives the type-aware ESLint findings from the `community.obsidian.md` review to zero. The plugin bundle is ~52% smaller.\n\n### Changed\n- **JSON Schema validation now uses `@cfworker/json-schema` instead of Ajv.** It is an eval-free, tree-walking validator (no `new Function` / no `eval`), so the automated review's \"dynamic code execution\" disclosure no longer applies. The bundle drops from ~176 KB to ~85 KB. Supported drafts are a superset of before (draft-04/07/2019-09/2020-12 vs. draft-07-only); the public validation contract (inline row errors + the error-count banner) is unchanged.\n- **`format` keywords are now enforced.** The previous Ajv build ran without `ajv-formats`, so `format` (`email`, `uri`, `date-time`, …) was a no-op annotation. The new validator enforces formats in draft-07 mode, so a value that violates a `format` constraint in an (opt-in) companion schema now reports an error. A structurally malformed companion schema (e.g. `{\"type\": 123}`) is still rejected via draft-07 meta-validation; a merely cosmetic, non-URI `$id` no longer disables validation for the whole file.\n\n### Fixed\n- **The community-review ESLint warnings are now zero.** The review's type-aware linter resolved `obsidian` to the Vitest mock (via a `tsconfig.json` `paths` alias), so every Obsidian-typed expression was flagged as `no-unsafe-*` and one assertion as `no-unnecessary-type-assertion`. The mock alias is gone from `tsconfig.json` (real Obsidian types now resolve), the Vitest mock moved to `tests/__mocks__/`, and the redundant assertions were removed. None of this changes runtime behavior. A committed `npm run lint:portal` guard now mirrors the review so the warnings cannot silently come back.\n\n### Internal\n- Added `tsconfig.test.json` (editor typing of tests against the mock), `eslint.portal.config.mjs` + `npm run lint:portal`, and `src/core/draft07-meta-schema.ts`. The Vitest suite (601 tests) pins the new validator's error granularity and format behavior.",
-      "downloadCount": 186,
+      "downloadCount": 189,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,

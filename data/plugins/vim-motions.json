@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-11T07:00:27.010Z",
-  "lastFetchedAt": "2026-07-11T07:00:27.010Z",
+  "lastChangedAt": "2026-07-12T07:00:27.005Z",
+  "lastFetchedAt": "2026-07-12T07:00:27.005Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.49.0"
+    "version": "0.51.1"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,147 @@
     {
       "assets": [
         {
-          "digest": "sha256:1a99bf3320fdb5b0c06f48788ce4dbbf010c332edc311b83eacb7dd63992c2ac",
-          "downloadCount": 12,
+          "digest": "sha256:1104f8c287a6c2070793be5eed4181e5fa659c604c407bbba39b09cdc95ea7eb",
+          "downloadCount": 21,
           "name": "main.js",
-          "size": 769112
+          "size": 790105
         },
         {
-          "digest": "sha256:bb86d9ab28567582961d4e66f074cc2964a553bd52af1a448d09ef2d25d653aa",
-          "downloadCount": 12,
+          "digest": "sha256:feefc6719c5c8928edcd20072dbe1053655fcda05c55b61386f2ccdbe2fbbbf7",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
-          "downloadCount": 11,
+          "downloadCount": 20,
+          "name": "styles.css",
+          "size": 25834
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Yank highlight over-extending on headings** — linewise yank (`yy`) on a heading with text on the very next line highlighted both lines, even though only the heading line was yanked. The highlight range calculation used `state.doc.lineAt(sel.to).to` to find the end of the highlight, but the codemirror-vim fork's `expandSelectionToLine()` sets `sel.to` to the start of the _next_ line (via `curEnd.line++`). Calling `lineAt()` on that position resolved to the entire next line, extending the highlight one line too far. Fixed by using `sel.to` directly as the highlight end boundary, which already points to the correct position (the start of the line after the last yanked line). ([#53](https://github.com/saberzero1/motions/issues/53))\r\n    - Plugin: `src/main.ts` (`attachYankHighlight` linewise range calculation)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.51.0...0.51.1",
+      "downloadCount": 21,
+      "draft": false,
+      "name": "0.51.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T23:29:15Z",
+      "tag": "0.51.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8f584181cf197bbb0e431619ec54b5daada43262182515fc93b8e36c70742469",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 790135
+        },
+        {
+          "digest": "sha256:6b5ea6b3cb0d336b152ca13b1b41246f7819460e7f5ca33a5c558f5db3d376e5",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 25834
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Input method switching for CJK users** — automatic IM switching when entering/leaving insert mode. Supports macism (macOS), im-select (macOS/Windows), fcitx5-remote (Linux), ibus (Linux), and any external IM switching binary. Per-editor IM state tracking, 50ms debounced switching, composition guard (never switches mid-IME composition), and error throttling with auto-disable. Desktop only — graceful no-op on mobile. ([#55](https://github.com/saberzero1/motions/issues/55))\r\n    - **Lua API**: `vim.obsidian.im.get()`, `.set(id)`, `.save()`, `.restore()`, `.enabled`, `.auto` — programmatic control for advanced use cases. Set `vim.obsidian.im.auto = false` to disable auto-wiring and handle switching via Lua autocmds.\r\n    - **Settings**: 7 new settings in **Settings → Vim Motions → Input method** — master toggle, binary path, obtain/switch args, normal mode IM, restore behavior (restore previous / use fixed default), default insert IM.\r\n    - **Security**: Uses `child_process.execFile` (no shell interpretation). Binary path must be absolute. IM identifiers validated against shell metacharacters. Scoped process access following the `external-fs.ts` pattern.\r\n    - Plugin: `src/im/im-process.ts` (new), `src/im/im-switcher.ts` (new), `src/settings.ts`, `src/lua/obsidian-api.ts`, `src/lua/api.ts`, `src/lua/loader.ts`, `src/lua/autocmd.ts`, `src/main.ts`, `src/util/external-fs.ts`\r\n    - Tests: `test/unit/im-process.test.ts` (new), `test/unit/im-switcher.test.ts` (new)\r\n- **`CmdlineEnter`/`CmdlineLeave` autocmd events** — fire when entering/leaving the `:`, `/`, or `?` command-line prompt. Event data includes `cmdtype` (`\":\"`, `\"/\"`, or `\"?\"`). `CmdlineLeave` is auto-wired to IM switching (switches to normal mode IM on prompt exit), matching im-select.nvim's default behavior.\r\n    - Plugin: `src/lua/autocmd.ts`, `src/lua/loader.ts`, `src/vim/mode-tracker.ts`, `src/im/im-switcher.ts`, `src/main.ts`\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/lua-config.md`: added `vim.obsidian.im` API section with function reference and Lua examples\r\n- `docs/configuration/settings.md`: added \"Input method\" settings group table\r\n- `KNOWN_LIMITATIONS.md`: added IM switching limitations section (desktop-only, no command-line/search mode, Flatpak/Snap, system-wide switching); updated \"Intentionally not supported\" table to mark IM switching as built-in\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.50.1...0.51.0",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.51.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T22:08:29Z",
+      "tag": "0.51.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3fafa416fa811e5646c81684fbc6b3b97776e5fa3402d62c6876bd15f7c58daa",
+          "downloadCount": 15,
+          "name": "main.js",
+          "size": 778615
+        },
+        {
+          "digest": "sha256:87a7d31c306ed60700e338fadcf1fe28dd740376c5509a5fae6f49bd7e85cfa9",
+          "downloadCount": 15,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
+          "downloadCount": 14,
+          "name": "styles.css",
+          "size": 25834
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Table widget duplication with third-party decoration plugins** — the embedded/cursor-aware table widget could show duplicated table content when another plugin (e.g., aDHL — Another Dynamic Highlights) applied `Decoration.mark` ranges over the same document region covered by the table's `Decoration.replace` block widget. CM6's decoration merging resolved the conflicting mark and replace decorations at default precedence, allowing raw table text to leak through alongside the rendered widget during re-entrant view updates. Fixed by wrapping the `tableRenderField` StateField in `Prec.high()`, ensuring the replace decoration takes precedence over default-priority mark decorations from other plugins. ([#55](https://github.com/saberzero1/motions/issues/55))\r\n    - Plugin: `src/vim/table-render-widget.ts` (`Prec.high()` wrap on `tableRenderField`)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.50.0...0.50.1",
+      "downloadCount": 15,
+      "draft": false,
+      "name": "0.50.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T18:11:39Z",
+      "tag": "0.50.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2a67b3b4b4f6a71914e4bd1621407c1863974b82c5d73b0a85e8251d5fabd90a",
+          "downloadCount": 14,
+          "name": "main.js",
+          "size": 778601
+        },
+        {
+          "digest": "sha256:4a41827d5a522c8b2781b25e43231f214ef5283634be9bb25de32c876d0a3a9c",
+          "downloadCount": 14,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
+          "downloadCount": 13,
+          "name": "styles.css",
+          "size": 25834
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Fold viewport scroll compensation** — the viewport automatically scrolls to keep the cursor visible after any fold/unfold operation, including Obsidian's \"Toggle fold properties\" command. Uses a `TransactionExtender` for CM6 fold effects and a `MutationObserver` for the properties widget's CSS class toggle. ([#54](https://github.com/saberzero1/motions/issues/54))\r\n    - Plugin: `src/vim/fold-sync.ts` (new), `src/main.ts`\r\n- **Fold create/delete commands** — `zf{motion}` creates a manual fold over the motion range (works in both visual and operator-pending mode). `zd`/`zD` delete the fold at the cursor. `zE` eliminates all folds in the document.\r\n    - Ex commands: `:folddelete` (`zd`), `:foldeliminate` (`zE`)\r\n    - Plugin: `src/fold/commands.ts` (new), `src/operators/register.ts`\r\n- **Incremental fold level** — `zm` folds one more heading level (h1 first, then h2, etc.). `zr` unfolds one heading level. A custom `StateField` tracks the current fold depth (0–6).\r\n    - Ex commands: `:foldmore` (`zm`), `:foldless` (`zr`)\r\n    - Plugin: `src/fold/fold-level.ts` (new), `src/workspace/navigation.ts`, `src/main.ts`\r\n- **Markdown fold provider** — custom `foldService` registers frontmatter (`---` blocks) and callouts (`> [!type]`) as foldable regions. These are now foldable via `zc`/`zo`/`za` in addition to the standard CM6 heading and code block folds.\r\n    - Plugin: `src/fold/provider.ts` (new), `src/main.ts`\r\n- **Fold placeholder text** — folded regions show descriptive placeholder text: heading title + line count, code block language, callout type, or frontmatter field count. Uses `codeFolding({ preparePlaceholder, placeholderDOM })`.\r\n    - Plugin: `src/fold/placeholder.ts` (new), `src/main.ts`\r\n- **Fold-aware navigation** — when enabled, navigating into a folded section (e.g., `]h` to a folded heading) automatically unfolds it. Matches Neovim's default `foldopen` behavior. Configurable via **Settings → Vim Motions → Fold-aware navigation** (default: on).\r\n    - Plugin: `src/vim/fold-sync.ts`, `src/settings.ts`\r\n- **Fold persistence** — fold state is remembered across file switches and sessions. Folds are captured on leaf change and restored when re-opening a file. Capped at 500 files with 30-day TTL eviction. Cleans up on file rename/delete.\r\n    - Plugin: `src/fold/persistence.ts` (new), `src/main.ts`, `src/settings.ts`\r\n\r\n### Documentation\r\n\r\n- `docs/features/workspace-navigation.md`: added fold provider, placeholder, fold-aware navigation, and persistence documentation\r\n- `docs/reference/keybindings.md`: added `zf`, `zd`, `zD`, `zE`, `zm`, `zr` keybindings\r\n- `docs/features/ex-commands.md`: added `:folddelete`, `:foldeliminate`, `:foldmore`, `:foldless`\r\n- `docs/configuration/settings.md`: added Fold-aware navigation and Fold persistence settings\r\n- `KNOWN_LIMITATIONS.md`: added `zn`/`zN` as known deviations; updated fold command coverage\r\n- `test/neovim-command-index.yaml`: added 6 new fold command entries\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.49.0...0.50.0",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "0.50.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-11T13:36:02Z",
+      "tag": "0.50.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1a99bf3320fdb5b0c06f48788ce4dbbf010c332edc311b83eacb7dd63992c2ac",
+          "downloadCount": 34,
+          "name": "main.js",
+          "size": 769112
+        },
+        {
+          "digest": "sha256:bb86d9ab28567582961d4e66f074cc2964a553bd52af1a448d09ef2d25d653aa",
+          "downloadCount": 34,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
+          "downloadCount": 33,
           "name": "styles.css",
           "size": 25834
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Which-key sort order setting** — configurable sort order for the which-key popup. \"which-key\" (default) matches which-key.nvim defaults: individual keys first, groups last, alphanumeric before special keys, natural alphabetical tiebreaker. \"Groups first\" shows groups before individual keys, both sorted alphabetically. Configurable via **Settings → Vim Motions → Which-key sort order**, `vim.opt.whichkeysort` in Lua, or `set whichkeysort=<order>` (alias `wks`) in vimrc.\r\n    - Plugin: `src/ui/which-key.ts` (`sortWhichKeyEntries`, `WhichKeySortOrder` type), `src/ui/global-which-key.ts`, `src/settings.ts`, `src/main.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`\r\n- **Which-key Lucide icons** — optional Lucide icon support for the which-key popup, inspired by which-key.nvim. Icons render as inline SVGs via Obsidian's `setIcon()` API, colored using Obsidian's CSS color variables or arbitrary CSS color strings. Each row displays: key → separator (➤) → icon → description, matching which-key.nvim's column layout.\r\n    - **Global toggle**: `whichKeyIcons` setting (default: on). Configurable via Settings UI, `vim.opt.whichkeyicons` in Lua, or `set whichkeyicons` / `set nowhichkeyicons` in vimrc.\r\n    - **Per-entry icons**: assign icon and color to any group label or command label via Settings UI, Lua (`vim.obsidian.whichkey.set_group(\"<leader>t\", \"Table\", { icon = \"table\", color = \"blue\" })`), or vimrc (`whichkeygroup <leader>t Table icon=table color=blue`).\r\n    - **Color system**: 8 named Obsidian colors (`red`, `orange`, `yellow`, `green`, `cyan`, `blue`, `purple`, `pink`) mapped to theme CSS variables, plus arbitrary CSS color strings. Default icon color: `--text-muted`.\r\n    - **Default icons**: Table (`table`, blue), EasyMotion (`zap`, yellow), Harpoon (`anchor`, orange) — applied automatically to built-in groups.\r\n    - **Alignment**: spacer spans for rows without icons when icons are globally enabled, ensuring consistent column alignment.\r\n    - Plugin: `src/ui/which-key.ts` (`WhichKeyLabelInfo`, `resolveIconColor`), `src/ui/global-which-key.ts`, `src/settings.ts` (GroupLabel/CommandLabel extended with `icon?`/`color?`), `src/main.ts`, `src/lua/api.ts`, `src/lua/obsidian-api.ts`, `src/lua/loader.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`, `src/vimrc/parser.ts`, `src/workspace/global-mapping-registry.ts`, `src/easymotion/register.ts`, `src/motions/tables.ts`, `styles.css`\r\n- **Harpoon-style file pinning** — pin files to numbered slots for instant switching. `<leader>ha` pins, `<leader>1`–`<leader>9` jumps to slots, `<leader>hp` opens the harpoon picker. Cursor position is tracked per-pinned-file and restored on navigation. Pins persist across sessions. File renames auto-update pins; file deletes auto-remove them.\r\n    - 6 ex commands: `:HarpoonAdd`, `:HarpoonRemove [N]`, `:Harpoon`, `:HarpoonSelect N`, `:HarpoonNext`, `:HarpoonPrev`\r\n    - 14 Obsidian commands for command palette access\r\n    - 15 leader keybindings with which-key \"Harpoon\" group\r\n    - Picker with slot-ordered display, fuzzy search, preview, and split-open support\r\n    - Plugin: `src/vim/harpoon-store.ts` (new), `src/vim/harpoon-nav.ts` (new), `src/picker/sources/harpoon.ts` (new), `src/main.ts`, `src/settings.ts`\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/which-key.md`: added Sort order and Icons sections with Lua/vimrc/Settings examples, color table, and default icons\r\n- `docs/configuration/settings.md`: added Which-key sort order and Which-key icons rows to Which-key hints table\r\n- `docs/configuration/vimrc.md`: added `whichkeysort` (`wks`) and `whichkeyicons` (`wki`) options\r\n- `docs/configuration/lua-config.md`: added `whichkeysort` and `whichkeyicons` options to `vim.opt` table\r\n- `KNOWN_LIMITATIONS.md`: added Sort order and Icons subsections to Which-key overlay section\r\n- `docs/features/harpoon.md`: new feature page\r\n- `docs/features/index.md`: added harpoon to Jump navigation section\r\n- `docs/configuration/settings.md`: added Harpoon file pinning to Jump navigation table\r\n- `docs/reference/keybindings.md`: added Harpoon section with leader bindings and ex commands\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.48.0...0.49.0",
-      "downloadCount": 12,
+      "downloadCount": 34,
       "draft": false,
       "name": "0.49.0",
       "prerelease": false,
@@ -88,26 +208,26 @@
       "assets": [
         {
           "digest": "sha256:4357b02d705731af919791cb5aae4258c9672f230a4e066b31c4ba6177f78901",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "main.js",
           "size": 746206
         },
         {
           "digest": "sha256:2c4a373ca9a08d5bc9f8d977ac5673f6c76844e356a6acb90537e62dc8d3a119",
-          "downloadCount": 17,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:a268fe377ab4a7b8e07e7c39059fce4648f8d9558c947f10379cd349c669ccff",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "styles.css",
           "size": 24818
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Yank highlight** — yanked text is briefly highlighted, providing visual feedback on what was yanked. Three modes available in **Settings → Vim Motions → Vim features → Yank highlight**: \"Solid\" (default, Neovim-style — instant appear, hold, disappear), \"Fade\" (gradual fade-out animation), or \"Off\". Duration is configurable via the **Yank highlight duration** slider (50–3000ms, default 200ms). Highlight color adapts to the active theme via `--text-accent` and can be overridden with the `--vim-motions-yank-bg` CSS custom property. Respects `prefers-reduced-motion`. Replaces the external [obsidian-vim-yank-highlight](https://github.com/aleksey-rowan/obsidian-vim-yank-highlight) plugin. ([#53](https://github.com/saberzero1/motions/issues/53))\r\n    - Works with remapped yank keys (detects actual yank operations via the `vim-yank` event, not keypress sniffing)\r\n    - Handles rapid successive yanks (new highlight replaces previous), large yanks (>1000 lines skipped), and disposed views (tab close during highlight)\r\n    - Requires bundled fork mode (built-in vim mode OFF) — the built-in vim does not emit the `vim-yank` event\r\n    - Blockwise yank highlight deferred to a future release\r\n    - Plugin: `src/vim/yank-highlight.ts` (new), `src/main.ts`, `src/settings.ts`, `styles.css`\r\n- **Embedded table editing mode** — new `'embedded'` option for **Settings → Vim Motions → Table widget in Live Preview**. Tables render as themed HTML with a two-layer editing model:\r\n    - **Table navigation**: `h`/`j`/`k`/`l` moves a cell highlight across the rendered table. `j`/`k` at the top/bottom row exits the table.\r\n    - **Cell editing**: `i`/`a`/`c`/`s`/`Enter` opens a vim-enabled editor in the highlighted cell with full vim support (modes, motions, text objects, auto-formatting). `Escape` returns to table navigation; a second `Escape` exits the table. `Tab`/`Shift-Tab` moves between cells.\r\n    - **Table manipulation**: `o`/`O` (add row below/above), `dd` (delete row), `dc` (delete column), `J`/`K` (move row down/up), `H`/`L` (move column left/right), `I`/`A` (add column left/right), `=` (realign). These operate directly on the raw markdown — no dependency on Obsidian's internal table commands.\r\n    - Cell edits are written back per-cell with per-cell undo granularity.\r\n    - Configurable via `set tablewidget=embedded` in vimrc or `vim.opt.tablewidget = \"embedded\"` in Lua.\r\n    - Plugin: `src/vim/table-nav-controller.ts` (new), `src/vim/table-cell-editor.ts` (new), `src/vim/table-operations.ts` (new), `src/vim/table-utils.ts` (new), `src/vim/table-render-widget.ts` (modified: data attributes, embedded mode toggle, re-render guard), `src/vim/table-embedded-editor.ts` (rewritten), `src/vim/table-auto-format.ts` (getVimMode accepts EditorView), `src/motions/tables.ts` (exported helpers), `src/main.ts`, `src/settings.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`, `styles.css`\r\n\r\n### Changed\r\n\r\n- **Oil explorer architecture rewritten** — oil no longer creates temporary `oil~*.md` files in the vault. The directory listing is rendered in a dedicated `oil-explorer` view type with an embedded CodeMirror 6 editor, eliminating temp file visibility in tabs, search, and graph. Vim mode (both built-in and bundled fork) works natively in the embedded editor. View state (current directory) persists across workspace restarts via `getState()`/`setState()`.\r\n    - **New**: reusable `EmbeddableMarkdownEditor` abstraction (`src/editors/embeddable-editor.ts`) — extracts Obsidian's internal `ScrollableMarkdownEditor` prototype via `app.embedRegistry` and exposes a lightweight editor mountable in any DOM container with full CM6 + vim support. Designed for future use by the table editor and other features needing embedded markdown editing.\r\n    - **New**: `OilView` custom view (`src/oil/oil-view.ts`) — extends `View` with view type `'oil-explorer'`, embedded editor with oil conceal extension, directory state management, and previous-file tracking for workspace restoration on close.\r\n    - **Changed**: `:q`/`:wq`/`:x`/`q` in oil now restore the previously open file instead of leaving an empty workspace.\r\n    - **Changed**: Oil keybinding registration uses `vim.map` with `<CR>` notation instead of `vim.noremap` with literal newline, fixing command execution in the embedded editor.\r\n    - **Changed**: Lua `vim.obsidian.oil.*` callbacks call manager methods directly instead of routing through ex commands, fixing Lua API calls when no MarkdownView is active.\r\n    - **Removed**: `OIL_TEMP_PREFIX`, `tempToDir` map, `getTempFilePath()`, `forgetTempPath()`, `cleanupOrphanedTempFiles()`, `forceSourceMode()`, `userIgnoreFilters` management, CSS `.nav-file-title[data-path^='oil~']` hiding rule.\r\n    - **Migration**: Legacy `oil~*.md` files from previous versions are automatically cleaned up on first load (`cleanupLegacyTempFiles()`).\r\n    - Plugin: `src/editors/embeddable-editor.ts` (new), `src/oil/oil-view.ts` (new), `src/oil/manager.ts` (rewritten), `src/oil/keybindings.ts` (refactored), `src/oil/render.ts` (OIL_TEMP_PREFIX filter removed), `src/workspace/commands.ts` (OilView detection for `:w`/`:wq`/`:x`/`:q`), `src/main.ts` (`registerView`, Lua callbacks simplified), `styles.css` (OilView styling), `test/specs/oil-poc.e2e.ts` (rewritten for OilView, 16 tests)\r\n\r\n### Fixed\r\n\r\n- **Oil confirm dialog button not focused** — the confirmation dialog shown when deleting files now auto-focuses the Confirm button, matching pre-migration behavior.\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.46.0...0.47.0",
-      "downloadCount": 17,
+      "downloadCount": 18,
       "draft": false,
       "name": "0.47.0",
       "prerelease": false,
@@ -148,13 +268,13 @@
       "assets": [
         {
           "digest": "sha256:3f7cd1966a81b8a4252ff67a019d58c460aca137a9b331f36df69e8685be5e2b",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 718165
         },
         {
           "digest": "sha256:70f332163de1cae9183742aa58f8e766c4056408c627854d715ae5f3ee973f58",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 606
         },
@@ -167,7 +287,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **`gk`/`gj` takes extra keypress to traverse non-wrapped headings** — `gk` required two presses to cross a heading line that was visually tall (large font/line-height) but did not wrap. CM6's `moveVertically` saw the heading's line block as spanning multiple `defaultLineHeight` steps, causing a spurious within-line cursor move before crossing to the adjacent line. The fork's `findPosV` now detects when `moveVertically` stays on the same document line with negligible Y-coordinate change (less than half `defaultLineHeight` via `coordsAtPos` comparison) and force-moves to the adjacent document line. Legitimate wrapped-line navigation (Y delta ≥ threshold) is unaffected. ([#26](https://github.com/saberzero1/motions/issues/26))\r\n    - Fork: `src/cm_adapter.ts` (`findPosV` Y-delta spurious move detection)\r\n\r\n### Added\r\n\r\n- **Oil explorer** — [oil.nvim](https://github.com/stevearc/oil.nvim)-inspired file explorer that renders vault directories as editable buffers. Create, rename, delete, and move files with standard vim commands, then commit all changes with `:w`. ([oil.nvim](https://github.com/stevearc/oil.nvim)-inspired)\r\n    - **`:Oil [path]`** opens the current file's directory (or a specified path) as an editable buffer in a new tab. Each line represents a file or folder with a concealed entry ID. The buffer is a regular markdown file — all existing vim features (EasyMotion, surround, text objects, which-key, status bar) work natively.\r\n    - **File operations via vim commands**: `o` (new line) + `:w` creates a file, `dd` + `:w` deletes, `cw` + `:w` renames. Filenames without an extension default to `.md`. Names ending with `/` create folders. Renames update backlinks via `app.fileManager.renameFile()`. Deletes respect user trash settings via `app.fileManager.trashFile()`.\r\n    - **Cross-directory moves**: `dd` in one oil buffer, `p` in another, `:w` moves the file. The diff engine detects moves by matching entry IDs across buffers.\r\n    - **Navigation keybindings** (active only in oil buffers): `<CR>` open/enter, `-` parent directory, `~` vault root, `q` close, `<C-l>` refresh, `g.` toggle hidden files, `gs` cycle sort order, `y.` yank file path\r\n    - **Auto-refresh**: vault event listeners (create/delete/rename) with 200ms debounce refresh open oil buffers when files change externally\r\n    - **Confirmation dialog**: shown when deleting files exceeding the configurable threshold (default: 1)\r\n    - **Stale file cleanup**: orphaned temp files from previous sessions are removed on plugin startup\r\n    - **Tab title**: reflects current directory (e.g., `oil~notes`) and updates on navigation\r\n    - **`:w`/`:wq`/`:x`/`:update` dispatch**: active file path is checked for the `oil~` prefix — oil commits route through the diff/validate/execute pipeline; normal files save normally\r\n    - **Global ex command**: `:Oil` available in the non-editor `:` command modal (same pattern as picker commands)\r\n    - **Setting gate**: `:Oil` command and keybindings only registered when the `oilExplorer` setting is enabled (default: on)\r\n    - Plugin: `src/oil/` (manager.ts, cache.ts, diff.ts, actions.ts, render.ts, parser.ts, extensions.ts, keybindings.ts, types.ts), `src/workspace/commands.ts` (`:w` dispatch, `:Oil` registration), `src/main.ts` (OilManager/OilKeybindingManager lifecycle), `src/settings.ts` (4 settings), `src/ui/global-ex-command.ts` (`:Oil` in global modal), `src/workspace/global-defaults.ts` (oil manager threading), `styles.css` (file explorer hiding)\r\n- **Oil explorer Lua API** — `vim.obsidian.oil.open(path)` opens oil for a directory, `vim.obsidian.oil.close()` closes the active oil buffer and cleans up the temp file\r\n    - Plugin: `src/lua/api.ts` (`oilOpen`/`oilClose` callbacks), `src/lua/obsidian-api.ts` (`vim.obsidian.oil` sub-table), `src/lua/loader.ts` (callback wiring)\r\n- **Oil explorer settings** — 4 new settings in **Settings → Vim Motions → File explorer**:\r\n    - `oilExplorer` (toggle, default: on) — enable/disable the oil explorer\r\n    - `oilShowHiddenFiles` (toggle, default: off) — show dotfiles in oil views\r\n    - `oilConfirmDeleteThreshold` (slider, 1–20, default: 1) — confirmation dialog threshold\r\n    - `oilDefaultSort` (dropdown: name/mtime/size, default: name) — directory sort order\r\n    - Plugin: `src/settings.ts`\r\n- **Oil explorer e2e test suite** — 10 regression tests covering: `:Oil` opens temp file, regular markdown view, vault file listing with concealment, current-directory default, file creation, folder creation, file deletion, file rename, no-op save, and temp file exclusion from listings\r\n    - Plugin: `test/specs/oil-poc.e2e.ts`\r\n- **`wdio.conf.mts` workspace cleanup** — `onPrepare` hook deletes stale `workspace.json` before e2e tests to prevent flaky failures from leftover workspace state\r\n- Spike test for reporter's exact content (`spike-gk-issue26-repro.e2e.ts`, 6 tests: full-document gk/gj traversal, consecutive h2 headings, long wrapped line, h2-longline-h2 transitions)\r\n\r\n### Changed\r\n\r\n- **Oil temp file hiding** — oil temp files (`oil~*.md`) are hidden from the file explorer via a static CSS prefix selector (`[data-path^=\"oil~\"]`) in `styles.css`, and from search/graph/quick switcher via Obsidian's `userIgnoreFilters` mechanism. User-configured ignore filters are preserved — oil only adds/removes its own entries.\r\n\r\n### Documentation\r\n\r\n- `docs/features/oil-explorer.md`: new feature page covering overview, opening commands, file operations, navigation, configuration, and implementation details\r\n- `docs/features/index.md`: added oil explorer entry to workspace & commands section\r\n- `docs/reference/keybindings.md`: added Oil explorer keybinding table (13 entries)\r\n- `docs/configuration/settings.md`: added File explorer settings group (4 settings)\r\n- `KNOWN_LIMITATIONS.md`: added oil explorer section with cross-directory move requirements, temp file mechanism, and dotfile limitation\r\n- `KNOWN_LIMITATIONS.md`: updated \"Visual line navigation\" section with three-correction architecture (multi-line clamp, tall non-wrapped line detection, column 0 fallback); updated test coverage note\r\n- Fork `DIFFERENCES.md`: updated \"Widget-aware vertical navigation\" section with Y-delta spurious move detection\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.44.1...0.45.0",
-      "downloadCount": 8,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.45.0",
       "prerelease": false,
@@ -628,7 +748,7 @@
       "assets": [
         {
           "digest": "sha256:5eedb365d10e578ef7c3323780c8b61aaff74738bca50f7266593725a1331f2a",
-          "downloadCount": 13,
+          "downloadCount": 14,
           "name": "main.js",
           "size": 324429
         },
