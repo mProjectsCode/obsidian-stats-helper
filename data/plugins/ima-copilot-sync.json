@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-07-12T05:03:26.999Z",
-  "lastFetchedAt": "2026-07-12T05:03:26.999Z",
+  "lastChangedAt": "2026-07-13T05:00:26.998Z",
+  "lastFetchedAt": "2026-07-13T05:00:26.998Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:6fe3c7584c92ff52becaad4b1ea1c7e25f5bf8d64fb01dccc1a8502782d65804",
-          "downloadCount": 357,
+          "downloadCount": 398,
           "name": "main.js",
           "size": 799493
         },
         {
           "digest": "sha256:7f59b8a7ddea94b848578f1c0e13bf4324caba9e874dbb954bcabb8d170a3410",
-          "downloadCount": 403,
+          "downloadCount": 448,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 342,
+          "downloadCount": 383,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.4.1\n\n### 修复\n\n- **限频导致知识库条目变空文件且永久跳过（#3）**：笔记较多的用户同步时遇到限频错误码（如 20005），此前 `syncKnowledgeItem` 会把限频错误误当作「该条目不支持同步」，写出一个只含兜底文案（`> 此条目为笔记，暂不支持自动同步内容`）的空文件；该文件带 `media_id` frontmatter，下次同步被增量逻辑当成「已同步」直接跳过，导致内容永久缺失。现改为限频时**不写兜底文件**并**中断当前循环**，剩余条目下次增量同步自动补齐，已同步部分不重复拉取\n- **限频不中断导致卡死**：此前限频后循环继续往下撞，每个条目都要走完 10s → 30s → 90s 退避（共 130s）才失败，N 篇笔记 = N × 130s 卡死。现命中限频立即 break，并跳过后续知识库 / 公共知识库同步阶段，单次 Notice 提示已同步数量与「剩余下次补齐」\n- **限频错误码识别扩展**：`RATE_LIMIT_CODES` 新增 20005（issue #3 用户报告码，官方 skills 文档未记录）；新增 `isRateLimitError()` 基于 errmsg 关键词（频率 / 限频 / 频控 / 配额 / 每日 / rate limit / quota / daily 等）的兜底识别，覆盖未来可能新增的限频码，不再依赖逐个枚举\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.4.1...6.4.2",
-      "downloadCount": 403,
+      "downloadCount": 448,
       "draft": false,
       "name": "6.4.2",
       "prerelease": false,
