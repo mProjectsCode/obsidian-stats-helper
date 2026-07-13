@@ -4,8 +4,8 @@
   "description": "Lina — Privacy-Focused AI Note Assistant - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lina",
-  "lastChangedAt": "2026-07-12T08:04:27.002Z",
-  "lastFetchedAt": "2026-07-12T08:04:27.002Z",
+  "lastChangedAt": "2026-07-13T08:01:27.040Z",
+  "lastFetchedAt": "2026-07-13T08:01:27.040Z",
   "manifest": {
     "author": "Anselmo Pinheiro",
     "authorUrl": "https://github.com/anselmopinheiro",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.1",
     "name": "Lina",
-    "version": "0.1.9"
+    "version": "0.1.10"
   },
   "name": "Lina",
   "presentInCommunityList": true,
@@ -22,27 +22,69 @@
     {
       "assets": [
         {
+          "digest": "sha256:7bd1112f7b02bcefb1367282c37ad70c5aa4263f960c144cf4cecea76affca24",
+          "downloadCount": 1,
+          "name": "commands.md",
+          "size": 5014
+        },
+        {
+          "digest": "sha256:17f7c7d99e62061e8a16ac4825f549a84cc478abdbc104435c4addf27dd1d1cf",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 545012
+        },
+        {
+          "digest": "sha256:e7b09e63843a13169e854814a24b6da84ed7d4114eb79a8cbd0c0094f4cd618e",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 353
+        },
+        {
+          "digest": "sha256:a88ae0c432dbc057d078202d7e05c95d13322b8a7aaeff0a5599051c7415c66a",
+          "downloadCount": 1,
+          "name": "manual.md",
+          "size": 20265
+        },
+        {
+          "digest": "sha256:edc76112985ab3c0fd54141b90b17bfaaf81e97a7c26bddaabe0ecfe1272bf4e",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 6020
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Lina 0.1.10 — Index reliability improvements\r\n\r\nThis release focuses on the reliability and consistency of Lina’s text index.\r\n\r\nWhat’s improved\r\nAdded deterministic index reconciliation during startup.\r\nLina now detects notes created, modified, renamed or deleted while Obsidian was closed.\r\nPrevented the in-memory index from diverging from the persisted index when a save operation fails.\r\nAdded independent per-file debounce, ensuring rapid changes to multiple notes are processed correctly.\r\nPrevented content-excluded notes from being repeatedly queued during every startup.\r\nImproved diagnostic logs with clearer event counts, affected paths and reasons for skipped updates.\r\nAdded integrated regression coverage for startup reconciliation, persistence failures and automatic update flows.\r\nWhy this matters\r\n\r\nThese changes reduce the risk of:\r\n\r\nmissing note updates;\r\nstale search results;\r\nduplicated or recurring index operations;\r\ninconsistencies between the active index and the files stored on disk.\r\n\r\nThe existing index format, chunking behaviour, search ranking and embeddings remain unchanged.\r\n\r\nValidation\r\n\r\nThis release passed:\r\n\r\n129 automated tests;\r\nTypeScript type checking;\r\nproduction build;\r\nrelease validation;\r\nmanual testing in a real Obsidian vault.\r\nUpdating\r\n\r\nReplace the existing plugin files with:\r\n\r\nmain.js\r\nmanifest.json\r\nstyles.css\r\n\r\nExisting Lina settings and index files remain compatible.",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-12T19:30:14Z",
+      "tag": "0.1.10"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:92f1b07edc083aceb604e1ffee343624819f7a5715bf0e7628b5fab2c932abb3",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "main.js",
           "size": 520252
         },
         {
           "digest": "sha256:4375669e0411a90810d043f905a863ba89d4d41063167bb4bbfb3a5a7ad50f24",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 352
         },
         {
           "digest": "sha256:edc76112985ab3c0fd54141b90b17bfaaf81e97a7c26bddaabe0ecfe1272bf4e",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 6020
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Lina 0.1.9\r\n\r\nThis is an important stability release for Lina.\r\n\r\nIt improves how Lina handles its local text index, especially in large vaults, vaults synced with OneDrive or similar services, and vaults where many notes were imported at once.\r\n\r\n## Fixed\r\n\r\n- Prevented Obsidian from becoming unresponsive or showing a blank white window when Lina tries to load an oversized `.lina/index/chunks.jsonl` file.\r\n- Added defensive loading for `.lina/index/chunks.jsonl`.\r\n- Added defensive handling for empty, truncated, or corrupted `.lina/index/notes.json` files.\r\n- Prevented automatic file-change updates from creating partial text indexes when no valid index exists.\r\n- Automatic updates now only run after a valid text index has already been created.\r\n- Invalid or incomplete index files are handled safely and no longer break the plugin.\r\n- Improved stability after large note imports, including OneNote imports or similar bulk-import workflows.\r\n\r\n## Indexing behaviour\r\n\r\nThe first text index creation is now clearly documented as a manual step.\r\n\r\nWhen Lina is installed or enabled for the first time, it does not automatically build the full text index. To start using Lina search, create the index manually from the Lina panel or by using the rebuild index command.\r\n\r\nAfter a valid index exists, Lina can keep it updated automatically through incremental updates.\r\n\r\nThis behaviour is intentional and helps keep Obsidian responsive in large vaults, on mobile devices, and in vaults synced with OneDrive or similar services.\r\n\r\n## Technical safeguards\r\n\r\n- Maximum chunk index file size: `50 MiB`\r\n- Maximum indexed chunks loaded at once: `100000`\r\n- Defensive parsing of `chunks.jsonl`\r\n- Defensive parsing of `notes.json`\r\n- Automatic updates require a valid existing text index\r\n- Rebuild/full index creation remains manual only\r\n\r\n## Notes\r\n\r\nIf Lina search results appear incomplete after updating, rebuild the Lina text index manually from the Lina panel.\r\n\r\nNo changes were made to the user interface, commands, settings, providers, embeddings, ranking logic, or search behaviour outside these stability fixes.",
-      "downloadCount": 15,
+      "downloadCount": 17,
       "draft": false,
       "name": "0.1.9",
       "prerelease": false,
