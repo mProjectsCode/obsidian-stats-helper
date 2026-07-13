@@ -4,8 +4,8 @@
   "description": "Record voice notes, Fill in lost thoughts, Transcribe the audio, Summarize & Visualize the text - All in one clip",
   "errors": [],
   "id": "scribe",
-  "lastChangedAt": "2026-07-12T01:03:26.980Z",
-  "lastFetchedAt": "2026-07-12T01:03:26.980Z",
+  "lastChangedAt": "2026-07-13T01:03:26.992Z",
+  "lastFetchedAt": "2026-07-13T01:03:26.992Z",
   "manifest": {
     "author": "Mike Alicea",
     "authorUrl": "https://github.com/Mikodin/",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "0.15.0",
     "name": "Scribe",
-    "version": "2.3.6"
+    "version": "2.3.8"
   },
   "name": "Scribe",
   "presentInCommunityList": true,
@@ -23,27 +23,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:5ee9bde3db28a68d8b1b964c6ba14327bbc602f2a6704d348f44bf443a0cf8c7",
-          "downloadCount": 5,
+          "digest": "sha256:601eefc4b140a4fccba4417816e2154adc6e8c0fe37793a72c1e5bbdfde751d1",
+          "downloadCount": 8,
           "name": "main.js",
-          "size": 1661405
+          "size": 1663217
         },
         {
-          "digest": "sha256:43b50b5596d3f956b8b09a3eccbc580c002e5d04341882ccddc18c20301a85e2",
-          "downloadCount": 5,
+          "digest": "sha256:332728f437b3cd8c0080cf989400a0a6250f5eda8e4325b6621fd0ad715eae1f",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 476
         },
         {
           "digest": "sha256:05c01470a42e9a20589e9364258028c805ceea566afbdc52cbc502a0690ce3d7",
-          "downloadCount": 4,
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 4150
+        }
+      ],
+      "author": "Mikodin",
+      "description": "## Fix: Skip LLM processing when transcription is disabled (#104)\r\n\r\nFixes #104\r\n\r\n### Problem\r\n\r\nThe \"Transcribe recordings\" and \"Process transcriptions with LLM\" settings were fully independent. With transcription **off** and processing **on**, `handleTranscription()` returned an empty string and the pipeline sent it straight to the LLM — resulting in a pointless (and paid) LLM call that generated garbage note sections.\r\n\r\n### Changes\r\n\r\n- **Settings UI** (`src/settings/GeneralSettingsTab.tsx`): \"Process transcriptions with LLM\" is now disabled and displayed as off while \"Transcribe recordings\" is off. The stored preference is left untouched, so re-enabling transcription restores the previous processing state. Description updated to note the dependency.\r\n- **Toggle component** (`src/settings/components/SettingsControl.tsx`): `SettingsToggle` now supports a `disabled` prop (click and Enter-key handlers are guarded).\r\n- **Pipeline guard** (`src/index.ts`, `handleScribeFile`): if the transcript is empty, LLM summarization is skipped with a `Scribe: ⚠️ Skipping LLM processing — transcript is empty` notice. This covers stale persisted settings, the modal inheriting the disabled-transcription flag, and any provider legitimately returning an empty transcript.\r\n\r\n### Testing\r\n\r\n- `npm run format:write`, `npm run lint:write`, `npm run build:prod` all pass\r\n- Manual: with \"Transcribe recordings\" off, the processing toggle is off/unclickable; completing a recording shows the skip notice instead of calling the LLM. Re-enabling transcription restores the previous processing preference.\r\n\r\n## What's Changed\r\n* Bug Fix:  Don't make LLM provider request  if there is no transcript by @Mikodin in https://github.com/Mikodin/obsidian-scribe/pull/110\r\n\r\n\r\n**Full Changelog**: https://github.com/Mikodin/obsidian-scribe/compare/2.3.7...2.3.8",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "Scribe 2.3.8 - Bug Fix: Don't make LLM provider request  if there is no transcript",
+      "prerelease": false,
+      "publishedAt": "2026-07-12T21:03:37Z",
+      "tag": "2.3.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c2a504c49d7bff16cb20314f296b247341154b7d2bdb07d4d4e7e306fdadc38",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 1662984
+        },
+        {
+          "digest": "sha256:063170740be0f0556b8d3b23215bfaf59e40380fd46b21e1b668448c10fd0220",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:05c01470a42e9a20589e9364258028c805ceea566afbdc52cbc502a0690ce3d7",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 4150
+        }
+      ],
+      "author": "Mikodin",
+      "description": "# Scribe 2.3.7 feat: add AssemblyAI LLM support with model selection and configuration\r\n## Add AssemblyAI as an LLM summarization provider\r\n\r\n## Summary\r\n\r\nAdds AssemblyAI's LLM Gateway as a summarization provider, so a user can run both transcription and LLM summarization through AssemblyAI — keeping data within a single vendor's privacy envelope (the motivation behind this ZDR / no-training branch) instead of sending transcripts to a second provider.\r\n\r\nBecause the gateway is OpenAI-compatible, it routes through the existing createOpenAiCompatibleLlmAdapter (LangChain ChatOpenAI + obsidianFetch + a baseURL override) — the same mechanism already used for Gemini and OpenRouter. No new transcription/LLM call logic was required; this is almost entirely wiring a new provider through the existing data-driven plumbing.\r\n\r\n## What changed\r\n\r\nNew provider wiring\r\n- src/util/consts.ts — added assemblyAi to the PROCESS_PLATFORM enum.\r\n- src/aiProviders/llm/openAiCompatibleLlm.ts — added the gateway base URL, default model (claude-sonnet-4-6), and a seed list of common model IDs.\r\n- src/aiProviders/llm/llmAdapter.ts — resolveLlmConfig case mapping the provider to assemblyAiApiKey + assemblyAiLlmModel + the gateway base URL. createLlmAdapter needed no change (non-Anthropic already routes to the OpenAI-compat adapter).\r\n- src/aiProviders/providerMetadata.ts — LLM_PROVIDERS entry (drives the settings dropdown, privacy card, and missing-key checks).\r\n- src/settings/settings.tsx — new assemblyAiLlmModel setting, defaulted to claude-sonnet-4-6.\r\n\r\nUI (free-text model combobox, mirroring OpenRouter)\r\n- src/settings/components/ProviderSettingsSections.tsx — AssemblyAI section reusing the existing API-key input + a combobox seeded with known model IDs (any gateway model ID allowed).\r\n- src/modal/components/options/ModalAiModelOptions.tsx — matching combobox branch in the per-run modal picker.\r\n\r\n### Bug fixes (gateway-specific)\r\n\r\nSummarization initially failed only with AssemblyAI. Two gateway behaviors differ from OpenAI/Gemini/OpenRouter, both fixed in openAiCompatibleLlm.ts:\r\n\r\n1. Output truncation — the gateway defaults max_tokens to 1000 when omitted (unlike OpenAI/Gemini, which use the model's high default). LangChain doesn't send max_tokens, so full structured notes were truncated mid-JSON and failed to parse. Fixed by sending an explicit maxTokens: 8192 for the gateway.\r\n2. Dropped transcript — the transcript lives in the first system message, and we always send ≥2 system messages (the language instruction defaults to en). When the gateway collapses OpenAI's multiple system messages into Anthropic's single system field for Claude models, the transcript-bearing message could be lost. Fixed by merging the main prompt + extra instructions into a single system message (behavior-equivalent for the other OpenAI-compat providers).\r\n\r\n## ZDR note\r\n\r\nNo special request headers are needed — Zero Data Retention on the LLM Gateway is an account-level arrangement (executed BAA + training opt-out + optional TTL) and applies\r\nonly when routing to Anthropic or Google models, not GPT/Qwen/Kimi. The de ZDR-eligible; users who select a gpt-* model in the combobox fall outsidethe ZDR envelope.\r\n\r\n## Testing\r\n\r\n- npm run format:write, npm run lint:write, npm run build:prod all pass cleanly (incl. the mobile-safety check).\r\n- Manual verification still needed in Obsidian: with an AssemblyAI key ander selected, confirm the note gets its summary sections + LLM-suggestedtitle. If it fails, the gateway's error body surfaces in the console via [obsidianFetch] error body:.\r\n\r\n(Note: the branch also switches the AssemblyAI transcription default speech model to universal-3-5-pro in assemblyAiTranscriber.ts.)\r\n\r\n## What's Changed\r\n* Scribe 2.3.7 feat: add AssemblyAI LLM support with model selection and configuration by @Mikodin in https://github.com/Mikodin/obsidian-scribe/pull/109\r\n\r\n\r\n**Full Changelog**: https://github.com/Mikodin/obsidian-scribe/compare/2.3.6...2.3.7",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Scribe 2.3.7 feat: add AssemblyAI LLM support with model selection and configuration",
+      "prerelease": false,
+      "publishedAt": "2026-07-12T20:31:14Z",
+      "tag": "2.3.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5ee9bde3db28a68d8b1b964c6ba14327bbc602f2a6704d348f44bf443a0cf8c7",
+          "downloadCount": 48,
+          "name": "main.js",
+          "size": 1661405
+        },
+        {
+          "digest": "sha256:43b50b5596d3f956b8b09a3eccbc580c002e5d04341882ccddc18c20301a85e2",
+          "downloadCount": 48,
+          "name": "manifest.json",
+          "size": 476
+        },
+        {
+          "digest": "sha256:05c01470a42e9a20589e9364258028c805ceea566afbdc52cbc502a0690ce3d7",
+          "downloadCount": 47,
           "name": "styles.css",
           "size": 4150
         }
       ],
       "author": "Mikodin",
       "description": "# Scribe 2.3.6 Adds a ton of providers for transcription + summarizing\r\n\r\n# Multi-provider AI refactor: transcription + summarization\r\nCloses https://github.com/Mikodin/obsidian-scribe/issues/54 @skorphil \r\n\r\nTested every provider on mobile and desktop\r\n\r\n## Summary\r\n\r\nReplaces the single-LLM (OpenAI only) / two-transcriber (OpenAI + AssemblyAI) setup with a provider-adapter architecture supporting **6 transcription providers** and **5 LLM providers**, plus inline privacy/data-retention info for each and a searchable model picker for OpenRouter.\r\n\r\n- **LLM (summarization + mermaid-fix):** OpenAI, Anthropic, Google (Gemini), OpenRouter, custom OpenAI-compatible endpoint\r\n- **Transcription:** OpenAI Whisper, AssemblyAI, ElevenLabs Scribe, Deepgram Nova-3, Mistral Voxtral, Google (Gemini), custom OpenAI-compatible endpoint\r\n\r\n## Why this shape\r\n\r\nPR #101 attempted Google support via `@langchain/google-genai` and was reverted (#102): that package transitively pulls in `node:async_hooks`, which crashes Obsidian mobile (WebView, no Node runtime). This PR avoids that class of bug entirely:\r\n\r\n- **Anthropic** uses the native `@anthropic-ai/sdk` (browser-safe, `dangerouslyAllowBrowser: true`) — the only new LangChain-adjacent dependency added.\r\n- **Google, OpenRouter, and custom endpoints** all route through the *existing* LangChain `ChatOpenAI` client via `baseURL`, since Gemini and OpenRouter both expose OpenAI-compatible chat completions endpoints. No Google SDK, no new provider packages.\r\n- **ElevenLabs, Deepgram, Mistral, and Gemini transcription** are raw `fetch` calls through the existing `obsidianFetch` CORS wrapper — no SDKs at all.\r\n- A new `scripts/checkMobileSafe.mjs` build step greps `build/main.js` for `async_hooks`/`AsyncLocalStorage` and **fails the production build** if either appears — thithat would have caught the #101 bug before merge.\r\n\r\n## Architecture\r\n\r\nNew `src/aiProviders/` module:\r\n\r\n```\r\nsrc/aiProviders/\r\n  providerMetadata.ts          # registry: diseld, keyConsoleUrl,\r\n                                #   models?, supportsDiarization?, privacy info\r\n  prompts.ts                   # shared promptd from the old\r\n                                #   openAiUtils.ts, byte-identical prompt text)\r\n  llm/\r\n    llmAdapter.ts               # LlmAdapter interface + resolveLlmConfig() + createLlmAdapter()\r\n    openAiCompatibleLlm.ts      # LangChain Ch google / openRouter / customOpenAi\r\n    anthropicLlm.ts             # native @anthropic-ai/sdk adapter\r\n    openRouterModels.ts         # fetches + cacatalog\r\n  transcription/\r\n    transcriptionAdapter.ts     # dispatches oPlatform\r\n    openAiTranscriber.ts        # moved from src/util/openAiUtils.ts\r\n    assemblyAiTranscriber.ts    # moved from s unchanged\r\n    elevenLabsTranscriber.ts\r\n    deepgramTranscriber.ts\r\n    mistralTranscriber.ts\r\n    geminiTranscriber.ts\r\n    diarizationFormat.ts        # shared \"**Speaker N**: text\" formatter\r\n```\r\n\r\nDeleted: `src/util/openAiUtils.ts`, `src/util/split),`src/settings/components/AiModelSettings.tsx` (replaced by the registry-driven settings UI).\r\n\r\n`src/util/obsidianFetch.ts` wraps Obsidian's `requestUrl()` as a CORS-bypassing `fetch` implementation — used by every\r\nHTTP-based provider client (OpenAI SDK, Anthroetch calls). Since `requestUrl()` buffers the fullresponse, **no provider call streams** — all LLM calls use non-streaming structured output.\r\n\r\n## Provider details\r\n\r\n### LLM\r\n\r\n| Provider | Transport | Models | Notes |\r\n|---|---|---|---|\r\n| OpenAI | LangChain `ChatOpenAI` | GPT-5.6/5.5/5.1/5/4.1/4o family | unchanged from before |\r\n| Anthropic | `@anthropic-ai/sdk`, `client.mestFormat` | claude-opus-4-8, claude-sonnet-5(default), claude-sonnet-4-6, claude-haiku-4-5 | never sends `temperature` (current Claude models reject non-default\r\nvalues); surfaces `refusal`/`max_tokens` stop  |\r\n| Google (Gemini) | LangChain `ChatOpenAI` via Gemini's OpenAI-compat endpoint\r\n(`generativelanguage.googleapis.com/v1beta/opedefault, GA), gemini-3.1-pro-preview,gemini-3-flash-preview, gemini-3.1-flash-lite, gemini-2.5-pro, gemini-2.5-flash | no Google SDK — sidesteps the async_hooks\r\nissue entirely |\r\n| OpenRouter | LangChain `ChatOpenAI` via `openrouter.ai/api/v1` | any model id, **searchable combobox** (see below) |\r\ntemperature omitted — OpenRouter routes to arbs/models with their own constraints |\r\n| Custom OpenAI-compatible | LangChain `ChatOpenAI` via user-supplied `baseURL` | free text | unchanged from before |\r\n\r\n### Transcription\r\n\r\n| Provider | Transport | Diarization | Notes |\r\n|---|---|---|---|\r\n| OpenAI Whisper | OpenAI SDK, chunked WAV upload | No | unchanged from before |\r\n| AssemblyAI | `assemblyai` SDK | Yes | unchand through `obsidianFetch`) |\r\n| ElevenLabs Scribe | raw `fetch`, multipart | Yes (word-level → merged into speaker runs) | |\r\n| Deepgram Nova-3 | raw `fetch`, raw audio byt) | |\r\n| Mistral Voxtral | raw `fetch`, multipart | No | |\r\n| Google (Gemini) | raw `fetch` to `generateCoo | Yes (prompt-driven) | no dedicated STT endpoint — audio is chunked to WAV (reusing the existing chunker) to stay under the 20MB inline-request limit, sent with a\r\ntranscription prompt |\r\n\r\nAll diarized output converges on the same `**Son regardless of provider.\r\n\r\n## Settings UI\r\n\r\n- AI Providers tab: separate \"Transcription\" as, each with a provider dropdown, that provider'sAPI key + model fields inline, and a **privacy card** — retention summary, whether the provider trains on your API data,\r\nand a policy link. Facts are July-2026 snapshopolicies drift.\r\n- **OpenRouter model field is now a searchable combobox** (native `<input list>` + `<datalist>`, no new dependency) — it\r\nfetches OpenRouter's public model catalog (no ers as you type, while still accepting arbitraryfree text. Same picker is used in the modal's per-run model override, which was previously a disabled read-only input for\r\nOpenRouter.\r\n- Settings migrate automatically: the old `useCustomOpenAiBaseUrl` boolean maps to `processPlatform`/`transcriptPlatform =\r\ncustomOpenAi`; everyone else is unaffected. \"R all API keys (now 7 of them).\r\n\r\n## Bug fix (behavior change)\r\n\r\n`handleTranscription` previously read `this.se, ignoring the modal's per-run`scribeOptions.transcriptPlatform` override — so switching providers in the modal had no effect on the actual request. This\r\nis now fixed; modal overrides take effect. Worince it changes observable behavior for anyone who was relying on (or unknowingly affected by) the old ignored-override behavior.\r\n\r\n## Build safety\r\n\r\n- Fixed a broken esbuild config: `builtin-modules@5` is ESM-only, so its default import silently resolved to `undefined`\r\nand Node builtins were being bundled unnoticedle`'s `builtinModules` (bare + `node:`-prefixedvariants).\r\n- Added `scripts/checkMobileSafe.mjs`, wired ifails the build if `build/main.js` contains`async_hooks` or `AsyncLocalStorage`.\r\n\r\n## Verification\r\n\r\n- `npm run format:write` — clean\r\n- `npm run build:prod` (tsc + esbuild + mobile\r\n- Confirmed all provider endpoints present in `build/main.js` (ElevenLabs, Deepgram, Mistral, Gemini generateContent +\r\nOpenAI-compat, OpenRouter, Anthropic)\r\n- Confirmed extracted summary prompt text is unchanged (byte-identical modulo trailing whitespace) vs. the original\r\n`openAiUtils.ts`\r\n\r\n## Not covered by this PR (needs real API keyse)\r\n\r\n- Live provider calls per transcription providses for ElevenLabs/Deepgram/Mistral/Gemini)\r\n- Anthropic and Gemini structured-output round-trips against real audio/transcripts\r\n- OpenRouter combobox behavior against the liv\r\n- Settings migration against a hand-edited `data.json` with `useCustomOpenAiBaseUrl: true`\r\n- Mobile sideload smoke test\r\n- Mistral Voxtral's file-size limit is unverified (chunking fallback noted in code but untested)\r\n\r\n## What's Changed\r\n* Feat: Add support for all major providers by @Mikodin in https://github.com/Mikodin/obsidian-scribe/pull/108\r\n\r\n\r\n**Full Changelog**: https://github.com/Mikodin/obsidian-scribe/compare/2.3.4...2.3.6",
-      "downloadCount": 5,
+      "downloadCount": 48,
       "draft": false,
       "name": "Scribe 2.3.6 Adds a ton of providers for transcription + summarizing",
       "prerelease": false,
@@ -144,26 +204,26 @@
       "assets": [
         {
           "digest": "sha256:d935399986208f4d1d15dcc2fbac090694fdbb772874c47c196ff0c1e20f78ad",
-          "downloadCount": 70,
+          "downloadCount": 71,
           "name": "main.js",
           "size": 1474960
         },
         {
           "digest": "sha256:8396924080e57168c04d94c034f57e21c75b7a654f4b21c67880b4583efd7ea8",
-          "downloadCount": 72,
+          "downloadCount": 73,
           "name": "manifest.json",
           "size": 476
         },
         {
           "digest": "sha256:9cd05022231ec2133fedddec45a2c80a876b084001d9cb807c26ddc503608cb6",
-          "downloadCount": 69,
+          "downloadCount": 70,
           "name": "styles.css",
           "size": 3355
         }
       ],
       "author": "Mikodin",
       "description": "## What's Changed\r\n* chore: update dependencies and improve type safety by @Mikodin in https://github.com/Mikodin/obsidian-scribe/pull/105\r\n\r\n\r\n**Full Changelog**: https://github.com/Mikodin/obsidian-scribe/compare/2.3.1...2.3.2",
-      "downloadCount": 72,
+      "downloadCount": 73,
       "draft": false,
       "name": "Scribe 2.3.2 - Chore - Update all dependencies",
       "prerelease": false,
