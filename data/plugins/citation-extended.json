@@ -4,8 +4,8 @@
   "description": "Extended functionality to automatically search and insert citations from a Zotero library. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "citation-extended",
-  "lastChangedAt": "2026-07-12T04:05:26.992Z",
-  "lastFetchedAt": "2026-07-12T04:05:26.992Z",
+  "lastChangedAt": "2026-07-13T04:02:27.000Z",
+  "lastFetchedAt": "2026-07-13T04:02:27.000Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:d8e813664ec55c10630047f76accce36c2b812da946798987232a7c9abf4fa78",
-          "downloadCount": 16,
+          "downloadCount": 19,
           "name": "main.js",
           "size": 2927424
         },
         {
           "digest": "sha256:8510bd4aa4afa77e3b686825e99b40f17334884e345068b3c7d565e6e8825787",
-          "downloadCount": 16,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:68b99110fde5e9bfb4b215b1b5e3f39accce428b1c63001b27471b8c774a795a",
-          "downloadCount": 14,
+          "downloadCount": 17,
           "name": "styles.css",
           "size": 5477
         }
       ],
       "author": "github-actions[bot]",
       "description": "A security and code-quality patch. It updates Handlebars to a fixed release addressing a template-injection advisory, brings the plugin into full compliance with the Obsidian plugin-review lint rules, and raises the minimum Obsidian version to match the APIs it actually uses. There are no user-facing feature changes and no change in runtime behaviour.\n\n## 🔒 Security\n\n- **Handlebars updated to 4.7.9**, resolving a JavaScript-injection-via-AST-type-confusion advisory ([GHSA-3mfm-83xf-c92r](https://github.com/advisories/GHSA-3mfm-83xf-c92r)) that affects 4.0.0–4.7.8. The plugin only ever compiles user-authored templates, so real-world exposure was low, but the fix is a drop-in patch and worth shipping.\n\n## ⚠️ Compatibility\n\n- **Minimum Obsidian version is now 1.7.2** (was 1.4.0). This matches `Workspace.revealLeaf`, the API the references sidebar uses to open its pane; the earlier `1.4.0` floor understated what the plugin needs. Obsidian 1.7.2 shipped in late 2024, so most vaults are unaffected.\n\n## 🔧 Under the Hood\n\n- **Guideline rules enforced locally**: `npm run lint` now reproduces the Obsidian plugin-review findings instead of only catching them in review. `obsidianmd/ui/sentence-case` and `obsidianmd/no-global-this` are errors, product names and acronyms are allow-listed, and `@eslint-community/eslint-comments` forbids silencing a guideline rule or leaving an undocumented `eslint-disable` directive.\n- **Suppressions removed**: all five `eslint-disable` comments were deleted and the code they masked was fixed — the Readwise API client now takes an injected timer (so the core layer no longer references `globalThis`), and redundant type assertions were dropped.\n- The full test suite (1,709 tests across 93 suites) remains green with 95%+ statement coverage; no runtime behaviour changed.\n\n---\n\n_Full Changelog_: https://github.com/akhmialeuski/obsidian-citation-extended/compare/0.7.0...0.7.1\n",
-      "downloadCount": 16,
+      "downloadCount": 19,
       "draft": false,
       "name": "v0.7.1",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:35a21d4ac2642a640e67fd54e2066bdce2e8611751f8a848ff95974a4f5635f1",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "main.js",
           "size": 2926609
         },
         {
           "digest": "sha256:b12342701534e7b2061256a1b6f251f6f33d5928f19a279745dedbce8df07149",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:68b99110fde5e9bfb4b215b1b5e3f39accce428b1c63001b27471b8c774a795a",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 5477
         }
       ],
       "author": "github-actions[bot]",
       "description": "This release makes literature notes safe to keep in sync with your library — a non-destructive update engine that merges reference data with your own edits without ever clobbering your writing — and turns Zotero into a first-class live data source, with two native connection methods, PDF annotations, and tags/collections in templates. It also adds inline citation autocomplete and a references sidebar.\n\n## ✨ New Features\n\n- **Non-destructive literature note updates**: A new sync engine keeps existing notes current without losing your edits. In **Smart sync** (default) the plugin owns only template-rendered frontmatter keys and `{{#syncBlock}}` callouts (tagged with native `^zc-…` block IDs); each unit is **three-way merged** against the last synced snapshot, so library changes and your manual edits combine automatically, and everything else in the note is treated as user content and is never touched. An **Update frontmatter only** mode merges frontmatter and leaves the body alone.\n- **Batch and single-note update commands**: **`Citations: Update all literature notes`** re-syncs every note against the current library and content template; **`Citations: Update literature note for current file`** does the same for just the active note. Deleted sync blocks stay deleted, new blocks are appended, and untouched notes are skipped, with a `Updated · Conflicts skipped · Skipped · Errors` summary notice.\n- **Conflict review dialog**: When you and the library changed the same thing, the update pauses on a **review dialog** that previews both outcomes as diffs — *Apply (keep my edits)*, *Use library version*, *Skip*, and *Apply/Skip all*. The first sync of a pre-existing note that would append new blocks also asks for consent (opt out via the **Review changes before writing** setting).\n- **Native Zotero connection via Better BibTeX**: Load the bibliography directly from a running Zotero over the local Better BibTeX export endpoint — no manual file export. Includes a **Test connection** check, a configurable **Auto-sync interval**, and an offline cache so the library stays usable when Zotero is closed.\n- **Native Zotero connection via the local API (no Better BibTeX)**: Connect to the HTTP API built into **Zotero 7+** (`127.0.0.1:23119`) with zero extensions — the most update-resilient way to connect. Resolves citekeys from Zotero's native Citation Key field (or the legacy `Extra` convention), with full metadata, tags, collections, and attachment paths, plus optional group-library and collection scoping.\n- **Native Zotero PDF annotations**: With **Import PDF annotations** enabled, the Better BibTeX source fetches real Zotero PDF highlights, underlines, comments, and image/area annotations — each with text, comment, hex color + palette name, page, tags, and a `zotero://open-pdf/...?annotation=KEY` deep link that opens the PDF **at the exact annotation**.\n- **Source-agnostic `annotations` template interface**: Zotero PDF annotations and Readwise highlights now share one uniform `annotations` shape (`text`, `comment`, `page`, `pageLabel`, `colorName`, `tags`, `openURI`, `source`), alongside `{{attachments}}` and `{{annotationCount}}` — a single `{{#each annotations}}` template covers both sources.\n- **Inline citation autocomplete**: Start typing `@smit` mid-sentence and a popover suggests matching references, inserting your configured citation format in place — no modal needed. Toggle it in **Settings** (on by default).\n- **References sidebar**: A side panel (from the ribbon or **`Citations: Show references for current note`**) that lists every reference cited in the active note, resolved live against your library and updating as you switch or edit notes.\n- **Zotero tags and collections in templates**: New `{{tags}}` (an alias of `{{keywords}}`) and `{{collections}}` variables expose Zotero terminology directly in your templates.\n- **Every data source is a first-class settings entry**: The database configuration UI now presents each source type — file, Zotero (Better BibTeX), Zotero (local API), and Readwise — as a first-class dropdown choice.\n\n## 🐛 Bug Fixes & Improvements\n\n- **Readwise stabilization**: The Readwise source is hardened against transient API failures and API-shape drift, so a flaky response no longer aborts a load.\n- **Zotero cache migration**: A legacy-path offline cache is eagerly migrated to the stable-id path, preserving sync continuity across reloads.\n- **Sync correctness**: Numerous data-loss paths were closed across the sync/merge subsystem — baselines are durable and flushed on unload, newlines in title-based paths are collapsed, and merges preserve settings and configuration.\n\n## 🔧 Under the Hood\n\n- **New modules**: `src/core/sync/` (sync blocks, 3-way merge, note-sync), `src/notes/baseline-store`, `src/core/zotero/` (Zotero client, local-API client, annotations), `src/sources/zotero-source` and `zotero-api-source`, `src/ui/views/references-view`, `src/ui/suggest/citation-suggest`, and `src/ui/modals/update-review-modal`.\n- **Documentation**: `docs/architecture.md` was expanded with the source-agnostic annotation model, the note-sync flow, and the new data sources; new use-case guides cover [Updating Literature Notes](https://github.com/akhmialeuski/obsidian-citation-extended/blob/master/docs/use-cases/updating-literature-notes.md) and [Zotero Integration](https://github.com/akhmialeuski/obsidian-citation-extended/blob/master/docs/use-cases/zotero-integration.md).\n- **Test suite** grew to 1,709 tests across 93 suites, maintaining 95%+ statement coverage.\n\n---\n\n_Full Changelog_: https://github.com/akhmialeuski/obsidian-citation-extended/compare/0.6.0...0.7.0\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "v0.7.0",
       "prerelease": false,
