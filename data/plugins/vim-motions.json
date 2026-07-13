@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-12T07:00:27.005Z",
-  "lastFetchedAt": "2026-07-12T07:00:27.005Z",
+  "lastChangedAt": "2026-07-13T07:01:27.005Z",
+  "lastFetchedAt": "2026-07-13T07:01:27.005Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.51.1"
+    "version": "0.52.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:c568dc40cae6e5031dcae596fc2b6f6ba908c52ffc6777e3803cece539b63294",
+          "downloadCount": 41,
+          "name": "main.js",
+          "size": 813852
+        },
+        {
+          "digest": "sha256:546a09cb5d4fd989abb3f8afec7740940c4d17599d82a36277917e8fb6a636c7",
+          "downloadCount": 42,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:2e9f2ade9ab6f35e87565c4fb171031295c229bfccec1cc372f047cabbfebd57",
+          "downloadCount": 37,
+          "name": "styles.css",
+          "size": 27331
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Cursor line highlight** — `set cursorline` / `set nocursorline` with `cursorlineopt` (number/line/both). Compartment-based runtime switching.\r\n- **Fold column** — `set foldcolumn` shows ▸/▾ indicators for foldable regions with click-to-fold. Uses CM6 `foldable()` / `foldedRanges()` APIs.\r\n- **`numberwidth` option** — `set numberwidth=N` controls minimum line number column width (1–20, default: 2).\r\n- **Mobile gutter width reduction** — line number gutter uses smaller font and reduced width on viewports ≤ 600px.\r\n- **Configurable line number gutter** — `set number`, `set relativenumber`, or both for hybrid mode (absolute on current line, relative on others), matching Neovim's semantics exactly. Uses a custom CM6 `gutter()` with `Compartment`-based runtime switching — `:set number` / `:set nonumber` take effect instantly without full feature reload. When the plugin's line number gutter is active, Obsidian's native line numbers are suppressed via CSS to prevent duplication. Defaults to off (matching Neovim defaults).\r\n    - **Settings**: **Settings → Vim Motions → Line numbers** — two toggles: Line numbers, Relative line numbers\r\n    - **Vimrc**: `set number` / `set nonumber` (alias `nu`), `set relativenumber` / `set norelativenumber` (alias `rnu`)\r\n    - **Lua**: `vim.opt.number = true`, `vim.opt.relativenumber = true`\r\n    - Plugin: `src/vim/line-number-gutter.ts` (new), `src/settings.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`, `src/main.ts`, `styles.css`\r\n- **Picker provider API** — external plugins can register custom picker sources via `window.VimMotions.picker.registerSource()`. The API validates namespaced source names (`pluginId:sourceName`), wraps external source methods in try/catch with 5-second timeout, caps results at 10,000 items, and emits `source-registered` / `source-unregistered` events. Consumer plugins discover the API via `window.VimMotions.picker` or `app.plugins.plugins['vim-motions'].pickerAPI`.\r\n    - **Lifecycle**: `vim-motions:picker-ready` workspace event fires after API installation; consumers use `onLayoutReady` + event listener pattern for load-order safety.\r\n    - **Type definitions**: `src/picker/picker-api.d.ts` ships standalone types for consumer plugins with full JSDoc and usage examples.\r\n    - Plugin: `src/picker/api.ts` (new), `src/picker/picker-api.d.ts` (new), `src/picker/registry.ts` (extended), `src/picker/types.ts` (metadata fields), `src/main.ts` (API wiring)\r\n- **Meta-picker** — `:Picker` (no arguments) opens a source browser listing all registered picker sources grouped by \"Built-in\" / \"Extensions\", with display names, icons, and keymap bindings shown. Selecting an entry opens that picker. `:Picker <source>` opens a named source directly.\r\n    - Plugin: `src/picker/sources/pickers.ts` (new), `src/workspace/commands.ts` (`:Picker` ex command), `src/main.ts` (`picker-pickers` Obsidian command)\r\n- **Picker source metadata** — `PickerSource` interface extended with optional `displayName`, `icon`, `description`, and `priority` fields. All 12 built-in sources now include metadata for display in the meta-picker.\r\n    - Plugin: `src/picker/types.ts`, `src/picker/sources/*.ts` (all 12 source files)\r\n- **Bundled picker integrations** — three built-in picker sources that auto-detect and integrate with popular plugins:\r\n    - **Omnisearch** (`omnisearch`) — dynamic full-text vault search via `globalThis.omnisearch.search()`. 150ms debounce, min 2-char query. Jumps to first match offset on selection.\r\n    - **Obsidian Tasks** (`tasks`) — shows all incomplete tasks sorted by due date, grouped by status type. Cached with event-based invalidation via `obsidian-tasks-plugin:cache-update`. Jumps to task line on selection.\r\n    - **Dataview** (`dataview`) — lists all Dataview-indexed pages with tags and aliases in description. Filterable by the picker's fuzzy matcher.\r\n    - All three are gated by settings toggles in **Settings → Vim Motions → Third-party integrations** (default: enabled) and by runtime plugin detection via `onLayoutReady`.\r\n    - Plugin: `src/picker/sources/omnisearch.ts` (new), `src/picker/sources/tasks.ts` (new), `src/picker/sources/dataview.ts` (new), `src/main.ts` (detection + registration), `src/settings.ts` (3 toggles)\r\n\r\n### Fixed\r\n\r\n- **Obsidian line numbers leaking into table cell editors** — when Obsidian's \"Show line numbers\" setting is enabled, line number gutters appeared inside embedded table cell editors where they shouldn't. Fixed by suppressing `.cm-gutters` in cell editors via CSS. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `styles.css`\r\n\r\n### Changed\r\n\r\n- **`enableMarkGutter` migrated to `signcolumn`** — the boolean toggle is now a dropdown with Auto/Always/Off modes matching Neovim's `signcolumn` option. Existing settings are auto-migrated. `set markgutter` / `set nomarkgutter` remain as backward-compatible aliases.\r\n- **Mark gutter internals refactored** — the mark gutter implementation has been extracted into a dedicated `sign-column.ts` module. The rendering approach is unchanged (line decorations + CSS `::after` overlay, zero layout shift), but the internal architecture now cleanly separates the sign column field from the refresh scheduling API. No user-facing changes.\r\n    - Plugin: `src/vim/sign-column.ts` (new), `src/vim/mark-gutter.ts` (refactored to delegate)\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/settings.md`: added `numberwidth`, `cursorline`, `cursorlineopt`, `signcolumn`, and `foldcolumn` settings\r\n- `docs/configuration/vimrc.md`: added new gutter options and `markgutter` alias to options tables\r\n- `docs/configuration/lua-config.md`: added new gutter options to `vim.opt` table\r\n- `docs/features/marks.md`: updated to mention `signcolumn` as the canonical way to toggle mark indicators\r\n- `KNOWN_LIMITATIONS.md`: added notes on `signcolumn` overlay behavior and `cursorlineopt=screenline` support\r\n- `docs/configuration/settings.md`: added Line numbers settings group\r\n- `docs/configuration/vimrc.md`: added `number`/`nu`, `relativenumber`/`rnu` to boolean options table\r\n- `docs/configuration/lua-config.md`: added `vim.opt.number`, `vim.opt.relativenumber` with hybrid mode tip\r\n- `KNOWN_LIMITATIONS.md`: removed `number` and `relativenumber` from \"not implemented\" options list\r\n- `docs/development/picker-api.md`: new provider API reference with consumer guide, API surface, integration examples (Omnisearch, Tasks), and lifecycle documentation\r\n- `docs/development/index.md`: added picker provider API link\r\n- `docs/reference/keybindings.md`: added `:Picker` / `:Pick` to ex commands table\r\n- `KNOWN_LIMITATIONS.md`: added picker provider API pop-out window limitation\r\n- `docs/configuration/settings.md`: added Third-party integrations settings group\r\n- `docs/development/picker-api.md`: added bundled integrations section\r\n- `eslint.config.mts`: added `.obsidian-cache` to global ignores (downloaded community plugin JS files)\r\n- `wdio.conf.mts`: added Omnisearch, Tasks, Dataview as `enabled: false` plugins for integration testing\r\n- `test/specs/picker-integration.e2e.ts`: 12 e2e tests covering source registration, picker opening, search results, meta-picker listing, and plugin disable/enable lifecycle\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.51.1...0.52.0",
+      "downloadCount": 42,
+      "draft": false,
+      "name": "0.52.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-12T20:33:41Z",
+      "tag": "0.52.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:1104f8c287a6c2070793be5eed4181e5fa659c604c407bbba39b09cdc95ea7eb",
-          "downloadCount": 21,
+          "downloadCount": 52,
           "name": "main.js",
           "size": 790105
         },
         {
           "digest": "sha256:feefc6719c5c8928edcd20072dbe1053655fcda05c55b61386f2ccdbe2fbbbf7",
-          "downloadCount": 21,
+          "downloadCount": 52,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
-          "downloadCount": 20,
+          "downloadCount": 51,
           "name": "styles.css",
           "size": 25834
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Yank highlight over-extending on headings** — linewise yank (`yy`) on a heading with text on the very next line highlighted both lines, even though only the heading line was yanked. The highlight range calculation used `state.doc.lineAt(sel.to).to` to find the end of the highlight, but the codemirror-vim fork's `expandSelectionToLine()` sets `sel.to` to the start of the _next_ line (via `curEnd.line++`). Calling `lineAt()` on that position resolved to the entire next line, extending the highlight one line too far. Fixed by using `sel.to` directly as the highlight end boundary, which already points to the correct position (the start of the line after the last yanked line). ([#53](https://github.com/saberzero1/motions/issues/53))\r\n    - Plugin: `src/main.ts` (`attachYankHighlight` linewise range calculation)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.51.0...0.51.1",
-      "downloadCount": 21,
+      "downloadCount": 52,
       "draft": false,
       "name": "0.51.1",
       "prerelease": false,
@@ -58,26 +88,26 @@
       "assets": [
         {
           "digest": "sha256:8f584181cf197bbb0e431619ec54b5daada43262182515fc93b8e36c70742469",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 790135
         },
         {
           "digest": "sha256:6b5ea6b3cb0d336b152ca13b1b41246f7819460e7f5ca33a5c558f5db3d376e5",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 25834
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Input method switching for CJK users** — automatic IM switching when entering/leaving insert mode. Supports macism (macOS), im-select (macOS/Windows), fcitx5-remote (Linux), ibus (Linux), and any external IM switching binary. Per-editor IM state tracking, 50ms debounced switching, composition guard (never switches mid-IME composition), and error throttling with auto-disable. Desktop only — graceful no-op on mobile. ([#55](https://github.com/saberzero1/motions/issues/55))\r\n    - **Lua API**: `vim.obsidian.im.get()`, `.set(id)`, `.save()`, `.restore()`, `.enabled`, `.auto` — programmatic control for advanced use cases. Set `vim.obsidian.im.auto = false` to disable auto-wiring and handle switching via Lua autocmds.\r\n    - **Settings**: 7 new settings in **Settings → Vim Motions → Input method** — master toggle, binary path, obtain/switch args, normal mode IM, restore behavior (restore previous / use fixed default), default insert IM.\r\n    - **Security**: Uses `child_process.execFile` (no shell interpretation). Binary path must be absolute. IM identifiers validated against shell metacharacters. Scoped process access following the `external-fs.ts` pattern.\r\n    - Plugin: `src/im/im-process.ts` (new), `src/im/im-switcher.ts` (new), `src/settings.ts`, `src/lua/obsidian-api.ts`, `src/lua/api.ts`, `src/lua/loader.ts`, `src/lua/autocmd.ts`, `src/main.ts`, `src/util/external-fs.ts`\r\n    - Tests: `test/unit/im-process.test.ts` (new), `test/unit/im-switcher.test.ts` (new)\r\n- **`CmdlineEnter`/`CmdlineLeave` autocmd events** — fire when entering/leaving the `:`, `/`, or `?` command-line prompt. Event data includes `cmdtype` (`\":\"`, `\"/\"`, or `\"?\"`). `CmdlineLeave` is auto-wired to IM switching (switches to normal mode IM on prompt exit), matching im-select.nvim's default behavior.\r\n    - Plugin: `src/lua/autocmd.ts`, `src/lua/loader.ts`, `src/vim/mode-tracker.ts`, `src/im/im-switcher.ts`, `src/main.ts`\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/lua-config.md`: added `vim.obsidian.im` API section with function reference and Lua examples\r\n- `docs/configuration/settings.md`: added \"Input method\" settings group table\r\n- `KNOWN_LIMITATIONS.md`: added IM switching limitations section (desktop-only, no command-line/search mode, Flatpak/Snap, system-wide switching); updated \"Intentionally not supported\" table to mark IM switching as built-in\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.50.1...0.51.0",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.51.0",
       "prerelease": false,

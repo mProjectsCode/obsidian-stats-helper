@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-12T07:00:27.005Z",
-  "lastFetchedAt": "2026-07-12T07:00:27.005Z",
+  "lastChangedAt": "2026-07-13T07:01:27.005Z",
+  "lastFetchedAt": "2026-07-13T07:01:27.005Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b0d448e4a052145f8e980446f16fb75e9dfe81a7114b0b6968348de4f8578801",
-          "downloadCount": 29,
+          "downloadCount": 45,
           "name": "main.js",
           "size": 215424
         },
         {
           "digest": "sha256:da34bba62394e84554c9541c995655b06c9a9ef7e298dc77ecca0e3ab40cf2d0",
-          "downloadCount": 27,
+          "downloadCount": 45,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 27,
+          "downloadCount": 43,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Reconnecting a Google or Apple (SSO) account no longer sends you to a dead end.** When a Google or Apple session lapsed during background auto-sync, the pause notice's Reconnect button opened the email sign-in window, where Google and Apple logins do not work. Reconnect now detects an SSO account and reopens the browser bookmarklet sign-in that actually works for it, and pasting the fresh token resumes the paused sync. Email and password accounts keep using the sign-in window as before.\n- **A Google or Apple session that cannot be renewed silently stops retrying instead of hammering Plaud hourly.** Those accounts keep their renewable session in your browser, not the plugin, so the silent background refresh can never succeed for them. It used to keep retrying about hourly forever. It now stops after its short backoff and waits for you to reconnect (auto-sync still recovers on its next run and via the Reconnect notice), which also avoids Plaud's per-hour refresh limit. Email and password sessions keep retrying as before, since their failures may be temporary.\n\n### Changed\n\n- **Clearer explanation of why Google and Apple accounts reconnect about daily.** The sign-in help and README now state that Plaud keeps the renewable session in your own browser, out of the plugin's reach, so SSO accounts cannot be refreshed silently the way email and password accounts can.\n\n",
-      "downloadCount": 27,
+      "downloadCount": 45,
       "draft": false,
       "name": "0.30.1",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:db74a6cb3b7af636653773bb87e40169c98ed53ee79c0c5a6a3f9f500d957ca2",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 316
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **New `plaud-industry` frontmatter property.** Plaud carries a topical/industry classification alongside each summary, separate from the summary category. When present it is now written as its own `plaud-industry` property instead of being folded into `plaud-category`, so the two never mix. It is left off for recordings where Plaud provides no industry value. A matching `{{industry}}` token is available in the extra-frontmatter value field.\n\n### Fixed\n\n- **The `plaud-category` property no longer duplicates `plaud-template`.** Plaud's current summary format stores the template (summary-type) name in the same field the plugin reads for the category, so both properties came out with the identical value, for example both showing \"Deep Summary Transcript\". The plugin now omits `plaud-category` when its value would only repeat `plaud-template`. If Plaud ever provides a category that genuinely differs from the template, it is written as before.\n\n",
-      "downloadCount": 16,
+      "downloadCount": 17,
       "draft": false,
       "name": "0.30.0",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:6b8d5cb3d0e9ed7dd4457d8f6381d7c35387228f16c133d6caf0acdc166b89c9",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 316
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **The background session refresh no longer opens `web.plaud.ai` tabs in your default browser.** The refresh timer's delay is computed from the stored token's expiry, and for a long-lived token (an expiry 137 days out was observed) that delay overflowed the browser's 32-bit timer limit (about 24.8 days) and fired immediately instead of months later. The needless refresh then failed, retried on a backoff up to hourly, and every retry opened a hidden sign-in window whose login page leaked popup tabs into your default browser. The schedule is now capped safely below the timer limit, and a timer that wakes early re-arms without refreshing while the token still has plenty of life, so a valid token is never refreshed for no reason.\n\n### Changed\n\n- **A background refresh never opens a sign-in window anymore, not even a hidden one.** It uses only the silent, windowless renewal. If that fails, the plugin pauses and shows the one-click Reconnect prompt instead of loading Plaud's site in the background; only clicking Sign in or Reconnect ever opens a window.\n- **A hung refresh request can no longer wedge the plugin.** Each renewal call is bounded by a 30-second timeout, so a stalled connection now counts as a failed refresh instead of silently blocking every later refresh and the Sign in button until Obsidian restarts.\n\n",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.29.0",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:23a2fca7a2f8ab7757af22a7c6fe14d88cb30b8c3b58a4d4627f994f907455d6",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 316
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **New setting \"Preserve unknown frontmatter on re-import\" (on by default).** When a re-import overwrites a note, any frontmatter property you added yourself, or that another tool wrote, is now kept instead of being dropped. Before this, a re-import rebuilt the whole frontmatter block from the plugin's own fields plus your declared extra-frontmatter rows, so a property that downstream automation wrote straight into the note was lost on the next overwrite. Reserved plugin fields still refresh, and you can still let the plugin manage a specific property by adding it as an extra-frontmatter row with preserve turned off. Turn the setting off to restore the old rebuild-from-scratch behavior.\n\n### Fixed\n\n- **The `plaud-model`, `plaud-template`, `plaud-headline`, `plaud-category`, and `plaud-summary-id` frontmatter fields are populated again.** After Plaud moved AI summaries onto a newer generation path, the plugin fetched only the summary text and dropped all of this metadata, so notes (and any MP3 you uploaded) came in with none of those properties. The plugin now reads the metadata from the same recording detail it already downloads, so the fields return. The template value now prefers Plaud's readable template name (for example \"Adaptive Summary\") over its internal code. If a future Plaud change relocates a field again, the import still succeeds without it and a debug log names the field that could not be found.\n- **A placeholder stub's `plaud-placeholder` marker no longer lingers after real content arrives.** The marker was missing from the plugin's reserved-key set; it is now reserved, so a later real import clears it as intended.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 15,
       "draft": false,
       "name": "0.28.0",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:4a0c9eed1460a701be3b81fedbfeed878cd2860b0d488fa39b7822e4134bb220",
-          "downloadCount": 13,
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 316
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Recordings in Plaud's trash are now recognized correctly.** Plaud's trash flag can arrive as a number or string rather than a strict boolean, so the plugin was treating every recording as not-trashed. That left the new \"Trashed\" badge and the \"Hide trashed\" filter with nothing to act on. The flag is now read in all its forms, so trashed recordings show the badge (when \"Hide trashed\" is off) and the filter works.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 14,
       "draft": false,
       "name": "0.27.2",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:75a7d6e33536e7ecbe905d06ed875afe1dcb92bbf18f4529f5f6d41aea54600f",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 316
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **The import dialog no longer gets stuck on an empty list.** When automatic sync had already imported your newest recordings, opening the dialog with \"Hide already-processed\" on could leave the list blank with nothing to scroll, so older recordings you had not imported yet were unreachable. The dialog now pages past fully-hidden recordings on its own until it finds ones to import. When there is genuinely nothing to import it says so and tells you to turn off a filter to review existing notes, instead of showing a blank panel with a misleading \"scroll to browse\" hint.\n\n### Changed\n\n- **The filter toggles are now one compact \"Hide:\" group on a single line** (Processed, Updates, Ignored, Trashed), so they no longer wrap and take up less room. Each keeps its full description in a tooltip.\n- **Recordings in Plaud's trash now show a \"Trashed\" badge** when \"Hide trashed\" is turned off, so they are no longer indistinguishable from your live recordings.\n\n",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.27.1",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:2b70f06e5c5de8253d3a1a9db470c47c43742e729506609edf4cf27172f5279d",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 316
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **New \"Hide updates available\" filter in the import dialog.** A recording you already imported but later changed in Plaud shows an \"Update available\" badge; re-importing it overwrites the note with Plaud's newer version. Those rows stay visible by default, because they are work you may still want to do. The new \"Hide updates available\" toggle collapses them too, so the list can show only brand-new recordings when you want the shortest possible list.\n\n### Changed\n\n- **The import dialog's filter toggles now read consistently.** All four are phrased as \"Hide ...\": \"Hide already-processed\", \"Hide updates available\", \"Hide ignored\", and \"Hide trashed\" (previously \"Show trashed\"). A checked box now always means \"this is hidden\", so the whole bar reads the same way instead of mixing hide and show. Behavior is unchanged: trash is still hidden by default.\n\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.27.0",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:5fae697aa75bcf0b414160b60394fde353f6dafd02e6a9383d59f88e63b80527",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 316
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **The import list can now hide recordings you have already imported.** The import dialog has a new filter bar. \"Hide already-processed\", on by default, drops recordings that are already imported and unchanged, so the list shows only new recordings and ones that changed in Plaud since you imported them. This is issue #54: setting \"Duplicate handling\" to \"Skip\" made people expect imported recordings to leave the list, but that setting only ever governed whether a note is written, never what the list shows. The filter bar is what controls the list now, and it is independent of duplicate handling. \"Show trashed\" also moved into the bar so all three list toggles sit together.\n- **Ignore recordings you never want imported.** Each row in the import dialog has an eye button. Click it to ignore a recording, for example a junk clip or a personal note: it drops out of the list when \"Hide ignored\" (on by default) is set, and background automatic sync never pulls it either. Ignoring works even on recordings you never imported, since it does not depend on a note existing. Turn \"Hide ignored\" off to see ignored recordings again, each with a crossed-eye button you can click to un-ignore. The ignore list is saved with the plugin's settings and keyed by each recording's stable id.\n\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.26.0",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:0adf1c45e2df502141ec9558bf1b727df9f6c581e8ad976a2045b6c5dcf966df",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 316
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n\n- **The \"Duplicate handling\" setting is now labelled \"Duplicate handling for manual imports\", and its description says automatic sync ignores it.** The old label read as though it governed every import, so choosing \"Ask each time\" while automatic sync was on looked like it would make a background run stop and wait for a prompt that can never appear unattended. It never did: automatic sync has always run headless, importing new recordings and re-importing only the ones you changed in Plaud, and never prompts. The clearer wording and a matching line on the automatic sync setting spell that out so the two settings no longer look linked (issue #43).\n\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.25.2",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:a4e4b6a4d006d7e5440901a7c6c0c058a093ce3cb370947587c5e819ec39c877",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 316
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **The card image in an imported note no longer shows \"could not be found.\"** Plaud's AI summary embeds its card poster with an inline link that only resolves inside Plaud's own app. The plugin already downloads that image into the note's attachments folder, but left the summary's original embed pointing at Plaud. It now repoints the inline embed at the local copy, so the card renders in Obsidian (issue #52).\n- **A one-time command repairs the card image in notes you imported earlier.** The fix above only applies as notes are imported, so notes imported before it keep the broken card. Run **Repair card image links from older imports (one-time)** from the command palette to repoint those existing notes at the card already in their attachments folder. It only touches this plugin's notes, is safe to run more than once, and reports how many it fixed. Notes whose card was never downloaded are left for a re-import (issue #52).\n\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.25.1",
       "prerelease": false,
