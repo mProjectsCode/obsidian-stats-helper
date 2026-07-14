@@ -4,8 +4,8 @@
   "description": "Lightweight Google Drive sync with path-based index, conflict detection, and Smart/Push/Pull modes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "neogdsync",
-  "lastChangedAt": "2026-07-13T03:05:26.985Z",
-  "lastFetchedAt": "2026-07-13T03:05:26.985Z",
+  "lastChangedAt": "2026-07-14T03:04:26.982Z",
+  "lastFetchedAt": "2026-07-14T03:04:26.982Z",
   "manifest": {
     "author": "martinlegend",
     "authorUrl": "https://github.com/martinlegend",
@@ -18,7 +18,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.0",
     "name": "NeoGDSync",
-    "version": "1.0.8"
+    "version": "1.0.10"
   },
   "name": "NeoGDSync",
   "presentInCommunityList": true,
@@ -26,27 +26,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:5f501196d37b772913de206ce8ce60b4947756b067b5e6c4d2a2ac6ac8e02fcd",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 62358
+        },
+        {
+          "digest": "sha256:44d78323f01a8d373452826523685b553dc2610e0803c7066509193aa3c2e449",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 451
+        },
+        {
+          "digest": "sha256:fb76c46ce67ee9551d312091ae7ae54cace071b98b0d626172cf3b830e4c00bc",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 388
+        }
+      ],
+      "author": "martinlegend",
+      "description": "Combines the v1.0.9 and v1.0.10 changes — no intermediate 1.0.9 release was cut, so this release folds both in.\n\n## v1.0.9 — data-loss and correctness fixes\n- Mid-sync edits are no longer dropped: event suppression now tracks the exact paths the sync wrote (`Syncer.syncWrites`) instead of a global flag that blocked all vault events, including new user edits made while a sync was running.\n- Same-folder renames now propagate to Drive (`files.rename`) — previously the old name was left on Drive, causing duplicate uploads after an index rebuild.\n- A `modify` op with no index entry (index lost/reset) now looks the file up on Drive by path (`findOnDrive`) before uploading, instead of always creating a duplicate.\n- Unified exclude logic between vault-event handlers and the sync engine (`src/exclude.ts`) — previously they disagreed, and excluded paths got stuck in the pending-ops counter forever.\n- Files first seen via \"unknown Drive changes\" (`syncedAt===0`) now go through conflict handling instead of silently overwriting the remote.\n- `index.db` is written via tmp-file + rename with recovery on load — a crash mid-save could previously reset the index silently, causing duplicate Drive files on the next push.\n- Multipart upload boundary is now randomized (was a fixed string that could collide with file content and corrupt the upload).\n- `authProxyUrl` setting actually takes effect now (was silently ignored); exclude patterns are editable in Settings (README already claimed this, but there was no UI).\n- Force Pull / Drive-change downloads now use the existing `concurrency` setting instead of running fully serial.\n- OAuth proxy (`oauth-proxy/worker.js`) escapes HTML in callback pages — `?error=` was previously reflected unescaped (XSS).\n- README corrected: refresh-token exchange does flow through the proxy (was incorrectly claiming it \"never leaves your device\").\n- Added `vitest` + unit tests covering exclusion matching, snapshot diffing, and index persistence/crash-recovery.\n\n## v1.0.10 — privacy fix\n- The Settings tab \"Refresh token\" field displayed the token in **plaintext**. This token grants full read/write/delete access to your Drive, so a screenshot or screen-share of the settings tab could leak it. Fixed: the field is now masked (`type = 'password'`) with a show/hide toggle.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.0.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T09:22:45Z",
+      "tag": "1.0.10"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:4d8b38f95596ac12d6f50b46dc110563137f412d45c2613734b2ab3ea0940b50",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "main.js",
           "size": 56627
         },
         {
           "digest": "sha256:fdc7b6903ba38526bcd8a11745e7315acaf491e7d387400e3a79ef079b618554",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 450
         },
         {
           "digest": "sha256:fb76c46ce67ee9551d312091ae7ae54cace071b98b0d626172cf3b830e4c00bc",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 388
         }
       ],
       "author": "martinlegend",
       "description": "A one-time cleanup (2026-07-13) reclaimed 3.46GB/15GB of Drive quota that had\nbeen pinned by `keepRevisionForever=true` revisions accumulated from repeated\nre-uploads of unchanged binaries. That cleanup discovered that Drive's\n`revisions.update` API cannot actually unset `keepForever` — 695/700 attempts\nto flip it to `false` failed with a 400 `Cannot update a revision to false\nthat is marked as keepForever`, contradicting the API's own documentation.\nThe only way to reclaim space from a pinned revision is `revisions.delete`\n(immediate, permanent — no 30-day undo window).\n\nThis release prevents the backlog from re-forming.\n\n## Changed\n- `driveApi.ts`: new `deleteRevision()` and `pruneRevisions(driveId, keepCount)`.\n  After each push, a file's revisions are listed and the oldest `keepForever`\n  ones beyond `keepCount` are deleted outright. Revisions without `keepForever`\n  are left alone — Drive already reclaims those on its own schedule.\n- `syncer.ts`: pruning runs in the background after every push that updates an\n  existing file; a prune failure never fails the sync itself.\n- `mime.ts`: new `isBinaryMime()`. Attachments (images, PDFs, office docs, …)\n  are usually replaced wholesale rather than incrementally edited, so they get\n  a much lower default keep count than notes.\n- New settings (shown only when \"Keep revisions\" is on):\n  - **Revisions to keep — notes** (default 5)\n  - **Revisions to keep — attachments** (default 1)\n\nExisting installs pick up these defaults automatically — no manual migration\nneeded, `loadSettings()` merges new keys from `DEFAULT_SETTINGS`.\n\n## Upgrade notes\nIf your vault already has a large pinned-revision backlog from before this\nversion, this release only stops *new* growth — it doesn't retroactively\nclean up the existing backlog (that requires walking every file once, which\nthe plugin doesn't do automatically to avoid a surprise slow startup / API\nquota hit). Ask for a one-off cleanup script if needed.",
-      "downloadCount": 3,
+      "downloadCount": 5,
       "draft": false,
       "name": "v1.0.8 — bound revision growth with active pruning",
       "prerelease": false,
