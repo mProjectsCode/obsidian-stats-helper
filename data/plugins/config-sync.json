@@ -4,8 +4,8 @@
   "description": "Selective, on-demand distribution of vault configuration (snippets, hotkeys, plugin settings) across devices and vaults. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "config-sync",
-  "lastChangedAt": "2026-07-13T09:03:27.030Z",
-  "lastFetchedAt": "2026-07-13T09:03:27.030Z",
+  "lastChangedAt": "2026-07-14T09:05:27.038Z",
+  "lastFetchedAt": "2026-07-14T09:05:27.038Z",
   "manifest": {
     "author": "xooooooooox",
     "authorUrl": "https://github.com/xooooooooox",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Config Sync",
-    "version": "0.19.0"
+    "version": "0.21.0"
   },
   "name": "Config Sync",
   "presentInCommunityList": true,
@@ -22,8 +22,68 @@
     {
       "assets": [
         {
+          "digest": "sha256:82ff71261bb7f3aa17d6d1e049a05e396e3ae63b1885f58d9afbd3d1761b3bf9",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 121072
+        },
+        {
+          "digest": "sha256:73b0f57f2f52dd5694e105b0b34acd53bbfad286371da578b74fbab79d31117e",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:70e5fffc450e56a1c969e2a559fe39f37a8af3e38e0c334ba9488b7f3a8fd645",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 29490
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Settings reliability, sensitive workflow, and a theme-native design system\r\n\r\nA big config-panel pass: saving is now atomic, sensitive keys surface before you enable sync, the panel is fully theme-native, and each synced item gets a proper expansion.\r\n\r\n### Saving is transactional\r\n- Every settings change writes atomically and **rolls back in memory** on a failed disk write, showing the error inline on the offending card instead of only at the page bottom.\r\n- The group-name validator accepts uppercase plugin ids (e.g. `plugin-DEVONlink-obsidian`), so one bad name no longer poisons every save.\r\n\r\n### Sensitive keys, handled before you enable\r\n- Detection runs on **every installed plugin** before you turn its sync on, floating flagged items to the top of their section with a `⚠ N keys` badge.\r\n- Each synced row expands into: **Fields to protect**, a read-only **View data.json** (keys colored by rule state — click one to add a strip/encrypt rule, the escape hatch when detection misses a field), and **Custom location**.\r\n\r\n### Custom location, clearer badges\r\n- The old \"Advanced\" sub-section is now **Custom location** — a default-collapsed row of **Location · Type · Path** for overriding where an item is stored, plus **Reset to default**.\r\n- The `⚙ custom location` badge appears **only** when an item uses a non-default storage location. Choosing an encryption mode, a device scope, or field rules is everyday configuration and no longer flags the item.\r\n\r\n### Cleaner classification\r\n- `workspaces.json` is reclassified as the **Workspaces** core plugin; volatile `workspace.json` / `workspace-mobile.json` move to Advanced → Discovered files.\r\n- The \"Not recommended\" section dissolves into inline **`device-specific`** badges (Sync, Publish) that still prompt a caution on enable.\r\n- The Advanced tab is slimmed to Custom rules, Discovered files, and a customized-rules summary banner.\r\n\r\n### Theme-native design system\r\n- The panel reuses Obsidian's native components without overriding their surfaces, carries **zero hardcoded colors** (enforced by a new `check-no-hardcoded-color.sh` gate), and binds every semantic accent (encrypt/strip/detected, hub strips/sections) to Obsidian's palette variables — so the panel and Sync Center render correctly in **any theme** automatically. Verified in the default theme and AnuPpuccin.\r\n\r\n### Display names on disk\r\n- `config-sync.json` groups gain an optional `label`, written on enable and backfilled on capture, so items read correctly (e.g. `Dataview`) even on a device where the plugin isn't installed.\r\n\r\nNode suite at 202 tests; minAppVersion 1.8.7.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.21.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T05:40:56Z",
+      "tag": "0.21.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8536adccc44ff2fdebb3c632bcd2b381c1bbc5642fcbc9fb1caf491106541c95",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 113949
+        },
+        {
+          "digest": "sha256:50fefcf7681b462ed69dc9b5243f99c22997d54263ebc3b2abb78bad01d38124",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:5a567b42f3764b9ef82670c4e70f019d1cc38f2eaf311453518683e028736911",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 24708
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Availability sections, plugin install engine, and inline reports\r\n\r\nApply is now availability-aware: the Sync Center understands whether each plugin is enabled, disabled, outdated, or missing on this device — and can fix that as part of applying.\r\n\r\n### Sync Center: four availability layers\r\n\r\n- The main list now holds only items that are ready to use. Three opt-in, collapsed sections sit below it:\r\n  - **Outdated on this device** — enabled plugins whose store settings were captured on a newer plugin version.\r\n  - **Disabled on this device** — installed but turned off.\r\n  - **Not installed on this device** — the store has settings, this device doesn't have the plugin.\r\n- Section items are never staged or counted until you opt in; all top-level numbers reflect the main list only.\r\n- Checkbox = whether settings sync. A new **On apply** segment = what happens to the plugin itself, composed from the item's actual gaps:\r\n  - Outdated: `⤓ Update to latest` (default) | `Keep {version}`\r\n  - Disabled: `⏻ Enable` (default) | `Keep disabled` — and `⤓ Update & enable` when it's also outdated\r\n  - Not installed: `⤓ Install & enable` (default) | `⤓ Install` | `Stage only`\r\n\r\n### Plugin install engine\r\n\r\n- Applying can install or update community plugins directly from the official community catalog (latest release, works on mobile).\r\n- Failures are isolated and honest: a failed update leaves the existing settings untouched; a failed install still stages the settings so they take effect when you install manually. Plugins that aren't in the catalog (or whose latest release identifies as a different plugin) are staged with a clear note.\r\n- Enables triggered from the panel persist across restarts, and every outcome is verified — no false \"enabled\" reports.\r\n\r\n### No more warning walls\r\n\r\n- The pre-apply \"version warnings\" dialog is gone. Everything it warned about is now visible in the panel before you click Apply, and version drift is handled where it belongs:\r\n  - Plugin behind the store → the Outdated section, with a one-click update path.\r\n  - Plugin ahead of the store → a quiet metadata line (\"capturing will refresh the store\").\r\n  - Obsidian and core-plugin settings are anchored to the Obsidian app version — reminder text only.\r\n- Apply always runs directly; the only dialog left in the plugin is the Revert report.\r\n\r\n### Inline results\r\n\r\n- Capture, Apply, Pull, and Push results render as a dismissible strip at the top of the panel instead of a modal — expand `details` for the full report, including per-item outcome pills like `⤓ installed & enabled 0.5.68`, `⏻ enabled`, `staged for install`.\r\n- Report styling (shared with the Revert dialog): a `+ added · ~ updated · − deleted` legend, per-section counts, and tooltips on every change chip.\r\n\r\n### Search\r\n\r\n- The Sync Center's name filter moved to the sidebar and now searches **all** scopes at once: sidebar entries show hit counts, and sections auto-expand to show matches.\r\n\r\n### Under the hood\r\n\r\n- `store.lock.json` now records the Obsidian app version for settings/core items (`sourceAppVersion`) alongside plugin versions.\r\n- 187 node tests (up from 166).\r\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.20.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T09:50:59Z",
+      "tag": "0.20.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3ef51e7877ee08ff54a6137a203ba6e8dbae0692d592a63202690e487f5aa94b",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 99965
         },
@@ -233,26 +293,26 @@
       "assets": [
         {
           "digest": "sha256:fd4c1733c1674bbde0da8bea7738b10d14f336245582cb8252413ee0ad77e622",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 76560
         },
         {
           "digest": "sha256:e8b91ba37296ba7ab61da5447732e630bd4d687319cae9fd0b8cbc760494a514",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 336
         },
         {
           "digest": "sha256:e9cc616ae3138de822d69756c3afdd81fbb0e9fff40da54e3ae9001e39ab9b4e",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 13454
         }
       ],
       "author": "github-actions[bot]",
       "description": "The panel stops offering actions that can't succeed, and remote comparisons lose their permanent noise line.\r\n\r\n## New\r\n- **\"No settings yet\" state (`○`).** Items with no config file on this device *and* nothing in the store — typically plugins you've never configured — now get their own gray state instead of being lumped into \"To capture\". They show dimmed with the checkbox disabled, count under a gray `○ N` pill and a `No settings yet` filter, and explain themselves when expanded. The moment such a plugin saves its first settings, the item moves to \"To capture\" automatically.\r\n\r\n## Fixed\r\n- **Capture can no longer error with \"nothing to capture yet\".** Previously these no-file items were counted and selectable under \"To capture\" (one vault showed \"To capture 16\" where only 1 item was real), and capturing them just produced errors. `—` now strictly means \"on this device but not in the store yet\". The ribbon dot also no longer lights up for them.\r\n- **Remote comparisons drop the `store metadata ~1` noise.** The store's lock file changes on every capture, so that row appeared in nearly every remote diff while saying nothing useful. A remote that differs only in bookkeeping now shows `✓ remote matches the local store`. Pull/Push reports still list metadata writes — those are real.\r\n\r\n**Full Changelog**: https://github.com/xooooooooox/obsidian-config-sync/compare/0.13.0...0.14.0\r\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.14.0",
       "prerelease": false,
