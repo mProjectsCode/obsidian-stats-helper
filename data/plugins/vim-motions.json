@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-13T07:01:27.005Z",
-  "lastFetchedAt": "2026-07-13T07:01:27.005Z",
+  "lastChangedAt": "2026-07-14T07:02:26.986Z",
+  "lastFetchedAt": "2026-07-14T07:02:26.986Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.52.0"
+    "version": "0.55.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:c568dc40cae6e5031dcae596fc2b6f6ba908c52ffc6777e3803cece539b63294",
-          "downloadCount": 41,
+          "digest": "sha256:64da95a19647b31022d1d5632ff23999f22c211bfd56edcdc46dab3a5dbbede3",
+          "downloadCount": 22,
           "name": "main.js",
-          "size": 813852
+          "size": 901809
         },
         {
-          "digest": "sha256:546a09cb5d4fd989abb3f8afec7740940c4d17599d82a36277917e8fb6a636c7",
-          "downloadCount": 42,
+          "digest": "sha256:86a24e518b5e7567191644bd5a964916f16c00c8334bdfb3b951778648738862",
+          "downloadCount": 22,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:a9b4bd56404a44ed6048c374faf08989562441ce6f006469ba5fe91549773c22",
+          "downloadCount": 21,
+          "name": "styles.css",
+          "size": 29433
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Changed\r\n\r\n- **Sign column migrated to dedicated gutter column** — vim mark indicators (`a`–`z`, `A`–`Z`) now render in a proper CM6 `gutter()` column instead of using `Decoration.line()` + CSS `::after` overlays. Fixes marks cascading vertically into the wrong line, overlapping on multi-mark lines, and inheriting heading font sizes. The gutter layout from left to right is: sign column → line numbers → fold column → content, matching Neovim's default arrangement. Uses `Compartment`-based runtime reconfiguration — `:set signcolumn=yes/auto/no` takes effect without full feature reload. `signcolumn=auto` now causes layout shift when marks appear/disappear (matching Neovim behavior); `signcolumn=yes` always reserves gutter space. ([#59](https://github.com/saberzero1/motions/issues/59))\r\n    - Plugin: `src/vim/sign-column.ts` (rewritten: `gutter()` + `GutterMarker` + `Compartment`), `src/vim/mark-gutter.ts` (updated re-exports), `src/main.ts` (unconditional registration, `reconfigureSignColumnGutter()`), `src/settings.ts` (removed from `RELOAD_KEYS`, dedicated handlers in both settings panels, `enableMarkGutter` deprecated), `src/vimrc/loader.ts` (`markgutter` mapped to `signcolumn` via `sideEffect`), `styles.css` (gutter element styles replacing `::after` overlay)\r\n- **`enableMarkGutter` setting deprecated** — the boolean `enableMarkGutter` property is now optional with `@deprecated` JSDoc. Existing settings are auto-migrated to `signcolumn` via `settings-migration.ts`. The property is kept in the interface for migration type safety only.\r\n\r\n### Added\r\n\r\n- **Dual line number display** — new `linenumbermode` option (`hybrid`/`dual`/`dual-rel-abs`) shows absolute and relative line numbers in separate side-by-side gutter columns. `set number relativenumber linenumbermode=dual` renders absolute on the left, relative on the right (configurable via `dual-rel-abs` for the reverse). The default `hybrid` mode is unchanged — existing configs are fully backward compatible. Auto-disabled on mobile viewports (≤600px, falls back to hybrid). Configurable via Settings UI dropdown, `set linenumbermode=dual` (alias `lnm`) in vimrc, or `vim.opt.linenumbermode = \"dual\"` in Lua.\r\n    - Plugin: `src/vim/line-number-gutter.ts` (dual compartments, `resolveGutters()`), `src/vim/options.ts` (`linenumbermode` option), `src/settings.ts` (setting + UI dropdown), `src/vimrc/loader.ts` (`linenumbermode`/`lnm`), `src/main.ts` (pass `linenumbermode` to extension creation/reconfiguration)\r\n- **Global vs local mark color differentiation** — global marks (`A`–`Z`) render in `--text-muted` color, local marks (`a`–`z`) render in `--text-accent`. The first character of the label determines the CSS class (`.vim-motions-sign-marker-global` or `.vim-motions-sign-marker-local`).\r\n    - Plugin: `src/vim/sign-column.ts` (`SignMarker.toDOM()` case detection), `styles.css`\r\n- **Click-to-navigate on mark labels** — clicking a mark label in the sign column gutter moves the cursor to that line. Uses `domEventHandlers.click` on the gutter, querying the `signColumnField` RangeSet for markers at the clicked line.\r\n    - Plugin: `src/vim/sign-column.ts` (`domEventHandlers.click`)\r\n- **`signcolumn` width modes** — `signcolumn` now accepts `auto:N` and `yes:N` syntax (N = 1–4) to control sign column character width. `set signcolumn=auto:3` reserves 3 character slots when marks exist. `set signcolumn=yes:2` always reserves 2 character slots. Validation via regex; invalid values silently rejected.\r\n    - Plugin: `src/vim/sign-column.ts` (`parseSignColumnMode()`, `isValidSignColumnValue()`), `src/vim/options.ts` (validation), `src/settings.ts` (type widened to `string`), `src/vimrc/loader.ts` (removed `validValues`)\r\n- **`statuscolumn` API** — Neovim-compatible `statuscolumn` option for user-configurable gutter layout. A format string controls which gutter segments appear and in what order: `%l` (line number), `%r` (relative number), `%s` (sign column marks), `%C` (fold indicators), `%=` (separator), and literal text. When set, the unified gutter replaces all individual gutter columns. When empty (default), individual `signcolumn`/`number`/`relativenumber`/`foldcolumn` settings manage gutters independently. Configurable via `vim.opt.statuscolumn = \"%s %l %r %C\"` in Lua or `set statuscolumn` (alias `stc`) in vimrc. Click handlers on sign and fold segments preserved. `linenumbermode` deprecated — `dual` maps to `statuscolumn = \"%l %r\"`. ([#59](https://github.com/saberzero1/motions/issues/59))\r\n    - Plugin: `src/vim/statuscolumn.ts` (new: parser, composite `StatusColumnMarker`, unified gutter, `StatusColumnSpacer`), `src/vim/sign-column.ts` (`signColumnField` extracted as standalone extension, `SignMarker.label` public), `src/vim/line-number-gutter.ts` (`computeLineNumber` + `getNumberwidth` exported), `src/vim/mark-gutter.ts` (re-exports `signColumnFieldExtension`), `src/vim/options.ts` (`statuscolumn` option), `src/settings.ts` (`statuscolumn` setting), `src/vimrc/loader.ts` (`statuscolumn`/`stc`), `src/main.ts` (standalone `signColumnField` registration, `statusColumnCompartment`, `reconfigureStatusColumnGutter()`), `styles.css` (statuscolumn segment styles)\r\n\r\n### Fixed\r\n\r\n- **Status bar vim mode duplication** — the vim mode indicator and chord display were duplicated in the status bar when the plugin had a non-default `clipboard` or `textwidth` setting saved. The settings restoration loop during `onload()` (lines 717-739 of `main.ts`, added in v0.53.0 by commit `947c6a7`) called `applySettingOverride` → `reloadFeatures()` before `onload()` had created its own `VimModeTracker` and `GlobalKeyHandler`. `reloadFeatures()` created these resources, then `onload()` overwrote `this.modeTracker` and `this.globalKeyHandler` with new instances — without destroying the first ones. The orphaned `VimModeTracker` left duplicate `addStatusBarItem()` DOM elements in the status bar, and the orphaned `GlobalKeyHandler` left a duplicate `keydown` listener on the document (causing intermittent leader key failures). Fixed by adding an `initializing` phase guard to `applySettingOverride` — all 6 side-effect branches (5 gutter reconfigurations + `reloadFeatures()`) are suppressed during `onload()`, matching the existing `vimrcLoading`/`luaLoading` guard pattern. Settings mutations to `this.settings` still apply immediately; only premature side effects are blocked. ([#63](https://github.com/saberzero1/motions/issues/63))\r\n    - Plugin: `src/main.ts` (`initializing` flag, 6 guard site updates in `applySettingOverride`)\r\n- **`iterateEditorViews` crash on non-editor leaves** — `reconfigureLineNumberGutter()` and other gutter reconfigure methods could throw `view.dispatch is not a function` on leaves where the CM6 EditorView chain resolved to a non-EditorView object. Fixed by adding a `typeof cm.dispatch === 'function'` guard in `iterateEditorViews`.\r\n    - Plugin: `src/main.ts` (`iterateEditorViews` type guard)\r\n\r\n### Tests\r\n\r\n- 10 e2e tests in `test/specs/marks-gutter.e2e.ts` (4 new, 6 updated): mark in gutter, mark move, multiple marks, delmarks removal, no marks = empty, dedicated gutter column, no line overlays, ellipsis truncation (4+ marks), consistent font size on headings, no `data-vim-marks` attribute\r\n- 4 e2e tests in `test/specs/statuscolumn.e2e.ts`: no statuscolumn by default, option registered in vim engine, sign column gutter present, mark gutter functionality preserved\r\n\r\n### Documentation\r\n\r\n- `docs/features/marks.md`: rewritten gutter indicators section — dedicated gutter column, fixed font size, truncation, three-mode table, gutter layout order\r\n- `docs/configuration/settings.md`: updated sign column description, added gutter layout tip with ASCII art example\r\n- `docs/configuration/lua-config.md`: expanded hybrid line numbers tip with gutter layout example\r\n- `KNOWN_LIMITATIONS.md`: updated `signcolumn` section — removed zero-width overlay note, updated behavior description\r\n- `README.md`: updated marks feature description\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.54.0...0.55.0",
+      "downloadCount": 22,
+      "draft": false,
+      "name": "0.55.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T23:18:31Z",
+      "tag": "0.55.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8e10d4a6e4fa467860b45e9c900b4a70679107e5f401cb19a0ec6a630bf33a0d",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 892596
+        },
+        {
+          "digest": "sha256:14d7de1563ddc3be5ce0ba8ff2375b6b8d3d3972f04028703777cad937816334",
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:2e9f2ade9ab6f35e87565c4fb171031295c229bfccec1cc372f047cabbfebd57",
-          "downloadCount": 37,
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 27331
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Which-key auto-resolves Obsidian command names for `:obcommand` mappings** — when a key is mapped to `:obcommand <id><CR>` or `:ob <id><CR>` without an explicit `desc`, the which-key popup now displays Obsidian's native command name instead of the raw ex command string. For example, `:ob app:go-back<CR>` displays as \"Navigate back\". Explicit `desc` options still take priority. Unknown command IDs fall back to the raw string. Descriptions are automatically localized — Obsidian's built-in commands already have localized names, so descriptions match the user's Obsidian language setting. Works in both editor which-key (leader bindings, `vim.keymap.set`) and global which-key (`:gmap`, `vim.obsidian.keymap.set`). ([#62](https://github.com/saberzero1/motions/issues/62))\r\n    - Plugin: `src/ui/which-key.ts` (`lookupObsidianCommandName()`, `resolveObCommandDescription()`, `OB_COMMAND_RHS_RE` regex matching both literal spaces and `<Space>` notation), `src/ui/global-which-key.ts` (`describeAction()` obcommand resolution)\r\n\r\n### Changed\r\n\r\n- **Consolidated Obsidian internal API access into `src/util/` utilities** — extracted typed accessor functions for 6 internal Obsidian APIs, replacing ~40 inline `(x as unknown as { ... })` casts across 16 files. Each utility centralizes the unsafe cast in one location and exposes a clean typed function:\r\n    - `src/util/commands.ts`: `executeCommand(app, id)`, `getCommandRegistry(app)` — 20 casts across 11 files\r\n    - `src/util/editor.ts`: `getEditorView(view)` — extracts CM6 `EditorView` from `MarkdownView`, replacing 6 inline casts across 5 files\r\n    - `src/util/leaf.ts`: `getLeafId(leaf)`, `isLeafPinned(leaf)`, `getViewFilePath(view)`, `getViewFileBasename(view)` — 12 casts across 3 files\r\n    - `src/util/metadata.ts`: `getResolvedLinks(app)` — 2 casts across 2 files\r\n    - `src/util/vault.ts`: `getVaultConfig(app, key)`, `isBuiltinVimEnabled(app)` — 4 casts across 4 files\r\n    - `src/util/keymap.ts`: `pushKeymapScope(app, scope)`, `popKeymapScope(app, scope)` — 3 casts in 1 file\r\n\r\n### Tests\r\n\r\n- 22 unit tests in `test/unit/which-key.test.ts`: `lookupObsidianCommandName()` (4 tests), `describeKeymapEntry()` without app (6 tests), `describeKeymapEntry()` with app and obcommand auto-resolution (12 tests covering `:ob`/`:obcommand` short/long form, `<CR>` variants, `<Space>` separator, unknown commands, label priority, edge cases)\r\n- 6 e2e tests in `test/specs/which-key-obcommand.e2e.ts`: editor which-key auto-resolution for `:ob` and `:obcommand` (2 tests), explicit `desc` priority (1 test), unknown command fallback (1 test), global which-key auto-resolution via registry API (1 test), global unknown command fallback (1 test)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.53.0...0.54.0",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.54.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T19:33:58Z",
+      "tag": "0.54.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cf93fbf537cb98f78d4e6d252e887105eb071998a8c2ac67d9f589a20adf0057",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 892655
+        },
+        {
+          "digest": "sha256:ed1f07117de2f1d80660902a3628c92873d5dd1261c789c8cd7efcc0266f669d",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:2e9f2ade9ab6f35e87565c4fb171031295c229bfccec1cc372f047cabbfebd57",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 27331
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Which-key descriptions not showing for keymaps set via Lua** — `vim.keymap.set` and `vim.obsidian.leader.set` with a `desc` option showed raw action names (`lua-action-0`), command strings (`:Oil<CR>`), or internal function names (`harpoonSelect1`) instead of the user's description. The codemirror-vim fork normalizes literal space characters to `<Space>` notation in key strings (e.g., `\" ff\"` → `\"<Space>ff\"`), but the which-key overlay stored and looked up label keys using unnormalized literal spaces — all lookups missed. Additionally, the leader-only which-key mode never triggered with space as leader because the `vim-keypress` event emits `\"<Space>\"` but the overlay compared against the raw `\" \"` character. ([#58](https://github.com/saberzero1/motions/issues/58))\r\n    - Plugin: `src/ui/which-key.ts` (`normalizeVimKey()` function mirroring the fork's `normalizeKeyString`, `normalizedLeaderKey` field for key event comparison, normalized lookups in `showLeaderBindings`/`showCompletions`/`onKeyPressLeaderOnly`), `src/main.ts` (`rebuildWhichKey()` normalizes all `commandLabels` and `groupLabels` map keys from settings, vimrc, and Lua sources)\r\n- **`vim.opt.clipboard` silently ignored in init.lua** — setting `vim.opt.clipboard = \"unnamed\"` or `\"unnamedplus\"` in init.lua had no effect. The Lua `vim.opt` handler only routed options through the `KNOWN_SET_OPTIONS` table, but `clipboard` was special-cased in the vimrc loader and missing from that table. Yanks never synced to the system clipboard when configured via Lua. Same issue affected `vim.opt.textwidth`. ([#56](https://github.com/saberzero1/motions/issues/56))\r\n    - Plugin: `src/vimrc/loader.ts` (`SideEffectOpt` type, `clipboard`/`textwidth`/`guicursor` added to `KNOWN_SET_OPTIONS`), `src/lua/api.ts` (special-case blocks removed, unified `KNOWN_SET_OPTIONS` path), `src/main.ts` (initial settings load from saved values), `src/lua/loader.ts` (`setOption` callback)\r\n- **Settings-based clipboard and textwidth not restored on plugin restart** — if a user set clipboard or textwidth via the Settings UI, the value was saved to disk but not re-applied to the vim engine on the next Obsidian startup. The saved `this.settings.clipboard` and `this.settings.textwidth` were never pushed to `vim.setOption()` during plugin load. Fixed by applying saved side-effect options after `registerVimOptions()`.\r\n    - Plugin: `src/main.ts` (initial settings loop using `KNOWN_SET_OPTIONS` sideEffects)\r\n\r\n### Changed\r\n\r\n- **Vim option architecture: `SideEffectOpt` type** — options that require side effects beyond `this.settings[key] = value` (clipboard, textwidth, guicursor) are now declared in the `KNOWN_SET_OPTIONS` table with a `sideEffect` type and an `apply()` callback. Previously, these options were special-cased with separate `if` blocks in both the vimrc loader and the Lua `vim.opt` handler — adding a new side-effect option required touching 2-3 files manually, and missing one path caused silent failures. Now there is a single declaration point. The vimrc loader, Lua handler, and initial settings load all route through the same table-driven path.\r\n    - Plugin: `src/vimrc/loader.ts` (`SideEffectOpt` interface, `applyKnownSetOption` sideEffect handling, special-case blocks removed), `src/lua/api.ts` (unified `KNOWN_SET_OPTIONS` path)\r\n\r\n### Added\r\n\r\n- **Snippets** — VS Code-compatible snippet expansion with tabstop navigation, linked mirrors, variable resolution ($CURRENT_YEAR, $TM_FILENAME, $UUID, etc.), and context-aware filtering (prose/code/frontmatter). Ships 40+ Obsidian-adapted snippets (headings, callouts, wikilinks, tables, frontmatter, math, date/time). Three trigger mechanisms: CM6 completion menu, Tab expansion (vim-native), and ex commands (`:snippet name`, `:snippets` picker). Bundled snippets toggleable via settings.\r\n- **User snippet directory** — load custom VS Code JSON snippet files from a configurable directory. Supports vault-relative and absolute paths (with `~` expansion, desktop only). User snippets override bundled snippets on prefix collision.\r\n- **Snippet Lua DSL** — LuaSnip-inspired `vim.snippet.*` API: `s()`, `t()`, `i()`, `c()`, `rep()`, `fmt()` for static snippets that compile to VS Code JSON at load time. `f()` (function nodes), `d()` (dynamic nodes), `sn()` (snippet nodes), `r()` (restore nodes) for reactive snippets that execute Lua functions via fengari at edit time.\r\n- **Snippet context filtering** — snippets can be restricted to specific editing contexts (`\"prose\"`, `\"code:js\"`, `\"code:*\"`, `\"frontmatter\"`) via a `\"context\"` field in JSON or the `context` option in Lua DSL.\r\n- **Choice node cycling** — `Ctrl+N`/`Ctrl+P` cycle through choice options (`${1|a,b,c|}`) on active snippet fields.\r\n- **Snippet picker** — `:snippets` opens the telescope-style fuzzy finder with snippet preview. `:snippet name` expands by name.\r\n- **`@codemirror/autocomplete` fork** — recursive descent snippet parser replacing CM6's regex parser, supporting choice nodes, nested placeholders, transforms (parsed, not applied), and bare `$1` syntax. Fork at [saberzero1/autocomplete](https://github.com/saberzero1/autocomplete).\r\n- 4 new settings: Enable snippets, Bundled snippets, Snippet directory, Trigger mode\r\n- 4 new vimrc `set` options: `snippets`, `snippetbundled`, `snippetdir`, `snippettrigger`\r\n- 13 new `vim.snippet.*` Lua API functions\r\n- Plugin files: `src/snippets/` (14 files), `src/lua/snippet-api.ts`, `src/snippets/dynamic-bridge.ts`\r\n- Fork files: `~/Repos/autocomplete/src/snippet.ts` (parser), `~/Repos/autocomplete/src/index.ts` (exports)\r\n\r\n### Tests\r\n\r\n- 9 unit tests in `test/unit/which-key.test.ts`: `normalizeVimKey()` — space conversion, idempotence, angle-bracket preservation, mixed notation\r\n- 4 e2e regression tests in `test/specs/lua-space-leader.e2e.ts`: which-key descriptions with space leader — string command desc, function callback desc, `all` mode desc, `vim.obsidian.leader.set` desc\r\n- 11 new e2e tests in `test/specs/lua-config.e2e.ts`:\r\n    - `vim.opt.clipboard = \"unnamed\"` applies from init.lua (1 test)\r\n    - `yy`/`yw`/`dd` populate `+` register when clipboard set via Lua (3 tests)\r\n    - `vim.opt.textwidth` and `vim.opt.tw` alias from init.lua (2 tests)\r\n    - Dual-config override precedence: Lua overrides vimrc for clipboard, textwidth, scrolloff (3 tests)\r\n    - Error resilience: unknown Lua option preserves vimrc clipboard; invalid textwidth (`-5`) preserves vimrc value (2 tests)\r\n- 7 e2e spec files (22 passing, 5 skipped) covering expansion, tabstops, variables, context, f()/d() nodes, static regression\r\n- 15 LuaSnip golden comparison unit tests (extracted from LuaSnip test suite commit `0abc8f3`)\r\n- 359 total unit tests passing\r\n\r\n### Documentation\r\n\r\n- `docs/features/snippets.md` (new feature page)\r\n- `docs/features/index.md`, `docs/reference/keybindings.md`, `docs/configuration/settings.md`, `docs/features/ex-commands.md`, `docs/configuration/vimrc.md`, `docs/configuration/lua-config.md` (updated)\r\n- `AGENTS.md` (fork dependency + page ownership)\r\n- `KNOWN_LIMITATIONS.md` (7 limitation entries)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.52.0...0.53.0",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.53.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T18:01:48Z",
+      "tag": "0.53.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c568dc40cae6e5031dcae596fc2b6f6ba908c52ffc6777e3803cece539b63294",
+          "downloadCount": 79,
+          "name": "main.js",
+          "size": 813852
+        },
+        {
+          "digest": "sha256:546a09cb5d4fd989abb3f8afec7740940c4d17599d82a36277917e8fb6a636c7",
+          "downloadCount": 79,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:2e9f2ade9ab6f35e87565c4fb171031295c229bfccec1cc372f047cabbfebd57",
+          "downloadCount": 77,
           "name": "styles.css",
           "size": 27331
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Cursor line highlight** — `set cursorline` / `set nocursorline` with `cursorlineopt` (number/line/both). Compartment-based runtime switching.\r\n- **Fold column** — `set foldcolumn` shows ▸/▾ indicators for foldable regions with click-to-fold. Uses CM6 `foldable()` / `foldedRanges()` APIs.\r\n- **`numberwidth` option** — `set numberwidth=N` controls minimum line number column width (1–20, default: 2).\r\n- **Mobile gutter width reduction** — line number gutter uses smaller font and reduced width on viewports ≤ 600px.\r\n- **Configurable line number gutter** — `set number`, `set relativenumber`, or both for hybrid mode (absolute on current line, relative on others), matching Neovim's semantics exactly. Uses a custom CM6 `gutter()` with `Compartment`-based runtime switching — `:set number` / `:set nonumber` take effect instantly without full feature reload. When the plugin's line number gutter is active, Obsidian's native line numbers are suppressed via CSS to prevent duplication. Defaults to off (matching Neovim defaults).\r\n    - **Settings**: **Settings → Vim Motions → Line numbers** — two toggles: Line numbers, Relative line numbers\r\n    - **Vimrc**: `set number` / `set nonumber` (alias `nu`), `set relativenumber` / `set norelativenumber` (alias `rnu`)\r\n    - **Lua**: `vim.opt.number = true`, `vim.opt.relativenumber = true`\r\n    - Plugin: `src/vim/line-number-gutter.ts` (new), `src/settings.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`, `src/main.ts`, `styles.css`\r\n- **Picker provider API** — external plugins can register custom picker sources via `window.VimMotions.picker.registerSource()`. The API validates namespaced source names (`pluginId:sourceName`), wraps external source methods in try/catch with 5-second timeout, caps results at 10,000 items, and emits `source-registered` / `source-unregistered` events. Consumer plugins discover the API via `window.VimMotions.picker` or `app.plugins.plugins['vim-motions'].pickerAPI`.\r\n    - **Lifecycle**: `vim-motions:picker-ready` workspace event fires after API installation; consumers use `onLayoutReady` + event listener pattern for load-order safety.\r\n    - **Type definitions**: `src/picker/picker-api.d.ts` ships standalone types for consumer plugins with full JSDoc and usage examples.\r\n    - Plugin: `src/picker/api.ts` (new), `src/picker/picker-api.d.ts` (new), `src/picker/registry.ts` (extended), `src/picker/types.ts` (metadata fields), `src/main.ts` (API wiring)\r\n- **Meta-picker** — `:Picker` (no arguments) opens a source browser listing all registered picker sources grouped by \"Built-in\" / \"Extensions\", with display names, icons, and keymap bindings shown. Selecting an entry opens that picker. `:Picker <source>` opens a named source directly.\r\n    - Plugin: `src/picker/sources/pickers.ts` (new), `src/workspace/commands.ts` (`:Picker` ex command), `src/main.ts` (`picker-pickers` Obsidian command)\r\n- **Picker source metadata** — `PickerSource` interface extended with optional `displayName`, `icon`, `description`, and `priority` fields. All 12 built-in sources now include metadata for display in the meta-picker.\r\n    - Plugin: `src/picker/types.ts`, `src/picker/sources/*.ts` (all 12 source files)\r\n- **Bundled picker integrations** — three built-in picker sources that auto-detect and integrate with popular plugins:\r\n    - **Omnisearch** (`omnisearch`) — dynamic full-text vault search via `globalThis.omnisearch.search()`. 150ms debounce, min 2-char query. Jumps to first match offset on selection.\r\n    - **Obsidian Tasks** (`tasks`) — shows all incomplete tasks sorted by due date, grouped by status type. Cached with event-based invalidation via `obsidian-tasks-plugin:cache-update`. Jumps to task line on selection.\r\n    - **Dataview** (`dataview`) — lists all Dataview-indexed pages with tags and aliases in description. Filterable by the picker's fuzzy matcher.\r\n    - All three are gated by settings toggles in **Settings → Vim Motions → Third-party integrations** (default: enabled) and by runtime plugin detection via `onLayoutReady`.\r\n    - Plugin: `src/picker/sources/omnisearch.ts` (new), `src/picker/sources/tasks.ts` (new), `src/picker/sources/dataview.ts` (new), `src/main.ts` (detection + registration), `src/settings.ts` (3 toggles)\r\n\r\n### Fixed\r\n\r\n- **Obsidian line numbers leaking into table cell editors** — when Obsidian's \"Show line numbers\" setting is enabled, line number gutters appeared inside embedded table cell editors where they shouldn't. Fixed by suppressing `.cm-gutters` in cell editors via CSS. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `styles.css`\r\n\r\n### Changed\r\n\r\n- **`enableMarkGutter` migrated to `signcolumn`** — the boolean toggle is now a dropdown with Auto/Always/Off modes matching Neovim's `signcolumn` option. Existing settings are auto-migrated. `set markgutter` / `set nomarkgutter` remain as backward-compatible aliases.\r\n- **Mark gutter internals refactored** — the mark gutter implementation has been extracted into a dedicated `sign-column.ts` module. The rendering approach is unchanged (line decorations + CSS `::after` overlay, zero layout shift), but the internal architecture now cleanly separates the sign column field from the refresh scheduling API. No user-facing changes.\r\n    - Plugin: `src/vim/sign-column.ts` (new), `src/vim/mark-gutter.ts` (refactored to delegate)\r\n\r\n### Documentation\r\n\r\n- `docs/configuration/settings.md`: added `numberwidth`, `cursorline`, `cursorlineopt`, `signcolumn`, and `foldcolumn` settings\r\n- `docs/configuration/vimrc.md`: added new gutter options and `markgutter` alias to options tables\r\n- `docs/configuration/lua-config.md`: added new gutter options to `vim.opt` table\r\n- `docs/features/marks.md`: updated to mention `signcolumn` as the canonical way to toggle mark indicators\r\n- `KNOWN_LIMITATIONS.md`: added notes on `signcolumn` overlay behavior and `cursorlineopt=screenline` support\r\n- `docs/configuration/settings.md`: added Line numbers settings group\r\n- `docs/configuration/vimrc.md`: added `number`/`nu`, `relativenumber`/`rnu` to boolean options table\r\n- `docs/configuration/lua-config.md`: added `vim.opt.number`, `vim.opt.relativenumber` with hybrid mode tip\r\n- `KNOWN_LIMITATIONS.md`: removed `number` and `relativenumber` from \"not implemented\" options list\r\n- `docs/development/picker-api.md`: new provider API reference with consumer guide, API surface, integration examples (Omnisearch, Tasks), and lifecycle documentation\r\n- `docs/development/index.md`: added picker provider API link\r\n- `docs/reference/keybindings.md`: added `:Picker` / `:Pick` to ex commands table\r\n- `KNOWN_LIMITATIONS.md`: added picker provider API pop-out window limitation\r\n- `docs/configuration/settings.md`: added Third-party integrations settings group\r\n- `docs/development/picker-api.md`: added bundled integrations section\r\n- `eslint.config.mts`: added `.obsidian-cache` to global ignores (downloaded community plugin JS files)\r\n- `wdio.conf.mts`: added Omnisearch, Tasks, Dataview as `enabled: false` plugins for integration testing\r\n- `test/specs/picker-integration.e2e.ts`: 12 e2e tests covering source registration, picker opening, search results, meta-picker listing, and plugin disable/enable lifecycle\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.51.1...0.52.0",
-      "downloadCount": 42,
+      "downloadCount": 79,
       "draft": false,
       "name": "0.52.0",
       "prerelease": false,
@@ -58,26 +148,26 @@
       "assets": [
         {
           "digest": "sha256:1104f8c287a6c2070793be5eed4181e5fa659c604c407bbba39b09cdc95ea7eb",
-          "downloadCount": 52,
+          "downloadCount": 53,
           "name": "main.js",
           "size": 790105
         },
         {
           "digest": "sha256:feefc6719c5c8928edcd20072dbe1053655fcda05c55b61386f2ccdbe2fbbbf7",
-          "downloadCount": 52,
+          "downloadCount": 53,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:ce4a61ed23fefd0df224b580b5e88f8ab15fea37576463b75708adbf233fb308",
-          "downloadCount": 51,
+          "downloadCount": 52,
           "name": "styles.css",
           "size": 25834
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Yank highlight over-extending on headings** — linewise yank (`yy`) on a heading with text on the very next line highlighted both lines, even though only the heading line was yanked. The highlight range calculation used `state.doc.lineAt(sel.to).to` to find the end of the highlight, but the codemirror-vim fork's `expandSelectionToLine()` sets `sel.to` to the start of the _next_ line (via `curEnd.line++`). Calling `lineAt()` on that position resolved to the entire next line, extending the highlight one line too far. Fixed by using `sel.to` directly as the highlight end boundary, which already points to the correct position (the start of the line after the last yanked line). ([#53](https://github.com/saberzero1/motions/issues/53))\r\n    - Plugin: `src/main.ts` (`attachYankHighlight` linewise range calculation)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.51.0...0.51.1",
-      "downloadCount": 52,
+      "downloadCount": 53,
       "draft": false,
       "name": "0.51.1",
       "prerelease": false,
