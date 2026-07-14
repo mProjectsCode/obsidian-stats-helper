@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-07-13T05:00:26.998Z",
-  "lastFetchedAt": "2026-07-13T05:00:26.998Z",
+  "lastChangedAt": "2026-07-14T05:04:27.082Z",
+  "lastFetchedAt": "2026-07-14T05:04:27.082Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "ima.copilot Sync",
-    "version": "6.4.2"
+    "version": "6.6.0"
   },
   "name": "ima.copilot Sync",
   "presentInCommunityList": true,
@@ -22,27 +22,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:6fe3c7584c92ff52becaad4b1ea1c7e25f5bf8d64fb01dccc1a8502782d65804",
-          "downloadCount": 398,
+          "digest": "sha256:b75b0c71285b24ce3742f5b83e4740c2201250292da47f05586260de852fed51",
+          "downloadCount": 38,
           "name": "main.js",
-          "size": 799493
+          "size": 822112
         },
         {
-          "digest": "sha256:7f59b8a7ddea94b848578f1c0e13bf4324caba9e874dbb954bcabb8d170a3410",
-          "downloadCount": 448,
+          "digest": "sha256:4a584f28cfce35ae2ad34ee6db30b7210a61481c6da321b46874ed64cf813ab6",
+          "downloadCount": 42,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 383,
+          "downloadCount": 36,
+          "name": "styles.css",
+          "size": 4190
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 6.6.0\n\n### 修复\n\n- **微信公众号文章发布时间晚 8 小时**：`extractWeChatPublishTime` 从 Unix 时间戳转换时漏了时区偏移，输出 UTC 而非北京时间（如实际 `2026-07-09T10:09:17` 被记为 `02:09:17`）。现统一加 `+8h` 偏移（与知乎/小红书路径一致，参照 Obsidian-Share-to-Save `extractCreateTime`）。`createTime` 预格式化字符串分支改为直接拼接输出，避免非 UTC+8 机器上 `new Date` 本地解析导致的二次偏移\n- **`create_time` 提取漏第三种格式**：补 `var create_time = '1234567890'` 赋值格式正则\n\n### 新增\n\n- **微信文章 HTML 代码示例保护**：微信技术类文章常含 `&lt;div&gt;` 等 HTML 标签实体，DOMParser 解码后 turndown 会输出原始 `<div>` 标签污染 Markdown。新增 `protectAngleBrackets`（DOMParser 前把 `&lt;`/`&gt;` 替换为 ANGLT/ANGGT 占位符，保护 code/pre/title 块原样）+ `restoreAngleBrackets`（turndown 后把 ANGLT+标签名+ANGGT 还原为行内代码 `` `<tag>` ``，其余还原为实体编码）。照搬 Obsidian-Share-to-Save `text-utils.ts`\n\n### 内部\n\n- **微信主路径接入完整后处理管线**（对齐 Obsidian-Share-to-Save `postprocessContent`）：`restoreAngleBrackets` → Tab→空格（防 Obsidian 误判缩进为代码块）→ `normalizeBoldMarkers`（已有）→ `normalizeMultilineLinks`（折叠 `[\\n\\ntext\\n\\n](url)` 断裂链接）→ `cleanWeChatWhitespace`（已有）。回退路径末尾也加 `restoreAngleBrackets` 防御\n- `convertWeChatHtmlToMarkdown` 入口加 `protectAngleBrackets` 预处理，影响整个 doc（含 isWeChatBlockPage 检测、buildCleanWeChatHtml、回退路径），链路自洽\n- 至此微信提取管线已与 Obsidian-Share-to-Save 完全对齐\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.5.1...6.6.0",
+      "downloadCount": 42,
+      "draft": false,
+      "name": "6.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T11:47:17Z",
+      "tag": "6.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:63a80aa34b2eab890ad1c39e9c664e6eadf1883945ba997cd58bab77d1e16f58",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 821459
+        },
+        {
+          "digest": "sha256:63841ce7f685fb9a066f5000bbca215f5848808ff84f9a046130c5f4e9ec7b6f",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 4190
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 6.5.1\r\n\r\n### 修复\r\n\r\n- **微信公众号文章同步只剩\"营销审核\"遮罩词、正文全丢**：微信文章 headless 渲染后返回「正文 `#js_content`（完整可见）+ 营销审核遮罩层（`visibility:hidden` 浮层）」共存的页面，此前用 defuddle 提取时，defuddle 对微信 flexbox `<section>` 伪结构无法识别，导致结构塌缩 + 正文丢失，结果文件只剩一行遮罩提示语。改用 **turndown 直取 `#js_content` 节点**（参照 Obsidian-Share-to-Save 的 WeChatConverter），正文、列表、段落结构、图片全部保真\r\n- **微信营销审核遮罩污染提取**：新增 `.weui-half-screen-dialog` / `.ad_control-tips` / `[class*=\"ad_control\"]` / `.pay_area` / `.wx_bottom_modal` 到 UI 移除清单，避免遮罩层文字混入正文\r\n- **拦截页判定增强**：`isWeChatBlockPage` 新增\"未经审核的第三方商业营销信息\"\"请确认是否继续访问\"关键词检测，并区分「真拦截页（纯遮罩无正文，短路返回）」与「正文 + 遮罩共存（走主路径提取）」两种形态\r\n\r\n### 新增\r\n\r\n- 引入 `turndown`（含 `@joplin/turndown-plugin-gfm` GFM 扩展：表格、删除线、任务列表、围栏代码块）作为微信文章 HTML→Markdown 转换器，defuddle 仍用于知乎 / 小红书 / 通用网页及微信回退路径",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "6.5.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T10:27:33Z",
+      "tag": "6.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:907887bd3f7c2462d4daa40317bb8d5bd127e46181dd4ade28091102957c8413",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 821434
+        },
+        {
+          "digest": "sha256:1712f49e47087ac1675143cedee3bb1987528dddcfc6fe6eb96e3bd5765b025c",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 4190
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 6.5.0\r\n\r\n### 修复\r\n\r\n- **微信公众号文章同步只剩\"营销审核\"遮罩词、正文全丢**：微信文章 headless 渲染后返回「正文 `#js_content`（完整可见）+ 营销审核遮罩层（`visibility:hidden` 浮层）」共存的页面，此前用 defuddle 提取时，defuddle 对微信 flexbox `<section>` 伪结构无法识别，导致结构塌缩 + 正文丢失，结果文件只剩一行遮罩提示语。改用 **turndown 直取 `#js_content` 节点**（参照 Obsidian-Share-to-Save 的 WeChatConverter），正文、列表、段落结构、图片全部保真\r\n- **微信营销审核遮罩污染提取**：新增 `.weui-half-screen-dialog` / `.ad_control-tips` / `[class*=\"ad_control\"]` / `.pay_area` / `.wx_bottom_modal` 到 UI 移除清单，避免遮罩层文字混入正文\r\n- **拦截页判定增强**：`isWeChatBlockPage` 新增\"未经审核的第三方商业营销信息\"\"请确认是否继续访问\"关键词检测，并区分「真拦截页（纯遮罩无正文，短路返回）」与「正文 + 遮罩共存（走主路径提取）」两种形态\r\n\r\n### 新增\r\n\r\n- 引入 `turndown`（含 `@joplin/turndown-plugin-gfm` GFM 扩展：表格、删除线、任务列表、围栏代码块）作为微信文章 HTML→Markdown 转换器，defuddle 仍用于知乎 / 小红书 / 通用网页及微信回退路径\r\n\r\n\r\n\r\n\r\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.4.2...6.5.0",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "6.5.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T10:13:22Z",
+      "tag": "6.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6fe3c7584c92ff52becaad4b1ea1c7e25f5bf8d64fb01dccc1a8502782d65804",
+          "downloadCount": 415,
+          "name": "main.js",
+          "size": 799493
+        },
+        {
+          "digest": "sha256:7f59b8a7ddea94b848578f1c0e13bf4324caba9e874dbb954bcabb8d170a3410",
+          "downloadCount": 462,
+          "name": "manifest.json",
+          "size": 253
+        },
+        {
+          "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
+          "downloadCount": 395,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.4.1\n\n### 修复\n\n- **限频导致知识库条目变空文件且永久跳过（#3）**：笔记较多的用户同步时遇到限频错误码（如 20005），此前 `syncKnowledgeItem` 会把限频错误误当作「该条目不支持同步」，写出一个只含兜底文案（`> 此条目为笔记，暂不支持自动同步内容`）的空文件；该文件带 `media_id` frontmatter，下次同步被增量逻辑当成「已同步」直接跳过，导致内容永久缺失。现改为限频时**不写兜底文件**并**中断当前循环**，剩余条目下次增量同步自动补齐，已同步部分不重复拉取\n- **限频不中断导致卡死**：此前限频后循环继续往下撞，每个条目都要走完 10s → 30s → 90s 退避（共 130s）才失败，N 篇笔记 = N × 130s 卡死。现命中限频立即 break，并跳过后续知识库 / 公共知识库同步阶段，单次 Notice 提示已同步数量与「剩余下次补齐」\n- **限频错误码识别扩展**：`RATE_LIMIT_CODES` 新增 20005（issue #3 用户报告码，官方 skills 文档未记录）；新增 `isRateLimitError()` 基于 errmsg 关键词（频率 / 限频 / 频控 / 配额 / 每日 / rate limit / quota / daily 等）的兜底识别，覆盖未来可能新增的限频码，不再依赖逐个枚举\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.4.1...6.4.2",
-      "downloadCount": 448,
+      "downloadCount": 462,
       "draft": false,
       "name": "6.4.2",
       "prerelease": false,
