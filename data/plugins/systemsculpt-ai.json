@@ -4,8 +4,8 @@
   "description": "Enhance your data flow with AI-powered tools for note-taking, task management, templates, and so much more.",
   "errors": [],
   "id": "systemsculpt-ai",
-  "lastChangedAt": "2026-07-13T00:04:26.983Z",
-  "lastFetchedAt": "2026-07-13T00:04:26.983Z",
+  "lastChangedAt": "2026-07-14T00:03:27.012Z",
+  "lastFetchedAt": "2026-07-14T00:03:27.012Z",
   "manifest": {
     "author": "SystemSculpt",
     "authorUrl": "https://systemsculpt.com",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:c06510df6ebe4bbeaf93c7ec988f01e09e243c00c54eaff4667e09ef923ed408",
-          "downloadCount": 99,
+          "downloadCount": 157,
           "name": "main.js",
           "size": 14717391
         },
         {
           "digest": "sha256:b032e79e16e1d833548d19d0ad14c5154701a71c9e7f1e8d908d75763941a48f",
-          "downloadCount": 103,
+          "downloadCount": 164,
           "name": "manifest.json",
           "size": 414
         },
         {
           "digest": "sha256:9c424383296c8de644030c05c7f64981de7465fe20d0f0178240852a817f57f6",
-          "downloadCount": 98,
+          "downloadCount": 151,
           "name": "styles.css",
           "size": 312187
         }
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.11.0\n\n## What's New\n\nSystemSculpt 5.11.0 makes Studio text nodes feel native to Obsidian and restores Chat Resend for desktop users. Text nodes now use Obsidian's Markdown editor, including live-preview formatting and task controls, while preserving the caret and edit history through Studio graph updates.\n\n## Highlights\n\n### Studio text editing\n\n- **Native Markdown editing.** Studio text nodes now use Obsidian's embedded Markdown surface instead of a plain textarea, so headings, emphasis, code, links, lists, and task checkboxes behave like they do in a note.\n- **Stable focus through graph updates.** Pointer placement, selection, scroll position, and focus survive the rerenders that happen while working in a Studio project.\n- **Reliable save and history behavior.** Leaving a text node flushes the latest edit, a continuous editing session is grouped into one undo step, and deleting an empty node remains undoable and redoable.\n- **Safer editor teardown.** Studio releases Obsidian's editor, focus, and keymap ownership even when a final commit or snapshot fails.\n\n### Chat\n\n- **Resend works again on desktop.** Resending from an earlier message no longer fails with `Failed to fetch dynamically imported module: node:fs`. Desktop filesystem access now stays behind the plugin's desktop-only boundary, with a built-bundle regression check to prevent the failure from returning.\n\n## Upgrade Notes\n\n- No manual action is required.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Verification\n\nThe release passed the plugin checks, full unit suite, built-bundle integration suite, and the Linux, macOS, and Windows GitHub end-to-end lanes. Native Studio editing and Chat Resend were also verified in the packaged plugin inside Obsidian.\n",
-      "downloadCount": 103,
+      "downloadCount": 164,
       "draft": false,
       "name": "5.11.0",
       "prerelease": false,
@@ -54,13 +54,13 @@
       "assets": [
         {
           "digest": "sha256:0bb6af9db584422346a29290e85ea89dc067122573b2fd0019c0485d754b78cb",
-          "downloadCount": 503,
+          "downloadCount": 504,
           "name": "main.js",
           "size": 14630544
         },
         {
           "digest": "sha256:8c109efd8b0daee74a6c9159c3cbd8b3483b0f6a21bb07b3a1d0929777ef0544",
-          "downloadCount": 523,
+          "downloadCount": 524,
           "name": "manifest.json",
           "size": 414
         },
@@ -73,7 +73,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.10.0\n\n## What's New\n\nSystemSculpt 5.10.0 is a focused security, privacy, and reliability release. It came out of a deep audit of the plugin and closes a cluster of correctness gaps: a secret no longer reaches a debug log, a syncable policy can no longer smuggle a blanket command-approval wildcard, rate limits now degrade gracefully, semantic search can no longer silently misalign, and settings failures are no longer swallowed. Every change shipped failing-test-first with a permanent CI guard, so the behaviors stay fixed.\n\n## Highlights\n\n### Security & privacy\n\n- **License key kept out of logs.** The chat debug request log previously captured the full request headers, including your SystemSculpt license key. The debug payload is now redacted; the real request is unchanged.\n- **No blanket command approval via sync.** A Studio agent policy can no longer carry a bare `*` wildcard that would auto-approve every CLI command. The wildcard is stripped when policies are parsed, ignored by the approval gate, and scrubbed from any policy already on disk.\n- **License validity downgrades only on an authoritative rejection.** A real `401`/`403` from the license service now correctly marks the license invalid, while transient/network errors preserve your last-known-good state instead of locking you out on a blip.\n\n### Reliability\n\n- **Rate limits degrade gracefully.** The client now honors the server's `Retry-After` on a managed `429`, classifies bring-your-own-key `429`s as transient, and performs a bounded, abort-aware retry — with a guarantee that already-streamed content can never be replayed. This is the client complement to the server-side OpenRouter hardening.\n- **Streams stop when a chat view closes.** Closing a chat now aborts its in-flight request instead of leaving the network stream, token spend, and render loop running in the background.\n- **Honest edit-tool results.** The filesystem agent's edit tool now reports zero or partial edits accurately instead of claiming success when nothing (or only some) of the requested changes applied, and it skips no-op writes.\n- **Settings failures are surfaced.** If saving (or backing up) settings fails — disk full, permissions, a sync lock — the error is now logged and shown once via a de-duplicated notice, instead of being silently swallowed and lost on reload.\n\n### Semantic search\n\n- **Embedding vectors stay aligned with their chunks.** Whitespace-only or empty inputs no longer shift the returned vectors out of alignment with their source chunks, which could silently corrupt semantic-search results. The provider now returns one slot per input and asserts the counts match.\n\n### Developer experience\n\n- **The CSS linter is now actually enforced.** The Obsidian-override hygiene linter that ships with the repo is wired into the check gate (locally and in CI), with a guard test proving it fails on an unscoped selector — so the rule it was written to catch is finally guaranteed.\n- Removed a dead token-counter code path (and its orphaned support files) that referenced a dependency that was never installed.\n\n## Upgrade Notes\n\n- No manual action is required; settings migrate automatically on update.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Verification\n\nEvery change in this release landed through its own pull request with the full CI matrix green — the unit suite and built-bundle integration suite, plus the macOS and Windows end-to-end lanes — and an automated review pass. Each fix added or tightened a permanent test guard at the cheapest layer that catches the regression. The release additionally ran the native release matrix: macOS desktop baselines, the Windows clean-install and desktop-baselines GitHub end-to-end check for the released commit, and the Android sync and runtime smoke lanes.\n",
-      "downloadCount": 523,
+      "downloadCount": 524,
       "draft": false,
       "name": "5.10.0",
       "prerelease": false,
@@ -90,7 +90,7 @@
         },
         {
           "digest": "sha256:fe6e823e4f5f4eb7ceb65763c7ff60cc7ffca23840052f3e1b88a14099977a23",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 413
         },
@@ -103,7 +103,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.9.0\n\n## What's New\n\nSystemSculpt 5.9.0 is a large feature and reliability release. It expands bring-your-own-key support to Claude and Gemini through their native APIs, makes BYOK users first-class (no license wall in chat), hardens startup and updates on every platform, and overhauls the embeddings and audio-transcription pipelines. It also lands the clearer license-renewal experience and a batch of chat and agent-mode improvements.\n\n## Highlights\n\n### Providers (bring your own key)\n\n- **Claude (Anthropic) BYOK** via the native Messages API — add your Anthropic key and use Claude models directly in Chat.\n- **Gemini (Google) BYOK** via the native `generateContent` API.\n- A connected provider's models can no longer silently disappear from the Chat picker: a model-catalog status state machine keeps the dropdown honest.\n- **BYOK users never hit a license wall.** When you run on your own provider key, chat no longer demands a SystemSculpt license, and a provider-key auth failure is reported as a provider problem (\"Open Providers\") rather than a subscription/renewal prompt.\n\n### Platform reliability\n\n- More reliable startup on Android and Linux, including a Node-free mobile bundle-load path so the plugin initializes without desktop-only APIs.\n- A disabled plugin is now fully inert — no timers, listeners, or background work linger after you turn it off.\n- Versioned settings migration with update safety: settings are migrated forward deterministically, with safe-mode and minimum-version fail-soft so a bad load can't wedge the plugin.\n\n### Embeddings\n\n- A portable embeddings index that survives Obsidian Sync and vault restore — export/import, snapshots, and automatic restore.\n- Typed provider errors and more robust response parsing.\n- Automatic retry with backoff for transient provider errors and rate limits.\n- A bulk rebuild that can resume after an interruption even when auto-processing is off.\n\n### Recording & transcription\n\n- A typed transcription provider core: typed errors, a response normalizer, and an HTTP classifier shared across providers.\n- **Self-hosted Whisper** support with config-time validation and a settings UI.\n- A separate, configurable post-processing model for cleaning up transcripts.\n- Captured audio is saved when iOS interrupts a recording (lock screen / phone call), so meetings aren't lost.\n- Mobile recording bitrate is capped so long meetings stay within transcription limits.\n- One-tap stop for the recorder — the stop control no longer needs repeat taps.\n- YouTube transcription now returns an actionable message when the transcript service is over quota, instead of leaking a raw error.\n\n### Chat & agent mode\n\n- Agent mode is scoped to the individual chat instead of a global setting.\n- The local Pi agent loop stops cleanly on repeated identical failing tool calls and surfaces an actionable error when a tool-use turn stalls.\n- Favorite models are restored in the composer model picker.\n- Filesystem agent tools run on mobile, and Folder Notes paths resolve correctly across all file tools.\n- A per-chat toggle to hide system and tool messages.\n- \"Attach Context File\" is available from the slash palette.\n\n### License experience\n\n- A clear, actionable renewal flow for expired or invalid SystemSculpt licenses, replacing the old generic stream error — with distinct copy and actions for expired vs. invalid vs. provider-key states.\n\n## Upgrade Notes\n\n- No manual action is required; settings migrate automatically on update.\n- Minimum supported Obsidian version remains `1.4.0`.\n- BYOK users: if you previously saw a license prompt while using your own provider key, that no longer happens — chat runs on your key.\n\n## Verification\n\nPlugin checks, the full unit suite, and the built-bundle integration suite passed locally. The release also ran the native release matrix: macOS desktop baselines, the Windows clean-install and desktop-baselines GitHub end-to-end check for the released commit, and the Android sync and runtime smoke lanes. Every change in this release landed through CI with the macOS and Windows E2E lanes green on its pull request.\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "5.9.0",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:a634933931fd2938a3c3cfd207c83eee3efead68e27455f6a1ca84bdc69822b5",
-          "downloadCount": 147,
+          "downloadCount": 148,
           "name": "manifest.json",
           "size": 413
         },
@@ -133,7 +133,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.8.1\n\n## What's New\n\nSystemSculpt 5.8.1 is an OpenAI provider setup patch. Adding an OpenAI API key now makes GPT-5.4 Mini available in the Chat model picker, and chat requests for it route to OpenAI using your key.\n\nThis continues the provider setup work from 5.7.1, which fixed the same kind of \"provider connected but its model is missing from Chat\" gap for xAI.\n\n## Highlights\n\n- A connected OpenAI provider now adds GPT-5.4 Mini to the Chat model picker.\n- Chat requests for that model route to OpenAI's API with your own key.\n- Added a guard so a configured provider's model cannot silently disappear from the picker again.\n\n## Upgrade Notes\n\n- No manual action is needed.\n- If you already added an OpenAI key but its model did not appear, update the plugin, then refresh provider status or reconnect OpenAI.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Fixes and Reliability\n\n- Fixed OpenAI bring-your-own-key models not appearing in the Chat model dropdown after the provider was configured.\n- Added a regression guard that checks every model offered in the picker has a working execution endpoint, so this class of dropdown gap is caught before release.\n\n## Verification\n\nPlugin checks, unit tests, and the built-bundle checks passed locally. The changes in this release also passed the macOS desktop baselines and the Windows clean-install and desktop-baselines end-to-end checks in continuous integration. Android and iOS device validation were not run for this patch.\n",
-      "downloadCount": 147,
+      "downloadCount": 148,
       "draft": false,
       "name": "5.8.1",
       "prerelease": false,
@@ -150,7 +150,7 @@
         },
         {
           "digest": "sha256:5d47221815e0d29d753d05169e8f8ce4b21f5253a0955f2d2e62237dbd0b2d36",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 413
         },
@@ -163,7 +163,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.8.0\n\n## What's New\n\nSystemSculpt 5.8.0 adds image generation to the desktop Studio. A Studio image node turns a text prompt into images through SystemSculpt's hosted image service, with direct control over the model, aspect ratio, image size, seed, and how many images to generate per run.\n\nThis release also removes the legacy CanvasFlow feature, which decorated Obsidian's native canvas and was superseded by Studio.\n\n## Highlights\n\n- Generate images from a Studio image node: choose the model, aspect ratio, image size, seed, and batch count (up to 4).\n- Leave the seed blank for random results, or set a whole number for reproducible output.\n- The model picker only lists models that can actually generate images, so you never select one the service rejects.\n\n## Upgrade Notes\n\n- No manual action is needed.\n- CanvasFlow has been removed; the desktop Studio view replaces it. Any saved `canvasFlowEnabled` setting is cleaned up automatically on upgrade.\n- Image generation is a desktop-only Studio feature.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Fixes and Reliability\n\n- Image generation requests normalize cleanly: camelCase and snake_case option names are both accepted, and an image size the chosen model does not support is dropped instead of failing the request.\n- Idempotent retries of an image job stay stable across the image-size change, so a repeated request replays the original job instead of returning a conflict.\n- Selecting an unsupported image model now returns a clear invalid-model response.\n\n## Verification\n\nPlugin checks, unit tests, release surface checks, the macOS desktop baselines, the Windows clean-install and desktop-baselines GitHub check, and the Android sync + runtime smoke passed before release. iOS device validation was not run for this release.\n\n## API and Platform Work Included\n\n- Backend image-generation request schema hardening (camelCase option aliases, image-size-aware idempotency hashing, explicit invalid-model errors), deployed to api.systemsculpt.com ahead of this release.\n- Removed the legacy CanvasFlow modules and relocated the shared image-generation modules to `src/services/images/`.\n",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "5.8.0",
       "prerelease": false,
@@ -174,13 +174,13 @@
       "assets": [
         {
           "digest": "sha256:a71fd228a98ba643a926cf483f8d5be83e095664d194c8efaf687f533331e670",
-          "downloadCount": 245,
+          "downloadCount": 246,
           "name": "main.js",
           "size": 14477955
         },
         {
           "digest": "sha256:e505bb03f76309d6f70107d89867f12defe882c230902d61bd168a052d1977cc",
-          "downloadCount": 258,
+          "downloadCount": 259,
           "name": "manifest.json",
           "size": 413
         },
@@ -193,7 +193,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.7.1\n\n## What's New\n\nSystemSculpt 5.7.1 is an xAI provider setup patch. Connecting an xAI API key now makes Grok 4.3 available in the Chat model picker, and the Providers tab gives you a direct `Use in Chat` action once the provider is ready.\n\nThis release also makes provider disconnect and reconnect behavior more reliable, so a saved API key is reflected consistently after refreshes and Obsidian restarts.\n\n## Highlights\n\n- Providers now show when a connected provider has a ready chat model.\n- xAI now adds Grok 4.3 to the model picker after you save a valid API key.\n- The xAI row now includes `Use in Chat`, which opens a new chat with Grok 4.3 selected.\n\n## Upgrade Notes\n\n- No manual action is needed.\n- If xAI was already connected but Grok did not appear, update the plugin, restart Obsidian, then refresh provider status or reconnect xAI.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Fixes and Reliability\n\n- Fixed a case where xAI could show as connected while Grok models were missing from Chat.\n- Fixed provider API-key persistence so saved and cleared keys survive refreshes and restarts more consistently.\n- Improved the Providers tab so connected providers point directly to the model users can try next.\n- Added Windows release validation for the fresh-install provider setup path.\n\n## Verification\n\nPlugin checks, unit tests, release surface checks, a real Obsidian desktop xAI/Grok chat smoke, and the native release gate passed before release.\n\n## API and Platform Work Included\n\n- Added the xAI remote provider endpoint and Grok 4.3 catalog entry used by provider-authenticated chat.\n- Added a Windows release check that runs a fresh Obsidian install before release.\n",
-      "downloadCount": 258,
+      "downloadCount": 259,
       "draft": false,
       "name": "5.7.1",
       "prerelease": false,
@@ -210,7 +210,7 @@
         },
         {
           "digest": "sha256:30cb0f59136ecf6fb9d8092b8bcd4e0afe342de2b6d0c95338a988e4fc44bbb3",
-          "downloadCount": 120,
+          "downloadCount": 121,
           "name": "manifest.json",
           "size": 413
         },
@@ -223,7 +223,7 @@
       ],
       "author": "SystemSculpt",
       "description": "# SystemSculpt 5.7.0\n\n## What's New\n\nSystemSculpt 5.7.0 is a Studio and chat reliability release. You can now paste or drag media files straight into Studio, so screenshots and images land on the canvas without a detour through your vault. Long, tool-heavy chats are also better at recovering their final answer when a turn gets interrupted mid-stream.\n\nManaged models now pick up their names, limits, and capabilities from the SystemSculpt server, so the model list stays current without waiting for a plugin update.\n\n## Highlights\n\n- Studio now accepts pasted and dropped media files directly onto the canvas, including images from your clipboard.\n- Chat now recovers interrupted turns more reliably, so long tool-driven replies are less likely to lose the final answer after a stream hiccup.\n- Chat keeps its streaming indicator consistent through repeated tool calls in a single turn, so the view reflects what the model is actually doing.\n- Managed models now sync their metadata from the server, so new models and updated limits appear without a plugin update.\n- Support links now point to the SystemSculpt support page.\n\n## Upgrade Notes\n\n- No manual action is needed.\n- Existing chats, settings, and Studio boards continue to work as before.\n- Minimum supported Obsidian version remains `1.4.0`.\n\n## Fixes and Reliability\n\n- Fixed cases where an interrupted chat turn could leave the conversation stuck instead of resuming or surfacing the partial reply.\n- Hardened tool-loop handling so repeated tool calls in one turn keep the streaming indicator and final message consistent.\n- Model metadata now falls back to the bundled catalog when the server is unreachable, so offline use keeps working.\n\n## Verification\n\nPlugin checks, the unit test suite, and the release surface gate passed before tagging.\n",
-      "downloadCount": 120,
+      "downloadCount": 121,
       "draft": false,
       "name": "5.7.0",
       "prerelease": false,
