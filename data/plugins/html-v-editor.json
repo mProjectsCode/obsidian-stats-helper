@@ -4,8 +4,8 @@
   "description": "Edit and preview HTML/HTM files, html-v blocks, and embedded HTML inside Obsidian. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "html-v-editor",
-  "lastChangedAt": "2026-07-13T08:01:27.040Z",
-  "lastFetchedAt": "2026-07-13T08:01:27.040Z",
+  "lastChangedAt": "2026-07-14T08:02:27.016Z",
+  "lastFetchedAt": "2026-07-14T08:02:27.016Z",
   "manifest": {
     "author": "mandolin",
     "description": "Edit and preview HTML/HTM files, HTML blocks, and embeds.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.12.0",
     "name": "HTML V Editor",
-    "version": "1.1.0"
+    "version": "1.2.1"
   },
   "name": "HTML V Editor",
   "presentInCommunityList": true,
@@ -21,27 +21,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:17fb86f2a26fc86ccfc5fc87f9a5ad1a236480cdf86b1b1033e8e4ea85f44afc",
+          "digest": "sha256:e077c78394d18e948e65ba0a5bde52d50d968ff855571b54b764561065bb4078",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 2111710
+        },
+        {
+          "digest": "sha256:1a934e500b8a2fcfee8de9536dcac60370f679afcb67c50f1a75ad6270d1db1b",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "digest": "sha256:44110dba464a11bc383ed73d774bc7ea92560c1ca29367ba94fc360beb90131c",
           "downloadCount": 6,
+          "name": "styles.css",
+          "size": 107567
+        }
+      ],
+      "author": "mandolin",
+      "description": "# HTML V Editor 1.2.1 Release Notes\n\n## 中文\n\nHTML V Editor 1.2.1 是一个兼容性补丁版本，修复 Windows 常见的 CRLF 换行对 `html-v` checklist 任务解析和回写的影响。\n\n### 修复\n\n- 修复 CRLF Markdown 中的 `html-v` fenced block 不能被 HTML V Tasks 识别，导致 block checklist 在任务面板中遗漏的问题。\n- checklist 状态回写后会保留目标 `html-v` fence 原有的 LF 或 CRLF 换行格式，避免无关格式变化。\n\n### 开发与验证\n\n- 仓库加入受说明的 npm peer 解析兼容配置；开发者现在可使用 `npm ci` 在干净 clone 中按 lockfile 重复安装依赖。\n- 完整发布 gate 已通过：28 个测试文件、108 项测试、发布包、市场质量、字体审计和生产依赖审计。\n- CRLF 解析/回写已加入自动回归测试；HIA runtime JSDoc pilot 通过并生成 22 个 doclet。\n\n### 兼容性\n\n- 最低 Obsidian 版本：`1.12.0`。\n- 仅支持桌面端。\n- 标准发布资产：`main.js`、`manifest.json`、`styles.css`。\n\n## English\n\nHTML V Editor 1.2.1 is a compatibility patch for `html-v` checklist parsing and write-back on Windows-style CRLF Markdown.\n\n### Fixes\n\n- Fixes HTML V Tasks missing checklist items inside `html-v` fenced blocks when a Markdown file uses CRLF line endings.\n- Preserves the target block's original LF or CRLF fence line endings when checklist state is written back.\n\n### Development and verification\n\n- Adds a documented npm peer-resolution compatibility setting so contributors can run reproducible `npm ci` installs from a clean clone.\n- The full release gate passed: 28 test files, 108 tests, release-package checks, marketplace-quality checks, font audit, and production dependency audit.\n- Adds automated CRLF parsing/write-back coverage; the HIA runtime JSDoc pilot passed with 22 rendered doclets.\n\n### Compatibility\n\n- Minimum Obsidian version: `1.12.0`.\n- Desktop only.\n- Standard release assets: `main.js`, `manifest.json`, and `styles.css`.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "HTML V Editor 1.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T19:05:52Z",
+      "tag": "1.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:01068b78c593ec1f42fc438f52851505bd6a78dc4ab66f0ee395b913b7ae828d",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 2111642
+        },
+        {
+          "digest": "sha256:2b27e427aef8bd85e83391045611248ec8b8d318b85c5e7ab966b24b0e0fb406",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 233
+        },
+        {
+          "digest": "sha256:44110dba464a11bc383ed73d774bc7ea92560c1ca29367ba94fc360beb90131c",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 107567
+        }
+      ],
+      "author": "mandolin",
+      "description": "# HTML V Editor 1.2.0 Release Notes\n\n## 中文\n\nHTML V Editor 1.2.0 新增 HTML 内部链接发现与受控导航能力，并收紧 Sandbox 脚本权限边界。\n\n### 主要变化\n\n- HTML V Tasks 侧栏新增 `Links` tab，可发现独立 HTML、Markdown `html-v` block 与 HTML embed 中的 `<a href>`。\n- 支持 Obsidian wiki link 和 vault 相对 Markdown / HTML 路径；支持关键字、状态、当前文件和分页过滤。\n- 已解析的内部链接只能由用户点击或命令触发打开；外部、危险、纯锚点和未解析地址只显示状态和原因。\n- 新增 `Open HTML V links` 命令，以及 HTML 文件右键菜单中的 Links 入口。\n- Trusted 与符合安全条件的 Sandbox 预览支持预览内链接点击和 hover，覆盖 HTML file、Reading、Live Preview、`html-v` block、embed 和 pop-out。\n\n### 安全与修复\n\n- Sandbox 开启脚本时不再隐式加入 `allow-same-origin`；旧危险设置会自动迁移为最小权限配置。\n- 修复资源路径本地化误改写导航锚点的问题，vault 相对链接不再被误判为 `app:` 地址。\n- 修复 iframe / pop-out 跨窗口 hover 和修饰键导航兼容性。\n- Links 索引是插件自有的只读派生数据，不写入 Obsidian 核心 Backlinks、Graph、搜索索引或 `MetadataCache` 的链接数据。\n\n### 兼容性\n\n- 最低 Obsidian 版本：`1.12.0`。\n- 仅支持桌面端。\n- 标准发布资产：`main.js`、`manifest.json`、`styles.css`。\n\n## English\n\nHTML V Editor 1.2.0 adds discoverable, controlled navigation for HTML internal links and tightens Sandbox script isolation.\n\n### Highlights\n\n- Adds a `Links` tab to HTML V Tasks for `<a href>` entries from standalone HTML files, Markdown `html-v` blocks, and HTML embeds.\n- Supports Obsidian wiki links and vault-relative Markdown / HTML paths, with search, status, current-file, and pagination filters.\n- Only resolved internal links can be opened through an explicit user action or command. External, blocked, anchor-only, and unresolved URLs remain informational.\n- Adds the `Open HTML V links` command and an HTML file context-menu entry.\n- Supports preview click and hover for HTML files, Reading, Live Preview, `html-v` blocks, embeds, and pop-out windows in Trusted mode and eligible Sandbox configurations.\n\n### Security and fixes\n\n- Sandbox scripts no longer implicitly receive `allow-same-origin`; unsafe legacy combinations are migrated to the minimum permission set.\n- Preserves navigation anchor URLs during resource localization, so vault-relative links are no longer rejected as `app:` URLs.\n- Fixes cross-window iframe/pop-out compatibility for hover and modifier-key navigation.\n- The Links index is plugin-owned and read-only. It does not write HTML links into Obsidian core Backlinks, Graph, search indexes, or `MetadataCache` link data.\n\n### Compatibility\n\n- Minimum Obsidian version: `1.12.0`.\n- Desktop only.\n- Standard release assets: `main.js`, `manifest.json`, and `styles.css`.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "HTML V Editor 1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-13T11:52:27Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:17fb86f2a26fc86ccfc5fc87f9a5ad1a236480cdf86b1b1033e8e4ea85f44afc",
+          "downloadCount": 11,
           "name": "main.js",
           "size": 2088976
         },
         {
           "digest": "sha256:dca3c4cdb9c0db190c7a63c89be278c7ff2a9b91b0e69830e8eb23375509dab0",
-          "downloadCount": 6,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 233
         },
         {
           "digest": "sha256:a6dc872d645258226b53688196cd5ce2e183186532704586d9cbe8a9b8a7c733",
-          "downloadCount": 5,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 105334
         }
       ],
       "author": "mandolin",
       "description": "# HTML V Editor 1.1.0 Release Notes\n\n## 中文\n\nHTML V Editor 1.1.0 为 HTML 内容导出带来 Markdown 和纯文本复制能力，并为后续互操作导入建立了可测试的转换基础。\n\n### 主要变化\n\n- HTML 文件 tab 新增 Markdown 与纯文本复制按钮。\n- 新增命令面板命令：`Copy current HTML as Markdown` 与 `Copy current HTML as plain text`。\n- Markdown `html-v` block 与嵌入 HTML 的 inline 工具栏新增 Markdown / 纯文本复制按钮。\n- inline 编辑中的复制以当前工作副本为准，无需先保存；取消编辑不会把临时内容写回源文件。\n- 新增 HTML 转 Markdown 核心、互操作样例语料、转换报告、资源本地化计划与 OneNote checkbox tag 映射基础。\n\n### 验证与兼容性\n\n- 已完成完整自动发布门禁，以及 Obsidian `1.12.7` 隔离 vault 的真实 UI smoke。\n- 最低 Obsidian 版本保持 `1.12.0`。\n- 仅支持桌面端。\n- 标准发布资产为 `main.js`、`manifest.json`、`styles.css`。\n\n## English\n\nHTML V Editor 1.1.0 adds Markdown and plain-text export for HTML content, while establishing tested conversion foundations for future interoperability workflows.\n\n### Highlights\n\n- Adds Markdown and plain-text copy buttons to the HTML file tab.\n- Adds the `Copy current HTML as Markdown` and `Copy current HTML as plain text` commands.\n- Adds Markdown / plain-text copy buttons to inline toolbars for Markdown `html-v` blocks and embedded HTML.\n- Exports the current inline working copy without requiring a save; cancelling editing does not write temporary content back to source files.\n- Adds the HTML-to-Markdown conversion core, interoperability fixture corpus, conversion report model, resource-localization plan, and OneNote checkbox-tag mapping foundation.\n\n### Verification and Compatibility\n\n- Passed the complete automated release gate and real Obsidian `1.12.7` UI smoke in an isolated vault.\n- Minimum Obsidian version remains `1.12.0`.\n- Desktop only.\n- Standard release assets are `main.js`, `manifest.json`, and `styles.css`.\n",
-      "downloadCount": 6,
+      "downloadCount": 11,
       "draft": false,
       "name": "HTML V Editor 1.1.0",
       "prerelease": false,
@@ -52,26 +112,26 @@
       "assets": [
         {
           "digest": "sha256:e51ec2db0a422c1b424a5e9376fa756aa27a2539472ba845d88db25a0a8c7aca",
-          "downloadCount": 21,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 2057027
         },
         {
           "digest": "sha256:cbe439b7ace163d5d153d095f3da0d05f0b156ed8e3791bca9be209e1f612993",
-          "downloadCount": 20,
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 208
         },
         {
           "digest": "sha256:6b4c9c521311857aef7d667b2c75e9bdfebaa41171018d187b2abbcdc5968c07",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 104445
         }
       ],
       "author": "mandolin",
       "description": "# HTML V Editor 1.0.7 Release Notes\n\n## 中文\n\nHTML V Editor 1.0.7 是一次字体合规和项目治理补丁版本，不改变现有 HTML 编辑、预览、嵌入和任务面板工作流。\n\n### 主要变化\n\n- HugeRTE 字体菜单改为 Inter、Noto、思源、Sarasa Gothic、JetBrains Mono、Fira Code、LXGW WenKai Mono 等开源字体优先选项。\n- 编辑内容、隔离 iframe 和 HugeRTE 皮肤 CSS 统一使用开源字体优先栈与通用字体回退。\n- 构建阶段清理 HugeRTE bundle 中未激活的专有字体默认值。\n- 新增字体审计命令，阻止专有字体引用或字体文件重新进入标准发布资产。\n- 内部规划与 AI 协作资料迁入独立私有 WorkZone，公开仓库文档边界更清晰。\n\n### 兼容性\n\n- 最低 Obsidian 版本保持 `1.12.0`。\n- 仅支持桌面端。\n- 标准发布资产仍为 `main.js`、`manifest.json`、`styles.css`。\n\n## English\n\nHTML V Editor 1.0.7 is a font-compliance and project-governance patch release. Existing HTML editing, preview, embed, and task-panel workflows remain unchanged.\n\n### Highlights\n\n- Replaces HugeRTE font choices with open-source-first families and generic fallbacks.\n- Applies the open-source-first font policy to editor content, isolated frames, and HugeRTE skin CSS.\n- Removes inactive proprietary font defaults from the bundled HugeRTE runtime during the release build.\n- Adds an automated font audit that rejects blocked font references and bundled font files.\n- Separates internal planning and AI collaboration materials into a private WorkZone repository.\n\n### Compatibility\n\n- Minimum Obsidian version remains `1.12.0`.\n- Desktop only.\n- Standard release assets remain `main.js`, `manifest.json`, and `styles.css`.\n",
-      "downloadCount": 20,
+      "downloadCount": 22,
       "draft": false,
       "name": "HTML V Editor 1.0.7",
       "prerelease": false,
@@ -88,7 +148,7 @@
         },
         {
           "digest": "sha256:2112d80ace94096b4e90b08bd7da2774a9cf1630e782786dd4507df49f48b044",
-          "downloadCount": 47,
+          "downloadCount": 48,
           "name": "manifest.json",
           "size": 208
         },
@@ -101,7 +161,7 @@
       ],
       "author": "mandolin",
       "description": "## HTML V Editor 1.0.6\n\n- Fixed modal html-v save flow so edited content persists correctly.\n- Fixed modal Source mode layout and scrolling.\n- Added Cut, Copy, Paste, Paste as plain text, and Select all toolbar actions in the visual editor.\n- Includes recent html-v block size editing and no-op save stability fixes.\n\nStandard Obsidian release assets are attached: main.js, manifest.json, styles.css.",
-      "downloadCount": 47,
+      "downloadCount": 48,
       "draft": false,
       "name": "HTML V Editor 1.0.6",
       "prerelease": false,
@@ -118,7 +178,7 @@
         },
         {
           "digest": "sha256:8103b853ffe34cb84314292f017f9dbbd5817164f3f2f7c98cd9e8d9213564d8",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 208
         },
@@ -131,7 +191,7 @@
       ],
       "author": "mandolin",
       "description": "Compatibility fix: lower minAppVersion to 1.12.0 so public-channel Obsidian users can find and install the plugin.",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "1.0.5",
       "prerelease": false,
@@ -148,7 +208,7 @@
         },
         {
           "digest": "sha256:743cafe79c6bc8cbba1cf8de58b4fac3bed29ed0fa07e7b4970346dc3a0102cb",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 208
         },
@@ -161,7 +221,7 @@
       ],
       "author": "mandolin",
       "description": "Marketplace review fix: remove the generic settings heading flagged by automated checks.",
-      "downloadCount": 14,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.0.4",
       "prerelease": false,
@@ -178,7 +238,7 @@
         },
         {
           "digest": "sha256:5371d7ff45c81dfe95cf9df67415608171c2f83326337792d02ec5d36664d954",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 208
         },
@@ -191,7 +251,7 @@
       ],
       "author": "mandolin",
       "description": "Marketplace review fix: remove the plugin name from the settings heading while retaining the 1.0.2 automated-check fixes.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,
@@ -208,7 +268,7 @@
         },
         {
           "digest": "sha256:ff07491b65bc29ef24c3aa6e0ce484ee446e2df49a0a0d7a5388ce218f365e8f",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 208
         },
@@ -221,7 +281,7 @@
       ],
       "author": "mandolin",
       "description": "Marketplace review fixes: remove blocked manifest wording, declare the newer Obsidian API baseline, avoid unsafe innerHTML assignments and document.write, replace direct style assignments, use Setting headings, and keep the release bundle free of dynamic script element creation.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
@@ -238,7 +298,7 @@
         },
         {
           "digest": "sha256:1a839af5aad956680f734934b1ccc64eae2da177c2ee48828823a3c46107e5c6",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 223
         },
@@ -251,7 +311,7 @@
       ],
       "author": "mandolin",
       "description": "Marketplace review fix: remove HugeRTE dynamic script element creation from the bundled release while keeping required HugeRTE assets statically packaged.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -268,7 +328,7 @@
         },
         {
           "digest": "sha256:958ef8bafee58b1852a8ac8452dc71505a04afb0c14ac7f3b0e0aa2417ffef0a",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 223
         },
@@ -281,7 +341,7 @@
       ],
       "author": "mandolin",
       "description": "# HTML V Editor 1.0.0 Release Notes\n\n## 中文\n\nHTML V Editor 1.0.0 是面向 Obsidian 社区插件市场准备的首个正式版本。\n\n### 主要功能\n\n- 在 Obsidian 中预览、可视化编辑和保存 `.html` / `.htm` 文件。\n- 支持 Markdown `html-v` code block 的阅读模式与 Live Preview 渲染和编辑。\n- 支持 Markdown 中嵌入 HTML 文件，并从预览进入编辑。\n- 内置 HugeRTE 可视化编辑器、Source 编辑模式和安全预览模式。\n- 支持特殊字符选择器、HugeRTE checklist、表格内 checklist。\n- 内置 HTML V Tasks 面板，支持 HTML checklist、`html-v` block checklist 和普通 Markdown task 的聚合、过滤、分页与回写。\n- 支持 Safe / Sandbox / Trusted 三档预览安全配置。\n\n### 发布方式\n\n本版本已把 HugeRTE 运行资源打入标准发布资产中，社区插件安装只需要：\n\n```text\nmain.js\nmanifest.json\nstyles.css\n```\n\n### 验证\n\n```text\nnpm run release 通过\nnpm run size 通过\nnpm audit --omit=dev --registry=https://registry.npmjs.org 通过\nversions.json 映射校验通过\n```\n\n## English\n\nHTML V Editor 1.0.0 is the first marketplace-ready release for Obsidian Community Plugins.\n\n### Highlights\n\n- Preview, visually edit, and save `.html` / `.htm` files inside Obsidian.\n- Render and edit Markdown `html-v` code blocks in Reading view and Live Preview.\n- Render and edit embedded HTML files from Markdown.\n- Bundle HugeRTE locally with source editing and configurable safe preview modes.\n- Support character map insertion, HugeRTE checklist, and checklist items inside tables.\n- Provide the HTML V Tasks side panel for HTML checklist, `html-v` checklist, and Markdown task aggregation.\n- Support task filtering, pagination, and write-back.\n\n### Release Assets\n\nHugeRTE runtime resources are bundled into the standard plugin assets. The release only needs:\n\n```text\nmain.js\nmanifest.json\nstyles.css\n```\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "HTML V Editor 1.0.0",
       "prerelease": false,
