@@ -4,8 +4,8 @@
   "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-retrieval",
-  "lastChangedAt": "2026-07-14T23:01:26.996Z",
-  "lastFetchedAt": "2026-07-14T08:02:27.016Z",
+  "lastChangedAt": "2026-07-15T08:03:27.037Z",
+  "lastFetchedAt": "2026-07-15T08:03:27.037Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine.",
@@ -13,35 +13,65 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Vault Retrieval",
-    "version": "0.15.0"
+    "version": "0.15.1"
   },
   "name": "Vault Retrieval",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:9f92bc7ff2e68a7579b9e9dfb276c1217c060f10404b82c43fa7bfa28eb15781",
-          "downloadCount": 14,
+          "digest": "sha256:b2a6080d33dd55e451cc40c9c0c6609302213422a0c4a39fa5b027ce6ae5776c",
+          "downloadCount": 4,
           "name": "main.js",
-          "size": 1719401
+          "size": 1722627
         },
         {
-          "digest": "sha256:56831308fc2d1895cd5b01b6dd247edb16a4e5bc217d9922721d6c8f34606d75",
-          "downloadCount": 13,
+          "digest": "sha256:f5a3abf977e258697a72472caba105f7819e2e3b21b27844cb08dd5bbbecaf35",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 329
         },
         {
           "digest": "sha256:eabdffbf2dcf03ed7773f1c9d499689b29154da29c78fb12282ff6a2b04cb571",
-          "downloadCount": 12,
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 17243
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **Empty notes no longer count as a permanent index deficit.** Notes with no embeddable\n  content (empty or frontmatter-only, e.g. folder notes) can never be indexed — but the\n  index-state delta counted them as missing forever, and \"complete the index\" reported a\n  confusing \"0 notes added\" while the button stayed enabled. The delta now excludes them\n  (with an explicit \"N empty notes ignored\" hint), the self-heal reports honestly\n  (\"X added · Y empty skipped · Z failed\"), and the auto-heal prompt on load only fires\n  for genuinely embeddable gaps. The heal progress popup counts only real embedding work\n  (e.g. \"1/1\" instead of \"119/179\"). Live edits keep the classification current: emptying\n  a note moves it out of the tally, filling it moves it back in.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.15.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T21:21:29Z",
+      "tag": "0.15.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f92bc7ff2e68a7579b9e9dfb276c1217c060f10404b82c43fa7bfa28eb15781",
+          "downloadCount": 17,
+          "name": "main.js",
+          "size": 1719401
+        },
+        {
+          "digest": "sha256:56831308fc2d1895cd5b01b6dd247edb16a4e5bc217d9922721d6c8f34606d75",
+          "downloadCount": 17,
+          "name": "manifest.json",
+          "size": 329
+        },
+        {
+          "digest": "sha256:eabdffbf2dcf03ed7773f1c9d499689b29154da29c78fb12282ff6a2b04cb571",
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 17243
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Collapsible settings sections.** The settings tab now groups its sections into collapsible\n  headers you can fold away, and the open/closed state persists per section. The Live-Embedding\n  section starts expanded the first time you open settings (that's where you enter the endpoint\n  nothing works without). Section headers are fully **keyboard- and screenreader-operable** —\n  focusable via Tab, Enter/Space to toggle, with a visible focus ring and `aria-expanded`.\n- **Index state shown as a delta.** The index section reads \"N / M notes\" with an inline\n  \"complete the index\" button. The count is computed as `embedded = total − missing` (the same\n  basis as the self-heal), so it reflects genuinely missing notes instead of a stale index count.\n\n### Changed\n- **One backlog truth.** The embedding status no longer shows a separate \"pending\" count; the\n  index-state delta is now the single source of truth for what still needs embedding — this\n  removes the confusing \"1 pending\" vs \"225 missing\" contradiction.\n- Internal: all query-embedding / retrieval call sites were consolidated behind a single\n  obsidian-free `RetrievalFacade` shared by the UI and the MCP server (the MCP tools behave\n  byte-identically).\n\n### Fixed\n- **Chat and Smart Apply reconnect after going offline.** Both now resolve the embedder through\n  the shared facade, so after an offline period or an endpoint switch they reconnect correctly\n  instead of embedding against a dead endpoint.",
-      "downloadCount": 13,
+      "downloadCount": 17,
       "draft": false,
       "name": "0.15.0",
       "prerelease": false,
@@ -58,7 +88,7 @@
         },
         {
           "digest": "sha256:0b1e247c978a191dab909251c298f529edb5d52ff81f309837886b61c8f10f65",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 329
         },
@@ -71,7 +101,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n- Build: replaced the `builtin-modules` dev-dependency with Node's built-in\n  `node:module` `builtinModules` for the esbuild externals list (both bare and\n  `node:`-prefixed forms). No runtime or behaviour change — addresses a\n  community-review recommendation.",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.14.1",
       "prerelease": false,
@@ -88,7 +118,7 @@
         },
         {
           "digest": "sha256:304a163cab9ab3b33c931199831bf727efd9ffa65a36c383692db285db2a90c4",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 329
         },
@@ -101,7 +131,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Easier MCP setup for external clients.** The MCP-server settings section now generates\n  ready-to-copy connection snippets for **Claude Code, OpenCode, OpenClaw, and a generic\n  `.mcp.json`** client (pick from a dropdown), lets you **reveal and rotate the Bearer token**,\n  lists the three tools the server exposes (`search`, `related`, `read_note`), and adds a\n  **\"Test connection\" button** that self-checks the running server end-to-end (with a 5s timeout\n  so it can never hang). Server start failures now report a plain-text cause (e.g. \"Port belegt\")\n  instead of a generic guess. Loopback-only, no new transport, no new dependencies.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.14.0",
       "prerelease": false,
@@ -118,7 +148,7 @@
         },
         {
           "digest": "sha256:7535ae6b734aefefec078c3a7cfe5516c3c8efb062af5269f718b40d2df28e18",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 329
         },
@@ -131,7 +161,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **External access via MCP is now a built-in plugin feature.** Enable the MCP server in\n  Settings → \"MCP-Server\" and connect an external LLM agent (e.g. Claude Code) with\n  `claude mcp add --transport http …` — three read-only tools (`search`, `related`, `read_note`)\n  over your vault's index. The server is **desktop-only**, binds to **loopback (127.0.0.1)** only,\n  runs only while Obsidian is open, and requires a **Bearer token** (auto-generated on enable) on\n  every request. Defense-in-depth: DNS-rebinding protection (Host-header allowlist), constant-time\n  token comparison, and a realpath containment guard so `read_note` cannot follow a symlink out of\n  the vault.\n\n### Changed\n- The MCP server is now this in-plugin HTTP server (Streamable HTTP) instead of a separate stdio\n  Node CLI — it is bundled into `main.js` and the standalone `mcp-server.js` target is removed.",
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.13.0",
       "prerelease": false,
@@ -148,7 +178,7 @@
         },
         {
           "digest": "sha256:e3d53c20dd07230358572e83ff40c6057f05ac7e8fb20345fbe56af05809ed23",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 329
         },
@@ -161,7 +191,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Index robustness** — the vector index is now hardened against data loss. A truncated or unreadable index is detected loudly (byte-length validation on load) and puts the plugin into a read-protected state instead of silently overwriting your good index with an empty one — the failure mode that could previously collapse a full index down to a handful of notes. New recovery tools in a \"Index-Robustheit\" settings section: **complete the index** re-embeds only the notes missing from the index (a fast delta reindex, also offered automatically when a large gap is detected on load), and **device-local backups** (kept in the plugin folder outside vault sync, last 3 rotated) can be restored with one click. When another device syncs a drastically smaller index, the good in-memory index is kept rather than adopted. A degraded index state is now surfaced in the status bar (`⚠ Index beschädigt`) instead of failing silently.\n\n### Changed\n- Internal: data-loss-critical decisions centralised in pure-core `index_guard.ts` (load classification, persist shrink-guard, vault↔index diff) and `index_backup.ts` (backup naming/rotation); live index writes are serialised to keep the persist guard correct under concurrent vault events.",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.12.0",
       "prerelease": false,
@@ -178,7 +208,7 @@
         },
         {
           "digest": "sha256:2c67f5f0bbbc5a4f9f65371ae48f9076acedba0f37b80922b445e57da2fc2ec4",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 329
         },
@@ -191,7 +221,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **MCP server** — use your vault index from Claude Code and other MCP clients. A bundled stdio server (`mcp-server.js`, built alongside the plugin by `npm run build`) exposes three read-only tools over your existing embedding index: `search` (semantic search, embeds the query via your configured endpoint), `related` (neighbours of a note, fully offline), and `read_note` (full markdown text, `.md` only, exclude prefixes enforced case-insensitively, symlink-escape protection via realpath containment). Configuration is read at server startup from the plugin's own settings (`data.json`); the index itself is picked up live whenever the plugin rewrites it. One server instance per vault; the server never writes to your vault. See the README's \"MCP server\" section for client registration (`.mcp.json`).\n\n### Changed\n- Internal: pure settings truth (`VaultRagSettings`/`DEFAULT_SETTINGS`/endpoint migration) extracted to `settings_core.ts` (re-exported, no behaviour change); obsidianmd lint rules scoped to plugin code with a targeted import guard for the Node-side MCP code.",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.11.0",
       "prerelease": false,
@@ -208,7 +238,7 @@
         },
         {
           "digest": "sha256:3ee6b1042430b4681133ce33213dc06ab689e14bd055e15d084abadad4e4b39d",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 329
         },
@@ -221,7 +251,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 0.10.1",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.10.1",
       "prerelease": false,
@@ -238,7 +268,7 @@
         },
         {
           "digest": "sha256:e4d95a88d9419a1facb16e1d3df4d9d2bff1ec8764bf2871d453ba7994f09979",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 329
         },
@@ -251,7 +281,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- Endpunkt-Presets: Ein-Klick-Buttons „+ LM Studio\" / „+ Ollama\" mit korrekten Default-Ports.\n- Klartext-Diagnose pro Endpunkt statt nur rot/grün (Verbindung abgelehnt / Hostname unbekannt / Zeitüberschreitung / kein LLM-API).\n- Nicht-blockierende Eingabe-Prüfung (fehlendes Schema/Port, Platzhalter-IP).\n\n### Changed\n- Chat-Endpunkt-Default auf `http://localhost:1234` (LM Studio) geändert.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -268,7 +298,7 @@
         },
         {
           "digest": "sha256:835cd642d55dc2463def4bceebe62de3966589742f4463fcbce291542c6be52e",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 328
         },
@@ -281,7 +311,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Non-deterministic Smart Apply mode (\"additive\")** — a per-application mode toggle in the Smart Apply cockpit. Alongside the default deterministic mode (the LLM only assigns your original blocks and never invents), the additive mode lets the LLM *infer* frontmatter values that aren't verbatim in the text and insert marked addition blocks — each carrying an ordinal confidence (high/medium/low) that you accept or reject individually in the diff gate. Low-confidence items are unchecked by default. Your original blocks stay byte-exact either way, and the deterministic path is bit-identical to before. A template can declare its preferred mode via a reserved `smartapply_modus` frontmatter key (never leaked into target notes), with a global default in settings. An optional \"keep provenance\" audit toggle records inferred keys as a `smartapply_erschlossen` field and marks additions with `%%erschlossen: …%%` comments — or leaves a clean document. Confidence is encoded via icon shape and text, not colour alone (WCAG 1.4.1).\n- **Undo ↔ Redo toggle** in the Smart Apply diff gate — after \"Undo\" the button becomes \"Redo\" and restores exactly what was applied (the final selection plus audit state), so an accidental undo is one click to reverse.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -298,7 +328,7 @@
         },
         {
           "digest": "sha256:7e729ed2e337b59e03c9246fdf4a8c0786cbde052c35ef5252953ede3526cdd6",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 328
         },
@@ -311,7 +341,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Unified sidebar hub** — the four separate sidebar views (Related Notes, Semantic Search, Chat, Smart Apply) are now a single \"Vault Retrieval\" hub with a tab bar, opened from one ribbon icon. The four commands deep-link straight to their tab. All panels stay mounted, so state persists across tab switches: a running chat stream or an open Smart-Apply diff survives switching away and back. The context-sensitive panels (Related, Smart Apply) refresh lazily — only when their tab is visible.\n\n### Changed\n\n- Old per-function sidebar leaves are migrated away automatically on load (one hub view replaces four).\n- Tab icons: Related now uses `waypoints`, Search uses the magnifying glass.\n\n### Fixed\n\n- Smart Apply no longer resets a manually chosen template when a background re-index fires for the same note.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -679,6 +709,6 @@
       "tag": "0.2.0"
     }
   ],
-  "removedAt": "2026-07-14T23:01:26.996Z",
+  "removedAt": null,
   "repo": "johannes-kaindl/vault-rag"
 }

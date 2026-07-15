@@ -4,8 +4,8 @@
   "description": "Obsidian mind map / mindmap plugin for visual thinking and knowledge management. Create interactive SVG maps from yxmm code blocks with layouts, themes, shortcuts, export, and fullscreen editing. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "yonxao-mindmap",
-  "lastChangedAt": "2026-07-14T08:02:27.016Z",
-  "lastFetchedAt": "2026-07-14T08:02:27.016Z",
+  "lastChangedAt": "2026-07-15T08:03:27.037Z",
+  "lastFetchedAt": "2026-07-15T08:03:27.037Z",
   "manifest": {
     "author": "yonxao",
     "description": "A feature-rich mind map plugin that renders `yxmm` code blocks as interactive SVG mind maps. Supports 20+ layouts, interactive editing, multiple themes, and rich customization options.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "Yonxao Mind Map",
-    "version": "1.5.1"
+    "version": "1.5.2"
   },
   "name": "Yonxao Mind Map",
   "presentInCommunityList": true,
@@ -21,20 +21,56 @@
     {
       "assets": [
         {
-          "digest": "sha256:90bf119eacbe4cfe5d98c852e04eb2a09e0cbccdbfde8c225adafe621fe6a108",
+          "digest": "sha256:3da4c87497f756f9acc87d313c8298c9b5fdb0034ce3976ded827528e3f1e804",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 801521
+        },
+        {
+          "digest": "sha256:c4372c088bec6856be23b29e12a8117a8f265fab0078e2d6a9a9eac377876eb2",
           "downloadCount": 14,
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:d596052fc28e5f50d78f50bcd4f82fb416cf22bfa29f27857c9259b4f8a3ce39",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 103234
+        },
+        {
+          "digest": "sha256:95a695aa0922eedbe915e2a3be9cd2bf9b6cc4c66d2806f8fff82cb6892dbf50",
+          "downloadCount": 0,
+          "name": "yonxao-mindmap-1.5.2.zip",
+          "size": 206741
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.1...1.5.2](https://github.com/yonxao/yonxao-mindmap/compare/1.5.1...1.5.2)\n\n#### 1.5.2 - 2026-07-14\n\n##### Added\n\n- Added relationship line endpoint anchor support: both ends of a relationship line can now be fixed to one of 8 anchor points on the topic border. Dragging an endpoint automatically snaps to the nearest anchor, and the anchor positions are persisted as `fromAnchor`/`toAnchor` attributes. New visual feedback controls appear on the endpoints during drag, and a dedicated `relationAnchors.js` module handles anchor coordinate calculation and nearest-point snapping.\n- Improved radial layout collision detection and connector handling:\n  - Added segment-to-rectangle intersection detection using slab clipping to avoid missing diagonal line crossings.\n  - Implemented connector obstacle repulsion that calculates the displacement needed for branches to clear the connector corridor.\n  - Added root branch collision resolution to prevent center connectors from passing through other branch topics.\n  - Improved collapsed topic child-line exit angle logic to record the actual expansion direction.\n- Optimized image rendering performance to eliminate flicker:\n  - Implemented image element pool reuse to avoid repeated creation and destruction.\n  - Added cross-renderer caching of image natural dimensions to prevent redundant loading and measurement.\n  - Established image resource address mapping to support reuse of the same image across multiple locations.\n  - Set cache size limits to prevent unbounded memory growth.\n  - Improved image size capture logic for better cache hit rates.\n- Refactored structure control drag logic into a dedicated `beginStructureControlDrag` method, removing duplicate event listener bindings and improving code clarity.\n\n##### Fixed\n\n- Fixed PNG export dark mode background fallback: solidified the `--background-primary` CSS variable value during SVG export, preventing export styles from overriding summary background and text stroke display properties. Ensures summary text box backgrounds remain consistent with the preview in dark mode, and prevents incorrect fallback to white backgrounds.\n- Fixed boundary title avoidance breaking tree layout branch alignment: refactored boundary title vertical space reservation into `structureBounds.js` with a dedicated `reserveBoundaryLabelVerticalSpace` function that correctly offsets subsequent topics as a whole, preventing parent-child misalignment caused by boundary titles pushing only same-column topics.\n\n##### 新增\n\n- 关联线端点锚点功能：关联线两端可固定到主题边框的 8 个锚点位置，拖拽端点时自动吸附最近锚点，锚点位置持久化为 `fromAnchor`/`toAnchor` 属性。新增端点拖拽视觉反馈控件，独立的 `relationAnchors.js` 模块负责锚点坐标计算与最近点吸附。\n- 改进放射布局碰撞检测与连接线处理：\n  - 新增线段与矩形边界相交检测算法，使用 slab 裁剪避免斜线漏判。\n  - 实现连接线障碍物推离功能，计算分支移出连线走廊所需的最小位移。\n  - 新增根节点分支碰撞解决机制，防止中心连线穿过其他分支主题。\n  - 优化折叠主题子线出口角度逻辑，记录实际展开方向以保持折叠状态下的连线一致性。\n- 优化图片渲染性能，消除闪动：\n  - 实现图片元素池复用机制，避免重复创建和销毁。\n  - 新增图片自然尺寸的跨渲染器缓存，防止重复加载和测量。\n  - 建立图片资源地址映射，支持同一图片多处复用。\n  - 设置缓存大小上限，防止内存无限增长。\n  - 改进图片尺寸捕获逻辑，提升缓存命中率。\n- 重构结构控制拖拽逻辑，提取为独立的 `beginStructureControlDrag` 方法，移除重复的事件监听器绑定，提升代码清晰度。\n\n##### 修复\n\n- 修复 PNG 导出在深色模式下背景回退为白色的问题：在 SVG 导出时固化 `--background-primary` CSS 变量值，防止导出样式覆盖概要背景和文字描边的展示属性，确保深色模式下概要文字框背景与预览一致。\n- 修复外框标题避让导致树形图分支对齐错乱的问题：将外框标题垂直空间预留逻辑重构到 `structureBounds.js` 中的 `reserveBoundaryLabelVerticalSpace` 函数，正确处理后续主题的整体偏移，避免仅移动同列主题导致父子节点对齐被破坏。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "1.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T14:59:20Z",
+      "tag": "1.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:90bf119eacbe4cfe5d98c852e04eb2a09e0cbccdbfde8c225adafe621fe6a108",
+          "downloadCount": 17,
           "name": "main.js",
           "size": 794882
         },
         {
           "digest": "sha256:1415c0c251af167abb968acc51482b586252b620d57707a668ecd8532ce766b5",
-          "downloadCount": 15,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 362
         },
         {
           "digest": "sha256:50cc4f9c14a1051e09c993e6fb01657f0490eb6896bac89d4ef96a88b54ade6a",
-          "downloadCount": 13,
+          "downloadCount": 16,
           "name": "styles.css",
           "size": 101989
         },
@@ -47,7 +83,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.0...1.5.1](https://github.com/yonxao/yonxao-mindmap/compare/1.5.0...1.5.1)\n\n#### 1.5.1 - 2026-07-13\n\n##### Added\n\n- Added watermark support with two watermark modes to choose from in a new Watermark tab in the config modal:\n  - **Signature watermark**: bound to the viewport; available in _corner_ style (text placed at one of nine positions with optional rounded background) and _bar_ style (a horizontal strip along the bottom of the viewport with tinted background and emphasized text). Configurable text, position, color, background color, font size, opacity, bar height, and padding.\n  - **Normal watermark**: bound to the content area; supports _text_ and _image_ types, with _single_ or _tiled_ arrangement. Text watermarks allow full control over font size, color, opacity, rotation, and position (9 anchor points). Image watermarks support URL and vault-file sources, custom width/height, gap, and offset. Tiled mode auto-fills the content area with configurable spacing and an upper element count limit to keep large maps responsive.\n- Added a watermark unlock mechanism using a user self-confirmation flow; watermark rendering is skipped until the user unlocks the feature through the plugin settings.\n- Added watermark configuration normalization and canonicalization, including range validation for font size, opacity, rotation, size, gap, and offset, so out-of-range values are clamped to the allowed bounds before rendering.\n- Added watermark rendering in exported PNG and SVG so watermarks remain visible after export.\n\n##### 新增\n\n- 配置面板新增水印选项卡，提供两种水印模式可选：\n  - **签名水印**：绑定视口，有角标样式（在 9 个位置之一显示文字，可带圆角背景）和底栏样式（在视口底部显示一条横向条幅，带低透明度强调底色和突出文字）两种风格，可配置文字、位置、颜色、背景色、字号、不透明度、条栏高度和内边距。\n  - **普通水印**：绑定内容区域，支持文字和图片两种类型，单个或平铺两种排列方式。文字水印可完整控制字号、颜色、不透明度、旋转角度和位置（9 个锚点）；图片水印支持 URL 和仓库文件两种来源，可自定义宽高、间距和偏移。平铺模式自动填满内容区域，可配置间距，并设置单次元素数量上限以保证大型导图的渲染性能。\n- 新增水印解锁机制，采用用户自行确认方式免费解锁；未解锁时水印渲染不会生效。\n- 新增水印配置的归一化和标准化处理，对字号、不透明度、旋转角度、尺寸、间距和偏移进行范围校验，超出允许范围的值会在渲染前被自动修正到合法区间。\n- 导出 PNG 和 SVG 时同步渲染水印图层，确保导出图片与画布显示一致。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 15,
+      "downloadCount": 20,
       "draft": false,
       "name": "1.5.1",
       "prerelease": false,
@@ -64,7 +100,7 @@
         },
         {
           "digest": "sha256:75867d7969b2ad0a6665b87156bd9ecc018179b7044b70eabe08454ff6bab860",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 362
         },
@@ -83,7 +119,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.4.1...1.5.0](https://github.com/yonxao/yonxao-mindmap/compare/1.4.1...1.5.0)\n\n#### 1.5.0 - 2026-07-12\n\n##### Added\n\n- Added three advanced mind map structures:\n  - **Relationship**: connects topics across branches; supports three connector styles (curve, straight, elbow) with direction configuration, and draggable curve adjustment.\n  - **Summary**: groups consecutive sibling topics and auto-generates a labeled bracket border around them.\n  - **Boundary**: encloses a region of topics; the boundary title is automatically positioned to avoid overlapping the enclosed topics.\n- Added source syntax parsing for relationships, summaries, and boundaries, with editor syntax highlighting.\n- Added a Structures tab in the config modal for managing relationship, summary, and boundary settings.\n- Added full interaction and export support for relationships, summaries, and boundaries, including drag-and-drop, undo/redo, and PNG/SVG export.\n- Added a guide area at the bottom of the config modal with documentation links (English and Chinese) and a GitHub star prompt.\n\n##### Fixed\n\n- Improved PDF export pagination for long mind maps:\n  - Set `preserveAspectRatio` on the SVG element to prevent blank pages when content spans multiple print pages.\n  - Recorded viewport aspect ratio as a CSS variable so print styles can dynamically recalculate canvas height.\n  - Implemented natural truncation and continuation at the bottom of print pages so long maps flow across pages without cutting topics in half.\n  - Added a dedicated print stylesheet to control page-break behavior during PDF export.\n\n##### 新增\n\n- 新增三大高级导图结构能力：\n  - **关联**：支持跨主题连接，三种线型（曲线、直线、折线）与方向配置，可拖拽调整曲线弧度。\n  - **概要**：分组同级连续主题，自动生成带标签的括号边框。\n  - **外框**：圈选主题区域，标题自动避让布局，避免与内部主题重叠。\n- 新增关联、概要、外框的源码语法解析与编辑器语法高亮。\n- 配置面板新增结构页，集中管理关联、概要、外框的各项配置。\n- 关联、概要、外框支持完整的交互与导出，包括拖拽、撤销/重做、PNG/SVG 导出。\n- 配置模态框底部新增引导区域，包含中英文文档链接和 GitHub 星标提示。\n\n##### 修复\n\n- 优化长导图 PDF 导出的分页处理：\n  - 为 SVG 元素添加 `preserveAspectRatio` 属性，避免跨页时产生空白页。\n  - 记录视口宽高比到 CSS 变量，供打印样式动态重新计算画布高度。\n  - 实现长导图在页面底部的自然截断和续接，避免主题被从中间截断。\n  - 新增专用打印样式文件，控制 PDF 导出时的分页行为。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 18,
+      "downloadCount": 19,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
@@ -100,7 +136,7 @@
         },
         {
           "digest": "sha256:58a5581f4929331d29c6187deca1f28109387452218f9ba9b7d67d43ed145f42",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 362
         },
@@ -119,7 +155,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.4.0...1.4.1](https://github.com/yonxao/yonxao-mindmap/compare/1.4.0...1.4.1)\n\n#### 1.4.1 - 2026-07-09\n\n##### Added\n\n- Added clickable task checkbox interactions inside topic content for `- [ ]` and `- [x]` items.\n- Added line number tracking for task items to maintain visual correspondence with source text.\n\n##### Changed\n\n- Normalized source mode save shortcut from `Alt/Option+S` to `Ctrl/Cmd+S` to match other save buttons.\n- Enabled JS build compression to reduce bundle size.\n\n##### Fixed\n\n- Multiple details and performance optimizations\n\n##### 新增\n\n- 主题内容中的 `- [ ]` 和 `- [x]` 任务项现在可点击交互，支持勾选和取消勾选。\n- 任务项增加行号追踪，保持与源码文本的视觉对应关系。\n\n##### 调整\n\n- 统一源码模式保存快捷键为 `Ctrl/Cmd+S`，与插件内其他保存快捷键一致。\n- 启用 JS 构建压缩，减小打包体积。\n\n##### 修复\n\n- 多项细节、性能优化\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 24,
+      "downloadCount": 25,
       "draft": false,
       "name": "1.4.1",
       "prerelease": false,
@@ -136,7 +172,7 @@
         },
         {
           "digest": "sha256:62e713f33620101f790da6fba3a93583567eea627ecc29232417bc0f9dba6e24",
-          "downloadCount": 40,
+          "downloadCount": 41,
           "name": "manifest.json",
           "size": 362
         },
@@ -155,7 +191,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.3.0...1.4.0](https://github.com/yonxao/yonxao-mindmap/compare/1.3.0...1.4.0)\n\n#### 1.4.0 - 2026-07-06\n\n##### Added\n\n- Added richer topic content syntax for inline tags, Markdown links, Obsidian links, task items, image blocks, note adornments, and attachment adornments.\n- Added tag rendering with stable per-map colors so the same tag text keeps a consistent visual identity without relying on the Obsidian accent color.\n- Added clickable link rendering with lightweight markers for external and Obsidian/internal links, while resolving internal targets through the current vault before opening.\n- Added task list rendering for `- [ ]` and `- [x]` items inside topic content without changing the topic tree structure.\n- Added Markdown and Obsidian image block support, including captions, explicit pixel sizes, width-height hints, percentage sizing, missing-image placeholders, and double-click image preview.\n- Added note and attachment icons after topics. Notes show popovers, while attachments can be opened or copied from their popover and support external URLs, Obsidian URIs, and vault attachments.\n- Expanded the topic editor content toolbar with quick insert actions for tags, links, tasks, images, notes, and attachments.\n- Added `Alt+S` / `Option+S` source-mode saving so source edits can be saved without leaving source mode.\n\n##### Changed\n\n- Improved PNG export and image-copy output by cloning the SVG with computed styles, embedded image data, and equation-safe SVG replacements, so rich content exports more closely match the preview.\n- Copying the full source now writes a complete fenced `yxmm` code block that can be pasted directly into Markdown.\n- Reworked physical fullscreen and window fullscreen to use body-level overlays consistently, improving behavior for long content, image-heavy maps, floating popovers, toolbar placement, focus recovery, and scroll restoration.\n- Improved image layout measurement so explicit image widths can participate in topic width calculation while still respecting the topic width cap.\n- Increased the documented and configured topic maximum width range to support wider rich-content topics up to `2000px`.\n- Updated English and Chinese documentation for the expanded rich content syntax, editor toolbar actions, link behavior, image sizing, attachment behavior, and source-mode save shortcut.\n\n##### Fixed\n\n- Fixed source-mode saving state so saving a modified `yxmm` source no longer unexpectedly returns the block to map mode after Obsidian rebuilds the code block.\n- Fixed source-mode save feedback so the saved/dirty/error status can survive the short rebuild window and display consistently after saving.\n- Fixed source-mode save shortcut handling when focus is inside the source view but not directly on the textarea, including macOS `Option+S` key handling.\n- Fixed fullscreen exit recovery so topic focus and surrounding scroll positions are restored more reliably after physical fullscreen or window fullscreen.\n\n##### 新增\n\n- 新增更完整的主题内容语法，支持内容标签、Markdown 链接、Obsidian 链接、任务项、图片块、备注装饰和附件装饰。\n- 新增标签渲染，同一导图内相同标签文字会保持稳定颜色，不依赖 Obsidian 默认强调色。\n- 新增可点击链接渲染，外部链接和 Obsidian/内部链接会显示轻量标识；内部目标打开前会先通过当前库解析，避免误创建不存在的文档。\n- 新增 `- [ ]` 和 `- [x]` 任务项渲染，任务项只作为主题内容显示，不改变主题树结构。\n- 新增 Markdown 图片和 Obsidian 附件图片渲染，支持标题、固定像素宽度、宽高提示、百分比尺寸、缺失图片占位，以及双击图片预览。\n- 新增主题后方备注和附件图标。备注可显示浮层；附件浮层提供打开和复制地址操作，并支持外部 URL、Obsidian URI 和当前库附件。\n- 主题编辑面板内容工具栏新增标签、链接、任务、图片、备注和附件快捷插入按钮。\n- 源码模式新增 `Alt+S` / `Option+S` 保存快捷键，可在不离开源码模式的情况下保存修改。\n\n##### 调整\n\n- 优化 PNG 导出和复制图片流程：导出 SVG 会内联计算后的样式、图片数据，并把公式替换为更适合导出的 SVG 表达，使富内容导出结果更接近预览效果。\n- 复制完整源码时改为输出完整 fenced `yxmm` 代码块，可直接粘贴到 Markdown 文档中。\n- 重构物理全屏和窗口全屏流程，统一使用 body 级覆盖层承载导图，改善长内容、图片导图、浮层、工具栏、焦点恢复和滚动恢复的表现。\n- 优化图片布局测量，显式图片宽度可参与主题宽度估算，同时仍受主题宽度上限约束。\n- 扩展主题最大宽度的配置和文档范围，富内容主题最高可设置到 `2000px`。\n- 更新中英文文档，补充富内容语法、主题编辑工具栏、链接行为、图片尺寸、附件行为和源码模式保存快捷键说明。\n\n##### 修复\n\n- 修复源码模式保存状态问题，修改 `yxmm` 源码后保存不再因 Obsidian 重建代码块而意外回到导图模式。\n- 修复源码模式保存提示在短暂重建窗口中丢失的问题，保存、已修改和错误状态会更稳定地显示。\n- 修复源码模式保存快捷键在焦点位于源码视图但不在 textarea 上时可能不响应的问题，并兼容 macOS `Option+S` 的按键识别。\n- 修复物理全屏和窗口全屏退出后的恢复问题，主题焦点和周围滚动位置会更可靠地回到进入全屏前的状态。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 40,
+      "downloadCount": 41,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
@@ -172,7 +208,7 @@
         },
         {
           "digest": "sha256:dd7729a98e5cc47a9ff7233d9a05335d3e5d13184ae556a2c38078b27593864c",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 362
         },
@@ -191,7 +227,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.2.1...1.3.0](https://github.com/yonxao/yonxao-mindmap/compare/1.2.1...1.3.0)\n\n#### 1.3.0 - 2026-07-04\n\n##### Added\n\n- Added inline content styles for topic text, including bold, italic, strikethrough, underline, and inline text colors.\n- Added lightweight block content support inside topics: unordered lists, ordered lists, display equations, and fenced code blocks using `~~~`.\n- Added topic text alignment configuration with `auto`, `left`, `center`, and `right`, plus topic-level `align` attributes.\n- Added topic editor controls for quickly inserting or clearing inline styles, lists, equations, code blocks, and text colors.\n\n##### Changed\n\n- Refactored rich text parsing so inline styles can span hard line breaks and overlap with other style ranges.\n- Improved code block and equation measurement so rich topic content keeps stable layout before SVG/MathJax rendering completes.\n- Unified fishbone layout naming semantics so `fishbone-left` and `fishbone-right` describe the content expansion direction.\n- Expanded README documentation and development context for rich content, font alignment, and current release behavior.\n\n##### Fixed\n\n- Preserved list indentation and automatic ordered-list numbering during rich content rendering.\n- Kept code blocks width-limited while allowing them to be wider than ordinary topic text when needed.\n- Added regression coverage for rich text parsing, serialization, text wrapping, and timeline/fishbone overlap cases.\n\n##### 新增\n\n- 新增主题内容局部样式：加粗、斜体、中划线、下划线和内容文字颜色。\n- 新增主题内轻量块级内容：无序列表、有序列表、展示公式，以及使用 `~~~` 的代码块。\n- 新增主题文本对齐配置，支持 `auto`、`left`、`center`、`right`，并支持主题属性 `align`。\n- 主题编辑面板新增内容样式工具，可快速插入或清除行内样式、列表、公式、代码块和文字颜色。\n\n##### 调整\n\n- 重构富文本解析逻辑，支持局部样式跨硬换行和不同样式区间交叉叠加。\n- 优化代码块和公式的测量逻辑，让 SVG/MathJax 异步渲染完成前布局仍保持稳定。\n- 统一鱼骨图布局命名语义，`fishbone-left` 与 `fishbone-right` 表示内容展开方向。\n- 扩展 README 和开发上下文，补充富文本内容、字体对齐和当前发布行为说明。\n\n##### 修复\n\n- 保留列表缩进，并在渲染有序列表时按层级自动递增编号。\n- 代码块可按内容适度放宽宽度，同时仍受上限约束，避免撑开整张导图。\n- 补充富文本解析、序列化、文本换行，以及时间轴/鱼骨图重叠场景的回归测试。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 18,
+      "downloadCount": 19,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -208,7 +244,7 @@
         },
         {
           "digest": "sha256:5c40b62a0dcf2f116c354b22af684ea986c6493577924e322e277a2cc369f824",
-          "downloadCount": 39,
+          "downloadCount": 40,
           "name": "manifest.json",
           "size": 362
         },
@@ -227,7 +263,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.2.0...1.2.1](https://github.com/yonxao/yonxao-mindmap/compare/1.2.0...1.2.1)\n\n#### 1.2.1 - 2026-07-02\n\n##### Fixed\n\n- Fixed timeline detail branches where the upper and lower timeline layouts could let a later detail trunk pass through a previous detail subtree.\n- Fixed fishbone layouts where same-side primary bones could place trailing topic cards too close and overlap in both left and right directions.\n\n##### 修复\n\n- 修复上侧时间轴和下侧时间轴中，后续详情分支主干可能穿过前一棵详情子树的问题。\n- 修复左向鱼骨图和右向鱼骨图中，同侧大分支末端主题卡片距离过近导致重叠的问题。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 39,
+      "downloadCount": 40,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -244,7 +280,7 @@
         },
         {
           "digest": "sha256:de9ceaf905ef1e343935dea19a6b0c16c089423149d9428f57e6f42a8c00cf2c",
-          "downloadCount": 31,
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 362
         },
@@ -263,7 +299,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.1.0...1.2.0](https://github.com/yonxao/yonxao-mindmap/compare/1.1.0...1.2.0)\n\n#### 1.2.0 - 2026-07-01\n\n##### Added\n\n- **Keyboard focus and navigation in map mode**: SVG maps can now keep an independent focused topic with visible focus highlighting.\n- **Topic navigation shortcuts**: use arrow keys to move topic focus. Mind map layouts use structural navigation between parent/child and sibling topics; other layouts keep spatial direction navigation.\n- **Topic creation and editing shortcuts**: add subtopics with `Tab`, add sibling topics with `Enter` / `Shift+Enter`, delete topics with `Delete` / `Cmd+Backspace`, open the topic editor with `Backtick` and start inline editing with `Space`.\n- **Topic collapse and view shortcuts**: toggle subtopics with `Alt+/` / `Option+/`, zoom and switch views with `Alt/Option` view shortcuts, and open the config panel with `Alt+,` / `Option+,`.\n- **Topic copy, cut, and paste shortcuts**: copy or cut the current topic content and paste it as a subtopic of the focused topic.\n- **Copy and paste with attributes**: copy the current topic together with attributes and subtopics, then paste the copied topic structure into another branch.\n- **Cross-map topic clipboard** within the same Obsidian session, with system clipboard text fallback when available.\n- **Undo and redo for topic-tree edits**: undo and redo map-mode topic operations with `Ctrl/Cmd+Z`, `Ctrl+Y`, and `Cmd+Shift+Z`.\n- **Shortcuts tab** in the config panel, listing the current read-only shortcut groups.\n- **Fullscreen draft recovery**: if fullscreen editing exits unexpectedly before pending edits are written back, the plugin offers recovery actions for the leftover source.\n\n##### Changed\n\n- Undo/redo history is kept briefly per `yxmm` code block so it can survive Obsidian rebuilding the code block after a save.\n- Undo/redo in fullscreen and window fullscreen follows the existing fullscreen pending-save flow and writes back to Markdown after exiting fullscreen.\n- Keyboard shortcut documentation and labels now use the same topic terminology as the rest of the plugin.\n\n##### Documentation\n\n- Updated the development context with the current shortcut groups, keyboard focus behavior, clipboard behavior, undo/redo boundaries, fullscreen save rules, and relevant code map entries.\n\n##### 新增\n\n- 新增 **导图模式主题焦点与键盘导航**：SVG 导图可维护独立的当前主题焦点，并显示焦点高亮。\n- 新增 **主题导航快捷键**：方向键可移动主题焦点；思维导图布局按父子/同级关系导航，其他布局按空间方向导航。\n- 新增 **主题创建与编辑快捷键**：`Tab` 新增子主题，`Enter` / `Shift+Enter` 新增同级主题，`Delete` / `Cmd+Backspace` 删除主题，`Backtick` 打开主题编辑面板，`Space` 开始内联编辑。\n- 新增 **主题折叠与视图控制快捷键**：`Alt+/` / `Option+/` 展开或折叠子主题，`Alt/Option` 组合键控制缩放、适配视图、原始视图、窗口全屏、全屏和配置面板。\n- 新增 **主题复制、剪切与粘贴快捷键**：可复制或剪切当前主题内容，并粘贴为当前焦点主题的子主题。\n- 新增 **复制主题及属性 / 粘贴主题及属性**：可复制当前主题的属性和子主题结构，并粘贴到其他分支。\n- 支持同一 Obsidian 会话内 **跨导图主题剪贴板**，并在系统剪贴板文本可用时作为兜底来源。\n- 新增 **主题树撤销与重做**：导图模式主题操作可通过 `Ctrl/Cmd+Z`、`Ctrl+Y` 和 `Cmd+Shift+Z` 撤销或重做。\n- 配置面板新增 **快捷键页**，只读展示当前快捷键分组。\n- 新增 **全屏草稿恢复**：全屏编辑异常退出且存在未写回内容时，提供残留源码恢复入口。\n\n##### 调整\n\n- 撤销/重做历史按 `yxmm` 代码块短期保存，避免 Obsidian 保存后重建代码块导致历史立即丢失。\n- 全屏和窗口全屏中的撤销/重做复用全屏待保存流程，退出全屏后再写回 Markdown。\n- 快捷键说明和界面文案统一使用当前项目的主题术语。\n\n##### 文档\n\n- 更新开发上下文，记录当前快捷键分组、主题焦点行为、剪贴板行为、撤销/重做边界、全屏保存规则和相关代码地图。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 31,
+      "downloadCount": 32,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -280,7 +316,7 @@
         },
         {
           "digest": "sha256:57f86f2ce49ff1a0a03ab69c1cf9997d1e18165d418b2786facdd6f1ba34f16e",
-          "downloadCount": 20,
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 362
         },
@@ -299,7 +335,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.0.0...1.1.0](https://github.com/yonxao/yonxao-mindmap/compare/1.0.0...1.1.0)\n\n#### 1.1.0 - 2026-06-29\n\n##### Added\n\n- **Window fullscreen mode**: full-screen the mind map within the app window instead of the entire display.\n- **Tooltips** for all toolbar and view buttons.\n- README badges and localization notes for both English and Chinese documentation.\n\n##### Fixed\n\n- UI element occlusion issues in fullscreen mode.\n- Mind map editing being disabled when in window fullscreen state.\n\n##### Refactored\n\n- Optimized initial rendering performance and view adaptation logic for better responsiveness.\n\n##### 新增\n\n- **窗口全屏功能**：在应用窗口内全屏显示导图，而非整个显示器。\n- 为工具栏和视图按钮添加 **tooltip 支持**。\n- 更新两个语言的 README 文档，添加项目徽章和本地化说明。\n\n##### 修复\n\n- 修复全屏模式下各类 UI 元素遮挡问题。\n- 修复窗口全屏状态下导图无法编辑的问题。\n\n##### 重构\n\n- 优化初始渲染性能与视图适配逻辑，提升响应速度。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 20,
+      "downloadCount": 21,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -316,7 +352,7 @@
         },
         {
           "digest": "sha256:e2d1a7ef33f3891a5c9d0ab03de194e2546213b374560bf5daebbf5217c57d73",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 362
         },
@@ -335,7 +371,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\r\n\r\n### 安装方式\r\n\r\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 \"yonxao-mindmap\"。\r\n2. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\r\n\r\n### 更新内容\r\n\r\n#### 1.0.0 - 2026-06-15\r\n\r\n##### Added\r\n\r\n- Initial public release of yonxao-mindmap.\r\n- Render Markdown-heading-style mind maps from `yxmm` code blocks.\r\n- **20 layout types across 7 categories**: mind maps, tree diagrams, organization charts, timelines, radial maps, fishbone diagrams, and tree tables.\r\n- **Two expansion modes**: natural expansion and hanging expansion.\r\n- **Three connector styles**: curve, straight, and elbow (configurable for mind map layouts).\r\n- **8 built-in color schemes**: default, ocean, forest, sunset, mono, rainbow, pastel-rainbow, neon-rainbow.\r\n- **28 built-in icons**: book, brain, cpu, database, file, folder, calendar, clock, user, users, tag, star, check, checkbox, list, target, flag, link, globe, search, message, pencil, heart, alert, info, rocket, chart, lightbulb.\r\n- Topic-level attributes: color, icon, fontSize, fontWeight, fontFamily, lineHeight, maxWidth.\r\n- **Interactive editing**: double-click inline edit, drag-and-drop reordering, right-click context menu, collapse/expand.\r\n- **Source mode**: toggle between map view and source editor with syntax highlighting.\r\n- **Visual configuration panel**: 6 tabs (Display, Color, Structure, Font, Interaction, Advanced) with intuitive controls.\r\n- **Config priority**: topic attributes > code block config > plugin global defaults > plugin built-in defaults.\r\n- **Global defaults editor** in Obsidian settings tab.\r\n- **Level-based overrides** for font and topic max-width with inheritance display.\r\n- **Fit view** and original size view modes, with configurable max upscale limit.\r\n- **Fullscreen mode** for immersive editing and viewing.\r\n- **PNG export** and text copy (current topic, subtree, or entire map).\r\n- **Obsidian right-click menu** for quick mind map insertion.\r\n- **Reading view support**: view-only mode with editing interactions disabled.\r\n- **Floating toolbar** with draggable position and corner snapping.\r\n- **16 supported languages**: auto-follows Obsidian language on first run.\r\n\r\n##### 新增\r\n\r\n- yonxao-mindmap 首次公开发布。\r\n- 从 `yxmm` 代码块渲染 Markdown 标题风格思维导图。\r\n- **7 大类共 20 种布局类型**：思维导图、树形图、组织结构图、时间轴、放射图、鱼骨图、树形表格。\r\n- **两种展开方式**：自然展开和下挂展开。\r\n- **三种连线线型**：曲线、直线、折线（思维导图布局可配置）。\r\n- **8 种内置色系**：default、ocean、forest、sunset、mono、rainbow、pastel-rainbow、neon-rainbow。\r\n- **28 个内置图标**：book、brain、cpu、database、file、folder、calendar、clock、user、users、tag、star、check、checkbox、list、target、flag、link、globe、search、message、pencil、heart、alert、info、rocket、chart、lightbulb。\r\n- 主题级属性：颜色、图标、字号、字重、字体、行高、最大宽度。\r\n- **交互式编辑**：双击内联编辑、拖拽排序、右键菜单、折叠/展开。\r\n- **源码模式**：导图视图与源码编辑器切换，支持语法高亮。\r\n- **可视化配置面板**：6 个 Tab（显示、颜色、结构、字体、交互、高级），操作直观。\r\n- **配置优先级**：主题属性 > 代码块配置区 > 插件全局默认值 > 插件内置默认值。\r\n- **全局默认值编辑器**，集成在 Obsidian 设置页中。\r\n- **按级别覆盖**字体和主题最大宽度，UI 显示继承关系。\r\n- **适配视图**和原始大小两种视图模式，可配置最大放大倍数。\r\n- **全屏模式**，沉浸式编辑与查看。\r\n- **PNG 导出**和文本复制（当前主题、子树或整图）。\r\n- **Obsidian 右键菜单**，快速插入思维导图。\r\n- **阅读视图支持**：仅查看模式，禁用编辑交互。\r\n- **悬浮工具栏**，可拖动位置并吸附到角落。\r\n- **支持 16 种语言**，首次运行自动跟随 Obsidian 语言。\r\n\r\n\r\n请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md) 了解详情。\r\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
