@@ -1,0 +1,326 @@
+{
+  "author": "Resolve-public",
+  "defaultBranch": "main",
+  "description": "AI writing assistant with unified chat, planning, and ambient editing. Connects to local or cloud providers. Features vault-wide RAG retrieval, knowledge graph, agentic tool use, note context, and reusable prompt commands. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "writing-assistant-chat",
+  "lastChangedAt": "2026-07-15T09:01:27.067Z",
+  "lastFetchedAt": "2026-07-15T09:01:27.067Z",
+  "manifest": {
+    "author": "Resolve-public",
+    "authorUrl": "https://github.com/Resolve-public",
+    "description": "AI writing assistant with unified chat, planning, and ambient editing. Connects to local or cloud providers. Features vault-wide RAG retrieval, knowledge graph, agentic tool use, note context, and reusable prompt commands.",
+    "fundingUrl": "https://buymeacoffee.com/resolvepublic",
+    "id": "writing-assistant-chat",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.12.5",
+    "name": "Writing Assistant Chat",
+    "version": "1.4.1"
+  },
+  "name": "Writing Assistant Chat",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:22dcb9f52af34f8ce2d66d859a6cdb1246741212a3a8ca4641a3152fe0837c1b",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 3014572
+        },
+        {
+          "digest": "sha256:ab1c229b2b38843a7507bf30ea278b674e8656168353740067aa232c5858e2f3",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 523
+        },
+        {
+          "digest": "sha256:ec816e4f235c0b711feaad86fba2b25cdbca42f505084fbed68919322c4b22da",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 219069
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.4.1\r\n\r\nA polish release on top of 1.4.0. The chat surface gets two small quality-of-life features and a coherent motion pass, while the styling pipeline moves to Tailwind CSS 4 underneath without any visual change. Nothing here alters provider behaviour or the agentic loop; it is about making the everyday surface calmer, faster to search, and more inviting when empty.\r\n\r\nThe empty chat state is no longer blank. It now presents a rotating carousel of writing prompts you can page through or let advance on its own. Conversation history became searchable by what was actually said, not just by title, so you can find a session by a phrase from inside it. Overlays across the chat now open and close with one shared, reduced-motion-aware animation, and the model and knowledge selectors share a single trigger style.\r\n\r\n### Added\r\n\r\n- **Empty-state prompt carousel**: the empty chat view now shows a sliding carousel of writing prompts that auto-advances, pauses on hover, and can be paged manually.\r\n- **History search by message body**: the history drawer now matches against the text inside each conversation, not only its title, using an on-demand exact substring scan with no persistent index.\r\n\r\n### Changed\r\n\r\n- **Unified overlay motion**: popovers and selectors across the chat now share one open-and-close animation, and it honours the system reduced-motion preference.\r\n- **Shared model and knowledge selector styling**: the model trigger and knowledge selector now draw from a common set of styles for a consistent appearance.\r\n- **Styling pipeline migrated to Tailwind CSS 4**: the entire CSS build moved from Tailwind 3 to 4 with no intended visual change, verified against a v3 visual baseline in both light and dark themes.\r\n\r\n### Fixed\r\n\r\n- **Benchmarks now require a loaded local model before running**, preventing runs from starting against a local provider with no model loaded.\r\n\r\n### Developer\r\n\r\n- Added an Obsidian UI visual rendering harness for catching unintended style regressions, and aligned it with provider brand icons.\r\n- Updated the Claude agent SDK to 0.3.207 with an added SDK contract test, and enabled type-check-only (`noEmit`) builds.",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "1.4.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T19:45:27Z",
+      "tag": "1.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73d789ac7c32425261b01868a78d448809fc46c91b5e136b6efa377929b78372",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2965158
+        },
+        {
+          "digest": "sha256:4412801226d80fd88af16e4dce035509403417c1dcddcaaf0c411eca3050cf66",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:b997c1b3aa238de243d1f7f686551787343e2fd5c57dd2d05ec3cfced321c225",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 249031
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.4.0\r\n\r\n1.3 was about giving the assistant a safer, more capable set of tools. 1.4.0 is about making that system easier to use every day. Provider setup has been rebuilt around automatic model catalogs and discovery, the model selector is faster and easier to navigate, and the controls that matter during a conversation now live directly beside the composer.\r\n\r\nThe old separation between conversation, planning, and editing has continued to disappear. Agentic behaviour is now the default, while a conversation-level approval control makes the meaningful distinction explicit: ask before edits, or edit automatically. Reasoning effort is available in the same place and follows the capabilities of the selected model.\r\n\r\nClaude Code received the deepest reliability work in this release. Conversations can resume from the CLI's persisted session when the live process is gone, then fall back to a transcript rebuild when that is not safe. Rebuilt sessions now retain compact records of tool results and edit outcomes, so the model does not forget what it found or changed. Context is checked before dispatch, interruptions are handled more cleanly, and provider-reported capacity is reflected in the UI.\r\n\r\nThe remaining work is about keeping state honest. RAG can now follow vault changes automatically and visibly reports when its index is stale. Editing timelines distinguish pending, applied, skipped, and unmatched work. Provider health, context usage, session recovery, and metered cost are all surfaced where they are useful.\r\n\r\n### Added\r\n\r\n- **Automatic model catalogs**: supported cloud and Claude Code models now ship in a release-time catalog, removing most manual model setup.\r\n- **Live LM Studio discovery**: locally available completion and embedding models are discovered and cached automatically.\r\n- **Provider cards**: a redesigned Providers tab combines enablement, authentication, connection details, model catalogs, custom model IDs, and health status.\r\n- **Provider-aware model selector**: browse models by provider, search the catalog, mark favourites, inspect availability, and refresh discovery without leaving the chat.\r\n- **Composer reasoning control**: choose the active model's supported reasoning effort directly from the composer. The selection is stored per model.\r\n- **Composer edit approval control**: switch a conversation between **Ask before edits** and **Edit automatically** without changing modes or opening settings.\r\n- **Responsive composer overflow menu**: reasoning, approval, tools, knowledge, and vision status remain accessible in narrow sidebars.\r\n- **Claude Code disk resume**: conversations can recover a persisted Claude Code session after the live process has been lost.\r\n- **Claude Code context preflight**: oversized requests are detected before dispatch instead of failing after the CLI starts.\r\n- **Persistent tool-result records**: compact discovery results and edit outcomes are retained for Claude Code transcript reconstruction.\r\n- **Automatic RAG reindexing options**: reindex on startup, watch vault changes, and independently allow or prevent automatic use of metered cloud embedding models.\r\n- **Persistent stale-index indicator**: the knowledge control reports when vault changes have left the semantic index out of date.\r\n- **Multi-value frontmatter support**: property editing tools now accept arrays for frontmatter fields with multiple values.\r\n- **Vault-operation previews**: editing timelines can show affected files, match counts, and operation summaries before approval.\r\n\r\n### Changed\r\n\r\n- **Agentic behaviour is now the default**, replacing the old emphasis on separate chat, plan, and edit modes.\r\n- **Approval posture persists per conversation**, so trusted and review-first sessions can keep different editing behaviour.\r\n- **Model lists render immediately from cached catalogs**, with live availability refreshed separately.\r\n- **Built-in and custom models are composed automatically** from enabled providers, replacing the previous manual completion-model and embedding-model configuration.\r\n- **Provider settings are consolidated** into a single Providers tab with clearer setup and connection feedback.\r\n- **Anthropic thinking blocks are preserved across tool rounds**, maintaining the reasoning context required for continued tool use.\r\n- **Reasoning capabilities are model-aware**, including dynamically reported Claude Code and LM Studio effort levels.\r\n- **Claude Code recovery now uses three tiers**: warm session reuse, persisted session resume, then synthetic transcript rebuild.\r\n- **Claude Code transcript rebuilds preserve more state**, including tool results, declined operations, no-result searches, partial turns, and completed editing work.\r\n- **Claude Code reports its real context usage and window size** to the capacity indicator.\r\n- **Last-known context capacity is persisted**, keeping the composer indicator useful between responses.\r\n- **Usage cost appears in the context ring only for metered providers**.\r\n- **Session badges distinguish reuse, resume, initial start, and synthetic rebuilds**, including the reason a rebuild was required.\r\n- **Claude Code enablement uses the cloud privacy acknowledgement**, reflecting that conversation and tool-read content follows the CLI's own storage and retention behaviour.\r\n- **Editing timelines use present-tense labels while work is pending**, then resolve to applied, skipped, failed, or no-match states.\r\n- **`replace_in_vault` reports zero matches honestly**, rather than presenting an empty replacement as completed work.\r\n\r\n### Fixed\r\n\r\n- Stopping Claude Code generation could leave the session in an unsafe state for the next turn.\r\n- Aborted and partially completed turns are now reconstructed without silently dropping their interruption state.\r\n- Claude Code sessions are invalidated after compaction or transcript divergence instead of being reused with mismatched context.\r\n- Session recovery now checks conversation linearity, model configuration, tools, prompts, and reasoning before resuming.\r\n- A failed disk-resume attempt falls back to a synthetic rebuild within the same turn.\r\n- Opening one model selector now closes any other selector already open.\r\n- LM Studio tool-template failures now include actionable guidance when the loaded model's Jinja template does not support tool use.\r\n- Markdown image blocks in assistant messages no longer create unsafe or broken image elements.\r\n- Agent-proposed writes into the vault's Obsidian configuration directory are rejected, including normalized path variants.\r\n- Vault replacement reviews now show an explicit **No match** result when a search anchor cannot be found.\r\n- Editing progress and result state remain attached to the correct timeline step, including Claude Code operations without a matching streamed tool-call identifier.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.4.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-12T20:51:37Z",
+      "tag": "1.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ab6ee8aec75bd4d790f35edbdbcd42829a38d2a6eaaf143aa97454d72aa6f7dc",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2860011
+        },
+        {
+          "digest": "sha256:b42d615c540864574c1183803cda0b17692e9735938aa2b7da9829b0b4cc1a42",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:a1b44fc9d70b37c9e9e8ee720a91319155329431b0c55ffb0070ca04fc9d117b",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 213499
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.3.4\r\n \r\n### Fixed\r\n- Tool issue when making batch surgical changes to a file would be blocked, by a safety net I implemented for local models, it proved to be a non issue, and the guard itself became the issue \r\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "1.3.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-04T20:52:49Z",
+      "tag": "1.3.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f40041b3320a2d74ed638fbea1bb0ad703bf498156a2fcfde85006d91342b399",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2858266
+        },
+        {
+          "digest": "sha256:95511b9334714a03c2c2574330ca2ae8adbe873c26278b1f82aabf3fc1cc65bf",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:a1b44fc9d70b37c9e9e8ee720a91319155329431b0c55ffb0070ca04fc9d117b",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 213499
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.3.3\r\n\r\n### Addded\r\n - Quality of life elements, such as adding files to context by drag and drop directly in the chat \r\n - New conversation button\r\n \r\n### Changed\r\n - Chat history has a new appearance\r\n \r\n### Fixed\r\n- Tool behaviour on complex changes, failed when making a lot of surgical fixes in the same large document\r\n- Certail tool calls were initiated, but dropped due to LM studio parallel settings, added a buffed to fix it\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.3.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T09:36:06Z",
+      "tag": "1.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8850d48d78bca45be21f021305b9fa9037f9e0950efd08a718082d00950fc05c",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2846360
+        },
+        {
+          "digest": "sha256:1f2d2c4633f3e70d0ff9edd3445aad3df13e2a5e43f9139969cd4268eee6f035",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:4fda003c80cf53b76b899486bd8ea6be952e9dace1b6d5cda1fcb41e9d40a54b",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 213066
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.3.2\r\n\r\n### Addded\r\n - Added a way to select models from the model picker in chat\r\n - Added a way to toggle auto-add note to context straight from the chat \r\n \r\n### Fixed\r\n- Claude Code behaviour on long reasoning sessions, on complex tasks, would make it think for 5+ minutes ( which can happen ), caused a safety to trigger and close the process\r\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-06-30T13:52:58Z",
+      "tag": "1.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:05e4c3319c4fd032b79f6af7f734c2cb8899fe7c3487c2c9159a17726b940fde",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 2838612
+        },
+        {
+          "digest": "sha256:7a6c13b0a2cbef8ad8679095d5d0955e210ceff3622806386dfb5c40b13990bd",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:8a26af228bda4c15fe498c347f947c4acd175b054b1e5fa376fe9c3cf9659746",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 209102
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.3.1\r\n\r\n### Fixed\r\n- First time install of addon would not function correctly with Claude Code",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T18:45:45Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:61b6efecca54bb33898ea851f18a9e58ef5bdea7f9f8d429386a9822a6329f50",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2837879
+        },
+        {
+          "digest": "sha256:53834ff87e8002b3d0ecf187b2fc8c65a94c44b4cd5386cda013e14a6d9d4d51",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 506
+        },
+        {
+          "digest": "sha256:8a26af228bda4c15fe498c347f947c4acd175b054b1e5fa376fe9c3cf9659746",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 209102
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.3.0\r\n\r\n1.2.0 was about committing to the agentic direction. 1.3.0 is about following through on it, giving the assistant a fuller, safer set of hands inside the vault, and making the cloud side scale without cost and context quietly creeping up on you.\r\n\r\nThe agent can now reorganise at the folder level, not just file by file, and it can read a note's outline, a single section, or its outgoing links before touching anything. That means less effort, and fewer tokens, spent re-reading whole documents just to find one paragraph. Reorganising documents was the chore I most wanted to hand off, and this release moves a good distance toward that.\r\n\r\nOn the cloud providers, tooling is now disclosed progressively, the model starts with a small, stable set of tools and searches for the rest only when it needs them. Paired with a mode-invariant prompt and a stable tool surface, this keeps the prompt cache warm across a conversation, which is what actually keeps Anthropic usage affordable over a long session. Thinking effort now scales to the task instead of being on or off.\r\n\r\nThe rest of the release is hardening. A lot of this cycle went into the unglamorous parts: data-loss corner cases during regeneration, RAG indexing correctness, diff and edit safety, and an approval flow that lets you review one change at a time. There's less to see, but it's the difference between a tool you trust with your notes and one you don't.\r\n\r\n### Added\r\n- **Folder operations**: `move_folder` and `trash_folder`, so the assistant can reorganise whole sections of the vault rather than one note at a time.\r\n- **Structure-aware read tools**: `get_outline`, `read_section`, and `get_outgoing_links` let the agent navigate a note's headings and links before acting, instead of always loading the full document.\r\n- **`insert_into_note`**: targeted insertion that places content at a location without rewriting the surrounding document.\r\n- **Vault-wide find/replace**: `replaceInVault` is wired into the conversion pipeline and UI, so replacements flow through the same review and diff path as other edits.\r\n- **Progressive tool disclosure (cloud)**: a stable Layer-2 core read surface plus native tool-search on the Anthropic client. The model sees a small fixed tool set up front and searches for more on demand, keeping the prompt cache warm and the context lean.\r\n- **Adaptive thinking + 1-hour cache TTL** for Anthropic: reasoning effort scales to the task, and cached context is retained longer.\r\n- **OpenAI streamed usage**: token usage is now captured from OpenAI streaming completions.\r\n- **Build-time pricing sync**: Anthropic prices are refreshed at release time, so cost figures stay current.\r\n- **Context tail-keep truncation**: optional truncation that preserves the most recent turns, with a higher default context limit.\r\n\r\n### Changed\r\n- **Unified modes for cloud providers**, with a session-scoped approval posture: chat, plan, and edit behaviour converge for cloud providers, and your approve/decline stance now persists for the session.\r\n- **One mutation per round**: the agent proposes a single vault-changing operation per round so you can review each one cleanly, even with models that ignore parallel-tool limits.\r\n- **Stable cloud tool surface**: a mode allow-list and a mode-invariant system prompt keep the tools and prompt steady across turns for cache stability.\r\n- **Diff engine handles mixed line endings**: CRLF/LF normalization so edits apply cleanly regardless of a file's line endings.\r\n- **Knowledge graph stays consistent** when you rename or delete vault files.\r\n- **Safer indexing**: concurrent file indexing is debounced and guarded in the vault indexer.\r\n- **Resilient API calls**: transient Anthropic errors are retried, and malformed tool calls surface a clear message instead of failing silently.\r\n- **Usage badge**: collapsed to a headline with detail in a tooltip, and it now surfaces Claude Code session reuse.\r\n\r\n### Fixed\r\n- Regeneration could lose data in certain chat-session corner cases.\r\n- Edit, delete, and version actions are now blocked during generation to prevent conflicting changes.\r\n- RAG indexer validates embedding vector count and dimension before storing, and chunk overlap/continuity was hardened.\r\n- Editing guards: empty searches no longer match a phantom offset-0 position, overlapping hunk accepts are blocked with a conflict notice, and `propose_edit` preflight now matches the apply step's rules.\r\n- In-loop review refuses to auto-apply an edit when its search anchor isn't unique.\r\n- Composer no longer jitters at narrow panel widths, and the chips row and drag ring no longer cause layout jolts.\r\n- Image lightbox is frameless with a built-in close button.\r\n- Settings dropdown label no longer clips.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T10:37:41Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:edb57e92ab7c1806e7973816989a4c477f357ccbc673aa379423575debee7fae",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2746289
+        },
+        {
+          "digest": "sha256:a47a152394704d8f58d8269d829966848e460530f940b878270ce402beff2969",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 505
+        },
+        {
+          "digest": "sha256:21907c506a06625a41c58db83aae5234e35f528efb4f332c3f430c8e707a8442",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 196424
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.2.0\r\n\r\nThis release adds Claude Code, an alternative way to use the plugin while keeping the costs down compared to usual API alternatives, it uses your Claude subscription, so if you already have that, you now have an option to use it. Claude models are very good at listening to instructions, Claude code, even if designed for code, under the hood it still has the Anthropic models, which are very good at feedback input and instruction based operations which is a real usecase when trying to reorganise or refactor documents.\r\n\r\nThe appearance of the plugin has shifted slightly, and for the better I think, going towards a more refined look, that in my opinion fits the obsidian aestetic.\r\n\r\nI can see it myself that the tool itself is developing in the agentic direction, but as it stands right now it is the right way forward in order to make use of the landscape, it's a path that can lead to a lot more functionality I can pull out of models, reorganising documents is a chore I'd rather watch be done automatically, and focus my attention on writing. It's the \"endless\" development path, I acknowledge that, but its also the clearer way to progress that I see right now.\r\n\r\n### Added\r\n- **Claude Code provider**: Use the Claude Code CLI as a chat provider, with prompt\r\n  caching. Subscription-based, so no per-token pricing is shown.\r\n- **Vault-wide write tools**: The assistant can now create and edit notes across the\r\n  whole vault, not just the active document, via a new set of agentic edit tools. File\r\n  creation is restricted to formats Obsidian can actually open (`.md`, `.canvas`).\r\n- **In-loop review (LiveVaultReview)**: Approve or decline each proposed vault\r\n  operation while the agent is still running, directly on the timeline.\r\n- **Inline diff preview**: Proposed edits render as a diff inside the actual document\r\n  before you accept them.\r\n- **Lexical content search**: New `search_content` tool for keyword search across the\r\n  vault, complementing semantic (RAG) retrieval.\r\n- **Benchmark tooling**: Evaluator checklist UI with pass/fail/warning states, a\r\n  slow-model pace warning, and improved in-house report generation and tracking.\r\n\r\n### Changed\r\n- **Redesigned chat UI**: Moved away from message bubbles to a clearer, flatter layout,\r\n  realigned with Obsidian's UI guidelines.\r\n- **Approval flow** reworked into a clearer interjection/feedback layer between you and\r\n  the agent's tool use.\r\n- **Note attachment handling** reworked, with room for future attachment types.\r\n- **Path handling**: Added a path resolver so models reference vault paths more reliably.\r\n- **Composer**: Better responsiveness and resize handling in narrow panels.\r\n- **Tool error feedback**: Failures now return specific, actionable messages the model\r\n  can self-correct from, instead of generic errors.\r\n\r\n### Fixed\r\n- Agent \"thinking\"/reasoning blocks now render markdown (code blocks, tables) instead of\r\n  plain text.\r\n- `semantic_search` returns a unified availability response when embeddings aren't ready.\r\n- `propose_edit` correctly requires existing content and gives clearer guidance.\r\n- Queued operations resolve serially with decline propagation (fixes a long-running hang).\r\n\r\n",
+      "downloadCount": 10,
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-20T08:26:28Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1038da7f4502f1fd03712d97133ff0b37747d7357c20967c60062615f5af2edf",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 861216
+        },
+        {
+          "digest": "sha256:4f089444456eb18f9de842636cc482ba6b7d4899797c36c56a32ae6b756ceaaf",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 504
+        },
+        {
+          "digest": "sha256:cd70a4244bcd9ff745a1792bbfb23115f4641a6ecd9898a881cb55d76c9a0382",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 177459
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant Chat 1.1.0\r\n\r\nThis release adds a better AI response renderer, improves note attachment handling, and includes several chat and settings fixes.\r\n\r\nAdded a new markdown-it based renderer for AI responses.\r\nAdded support for opening images directly from chat bubbles.\r\nAdded a setting to automatically include attachments found in an attached note.\r\nImproved handling of note attachments and tightened restrictions for attachments found inside documents.\r\nFixed markdown link and wikilink behavior in chat responses.\r\nImproved chat response styling and markdown rendering behavior.\r\nTightened up the custom commands dialog and separator styling in settings.\r\nIf you want a slightly more polished GitHub-release version, use this:\r\n\r\n## Highlights\r\n \r\nNew markdown rendering pipeline for AI responses.\r\nClick-to-open images in chat.\r\nOptional automatic inclusion of attachments from attached notes.\r\n\r\n## Fixes and improvements\r\n\r\nBetter wikilink and markdown link handling in chat.\r\nSafer attachment handling and stricter attachment restrictions inside documents.\r\nCleaner styling for rendered responses.\r\nPolished custom command and settings UI.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-08T20:46:25Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4d19c4c8dd585dbb3b0fbdea07f0b3949e1d52de1fd6de5d1084d614a4a19cbd",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 603884
+        },
+        {
+          "digest": "sha256:aae7fd3af66b010567049ae59f6f7a8d3fd2b391f21f994488ddb1007b264571",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 514
+        },
+        {
+          "digest": "sha256:8b91e6d4641ea04c0f04fe38e21b1f3d86772d3525a17b75d4ae69edb5dedc3c",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 170579
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Initial release of Writing Assistant Chat.\r\n\r\n## Features\r\n\r\n- **Three operating modes** — conversation, plan, and edit with diff review\r\n- **Multi-provider support** — LM Studio (local), Anthropic, and OpenAI\r\n- **Agentic tool use** — vault reading, file search, semantic search, edit proposals, frontmatter updates\r\n- **Vault-wide RAG** — semantic retrieval over your vault using local or cloud embeddings\r\n- **Knowledge graph** — LLM-powered entity and relationship extraction\r\n- **Active note context** — current document automatically available to conversations\r\n- **Prompt commands** — reusable templates with `{{selection}}` and `{{noteText}}` placeholders\r\n- **Streaming responses** with token usage tracking and cost estimation\r\n- **Model profiles** — per-provider configurations with system prompt, temperature, and sampling controls\r\n- **Chat history** with message versioning and regeneration\r\n\r\nDesktop only. No telemetry.\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.0 Foundation Release",
+      "prerelease": false,
+      "publishedAt": "2026-06-08T18:03:17Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "resolve-public/writing-assistant-chat"
+}
