@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-07-14T05:04:27.082Z",
-  "lastFetchedAt": "2026-07-14T05:04:27.082Z",
+  "lastChangedAt": "2026-07-15T05:05:27.001Z",
+  "lastFetchedAt": "2026-07-15T05:05:27.001Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b75b0c71285b24ce3742f5b83e4740c2201250292da47f05586260de852fed51",
-          "downloadCount": 38,
+          "downloadCount": 92,
           "name": "main.js",
           "size": 822112
         },
         {
           "digest": "sha256:4a584f28cfce35ae2ad34ee6db30b7210a61481c6da321b46874ed64cf813ab6",
-          "downloadCount": 42,
+          "downloadCount": 97,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 36,
+          "downloadCount": 89,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.6.0\n\n### 修复\n\n- **微信公众号文章发布时间晚 8 小时**：`extractWeChatPublishTime` 从 Unix 时间戳转换时漏了时区偏移，输出 UTC 而非北京时间（如实际 `2026-07-09T10:09:17` 被记为 `02:09:17`）。现统一加 `+8h` 偏移（与知乎/小红书路径一致，参照 Obsidian-Share-to-Save `extractCreateTime`）。`createTime` 预格式化字符串分支改为直接拼接输出，避免非 UTC+8 机器上 `new Date` 本地解析导致的二次偏移\n- **`create_time` 提取漏第三种格式**：补 `var create_time = '1234567890'` 赋值格式正则\n\n### 新增\n\n- **微信文章 HTML 代码示例保护**：微信技术类文章常含 `&lt;div&gt;` 等 HTML 标签实体，DOMParser 解码后 turndown 会输出原始 `<div>` 标签污染 Markdown。新增 `protectAngleBrackets`（DOMParser 前把 `&lt;`/`&gt;` 替换为 ANGLT/ANGGT 占位符，保护 code/pre/title 块原样）+ `restoreAngleBrackets`（turndown 后把 ANGLT+标签名+ANGGT 还原为行内代码 `` `<tag>` ``，其余还原为实体编码）。照搬 Obsidian-Share-to-Save `text-utils.ts`\n\n### 内部\n\n- **微信主路径接入完整后处理管线**（对齐 Obsidian-Share-to-Save `postprocessContent`）：`restoreAngleBrackets` → Tab→空格（防 Obsidian 误判缩进为代码块）→ `normalizeBoldMarkers`（已有）→ `normalizeMultilineLinks`（折叠 `[\\n\\ntext\\n\\n](url)` 断裂链接）→ `cleanWeChatWhitespace`（已有）。回退路径末尾也加 `restoreAngleBrackets` 防御\n- `convertWeChatHtmlToMarkdown` 入口加 `protectAngleBrackets` 预处理，影响整个 doc（含 isWeChatBlockPage 检测、buildCleanWeChatHtml、回退路径），链路自洽\n- 至此微信提取管线已与 Obsidian-Share-to-Save 完全对齐\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.5.1...6.6.0",
-      "downloadCount": 42,
+      "downloadCount": 97,
       "draft": false,
       "name": "6.6.0",
       "prerelease": false,
