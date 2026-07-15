@@ -4,8 +4,8 @@
   "description": "Publish note to Mowen note mini program.",
   "errors": [],
   "id": "publish-note-to-mowen",
-  "lastChangedAt": "2026-07-12T02:04:26.990Z",
-  "lastFetchedAt": "2026-07-12T02:04:26.990Z",
+  "lastChangedAt": "2026-07-15T02:01:27.015Z",
+  "lastFetchedAt": "2026-07-15T02:01:27.015Z",
   "manifest": {
     "author": "ziyou",
     "authorUrl": "https://yuandifly.com",
@@ -29,7 +29,7 @@
         },
         {
           "digest": "sha256:4c0fdd8788a00aa27daef06e509beff081aaa8864ec82fc2b02c689f2659c9a9",
-          "downloadCount": 60,
+          "downloadCount": 61,
           "name": "manifest.json",
           "size": 267
         },
@@ -54,7 +54,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 60,
+      "downloadCount": 61,
       "draft": false,
       "name": "0.0.34",
       "prerelease": false,
@@ -71,7 +71,7 @@
         },
         {
           "digest": "sha256:8b0870511c0327b944cbb737ae9377041077581b652127680648625c7a909df3",
-          "downloadCount": 33,
+          "downloadCount": 34,
           "name": "manifest.json",
           "size": 267
         },
@@ -96,7 +96,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 33,
+      "downloadCount": 34,
       "draft": false,
       "name": "0.0.33",
       "prerelease": false,
@@ -113,7 +113,7 @@
         },
         {
           "digest": "sha256:4af4017776882d026a318169050f0bf2d8682780a7e64a454a974891ec43d670",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 267
         },
@@ -138,7 +138,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.0.32",
       "prerelease": false,
@@ -155,7 +155,7 @@
         },
         {
           "digest": "sha256:b247b5a4dd44102d8b4f3723860c4c70a641e1cd822d4dde14cf1b304935c441",
-          "downloadCount": 23,
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 267
         },
@@ -168,7 +168,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "",
-      "downloadCount": 23,
+      "downloadCount": 24,
       "draft": false,
       "name": "0.0.30",
       "prerelease": false,
@@ -185,7 +185,7 @@
         },
         {
           "digest": "sha256:58cc535d0bcbac36e2e9f117a5bbeeeef3fef7f608f3769799c32ad07c4d1377",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 267
         },
@@ -204,7 +204,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 修复概览\n\n基于代码深度审查，系统性修复 15 项问题，涵盖紧急 Bug、功能缺陷、逻辑改进和架构优化。\n\n## P0 紧急修复\n1. **ai.ts AbortController 超时失效** — `requestUrl` 不支持 `signal` 参数，改用 `timeout` 参数实现超时控制\n2. **MowenPublishModal 隐私开关语义反转** — \"允许分享\"开关实际控制 `noShare`，改为\"禁止分享\"与字段语义对齐\n3. **errorHandler 运算符优先级 Bug** — `classifyApiError` 中 `&&` 与 `||` 优先级错误，加括号明确逻辑\n\n## P1 重要修复\n4. **ImageEmbedHandler 不支持图片调整语法** — 支持 `![[image.png|300]]` 和 `![[image.png|描述]]`，正确分离管道符后的尺寸/描述\n5. **saveSettings 重建服务实例丢失第三方 Handler** — 改为 `updateSettings` 更新引用，保留已注册的 Handler\n6. **HeadingHandler 标题不处理行内格式** — 调用 `processInlineFormatting` 处理标题中的加粗/高亮/链接\n7. **inlineFormatter `***` 三星号解析错误** — 优先检测 `***`(bold+highlight)，修复组合标记解析歧义\n\n## P2 改进修复\n8. **QuoteHandler 多行引用 `\\n` 被吞入文本节点** — 逐行处理行内格式，行间插入换行文本节点\n9. **InternalLinkHandler 段落内 `[[link]]` 信息丢失** — 在 `processInlineFormatting` 中增加 `[[link]]` 行内识别\n10. **NoteAtomNode 类型定义重复** — 删除 `types/index.ts` 中的冗余定义，统一从 `api.ts` 导出\n11. **设置页 onChange 每次按键触发 saveSettings** — 文本输入添加 500ms 防抖\n\n## P3 优化\n12. **safeRequest 返回值定义 ApiResponse 命名接口** — 替代匿名类型\n13. **TagService.mergeTags 冗余 defaultTag** — `markdownTagsToNoteAtomTags` 已内部追加，移除重复\n14. **MowenPublishModal 每次创建 MarkdownConverter** — 改用简单正则去除 frontmatter\n15. **baseUrl 硬编码** — 改为 `let` + `setBaseUrl`/`getBaseUrl` 可配置\n\n## 新增功能\n- **公网图片下载上传** — http/https 图片下载后上传至墨问 CDN，添加 Referer/User-Agent 绕过 OSS 防盗链\n- **标题后空行** — 标题节点后自动追加空 paragraph\n\n## 延后项（需较大架构调整）\n- ListHandler 列表结构\n- 行内 `$...$` 数学公式\n- InlineHandler 死代码清理\n- checkApiKeyHealth 轻量接口\n- checkAIServiceHealth 多服务商适配",
-      "downloadCount": 16,
+      "downloadCount": 17,
       "draft": false,
       "name": "v0.0.29 - 深度审查修复",
       "prerelease": false,
@@ -221,7 +221,7 @@
         },
         {
           "digest": "sha256:2aaefdde4e01ebd30ac1f243a899ff99253cb8bc55c0da9dfdde6d18a33e2744",
-          "downloadCount": 32,
+          "downloadCount": 33,
           "name": "manifest.json",
           "size": 268
         },
@@ -240,7 +240,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 32,
+      "downloadCount": 33,
       "draft": false,
       "name": "0.0.28",
       "prerelease": false,
@@ -257,7 +257,7 @@
         },
         {
           "digest": "sha256:c19c8804fc757ce5d3ffea4f0aa96cc211ab1915ff457ab911264f0b4a0a91c1",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 268
         },
@@ -276,7 +276,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.0.27",
       "prerelease": false,
@@ -293,7 +293,7 @@
         },
         {
           "digest": "sha256:917920049df3a56f373552977a2efc7a77b318d572cb9c3b977661980c329eed",
-          "downloadCount": 193,
+          "downloadCount": 194,
           "name": "manifest.json",
           "size": 268
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "",
-      "downloadCount": 193,
+      "downloadCount": 194,
       "draft": false,
       "name": "0.0.26",
       "prerelease": false,
@@ -329,7 +329,7 @@
         },
         {
           "digest": "sha256:cf43dcb9a7f09c6880e8da0641435f287a4a06a8ed3de60018fb68c1f9495c33",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 268
         },
@@ -348,7 +348,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.0.25",
       "prerelease": false,
@@ -365,7 +365,7 @@
         },
         {
           "digest": "sha256:a35b1714f4da4a218f2fc2dc88cf0203ce43380888c813051c8659fae8fb5dbe",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 268
         },
@@ -384,7 +384,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.0.24",
       "prerelease": false,
