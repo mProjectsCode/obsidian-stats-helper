@@ -4,8 +4,8 @@
   "description": "Execute code inside your notes: Shiki syntax highlighting with 65+ themes, live streaming output, inline Matplotlib and Plotly graphs, shared variables, and styled HTML and PDF export with outputs. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "code-suite",
-  "lastChangedAt": "2026-07-14T03:04:26.982Z",
-  "lastFetchedAt": "2026-07-14T03:04:26.982Z",
+  "lastChangedAt": "2026-07-15T03:00:27.025Z",
+  "lastFetchedAt": "2026-07-15T03:00:27.025Z",
   "manifest": {
     "author": "Felix Leopold",
     "authorUrl": "https://github.com/felixleopold",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:755e89cd7f89df7bbfad20ae9cc434ff72dc1d83a425fe359ad536c913728602",
-          "downloadCount": 149,
+          "downloadCount": 163,
           "name": "main.js",
           "size": 4087432
         },
         {
           "digest": "sha256:d7c853699ac57678b8bd9cabfb3025a1f33eea32f057ac2eef9b91689cdc85b4",
-          "downloadCount": 150,
+          "downloadCount": 164,
           "name": "manifest.json",
           "size": 422
         },
         {
           "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
-          "downloadCount": 142,
+          "downloadCount": 156,
           "name": "styles.css",
           "size": 36044
         }
       ],
       "author": "github-actions[bot]",
       "description": "Maintenance release: clears the remaining Obsidian plugin-reviewer warnings. No functional changes.\n\n## Bug Fixes\n\n- **Cleared the remaining `@typescript-eslint/no-unnecessary-type-assertion` warnings** from the plugin review ([#43](https://github.com/felixleopold/obsidian-code-suite/issues/43)). Four `window.setTimeout(...) as unknown as number` casts and a Shiki `loadTheme` cast were genuinely redundant and removed; the file-picker `File & { path }` cast became a type annotation; and the two `frontmatter as Record<string, unknown>` casts now route through a small `toRecord()` helper whose `unknown → Record` narrowing is valid in every type environment. Rounds out the type-safety cleanup started in 1.16.2.\n\n## Upgrade Notes\n\n- No action needed — internal type-safety changes only, no effect on behavior.\n",
-      "downloadCount": 150,
+      "downloadCount": 164,
       "draft": false,
       "name": "1.16.3",
       "prerelease": false,
@@ -593,26 +593,26 @@
       "assets": [
         {
           "digest": "sha256:00eb6c73b241bc9d172af4d1c8292c7abfe60e83b54537b48f92a73fe962f806",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 4010122
         },
         {
           "digest": "sha256:ab4ad9c2e15e19a61e394b311ffe4a57f7926b02f7a2e7f6c75d4a3334213cf4",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 419
         },
         {
           "digest": "sha256:b92ef8a8b67434aa58c262fef1f316b58e623ea564971aab7e063d3d94c1e27f",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 24173
         }
       ],
       "author": "github-actions[bot]",
       "description": "Typed variable injection (fixing #16), plus an experimental way to use markdown tables as code variables.\n\n## What's New\n\n- **Typed `vars` injection** ([#16](https://github.com/felixleopold/obsidian-code-suite/issues/16)): values in `vars` blocks and `code_vars:` frontmatter are now injected as native, correctly-typed literals. `5` is an `int`, `True` is a `bool`, `0.85` is a `float`, and a quoted `\"https://x\"` is a clean string — no more manual casting or double-quoting.\n- **Live cross-language variables**: a shared variable changed by one block is now visible to later blocks in *any* language, in execution order. Set `count = 42` in Python and a later Bash block sees `42`; change it in Bash and the next Python block sees the new value (re-typed). Re-running a block no longer double-applies its own assignment. **Apply** on a `vars` block (or **Clear Session**) resets shared vars to their declared values.\n- **`:type` hints**: force a type with `port:str = 8080`, `ratio:float = 1`, or `ids:json = [1, 2, 3]`. Hints: `str`, `int`, `float`, `bool`, `json`.\n- **Multiline string vars**: triple-quoted (`\"\"\"` or `'''`) values can span multiple lines.\n- **Data tables (experimental)** — Settings → Experimental features → Data tables (off by default): a `%% codesuite: <name> as <shape> %%` directive above a markdown table exposes it to code as `records`, `dict`, `columns`, `matrix`, or `vars`. A `var | value` header is recognised automatically.\n\n## Bug Fixes\n\n- `vars` string values are no longer wrapped in an extra layer of quotes (e.g. `BASE_URL` was becoming `'\"https://…\"'`, breaking URL navigation).\n- Integers and booleans from `vars` blocks are no longer injected as strings, so comparisons like `if depth > CRAWL_DEPTH:` work without manual `int()`/`bool()` casting.\n\n## Upgrade Notes\n\n- Existing `vars` blocks keep working. If your code relied on every value being a string and you previously cast it (e.g. `int(MY_INT)`), those casts are now redundant but harmless. Add a `:str` hint if you specifically need a value kept as a string.\n- Shared variables are now a live cross-language namespace updated in execution order. If you relied on a `vars` value always resetting to its declared value on every run regardless of prior runs, use **Apply** / **Clear Session** to reset, or keep that variable read-only.\n- Data tables are experimental and off by default; their syntax may change in a future release.\n",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
