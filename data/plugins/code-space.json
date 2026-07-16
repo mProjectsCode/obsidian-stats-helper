@@ -4,8 +4,8 @@
   "description": "Professional code file management with visual dashboard, syntax highlighting editor, and Markdown embedding. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "code-space",
-  "lastChangedAt": "2026-07-15T04:02:27.016Z",
-  "lastFetchedAt": "2026-07-15T04:02:27.016Z",
+  "lastChangedAt": "2026-07-16T04:01:27.001Z",
+  "lastFetchedAt": "2026-07-16T04:01:27.001Z",
   "manifest": {
     "author": "unlinearity",
     "authorUrl": "https://github.com/UNLINEARITY",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b47a24bc0a31950087514131afe237efbb6e40f84df343b45ec63a00594226b7",
-          "downloadCount": 1502,
+          "downloadCount": 1528,
           "name": "main.js",
           "size": 1128548
         },
         {
           "digest": "sha256:dfde188aeb55bfb2e2a711abc0b43f06d17e82e82a599751f3b372d7785c10de",
-          "downloadCount": 5103,
+          "downloadCount": 5189,
           "name": "manifest.json",
           "size": 330
         },
         {
           "digest": "sha256:cb491f3df606547f942ad12e65783628bcf890dfba74a88daf2110fd0c9c9735",
-          "downloadCount": 1435,
+          "downloadCount": 1460,
           "name": "styles.css",
           "size": 40061
         }
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 2.3.0\r\n\r\n## Overview\r\n\r\nCode Space 2.3.0 is a release-readiness update for the Obsidian community plugin review process. It aligns the declared minimum Obsidian version with the APIs already used by the plugin, updates source patterns for popout window compatibility, and cleans the stylesheet so the package passes stricter review lint checks.\r\n\r\nThis release does not change the Code Space editing, Dashboard, embed, or outline workflows. The main operational change is that the plugin now accurately declares Obsidian `1.7.2` as the minimum supported app version.\r\n\r\n## Improvements\r\n\r\n### Accurate Obsidian compatibility metadata\r\n\r\nThe plugin metadata now matches the Obsidian APIs used by Code Space.\r\n\r\n- `manifest.json` declares `minAppVersion` as `1.7.2`.\r\n- `versions.json` maps released plugin versions to the same minimum app version for catalog validation.\r\n- The release metadata avoids claiming support for Obsidian versions that do not provide APIs such as `Workspace.revealLeaf`.\r\n\r\n### Popout and window compatibility cleanup\r\n\r\nSeveral source-level review warnings have been addressed without changing user-facing behavior.\r\n\r\n- Document access now uses Obsidian-compatible document references where required.\r\n- Timer and animation scheduling follows the current Obsidian lint expectations.\r\n- DOM helper calls have been updated to the recommended `createDiv` and `createSpan` forms where applicable.\r\n- Unused parameters and unsafe array typing warnings were cleaned up.\r\n\r\n### Stylesheet lint cleanup\r\n\r\nThe stylesheet has been adjusted to satisfy Obsidian CSS review warnings while preserving the intended appearance.\r\n\r\n- Duplicate selectors were merged into their first definitions.\r\n- Many `!important` declarations were removed in favor of existing selector specificity.\r\n- Partially supported CSS features were replaced with review-friendly equivalents.\r\n- Hex color formatting is now consistent where the linter flagged shorthand values.\r\n\r\n## Important notes\r\n\r\n- Minimum supported Obsidian version is now `1.7.2`.\r\n- No settings migration is required.\r\n- No commands, file associations, or Dashboard actions were removed.\r\n- Release assets remain `main.js`, `manifest.json`, and `styles.css`.\r\n\r\n## Contributors and commits\r\n\r\nRelease window: `2.2.0..HEAD`\r\n\r\n- `1ef6803` unlinearity - fix: satisfy Obsidian review compatibility checks\r\n- `4827aa6` unlinearity - style: clean up Obsidian review lint warnings\r\n",
-      "downloadCount": 5103,
+      "downloadCount": 5189,
       "draft": false,
       "name": "2.3.0",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:ae0bd88bef4c13909f36e1e53054783dab17ac4e52ed3edfc77ae65ee101eb8d",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 330
         },
@@ -72,7 +72,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 2.2.0\r\n\r\n## Overview\r\n\r\nCode Space 2.2.0 focuses on keeping code embeds and the Dashboard accurate as your vault changes. Embedded code now refreshes when its source file changes, the Dashboard can hide files or folders that should stay out of the managed code list, and syntax highlighting has been corrected for TypeScript while expanding support for Kotlin and MATLAB-style files.\r\n\r\nThis release does not remove any existing commands or require manual migration.\r\n\r\n## New features\r\n\r\n### Automatic refresh for code embeds\r\n\r\nCode embeds now update when the source file changes in the vault.\r\n\r\n- Open Markdown previews are scanned for embeds that reference the modified file.\r\n- Matching embeds are disposed and rendered again so the visible preview reflects the latest source content.\r\n- This applies to code embeds that are already open in the workspace, reducing cases where a note shows stale code after a file is saved or changed elsewhere.\r\n\r\n### Dashboard ignore management\r\n\r\nThe Dashboard can now hide files and folders that you do not want Code Space to manage.\r\n\r\n- Use the Dashboard context menu to ignore an individual file.\r\n- Use the Dashboard context menu to ignore a parent folder and hide its contents from the managed file list.\r\n- Use the new `Manage ignored files and folders` toolbar action to review ignored entries.\r\n- The ignore manager can open ignored files directly or remove an item so it appears in the Dashboard again.\r\n- Ignored paths are normalized, deduplicated, and kept in sync when files or folders are renamed or deleted.\r\n\r\n### Kotlin and MATLAB-style syntax support\r\n\r\nCode Space now includes syntax support for additional language families.\r\n\r\n- Kotlin files (`.kt`) and Kotlin script files (`.kts`) use a dedicated Kotlin highlighter.\r\n- MATLAB/Octave-style `.m` files use the Octave highlighter.\r\n- Code embeds and native Markdown/PDF expansion now recognize these extensions as renderable code files.\r\n\r\n## Fixes and refinements\r\n\r\n### Correct TypeScript highlighting\r\n\r\nTypeScript and TSX files now use CodeMirror's TypeScript-aware JavaScript parser configuration.\r\n\r\n- `.ts` files are parsed as TypeScript instead of plain JavaScript with JSX enabled.\r\n- `.tsx` files are parsed with both TypeScript and JSX support.\r\n- JavaScript, MJS, and CJS files now avoid JSX mode unless the extension requires it.\r\n\r\n### More reliable editor change detection\r\n\r\nThe editor now compares new document content against the view's loaded file content when detecting changes. This makes old-content detection more reliable when file updates are observed from the vault and helps avoid incorrect dirty-state decisions after external changes.\r\n\r\n### Consistent file opening from Dashboard surfaces\r\n\r\nDashboard file cards and the ignore manager now share the same managed-file opening path. Code files continue to open in the Code Space editor, while file types that Obsidian handles natively continue to open through Obsidian's native viewer.\r\n\r\n## Important notes\r\n\r\n- Ignored files and folders are stored in plugin data under a new `ignoredFiles` setting, which defaults to an empty list.\r\n- Existing Dashboard behavior is unchanged until a user chooses to ignore a file or folder.\r\n- Kotlin and MATLAB-style highlighters are available for opening and embedding those files. They are not added to the default managed extension list automatically; users can add extensions in settings if they want those files to appear in the Dashboard by default.\r\n- Release assets remain `main.js`, `manifest.json`, and `styles.css`.\r\n\r\n## Contributors and commits\r\n@fourteendp \r\n- `f75a45f` fourteendp - feat: Automatically update the associated embed code when the file is saved\r\n- `4854db9` Fourteen - fix: Get correct old content when listening for file changes\r\n\r\n@UNLINEARITY \r\n- `a37f1ce` unlinearity - feat: add file ignore management for Code Space dashboard\r\n- `ddd962f` unlinearity - feat: add Open button to ignore management modal\r\n- `eb7e6d6` unlinearity - fix: correct TypeScript syntax highlighting in Code Space\r\n- `f2f6659` unlinearity - feat: support ignored folders in dashboard\r\n- `21514e6` unlinearity - feat: add Kotlin and Matlab syntax highlighting\r\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "2.2.0",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:2cfd570ce3f26cfaf8689c8adcd6004a3727990fb31cd81aee487c9d03c5927f",
-          "downloadCount": 1795,
+          "downloadCount": 1797,
           "name": "manifest.json",
           "size": 333
         },
@@ -102,7 +102,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 2.1.0\r\n\r\n## Overview\r\n\r\n2.1.0 is a small release focused on editing polish. The main changes are: embedded code can open into more targets, editor highlights now follow Obsidian's accent color system, and a couple of readability issues around custom fonts and dark-theme comments are fixed.\r\n\r\nFrom `2.0.0` to `2.1.0`, the repo changed 28 files with 450 insertions and 81 deletions. That includes the new `docs/releases/` archive and the related docs cleanup. If release-doc files are excluded, the remaining delta is 18 files with 147 insertions and 81 deletions.\r\n\r\n---\r\n\r\n## 1. Embedded code open targets\r\n\r\nEmbedded code headers no longer have to open only in the current leaf.\r\n\r\n- Plain click still opens the source file in the current leaf\r\n- `Ctrl/Cmd+Click` opens the source file in a new tab\r\n- `Ctrl/Cmd+Shift+Click` opens the source file in a new window\r\n- `Ctrl/Cmd+Alt+Click` opens the source file in a split view\r\n- The embed tooltip was updated in both English and Chinese to show the new shortcuts\r\n\r\n---\r\n\r\n## 2. Theme-based editor highlights\r\n\r\nSeveral hardcoded highlight colors were replaced with values derived from Obsidian's theme variables.\r\n\r\n- Primary selection now uses accent-based foreground and background values\r\n- Active-line selection uses a slightly stronger accent treatment\r\n- Search matches and current matches now use accent-based background, outline, and shadow values instead of fixed yellow and red colors\r\n- Same-word match highlighting was adjusted to stay visible without taking over the whole editor\r\n\r\nThis makes the editor sit more naturally inside light, dark, and custom themes.\r\n\r\n---\r\n\r\n## 3. Font and dark-theme readability fixes\r\n\r\nTwo smaller fixes also landed in this version.\r\n\r\n### Custom code font fix\r\n\r\n- Monospace font settings now apply on the CodeMirror scroller layer used by both the main editor and embedded code views\r\n- This fixes cases where Obsidian's code font setting did not actually reach Code Space\r\n\r\n### Dark-theme comment readability\r\n\r\n- Dark-mode comment colors were adjusted from `#5c6370` to `#7a8394`\r\n- The change applies to the main editor, embedded code rendering, and related CSS fallback styles\r\n\r\n---\r\n\r\n## 4. Documentation cleanup\r\n\r\nThis tag also includes a docs pass:\r\n\r\n- Project screenshots were moved under `docs/img/`\r\n- `README.md` and `README_CN.md` were updated to use the new screenshot paths\r\n- Historical release notes for `1.1.0` through `2.0.0` were added under `docs/releases/`\r\n\r\n---\r\n\r\n## 5. Contributors\r\n\r\nCommits in the `2.0.0..2.1.0` release window:\r\n\r\n### @fourteendp\r\n\r\n- `534514d` `feat: add more ways to open files for embedded code`\r\n- `a46e500` `style: fix Obsidian custom font not working`\r\n- `41eeaa4` `chore: update keyboard shortcuts in embed tooltip`\r\n- Landed through merge commits `27880ec` `Merge pull request #21 from fourteendp/fix` and `f15ea12` `Merge pull request #22 from fourteendp/feat-1`\r\n\r\n### @UNLINEARITY\r\n\r\n- `ae87854` `style: unify code editor highlights with theme colors and improve selection readability`\r\n- `7e5aeb0` `style: improve dark mode comment readability`\r\n- `46387ae` `docs: reorganize the docs-related files.`\r\n",
-      "downloadCount": 1795,
+      "downloadCount": 1797,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:15ec86a905440ed5fa74c9584592a2796f118ff80524762f5c3136064fa60dad",
-          "downloadCount": 896,
+          "downloadCount": 898,
           "name": "manifest.json",
           "size": 323
         },
@@ -132,7 +132,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 2.0.0\r\n\r\n## Overview\r\nThis milestone release makes code file embeds behave much more like a native part of Obsidian. The headline change is full support for exporting code file embeds through Obsidian's official **Export to PDF** flow, so embedded code now renders as real code blocks in the final PDF instead of gray file cards. This release also improves embed compatibility across more host surfaces, stabilizes multi-window behavior, and removes the old custom PDF export path now that the native route is working reliably.\r\n\r\n## Major Features\r\n\r\n### Native Obsidian Export to PDF support\r\n- Code file embeds such as `![[script.py]]` and `![[robot.urdf#L20-L40]]` now export as real syntax-highlighted code blocks when using Obsidian's built-in **Export to PDF** on desktop.\r\n- The implementation integrates with Obsidian's native print pipeline instead of generating a separate PDF rendering flow.\r\n- Official page layout, pagination, and export settings are preserved because the final PDF is still produced by Obsidian's own export UI.\r\n\r\n### Broader code embed compatibility\r\n- Improved code embed rendering across reading mode, pop-out windows, and other Obsidian rendering hosts that reuse the Markdown preview pipeline.\r\n- Better source-path recovery and context tracking make embeds more resilient when views move, rerender, or render outside the main window.\r\n- Lifecycle cleanup for read-only embed editors is more robust, reducing stale views and listener leaks after rerenders or window transitions.\r\n\r\n## Improvements\r\n\r\n### PDF and print pipeline refinement\r\n- Code embed expansion is now shared through a dedicated Markdown transformation path, keeping export behavior more consistent.\r\n- Native PDF diagnostics were added during implementation and then reduced back to debug-level logging for future troubleshooting without cluttering normal usage.\r\n- The old custom PDF export command and implementation were removed now that the native export path is the primary supported solution.\r\n\r\n### Preview and highlighting consistency\r\n- Improved preview handling for more code-file embed cases, including better syntax highlighting consistency for mapped and XML-family formats.\r\n- Embedded code styling and print fallbacks were refined to behave more predictably across different rendering contexts.\r\n\r\n### Stability fixes\r\n- Fixed a multi-window CodeMirror initialization issue that could surface when a view moved into a new window.\r\n- Improved cleanup and reattachment behavior for code embeds during host changes and repeated rendering.\r\n\r\n## Important notes\r\n- The previous custom PDF export command has been removed.\r\n- To export embedded code to PDF, use Obsidian's official **Export to PDF** command.\r\n- Release assets for this version should be `main.js`, `manifest.json`, and `styles.css`.\r\n\r\nCode Space 2.0.0 使代码文件嵌入在 Obsidian 原生导出 PDF 时能渲染为语法高亮的真实代码块，并移除了旧的自定义 PDF 导出路径，同时改进了嵌入兼容性和多窗口稳定性。\r\n",
-      "downloadCount": 896,
+      "downloadCount": 898,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:29becf5e5bad3998ecf68649abd45724a74ff7ab3da0048cd503973a35d92a9d",
-          "downloadCount": 1373,
+          "downloadCount": 1375,
           "name": "manifest.json",
           "size": 323
         },
@@ -162,7 +162,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.9.0\r\n\r\n## Overview\r\nThis release significantly expands syntax highlighting support through language reuse mappings, adds R language support, and includes important fixes for code embed display consistency and URL handling.\r\n\r\n## New Features\r\n\r\n### Extended syntax highlighting via language reuse\r\n- Massively expanded syntax highlighting support by implementing language reuse mappings.\r\n- Languages now share syntax definitions when compatible, reducing redundancy while maintaining accurate highlighting.\r\n- This approach enables better support for language variants and dialects without requiring separate language packages.\r\n- **40+ new file extensions** are now supported with syntax highlighting (available via Settings > Managed Extensions):\r\n  - **XML Family**: `.urdf`, `.xacro`, `.svg`, `.xsd`, `.xsl`, `.xslt`, `.wsdl`, `.plist`, `.csproj`, `.vcxproj`, `.props`, `.targets`, `.config`\r\n  - **C/C++ Family**: `.ino` (Arduino), `.pde` (Processing), `.nut` (Squirrel), `.cu`/`.cuh` (CUDA), `.glsl`, `.vert`/`.frag` (GLSL), `.hlsl`, `.mm` (Objective-C++), `.swift`\r\n  - **Java Family**: `.kt`/`.kts` (Kotlin), `.scala`, `.groovy`, `.gradle`\r\n  - **JavaScript Family**: `.json5`, `.jsonc`, `.vue`, `.svelte`, `.astro`\r\n  - **Python Family**: `.pyx`, `.pxd`, `.pxi` (Cython), `.ipy`\r\n  - **Config Files**: `.toml`, `.ini`, `.cfg`, `.conf` (reusing YAML highlighter)\r\n  - **Shell Scripts**: `.sh`, `.bash`, `.zsh` (Shell), `.ps1`, `.psm1`, `.psd1` (PowerShell)\r\n  - **Other Languages**: `.cmake`, `.dockerfile`, `.diff`, `.patch`, `.lua`, `.pl`/`.pm` (Perl), `.rb`/`.erb` (Ruby)\r\n\r\n### R language support\r\n- Added native syntax highlighting support for the R programming language.\r\n- R files (`.r`) now benefit from proper token coloring and editor features.\r\n- Supports R's unique syntax including assignment operators, statistical functions, and data structures.\r\n\r\n## Bug Fixes\r\n\r\n### Code embed improvements\r\n- **Compact display**: Fixed code embed rendering to use compact display mode for better visual consistency.\r\n  - Reduced padding from 12px to 4px for tighter spacing\r\n  - Reduced header padding from 6px/12px to 4px/10px\r\n  - Optimized CodeMirror content padding (8px → 4px) and line padding (0 8px → 0 6px)\r\n- **Path resolution**: Stabilized embed path resolution to prevent broken references in complex vault structures.\r\n  - Added global search fallback when other resolution methods fail\r\n  - Searches entire vault for matching filename (exact match first, then case-insensitive)\r\n  - Fixes drag-and-drop embed creation from nested directories\r\n- **URL handling**: Preserved line range hash in reading mode URLs for proper navigation.\r\n  - Fixed `extractPathFromCandidate()` to retain URL hash fragment (`#L20-L40`)\r\n  - Line range syntax now works correctly in both editing and reading modes\r\n\r\n### Code embed interaction fixes\r\n- **Click behavior refinement**: Improved click interaction to prevent accidental navigation:\r\n  - Only header title is clickable to open file\r\n  - Code content area is for text selection only, no navigation trigger\r\n  - All clicks in code area (including padding) are blocked from triggering navigation\r\n  - Added `user-select: none` to header to prevent text selection\r\n\r\n## UI/UX Improvements\r\n- Code embeds now display more consistently across different contexts\r\n- Better visual feedback when navigating to embedded code sections\r\n- Improved readability with optimized spacing in embed containers\r\n- Header title is now the single entry point for opening embedded files\r\n\r\n重点扩展了语法高亮支持（新增大量文件类型并加入 R 语言），同时优化了代码嵌入的显示一致性、路径解析和 URL 行号跳转，并改进交互细节以减少误操作，整体提升了代码阅读与嵌入体验。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.8.0...1.9.0",
-      "downloadCount": 1373,
+      "downloadCount": 1375,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:d952e5fb25ace6a3e75fe8129936a45a538fd9a7048022d73cf76a601be81b35",
-          "downloadCount": 241,
+          "downloadCount": 243,
           "name": "manifest.json",
           "size": 323
         },
@@ -192,7 +192,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.8.0\r\n\r\n## Overview\r\nThis release adds several quality-of-life improvements: a master toggle for external folder mounts, more flexible new file locations, line range syntax for code embeds, automatic save on close, and important bug fixes for embed rendering and code outline behavior.\r\n\r\n## New Features\r\n\r\n### External folder mounts master toggle\r\n- Added a global \"Enable external folder mounts\" toggle in Settings.\r\n- When disabled, all mounted external folders are unmounted (configuration is preserved).\r\n- When re-enabled, all previously configured mounts are restored automatically.\r\n- The toggle hides the entire external mounts section when off for a cleaner UI.\r\n\r\n### New file location options\r\n- Added \"Current file's folder\" option for new code file location.\r\n- You can now choose where new code files are created:\r\n  - **Specified folder**: Use a fixed folder path (classic behavior).\r\n  - **Current file's folder**: Save to the same folder as the currently active note.\r\n- The path input and browse button are hidden when \"current file's folder\" is selected.\r\n\r\n### Line range syntax for code embeds\r\n- Code embeds now support line range syntax: `![[test.py#20-40]]`.\r\n- Supports multiple formats: `#20-40`, `#L20-L40`, `#L20-40`.\r\n- If the end line exceeds the file length, it automatically truncates to the end.\r\n- Range mode ignores the `maxEmbedLines` setting and shows the full requested range.\r\n- Single-line syntax still works: `![[test.py#20]]` shows from line 20 to the end.\r\n\r\n### Automatic save on close\r\n- Added event-triggered auto-save to prevent data loss.\r\n- Code files are now automatically saved when:\r\n  - Closing a Code Space tab\r\n  - Closing the Obsidian window\r\n  - Unloading the plugin\r\n- This complements the existing Ctrl+S manual save workflow.\r\n\r\n## Bug Fixes\r\n\r\n### Code embed rendering\r\n- Fixed code embeds not rendering in Reading mode by relaxing CSS selectors.\r\n- Code embeds now render correctly in both Live Preview and Reading modes.\r\n- Fixed code embeds not rendering in the main window (regression).\r\n\r\n## UI/UX Improvements\r\n- Simplified Settings by hiding the external mount configuration when the feature is disabled.\r\n- Better notification messages when bulk mounting/unmounting external folders.\r\n\r\n新增外部文件夹挂载总开关和更灵活的新文件保存位置，代码嵌入支持精确的行号范围引用，关闭时自动保存有效防止数据丢失，同时修复了多个代码嵌入渲染相关问题，使整体使用更加流畅。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.7.1...1.8.0",
-      "downloadCount": 241,
+      "downloadCount": 243,
       "draft": false,
       "name": "1.8.0",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:c7e5463469d6d9276d7eea56c8ccf9183ab8364f5d07e53427445468be755f17",
-          "downloadCount": 271,
+          "downloadCount": 273,
           "name": "manifest.json",
           "size": 323
         },
@@ -222,7 +222,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.7.0\r\n\r\n## Overview\r\nThis release improves the in-editor search and replace workflow, stabilizes code embeds (including popout windows), and refreshes documentation and UI copy.\r\n\r\n## Code editor search and replace\r\n- Ctrl/Cmd+F is intercepted in the Code Space editor to open the custom search panel (toggle).\r\n- Ctrl+H (Cmd+Alt+F on macOS) focuses the replace input.\r\n- Selected text can auto-fill the search query when opening the panel.\r\n- Replace supports empty strings for delete-style workflows.\r\n- Mobile typing behavior is adjusted to reduce keyboard overlay issues.\r\n\r\n## Code embed stability and popout windows\r\n- Embed rendering is more stable during note switches to reduce wrong-file flashes.\r\n- Popout windows now install their own embed processing so code embeds render reliably.\r\n- Popout windows inherit Code Space embed styles and theme state for consistent layout.\r\n- Line count badges and line-limit scrolling are restored in popout embeds.\r\n- Explicit root links like `![[foo.ts]]` resolve correctly even with same-name files elsewhere.\r\n\r\n本次更新重点优化了代码编辑器内的搜索替换体验，现在支持 Ctrl+F Ctrl+H ，并补充完善相关功能；提升了代码嵌入在主窗口与弹出窗口中的渲染稳定性与一致性，修复同名文件渲染错误，以及移动到新窗口不渲染的错误。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.6.0...1.7.0",
-      "downloadCount": 271,
+      "downloadCount": 273,
       "draft": false,
       "name": "1.7.0",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:4a4caeaea6004776d5ecc42f3a67d337cdf5d5d299edf8999db8fbd04d25bb3d",
-          "downloadCount": 168,
+          "downloadCount": 170,
           "name": "manifest.json",
           "size": 323
         },
@@ -252,7 +252,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.6.0\r\n\r\n## Overview\r\nThis release introduces desktop-only external folder mounting, more flexible filtering, and clearer UI signals for mounted content. It also refines path display and adds Windows link-type control.\r\n\r\n## External folder mounting (desktop)\r\n- Mount external folders into the vault via system links (symlink/junction).\r\n- Manage mounts from settings: add, remove, relink, and status checks.\r\n- Guardrails ensure mount points stay inside the vault, with clear error feedback.\r\n- Desktop-only gating prevents mobile-side issues.\r\n\r\n## Windows link type control\r\n- New setting to choose link type: Auto / Symlink / Junction.\r\n- Auto mode tries symlink first and falls back to junction when needed.\r\n\r\n## Dashboard filtering and path display\r\n- Folder and extension filters now support multi-select.\r\n- Folder selection uses a dedicated modal for long path usability.\r\n- Long paths are displayed cleanly with single-line ellipsis and tooltips.\r\n\r\n## Visual cues\r\n- External mounts now show a subtle badge in the dashboard to distinguish them from vault files.\r\n\r\n## Documentation and localization\r\n- README and README_CN updated for new features and structure.\r\n- New UI strings added for filters and mount options.\r\n\r\n本次更新在桌面端引入外部文件夹挂载能力，增强了面板筛选与路径显示体验，并通过更清晰的交互与视觉提示提升整体可用性。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.5.0...1.6.0",
-      "downloadCount": 168,
+      "downloadCount": 170,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:ac4b1d767d0b29b2b068824bfb0d3b0e634d6a031f4ac42819cddb23e666c02d",
-          "downloadCount": 27,
+          "downloadCount": 29,
           "name": "manifest.json",
           "size": 323
         },
@@ -282,7 +282,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.5.0\r\n\r\n## Overview\r\nThis release focuses on significantly enhancing user experience (UX) through intelligent state persistence and refined interaction workflows. Major additions include a smart memory system for the Dashboard, a native folder selection interface for file creation, and highly requested customization options for editor typography.\r\n\r\n## Dashboard Persistence & Stability\r\n- **State Memory**: The Dashboard now intelligently remembers your view state. Search queries, filter selections, and sorting preferences are automatically saved and restored upon reopening, eliminating repetitive setup.\r\n- **Smart Auto-Save**: Implemented a debounced save mechanism that persists state changes seamlessly without performance impact.\r\n\r\n## Interaction & Workflow\r\n- **Native Folder Selection**: Replaced the cumbersome dropdown menu with a native fuzzy-search folder suggester (similar to Obsidian's \"Move file to\" modal). This allows for rapid and intuitive selection of default file paths.\r\n- **Fluid Creation Workflow**: Completely redesigned the \"Create Code File\" modal.\r\n    - **Inline Path Switching**: Integrated a path selection button directly within the filename input row.\r\n    - **Instant Context**: Users can now switch the destination folder on the fly without leaving the creation dialog.\r\n    - **Smart Path Resolution**: The system now intelligently handles complex paths (e.g., `folder/subfolder/script.py`), automatically creating necessary directories.\r\n\r\n## Visual & Customization\r\n- **Font Size Control**: Introduced independent font size settings for both the **Main Editor** (Default: 18px) and **Code Embeds** (Default: 15px), catering to diverse screen sizes and reading preferences.\r\n- **Dynamic Layout Engine**:\r\n    - **Responsive Embeds**: Code embed blocks now calculate their height dynamically based on the configured font size and line height, ensuring pixel-perfect rendering.\r\n    - **Style Isolation**: Applied `!important` CSS rules to embed styles to prevent conflicts with third-party themes, ensuring consistent presentation.\r\n    - **Compact Defaults**: Tuned default embed limits to 20 lines for a tighter integration within Markdown notes.\r\n\r\n增加代码创建时设置创建路径的功能；为管理面板加上记忆功能，记录之前的筛选；为代码嵌入界面和编辑界面的字体大小 增加自定义的选项。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.4.0...1.5.0",
-      "downloadCount": 27,
+      "downloadCount": 29,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:82be88d792b47c06dccced1b5719a115505fb6017f7a55e58b0fae8a0f4fbc23",
-          "downloadCount": 126,
+          "downloadCount": 128,
           "name": "manifest.json",
           "size": 323
         },
@@ -312,7 +312,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.4.0\r\n\r\n## Overview\r\nThis release introduces a comprehensive Internationalization (i18n) system, significantly expands language support for both syntax highlighting and outline parsing, and refines the core interaction model for embedded code blocks.\r\n\r\n## Internationalization (i18n)\r\n- **Full Chinese Support**: Implemented complete **Chinese (zh-CN)** localization. The entire interface (Settings, Dashboard, Command Palette, Notices) now automatically adapts based on Obsidian's language settings.\r\n- **Localization Infrastructure**: Established a robust translation architecture to facilitate future language additions.\r\n\r\n## Language Support & Parsing\r\n- **New Syntax Highlighting**: Added support for **Rust** (`.rs`), **Go** (`.go`), **C#** (`.cs`), **Java** (`.java`), **YAML** (`.yaml`), and **XML** (`.xml`).\r\n- **Advanced Outline Parser**:\r\n    - **C/C++ Upgrade**: Completely rewrote the parser to handle complex function signatures (pointers, references, templates) and varied indentation styles.\r\n    - **New Languages**: The Outline view now accurately extracts symbols from **Rust**, **Go**, and **C#**, skipping control flow keywords for cleaner navigation.\r\n\r\n## Interaction Enhancements\r\n- **Refined Navigation**:\r\n    - **Header Click**: Clicking the header of an embedded code block now opens the source file.\r\n    - **Selection Safety**: Clicking inside the code area no longer triggers navigation, preventing accidental jumps during text selection. Double-click navigation has also been removed to prioritize selection actions.\r\n- **Line Number Guard**: Applied `user-select: none` to line numbers across all views, ensuring that copying code via drag-selection excludes line digits.\r\n\r\n插件增加了多语言支持，目前全面支持中文，优化了代码嵌入的交互，增加了更多语言的高亮，完善了代码 Outline 对类和函数的解析\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.3.0...1.4.0",
-      "downloadCount": 126,
+      "downloadCount": 128,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
@@ -329,7 +329,7 @@
         },
         {
           "digest": "sha256:eac79d17141ed6d0de81a5662389cc180731cf3b49103d2e7c605687d91615d7",
-          "downloadCount": 42,
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 323
         },
@@ -342,7 +342,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.3.0\r\n\r\n## Overview\r\nThis release focuses on hardening the editor's core stability and refining the visual experience across all platforms. Major improvements include a rewritten binary file handler for macOS compatibility, a critical fix for the Undo history stack, and seamless theme synchronization for embedded code blocks.\r\n\r\n## Core Fixes & Stability\r\n- **Undo/Redo Logic Repair**: Fixed a critical bug where using `Ctrl+Z` immediately after opening a file would clear the entire document. The editor now correctly initializes the history stack with the file's content as the baseline.\r\n- **Binary File Compatibility**: Completely refactored the opening logic for binary files (PDFs, Images). This resolves the \"empty directory\" issue reported on **macOS**, ensuring that clicking a binary file in the Dashboard reliably launches the native Obsidian viewer.\r\n\r\n## Visual & Interaction Enhancements\r\n- **Theme Auto-Sync**: Embedded code blocks (`Code Embed`) now listen for global theme changes. Switching between Light and Dark modes instantly updates the syntax highlighting without requiring a file reload.\r\n- **Smart Sidebar Toggle**: The \"Outline\" button in the view header now implements true toggle logic:\r\n    - Opens sidebar if closed.\r\n    - Collapses sidebar if Outline is already focused.\r\n    - Switches tab if another view is active.\r\n- **Typography Upgrade**:\r\n    - **Font Ligatures**: Enabled ligatures (e.g., `=>`) for supported fonts (Fira Code, JetBrains Mono).\r\n    - **Readability**: Increased default editor font size to **16px** with a **1.5x** line height for a more comfortable coding environment.\r\n    - **Consistency**: Unified font rendering styles across the Editor and Embed views.\r\n- **Gutter Polish**: Fixed visual glitches where code text could overlap line numbers during horizontal scrolling by enforcing layer stacking and opaque backgrounds.\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.2.0...1.3.0",
-      "downloadCount": 42,
+      "downloadCount": 44,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -359,7 +359,7 @@
         },
         {
           "digest": "sha256:3ac585f443cb5d983f91285429de445f84284bfa1fcb8490b86576934bc66fcc",
-          "downloadCount": 74,
+          "downloadCount": 76,
           "name": "manifest.json",
           "size": 323
         },
@@ -372,7 +372,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.2.0\r\n\r\n## Overview\r\nThis version focuses on enhancing interaction logic and editor stability. Key functionalities have been integrated into the native Obsidian view header, and critical issues regarding search operations and display alignment have been resolved.\r\n\r\n## UI/UX Refinement\r\n- **Native Header Integration**: Replaced floating buttons with standard action buttons within the editor's header for Search and Outline operations, ensuring a cleaner workspace and alignment with native design patterns.\r\n- **Intelligent Sidebar Control**: Enhanced the Outline activation mechanism to automatically focus the view and expand the right sidebar if collapsed.\r\n- **Run/Open Capability**: Added a \"Play\" button to the header that triggers the native \"Open in default app\" action, allowing seamless execution or external editing of the current file.\r\n- **Navigation Stability**: Implemented horizontal scroll locking. Navigation to search results or code symbols now utilizes a \"nearest\" scroll strategy, preventing disorienting horizontal viewport shifts.\r\n- **Visual Gutter Integrity**: Applied a solid background and layer priority to the line number column to prevent code text from overlapping visually during horizontal scrolling.\r\n\r\n## Bug Fixes\r\n- **Batch Replacement Logic**: Fixed a significant defect in the \"Replace All\" function where manual offset calculations caused text corruption. The system now utilizes atomic transactions for reliable batch processing.\r\n- **Icon Standardization**: Unified the symbol iconography across the interface for consistent visual guidance.\r\n- **Code Quality**: Resolved all floating Promise and type assertion warnings to meet strict plugin standards.\r\n",
-      "downloadCount": 74,
+      "downloadCount": 76,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -389,7 +389,7 @@
         },
         {
           "digest": "sha256:9c6c9f6aa6a093218bd9cb829be926a97df3c085d41570d2417be3c71f64888f",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 323
         },
@@ -402,7 +402,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "# Code Space Release Notes - 1.1.0\r\n\r\n## Overview\r\nThis version introduces several major features designed to improve the coding experience within Obsidian, focusing on structural navigation and interface refinement.\r\n\r\n## New Features\r\n- **Code Outline View**: A new sidebar integration that automatically parses code symbols (classes, functions, and methods). It supports Python, JavaScript/TypeScript, C/C++, Java, and PHP.\r\n- **Custom Search and Replace**: A dedicated search panel featuring VS Code-style icon controls for regular expressions, case sensitivity, and whole-word matching.\r\n- **Floating Search Toggle**: A minimalist floating button in the editor for rapid access to search functionality without overlapping critical UI elements.\r\n\r\n## UI/UX Improvements\r\n- **Refined Dashboard**: Restructured the header layout using flexbox to ensure precise vertical alignment of the title and management buttons.\r\n- **Optimized Padding**: Reduced workspace padding to maximize the usable area for file lists and content.\r\n- **Visual Highlighting**: Implemented a high-contrast highlight system using light red for active selection and golden yellow for secondary search matches.\r\n- **Loop Search**: Added support for wrapping search results from the end of the file back to the beginning.\r\n\r\n## Bug Fixes\r\n- **Plugin Lifecycle**: Resolved a critical issue where reloading the plugin led to duplicate outline views in the sidebar.\r\n- **Modal Closure**: Fixed a bug where the \"Create Code File\" dialog remained visible after successful file creation.\r\n- **Reliability Fixes**: Addressed several `TypeError` cases during symbol parsing and line jumping.\r\n- **Cursor Stability**: Fixed an issue where manually saving the file would reset the cursor position to the top.\r\n- **Code Standards**: Cleared all ESLint warnings and errors to ensure stability and compatibility with official repository standards.\r\n\r\n此版本主要优化了Obsidian中的代码编写体验，新增了可解析多种编程语言的代码大纲视图侧边栏、搜索/替换面板以及便捷的浮动搜索按钮。界面方面，重构了仪表板布局并优化了内边距，同时增强了搜索高亮和循环搜索。此次更新还修复了侧边栏重复、模态框关闭异常、类型错误、光标位置重置等多个关键问题，并清除了所有ESLint警告以确保代码规范和稳定性。\r\n\r\n**Full Changelog**: https://github.com/UNLINEARITY/Obsidian-CodeSpace/compare/1.0.0...1.1.0",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -419,7 +419,7 @@
         },
         {
           "digest": "sha256:9ac1b254d6c3ff3e1263b1b4276240593798e07d87d80b1ed1e0ce377739fa54",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 323
         },
@@ -432,7 +432,7 @@
       ],
       "author": "UNLINEARITY",
       "description": "## Code Space - Professional Code File Management for Obsidian\r\n\r\nA comprehensive plugin providing code file viewing, management, and editing capabilities for Obsidian.\r\n\r\n### The Three Layers of \"Space\"\r\n\r\n1. **Management Space**: Visual dashboard for unified code file indexing and management\r\n2. **Editing Space**: Professional code editor with syntax highlighting and smart editing features   \r\n3. **Embedding Space**: Deep integration with Obsidian native features for code file references and embedded previews\r\n\r\n### Features\r\n\r\n- **Visual Dashboard**: Browse and manage all code files through a dedicated interface\r\n- **Syntax Highlighting**: Multi-language support (Python, C/C++, JavaScript/TypeScript, HTML, CSS, SQL, PHP, Ruby, Shell, and more)\r\n- **Smart Editing**: Auto-indentation, bracket matching, code folding, line numbers\r\n- **Manual Save**: Ctrl+S to save, preventing unintended modifications\r\n- **Font Scaling**: Adjust font size with Ctrl+Mouse Wheel\r\n- **Code Embedding**: Use `![[filename]]` syntax to embed code previews in Markdown\r\n- **Extensible**: Supports files with any extension; binary files open with Obsidian's native viewer \r\n\r\n### Installation\r\n\r\nSearch for \"Code Space\" in Obsidian's Community Plugins browser, or install manually by downloading the files from this Release.\r\n\r\n### Known Limitations\r\n\r\n- Code file content not indexed by Obsidian global search\r\n- Find and replace functionality not implemented\r\n\r\n---\r\n\r\n**Making code management simple and efficient in Obsidian!**",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
