@@ -4,8 +4,8 @@
   "description": "Flowith-style branching AI conversations on Obsidian Canvas. Fork, explore, and map your thinking. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "canvas-branch-chat",
-  "lastChangedAt": "2026-07-14T00:03:27.012Z",
-  "lastFetchedAt": "2026-07-13T09:03:27.030Z",
+  "lastChangedAt": "2026-07-16T09:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T09:02:26.990Z",
   "manifest": {
     "author": "p4nt1um",
     "authorUrl": "https://github.com/p4nt1um",
@@ -17,32 +17,62 @@
     "version": "0.2.3"
   },
   "name": "Canvas Branch Chat",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:8232b1f7a203c900c7917eb11e226330a159445c321cfc16f163102aed070834",
-          "downloadCount": 5,
+          "digest": "sha256:2c7e861b70b65473ae34228f6ba5f2c785c8bdaa6e8af23744db96eca8d518e7",
+          "downloadCount": 4,
           "name": "main.js",
-          "size": 104265
+          "size": 104447
         },
         {
-          "digest": "sha256:7279f17f142c2e33e203574fc9f983466b2b63c4004c027107ca08f322e7783c",
-          "downloadCount": 6,
+          "digest": "sha256:215988994de0eb18a01c6e35eeb50c7d98cf2048c3154ce69eb83aa3af067042",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 310
         },
         {
           "digest": "sha256:1641cf047eb5bf31dd4564dfbf8f92f7d13c57175c417a6aa163adeee2eda748",
-          "downloadCount": 5,
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 6854
+        }
+      ],
+      "author": "p4nt1um",
+      "description": "主要变更：\r\n\r\n🔧 代码质量\r\n\r\n彻底清除所有 eslint-disable 指令和 unsafe 警告，代码全部通过严格 lint 检查\r\n消除剩余 TypeScript / 构建 Warning，零警告编译\r\n\r\n⚙️ CI/CD\r\n\r\n新增 GitHub Actions Release Workflow，支持自动构建发布\r\n加入 Artifact Attestations 构建来源认证\r\nInternal: v0.2.2 → v0.2.3 两轮 lint 修复，代码质量对齐 Obsidian 社区审核标准。",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.2.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T11:04:14Z",
+      "tag": "0.2.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8232b1f7a203c900c7917eb11e226330a159445c321cfc16f163102aed070834",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 104265
+        },
+        {
+          "digest": "sha256:7279f17f142c2e33e203574fc9f983466b2b63c4004c027107ca08f322e7783c",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 310
+        },
+        {
+          "digest": "sha256:1641cf047eb5bf31dd4564dfbf8f92f7d13c57175c417a6aa163adeee2eda748",
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 6854
         }
       ],
       "author": "p4nt1um",
       "description": "# v0.2.2\r\n\r\n## 🎬 对话回放\r\n\r\n右键任意节点 → **▶️ 回放对话**，三种遍历模式逐节点聚焦回顾整个对话树。\r\n\r\n### 三种遍历模式\r\n\r\n| 模式 | 说明 | 快捷键 |\r\n|------|------|--------|\r\n| **T 时间线** | 按节点创建时间顺序（`createdAt` 时间戳） | T |\r\n| **B 广度优先** | BFS 层序，同层按创建时间排序 | B |\r\n| **D 深度优先** | 沿分支走到底再回溯 | D |\r\n\r\n### 控制\r\n\r\n- **空格** — 暂停 / 继续\r\n- **← / →** — 上一个 / 下一个\r\n- **Esc** — 退出回放\r\n- **三档速度** — 慢 / 中 / 快，实时切换\r\n\r\n### 视觉\r\n\r\n- 全局总览 → 逐节点聚焦 → 每 4 张回一次总览锚定方位\r\n- pending 节点灰暗，current 节点高亮+阴影，played 节点保留标记\r\n- 全部使用 Obsidian Canvas 原生 API（`zoomToFit` / `zoomToBbox`），动画流畅不抖动\r\n\r\n## ✨ 智能追问改进\r\n\r\n**分级降级提取**，不再只依赖标题：\r\n\r\n1. 标题（`#` ~ `####`）\r\n2. 数字列表（`1.` `2.` …）\r\n3. Bullet（`-` `*`）\r\n4. 第 1 行非空语句\r\n\r\n上级 ≥3 个时只取上级，不足时自动降级。全部不足 2 个时阈值降到 2 再走一遍，仍不满足取第 1 行。正则提取不足时 fallback 到 LLM 生成候选问题。\r\n\r\n## 📝 总结流程改进\r\n\r\n多选合并时，**先创建 user 节点显示提示词**，再创建 assistant 节点显示总结结果。与追问流程一致，提示词不再\"隐身\"。\r\n\r\n```\r\n源节点 ──→ user(提示词) ──→ assistant(总结结果)\r\n```\r\n\r\n## 🔧 内部改进\r\n\r\n- 节点新增 `createdAt` 时间戳，回放排序使用真实创建时间\r\n- 旧节点无时间戳时 fallback 到坐标排序\r\n- 控制条按钮使用 `pointerdown` 事件，避免 Canvas 事件捕获冲突\r\n- 控制条 `position: fixed` 挂载在 `document.body`，不受 Canvas transform 影响\r\n- 全部使用 Obsidian Canvas 原生 API，不自建 viewport 动画系统\r\n\r\n## 🛡️ 代码质量（社区审核修复）\r\n\r\n- 消除所有 `eslint-disable` — `as any` 改为 `as unknown as { 具体类型 }`\r\n- `fetch()` → `window.fetch()`（popout 兼容）\r\n- `document` → `activeDocument`（popout 兼容）\r\n- `setTimeout` → `window.setTimeout`（popout 兼容）\r\n- `querySelectorAll` → `findAll`（Obsidian API）\r\n- inline style 全部改为 CSS class 驱动\r\n- `innerHTML` → `textContent`\r\n- `Record<string, any>` → `Record<string, unknown>`\r\n- 新增 GitHub Actions release workflow + artifact attestations\r\n\r\n---\r\n\r\n**完整 changelog**: `8d3d8a6..33c6d84`（21 commits）\r\n",
-      "downloadCount": 6,
+      "downloadCount": 10,
       "draft": false,
       "name": "",
       "prerelease": false,
@@ -170,6 +200,6 @@
       "tag": "v0.1.0"
     }
   ],
-  "removedAt": "2026-07-14T00:03:27.012Z",
+  "removedAt": null,
   "repo": "p4nt1um/canvas-branch-chat"
 }

@@ -4,8 +4,8 @@
   "description": "Publish notes to a GitHub Pages site and copy shareable links. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "github-pages-share",
-  "lastChangedAt": "2026-07-15T09:01:27.067Z",
-  "lastFetchedAt": "2026-07-15T09:01:27.067Z",
+  "lastChangedAt": "2026-07-16T09:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T09:02:26.990Z",
   "manifest": {
     "author": "Mark Chang",
     "authorUrl": "https://github.com/wzmf399443",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "GitHub Pages share",
-    "version": "0.2.1"
+    "version": "0.2.2"
   },
   "name": "GitHub Pages share",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:3999590aa6bedd3a7a37f6c8c3b963d69025c6bbaf8aa9b5ebe87479403532c8",
-          "downloadCount": 5,
+          "digest": "sha256:30ee10b2ff92e3a3af94fa622737fa7022b44fdaabfbbddb2ff92c9d675bb00f",
+          "downloadCount": 0,
           "name": "main.js",
-          "size": 45488
+          "size": 56428
         },
         {
-          "digest": "sha256:6a4ba8a49c71e29750ad74e553deabeddce66995ede1857e2a9b6bf5b8fb26d0",
-          "downloadCount": 5,
+          "digest": "sha256:89a7cfc67dec3d771188d2f362896b1385a1a233c99fd8fa2becf3260d53e96f",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 289
         },
         {
           "digest": "sha256:216eeaf9b1cbd83f594b8d4f10e92496c7c2781c79a7d5cb9ad1d76f8fc3ad71",
-          "downloadCount": 5,
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 1171
+        }
+      ],
+      "author": "wzmf399443",
+      "description": "## Highlights\n\n- **Brand-new repos now work.** Publishing to a zero-commit GitHub\n  repository used to fail with a 409 \"Git Repository is empty.\" mid-flow.\n  0.2.2 bootstraps the initial commit via the Contents API (the only\n  endpoint that works against an empty repo) and then proceeds with the\n  normal publish, so \"Set up Pages repo\" and \"Publish current note\"\n  both succeed on a fresh repo.\n- **Faster, atomic publishes.** A publish (note + attachments +\n  any missing scaffolding) now lands in a single Git Data API commit\n  instead of one Contents PUT per file. Pages therefore rebuilds once\n  per publish, and rapid re-publishes no longer race against the\n  per-file sha lookup.\n- **Smart `baseUrl` reconciliation on repo switch.** Changing the\n  Repository field in settings now follows the new repo's derived\n  Pages URL if you were still on the default, preserves your customized\n  value if you had one, and always resets `pagesConfirmed` so the new\n  repo's Pages setup has to be re-confirmed.\n\n## Fixes\n\n- 409 \"Git Repository is empty.\" when publishing against a brand-new\n  repo.\n- 409 / 422 \"conflict, try again\" toasts on rapid re-publish of the\n  same note — the per-file sha race is gone now that every publish is\n  one atomic commit.\n- Switching the Repository field in settings to a different repo\n  previously left the previous `baseUrl` cached, so share links kept\n  pointing at the old site until the next successful publish\n  overwrote them — and `pagesConfirmed` stayed `true` even though the\n  new repo had never been confirmed. 0.2.2 reconciles `baseUrl` on\n  repo change: if you were on the default, it follows the new repo's\n  derived URL; if you had customized it, your value is preserved.\n  `pagesConfirmed` always resets so the new repo's Pages setup has to\n  be re-confirmed. `publishNote` and `setupRepo` also now always\n  overwrite `baseUrl` from the `pagesInfo` they receive.\n\n## Internal\n\n- `src/github.ts`: new `commitFiles(files, message)` entry point;\n  empty-repo detection via the branch-ref read; non-fast-forward retry\n  with exponential backoff (`[1s, 2s, 4s, 8s]`) and a static\n  `last-pushed-head` cache per `owner/repo/branch`.\n- `src/publisher.ts`: `ensure*()` helpers refactored into\n  `build*File()` helpers that return staged files; the publish and\n  \"Set up Pages repo\" flows aggregate them into one `commitFiles`\n  call. `describeError` adds a human-readable 422 fast-forward\n  message. `publishNote` and `setupRepo` now always overwrite\n  `settings.baseUrl` from the latest `pagesInfo`.\n- `src/settings.ts`: smart baseUrl reconciliation on Repository\n  change — snapshot the old derived default first, then either follow\n  the new default or keep the user's customized value; always reset\n  `pagesConfirmed` to `false`; sync the visible input element via a\n  new `pagesBaseUrlInput` field.\n- `main.js` rebuilt from source.\n\nUpgrade as usual — download `main.js`, `manifest.json`, `styles.css`\nfrom this release and drop them into\n`<vault>/.obsidian/plugins/github-pages-share/`. See the README for\nfull instructions.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T08:46:52Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3999590aa6bedd3a7a37f6c8c3b963d69025c6bbaf8aa9b5ebe87479403532c8",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 45488
+        },
+        {
+          "digest": "sha256:6a4ba8a49c71e29750ad74e553deabeddce66995ede1857e2a9b6bf5b8fb26d0",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 289
+        },
+        {
+          "digest": "sha256:216eeaf9b1cbd83f594b8d4f10e92496c7c2781c79a7d5cb9ad1d76f8fc3ad71",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 1171
         }
       ],
       "author": "wzmf399443",
       "description": "First public release, prepared for Obsidian community plugin submission.\n\nPublish Markdown notes from Obsidian to a GitHub repository, serve them through GitHub Pages (Jekyll), and copy a shareable link.\n\n## Highlights\n- Publish a note or a whole folder; unpublish removes the note and its orphaned images\n- Wikilinks become relative links; embedded images upload to an assets folder\n- Callouts render as styled HTML; mermaid code blocks render on the published site\n- Auto-update republishes edited notes; mobile supported\n\n## Changes in 0.2.1\n- Bilingual README (en / zh-TW) with security and network disclosures\n- Input hardening: repository name allowlist, folder path traversal rejection, consistent YAML escaping\n- Published-site mermaid CDN import pinned to 11.16.0\n- UI text: \"GitHub Pages\" capitalized as a product name",
-      "downloadCount": 5,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.2.1",
       "prerelease": false,

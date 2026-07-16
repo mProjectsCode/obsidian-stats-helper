@@ -1,0 +1,355 @@
+{
+  "author": "Arsenije Catic",
+  "defaultBranch": "main",
+  "description": "Find notes by meaning and ask questions about what you wrote. Fully local AI, nothing leaves your machine. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "uru",
+  "lastChangedAt": "2026-07-16T09:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T09:02:26.990Z",
+  "manifest": {
+    "author": "Arsenije",
+    "authorUrl": "https://github.com/Arsenije",
+    "description": "Search and chat with your vault using local AI — private, offline, powered by Khora.",
+    "id": "uru",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.7.2",
+    "name": "Uru",
+    "version": "0.1.12"
+  },
+  "name": "Uru",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:f1e52c49c9993dd19ebeb4b3aea42ebb57046847abec5199f0c6f92545fcae2a",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 120309
+        },
+        {
+          "digest": "sha256:d597a924a40e975c4d667237f2e89bebfd28719ee15757687f95a35904e9cd94",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 279
+        },
+        {
+          "digest": "sha256:6eeb94edb6b2cd9b454bdf6cc22493fdcdb74d52c2ef04874ad13c369d49dd8a",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 5356
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **Obsidian plugin-review error resolved.** `workspace.revealLeaf()` (available since Obsidian 1.7.2) is now awaited, and `minAppVersion` is raised from `1.5.0` to `1.7.2` to match the APIs the plugin actually uses.\n- **Review warnings addressed.** `onunload` is synchronous again (shutdown runs fire-and-forget in the same order); timers use `window.setTimeout`/`setInterval` so they behave in popout windows; the default ignore list derives the config folder from `vault.configDir` instead of hardcoding `.obsidian`; a settings status callback no longer leaks a return value; a child-process failure now rejects with a proper `Error`.\n\n### Changed\n- **Releases are attested and minimal.** The release workflow now publishes GitHub artifact attestations for `main.js`, `manifest.json`, and `styles.css` (verify with `gh attestation verify main.js -R Arsenije/Uru`), and the extra `uru-<version>.zip` asset is gone — manual installs download the same three files the community installer fetches (see the README).\n- The `builtin-modules` dev dependency was replaced with Node's own `module.builtinModules` in the build config.\n\n\n---\n\n**Manual install:** download **`main.js`**, **`manifest.json`**, and **`styles.css`** below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Put them in `<your-vault>/.obsidian/plugins/uru/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.1.12",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T21:20:32Z",
+      "tag": "0.1.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ac08f90401a268390f9419544adaf34a66298885446807a39c5422c3706150e8",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 120110
+        },
+        {
+          "digest": "sha256:b57a01ea2412801b9e38ccb54f2a4a48dd8bdf6d7d54a3f53143bd53c088187a",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 279
+        },
+        {
+          "digest": "sha256:6eeb94edb6b2cd9b454bdf6cc22493fdcdb74d52c2ef04874ad13c369d49dd8a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 5356
+        },
+        {
+          "digest": "sha256:f3b869115b407b9ae9a0a4e931cf24cc0cba2b6148e0c7b39146a5d6913d2141",
+          "downloadCount": 0,
+          "name": "uru-0.1.11.zip",
+          "size": 41415
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **Ready for Obsidian's community plugin directory.** The Python sidecar now travels *inside* `main.js` (embedded at build time) instead of shipping as a separate `sidecar/` folder — so an install that receives only `main.js`, `manifest.json`, and `styles.css` (exactly what Obsidian's community-directory installer downloads) bootstraps correctly. First-run setup writes the embedded source into Uru's app-data folder and installs it from there; nothing changes for already-set-up vaults.\n- **Release mechanics match Obsidian's requirements.** Releases are now tagged with the bare version (`0.1.11`, not `v0.1.11`) to match `manifest.json` exactly, and `main.js`, `manifest.json`, and `styles.css` are attached to each release as individual assets (the community installer fetches those files directly). The manual-install zip remains, renamed to `uru-<version>.zip` and no longer containing a `sidecar/` folder.\n- **Manifest polish for review.** `minAppVersion` raised from the sample-plugin template's `0.15.0` to `1.5.0`, the description now leads with what Uru does (\"Search and chat with your vault…\"), and `authorUrl` points at the author's GitHub profile.\n\n### Added\n- **LICENSE file** (MIT) at the repo root — the README and package metadata already said MIT; now GitHub and Obsidian's review tooling can see it too.\n- **\"Network use\" section in the README** — a table of exactly what the first-run setup downloads, from which hosts, and why; every item version- or revision-pinned. After setup, the plugin only talks to its own sidecar on `127.0.0.1`.\n- **Submission notes for Obsidian reviewers** (`docs/obsidian-submission.md`) — why Uru exists, the technical decisions behind the first-run backend bootstrap, and a policy-compliance checklist.\n\n### Fixed\n- **`versions.json` no longer overpromises compatibility.** Every row claimed `minAppVersion` `0.15.0` (the sample-plugin template default); all rows now say `1.5.0`, matching the manifest.\n\n\n---\n\n**Manual install:** download the **`uru-0.1.11.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.11",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T20:44:39Z",
+      "tag": "0.1.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1d253f115d27815558f307b752b187aefa415ab210a9e66c8257685a1219dc02",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 248
+        },
+        {
+          "digest": "sha256:bca18785bf24de92aaf7502fdf36b4a160486715a383b059196d51202d9e9bb9",
+          "downloadCount": 0,
+          "name": "uru-v0.1.10.zip",
+          "size": 43334
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **One consistent voice across every label, notice, and error.** The search feature is now called **Search** everywhere (ribbon, command, and panel — previously \"Recall\"); user-facing messages say **\"the local AI service\"** instead of the internal word \"backend\"; and status-bar tooltips show plain words (\"Ready\", \"Starting…\") instead of raw internal state. Notices drop the inconsistent \"Uru:\" prefix, use consistent punctuation, and no longer duplicate the same message two ways. \"Remove Uru completely\" is now **\"Uninstall Uru\"**, the indexing button reads **\"Index new & edited\"**, and the underlying library is capitalized as **Khora**. Developer-only details (raw relevance scores, all-caps `ERROR:`, \"(no answer)\") no longer leak into the UI. No behavior changed — only wording.\n- **A clearer, better-organized Settings page.** The Status row is now labelled **\"Uru setup\"** and its button reads **\"Repair Uru\"** (was \"Re-run setup\"). **\"Index on startup\"** moved up next to the indexing controls it affects, out of the Advanced section. The Models section now links each model to a short **\"Why this model?\"** explainer in the README, and the **\"Uninstall Uru\"** description leads with what to do and reads more plainly.\n\n### Removed\n- **Deep indexing (entity extraction) is gone.** Uru no longer runs a local model over every note to map people, places, and ideas — indexing is now always the fast embeddings-only path (what used to be called \"Quick\"). The Deep/Quick choice disappears from the chat first-run prompt and Settings, the \"People & topics\" chips disappear from Search, and indexing a large vault drops from hours to minutes. Search, chat, and citations are unchanged. Notes indexed under Deep mode keep working as-is; no re-index is needed.\n- **\"Link notes in the graph\" is gone.** The Settings section that wrote a \"uru-links\" property into your notes' frontmatter (so connections showed in Obsidian's Graph view) has been removed. On the first launch after updating, Uru automatically strips the \"uru-links\" property from any notes that still carry it — the same clean undo the \"Remove Uru links\" button performed — and tells you how many notes were cleaned. Your note text and other properties are untouched.\n- **\"Reset this vault's Uru data\" is gone.** The Danger-zone button that cleared just this vault's index while keeping the shared AI service has been removed — it overlapped confusingly with \"Uninstall Uru\". To rebuild a vault's index, use **\"Re-index everything\"**; to remove everything, use **\"Uninstall Uru\"**.\n\n### Fixed\n- **No more stray console windows on Windows.** Each local AI server (chat + embedding, and a fresh one on every crash-restart) used to pop up its own `cmd` window because it inherited no console from the backend. The servers now launch with `CREATE_NO_WINDOW`, and first-run setup steps (uv, Python, GPU detection) no longer flash a console either. Windows only — macOS and Linux were never affected.\n- **A crashing backend no longer piles up llama.cpp processes on Windows either.** The Windows backend now runs its llama.cpp servers inside a kill-on-close Job Object, so they shut down with the backend no matter how it dies (matching the Linux behavior added in 0.1.9). Previously a hard crash could leave llama.cpp servers resident and stack more on each restart.\n- **Settings no longer gets stuck on \"Setting up…\".** While the local AI service was booting, the Settings status row could stay on \"Setting up…\" until you closed and reopened Settings — even though Uru was already ready. It now updates live to \"Ready\" the moment the service is up.\n\n\n---\n\n**Manual install:** download the **`uru-v0.1.10.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-14T13:28:23Z",
+      "tag": "v0.1.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9237d82dbfbc128f82976c580e8491bc3a2fe605e4a675d53e251f124ca89edb",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 247
+        },
+        {
+          "digest": "sha256:42f191fa7b55eb39decf74134bc0a1fb4396c1f2c0034d8565daa4de9b131223",
+          "downloadCount": 2,
+          "name": "uru-v0.1.9.zip",
+          "size": 55787
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Automatic GPU acceleration on Windows and Linux.** On first run Uru now detects a supported GPU (AMD, Nvidia, or Intel) and downloads a Vulkan build of llama.cpp instead of the CPU-only build, so chat and indexing run on the GPU — a large speedup, especially for Deep mode. It falls back to the CPU build automatically if no usable GPU is found (and remembers that so it doesn't re-download each launch). Existing installs are upgraded to the GPU build on the next launch when a GPU is present. macOS is unchanged (it already uses the Metal GPU).\n\n### Fixed\n- **Linux setup no longer downloads ~6 GB of unused NVIDIA CUDA libraries.** The backend install now always picks the CPU build of PyTorch — Uru only carries PyTorch as an indirect dependency and never runs it (all AI inference happens in llama.cpp), but on Linux the default download was the CUDA build plus 21 NVIDIA packages. First-run setup on Linux is now several GB smaller and minutes faster.\n- **A crashing backend no longer piles up llama.cpp processes.** If the backend process died unexpectedly (e.g. killed by the OS when memory ran out), its two llama.cpp servers were left running, and every automatic restart added two more — eating memory until startup could no longer succeed. On Linux the llama.cpp servers now shut down with the backend no matter how it dies.\n- **The backend was reinstalled on every launch** due to a version-pin mismatch (the plugin expected sidecar 0.2.10 while the bundled code reported 0.2.9). The versions are back in sync, so a healthy install is reused.\n- **Crash diagnostics now record how the backend exited** (exit code and signal), so a silent native crash or out-of-memory kill shows up in the diagnostics log instead of the log just stopping mid-startup.\n\n\n---\n\n**Manual install:** download the **`uru-v0.1.9.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-09T18:18:15Z",
+      "tag": "v0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:273367b06550f0eb0bbae41c7bbbc743a4a7d55b3bc73ce04162883be277afd3",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 247
+        },
+        {
+          "digest": "sha256:5dfd6637e6cb93c35e9cd730d97f292d4d9f472d57cb24e6bb30821a7945c8e3",
+          "downloadCount": 3,
+          "name": "uru-v0.1.8.zip",
+          "size": 53936
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Loading state while Uru starts.** Opening Chat or Recall before the local backend is ready now shows a clear \"Starting Uru…\" state (with a live progress indicator) instead of a dead or misleading input box, and switches to the real chat/search view automatically once the backend is up. If startup fails, both panels show a plain error with a **Retry** button.\n\n### Changed\n- **Simpler first-run setup.** The setup dialog leads with a shorter, privacy-focused intro and no longer asks you to choose Quick vs Deep up front — it defaults to Deep, still changeable anytime in Settings. The install button now spells out that it \"can take a few minutes,\" and the final log line reads \"Setup complete — backend ready.\"\n\n\n---\n\n**Manual install:** download the **`uru-v0.1.8.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T13:06:26Z",
+      "tag": "v0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2b0cc4eaff32a518dc546ec2a16cdfcb8a60e6256aa734af130a38e105174034",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 247
+        },
+        {
+          "digest": "sha256:0204de46ef457db5c7f6d8764392b8eb5c8691544ad884f27873523a8257556f",
+          "downloadCount": 1,
+          "name": "uru-v0.1.7.zip",
+          "size": 53697
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **\"Danger zone\" in Settings** with two scoped cleanup actions — \"Reset this vault's Uru data\" and \"Remove Uru completely\" — backed by a small `vaults.json` registry, so cleanup never deletes another vault's index or a shared backend it still needs. This makes it easy to fully clean up (models, Python environment, index) before removing the plugin, since Obsidian's own uninstall only removes the in-vault plugin folder.\n\n### Changed\n- **Consistent plain-language copy across every surface.** Removed the remaining \"knowledge graph\" / \"Lite\" / \"Full\" wording (which clashed with Obsidian's graph view) in favor of the **Quick / Deep** vocabulary and a \"maps how your notes connect\" framing — in the Recall command, the manifest description, and the README. Softened \"backend\" out of user-facing error notices (power-user command names stay as-is). Renamed the Recall panel's \"Entities\" heading to \"People & topics\".\n\n### Removed\n- The command-palette-only \"Delete all Uru data\" command, which wiped every vault's data unconditionally — replaced by the scoped Danger zone actions above.\n\n### Fixed\n- A failed first-run setup (e.g. the local AI service didn't start, so no note was indexed) no longer shows a misleading \"Indexing didn't finish — Resume\" prompt; it now offers a clean retry.\n\n\n---\n\n**Manual install:** download the **`uru-v0.1.7.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-03T12:00:30Z",
+      "tag": "v0.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:eeaf0ba6e5de212b3f7e2e9708e29600aca63088792312275a56d8adf7594731",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:39fb0686ae391c786ea22421ffb3fb9cb8235ebee681ab69004e851dc97b9792",
+          "downloadCount": 2,
+          "name": "uru-v0.1.6.zip",
+          "size": 33371
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **`CHANGELOG.md`** — a dedicated, backfilled release history (0.1.0–0.1.5), replacing the inline README section.\n\n### Changed\n- **GitHub release notes are now generated from this changelog.** The release workflow reads the matching version section from `CHANGELOG.md` (falling back to the manual-install instructions), so each release documents what actually changed instead of repeating boilerplate.\n\n\n---\n\n**Manual install:** download the **`uru-v0.1.6.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T12:19:29Z",
+      "tag": "v0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ad752d9ea64adcfb3d579693bfc8c772626b3af7612a1684f0b19076c27861fe",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:6e38aefc0d9fde1939822953ae20db000f6014401db0f69d07f4311a9e1e943e",
+          "downloadCount": 0,
+          "name": "uru-v0.1.5.zip",
+          "size": 33371
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\n### Changed\n- **Sleep-safe, crash-resilient indexing** — indexing resumes where it left off after an interruption instead of restarting from zero, and the backend survives OS sleep instead of being killed by the idle watchdog mid-sleep.\n\n### Added\n- **Estimated time remaining (ETA)** while indexing.\n- **Resume indexing** prompt and command when a previous run was interrupted.\n\n### Performance\n- Reuse a single shared entity extractor per model across documents (VectorCypher extraction state) — faster, steadier Deep indexing.\n---\n\n**Manual install:** download the **`uru-v0.1.5.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T12:01:17Z",
+      "tag": "v0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a919b7b58c08d9f6403bdb0112e4d14416e96d13161e166b39e8e698eeacafdd",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:3335bf7600735ffbd5741780ec856b8625e78b90e7f409f7120906bf41536317",
+          "downloadCount": 0,
+          "name": "uru-v0.1.4.zip",
+          "size": 31621
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\n### Added\n- **Deep vs Quick choice in the chat first-run prompt** — opening chat before the vault is indexed now lets you pick indexing depth up front, with the same explanation as the setup dialog.\n---\n\n**Manual install:** download the **`uru-v0.1.4.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T10:50:08Z",
+      "tag": "v0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:54f9210905ab64811ee3aa18edba92d8261d4360276c4b73c0d47d2ac1155350",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:8a1d80ae87fd561f15b2f227b9c9d4f342004fa26b877e66f346cd7acc9fc89f",
+          "downloadCount": 1,
+          "name": "uru-v0.1.3.zip",
+          "size": 31112
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's new\n\n### Changed\n- **Unified, plain-language copy** across the setup dialog, chat, and settings. \"Lite/Full\" became **Quick/Deep**, and the \"knowledge graph\" wording (which clashed with Obsidian's own graph view) was replaced with plain descriptions.\n- **Restructured settings** — merged the indexing sections, collapsible Advanced/Models groups, friendly model names, and a plain-language status row (no raw namespace UUID).\n\n### Added\n- **First-run \"Index my vault\" prompt in the chat panel** when the vault isn't indexed yet, with a live progress bar.\n- **Live re-index progress bar** in settings.\n---\n\n**Manual install:** download the **`uru-v0.1.3.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB) — see the setup dialog.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T10:09:30Z",
+      "tag": "v0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:57b65d8998962693e48703f1b4411a7a0a6d5d994dbd9195c1ce2f1146877476",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:2674b5dc3d26418eee9cf69b3b003eb8c263ce7a059f9fea0218c1ecfe7c393b",
+          "downloadCount": 4,
+          "name": "uru-v0.1.2.zip",
+          "size": 28975
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Manual install:** download the **`uru-v0.1.2.zip`** asset\nbelow — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will\nfail to load. Extract the `uru/` folder into\n`<your-vault>/.obsidian/plugins/`, then enable Uru in\nSettings → Community plugins. First run downloads the local backend\n(~3 GB) — see the setup dialog.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-01T07:46:39Z",
+      "tag": "v0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:15f745d7b434e961c63b72086bfd2232896b266617925a4f80a91d7e2039e508",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 231
+        },
+        {
+          "digest": "sha256:7c413f5b918f92d3c0f71edde1e629b2982686321caa08a2a80f778f2bd77a3f",
+          "downloadCount": 5,
+          "name": "uru-v0.1.1.zip",
+          "size": 28974
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Manual install:** download the **`uru-v0.1.1.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB).",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T10:42:14Z",
+      "tag": "v0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e7cf3c9a01da6f577fdf2661dfd00b68a27ae2d38dd29adb47c33319f0e588f4",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 232
+        },
+        {
+          "digest": "sha256:b9218d1a5df987b2b0f2e6e3e4f19b5849baf5520693ee39ab9f704b36834877",
+          "downloadCount": 0,
+          "name": "uru-v0.1.0.zip",
+          "size": 27581
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "⚠️ Superseded by v0.1.1 — please use the latest release. **Manual install:** download the **`uru-v0.1.1.zip`** asset below — ⚠️ **not** \"Source code (zip)\", which has no built `main.js` and will fail to load. Extract the `uru/` folder into `<your-vault>/.obsidian/plugins/`, then enable Uru in Settings → Community plugins. First run downloads the local backend (~3 GB).",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-06-29T08:45:10Z",
+      "tag": "v0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "arsenije/Uru"
+}
