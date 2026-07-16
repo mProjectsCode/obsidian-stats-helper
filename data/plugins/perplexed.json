@@ -1,11 +1,11 @@
 {
-  "author": "lossless-group",
+  "author": "The Lossless Group",
   "defaultBranch": "main",
   "description": "Generate source-cited research content from Perplexity, Anthropic Claude, Perplexica, or local LM Studio — directly into your notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "perplexed",
-  "lastChangedAt": "2026-07-15T05:05:27.001Z",
-  "lastFetchedAt": "2026-07-15T05:05:27.001Z",
+  "lastChangedAt": "2026-07-16T05:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T05:02:26.990Z",
   "manifest": {
     "author": "The Lossless Group",
     "authorUrl": "https://lossless.group",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:fc396939fd74182d6748e5fffa874d3044928fe746c95ef385bb683c388a7867",
-          "downloadCount": 91,
+          "downloadCount": 100,
           "name": "main.js",
           "size": 352291
         },
         {
           "digest": "sha256:d7ed535fe4e328086d9f5c901d96e580b9f5ddbc34dad4da9efe4d326669f07e",
-          "downloadCount": 89,
+          "downloadCount": 98,
           "name": "manifest.json",
           "size": 427
         },
         {
           "digest": "sha256:f0c6588465c988a5fb28d4ab9ce9a32a1e7dabe1be1fffc72fcb8a365e07d63b",
-          "downloadCount": 86,
+          "downloadCount": 95,
           "name": "styles.css",
           "size": 28906
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Why care?\n\nIf you clicked **Ask Perplexity** or ran a directory template and got a CORS error — or just got nothing — this is the fix. Streaming was broken for every Perplexity query. Non-streaming requests were unaffected.\n\nPerplexity's API stopped including the `Access-Control-Allow-Origin` header that Electron's Chromium renderer requires before it will hand a response body to calling code. The request was arriving and returning `200 OK` — Chromium was reading the headers, seeing no CORS allowance for `app://obsidian.md`, and then blocking the body. The underlying request was succeeding; the plugin just couldn't see any of it.\n\n## What changed?\n\nBoth streaming code paths now use `https.request` from Node.js's built-in `node:https` module instead of `activeWindow.fetch`. Node.js routes requests through the OS network stack — below Chromium entirely. CORS enforcement is a Chromium concept; it has no meaning at the OS socket layer.\n\n- **Modal query flow** (`perplexityService.ts`) — the quick **Ask Perplexity** command and all model variants\n- **Directory template runner** (`directoryTemplateService.ts`) — the `streamPerplexityToFile` function used by every template that calls Perplexity\n\nThe SSE parsing, idle-timeout, chunk accumulation, citations, images, and AbortController signal handling are all untouched. This is a pure transport-layer swap.\n\n```\nBefore:  activeWindow.fetch → Chromium renderer → CORS enforcement → body blocked\nAfter:   https.request → Node.js network stack → OS socket → no CORS\n```\n\n## Upgrade notes\n\nReload the plugin after upgrading (Settings → Community Plugins → Perplexed → toggle off, then on). No vault-template changes, no new settings, no new cft-block keys. All 0.3.0 analyst-grade templates and infrastructure are fully intact.\n\n## Full changelog\n\nSee [`changelog/releases/0.3.1.md`](https://github.com/lossless-group/perplexed-plugin/blob/main/changelog/releases/0.3.1.md) for the full release narrative and [`changelog/2026-07-06_01.md`](https://github.com/lossless-group/perplexed-plugin/blob/main/changelog/2026-07-06_01.md) for the engineering detail.",
-      "downloadCount": 89,
+      "downloadCount": 98,
       "draft": false,
       "name": "0.3.1 — Perplexity streaming restored after CORS enforcement change",
       "prerelease": false,

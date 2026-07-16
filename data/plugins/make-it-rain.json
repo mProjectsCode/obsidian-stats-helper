@@ -4,8 +4,8 @@
   "description": "Pull Raindrop.io bookmarks, highlights, and attachments into Markdown notes with rich metadata, smart folder structures, and native file support. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "make-it-rain",
-  "lastChangedAt": "2026-07-15T05:05:27.001Z",
-  "lastFetchedAt": "2026-07-15T05:05:27.001Z",
+  "lastChangedAt": "2026-07-16T05:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T05:02:26.990Z",
   "manifest": {
     "author": "frostmute",
     "authorUrl": "https://www.github.io/frostmute",
@@ -15,11 +15,29 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Make It Rain",
-    "version": "2.0.0-beta.2"
+    "version": "2.0.0"
   },
   "name": "Make It Rain",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:a371c22e99aae7cda4fa02ddd802448e97586b6463302137e03121d3f0962b7a",
+          "downloadCount": 1,
+          "name": "make-it-rain.zip",
+          "size": 36792
+        }
+      ],
+      "author": "frostmute",
+      "description": "# Make It Rain 2.0.0\r\n\r\n## What's new\r\n\r\n### 🔄 Safe Sync (#9)\r\n\r\nDetect Raindrops that have been deleted or renamed remotely, then prompt for action in a per-item modal. Each candidate can be:\r\n\r\n- **Ignore** — leave the local file untouched\r\n- **Archive** — move to `<vault>/.trash/` (preserves `raindrop_id` frontmatter so it can be restored)\r\n- **Delete permanently**\r\n\r\nDetection splits results into `deleted` and `unknown` buckets. The plugin **never auto-acts on `unknown`** — only on a confirmed `deleted` from Raindrop. API errors, missing data, and unexpected shapes all land in `unknown` and require manual review.\r\n\r\n- **Vault scan** for notes carrying `raindrop_id` frontmatter (added in 1.10.0)\r\n- **10-way concurrent** batch-checks against the Raindrop API\r\n- **Auto-runs after each import** when enabled, or on demand via command palette: `Safe sync: scan for deleted/renamed Raindrops`\r\n- **Settings → Sync → Safe Sync** toggle (off by default — opt in)\r\n- **Settings → Sync → Default action** dropdown (`Prompt` / `Archive` / `Delete`)\r\n- **Settings → Sync → Trash folder** (defaults to `.trash/`)\r\n\r\n### 🧩 Template import/export (#84)\r\n\r\nTemplates now travel. Export any template from the Template Manager to clipboard as JSON; import via modal with collision detection, empty-string-safe roundtrip, and error surfacing in the modal.\r\n\r\n- Export any template to JSON on your clipboard\r\n- Import via modal: paste JSON, name it, done\r\n- Name collisions are **rejected**, not silently overwritten\r\n- Empty-string templates survive the round-trip\r\n- Import failures stay in the modal instead of closing silently\r\n\r\n### 👀 Live template preview\r\n\r\nEditing a content-type template in **Settings → Templates** now renders a live Markdown preview alongside the editor. The preview is locked to the currently selected content type, no more bleeding across types.\r\n\r\n## Bug fixes\r\n\r\n- **S3 attachments stop 403'ing on redirect.** `fetchArchiveContent` no longer forwards the Raindrop `Authorization` header on the second hop to AWS S3 — fixes `403 Forbidden` on cached archive attachments fetched via `/cache`.\r\n- **Safe Sync splits `deleted` vs. `unknown`.** Detection never auto-acts on ambiguous state.\r\n- **Template import modal** stays open and reports errors on failure; import is awaited before close; name collisions rejected.\r\n- **Template export** clipboard-write errors now surface in the modal.\r\n- **Settings template preview** is locked to the currently selected content type.\r\n- Dead code removal in the template modals.\r\n\r\n## Upgrade\r\n\r\n- Wire-compatible with `2.0.0-beta.2` — no schema, settings, or template changes.\r\n- Install, restart Obsidian, you're done.\r\n- First Safe Sync will surface any deleted/renamed items — set Default Action in Settings if you want unattended safety.\r\n\r\n## Stats\r\n\r\n- 23 commits since `1.11.1`\r\n- 299/299 tests passing\r\n- ESLint clean\r\n- minAppVersion `1.13.0`\r\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "2.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T07:29:06Z",
+      "tag": "2.0.0"
+    },
     {
       "assets": [
         {
@@ -36,7 +54,7 @@
         },
         {
           "digest": "sha256:d0cbf568a164f94088051a3fb26949009c19ae787d3c2fc319bfcf1aed0bb94c",
-          "downloadCount": 4,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 416
         },
@@ -49,7 +67,7 @@
       ],
       "author": "frostmute",
       "description": "v2.0.0-beta.2 — Safe Sync, template import/export, live template preview, and the S3-redirect 403 is gone.\n\nHighlights\n- Safe Sync (#9): per-row prompt/Archive/Delete for local notes whose Raindrop was deleted or renamed remotely. Detection splits deleted vs. unknown; never auto-acts on ambiguity. Settings toggle + command-palette entry included.\n- Template import/export (#84): export any template to clipboard JSON; import via modal with collision detection. Empty-string-safe.\n- Live template preview (Settings): render the currently-selected content-type template as you edit.\n\nFixes\n- fetchArchiveContent no longer forwards the Authorization header to AWS S3 — fixes 403s on cached archive attachments.\n- Safe Sync detection no longer auto-acts on unknown state.\n- Template import modal: failures surface in the modal instead of closing silently; import is awaited before close; name collisions rejected.\n- Template export: clipboard-write errors handled.\n- Empty-string templates survive export → import.\n- Settings template preview: locked to the currently selected content type.\n\nPerf\n- Settings live preview updates batch; no keystroke-level re-render.\n\nBreaking changes: none. Wire-compatible with v2.0.0-beta.\n\nUpgrade: install, restart Obsidian, you're done. First Safe Sync will surface any deleted/renamed items — set Default Action in Settings if you want unattended safety.\n\nFull release notes and migration guide: see the project changelog.",
-      "downloadCount": 4,
+      "downloadCount": 11,
       "draft": false,
       "name": "Release v2.0.0-beta.2",
       "prerelease": true,
@@ -60,26 +78,26 @@
       "assets": [
         {
           "digest": "sha256:bfa111414f30ac969bdf93b20aec2eddf9c14800c10a3d98a31b27289c207175",
-          "downloadCount": 77,
+          "downloadCount": 80,
           "name": "main.js",
           "size": 130142
         },
         {
           "digest": "sha256:535efa961b73f4b53ab82f525b3645a198d696d1d57a4f8746110ebbf84ff1bd",
-          "downloadCount": 606,
+          "downloadCount": 614,
           "name": "manifest.json",
           "size": 410
         },
         {
           "digest": "sha256:688072917ac6e33ab7acf8cc2733b6bd756a4b700eb138f3af08037be946c7b4",
-          "downloadCount": 38,
+          "downloadCount": 41,
           "name": "styles.css",
           "size": 7873
         }
       ],
       "author": "frostmute",
       "description": "Fix: Raindrop attachment downloads (400 Bad Request on S3 redirects) #1.11.1",
-      "downloadCount": 606,
+      "downloadCount": 614,
       "draft": false,
       "name": "v1.11.1",
       "prerelease": false,
@@ -96,7 +114,7 @@
         },
         {
           "digest": "sha256:535efa961b73f4b53ab82f525b3645a198d696d1d57a4f8746110ebbf84ff1bd",
-          "downloadCount": 38,
+          "downloadCount": 43,
           "name": "manifest.json",
           "size": 410
         },
@@ -109,7 +127,7 @@
       ],
       "author": "frostmute",
       "description": "Community review fixes and performance optimizations.",
-      "downloadCount": 38,
+      "downloadCount": 43,
       "draft": false,
       "name": "Release 1.11.0",
       "prerelease": false,
@@ -120,26 +138,26 @@
       "assets": [
         {
           "digest": "sha256:3ddc29180c3ce398e57caf0a3284f2b9125413daa6b8524ed9777eccab221521",
-          "downloadCount": 307,
+          "downloadCount": 314,
           "name": "main.js",
           "size": 127448
         },
         {
           "digest": "sha256:6fffba927b8663d6a06000537e31d16ad3e8b70899b041075c733b51d9fe3591",
-          "downloadCount": 379,
+          "downloadCount": 390,
           "name": "manifest.json",
           "size": 409
         },
         {
           "digest": "sha256:688072917ac6e33ab7acf8cc2733b6bd756a4b700eb138f3af08037be946c7b4",
-          "downloadCount": 308,
+          "downloadCount": 315,
           "name": "styles.css",
           "size": 7873
         }
       ],
       "author": "devin-ai-integration[bot]",
       "description": "## [1.10.0] - 2026-06-05\r\n\r\n### Added\r\n\r\n- **Raindrop Group Hierarchy Support**: The plugin now integrates Raindrop.io sidebar \"Groups\" into the collection hierarchy.\r\n- **New Template Variable**: Added `{{collectionGroup}}` to access the name of the top-level sidebar Group a collection belongs to.\r\n- **Improved Path Construction**: The `{{collectionPath}}` variable now includes the sidebar Group name as the root of the path (e.g., `GROUP / Parent / Child`).\r\n- **Group Caching**: Implemented efficient caching for Raindrop Groups.\r\n- **Archive Scraping Overhaul (Issue #58)**: Rewrote the archive scraping pipeline to use Obsidian's native `htmlToMarkdown()` for HTML-to-Markdown conversion, replacing the old DOMParser + CSS selector approach. Scraped content now produces structured Markdown with headings, paragraphs, and lists instead of a flat text blob.\r\n\r\n### Fixed\r\n\r\n- **Raindrop Cache 303 Redirect (Issue #58)**: `fetchArchiveContent` now manually follows the `/cache` endpoint's HTTP 303 redirect to S3, stripping the Authorization header on the second hop. Fixes empty `{{scrapedContent}}` on platforms where Obsidian's `requestUrl` doesn't follow redirects automatically.\r\n- **Nesting-Aware Template Engine (Issue #59)**: Replaced the regex-based template rendering logic with a robust, nesting-aware AST parser and evaluator.\r\n- **YAML Null Keyword Quoting**: `formatYamlValue` now quotes YAML null-like strings (`null`, `Null`, `NULL`, `~`) and short boolean strings (`y`, `Y`, `n`, `N`) to prevent type coercion in frontmatter (PR #73).\r\n- **YAML Reserved-Word Force-Quoting**: Added `formatYamlString` utility to force-quote string fields (title, description, collectionTitle) that could be misinterpreted as dates, nulls, or booleans (PR #74).\r\n- **formatYamlString Null Serialization**: `formatYamlString` now serializes explicit `null`/`undefined` as unquoted `null` keyword (PR #75).\r\n- **Double-Escaping in Frontmatter**: Fixed double-escaping of collectionTitle/collectionPath when passed through `createYamlFrontmatter` (PR #69).\r\n- **Leading-Quote Data Loss**: Strings starting with `\"` or `'` in frontmatter are now properly escaped (PR #69).\r\n- **Stale Closure in Template Rename**: Fixed stale closure bug in named template rename handler (PR #70).\r\n- **Frontmatter Injection in Folder Notes**: Folder note generation now uses `createYamlFrontmatter` (PR #65).\r\n- **ESLint & Tooling Configuration**: Downgraded `eslint-plugin-obsidianmd` to `0.0.1` for ESLint 8 compatibility; disabled buggy `obsidian/settings-tab` rule; fixed `no-case-declarations` and deprecated `substr` usage.\r\n\r\n### Changed\r\n\r\n- Removed unused `RaindropType` import from `apiUtils.ts` (PR #62).\r\n- Optimized array concatenation in `main.ts` (PR #63).\r\n- Eliminated redundant type guard in `main.ts` (PR #64).\r\n- Removed dead assignment in `processRaindrop` (PR #67).\r\n- Removed unused `col` variable in `main.ts` (PR #68).\r\n- Performance: split var node name once during template validation (PR #71).",
-      "downloadCount": 379,
+      "downloadCount": 390,
       "draft": false,
       "name": "1.10.0",
       "prerelease": false,
@@ -156,13 +174,13 @@
         },
         {
           "digest": "sha256:9d1394aaf98c496e81058c50e88345201c0c0d8324c5ce63c526bb5522911197",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "make-it-rain.zip",
           "size": 25737
         },
         {
           "digest": "sha256:cdd750dbe3e942bb92c90041ca2a73642fd2dd68dc43aa442ea0480768bc44b0",
-          "downloadCount": 248,
+          "downloadCount": 253,
           "name": "manifest.json",
           "size": 408
         },
@@ -175,7 +193,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 248,
+      "downloadCount": 253,
       "draft": false,
       "name": "Release v1.9.2",
       "prerelease": false,
@@ -192,7 +210,7 @@
         },
         {
           "digest": "sha256:f88e0ec5b5e0039d5f8eeed3c42197e54750517e3b368bb8c331ce88a9ebb1d1",
-          "downloadCount": 45,
+          "downloadCount": 50,
           "name": "manifest.json",
           "size": 409
         },
@@ -205,7 +223,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.9.0...1.9.1",
-      "downloadCount": 45,
+      "downloadCount": 50,
       "draft": false,
       "name": "Release 1.9.1",
       "prerelease": false,
@@ -228,7 +246,7 @@
         },
         {
           "digest": "sha256:5ecf3e6f4e53f16d3c0757174f97caa486bae42e104e0ed247dfab639787cd67",
-          "downloadCount": 17,
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 366
         },
@@ -241,7 +259,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "",
-      "downloadCount": 17,
+      "downloadCount": 22,
       "draft": false,
       "name": "Release 1.9.1",
       "prerelease": false,
@@ -258,7 +276,7 @@
         },
         {
           "digest": "sha256:5badd9779f6ae7cdfba0ab3c413f79921fd3e589d69e10be18441e19b1204d65",
-          "downloadCount": 697,
+          "downloadCount": 702,
           "name": "manifest.json",
           "size": 366
         },
@@ -271,7 +289,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.8.0...1.9.0",
-      "downloadCount": 697,
+      "downloadCount": 702,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,
@@ -294,7 +312,7 @@
         },
         {
           "digest": "sha256:c5f5ba2b70e20616838afa4ec809ac90a24c6628f9aa9868930ca83f5382d66d",
-          "downloadCount": 159,
+          "downloadCount": 164,
           "name": "manifest.json",
           "size": 370
         },
@@ -307,7 +325,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 159,
+      "downloadCount": 164,
       "draft": false,
       "name": "Release v1.8.0",
       "prerelease": false,
@@ -330,7 +348,7 @@
         },
         {
           "digest": "sha256:57746beaf9f56e08d4700413231806ae956d64d5f10eceb91c6ef11a674253d8",
-          "downloadCount": 773,
+          "downloadCount": 778,
           "name": "manifest.json",
           "size": 369
         },
@@ -343,7 +361,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release v1.7.2\n\n## 🐛 Bug Fixes\n\n### Fixed Release Packaging (Issue #6)\n- **Problem:** Users downloading \"Source code (zip)\" didn't receive the compiled plugin files (`main.js`, `manifest.json`, `styles.css`)\n- **Solution:** Release workflow now creates `make-it-rain.zip` containing all required plugin files\n- **Documentation:** Updated README with clearer installation instructions and warning about which file to download\n\n## 📝 Documentation\n\n- Clarified manual installation steps in README\n- Added prominent warning to download `make-it-rain.zip` instead of \"Source code (zip)\"\n\n## 🔧 Maintenance\n\n- Added issue templates for bug reports and feature requests\n- General repository cleanup\n\n## 👋 Community\n\nThanks to @haranrk and @timebinder for reporting the confusion around release downloads. Your feedback helps improve the project!\n\n**Note to users:** If you previously had trouble installing the plugin from the release page, please try again with the new `make-it-rain.zip` file in this release.\n",
-      "downloadCount": 773,
+      "downloadCount": 778,
       "draft": false,
       "name": "Release v1.7.2",
       "prerelease": false,
@@ -358,7 +376,7 @@
           "size": 84453
         },
         {
-          "downloadCount": 2846,
+          "downloadCount": 2851,
           "name": "manifest.json",
           "size": 369
         },
@@ -370,7 +388,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Release v1.7.1\n\nThis release brings several user experience enhancements and bug fixes to Make It Rain!\n\n**Key Highlights:**\n\n*   **✨ Enhanced Collection Selection (Fetch Modal):** Easily select collections from a dynamic, filterable list populated directly from your Raindrop.io account when fetching your bookmarks! This is in addition to the existing manual ID/name entry.\n*   **📄 Improved Template Editing:** Reset your main and content-type specific templates to their defaults with new \"Reset to Default\" buttons in the settings.\n*   **↔️ Better Layout for Inputs:** Input fields in modals and template editing areas are now stacked below their descriptions, providing more space and better readability.\n*   **❓ Contextual Help Links:** Look for new `(?)` help icons next to complex settings that link directly to our documentation.\n*   **🚀 Quick Import Fixes:** The Quick Import feature now more reliably parses Raindrop item IDs and provides clearer instructions on how to find them.\n\n**Other Changes:**\n\n*   Resolved a CI build issue to ensure smoother automated builds.\n\nAs always, thank you for using Make It Rain! We appreciate your feedback. Please report any issues or suggest features on our [GitHub Issues page](https://github.com/frostmute/make-it-rain/issues). ",
-      "downloadCount": 2846,
+      "downloadCount": 2851,
       "draft": false,
       "name": "Release v1.7.1",
       "prerelease": false,
@@ -385,7 +403,7 @@
           "size": 65287
         },
         {
-          "downloadCount": 8,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 369
         },
@@ -397,7 +415,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [1.7.0] - 2025-05-06\n\n### Added\n\n- **Pre-calculated Template Variables**: Introduced new variables directly available in templates for easier use and consistency: `formattedCreatedDate`, `formattedUpdatedDate`, `renderedType`, `domain`, `formattedTags`.\n- **Directory Creation**: Implemented logic in `processRaindrop` to automatically create necessary target directories before writing note files, preventing \"ENOENT: no such file or directory\" errors.\n\n### Changed\n\n- **Template Data Structure**:\n    - Flattened `collection` data in templates. Instead of `{{collection.id}}`, use `{{collectionId}}`, `{{collectionTitle}}`, `{{collectionPath}}`, and `{{collectionParentId}}` (if available).\n    - Standardized the `lastupdate` variable (previously `last_update` or `lastUpdate` in some places) across all templates, `DEFAULT_SETTINGS`, and internal logic.\n- **Default Templates Updated**: All default and content-type specific templates within `DEFAULT_SETTINGS` in `src/main.ts` have been updated to:\n    - Use the flattened collection variables.\n    - Utilize the new pre-calculated display variables instead of template helper functions.\n    - Consistently use `lastupdate` and ensure `id: {{id}}` is present.\n    - Use `{{bannerFieldName}}` for the cover image in frontmatter.\n    - Include a standard 'Details' block with pre-calculated variables.\n- **Fallback Note Generation**: Ensured fallback note creation logic (when templates are disabled) in `processRaindrop` uses `lastupdate` and correct newline character `\\n` formatting for the note body.\n- **README.md \"Created Note Structure\"**:\n    - Replaced the Handlebars template source code example with an example of the *rendered Markdown output* that a user would see in their Obsidian note using the default template. This provides a clearer, more user-friendly illustration of the plugin's output.\n    - Previously, also addressed Markdown linting issues (line lengths) and briefly switched template code block highlighting from `markdown` to `handlebars`.\n- **Dependencies**: Corrected `package.json` by removing an erroneous `@types/obsidian` devDependency. The primary `obsidian` devDependency remains for type checking.\n\n### Fixed\n\n- **Type Filtering in Modal**: Addressed an issue where fetching raindrops from the modal ignored the selected type filter (logic added to filter `allData` by `options.filterType` in `main.ts` *after* fetching and *before* passing to `processRaindrops`).\n- **Collection Hierarchy Replication**: Ensured the collection/sub-collection hierarchy from Raindrop.io is correctly replicated as a folder structure in Obsidian during import (achieved by using `getFullPathSegments` and `createFolderStructure` in `processRaindrop`).\n- **Frontmatter Rendering (YAML vs. JSON)**: Resolved an issue where the `collection` frontmatter field could render as a JSON object in Obsidian's reading view by flattening the collection data for the template.\n- **Template Helper Rendering**: Fixed issues where template helper functions like `{{formatDate created}}` were not rendering in the \"Details\" section by pre-calculating these values and adding them to `enhancedDataForRender`.\n- **Fallback Note Body Formatting**: Corrected an issue where fallback note generation (templates disabled) output literal `\\\\n` characters in the note body.\n\n### Documentation\n\n- Updated `docs/template-system.md`: Added `id: {{id}}` to the default template example and ensured consistency with flattened collection variables, `lastupdate`, and pre-calculated variables.\n- Updated `docs/template-gallery.md`: Added `id: {{id}}` to relevant template examples and ensured overall consistency with current template variables and structure.\n- Verified `docs/templates.md` (variable lists) and `docs/note-structure.md` (fallback structure) are consistent with the latest changes. ",
-      "downloadCount": 8,
+      "downloadCount": 13,
       "draft": false,
       "name": "Release v1.7.0",
       "prerelease": false,
@@ -412,7 +430,7 @@
           "size": 57158
         },
         {
-          "downloadCount": 39,
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 369
         },
@@ -424,7 +442,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.6.0...v1.6.1",
-      "downloadCount": 39,
+      "downloadCount": 44,
       "draft": false,
       "name": "v1.6.1",
       "prerelease": false,
@@ -439,7 +457,7 @@
           "size": 54786
         },
         {
-          "downloadCount": 7,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 369
         },
@@ -451,7 +469,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.5.1...v1.6.0",
-      "downloadCount": 7,
+      "downloadCount": 12,
       "draft": false,
       "name": "v1.6.0",
       "prerelease": false,
@@ -466,7 +484,7 @@
           "size": 52802
         },
         {
-          "downloadCount": 8,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 369
         },
@@ -478,7 +496,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.5.0...v1.5.1\r\n\r\n### Fixed\r\n\r\n- Fixed collection hierarchy to properly maintain nested folder structure when no filter options are selected.\r\n- Improved rate limiting logic with more conservative limits and longer delays between retries.\r\n- Added small delays between consecutive API calls to reduce rate limit issues.\r\n- Added user-visible notices during rate limit waiting periods.\r\n- Fixed JSON parsing issues with API responses.",
-      "downloadCount": 8,
+      "downloadCount": 13,
       "draft": false,
       "name": "v1.5.1",
       "prerelease": false,
@@ -493,7 +511,7 @@
           "size": 49327
         },
         {
-          "downloadCount": 6,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 369
         },
@@ -505,7 +523,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.4.0...v1.5.0\r\n\r\n# Release Notes for Make It Rain v1.5.0\r\n\r\n- 2025-05-16\r\n\r\n## Technical Details\r\n- Updated to version 1.5.0\r\n- Minimum Obsidian version required: 1.8.10\r\n\r\n## Installation\r\n1. Download the latest release from the Releases page\r\n2. Extract the plugin to your vault's plugins folder\r\n3. Enable the plugin in Obsidian's settings\r\n\r\n## Support\r\nIf you encounter any issues, please report them on our GitHub repository.\r\n\r\nThank you for using Make It Rain!",
-      "downloadCount": 6,
+      "downloadCount": 11,
       "draft": false,
       "name": "v1.5.0",
       "prerelease": false,
@@ -520,7 +538,7 @@
           "size": 108518
         },
         {
-          "downloadCount": 6,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 369
         },
@@ -532,7 +550,7 @@
       ],
       "author": "frostmute",
       "description": "**Full Changelog**: https://github.com/frostmute/make-it-rain/compare/v1.3.0...v1.4.0",
-      "downloadCount": 6,
+      "downloadCount": 11,
       "draft": false,
       "name": "v1.4.0",
       "prerelease": false,

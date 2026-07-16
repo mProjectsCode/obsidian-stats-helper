@@ -4,8 +4,8 @@
   "description": "Sync ima notes & knowledge-base to Obsidian - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "ima-copilot-sync",
-  "lastChangedAt": "2026-07-15T05:05:27.001Z",
-  "lastFetchedAt": "2026-07-15T05:05:27.001Z",
+  "lastChangedAt": "2026-07-16T05:02:26.990Z",
+  "lastFetchedAt": "2026-07-16T05:02:26.990Z",
   "manifest": {
     "author": "chenxiccc",
     "authorUrl": "",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:b75b0c71285b24ce3742f5b83e4740c2201250292da47f05586260de852fed51",
-          "downloadCount": 92,
+          "downloadCount": 128,
           "name": "main.js",
           "size": 822112
         },
         {
           "digest": "sha256:4a584f28cfce35ae2ad34ee6db30b7210a61481c6da321b46874ed64cf813ab6",
-          "downloadCount": 97,
+          "downloadCount": 138,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 89,
+          "downloadCount": 123,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.6.0\n\n### 修复\n\n- **微信公众号文章发布时间晚 8 小时**：`extractWeChatPublishTime` 从 Unix 时间戳转换时漏了时区偏移，输出 UTC 而非北京时间（如实际 `2026-07-09T10:09:17` 被记为 `02:09:17`）。现统一加 `+8h` 偏移（与知乎/小红书路径一致，参照 Obsidian-Share-to-Save `extractCreateTime`）。`createTime` 预格式化字符串分支改为直接拼接输出，避免非 UTC+8 机器上 `new Date` 本地解析导致的二次偏移\n- **`create_time` 提取漏第三种格式**：补 `var create_time = '1234567890'` 赋值格式正则\n\n### 新增\n\n- **微信文章 HTML 代码示例保护**：微信技术类文章常含 `&lt;div&gt;` 等 HTML 标签实体，DOMParser 解码后 turndown 会输出原始 `<div>` 标签污染 Markdown。新增 `protectAngleBrackets`（DOMParser 前把 `&lt;`/`&gt;` 替换为 ANGLT/ANGGT 占位符，保护 code/pre/title 块原样）+ `restoreAngleBrackets`（turndown 后把 ANGLT+标签名+ANGGT 还原为行内代码 `` `<tag>` ``，其余还原为实体编码）。照搬 Obsidian-Share-to-Save `text-utils.ts`\n\n### 内部\n\n- **微信主路径接入完整后处理管线**（对齐 Obsidian-Share-to-Save `postprocessContent`）：`restoreAngleBrackets` → Tab→空格（防 Obsidian 误判缩进为代码块）→ `normalizeBoldMarkers`（已有）→ `normalizeMultilineLinks`（折叠 `[\\n\\ntext\\n\\n](url)` 断裂链接）→ `cleanWeChatWhitespace`（已有）。回退路径末尾也加 `restoreAngleBrackets` 防御\n- `convertWeChatHtmlToMarkdown` 入口加 `protectAngleBrackets` 预处理，影响整个 doc（含 isWeChatBlockPage 检测、buildCleanWeChatHtml、回退路径），链路自洽\n- 至此微信提取管线已与 Obsidian-Share-to-Save 完全对齐\n\n\n**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/6.5.1...6.6.0",
-      "downloadCount": 97,
+      "downloadCount": 138,
       "draft": false,
       "name": "6.6.0",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:63a80aa34b2eab890ad1c39e9c664e6eadf1883945ba997cd58bab77d1e16f58",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "main.js",
           "size": 821459
         },
         {
           "digest": "sha256:63841ce7f685fb9a066f5000bbca215f5848808ff84f9a046130c5f4e9ec7b6f",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 253
         },
         {
           "digest": "sha256:fc770e23adeaa073f5ca824117ab4456cd1c4dfe9d998c3a49f6f63364799166",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 4190
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 6.5.1\r\n\r\n### 修复\r\n\r\n- **微信公众号文章同步只剩\"营销审核\"遮罩词、正文全丢**：微信文章 headless 渲染后返回「正文 `#js_content`（完整可见）+ 营销审核遮罩层（`visibility:hidden` 浮层）」共存的页面，此前用 defuddle 提取时，defuddle 对微信 flexbox `<section>` 伪结构无法识别，导致结构塌缩 + 正文丢失，结果文件只剩一行遮罩提示语。改用 **turndown 直取 `#js_content` 节点**（参照 Obsidian-Share-to-Save 的 WeChatConverter），正文、列表、段落结构、图片全部保真\r\n- **微信营销审核遮罩污染提取**：新增 `.weui-half-screen-dialog` / `.ad_control-tips` / `[class*=\"ad_control\"]` / `.pay_area` / `.wx_bottom_modal` 到 UI 移除清单，避免遮罩层文字混入正文\r\n- **拦截页判定增强**：`isWeChatBlockPage` 新增\"未经审核的第三方商业营销信息\"\"请确认是否继续访问\"关键词检测，并区分「真拦截页（纯遮罩无正文，短路返回）」与「正文 + 遮罩共存（走主路径提取）」两种形态\r\n\r\n### 新增\r\n\r\n- 引入 `turndown`（含 `@joplin/turndown-plugin-gfm` GFM 扩展：表格、删除线、任务列表、围栏代码块）作为微信文章 HTML→Markdown 转换器，defuddle 仍用于知乎 / 小红书 / 通用网页及微信回退路径",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "6.5.1",
       "prerelease": false,
@@ -1239,14 +1239,14 @@
         },
         {
           "digest": "sha256:a6da54e0bcd4dea81b4b729e8f0ab53a2c0ab251ee60136d9dcdfc35e902fd38",
-          "downloadCount": 17,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 234
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/chenxiccc/obsidian-ima.copilot-sync/compare/1.2.0...1.2.1",
-      "downloadCount": 17,
+      "downloadCount": 19,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
