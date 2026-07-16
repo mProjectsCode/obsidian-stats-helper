@@ -4,8 +4,8 @@
   "description": "Surface notes most semantically similar to the one you're reading in a left-sidebar panel, powered by a small multilingual embedding model that runs entirely on your machine. Private and offline. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "smart-related-notes",
-  "lastChangedAt": "2026-07-15T08:03:27.037Z",
-  "lastFetchedAt": "2026-07-15T08:03:27.037Z",
+  "lastChangedAt": "2026-07-16T08:01:28.006Z",
+  "lastFetchedAt": "2026-07-16T08:01:28.006Z",
   "manifest": {
     "author": "Saiki77",
     "authorUrl": "https://github.com/Saiki77",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:e0edba8e8c58050138dca868c3d20130c818021336665f28721c32ac24e724a8",
-          "downloadCount": 72,
+          "downloadCount": 76,
           "name": "main.js",
           "size": 625633
         },
         {
           "digest": "sha256:a0a7907f19526fa4940d07ebb1748bdae40ec4009c5b18e21572982bf0fcd8d8",
-          "downloadCount": 90,
+          "downloadCount": 96,
           "name": "manifest.json",
           "size": 426
         },
         {
           "digest": "sha256:19249f3b62144dec7ce3eeb98bdcf11d619c94ad04d733d254e6da49ddc979bc",
-          "downloadCount": 66,
+          "downloadCount": 70,
           "name": "styles.css",
           "size": 8975
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Streamlined install + community-review fixes\n\nReleases now ship exactly the three files Obsidian installs (`main.js`, `manifest.json`, `styles.css`) — the runtime zip is gone. Instead, the plugin **downloads the pinned ONNX runtime once (~24 MB) into its own folder on first use** and serves it locally from then on, so **every** install method (community directory, BRAT, manual) now works offline after first run — previously only the full-zip install did.\n\n- The cached runtime is **integrity-checked against byte sizes pinned at build time**: interrupted downloads, leftovers from older installs, or a proxy serving garbage are detected and cleanly re-downloaded instead of causing cryptic startup errors.\n- Runtime download tries jsdelivr first, then unpkg — one blocked CDN no longer breaks first-run setup.\n- Existing installs that already have the runtime folder (e.g. from the 2.1.x zips) keep using it — no re-download.\n- Internal changes for the community-plugin automated review (no `fetch` in plugin code; assets are read through the vault API / `requestUrl`).\n\nSee [2.1.1](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.1) and [2.1.0](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.0) for the idle memory-release feature this builds on.",
-      "downloadCount": 90,
+      "downloadCount": 96,
       "draft": false,
       "name": "2.1.2",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:a33f7970daad00045e955ba1585556a3faebe330a27c516015170b24b1babf26",
-          "downloadCount": 18,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 426
         },
@@ -78,7 +78,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## More aggressive memory release\n\nNew choices for **\"Unload model when idle\"**:\n\n- **Right after use (30 seconds)** — the embedding engine is torn down half a minute after its last piece of work, so it effectively only exists *during* indexing/search bursts.\n- **After 1 minute**\n\n30 seconds is the floor rather than \"instant\" because a respawn costs a few seconds of background CPU and note edits are re-indexed on a 20-second pause — anything shorter would tear the engine down between consecutive edits and immediately respawn it.\n\nWith the aggressive settings, the first search or `[[` suggestion after a pause shows the keyword/recency fallback for a few seconds while the engine reloads (the panel says \"Loading the embedding model…\"), then results upgrade.\n\nSee [2.1.0](https://github.com/Saiki77/smart-related-notes/releases/tag/2.1.0) for the underlying change (engine in a terminable worker, memory actually returned to the OS, offline/CDN fix, detailed error messages).\n\n**Installing manually?** Use `smart-related-notes.zip` (it includes the bundled ONNX runtime). Installs of just `main.js` fall back to the CDN.\n",
-      "downloadCount": 18,
+      "downloadCount": 20,
       "draft": false,
       "name": "2.1.1",
       "prerelease": false,
@@ -95,7 +95,7 @@
         },
         {
           "digest": "sha256:b41b14eb178419d913e0d8d60f99781b610adcc233743a692106bca56b2b62a1",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 426
         },
@@ -114,7 +114,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Memory: the plugin now frees its RAM when idle\n\nThe embedding engine (transformers.js + ONNX runtime) now runs in its own worker and is **shut down after 15 minutes without indexing or searching** (configurable via the new **\"Unload model when idle\"** setting), returning its memory — previously hundreds of MB to several GB held until Obsidian quit — to the system. It reloads automatically in a few seconds on next use, with no re-download. Ranking when switching notes never needs the engine and is unaffected.\n\nAlso in this release:\n\n- **Fixed: model/device/speed changes leaked memory** — each change stacked another copy of the engine's memory on top of the old one.\n- **Fixed: offline use & CDN dependency** — 2.0.x silently ignored its bundled ONNX runtime and always fetched it from jsdelivr's CDN. Full installs now use the shipped copy (works offline; fixes *\"could not load the embedding model\"* on networks that block the CDN).\n- **Fixed: changing the model mid-index** could save an index mixing old- and new-model vectors; the rebuild now restarts cleanly.\n- **Better errors**: model-load failures now say *what* failed (ONNX runtime fetch vs. model download, with the URL/model named) right in the notice — please include it when reporting issues.\n- Search shows \"Loading the embedding model…\" while the engine warms up instead of waiting silently; smoother typing during rebuilds (inference left the main thread).\n\n**Installing manually?** Use `smart-related-notes.zip` (it includes the bundled ONNX runtime). Installs of just `main.js` fall back to the CDN.\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -131,7 +131,7 @@
         },
         {
           "digest": "sha256:6f3f22b5ea1b97f9e4c99fac62a23617a33cde7c2edb7c8f8750c5cae93ad53b",
-          "downloadCount": 114,
+          "downloadCount": 116,
           "name": "manifest.json",
           "size": 426
         },
@@ -150,7 +150,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "2.0.1\n\n",
-      "downloadCount": 114,
+      "downloadCount": 116,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
@@ -167,7 +167,7 @@
         },
         {
           "digest": "sha256:aa561d68ed3f61c7ca4b0d5e6e3ff31b006e095d651519cc3696bf25b61f9052",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 426
         },
@@ -186,7 +186,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "2.0.0\n\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -203,7 +203,7 @@
         },
         {
           "digest": "sha256:b1e69e61e345550678d6e55dc9706114f05caa61244ee6d47ece6a9119c2126b",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 434
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.19.0-beta.3: close first-run gate leaks (flushDirty, [[ suggester) + cap/doc fixes\n\nAdversarial review (verdict fix-then-ship; hybrid verified correct, EOS-truncation false\npositive dropped). Fixes:\n- HIGH: flushDirty() now returns early (clears dirty) while !modelChosen — editing a note\n  on a fresh gated install no longer silently downloads the default model.\n- HIGH: link-suggester computeContextVec() early-returns while !modelChosen — typing [[\n  no longer pulls model weights before a model is picked (falls back to recency).\n- LOW: rebuildIndex() gated with a Notice; WHOLE_NOTE_CHARS 14000->10000 with a corrected\n  comment (no tokenizer truncation on the single-input path); whole-note cap now counts\n  IDEAS (parity with MiniLM's body-chunk cap).\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.19.0-beta.3",
       "prerelease": true,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:277b124d48bb093ef1f98a68f03b0ba7a88da90888515e0f59ecbc17ec0e970b",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 434
         },
@@ -258,7 +258,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.19.0-beta.2: jina-v5 opt-in (whole-note + idea hybrid), first-run gate, model manager\n\n- embeddings.ts: per-model ModelSpec (prefix/pooling/wholeNote); jina-v5-nano uses a\n  'Document: ' prefix + LAST-TOKEN pooling (single-input, no padding) via embed/embedBatch.\n- index-store.ts: whole-note + idea-unit hybrid (chunkNoteWholeNote). For jina the note\n  MEAN is one embed of the whole note (its winning signal) and each IDEA is embedded\n  whole as a stored chunk (idea extractor preserved, fed by jina). assembleEntry splits\n  the isMean chunk off as meanVector; storage is dimension-agnostic (384 MiniLM / 768 jina).\n  MiniLM path unchanged.\n- main.ts: jina in MODEL_OPTIONS (opt-in, ~250MB, CC-BY-NC labelled); FIRST-RUN GATE\n  (modelChosen: fresh installs don't index until a model is picked; existing installs\n  migrated to chosen); settings intro blurb; MODEL MANAGER (list + remove cached models).\n- Model switch re-embeds via the existing modelId/dims invalidation (no mixed-dim mixing).\n- Build + lint green. In-Obsidian jina behavior (pooling/whole-note ranking) is the test.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.19.0-beta.2",
       "prerelease": true,
@@ -275,7 +275,7 @@
         },
         {
           "digest": "sha256:71e2d5982046381a4e79b693e01f768cad842013270a9391b8a74ddffee10630",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 434
         },
@@ -294,7 +294,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "ci: verify the asyncify wasm assets (v4) instead of the removed jsep ones\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.19.0-beta.1",
       "prerelease": true,
@@ -311,7 +311,7 @@
         },
         {
           "digest": "sha256:d7f30c35c47ed67618a014dc462f3f0cd793b7b6b3e8dcb72df71a9d94084a87",
-          "downloadCount": 24,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 427
         },
@@ -330,7 +330,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.18.0: isolated areas (self-contained tag-namespace partitions)\n\nA new \"Isolated areas (tag namespaces)\" setting lets you activate areas by tag\nnamespace (one per line, e.g. goa). A note whose tags include an activated namespace\n(matching goa AND goa/character) belongs to that area; ranking then partitions the\nvault:\n\n- A note in an isolated area only relates to notes in the SAME area, and never appears\n  in the cards of any note outside it (a self-contained novel/world stays self-\n  contained -- \"doesn't appear anywhere else\").\n- Notes in no activated area share one common pool.\n- Tag suggestions scope for free: an isolated note's neighbours are all same-area, so\n  e.g. goa/* tags are only ever suggested to goa notes, never to math/study notes.\n\nImplementation: rank()'s Stage-1 shortlist drops candidates failing areaMatch(); area =\ntop-level tag namespace intersected with options.isolatedAreas. noteAreas()/areaMatch()\nhelpers; computeInsights (links + tag suggestions) inherits the filter via rank().\nRank-time only -> NO re-embed; changing the setting re-ranks live.\n\n",
-      "downloadCount": 24,
+      "downloadCount": 26,
       "draft": false,
       "name": "1.18.0",
       "prerelease": false,
@@ -347,7 +347,7 @@
         },
         {
           "digest": "sha256:8a35a57ebe45998baeb35df482b4edda71f76c3b9a86f7f5cd8c489bb8343a0e",
-          "downloadCount": 32,
+          "downloadCount": 34,
           "name": "manifest.json",
           "size": 427
         },
@@ -366,7 +366,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.17.0: semantic tag suggestions (the plugin finds missing tags itself)\n\nAdds a \"Suggested tags\" section to the Vault insights report: for each note, the tags\na MAJORITY of its semantic neighbours carry but it lacks -- restricted to DISCRIMINATIVE\ntags (document-frequency between MIN_TAG_DF and 50% of notes, so a near-universal tag\nlike \"goa\" is never proposed) and to notes with enough tagged neighbours\n(MIN_TAG_NEIGHBORS) to be trustworthy. Pure label-propagation over the existing\nsimilarity graph -- no rules, no body heuristics.\n\nValidated live on the user's vault: it independently inferred Whispering Shadow and\nVulcan -> #goa/character (10/20 neighbours each) from similarity to the already-tagged\ncharacter cluster, and math notes clustering to #bio/#analysis; the min-neighbours guard\ndrops sparse-note noise (e.g. a 1/2-neighbour false positive).\n\nIndexStore.computeInsights now also returns suggestedTags; rendered in the report. No\nindex format change -> no re-embed.\n\n",
-      "downloadCount": 32,
+      "downloadCount": 34,
       "draft": false,
       "name": "1.17.0",
       "prerelease": false,
@@ -383,7 +383,7 @@
         },
         {
           "digest": "sha256:09d604df31397a8755742f36238a129f0389553af787720d33aacdd502a2fdc8",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 427
         },
@@ -402,7 +402,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.16.0: linked-notes (MOC) mode in the panel\n\nA new link icon in the panel header toggles \"linked notes\" mode: instead of the notes\nmost SIMILAR to the active note, the cards show the notes the active note LINKS TO --\ni.e. a map-of-content's members. Closes the category gap from the other side: open\n\"GoA Characters\" and the panel lists every character it links to, as clickable cards.\n\n- view.ts: linksMode toggle (mutually exclusive with search), renderLinks() reads\n  metadataCache.resolvedLinks for the active note and renders resolved md targets as\n  \"Linked\" cards; empty state when the note links to nothing.\n- Active toggle reads as accent (styles.css). No index change -> no re-embed.\n\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "1.16.0",
       "prerelease": false,
@@ -419,7 +419,7 @@
         },
         {
           "digest": "sha256:81b3648cfd6936e87f2c0876f4689011df679c8033b1b44b9fbe4f76db91c93b",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 427
         },
@@ -438,7 +438,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.15.0: Vault insights command (link-building + graph hygiene)\n\nA new command \"Vault insights (suggested links, orphans, duplicates)\" generates a\nreport note over the whole vault from the live semantic index -- aimed at growing a\nsparse link graph and cleanup:\n\n- Suggested links: strongest related-but-UNLINKED pairs (>= 0.5 similarity, top 50),\n  the fastest way to connect notes that belong together.\n- Orphan notes: notes with no resolved links in or out, each paired with its closest\n  relative as a starting point.\n- Possibly duplicate: near-identical pairs (>= 0.68), merge/cross-link candidates.\n- Stale: oldest-edited notes.\n\nIndexStore.computeInsights(ignore) reuses the same rank() the panel uses; the report\nnote ignores ITSELF as a link source so re-runs stay accurate. Thresholds tuned to the\nobserved score distribution (a real 113-note vault: 48 orphans, top unlinked pairs\n0.64-0.75). No index format change -> no re-embed. Rank-time only.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.15.0",
       "prerelease": false,
@@ -455,7 +455,7 @@
         },
         {
           "digest": "sha256:0a41dedf0492e3f66f82d485a91b0167c1dc91e9c50f0b9685aa9babf9596931",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 427
         },
@@ -474,7 +474,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.14.0: embed note tags + aliases (restore the frontmatter signal)\n\nChunking strips YAML frontmatter, which silently DISCARDED each note's tags and\naliases -- exactly the \"this is a GoA character\" context the user expects search and\nrelated-notes to use. Now the title chunk's EMBED input folds in aliases + tags\n(display text stays the bare basename), via the existing normalizeTag/addFrontmatterTags\nhelpers plus a new addAliases. So a note matches on its alternate names and category\ntags, not just its prose.\n\nNote on behavior: a tag present on nearly every note (e.g. \"goa\") is absorbed into the\ncorpus centroid and centered out at rank time, so the lift comes from DISTINCTIVE tags\nand aliases; a universal tag is neutral, not harmful. A per-type tag (e.g. #character)\nwould make that category razor-sharp.\n\nINDEX_VERSION 7->8 (one-time re-embed).\n\nAlso adds bench/ab-eval.mjs: an offline link-recall A/B harness (ground truth = the\nuser's wikilinks). Result on the user's real vault (24 linked notes): MiniLM/windows+\nbiMax (current) R@10=0.429 BEATS BGE-M3/windows 0.351 and BGE-M3/whole-note 0.212 --\nso the 568MB long-context model is a measurable REGRESSION here, and the small\nparaphrase model + MaxSim-over-windows stays the right call. Path A confirmed by data.\n\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "1.14.0",
       "prerelease": false,
@@ -491,7 +491,7 @@
         },
         {
           "digest": "sha256:547386f07e8c34b638559fa4e20951d1a81dc7d785141d6058beae944b5eab3b",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 427
         },
@@ -510,7 +510,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.13.0: better semantic search — best-passage match + title boost\n\nSearch ranked notes purely by the note AVERAGE, so a query like \"goa character\"\nsurfaced notes whose whole topic is \"characters\" (list/idea notes) and buried both the\nindividual character notes and even the note literally named \"GoA Characters\". Two\nfixes, both rank-time only (NO re-embed, no index change):\n\n- Best-passage re-rank: after the mean-cosine shortlist, score each candidate by the\n  best-matching passage (max cosine of the query to any of the note's chunk vectors),\n  blended 0.4 mean / 0.6 passage. A note that discusses the query in ONE section now\n  surfaces even if its overall gist is something else.\n- Lexical title/path boost: + up to 0.25 for query words present in the note path, so\n  searching \"goa characters\" puts the note literally named that near the top instead\n  of below an unrelated template.\n\nNote: a category query (\"list all X\") is still bounded by semantic similarity — to\nenumerate members of a MOC, following its outgoing links is the structural answer\n(a candidate future mode).\n\n",
-      "downloadCount": 15,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.13.0",
       "prerelease": false,
@@ -527,7 +527,7 @@
         },
         {
           "digest": "sha256:1a0c1cf7c0da07b6ff1ff136ebcb6c03ffd2115dbca4d7063db6e35dc293e150",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 427
         },
@@ -546,7 +546,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.12.0: idea-level grouping + idea-aware ranking (semantic chunking)\n\nParagraph boundaries are a poor unit for \"an idea\" (a paragraph is often one\nsentence). This groups adjacent passages into coherent IDEAS (~200-500 words) and\nblends idea-level matching into ranking, so a note related by one whole idea spanning\nseveral paragraphs surfaces, not just on a single lucky passage hit.\n\n- assignIdeas() (index-store.ts): groups the body windows into ideas on the FULL\n  pre-cap stream (true text adjacency) at heading transitions + adaptive lexical-\n  cohesion valleys, bounded by size rails (MAX_IDEA_WINDOWS) and a word floor\n  (MIN_IDEA_WORDS, coalesced by mergeSmallIdeas so bullet-heavy notes reach the target\n  instead of leaving 40-word fragments). Atomic-note guard keeps short math/technical\n  notes as one idea. Pure text -> deterministic + model-independent (ideas don't shift\n  when the model is swapped, keeping a future model A/B clean).\n- Each note persists a small ideaOf[] (one idea id per row) in the JSON manifest only\n  -- the binary blob layout is UNCHANGED. ideaMaxSim() aggregates the centered window\n  rows into per-idea vectors and runs the existing directionalMax (same geometry as\n  biMax, title idea weighted). rank() blends ((1-w)*biMax + w*ideaMaxSim).\n- \"Idea influence\" w is a LIVE rank-time knob (default 0.3): it re-ranks instantly\n  with NO re-embed, so it can be A/B'd by sliding 0..0.6. 0 == byte-identical to v1.11.\n- INDEX_VERSION 6->7 (one-time re-embed to populate ideaOf).\n\nVerified: research+design+adversarial workflow (verdict fix-then-ship; fixes applied)\nplus a live run of the algorithm against the user's real notes (atomic notes -> 1\nidea; long prose -> ~200-360-word ideas; no fragments). A higher-quality long-context\nmodel (BGE-M3) remains a measured A/B before adoption -- this idea layer is the shared\nfoundation either way.\n\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "1.12.0",
       "prerelease": false,
@@ -563,7 +563,7 @@
         },
         {
           "digest": "sha256:b93c20810aeec67ac8cd997ebab91a9378181f979779716de6021c6abb29ecac",
-          "downloadCount": 24,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 427
         },
@@ -582,7 +582,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.11.1: clean heading breadcrumbs in structure-aware chunking\n\nLive verification (running the new chunker against real notes in Obsidian's console)\nconfirmed the rewrite works end to end — whole-note coverage with the longest notes\npreviously losing ~96% of their content to the 1500-char cap, real headings detected\n(19 sections in one note), every chunk within the token budget (0 over 480). It also\nsurfaced one cosmetic issue, fixed here:\n\n- splitIntoSections now strips inline markdown (**bold**, _italic_, `code`, [[links]])\n  from heading text, so a heading like `# **Stage A — Ethereal Artificer:**` yields the\n  breadcrumb \"Stage A — Ethereal Artificer:\" instead of carrying the literal ** markers\n  into the heading-context embed prefix. Cleaner context for the embedder.\n- INDEX_VERSION 5 -> 6 so any index already built on 1.11.0 re-embeds once with the\n  cleaned prefixes.\n\n",
-      "downloadCount": 24,
+      "downloadCount": 26,
       "draft": false,
       "name": "1.11.1",
       "prerelease": false,
@@ -599,7 +599,7 @@
         },
         {
           "digest": "sha256:8f6ec405bfd55e34e23b5e9e8915b27c9b958947806c0ddcafca80b5ec035a0a",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 427
         },
@@ -618,7 +618,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.11.0: whole-note structure-aware chunking (foundational embedding overhaul)\n\nNotes are no longer truncated to 1500 chars and chunked by blind sentence windows.\nThe whole note is now split at LOGICAL boundaries into coherent idea-chunks, so a note\nis an overall embedding PLUS a set of section-level chunks other notes/queries align\nwith section-by-section.\n\n- splitIntoSections(): parse the raw note into sections at ATX headings (code-fence +\n  frontmatter aware), carrying a heading breadcrumb; headings are the primary idea\n  boundary, paragraphs the secondary one. A window never crosses a section/paragraph.\n- splitToBudget(): hard char guard (MAX_CHUNK_CHARS=480 ≈ 120 tokens) splitting any\n  window at sentence then whitespace boundaries so the model never silently truncates\n  a chunk (EN + DE). TARGET_WORDS 60->80.\n- Whole-note coverage: removed embedCharLimit truncation entirely; chunk-count cap\n  16->48 (adaptive tiers raised), over-cap keeps every section's first window.\n- Heading context (new setting, default on): the first chunk of each section embeds\n  with a \"Note > H1 > H2:\" breadcrumb prefix (embed input only; raw text kept for\n  snippets), the LLM-free contextual-retrieval trick, scoped to avoid embedding\n  collapse. The window is clamped so prefix+window stays within the token budget.\n- INDEX_VERSION 4->5: one-time full re-embed on update. meanVector + biMax unchanged\n  (better inputs). Both build() and embedFile() embed via a shared chunkEmbedInput()\n  helper so the full and incremental paths can't diverge.\n\nVerified by a research-backed design pass + an adversarial review (fixed a high-sev\nincremental-path regression and a prefix-budget truncation before shipping).\n\n",
-      "downloadCount": 15,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.11.0",
       "prerelease": false,
@@ -635,7 +635,7 @@
         },
         {
           "digest": "sha256:d4622938d527d579c170751cb5d833217817e479e160f30dcc11b5d5f75dc60b",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 427
         },
@@ -654,7 +654,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.10.0: semantic search box in the panel\n\nA magnifier in the panel header (next to the rebuild icon) opens a search box that\nranks the whole vault by meaning against a typed query (e.g. \"goa characters\",\n\"proofwork\"), on the same mean-centered scale as the related-notes cards.\n\n- store.rankByQuery(query): embeds the query, centers it with the corpus centroid,\n  ranks entries by cosine to their centered means (floor = min(minSimilarity, 0.12),\n  topK). Keyword fallback (query tokens vs note paths, excludes respected) when the\n  engine can't embed or the index is empty, and on an embedding-dim mismatch.\n- view: toggle search input; debounced; async results guarded against stale runs;\n  render() yields to an active search; debouncers cancelled on close.\n\nVerified by an adversarial review (verdict: ship).\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.10.0",
       "prerelease": false,
@@ -671,7 +671,7 @@
         },
         {
           "digest": "sha256:5c93628abc9520dcbf97e1b9fc7ea846a9f6d64bacc6fc16babc069facb771d7",
-          "downloadCount": 17,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 426
         },
@@ -690,7 +690,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.9.1: fix cards showing through the panel header while scrolling\n\nThe header was position:sticky inside a single scrolling view, which let cards\nrender over/through it during scroll momentum. Switch to a flex column: a fixed\nheader (flex:0 0 auto) plus the card list as its own scroll area\n(flex:1; min-height:0; overflow-y:auto), so cards can never paint outside the list.\n\n",
-      "downloadCount": 17,
+      "downloadCount": 19,
       "draft": false,
       "name": "1.9.1",
       "prerelease": false,
@@ -707,7 +707,7 @@
         },
         {
           "digest": "sha256:37da9662ff9fb98884c89d5171e02fad4bc17be9f8d474089619b671d6780a96",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 426
         },
@@ -726,7 +726,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.9.0: recent notes in the empty panel + link-suggestion folder exclusion\n\n- When no note is open, the panel now lists recent notes (recently opened, falling\n  back to recently modified) as clickable cards instead of \"No active note.\"\n- New setting \"Folders excluded from link suggestions\": notes in these folders stay\n  indexed and ranked in the panel but are never offered as inline [[link]] targets.\n  The TitleIndex now skips the union of the index-excluded folders and this list, so\n  \"Excluded folders\" also implies no link suggestions (an excluded folder is fully\n  excluded). Changing either list marks the TitleIndex dirty so the glow updates.\n\n",
-      "downloadCount": 15,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.9.0",
       "prerelease": false,
@@ -743,7 +743,7 @@
         },
         {
           "digest": "sha256:ad7e6266fb3b5ad986ad0d31f5e8bc0f4a02c4887bb80a09e3cad16de1b389d7",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 426
         },
@@ -762,7 +762,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.5: docs-only release (remove em dashes from the README)\n\nNo code changes; version bump to ship the README formatting cleanup.\n\n",
-      "downloadCount": 16,
+      "downloadCount": 18,
       "draft": false,
       "name": "1.8.5",
       "prerelease": false,
@@ -779,7 +779,7 @@
         },
         {
           "digest": "sha256:18df251ab7be2962ed4e0c2226f66ae4ab3309129d20aab077c55ceb7224410b",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 426
         },
@@ -798,7 +798,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.4: rename plugin id + repo to smart-related-notes\n\nThe plugin id was `related-notes`, which is already taken by another community\nplugin of the same id (\"Related Notes\" by mrboxtobox). Obsidian requires globally\nunique plugin ids, so the directory submission was rejected with \"An entry with this\nID already exists.\" The display name \"Smart Related Notes\" was never the problem.\n\nRename the id and the GitHub repo to `smart-related-notes` (display name unchanged).\nAlso updated to match: the runtime plugin-folder path (self-hosted wasm lookup), the\nsidebar view type (avoids clashing if both plugins are installed), the release zip /\npackaged folder, the package name, and the manual-install docs. Internal console log\nprefixes and CSS class names are intentionally left as-is (no conflict).\n\nExisting BRAT installs should be removed and re-added from Saiki77/smart-related-notes;\nbecause the plugin folder changes, settings and the index rebuild fresh.\n\n",
-      "downloadCount": 15,
+      "downloadCount": 17,
       "draft": false,
       "name": "1.8.4",
       "prerelease": false,
@@ -815,7 +815,7 @@
         },
         {
           "digest": "sha256:cd2e930bf165dffa8e45fdcf44613241b33a41f28f81a420e6093d86b02e94af",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -834,7 +834,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.3: revert auto->WebGPU (memory crash) + add Indexing speed setting\n\nThe 70GB memory crash returned: 1.7.0 made \"auto\" prefer WebGPU again, and onnxruntime\n-web's WebGPU backend still accumulates GPU/unified memory across reindexes (and plugin\nreloads) until Obsidian dies — per-pass tensor disposal wasn't enough. Revert: \"auto\"\n(and \"wasm\") resolve to multi-threaded WASM, which is memory-stable (verified flat at\n~9GB across 3 back-to-back reindexes, no growth). WebGPU stays available only as an\nEXPLICIT pin, with a clear warning in the setting + README.\n\nMulti-threaded WASM is fast (~28s) but its shared heap holds several GB while loaded,\nand that cost is roughly the same at 4 or 8 threads (it's the model's working set, not\nper-thread) — only single-threaded is light (~2GB) but slow (~2.5min). Since there's no\nfast-AND-light option, expose the trade-off: a new \"Indexing speed\" setting\n(Light = 1 thread / Balanced = ~cores/3 / Fast = cores-2 capped 8), default Balanced,\nwired via setEmbedThreads(); changing it recreates the engine (configureEnv re-applies\nnumThreads) and rebuilds, exactly like a device change. Incremental per-note updates\nstay fast at any setting. No INDEX_VERSION change.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.8.3",
       "prerelease": false,
@@ -851,7 +851,7 @@
         },
         {
           "digest": "sha256:fa8dd8096e7d5cdc5cae0062d48d6996ee54c0b75df8c9da1eee9f2b29410678",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -870,7 +870,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.2: glow gate — only suppress off-topic CONTENT-RICH notes, let stubs glow\n\n1.8.1 gated ALL empty stubs (glow only if structurally tied), which left notes with\nNOTHING highlighted — e.g. an on-topic but empty \"LLM\" stub stopped glowing in an\nessay about LLMs. Now that off-topic notes with real content (a math \"Analysis\" full\nof calculus) are caught by the centered semantic test, the blunt stub rule is no\nlonger needed.\n\nNew glowAllowed: gate ONLY a content-rich target (chunkCount > 1) that is both\noff-topic (centered similarity < GLOW_CONTEXT_FLOOR) AND not structurally tied (no\nlink either direction, no shared tag). Everything else glows — empty stubs (concept\nplaceholders to link/build out), on-topic notes, and linked/tagged notes. Extracted\nthe structural test into structurallyTied(). No re-embed.\n\nVerified live: in the security essay, \"analysis\" (now a content-rich math note) stays\ngated, while \"llm\" (empty stub) glows again — highlighting is back without the\noff-topic noise.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.8.2",
       "prerelease": false,
@@ -887,7 +887,7 @@
         },
         {
           "digest": "sha256:edc431e7e22244dfb5f476eddc9da56a783b81a6c9e7c8af1a398b6218f90858",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -906,7 +906,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.1: context-gate the glow — don't link a common word where it doesn't fit\n\nThe inline glow linked any exact title match, so \"analysis\" in a security note glowed\nthe unrelated math \"Analysis\" note. Gate each glow (and Link-all / auto-link) by\nwhether the target fits the active note's CONTEXT, via IndexStore.glowAllowed:\n  - Content-rich target: keep only when its centered (topical) similarity to the\n    active note clears GLOW_CONTEXT_FLOOR (0.15) — reuses the 1.8.0 mean-centering, so\n    an off-topic note scores ~0 and is dropped.\n  - Empty stub target: it carries no topic to judge (the title may be an ambiguous\n    word), so glow only when there's an explicit structural tie — a link either\n    direction or a shared tag. An isolated empty stub (bare \"Analysis\") has none, so it\n    no longer glows off-topic.\nWired via glowBridge.contextGate (set from main.ts), checked in buildGlow and\ndetectMentions after resolve. Verified live: \"analysis\" no longer underlines in the\nsecurity note (its math target is an isolated empty stub). Note: this also gates other\nisolated empty stubs (e.g. an empty \"LLM\" note) until they gain content or a link —\ninherent, since an empty note's topic can't be inferred; it self-heals as notes mature.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.8.1",
       "prerelease": false,
@@ -923,7 +923,7 @@
         },
         {
           "digest": "sha256:00ce3229eea47b4bc5724b4983fe8fcb302f1f8ccce2bed0880d8eae59d81961",
-          "downloadCount": 12,
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 420
         },
@@ -942,7 +942,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.8.0: topic-focused ranking — mean-centering to remove the anisotropy noise floor\n\nUnrelated notes scored a high baseline (~40-50%) purely from embedding-space\nanisotropy: every note shares a common direction, so cosine never approaches 0 even\nfor unrelated topics (a biology note matched a security essay at 41%). Researched the\nliterature (Mu & Viswanath all-but-the-top, Su et al. BERT-whitening, BERTopic\nc-TF-IDF, Hämmerl et al.) and MEASURED it live on the vault: mean anisotropy 0.494,\nand simple common-mean removal drives it to -0.037 while keeping real matches high\n(security-vs-Proofwork 0.86, security-vs-Bio 0.52 -> -0.06).\n\nImplementation (src/vector-math.ts + src/index-store.ts): compute the corpus centroid\n(L2-normalized mean of all note mean-vectors) whenever entries change, and subtract it\n(+ re-normalize) from BOTH the Stage-1 mean vectors and the Stage-2 chunk vectors (the\nDequantCache centers rows on dequant; centered means feed the stub-grounding path).\nCentroid recomputed on load/build/update/remove; no re-embed (reads stored vectors).\nSimple common-mean removal is the safe form of isotropy correction — on an already-\nisotropic corpus the centroid norm is tiny, so it's a near-no-op, never harmful.\n\nCentering removes the floor, so scores now sit on a lower, floor-free scale: default\nminSimilarity 0.45 -> 0.2 (+ profiles), Stage-1 coarse floor goes slightly negative\nwhen centered to preserve recall, and a one-time settings migration lowers any pre-\n1.8.0 minSimilarity onto the new scale. Verified live on the security essay: panel went\nfrom 10 noisy results (math/bio stubs at 40-52%) to a clean Proofwork 51 / Projects 35\n/ UNI Themen 23, with Bio and all unrelated stubs gone.\n\n",
-      "downloadCount": 12,
+      "downloadCount": 14,
       "draft": false,
       "name": "1.8.0",
       "prerelease": false,
@@ -959,7 +959,7 @@
         },
         {
           "digest": "sha256:15827103ee7f7cafd250f65bdbd5a77fd4d6a8b6a1238a99da1f2b27c63e09d2",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -978,7 +978,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.7.2: glow style — slim blue underline instead of a highlight\n\nThe inline glow used a filled highlight background + accent box-shadow, which is\nvisually heavy. Replace it with a slim 1px blue underline (var(--color-blue),\n3px offset; 2px on hover) and no background — a subtle, non-distracting hint that a\nconcept has a note, and visually distinct from a real wikilink (which the theme\ncolours differently). Verified live.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.7.2",
       "prerelease": false,
@@ -995,7 +995,7 @@
         },
         {
           "digest": "sha256:b8e8b704e4d128b6d2d616c3c40660ed72dc1e496415b79cee3b3325bc888467",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1014,7 +1014,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.7.1: content-confidence — stop near-empty notes ranking high on unrelated notes\n\nEmpty/stub notes surfaced at ~40-52% under unrelated notes (e.g. the math stubs\n\"Ableiten\", \"Integrieren\", \"Lineare Algebra\" under an AI-security essay). Root cause\nis embedding-space anisotropy: a short/empty note embeds to a non-distinctive vector\nnear the corpus centroid, so it scores a moderate ~0.5 cosine against EVERYTHING. The\nv1.4.1 title-vs-mean stub grounding wasn't enough — even the grounded title cosine is\n~0.5 for an unrelated one-word title.\n\nFix: scale the SEMANTIC score by a content-confidence factor derived from the note's\nbody size (chunkTexts when summaries are on, else body chunk count) — full trust at\nCONFIDENT_BODY_CHARS (220), down to MIN_CONTENT_CONFIDENCE (0.4) for a title-only\nnote. Applied to the semantic part only and SKIPPED for directly-linked notes, so a\nnote you explicitly linked (e.g. an on-topic \"LLM\" stub) still surfaces via its link\nwhile spurious unlinked stubs drop below minSimilarity.\n\nNo re-embed needed (reads existing chunkTexts/chunkCount). Verified live: math stubs\ndropped out, content notes unchanged (Proofwork 61/Projects 53/Bio 41), linked-but-\nempty LLM kept at 43%.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.7.1",
       "prerelease": false,
@@ -1031,7 +1031,7 @@
         },
         {
           "digest": "sha256:fbb19eaac247d6cc1721f4858eca1fbeefa2e66e6fa77b66c23a3c8800d51452",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1050,7 +1050,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.7.0: GPU acceleration + multi-threaded WASM — reindex from minutes to seconds\n\nIndexing was single-threaded WASM on one core with the Best/mpnet model, so a full\nreindex took minutes and felt laggy on an otherwise idle, powerful machine. Measured\nlive on a 14-core Mac with an Apple GPU (per-text on real note chunks):\n\n  single-thread WASM (old)   ~130ms  -> full reindex ~2.5-3 min\n  multi-threaded WASM         ~22ms  -> full reindex ~28s\n  WebGPU (Apple GPU)           ~6ms  -> full reindex ~6.5s\n\nThree changes:\n\n1. MULTI-THREADED WASM. The renderer isn't cross-origin isolated, but Electron\n   exposes SharedArrayBuffer anyway, so ort-web threaded WASM runs. configureEnv now\n   sets numThreads = min(cores-2, 8) instead of 1 (~6x faster; verified threads\n   actually engage). This is the CPU fallback.\n\n2. WebGPU LEAK FIXED, so \"auto\" prefers the GPU again. The old leak (a reindex\n   ballooned to ~70GB, the reason 1.6.2 forced auto->wasm) is gone: embedBatch now\n   runs fixed-size sub-batches AND disposes each output tensor, releasing GPU buffers\n   every pass. Verified live: 3 back-to-back reindexes held memory flat (~10GB,\n   trending down via GC), zero growth. \"auto\" => webgpu when an adapter is present,\n   else multi-threaded wasm.\n\n3. dispose() on every embed output (the leak fix above; harmless on WASM).\n\nThe 1.6.4 MessageChannel yield + 1.6.3 sub-batching/label-gating/persist-mutex all\nremain. ort/glue loading untouched. Settings + README copy updated. No INDEX_VERSION\nchange. Validated end to end in the live vault: auto picks webgpu, full reindex ~6.5s,\nUI responsive, memory stable.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.7.0",
       "prerelease": false,
@@ -1067,7 +1067,7 @@
         },
         {
           "digest": "sha256:ac0fa43beb3aed6328a05600e66b50ea4e7ec24a756fc7728957b8edcc145339",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1086,7 +1086,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.5: fix glow click — resolve by coordinates, convert via the CM6 view directly\n\nClicking a glowing mention never converted it to a link. Two causes:\n- The mousedown guard checked e.target.classList.contains(\"srn-glow\"), but in live\n  preview the glow <span> is routinely wrapped by (or wraps) other CM/Obsidian spans,\n  so the clicked node is usually a CHILD without the glow class — the check failed and\n  the handler bailed immediately.\n- Insertion round-tripped through the Obsidian editor (offsetToPos translation + an\n  active-editor lookup), each a silent-failure point.\n\nFix: resolve the click to a document offset from pointer COORDINATES\n(view.posAtCoords) instead of e.target, look up the glow range covering that offset,\nre-validate the surface against the live doc, and apply the wikilink with the CM6\nview DIRECTLY (view.dispatch with the same offsets, cursor placed after the link).\nLeft-click only. No model/ort/index changes.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.6.5",
       "prerelease": false,
@@ -1103,7 +1103,7 @@
         },
         {
           "digest": "sha256:287c633f1ec739f4462f42ce4ab2c51564010f4220169a97eafdea4030d11e37",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1122,7 +1122,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.4: fix reindex crawling for minutes — yield via MessageChannel, not setTimeout\n\nv1.6.3 made embedBatch yield between sub-batches via window.setTimeout(0). Chromium\nclamps nested setTimeout to >=4ms and throttles timers to ~1/second when the window\nis unfocused or the renderer is busy (this vault also runs Dataview, Excalidraw,\nCalendar, Charts). A reindex does many yields, so on a loaded window the timer\nthrottling turned a few-second index into MINUTES of waiting — CPU and RAM idle, the\nwhole app laggy. Classic \"stuck on throttled timers\" signature.\n\nFix: a shared src/async-yield.ts yieldToUI() built on a MessageChannel message — a\nmacrotask that still lets the renderer paint/handle input but is NOT subject to\nsetTimeout's clamping/throttling (the technique React's scheduler uses). Both\nembedBatch (sub-batch yields) and build() (between-batch yields) now use it. embedBatch\nalso yields on a ~20ms TIME BUDGET rather than after every sub-batch, so a fast machine\nyields rarely (near full throughput) while a slow one stays responsive. Vector order/\nvalues unchanged (ranking identical); ort/device loading untouched; no INDEX_VERSION\nchange.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.6.4",
       "prerelease": false,
@@ -1139,7 +1139,7 @@
         },
         {
           "digest": "sha256:713d856e0662ecdb5e9d012129f7d8e09bc85656ed8dca85e3bdda9a60ef657d",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1158,7 +1158,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.3: responsive reindex, defer labels off the load path, fix persist ENOENT race\n\nAfter v1.6.2 moved indexing to WASM (CPU, main thread), three issues surfaced live:\n\n1. Reindex FROZE the UI. embedBatch ran one pipe() over a whole outer batch\n   (~130+ chunk texts) — a single uninterruptible synchronous WASM pass of several\n   seconds. Now embedBatch sub-batches inputs in slices of EMBED_SUB_BATCH (12) and\n   yields a macrotask between slices, so the renderer keeps painting. Rows are\n   concatenated in input order, so the returned vectors are byte-identical and\n   ranking output is unchanged (embed()/1-text batches skip the extra yield).\n\n2. Lazy keyphrase labels embedded DURING load/reindex (render -> getSummary ->\n   scheduleLabel -> drainLabels -> embedBatch -> model init), piling blocking\n   inference onto the reindex. Added labelsAllowed() — false while building/loading\n   or a vector write is in flight — gating both scheduleLabel (skips queueing) and\n   drainLabels (defers + re-arms). Labels resume once indexing settles; getSummary\n   still returns its snippet fallback immediately.\n\n3. Uncaught ENOENT: rename 'index.json.tmp' -> 'index.json'. persist() and the\n   label drain's persistManifestOnly() could run concurrently, both writing the same\n   index.json.tmp; the first swapInto renamed it away, the second threw on a missing\n   tmp — and it was an uncaught rejection. All persists now funnel through a\n   persistChain mutex (persistSerial) with .catch logging, so only one write+swap\n   runs at a time and a failure never rejects unhandled. swapInto also no-ops if tmp\n   is already gone (defence-in-depth).\n\nort/wasm/glue/device loading untouched. No INDEX_VERSION change. Build + lint green.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.6.3",
       "prerelease": false,
@@ -1175,7 +1175,7 @@
         },
         {
           "digest": "sha256:cd2010b7e3034ec519007104bdedd13664555ea2dd35ba29054a0d283a6d146e",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1194,7 +1194,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.2: fix massive memory leak on reindex — \"auto\" no longer uses WebGPU\n\nA full reindex spiked to ~70GB of RAM and crashed Obsidian. Root cause: the\n\"auto\" compute device (the default) preferred WebGPU whenever an adapter was\npresent, and onnxruntime-web's WebGPU backend accumulates GPU buffers across the\nmany embed() calls of a (re)index. On a unified-memory Mac that GPU memory IS\nsystem RAM, so indexing a whole vault ballooned without bound until the process\ndied — disproportionate to the tiny vault, the signature of per-call accumulation\nrather than data size.\n\nFix: \"auto\" now resolves to the memory-stable WASM (CPU) backend, same as \"wasm\".\nWebGPU stays available only as an EXPLICIT pin for users who accept the cost and\nmainly want single-query speed; the setting + README now warn about the reindex\nmemory spike. WASM is plenty fast for note-sized inputs and reuses its heap across\ncalls, so a reindex stays flat.\n\nNo INDEX_VERSION change; the reindex simply runs on WASM now.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.6.2",
       "prerelease": false,
@@ -1211,7 +1211,7 @@
         },
         {
           "digest": "sha256:5344957cbec3beff9ff5e5c04420ec032976cd8ad292b84342ab074bfd24e5bf",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1230,7 +1230,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.1: fix index persist — adapter.rename throws over an existing destination\n\n1.6.0's binary persist wrote to .tmp then `adapter.rename(tmp, dest)`, but\nObsidian's adapter.rename throws \"Destination file already exists!\" when dest\nexists. So the FIRST write (after the v4 rebuild discarded the old index) worked,\nbut every later persist failed — breaking lazy-label persistence AND incremental\nindex saves on edit. Caught live in the vault.\n\nFix: a swapInto(tmp, dest) helper that removes dest before renaming (the complete\nnew data is already in tmp; load()'s totalBytes check self-heals the brief\nremove→rename window). Used by both persist() and persistManifestOnly().\n\nVerified live: reload + switch through several notes → no \"already exists\" error,\nlazy labels persist, rankings intact. Benchmark still bit-identical (max diff 0).\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.6.1",
       "prerelease": false,
@@ -1247,7 +1247,7 @@
         },
         {
           "digest": "sha256:0336e55f8839a17be5a4811a2e8c91903231ca29df94a61e53940892a6b50675",
-          "downloadCount": 12,
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 420
         },
@@ -1266,7 +1266,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.6.0: scale to 1000+ notes — lazy dequant, binary index, lazy labels (ranking unchanged)\n\nRanking latency was already flat via the 2-stage funnel; this pass kills the\nat-rest vector costs. Verified by benchmark (1000 notes, 384d): index 16.4MB→8.2MB,\ncold-load 49ms→1.1ms (~43x), chunk RAM 24.9MB→6.2MB (4x), and a bit-identical\nassert over 1200 pairs reports MAX SCORE DIFF = 0 — ranking results are provably\nunchanged.\n\n- Lazy chunk dequant: chunks stay int8 in RAM (4x less); Stage 1 uses only mean\n  vectors; a note's chunks are dequantized to fp32 only when it enters the Stage-2\n  shortlist, behind an LRU. New src/vector-math.ts holds the dependency-free math\n  (also importable by the node benchmark); embeddings re-exports cosineSimilarity.\n- Binary index format: a small JSON manifest + one binary blob (adapter.writeBinary)\n  instead of base64-in-JSON. Crash-safe (blob before manifest; totalBytes self-heals).\n- Lazy keyphrase labels: computed on first card view (snippet shown meanwhile,\n  debounced async, persisted, targeted re-render) — not for all notes at build time.\n- Scale-aware: adaptive maxChunks for >2000-note vaults; yield-to-UI between embed\n  batches so indexing never freezes.\n- INDEX_VERSION 3->4: one clean one-time rebuild on upgrade; old JSON index discarded.\n\nbench/at-rest.mjs reproduces the numbers with plain `node`.\n\n",
-      "downloadCount": 12,
+      "downloadCount": 14,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
@@ -1283,7 +1283,7 @@
         },
         {
           "digest": "sha256:1f3946387e0e97b1be34f98e23752f1931f45b39bac2d01f1b86f8bc194c258e",
-          "downloadCount": 12,
+          "downloadCount": 14,
           "name": "manifest.json",
           "size": 420
         },
@@ -1302,7 +1302,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.5.0: link-building — inline glow + 1-click link, and a semantic [[ suggester\n\nTwo precision-first linking features, fully self-contained (reuse the existing\nembeddings; no new model), working WITH and WITHOUT the easy-links plugin.\n\nFeature A — inline glow + 1-click link (src/link-glow.ts, src/title-index.ts):\n  the FIRST unlinked mention of a concept that already has a note (matched by\n  EXACT title/alias text via a longest-first, Unicode-boundary alternation over a\n  title+alias index — so a hit is always a real note) glows in live preview; click\n  converts it to [[Note]] (or [[Note|Alias]]). A \"Link all unlinked mentions\"\n  command and an opt-in idle auto-link-of-subsequent-mentions setting. Skips\n  existing links/code/frontmatter and the note's own title; per-view scoped for\n  split panes; no rebuild on selection moves.\nFeature B — smart [[ suggester (src/link-suggester.ts): ranks existing notes by\n  SEMANTIC relevance to the cursor's paragraph (blended 60/40 with the typed-query\n  fuzzy match), excludes the active note, and offers clearly-labelled \"create new\n  note\" rows for strongly-relevant concepts that don't exist yet. Coexists with\n  easy-links (take-over defaults OFF when easy-links' smart suggester is on, honours\n  an explicit user toggle) and works standalone.\n\nCodeMirror 6 (@codemirror/view, @codemirror/state) added as externalized devDeps.\nValidated live: title index resolves, glow decorations render (llm/analysis), 12\nsuggesters registered, no load errors.\n\n",
-      "downloadCount": 12,
+      "downloadCount": 14,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
@@ -1319,7 +1319,7 @@
         },
         {
           "digest": "sha256:2d7684405685124123c3e1b991e65be8a430bb941dae250eae44a6a3fb0f1965",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1338,7 +1338,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.4.1: ground empty/stub notes in their title; stop labels echoing the title\n\nLive-measured: a title-only note (empty body) ranked off the single luckiest\nchunk match — directionalMax takes a MAX, so a one-word title (e.g. \"Ableiten\")\nspuriously aligned with some passage and surfaced under an unrelated topic.\n\n- biMax: a stub (chunkCount === 1) is now scored by the cosine of its title to the\n  OTHER note's normalized mean vector (its overall topic) instead of the best\n  single chunk. So an empty note's relevance comes mainly from its title vs the\n  active note's overall meaning, as it should. Notes with any body use full\n  bidirectional MaxSim unchanged. (No re-embed needed — works on stored vectors.)\n- Summary label: empty/stub notes (and any label that just echoes the title) now\n  leave the line blank instead of repeating the card name. Suppressed at display\n  time too, so older indexes that stored the basename are fixed on reload without\n  a rebuild.\n\nVerified live: empty math stubs dropped ~11 points and several fell off; the\ndirectly-related notes hold the top; no more title-echo label lines.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.4.1",
       "prerelease": false,
@@ -1355,7 +1355,7 @@
         },
         {
           "digest": "sha256:d27b3626ed9cc78380ad679761017c91730f1903f490e7ec22896cf35ca9ffa8",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1374,7 +1374,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.4.0: concise 3-7 word topic labels + drop the same-folder signal\n\n- Summary line is now a tight KeyBERT-style topic LABEL instead of a full\n  sentence: candidate 1-3-gram phrases (sentence-bounded, DE+EN stopword/number\n  filtered, German mid-sentence-capitalised-noun preference) are embedded in one\n  pass with the existing model, ranked by cosine to the note mean, MMR-diversified\n  (λ=0.6), and assembled into a 3-7 word label. Computed at index time, persisted,\n  cached by mtime. No new model/download. Falls back to the title for tiny notes.\n- Removed the \"same folder\" structural signal + \"Same folder\" pill: in an atomic\n  vault with a handful of folders it fired for almost everything. SIGNAL_NORM\n  re-derived from links + shared tags + co-citation + frontmatter.\n- INDEX_VERSION 2 -> 3: one automatic full rebuild on upgrade, then labels load\n  from disk.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
@@ -1391,7 +1391,7 @@
         },
         {
           "digest": "sha256:b157b21250b28e04261d8fadb4889c2c9a938611cc087c266a9ae24b15f57bc0",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1410,7 +1410,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.3.0: chunk-level embeddings + BiMax ranking + structural boost (real quality fix)\n\nDiagnosed live: whole-note mean-pooling made long notes blur together —\ncosine(security essay, unrelated German Bio note)=0.808 OUTRANKED cosine(security\nessay, directly-related Proofwork)=0.714, because averaging a long varied note\nregresses to a generic centroid. Paraphrase models are trained on sentences;\nfeeding them whole essays misuses them.\n\nRedesign (schema v1 -> v2, forces a one-time full reindex on upgrade):\n- Each note is now embedded as a TITLE chunk (weighted 2x) + capped sentence-window\n  body chunks, not one mean vector.\n- Ranking is a 2-stage funnel: Stage 1 a cheap mean-vector shortlist (low recall\n  floor only); Stage 2 a symmetric Bidirectional-MaxSim over the two notes' chunk\n  sets — two notes match on their BEST-matching chunks, so topical overlap wins and\n  the centroid blur is gone. (Verified to invert the measured case.)\n- Bounded hybrid structural boost (direct links, shared tags, co-citation/shared\n  links, same folder, frontmatter) with an interpretable why-related pill +\n  linked/related connection type; tunable \"structure influence\" (can't promote\n  unrelated notes).\n- minSimilarity now applies to the FINAL displayed score (Stage 2), not the\n  unreliable mean cosine.\n- Centroid-sentence summary line (reuses the chunk vectors — no extra download),\n  cached per note.\n- int8-quantized chunk persistence to keep the index small.\n\nFully self-contained/offline; existing features (incremental updates, keyword\nfallback, model/device swap, profiles, force rebuild) intact.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -1427,7 +1427,7 @@
         },
         {
           "digest": "sha256:2da68b702f943bc7182eb496693b37739e9a50a0e53b4a63d65420a20228f9a2",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1446,7 +1446,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.2.1: \"Rebuild index\" now forces a full re-embed (no more instant no-op)\n\nThe manual Rebuild reused vectors whose mtime was unchanged, so with the same\nmodel it finished instantly and changed nothing — confusing when a user clicks it\nexpecting fresh embeddings. build() now takes a `force` flag; rebuildIndex() sets\nit so every note is re-embedded with the current model/settings. (A model change\nstill rebuilds automatically via setEngine clearing the vectors.)\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.2.1",
       "prerelease": false,
@@ -1463,7 +1463,7 @@
         },
         {
           "digest": "sha256:40532d1e65d7a72dcbbda3cc57c09776fa57d59b775ad34e37a588c21b7eda88",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1482,7 +1482,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.2.0: default to symmetric similarity models (much better related-note ranking)\n\nThe embeddings ranked poorly (e.g. an English security essay scoring 0.81 with\nGerman biology notes, above its own topic siblings) because the default model,\nmultilingual-e5-small, is a RETRIEVAL model: trained for short-query → document\nsearch, asymmetric, with a compressed/anisotropic passage space that doesn't\ndiscriminate note-to-note similarity. It was also prefixed \"passage:\" on both\nsides; e5's guidance is to use \"query:\" for non-retrieval tasks.\n\nChanges:\n- Default + Balanced model -> paraphrase-multilingual-MiniLM-L12-v2, a SYMMETRIC\n  sentence-similarity model purpose-built for \"are these two texts alike\". Best\n  quality stays paraphrase-multilingual-mpnet-base-v2 (stronger, larger). e5 kept\n  as an option, relabelled as retrieval/weaker-for-similarity.\n- e5 prefix: \"passage:\" -> \"query:\" on both sides (symmetric; no-op for the\n  prefix-free paraphrase models).\n- Updated Model setting copy + README accordingly.\n\nExisting installs keep their saved model until the user switches; applying a\nprofile or picking a model rebuilds the index.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -1499,7 +1499,7 @@
         },
         {
           "digest": "sha256:48cd5df12dbd161557c569c019a789341393e57acadd43bdc46379d2483973e3",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1518,7 +1518,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.6: patch BOTH Node checks in the served ort glue (the real worker_threads fix)\n\n1.1.5 served a patched glue via Blob but only patched ONE of the glue's two Node\nchecks. Proof it was actually loaded: the 1.1.5 error was `import('worker_threads')`\n(the worker-bootstrap check) and NOT `import('module')` (the process.type check's\npath) — so the process.type patch HAD taken effect; a second, separate check was\nstill firing.\n\nThe bundled ort-web loads its jsep glue EXTERNALLY (not inlined), and that glue has\ntwo independent Node gates, each importing the Node-only 'worker_threads' at module\nload:\n  1. n = ... && \"renderer\" != process.type        -> import(\"module\") + require(\"worker_threads\")\n  2. typeof globalThis.process?.versions?.node == 'string'  -> await import('worker_threads')\n\ngen-ort now forces BOTH false in the patched glue we serve via Blob URL\n(wasmPaths = { mjs: blob, wasm: <local-or-CDN .wasm> }), so the glue loads clean on\nthe main thread and takes the pure-web path. Reverted the brief main.js post-build\npatch attempt (the glue isn't inlined, so the needle wasn't there).\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.6",
       "prerelease": false,
@@ -1535,7 +1535,7 @@
         },
         {
           "digest": "sha256:8e00191c0af5f3dbce06382eff62e22e08471248aa0b0a32ed7f80422e6619f1",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1554,7 +1554,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.5: serve a web-patched ort glue so it never imports worker_threads\n\nprocess.type is read-only in Electron, so v1.1.4's attempt to set it to\n\"renderer\" silently no-op'd and onnxruntime-web's glue kept taking the Node path:\n`n = ... && \"renderer\" != process.type` was true, so it did\n`await import(\"module\")` + `require(\"worker_threads\")` → \"Failed to resolve module\nspecifier 'worker_threads'\" / \"no available backend found\".\n\nFix that doesn't depend on the environment at all: gen-ort.mjs now emits a PATCHED\ncopy of the jsep glue with that one check replaced by `!1`, so its\nENVIRONMENT_IS_NODE is always false and the worker_threads / node-fs branches are\ndead. embeddings serves this patched glue to ort via a Blob URL\n(wasmPaths = { mjs: blobURL, wasm: <local-or-CDN .wasm> }); the glue then takes\nthe pure-web path — fetch the wasm, instantiate, run single-threaded on the main\nthread. Works for BRAT installs (CDN .wasm) and zip installs (local .wasm) alike.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.5",
       "prerelease": false,
@@ -1571,7 +1571,7 @@
         },
         {
           "digest": "sha256:26ba2533a06089fd5b5f614545c44f9e59087613f32a0e9aab549a999ed181d7",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1590,7 +1590,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.4: set process.type=\"renderer\" so ort's wasm glue takes the web path\n\nLive console diagnosis: crossOriginIsolated=false (so threading was never on, and\nnumThreads was a red herring), yet onnxruntime-web's Emscripten glue still\nimported the Node-only 'worker_threads' on the MAIN thread.\n\nThe glue decides node-vs-web with `process.versions.node && process.type\n!= \"renderer\"`. In Obsidian's renderer process.type is NOT \"renderer\", so the\nglue concluded Node and `import()`ed 'worker_threads' → \"Failed to resolve module\nspecifier 'worker_threads'\" / \"no available backend found\". This is a SECOND,\nindependent Node check from transformers' IS_NODE_ENV (which we already handle via\nprocess.release.name), it runs at session-create time, and it reads process.type.\n\nFix: ort-shim sets process.type = \"renderer\" (its correct value in an Electron\nrenderer) persistently, before any embedding runs, so the glue takes the web path\nand loads the wasm via fetch — no worker_threads, no Node module resolution.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.4",
       "prerelease": false,
@@ -1607,7 +1607,7 @@
         },
         {
           "digest": "sha256:f626a7652ed793e6e1c5a8fd89efd3d61b1674c9f239c57a3b70de602838a316",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1626,7 +1626,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.3: set wasm numThreads=1 on the object ort actually reads (fixes worker_threads)\n\nAfter the web backend started loading, ort spawned a pthread worker that tried to\n`import('worker_threads')` (a Node-only module) → \"Failed to resolve module\nspecifier 'worker_threads'\" / \"no available backend found\".\n\nCause: ort reads its wasm flags from ort.env.wasm, which the WEB runtime exposes\nas `env.backends.onnx.env.wasm`. configureEnv only set `env.backends.onnx.wasm`\n(undefined in the web build), so numThreads=1 never applied — and because\nObsidian's renderer is cross-origin isolated, ort defaulted to multi-threading\nand spawned the worker. (In the Node build the shape is the opposite:\nenv.backends.onnx.wasm exists, env.backends.onnx.env does not.)\n\nFix: set wasmPaths + numThreads=1 + proxy=false on BOTH env.backends.onnx.wasm\nand env.backends.onnx.env.wasm, so the object ort reads is always hit. Single\nthreaded, no proxy worker → no worker_threads, runs inline on the main thread\n(process.type === \"renderer\", so the glue uses the web path).\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.3",
       "prerelease": false,
@@ -1643,7 +1643,7 @@
         },
         {
           "digest": "sha256:205b7dd20a0aec22798a56dbf5937014d6ffa48e36f4a5f9d2fcd4a71e02aa9f",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1662,7 +1662,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.2: take the real web backend by flipping IS_NODE_ENV (not a symbol shim)\n\nLive diagnosis in Obsidian's devtools showed the true cause. transformers.js\nv3 builds its backend exactly once, at import time:\n\n    if (Symbol.for(\"onnxruntime\") in globalThis) ONNX = globalThis[that]   // sets runtime, NEVER fills the device list\n    else if (IS_NODE_ENV) { ...push(\"cpu\") }                               // node: only cpu\n    else { ...push(\"webgpu\"?, \"wasm\") }                                    // web: the correct list\n\nThe previous Symbol.for(\"onnxruntime\") shim made transformers use ort-web (so\n\"create of undefined\" went away) but took the FIRST branch, which leaves\nsupportedDevices empty — hence every device failed with \"Should be one of: .\".\n\nIS_NODE_ENV is `process?.release?.name === \"node\"`, evaluated once at import.\nort-shim.ts now flips process.release.name to a non-\"node\" value just before\ntransformers imports, then restores it on the next microtask. transformers then\ntakes the real WEB branch: bundled onnxruntime-web AND a populated device list\n(webgpu when available, else wasm). No global symbol left behind.\n\nRemoved the now-dead onnxruntime-web.d.ts and the Symbol.for install.\n\nNOTE: upgrading from 1.0.x/1.1.0/1.1.1 requires a full Obsidian restart once —\nthe old build's globalThis symbol persists in the renderer across plugin\nreloads, so a fresh window is needed to clear it.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.2",
       "prerelease": false,
@@ -1679,7 +1679,7 @@
         },
         {
           "digest": "sha256:e5ef7e16041d05f1da4a62dd9bd49bdd61e972f1d5414c2cbd2453c8380e3d66",
-          "downloadCount": 14,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 420
         },
@@ -1698,7 +1698,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.1: fall back to CDN wasm when the ort/ folder isn't installed\n\nBRAT and manual installs copy only main.js + manifest.json + styles.css from\nthe release assets — NOT the ort/ folder (that ships only inside\nrelated-notes.zip). configureWasmPaths() derived the wasm URL with\ngetResourcePath(), which returns an app:// URL whether or not the file exists,\nthen set it unconditionally. So on a BRAT install the wasm path 404'd, ORT\nregistered zero execution providers, and every embed failed with\n\"Unsupported device: wasm. Should be one of: .\" — never falling back to the CDN.\n\nFix: check adapter.exists() for the probe wasm first; only self-host when it's\nactually present. When absent, leave the base unset so the engine uses its\nversion-pinned jsdelivr fallback (verified reachable through Obsidian's CSP:\nHTTP 206). The full zip still self-hosts and runs offline.\n\n",
-      "downloadCount": 14,
+      "downloadCount": 16,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -1715,7 +1715,7 @@
         },
         {
           "digest": "sha256:34e25697642bf1b8963ad36fbe09a42a2b02bb1c9aff3b65465cb9a18cba2aff",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 420
         },
@@ -1734,7 +1734,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.1.0: rename to Smart Related Notes + fix on-device embeddings init\n\nThe real root cause of \"Cannot read properties of undefined (reading\n'create')\": in the Electron renderer, transformers.js detects a Node env\n(process.release.name === \"node\") and takes the onnxruntime-NODE branch, but\nthat package is externalized, so InferenceSession is undefined and webgpu/wasm\nare rejected as unsupported (only the Node [\"cpu\"] provider list was built).\n\nFix: src/ort-shim.ts installs our bundled onnxruntime-web under\nSymbol.for(\"onnxruntime\") BEFORE @huggingface/transformers is imported (it's\nimported first in main.ts). transformers checks that symbol ahead of its\nNode/Web detection, so the renderer now uses the real web runtime —\nInferenceSession is defined and the device list is rebuilt as [webgpu?, wasm].\n\n- Remove the invalid \"cpu\" device (wasm IS the CPU path for ort-web);\n  DevicePref is now auto|webgpu|wasm and every order ends in wasm.\n- Self-host the ort .wasm via an app:// URL from the plugin folder, with a\n  version-pinned jsdelivr fallback, so it runs offline and the glue/wasm match.\n- Rename to \"Smart Related Notes\" (id stays \"related-notes\"); view title and\n  ribbon now read \"Smart related notes\".\n- Rewrite README to lead with the on-device / private / offline story.\n\nFully self-contained: no server, no second app.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -1751,7 +1751,7 @@
         },
         {
           "digest": "sha256:a3278f9841bf72a42618974cbd8a03a10c2a55b0c55dbcf82ed042280fdf0fdf",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 353
         },
@@ -1770,7 +1770,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "v1.0.1: fix device error (native CPU), slider values, 20s re-embed, profiles\n\n- Device: Electron loads onnxruntime-node, which rejects webgpu/wasm (the\n  'Unsupported device' error). Route to native CPU there (fast); every device\n  order ends in 'cpu' so init can't dead-end. Added a 'cpu' option.\n- Settings sliders now show their numeric value.\n- Re-embed a changed note only after 20s of edit-idle (not while typing).\n- Add Balanced / Best quality one-click performance profiles.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -1787,7 +1787,7 @@
         },
         {
           "digest": "sha256:210aca7eca6a5ece415873b9e25209595075bc65dd2486d4199d8fa20002e84c",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 353
         },
@@ -1806,7 +1806,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "ci: fix wasm-verify step (onnxruntime-web blocks require of its package.json)\n\nRead the pinned ORT version from the generated src/ort-version.ts instead.\n\n",
-      "downloadCount": 13,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

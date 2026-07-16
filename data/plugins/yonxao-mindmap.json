@@ -4,8 +4,8 @@
   "description": "Obsidian mind map / mindmap plugin for visual thinking and knowledge management. Create interactive SVG maps from yxmm code blocks with layouts, themes, shortcuts, export, and fullscreen editing. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "yonxao-mindmap",
-  "lastChangedAt": "2026-07-15T08:03:27.037Z",
-  "lastFetchedAt": "2026-07-15T08:03:27.037Z",
+  "lastChangedAt": "2026-07-16T08:01:28.006Z",
+  "lastFetchedAt": "2026-07-16T08:01:28.006Z",
   "manifest": {
     "author": "yonxao",
     "description": "A feature-rich mind map plugin that renders `yxmm` code blocks as interactive SVG mind maps. Supports 20+ layouts, interactive editing, multiple themes, and rich customization options.",
@@ -22,32 +22,32 @@
       "assets": [
         {
           "digest": "sha256:3da4c87497f756f9acc87d313c8298c9b5fdb0034ce3976ded827528e3f1e804",
-          "downloadCount": 13,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 801521
         },
         {
           "digest": "sha256:c4372c088bec6856be23b29e12a8117a8f265fab0078e2d6a9a9eac377876eb2",
-          "downloadCount": 14,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 362
         },
         {
           "digest": "sha256:d596052fc28e5f50d78f50bcd4f82fb416cf22bfa29f27857c9259b4f8a3ce39",
-          "downloadCount": 11,
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 103234
         },
         {
           "digest": "sha256:95a695aa0922eedbe915e2a3be9cd2bf9b6cc4c66d2806f8fff82cb6892dbf50",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "yonxao-mindmap-1.5.2.zip",
           "size": 206741
         }
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.1...1.5.2](https://github.com/yonxao/yonxao-mindmap/compare/1.5.1...1.5.2)\n\n#### 1.5.2 - 2026-07-14\n\n##### Added\n\n- Added relationship line endpoint anchor support: both ends of a relationship line can now be fixed to one of 8 anchor points on the topic border. Dragging an endpoint automatically snaps to the nearest anchor, and the anchor positions are persisted as `fromAnchor`/`toAnchor` attributes. New visual feedback controls appear on the endpoints during drag, and a dedicated `relationAnchors.js` module handles anchor coordinate calculation and nearest-point snapping.\n- Improved radial layout collision detection and connector handling:\n  - Added segment-to-rectangle intersection detection using slab clipping to avoid missing diagonal line crossings.\n  - Implemented connector obstacle repulsion that calculates the displacement needed for branches to clear the connector corridor.\n  - Added root branch collision resolution to prevent center connectors from passing through other branch topics.\n  - Improved collapsed topic child-line exit angle logic to record the actual expansion direction.\n- Optimized image rendering performance to eliminate flicker:\n  - Implemented image element pool reuse to avoid repeated creation and destruction.\n  - Added cross-renderer caching of image natural dimensions to prevent redundant loading and measurement.\n  - Established image resource address mapping to support reuse of the same image across multiple locations.\n  - Set cache size limits to prevent unbounded memory growth.\n  - Improved image size capture logic for better cache hit rates.\n- Refactored structure control drag logic into a dedicated `beginStructureControlDrag` method, removing duplicate event listener bindings and improving code clarity.\n\n##### Fixed\n\n- Fixed PNG export dark mode background fallback: solidified the `--background-primary` CSS variable value during SVG export, preventing export styles from overriding summary background and text stroke display properties. Ensures summary text box backgrounds remain consistent with the preview in dark mode, and prevents incorrect fallback to white backgrounds.\n- Fixed boundary title avoidance breaking tree layout branch alignment: refactored boundary title vertical space reservation into `structureBounds.js` with a dedicated `reserveBoundaryLabelVerticalSpace` function that correctly offsets subsequent topics as a whole, preventing parent-child misalignment caused by boundary titles pushing only same-column topics.\n\n##### 新增\n\n- 关联线端点锚点功能：关联线两端可固定到主题边框的 8 个锚点位置，拖拽端点时自动吸附最近锚点，锚点位置持久化为 `fromAnchor`/`toAnchor` 属性。新增端点拖拽视觉反馈控件，独立的 `relationAnchors.js` 模块负责锚点坐标计算与最近点吸附。\n- 改进放射布局碰撞检测与连接线处理：\n  - 新增线段与矩形边界相交检测算法，使用 slab 裁剪避免斜线漏判。\n  - 实现连接线障碍物推离功能，计算分支移出连线走廊所需的最小位移。\n  - 新增根节点分支碰撞解决机制，防止中心连线穿过其他分支主题。\n  - 优化折叠主题子线出口角度逻辑，记录实际展开方向以保持折叠状态下的连线一致性。\n- 优化图片渲染性能，消除闪动：\n  - 实现图片元素池复用机制，避免重复创建和销毁。\n  - 新增图片自然尺寸的跨渲染器缓存，防止重复加载和测量。\n  - 建立图片资源地址映射，支持同一图片多处复用。\n  - 设置缓存大小上限，防止内存无限增长。\n  - 改进图片尺寸捕获逻辑，提升缓存命中率。\n- 重构结构控制拖拽逻辑，提取为独立的 `beginStructureControlDrag` 方法，移除重复的事件监听器绑定，提升代码清晰度。\n\n##### 修复\n\n- 修复 PNG 导出在深色模式下背景回退为白色的问题：在 SVG 导出时固化 `--background-primary` CSS 变量值，防止导出样式覆盖概要背景和文字描边的展示属性，确保深色模式下概要文字框背景与预览一致。\n- 修复外框标题避让导致树形图分支对齐错乱的问题：将外框标题垂直空间预留逻辑重构到 `structureBounds.js` 中的 `reserveBoundaryLabelVerticalSpace` 函数，正确处理后续主题的整体偏移，避免仅移动同列主题导致父子节点对齐被破坏。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 14,
+      "downloadCount": 23,
       "draft": false,
       "name": "1.5.2",
       "prerelease": false,
@@ -58,19 +58,19 @@
       "assets": [
         {
           "digest": "sha256:90bf119eacbe4cfe5d98c852e04eb2a09e0cbccdbfde8c225adafe621fe6a108",
-          "downloadCount": 17,
+          "downloadCount": 18,
           "name": "main.js",
           "size": 794882
         },
         {
           "digest": "sha256:1415c0c251af167abb968acc51482b586252b620d57707a668ecd8532ce766b5",
-          "downloadCount": 20,
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 362
         },
         {
           "digest": "sha256:50cc4f9c14a1051e09c993e6fb01657f0490eb6896bac89d4ef96a88b54ade6a",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "styles.css",
           "size": 101989
         },
@@ -83,7 +83,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.0...1.5.1](https://github.com/yonxao/yonxao-mindmap/compare/1.5.0...1.5.1)\n\n#### 1.5.1 - 2026-07-13\n\n##### Added\n\n- Added watermark support with two watermark modes to choose from in a new Watermark tab in the config modal:\n  - **Signature watermark**: bound to the viewport; available in _corner_ style (text placed at one of nine positions with optional rounded background) and _bar_ style (a horizontal strip along the bottom of the viewport with tinted background and emphasized text). Configurable text, position, color, background color, font size, opacity, bar height, and padding.\n  - **Normal watermark**: bound to the content area; supports _text_ and _image_ types, with _single_ or _tiled_ arrangement. Text watermarks allow full control over font size, color, opacity, rotation, and position (9 anchor points). Image watermarks support URL and vault-file sources, custom width/height, gap, and offset. Tiled mode auto-fills the content area with configurable spacing and an upper element count limit to keep large maps responsive.\n- Added a watermark unlock mechanism using a user self-confirmation flow; watermark rendering is skipped until the user unlocks the feature through the plugin settings.\n- Added watermark configuration normalization and canonicalization, including range validation for font size, opacity, rotation, size, gap, and offset, so out-of-range values are clamped to the allowed bounds before rendering.\n- Added watermark rendering in exported PNG and SVG so watermarks remain visible after export.\n\n##### 新增\n\n- 配置面板新增水印选项卡，提供两种水印模式可选：\n  - **签名水印**：绑定视口，有角标样式（在 9 个位置之一显示文字，可带圆角背景）和底栏样式（在视口底部显示一条横向条幅，带低透明度强调底色和突出文字）两种风格，可配置文字、位置、颜色、背景色、字号、不透明度、条栏高度和内边距。\n  - **普通水印**：绑定内容区域，支持文字和图片两种类型，单个或平铺两种排列方式。文字水印可完整控制字号、颜色、不透明度、旋转角度和位置（9 个锚点）；图片水印支持 URL 和仓库文件两种来源，可自定义宽高、间距和偏移。平铺模式自动填满内容区域，可配置间距，并设置单次元素数量上限以保证大型导图的渲染性能。\n- 新增水印解锁机制，采用用户自行确认方式免费解锁；未解锁时水印渲染不会生效。\n- 新增水印配置的归一化和标准化处理，对字号、不透明度、旋转角度、尺寸、间距和偏移进行范围校验，超出允许范围的值会在渲染前被自动修正到合法区间。\n- 导出 PNG 和 SVG 时同步渲染水印图层，确保导出图片与画布显示一致。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 20,
+      "downloadCount": 21,
       "draft": false,
       "name": "1.5.1",
       "prerelease": false,
