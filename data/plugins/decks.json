@@ -4,8 +4,8 @@
   "description": "Decks - Spaced repetition flashcards plugin with FSRS algorithm.",
   "errors": [],
   "id": "decks",
-  "lastChangedAt": "2026-07-15T03:00:27.025Z",
-  "lastFetchedAt": "2026-07-15T03:00:27.025Z",
+  "lastChangedAt": "2026-07-16T03:01:27.045Z",
+  "lastFetchedAt": "2026-07-16T03:01:27.045Z",
   "manifest": {
     "author": "Xherdi Lika",
     "authorUrl": "https://github.com/dscherdi",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.10",
     "name": "Decks",
-    "version": "2.6.0"
+    "version": "2.6.1"
   },
   "name": "Decks",
   "presentInCommunityList": true,
@@ -29,14 +29,14 @@
           "size": 34523
         },
         {
-          "digest": "sha256:b6c40714e6c7b8b3c7c2e65ec35365473529b13d85127688a34bf3e38e83e72c",
-          "downloadCount": 17,
+          "digest": "sha256:8b736d04c79841021815708fe9beac00ca591ffa4ac4f13a004f86435817e9d1",
+          "downloadCount": 26,
           "name": "main.js",
-          "size": 5248532
+          "size": 5261175
         },
         {
-          "digest": "sha256:673b4f0e815053f72e24a9e62f344027b9b30e26577d40ad9b8d27b12be0336a",
-          "downloadCount": 18,
+          "digest": "sha256:edcacad4de17a0c2f6beb1a7004d322b30b8eb87b09025e7da6e517f528ca309",
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 381
         },
@@ -48,14 +48,56 @@
         },
         {
           "digest": "sha256:eccf2fb8b427291da1fba95e274cbbfd240a1f67a71869fb292a11f060bfb6bc",
-          "downloadCount": 16,
+          "downloadCount": 25,
+          "name": "styles.css",
+          "size": 137465
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Decks 2.6.1 — suspended cards stay suspended\n\nThis release fixes the long-standing bug where suspended (and buried) cards reappeared in the review queue, most visibly after a plugin update.\n\n#### **Why it happened**\n\nSuspend and bury flags were stored only on the card's database row. Three code paths could rebuild or overwrite that row without carrying the flags along: the database rebuild that runs on plugin updates, the multi-device database merge, and an edge case in cross-device change replay. Review history always survived these paths — the suspend flag did not, so cards came back as reviewable.\n\n#### **What changed**\n\nSuspend and bury state now lives in its own preserved table, alongside review history and card identity bindings. It survives plugin updates, card edits, deleting and re-adding a card, and multi-device merges. When two devices disagree, the most recent change wins — suspending on one device and unsuspending later on another resolves to the later action.\n\n#### **One-time caveat**\n\nState that earlier versions already lost cannot be restored — there is nothing left to restore it from. Cards suspended after installing this update keep their state from then on. If your suspended cards were reset by a previous update, re-suspend them once (Browse → select → Suspend).\n\n#### **Also**\n\n- Resetting a card now clears its suspend/bury state on all devices consistently.\n- A suspend synced from another device now applies even if the card was edited locally in the meantime.\n- Restoring a backup now brings back suspend/bury state and the card identity bindings introduced in 2.6.0. Previously a restore recovered review history but not these, so restored cards could lose their suspended status and, if renamed since the backup, their link to that history.\n",
+      "downloadCount": 26,
+      "draft": false,
+      "name": "2.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T15:31:23Z",
+      "tag": "2.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "downloadCount": 0,
+          "name": "LICENSE",
+          "size": 34523
+        },
+        {
+          "digest": "sha256:b6c40714e6c7b8b3c7c2e65ec35365473529b13d85127688a34bf3e38e83e72c",
+          "downloadCount": 47,
+          "name": "main.js",
+          "size": 5248532
+        },
+        {
+          "digest": "sha256:673b4f0e815053f72e24a9e62f344027b9b30e26577d40ad9b8d27b12be0336a",
+          "downloadCount": 50,
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:331a523a7311e940ff66800218d1b0fe2ac2e56d53ff6a49e629c1878ccf3a15",
+          "downloadCount": 0,
+          "name": "README.md",
+          "size": 24963
+        },
+        {
+          "digest": "sha256:eccf2fb8b427291da1fba95e274cbbfd240a1f67a71869fb292a11f060bfb6bc",
+          "downloadCount": 44,
           "name": "styles.css",
           "size": 137465
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Decks 2.6.0 — stable card ids\n\nUntil now a card's identity was derived from its question text: editing the question created what the plugin saw as a new card, and the review history often had to be recovered by guesswork — or was lost. This release gives every reviewed card a persistent identity that survives edits. It also fixes a bug where a tag's selected profile could revert on upgrade.\n\n#### **Cards keep their scheduling through edits**\n\nRephrasing a question, rewriting an answer, moving a card to another heading or file, reordering table rows, inserting new cards above old ones — none of these reset a card's review progress anymore. The card's due date, interval, and history follow it through the edit. Deliberately deleting a card's content and writing something new in its place is still treated as a new card, since it tests something different.\n\n#### **How it works: a hidden identity marker**\n\nWhen a card is reviewed for the first time, Decks writes a small identity marker into the note — an Obsidian comment such as `%%dk:h:x7f2%%`, placed on its own line after the card's answer (or inside a table row's first cell, or at the end of a cloze line). Obsidian hides comments in reading mode and live preview, so the marker is only visible in source mode. It travels with the card when you cut and paste it. Removing the marker returns the card to a fresh state — it is the card's identity, so treat it as part of the card. Do not copy one marker onto two cards.\n\n#### **A one-time pass marks your existing cards**\n\nAfter the update, Decks marks every already-reviewed card once (one edit per deck file, shortly after start-up). Cards you never reviewed are marked at their first review instead. Review history and scheduling are fully preserved through the upgrade — every card stays on the due date it had.\n\n#### **Table cards: identity survives row and column changes**\n\nA table row's marker lives in its first cell. Editing any cell, adding or reordering columns, and moving rows within the table all keep the row's identity. A row whose cells contain cloze deletions gets one marker shared by all of its cloze cards.\n\n#### **Canvas cards no longer reset when node text changes**\n\nCards from canvas files now derive their identity from the canvas node and edge ids instead of the node text, so editing the text of a connected node keeps the card's progress. No marker is written into canvas files.\n\n#### **Re-importing an Anki deck keeps your progress**\n\nImported decks now carry identity markers derived from each note's Anki id. Re-importing an updated `.apkg` — even one where card content changed in Anki — matches cards by those markers, so review progress carries over instead of resetting. The legacy spaced-repetition migration writes markers the same way.\n\n#### **Editing through the plugin preserves markers**\n\nThe card edit dialog and card splitting keep the identity marker in place (a split keeps it on the first of the resulting cards).\n\n#### **Image occlusion no longer requires the cloze setting**\n\nImage-occlusion cards (both the occlusion editor blocks and the older image-plus-numbered-list format) now parse regardless of the profile's \"Cloze deletions\" setting. That setting now controls exactly one thing: whether `==highlighted==` text produces cloze cards. Note for decks that had cloze disabled: a body consisting of an image followed by a numbered list now parses as occlusion cards instead of one plain card.\n\n#### **Fixed: a tag's profile could revert after an upgrade**\n\nDatabase upgrades rebuilt the profile-tag mapping table without its deletion markers, so tag mappings you had deleted could come back — silently overriding the profile you selected for a tag (for example, reverting decks to a heading-level preset). Deleted mappings now stay deleted. If a stray mapping already resurrected in your vault, remove it once under the affected profile in the profiles manager.\n\n",
-      "downloadCount": 18,
+      "downloadCount": 50,
       "draft": false,
       "name": "2.6.0",
       "prerelease": false,
@@ -156,13 +198,13 @@
         },
         {
           "digest": "sha256:84a4b906b43ac3caf74f1a824e7802d57a66a94b5d57e1d17a692aa194099bd6",
-          "downloadCount": 63,
+          "downloadCount": 64,
           "name": "main.js",
           "size": 5199878
         },
         {
           "digest": "sha256:df1ae690779976378e366ec8c7c0f35156c2afc923b7c36cc9f950434c59d10c",
-          "downloadCount": 70,
+          "downloadCount": 71,
           "name": "manifest.json",
           "size": 381
         },
@@ -174,14 +216,14 @@
         },
         {
           "digest": "sha256:e4060d0228eadbf04e44ed842fb1b780a5661548e94a01cc536f78d31e23f5cf",
-          "downloadCount": 58,
+          "downloadCount": 59,
           "name": "styles.css",
           "size": 137385
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Decks 2.5.5 — control how Anki decks are split on import\n\nWhen you import from Anki, large decks are broken into multiple files so each stays fast to open in Obsidian. Decks 2.5.5 puts that choice in your hands.\n\n#### **Choose whether to split large decks**\n\nThe Anki import dialog has a new **Split large decks into multiple files** toggle. Leave it on (the default) to keep today's behavior — a big deck is broken into numbered part-files. Turn it off to import each deck as a single file instead. Either way, subdecks always come in as their own separate files.\n\n#### **Set your own cards-per-file limit**\n\nWith splitting on, a new **Cards per file** field lets you decide how many cards go in each part-file (default 1000). Lower it for smaller, snappier files; raise it for fewer files.\n\n> Upgrade-safe: the defaults match previous behavior — imports split exactly as they did before unless you change these options.\n",
-      "downloadCount": 70,
+      "downloadCount": 71,
       "draft": false,
       "name": "2.5.5",
       "prerelease": false,
@@ -198,13 +240,13 @@
         },
         {
           "digest": "sha256:8d8921bf3cdcc414a9fdab9b345b860a7e21e5465e550dd21033a98c0ecb33f1",
-          "downloadCount": 33,
+          "downloadCount": 34,
           "name": "main.js",
           "size": 5178888
         },
         {
           "digest": "sha256:5b87ddbd422d6e487fa7b3654214df1db465ea253eebe099f011d76aa4e4e863",
-          "downloadCount": 37,
+          "downloadCount": 38,
           "name": "manifest.json",
           "size": 381
         },
@@ -216,14 +258,14 @@
         },
         {
           "digest": "sha256:e4060d0228eadbf04e44ed842fb1b780a5661548e94a01cc536f78d31e23f5cf",
-          "downloadCount": 33,
+          "downloadCount": 34,
           "name": "styles.css",
           "size": 137385
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Decks 2.5.4 — faster Anki imports, with audio and images that just work\n\nImporting a large Anki deck used to crawl, and some cards showed raw `![[sound.mp3]]` text instead of playing anything. Decks 2.5.4 makes `.apkg` import dramatically faster and gets media rendering the way it should.\n\n#### **Media copies in seconds, not minutes**\n\nDecks with thousands of images and audio clips now import their media far faster — a deck whose media took minutes to copy finishes in seconds.\n\n#### **Audio and video play in review**\n\nCards imported from Anki now show their images *and* play their audio (and video) during review. Previously, cards built from Anki's styled templates displayed the raw `![[audio.mp3]]` embed text instead of a player — now they render a proper audio/video control, just like images already did.\n\n#### **A heads-up on very large imports**\n\nWhen you import a deck with thousands of media files, Decks now lets you know Obsidian is indexing them in the background — so a brief moment before every image and sound appears is expected, not a glitch.\n\n> Upgrade-safe: nothing in your vault changes, and re-importing a deck refreshes its media without creating duplicates.\n",
-      "downloadCount": 37,
+      "downloadCount": 38,
       "draft": false,
       "name": "2.5.4",
       "prerelease": false,

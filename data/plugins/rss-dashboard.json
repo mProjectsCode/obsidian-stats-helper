@@ -4,8 +4,8 @@
   "description": "A dashboard for organizing and consuming RSS feeds, YouTube channels, and podcasts with smart tagging, media playback, and seamless content flow.",
   "errors": [],
   "id": "rss-dashboard",
-  "lastChangedAt": "2026-07-15T03:00:27.025Z",
-  "lastFetchedAt": "2026-07-15T03:00:27.025Z",
+  "lastChangedAt": "2026-07-16T03:01:27.045Z",
+  "lastFetchedAt": "2026-07-16T03:01:27.045Z",
   "manifest": {
     "author": "Aditya Amatya",
     "authorUrl": "https://github.com/amatya-aditya",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:057e7172a286073fb2cca5e9d0e6878975660f97470898708ad4349b28f0394c",
-          "downloadCount": 1052,
+          "downloadCount": 1259,
           "name": "main.js",
           "size": 914187
         },
         {
           "digest": "sha256:c8287c74c4f165e90f0f891d3c24b667014a01ab7c840f7ef07854efacdbf00e",
-          "downloadCount": 1540,
+          "downloadCount": 1930,
           "name": "manifest.json",
           "size": 425
         },
         {
           "digest": "sha256:b987862dbc1df2027e690d218643a877c020208c46bee4b5aea7395cd8cf2257",
-          "downloadCount": 1045,
+          "downloadCount": 1251,
           "name": "styles.css",
           "size": 322707
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 2.5.0 - July 11, 2026\r\n\r\n> RSS Dashboard 2.5.0 is a focused maintenance release: a new migration prompt steers existing users toward Shard Storage v2, three bugs are fixed, and the plugin closes out its remaining Community Plugin Audit findings with CI safeguards to prevent regressions.\r\n\r\n---\r\n\r\n### Headline Feature\r\n\r\n#### Storage migration prompt\r\n\r\n- Added a storage migration pop-up that appears on plugin update, detecting when a vault is still on Legacy or v1 storage and prompting the user to upgrade to Shard Storage v2. This surfaces the migration path proactively rather than requiring users to discover it in the Storage settings tab, and should meaningfully increase v2 adoption ahead of the eventual forced migration flagged in 2.4.0. Eventually, legacy mode (monolith singular data.json file) and shard storage v1 (introduced in 2.3) will be depreciated on future versions.\r\n\r\n### Fixes\r\n\r\n- Fixed the shard local storage address not correctly appearing in the Add/Edit feed window.\r\n- Fixed scrolling not working on the mobile Discover sidebar.\r\n- Fixed the tag icon on cards re-opening the tag window on a second click instead of closing it.\r\n\r\n### Community Plugin Audit remediation\r\n\r\n- Fixed an \"Unexpected browser feature\" warning for `multicolumn`, which is only partially supported by Obsidian 1.4.5.\r\n- Fixed an \"Unexpected browser feature\" warning for `css-scrollbar`, which is only partially supported by Obsidian 1.4.5.\r\n- Removed two unnecessary type assertions flagged by the audit: one that did not change the type of the expression, and one where the receiver already accepted the original type of the expression.\r\n- Replaced remaining `document` references with `activeDocument` for popout window compatibility.\r\n- Removed all remaining `as any` type declarations.\r\n- Removed extraneous `!important` declarations identified since the 2.4.0 remediation pass.\r\n- Added ESLint CI blockers for all of the above categories to prevent regressions in future commits.\r\n",
-      "downloadCount": 1540,
+      "downloadCount": 1930,
       "draft": false,
       "name": "2.5.0",
       "prerelease": false,
@@ -60,7 +60,7 @@
         },
         {
           "digest": "sha256:40c9b6cd10e6cd64ea54306c06969d20801f9135809918e74f4d546391da0f86",
-          "downloadCount": 3528,
+          "downloadCount": 3549,
           "name": "manifest.json",
           "size": 425
         },
@@ -73,7 +73,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.4.1 - July 3, 2026\r\n\r\n### Features\r\n\r\nAdded collapsible headers when viewing feeds in \"feed\" grouping ([GH Issue #149](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/149))\r\n\r\n### Plugin Compliance\r\n\r\n- Upon submission of 2.4.0, the plugin was flagged with 455 issues found by automated scans. [docs/development/2.4.0-audit/2.4.0_audit_remediation_plan.md](docs/development/2.4.0-audit/2.4.0_audit_remediation_plan.md) was proposed and implemented. The !important warnings all have comments explaining their usage.\r\n\r\n- Additional CI/commit blockers were added to the repo which will disallow future commits that violate eslint rules in order to remain compliant",
-      "downloadCount": 3528,
+      "downloadCount": 3549,
       "draft": false,
       "name": "2.4.1",
       "prerelease": false,
@@ -90,7 +90,7 @@
         },
         {
           "digest": "sha256:be98e6df8e576a73fd842cf069c847293255f84b55591202fc50d7edbe66143d",
-          "downloadCount": 1002,
+          "downloadCount": 1023,
           "name": "manifest.json",
           "size": 425
         },
@@ -103,7 +103,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.4.0 - July 1, 2026\r\n\r\n> RSS Dashboard 2.4 focuses on sync reliability at scale: Shard Storage v2 separates settings, user state, and article content to eliminate cross-device race conditions, joined by deeper auto-tagging (feed source, individual feed, and folder), richer podcast controls, and continued Community Plugin compliance remediation.\r\n\r\n---\r\n\r\n### Headline Features\r\n\r\n#### Shard Storage v2 — resolving sync race conditions\r\n\r\n- Added Shard Storage mode v2 to improve sync reliability across devices. This mode introduces a new `user-state.json` file alongside `data.json`, storing per-article state — read/unread, favorited, saved, tags, and play progress. Feed shard files now contain only article content and the GUID used to link back to `user-state.json`. `data.json` now stores only plugin settings.\r\n- This separation resolves race conditions that previously caused some sync tools (e.g. Remotely Save, WebDAV-based sync) to overwrite read/star/tag changes when a feed refresh on another device landed at the same time.\r\n- v2 is opt-in: existing users on Legacy or v1 storage can migrate via the new \"Vault location (v2 — split user state)\" option in the Storage settings tab. A confirmation prompt explains the change before migration runs. Future versions will likely force users to migrate from v1 to v2.\r\n- Updated [docs/storage-vault-shards-guide.md](../../docs/storage-vault-shards-guide.md) to include v2 documentation and a comparison of all three storage modes.\r\n\r\n#### Smarter auto-tagging: by feed source, individual feed, and folder\r\n\r\n- Added three ways to auto-tag articles, which can be combined: by feed source, by individual feed, and by folder, with folder tags cascading to descendant feeds.\r\n- **Feed source**: `Settings > Tags > Auto Tagging` now supports multi-tag auto-tagging based on feed source (for example, apply \"RSS\" to all RSS feeds, or \"YouTube\" to all YouTube feeds).\r\n- **Individual feed**: A new \"Custom auto-tags\" dropdown in the Add/Edit feed window layers feed-specific tags on top of any enabled feed-source tags.\r\n- **Folder**: Right-click any sidebar folder and choose **Auto-tag feeds in folder...** to assign tags that cascade to all feeds in that folder and its descendants, with support for targeting subfolders. Choose \"Sync folder auto-tags\" to add newly selected tags and remove deselected ones while leaving manual and other rule tags untouched, or \"Remove all tags\" to strip every tag in scope.\r\n- See [docs/tags-primer.md](../../docs/tags-primer.md) for full precedence rules and examples.\r\n\r\n#### Multi-select sidebar folders\r\n\r\n- Added ability to control+click and shift+click select multiple folders in the sidebar. This allows you to filter and view only the articles contained within those folders.\r\n\r\n#### Podcast player upgrades\r\n\r\n- Added `Settings > Media > Podcast player` default play speed, applied automatically when an episode loads.\r\n- Added an \"Autoplay\" toggle in the playlist bar to automatically continue to the next episode, or keep playback limited to the current episode when disabled.\r\n\r\n#### Sidebar feed fetch status\r\n\r\n- Added a red (!) icon next to the unread badge indicating a feed that failed to fetch. Hover, right-click \"View fetch error,\" or long-press on mobile/tablet to see the failure reason.\r\n- Added a toggle in the Sidebar settings tab to enable/disable the feed fetch status icon.\r\n\r\n### Feed Management and Workflow Improvements\r\n\r\n- Added Obsidian URI support for one-click feed subscription via `obsidian://rss-dashboard?action=add-feed&url=<encoded-feed-url>`, including parameter validation and unsupported-action notices. [GH FR #126](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/126)\r\n- Added `Settings > General > Saved article open location` to control where saved articles open. [GH FR #131](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/131)\r\n- Added `{{image}}` to the Article Saving template, inserting the cover image URL when one exists. [GH FR #128](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/128)\r\n- Added `,` keybind to mark the current article read and advance to the next. [GH FR #138](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/138)\r\n- Added an \"Auto\" option to the Proxy dropdown in General Settings, cycling through all configured proxies instead of a single fixed choice. Enabled by default.\r\n- Added a configurable startup refresh delay (in seconds, default 5) to reduce processing load immediately after launch.\r\n- Added two new dedicated settings tabs, **Storage** and **Sidebar**, consolidating options previously spread across other tabs.\r\n\r\n### Stability and Quality of Life\r\n\r\n#### Saving articles to vault\r\n\r\n- [GH Issue #127](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/127) covered several distinct problems, now resolved:\r\n  - Certain feeds with malformed XML could corrupt the saved article; added a cleaner helper to sanitize feed XML (e.g. [beehiiv.com](https://rss.beehiiv.com/feeds/40ZQ7CSldT.xml)).\r\n  - Substack's `content:encoded` XML schema wasn't handled properly by the parsing helper, causing articles and images to save incorrectly.\r\n  - Resolved a format discrepancy between saving an article via the dashboard card versus the reader toolbar; both paths now resolve to the same saved note.\r\n\r\n#### Cross-platform sync reliability\r\n\r\n- Added a bootstrap pointer that saves metadata config locally so the app knows where to look on restart.\r\n- Changed the default storage type for fresh installs from Legacy JSON to Shard Storage v2, while retaining Legacy JSON as an option for existing users.\r\n- Added a variable-length sync nonce (`_syncNonce` + `_syncPad`) to every `saveData` call, appending a random 1-2kb string so `data.json`'s file size always changes on save — ensuring Obsidian Sync reliably detects and uploads settings changes even when the underlying data itself is unchanged.\r\n- Resolves [GH Issue #142](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/142) and [GH Issue #140](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/140).\r\n- Added step-by-step cross-platform sync instructions to [README.md ## Syncing Across Devices](README.md).\r\n\r\n#### Card rendering and display fixes\r\n\r\n- Fixed some feeds not properly rendering card previews (e.g. [World History Encyclopedia](https://www.worldhistory.org/rss/)).\r\n- Fixed laggy rendering on some feeds (NPR).\r\n- Fixed preview images not appearing on cards for feeds without a provided image URL.\r\n- Fixed cards showing a blank gray state instead of summary text due to pixel trackers being misinterpreted as images.\r\n- Fixed date misalignment inside the card toolbar.\r\n- Fixed some feeds (e.g. TED Talks) not properly showing summary text inside cards.\r\n\r\n#### Mobile and interface fixes\r\n\r\n- Fixed RSS feed profile favicon size overflow on Android, where sidebar favicons (used by Mastodon feeds) rendered at massive sizes instead of the intended 16x16px; added explicit `max-width`, `max-height`, and touch-device CSS constraints.\r\n- Fixed mobile sidebar tags issue where tapping a checked row failed to uncheck it.\r\n- Fixed the inline viewer not rendering the reader toolbar.\r\n- Fixed some sidebar icons not rendering properly.\r\n- Fixed the \"All Feeds\" spinner not animating on mobile/tablet during a refresh-all.\r\n- Fixed some broken favicons causing unnecessary internal retry loops while attempting to resolve.\r\n\r\n### Commnuity Plugin Audit remediation\r\n\r\n- Addressed the remaining issues on the Obsidian Community Plugin Audit (https://community.obsidian.md/plugins/rss-dashboard)\r\n- Rewrote how media progress (YouTube iframe embeds) is stored to remove dynamic `<script>` element creation, which had been flagged as a red/critical audit risk; added a CI/CD ESLint rule to prevent regressions. This unforunately breaks the YouTube saved progress feature (see below)\r\n- Completely eliminated all Node.js/Electron `fs` and `path` usages from production plugin code.\r\n- Eliminated all superfluous `!important` declarations; documented remaining necessary declarations that pass audit.\r\n\r\n### Known issues\r\n\r\n#### YouTube saved progress\r\n\r\n- **Known Issue:** YouTube watch progress is currently not being saved. This is due to YouTube API limitations in Obsidian's Electron environment (specifically, cross-origin `postMessage` blocks from the `app://` protocol). Previously, this was handled by a dynamic `<script>` injection of the YouTube IFrame API, but that had to be removed during the 2.3.0 plugin audit as a potential security violation. We are continuing to monitor for upstream Electron or API workarounds. See [YouTube progress not being saved](../../docs/bugs/bug_report_yt_progress.md).\r\n",
-      "downloadCount": 1002,
+      "downloadCount": 1023,
       "draft": false,
       "name": "2.4.0",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:f73081d33a39c9e40233c916cd485d0f15319a69fae0e026d13771dcac3cd86a",
-          "downloadCount": 3229,
+          "downloadCount": 3250,
           "name": "manifest.json",
           "size": 432
         },
@@ -133,7 +133,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.4.0-beta.3 - June 17, 2026\r\n\r\n### Features\r\n\r\n#### Auto-tag via Folder\r\n\r\n- You may now apply multiple auto-tags to articles based upon the sidebar folder they are stored in. This feature is available in the sidebar via right click -> Auto-tag feeds in folder.. You may also target subfolders and may choose to apply tags to all current articles or only future articles. \r\n\r\n- 'Sync folder auto-tags' option adds newly selected folder tags where missing, and remove tag names you deselected from this folder's rule. Other tags (manual tags, per-feed tags, parent folder tags not removed here) are left unchanged.\r\n\r\n- Remove all tags — strip every tag from existing articles in the selected scope, including manual tags and tags from other rules.- \r\n\r\n- This adds to the already existing \"auto-tag by feed source\" feature introduced in 2.4.0-beta.2.  A full guide on all the tagging options are available: [docs/tags-primer.md](docs/tags-primer.md)\r\n  \r\n#### Shard Storage version 2 (v2)\r\n\r\n- Added Shard Storage mode v2 to improve sync reliability across devices. This mode introduces a new user-state.json file alongside data.json, which stores per-article state — read/unread, favorited, saved, tags, and play progress. Feed shard files now contain only article content and the GUID used to link back to user-state.json. data.json now stores only plugin settings.\r\n\r\n- This separation resolves race conditions that previously caused some sync tools (e.g. Remotely Save, WebDAV-based sync) to overwrite read/star/tag changes when a feed refresh on another device landed at the same time.\r\n\r\n- v2 is opt-in: existing users on legacy or v1 storage can migrate via the new \"Vault location (v2 — split user state)\" option in the Storage settings tab. A confirmation prompt explains the change before migration runs.\r\n\r\n- updated [docs/storage-vault-shards-guide.md](docs/storage-vault-shards-guide.md) to include v2 documentation and comparison of all 3 existing storage modes.\r\n\r\n#### Sidebar feed fetch status\r\n\r\n- Added a new red (!) icon adjacent to the unread badge which indicates a feed that failed to fetch. Hovering over the icon or right clicking the feed and selecting \"View fetch error\" will show the reason for the fetch failure. Long-press on mobile/tablet will also open the same right-click context menu.\r\n\r\n- Added a new toggle setting in Sidebar tab to enable/disable the feed fetch status icon.\r\n\r\n#### Autoproxies\r\n\r\n- Added a new Auto setting to the Proxy dropdown in General Settings which cycles through the list of all proxies instead of only being allowed to choose one. This setting is enabled on by default.\r\n\r\n#### Auto-refresh\r\n\r\n- Added: configurable startup refresh delay (in seconds, default 5). This can be adjusted to reduce processing load upon startup.\r\n\r\n#### Right click copy URLs on cards\r\n\r\n- Added: Copy article URL and copy Feed URL to right click context menu for cards\r\n\r\n### Fixes\r\n\r\n- Fixed some feeds not properly rendering card previews (e.g. [World History Encyclopedia](https://www.worldhistory.org/rss/))\r\n\r\n- Fixed laggy feeds (NPR)\r\n\r\n- Fixed preview image not appearing in cards for feeds that don't have an image url provided.\r\n\r\n- Fixed cards showing a blank gray card instead of just summary text, due to interpreting pixel tracker as the image.\r\n\r\n- Fixed date inside card toolbar misalignment\r\n\r\n- Fixed some feeds like TED Talks not properly showing summary text inside cards.\r\n\r\n- Fixed mobile sidebar tags issue where tapping checked rows were unable to be unchecked.\r\n\r\n- Fixed inline viewer not rendering reader toolbar\r\n\r\n- Fixed some sidebar icons not properly rendering\r\n\r\n- Fixed 'All Feeds' spinner not spinning on mobile/tablet when refreshing all feeds\r\n\r\n- Fixed some broken favicons causing unnecessary internal code loops while trying to resolve",
-      "downloadCount": 3229,
+      "downloadCount": 3250,
       "draft": false,
       "name": "2.4.0-beta.3",
       "prerelease": true,
@@ -150,7 +150,7 @@
         },
         {
           "digest": "sha256:c1ce79bbe89e8b38796a01da60d3653bb8e9adfff11555c9725b2e34170767eb",
-          "downloadCount": 1920,
+          "downloadCount": 1941,
           "name": "manifest.json",
           "size": 432
         },
@@ -163,7 +163,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.4.0-beta.2 - June 9, 2026\r\n\r\n### New Features\r\n\r\n#### Auto Tagging\r\n\r\n- Added two new ways to auto-tag articles: by feed source and by individual feed.\r\n\r\n- Feed Source: Added to 'Settings > Tags > Auto Tagging' - You can now enable multi-tag auto-tagging based on the feed source (For example, apply the tag \"RSS\" to all articles from RSS feeds, and \"YouTube\" to all articles from YouTube feeds, or apply your own custom tags).\r\n\r\n- Individual feed - Added a new \"custom auto-tags' dropdown to the Add/Edit feed window under the existing \"Feed options\" dropdown:\r\n  - If 'Feed Source' autotags are enabled for that feed (via Settings), the tags you apply in 'Individual feed settings' will be added on top of the 'Feed Source' autotags.\r\n  - For example, if you have enabled \"Feed\" autotags and applied the tag \"RSS\" to all RSS feeds, and you also apply the individual feed tag \"News\" to that feed, all articles from that feed will be tagged with both \"RSS\" and \"News\".\r\n  - If there are no existing 'Feed Source' autotags, then only the tags applied for that individual feed will be applied.\r\n\r\n- Additionally, within the \"Edit feed\" window, within the 'Feed options\" dropdown, there is now a new section that shows the 'inherited auto-tags\" if any are applied Feed source tagging.\r\n\r\n#### Podcast Player\r\n\r\n- Added: Setting > Media > Podcast player setting where users can apply a default play speed that automatically applies when the player loads an episode.\r\n\r\n- Added: \"Autoplay\" button in the playlist bar. Enabling it will autoplay episodes when the previous one finishes. Disabling it will only play the current episode and will prevent episodes from automatically playing.\r\n\r\n### Fixes\r\n\r\n- Fixed RSS feed profile favicon size overflow on Android devices where favicons in the sidebar were rendering at massive sizes instead of the intended 16x16px. Added explicit `max-width`, `max-height`, and touch-device CSS constraints for profile image icons (used by Mastodon feeds) to prevent uncontrolled scaling on mobile WebView browsers.\r\n\r\n- Fixed a bug within 2.4.0-beta.1 which was writing unnecessary amounts of data to the JSON files causing performance degradation\r\n\r\n### Changes\r\n\r\n- Added two new settings tabs, 'Storage' and 'Sidebar'. These are refactors of already existing features contained elsewhere in the settings, but moved into their own dedicated tabs to improve the user experience.",
-      "downloadCount": 1920,
+      "downloadCount": 1941,
       "draft": false,
       "name": "2.4.0-beta.2",
       "prerelease": true,
@@ -180,7 +180,7 @@
         },
         {
           "digest": "sha256:1d89eacc6128eac79cf90fbddd9edcab8ae6ee85fd310a390819786daef2d619",
-          "downloadCount": 941,
+          "downloadCount": 962,
           "name": "manifest.json",
           "size": 432
         },
@@ -193,7 +193,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [2.4.0-beta.1] - June 5, 2026\r\n\r\n### New Features\r\n\r\n- Added Settings > General > Saved article open location option to control where saved articles open. [GH FR #131](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/131)\r\n- Added ',' keybind to mark article read and advance to next article. [GH FR #183](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/138)\r\n- Added Obsidian URI support for one-click feed subscription via `obsidian://rss-dashboard?action=add-feed&url=<encoded-feed-url>`, including parameter validation and unsupported-action notices. [GH FR #126](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/126)\r\n- Added {{image}} to Article Saving template which includes URL to cover image if it exists [GH FR #128](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/128)\r\n\r\n### Fixes\r\n\r\n#### Saving articles to vault not saving article content\r\n\r\n- [GH Issue #127](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/127) - appeared to be the same issue on the surface but turned out to be several:\r\n- Certain feeds with malformed xml would corrupt the saved article. Added a new cleaner helper to sanitize the feed xml. [beehiiv.com example](https://rss.beehiiv.com/feeds/40ZQ7CSldT.xml)\r\n- Certain feeds (i.e. Substack) would not save articles or images properly when saving article to vault due to Substack's content:encoded xml schema and our parsing helper not handling it properly.\r\n- Fixed format discrepency between saving article via dashboard card and saving article via reader toolbar (different pathways interally but now both resolve the same way for the user's saved note)\r\n\r\n#### Cross-platform sync reliability\r\n\r\n- Added a new bootstrap pointer which saves metadata config locally so the app knows where to look upon restart.\r\n- Changed default storage type for fresh plugin installs from Legacy JSON to Shard Storage - still retaining Legacy JSON as an option to ease transition for existing users.\r\n- Resolves [GH Issue #142](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/142) and [GH Issue #140](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/140)\r\n- Added a variable-length sync nonce (\\_syncNonce + \\_syncPad) to every saveData call, ensuring the file size changes on each write so Obsidian Sync reliably detects and uploads settings changes. When small changes were made that left data.json filesize unaffected, sync became unreliable. This hash appends a random string to the end of data.json between 1-2kb so data.json will always be different on each save.\r\n\r\n- Added comprehensive step-by-step instructions for ensuring successful cross-platform sync of RSS Dashboard settings and data to [README.md ## Syncing Across Devices](README.md)\r\n\r\n### Community Plugin Audit\r\n\r\n- Remediation work on latest Community Plugin Audit (https://community.obsidian.md/plugins/rss-dashboard) - now standing at 72% compliance (up from 46% last version).\r\n\r\n- **Dynamic `<script>` element creation**\r\n  - Flagged as a red/critical risk due to 2.3.0's media progress saving feature (specifically Youtube iFrame embeds)\r\n  - Rewrote how the progress is stored that adheres to Obsidian's best practices and Youtube SDK API\r\n  - Added CI/CD ESLint rule to prevent dynamic `<script>` element creation in the future\r\n\r\n- Completely eliminated all Node.js/Electron `fs` and `path` usages from the production plugin code\r\n\r\n- Completely eliminated all superflous !important declarations; added comments to remaining declarations that pass audit and deemed necessary",
-      "downloadCount": 941,
+      "downloadCount": 962,
       "draft": false,
       "name": "2.4.0-beta.1",
       "prerelease": true,
@@ -210,7 +210,7 @@
         },
         {
           "digest": "sha256:6e392617b7c0e54b0d87477eb1fac610ad0478f16cf936c73806b554025001a7",
-          "downloadCount": 6948,
+          "downloadCount": 6969,
           "name": "manifest.json",
           "size": 425
         },
@@ -229,7 +229,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.3.0\r\n\r\nRSS Dashboard 2.3 focuses on reliability at scale: smarter storage, stronger media handling, keyboard shortcuts, and compliance improvements with Obsidian's new Community Plugin webpage.\r\n\r\n---\r\n\r\n### Headline Features\r\n\r\n#### Smarter storage with configurable metadata location and migration controls\r\n\r\n- Added configurable metadata `data.json` location with dedicated migration controls.\r\n- Storage tools now support backup, import/export, and safer mode transitions in one flow.\r\n- Vault Shards mode and related controls were expanded and hardened for larger libraries.\r\n- Added a user-facing setup and FAQ guide for storage workflows: [docs/storage-vault-shards-guide.md](docs/storage-vault-shards-guide.md).\r\n\r\n#### Major media and reader intelligence upgrades\r\n\r\n- Added paywall/restricted-content detection so Reader shows a clear banner when only excerpted content is available.\r\n- Improved media detection to correctly classify Bloomberg-style and image-first video feeds, preventing false restricted-content notices.\r\n- Added automatic `Video` tagging for detected non-YouTube video items, with a new **Settings > Media > Auto-tag videos** toggle (enabled by default).\r\n- Added **Settings > Media > Remember Playback Progress** to save and restore podcast and video position across sessions.\r\n- Added **Settings > Media > Twitter/X/Nitter default folder** with auto-detection and suggested placement after adding Twitter/X/Nitter feeds.\r\n\r\n#### Keyboard-first and mobile-first workflow improvements\r\n\r\n- Added a comprehensive keyboard shortcuts system to speed up navigation and common actions.\r\n- Press `?` (Shift + /) in-app to open the keyboard shortcuts help reference. \r\n- Online version also available - see [Keyboard Shortcuts](docs/Keyboard%20Shortcuts.md).\r\n- Added long-press support on sidebar folders for mobile, matching desktop right-click behavior.\r\n\r\n### Filtering, Feed Management, and Display Improvements\r\n\r\n- Added `URL` as a Rules target alongside title, summary, and content so filters can match link patterns such as YouTube Shorts.\r\n- Added a display option for **Absolute timestamps** (for example, May 15, 2026) in addition to relative time labels.\r\n- Enhanced Edit Feed status details with feed ID location, storage type (shard or legacy), and one-click copy support.\r\n\r\n### Stability and Quality of Life\r\n\r\n- Fixed Reader article bodies disappearing on rich HTML feeds, including affected feeds such as Ars Technica and Substack.\r\n- Fixed URLs ending in `x` being incorrectly interpreted as Twitter/X/Nitter feeds. See [GH Issue #121](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/121).\r\n- Fixed a shard-to-legacy revert issue that could mark articles as past auto-deletion date.\r\n- Fixed duplicate YouTube items in shard storage by normalizing multiple GUID forms (`yt:video:VIDEO_ID`, `watch?v=VIDEO_ID`, `/shorts/VIDEO_ID`) to a single canonical key.\r\n\r\n### Under the Hood\r\n\r\n- Completed the Obsidian Community Plugin compliance audit: **45% -> 100% complete**.\r\n- Removed unsafe production `innerHTML` rendering paths in favor of safer sanitized append flows.\r\n- Migrated global DOM usage to scoped `activeWindow` and `activeDocument` contexts for popout-window compatibility.\r\n- Final validation state for this release cycle: ESLint clean (0 errors, 0 warnings), 130/130 test files passing (1180 tests).\r\n- See [docs/plugin-scorecard.md](docs/plugin-scorecard.md), [docs/development/compliance-patterns.md](docs/development/compliance-patterns.md), and [docs/development/test-lint-backlog-tracker.md](docs/development/test-lint-backlog-tracker.md) for implementation and audit details.\r\n",
-      "downloadCount": 6948,
+      "downloadCount": 6969,
       "draft": false,
       "name": "2.3.0",
       "prerelease": false,
@@ -246,7 +246,7 @@
         },
         {
           "digest": "sha256:b1c9d9dd3941076bbe3a3e16a209b851023f305dd319d5335d0d3a315cab0d73",
-          "downloadCount": 1832,
+          "downloadCount": 1853,
           "name": "manifest.json",
           "size": 432
         },
@@ -265,7 +265,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [2.3.0-beta.3] - May 19, 2026\r\n\r\n### Features\r\n\r\n#### New: Keyboard Shortcuts\r\n\r\n- Implemented a new comprehensive keyboard shortcuts system to enhance navigation and productivity.\r\n- To quickly access the keyboard shortcuts help file, press `?` (Shift + /) within the app. This will display a list of available shortcuts and their functions.\r\n\r\n#### Playback Progress\r\n\r\n- Added a new **Settings > Media > Remember Playback Progress** toggle to automatically save and restore podcast and video playback position across reader and plugin restarts.\r\n- Additional information can be found within the ## Media Playback Progress Tracking section of [docs/SECURITY.md](docs/SECURITY.md) guide and assures users that all data is stored locally and no telemetry is collected .\r\n\r\n#### Twitter/X/Nitter default folder\r\n\r\n- Added Settings > Media > Twitter/X/Nitter default folder to specify a default folder for Twitter/X/Nitter feeds. This folder is auto-detected and suggested after user adds a Twitter/X/Nitter feed.\r\n\r\n### Fixes\r\n\r\n- Fixed Reader view article bodies disappearing for rich feed HTML on affected feeds such as Ars Technica and Substack.\r\n\r\n- Fixed URLs ending in x mistakenly interpreting as x/nitter feeds [GH Issue #121 submitted by Wiloti](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/121)",
-      "downloadCount": 1832,
+      "downloadCount": 1853,
       "draft": false,
       "name": "2.3.0-beta.3",
       "prerelease": true,
@@ -282,7 +282,7 @@
         },
         {
           "digest": "sha256:cdb92e3854f14abdbad7f226409d4e02f981337258e3f83b4c6bcde5e56a922c",
-          "downloadCount": 1094,
+          "downloadCount": 1115,
           "name": "manifest.json",
           "size": 442
         },
@@ -301,7 +301,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [2.3.0-beta.2] - May 15, 2026\r\n\r\n### Features\r\n\r\n- Added configurable metadata `data.json` location with dedicated migration controls and backup/import-export support. See: [docs/storage-vault-shards-guide.md](docs/storage-vault-shards-guide.md).\r\n- Fixed Bloomberg-style video feed items being misclassified as restricted articles by improving media type detection (including image-first `media:content` handling and conservative video-route fallback), and added regression coverage for parser, media classification, reader surfaces, and save flow to prevent false paywall notices/banners.\r\n- Added paywall/restricted-content detection so the Reader shows a banner when only excerpted content is available.\r\n- Added automatic `Video` tagging for detected non-YouTube video items, plus a new **Settings > Media > Auto-tag videos** toggle (enabled by default). Existing users are migrated/backfilled safely.\r\n- Added long-press support on folders in sidebar for mobile devices that performs the same right-click functionality as desktop. Resolves [GH Issue #113](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/113)\r\n- Added new status section in edit feed modal to show location of feed ID, feed storage type (shard or legacy), and a copy button to quickly copy the local location.\r\n- Added \"URL\" as a Rule target alongside title, summary, and content which allows filters based upon URL address (i.e. 'shorts' for YouTube Shorts) [GH PR #116 submitted by Caleb68864](https://github.com/amatya-aditya/obsidian-rss-dashboard/pull/116)\r\n- Added new Display setting to change from Relative timestamps (Today, 1 day ago, 1 week ago etc) to Absolute timestamps (e.g. May 15, 2026) [GH Issue #115 submitted by Thehone1](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/115)\r\n\r\n### Fixes\r\n\r\n- Fixed bug where reverting from 'shard' storage back to 'legacy' caused all articles to become marked as past auto-deletion date.\r\n- Fixed YouTube feed articles duplicating in shard storage when the same video was stored under different GUID forms (`yt:video:VIDEO_ID`, `watch?v=VIDEO_ID`, `/shorts/VIDEO_ID`). All three forms now normalize to a single canonical key so duplicates are prevented on refresh and existing duplicate pairs are auto-cleaned on load.\r\n\r\n### Development\r\n\r\n- **Compliance Audit: 45% → 100% Complete** ✅\r\n  - Completed all items on the Obsidian Community Plugin audit scorecard.\r\n  - Resolved all 37 \"Disabling '@typescript-eslint/no-explicit-any'\" occurrences by adding descriptive audit guardrail comments throughout the codebase.\r\n  - Eliminated all unsafe `innerHTML` assignments in production rendering paths (replaced with `sanitizeAndAppendHtml`).\r\n  - Migrated all global DOM API references to Obsidian's scoped `activeWindow` and `activeDocument` contexts (100+ occurrences) for popout window compatibility.\r\n  - Replaced third-party `builtin-modules` dependency with native `module.builtinModules`.\r\n  - Removed all deprecated Clipboard API fallbacks.\r\n  - Final validation: ESLint clean (0 errors, 0 warnings), 130/130 test files passing (1180 tests).\r\n  - See: [docs/plugin-scorecard.md](docs/plugin-scorecard.md)\r\n\r\n- Relaxed eslint.config.mjs to now include testing files.\r\n- Completed full burn-down of test-file ESLint backlog (2686 errors → 0 errors across 130 test files).\r\n- Resolved all type-safety debt in test suite with boundary-cast pattern and strict interface definitions.\r\n- Aligned `Notice` stub behavior with modern Obsidian API to resolve 21 unit test regressions.\r\n- Added a new `Compliance Declarations (Audit Guardrails)` policy section to `CONTRIBUTING.MD` with required pre-PR compliance checks.\r\n- Added `docs/development/compliance-patterns.md` as the canonical implementation reference for audit-sensitive patterns (safe HTML rendering, boundary typing, popout-safe APIs, and DOM helper conventions).\r\n- Added root `.instructions.md` and linked policy references in README/development docs/scorecard so AI-assisted and human contributions follow the same compliance guardrails.\r\n- See: [docs/development/test-lint-backlog-tracker.md](docs/development/test-lint-backlog-tracker.md) for detailed test-file lint debt burn-down progress (54 passes, 2686 → 0 errors).",
-      "downloadCount": 1094,
+      "downloadCount": 1115,
       "draft": false,
       "name": "2.3.0-beta.2",
       "prerelease": true,
@@ -318,7 +318,7 @@
         },
         {
           "digest": "sha256:f5c02d4d9cdb888909f06f6a42a47ad998edd73955f546fb34ebd8fb4eef16d4",
-          "downloadCount": 1407,
+          "downloadCount": 1428,
           "name": "manifest.json",
           "size": 442
         },
@@ -331,7 +331,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Features\r\n\r\n- New experimental **Vault Shards storage mode**: Store article history in separate per-feed files instead of one large data.json file, with easy migration between modes.\r\n\r\n- Enhanced storage controls: Manage storage mode, repair shards, and import/export data directly from General settings.\r\n\r\n- Added a user-facing setup and FAQ guide for Vault Shards storage: [docs/storage-vault-shards-guide.md](docs/storage-vault-shards-guide.md).",
-      "downloadCount": 1407,
+      "downloadCount": 1428,
       "draft": false,
       "name": "2.3.0-beta.1",
       "prerelease": true,
@@ -348,7 +348,7 @@
         },
         {
           "digest": "sha256:a8950dcab2ce4efc7c53fa27d3b04ec9c1206636a0e9fb1e62d3a145d8e16efa",
-          "downloadCount": 2638,
+          "downloadCount": 2659,
           "name": "manifest.json",
           "size": 435
         },
@@ -361,7 +361,7 @@
       ],
       "author": "marcd35",
       "description": "## 2.2.0\r\n\r\n> RSS Dashboard 2.2 adds premium-grade filtering and highlighting, brings the plugin fully into its own on mobile and tablet, and delivers a major upgrade to reading, discovery, and feed management across the board.\r\n\r\n---\r\n\r\n### Headline Features\r\n\r\n#### Highlight words and phrases like a power-user tool\r\n\r\n- Highlight custom words or phrases across article titles, card summaries, and full reader content.\r\n- Set per-word colors, choose exact or partial matching, and enable case sensitivity when you need precision.\r\n- Control where highlights appear and quickly toggle them from the Filters menu.\r\n- For heavy feed readers, this turns RSS Dashboard into a far more actionable scanning tool, not just a passive reading list.\r\n\r\n#### Advanced include/exclude rules for serious feed curation\r\n\r\n- Build global or per-feed rule sets using include/exclude logic.\r\n- Target titles, summaries, or full content.\r\n- Combine rules with AND/OR logic, override global rules on individual feeds, and bypass rules at the dashboard level when needed.\r\n- This is one of the biggest workflow upgrades in 2.2: the plugin can now actively shape what you see, not just display everything a feed publishes.\r\n\r\n### Full Mobile and Tablet Support\r\n\r\n- 2.2 is the release where RSS Dashboard becomes genuinely comfortable to use across desktop, tablet, and phone.\r\n- Android and iOS rendering issues were fixed across the sidebar, reader, icons, menus, and settings flows.\r\n- Touch targets, drawers, reader controls, and settings layouts were reworked to behave more naturally on smaller screens.\r\n- Mobile-safe reader settings, improved toolbar patterns, and responsive layout cleanup make the entire plugin feel far more first-class outside desktop Obsidian.\r\n\r\n### Reading, Layout, and Sidebar Upgrades\r\n\r\n- New Feed view adds a social-style, single-column reading mode with hero images and integrated actions.\r\n- Reader formatting controls were added and refined for better readability across devices.\r\n- Sidebar organization is far more flexible, with drag-and-drop ordering for feeds, folders, and toolbar icons.\r\n- Tag filtering got a major upgrade with AND / OR / NOT logic and inline tag management.\r\n- New options for unread-based sorting, hiding empty feeds, toolbar divider control, scoped sidebar search persistence, row spacing, badges, and toolbar visibility make the sidebar much more customizable.\r\n\r\n### Discover, Feed Management, and Podcasts\r\n\r\n- Discover got stronger with Kagi Smallweb integration, folder targeting, and an Add All button to quickly add feeds to your dashboard.\r\n- Import and setup flows were improved with a more capable OPML experience, XML filename support, smarter default handling, and global feed defaults for new subscriptions.\r\n- Feed management became more unified and polished across RSS, podcasts, and video feeds.\r\n- Added native Twitter/X integration - simply paste a Twitter profile URL into the Add Feed window and it will be automatically converted into a chronological Nitter RSS feed.\r\n- Podcasts received major quality-of-life upgrades including Pocket Casts support, improved feed resolution, sleep timer, better browser handoff options by extracting all URLs from the episode, and stronger metadata handling.\r\n\r\n### Stability and Quality of Life\r\n\r\n- Auto-refresh is smarter, including refresh-on-vault-open when an interval has already elapsed and an Off option for users who want manual control.\r\n- Page-level mark read, auto-backup on unload, better pagination behavior, scroll restoration, and more reliable unread-state updates smooth out everyday use.\r\n- Numerous fixes across reader rendering, OPML workflows, imported-feed defaults, proxy warnings, refresh behavior, and mobile regressions make 2.2 much more dependable than the beta line it grew out of.\r\n\r\n### Under the Hood\r\n\r\n- 2.2 also shipped with the first durable repo-wide automated test baseline for RSS Dashboard.\r\n- The suite now sits at 120 passing test files and 1019 passing tests, with 54.66% statement coverage, 45.5% branch coverage, 49.58% function coverage, and 55.87% line coverage.\r\n- Coverage thresholds are actively enforced in `vitest.config.mjs` at lines 40, branches 33, and functions 34 to help prevent regression.\r\n- Under the hood, this release included major maintainability work across settings architecture, feed manager flows, reader components, article list extraction, shared test infrastructure, and general release hardening.\r\n",
-      "downloadCount": 2638,
+      "downloadCount": 2659,
       "draft": false,
       "name": "2.2.0",
       "prerelease": false,
@@ -372,13 +372,13 @@
       "assets": [
         {
           "digest": "sha256:274a8494c35134445c800e0a27b83bde6634134dbbff562c32ea7d85c43f4e24",
-          "downloadCount": 236,
+          "downloadCount": 237,
           "name": "main.js",
           "size": 743033
         },
         {
           "digest": "sha256:7cb9d7b50b977acc8f0f733b42a33e65e7895f45cb954b481de207da87cf0ffa",
-          "downloadCount": 4843,
+          "downloadCount": 4864,
           "name": "manifest.json",
           "size": 433
         },
@@ -391,7 +391,7 @@
       ],
       "author": "marcd35",
       "description": "## [2.2.0-beta.11] - April 25, 2026\r\n\r\n### Features\r\n\r\n- **\"Add All\" Button added to Discover page**\r\n  - Added a new \"Add All\" button to the Discover page header. This button adds all feeds from the current page to the user's feed list.\r\n\r\n- **Sort feeds by unread count**\r\n  - Added a new option to the 'Sort' icon which organizes feeds by unread count.\r\n  - Two options: High to Low / Low to High\r\n\r\n- Added new \"inline\" reader view option to the general settings which opens the article in the same tab as the dashboard. (GH[#100](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/100))\r\n\r\n- Added a new \"external browser\" reader view location option in General settings so article and media opens can bypass the in-app reader and launch in the system browser. (GH[#89](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/89))\r\n\r\n- **Flexible Date Formatting for Templates** (GH[#102](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/102)):\r\n  - Added support for custom date formats in article templates using Moment.js.\r\n  - New variables: `{{dateShort}}` (renders as `YYYY-MM-DD`) and parameterized `{{date:FORMAT}}` (e.g., `{{date:YYYY/MM/DD HH:mm}}`).\r\n  - Improved settings UI for Article Saving with a readable, row-by-row guide of all available template variables.\r\n  - Full backward compatibility for `{{date}}`, `{{isoDate}}`, and `{{isoDateTime}}`.\r\n\r\n### Fixes\r\n\r\n- Fixed badge color settings not syncing between color picker and hex input controls. Color picker now updates hex input immediately, and hex input now updates color picker after validation.\r\n\r\n- Fixed a bug where the Obsidian tab title was not properly updating when switching between feeds.\r\n\r\n- Per-feed Add/Edit Feed options now support a separate Auto-refresh \"Off\" override in addition to \"Use global setting\", and the explicit Off state is preserved when adding or importing feeds.\r\n\r\n- Multi-feed refreshes now run through a bounded worker pool of 4 with a 15s per-feed timeout, keep runtime-only refresh state per URL, merge refreshed feeds back into settings during the run, and finish with one save plus a final dashboard refresh. Single-feed refresh stays on the lightweight direct path. (Old behavior: all feeds were being refreshed individually with no indication of progress or completion)\r\n\r\n- Fixed Reader View Location So It Controls Article Opening into sidebars (GH[#100](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/100))\r\n\r\n- Fixed Discover and Smallweb views incorrectly opening in the sidebar when Dashboard view location was set to a sidebar option; they now always open as a new tab in the main content area.\r\n\r\n- Adding a feed as \"Favorite\" now also applies the \"Favorite\" tag and is removed when un-favorited.\r\n\r\n- Fixed reader tag pills so tag colors now render correctly in Reader view instead of showing plain text with no colored background.\r\n\r\n- Fixed tag color edits so Reader view now refreshes its open tag DOM immediately after popover/settings color changes, matching the existing dashboard tag refresh behavior without needing to reopen the article.\r\n\r\n- Fixed podcast feeds that only expose channel-level artwork so shared feed artwork now appears correctly in podcast episodes and the player instead of being dropped during parsing/refresh.\r\n\r\n- Fixed the Manage Feeds workflow so the modal now closes after the user initiates an OPML import instead of remaining open behind the import flow.\r\n\r\n- Saved articles now persist across vault reloads (PR#106)\r\n\r\n- Saved articles no longer truncate title names\r\n\r\n### Improvements\r\n\r\n- Optimized the feed refresh process to reduce unnecessary network requests.\r\n\r\n- Added a per-feed \"Exclude from refresh\" option in Add/Edit Feed so selected feeds can be skipped by auto-refresh and bulk refresh actions while still allowing direct manual refresh.",
-      "downloadCount": 4843,
+      "downloadCount": 4864,
       "draft": false,
       "name": "2.2.0-beta.11",
       "prerelease": false,
@@ -408,7 +408,7 @@
         },
         {
           "digest": "sha256:27d514be1cdef4a54297e7d0fd2a6c8c76ddfb00eccfd90b4ed691dfb195a4a9",
-          "downloadCount": 10562,
+          "downloadCount": 10583,
           "name": "manifest.json",
           "size": 433
         },
@@ -421,7 +421,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [2.2.0-beta.10] - April 2, 2026\r\n\r\n### New Features\r\n\r\n- **Sidebar Toolbar Divider**:\r\n  - Decoupled the vertical divider from the discover icon - now a standalone, configurable element.\r\n  - Added \"Divider\" to the icon visibility settings in Display tab.\r\n  - The divider can now be enabled/disabled and reordered among other icons via drag-and-drop.\r\n  - Default position is between Discover and Add Feed icons.\r\n\r\n- **Smart Auto-Refresh on Vault Open**:\r\n  - Feeds now automatically refresh when opening the vault if the configured refresh interval has elapsed since the last refresh.\r\n  - **Before:** The refresh timer reset to zero each time Obsidian closed. Users had to manually refresh or wait for the interval to pass after reopening the vault.\r\n  - **After:** The plugin now tracks the last refresh timestamp in settings. On vault open, it checks if enough time has passed and refreshes immediately if needed.\r\n  - Manual refreshes (sidebar icon, right-click menu, header button) also update the timestamp.\r\n  - Respects all existing refresh interval settings (5 min to 24 hours).\r\n\r\n- **Auto Refresh: Off Option added**\r\n  - Added a new \"Off\" option to the refresh interval dropdown in General > Global Feeds > Refresh Interval. Resolves GH Issue #92\r\n\r\n- **Mark Page Read button added**\r\n  - Appears at the bottom of the article list\r\n  - Marks only the articles from the current page as read, but leaves remaining articles in the feed untouched.\r\n\r\n### Fixes\r\n\r\n- Android bug causing list and card views to regress after every open\r\n\r\n- Chevron clicks in sidebar now only toggle collapse - GH[#91](https://github.com/amatya-aditya/obsidian-rss-dashboard/issues/91)\r\n\r\n- Auto-deleted items no longer reappearing as unread upon refresh (PR#87 submitted by emiraga)\r\n\r\n### Development\r\n\r\n- **Testing Baseline for 2.2.0**:\r\n  - Established the first durable repo-wide automated test baseline for the plugin.\r\n  - The pre-testing reference point was `2.1.9`, which effectively shipped without a meaningful unit test suite beyond minimal Vitest scaffolding.\r\n  - The repo now has **103 passing test files** and **741 passing tests**.\r\n  - Global coverage baseline is now **46.77% statements**, **37.32% branches**, **41.51% functions**, and **47.66% lines**.\r\n  - Added broad unit and integration-style coverage across core services, views, components, settings flows, modals, and plugin lifecycle behavior.\r\n  - Added and expanded shared test infrastructure including Obsidian API stubs, JSDOM polyfills, and purpose-built harnesses for complex UI/service surfaces.\r\n  - Coverage thresholds are now actively enforced in `vitest.config.mjs` at **lines 40 / branches 33 / functions 34** to prevent regression.\r\n  - Added contributor-facing testing documentation and archived the phase-by-phase handoff artifacts used during the coverage push.",
-      "downloadCount": 10562,
+      "downloadCount": 10583,
       "draft": false,
       "name": "2.2.0-beta.10",
       "prerelease": false,
@@ -438,7 +438,7 @@
         },
         {
           "digest": "sha256:af5e87d4b5bfe499dbab2f0a654b506691b7bfab2d8d2f6cf7bc55a83bcb07f6",
-          "downloadCount": 2351,
+          "downloadCount": 2372,
           "name": "manifest.json",
           "size": 432
         },
@@ -451,7 +451,7 @@
       ],
       "author": "marcd35",
       "description": "## [2.2.0-beta.9] - March 27, 2026\r\n\r\n### New Features\r\n\r\n- **Sidebar Horizontal Scrolling**:\r\n  - Added support for horizontal scrolling in the sidebar header toolbar via the mouse scrollwheel.\r\n  - Added click-and-drag horizontal scrolling for desktop and mobile touch devices.\r\n  - Added \"grabbing\" cursor feedback and touch-drag optimization to prevent accidental icon clicks while scrolling.\r\n\r\n- **XML support**: Import OPML window now allows XML filenames in addition to OPML filenames.\r\n\r\n- **Feed View**:\r\n  - Added a new \"Feed\" view mode for a social-media-style, single-column layout.\r\n  - Features hero images, clamped text summaries, and integrated action toolbars.\r\n  - Added a 3-button view toggle (List, Card, Feed) to the hamburger menu using the accessible `clickable-icon` pattern.\r\n  - Added \"Feed\" view as a preference in General settings.\r\n  - Improved Feed View image quality by prioritizing high-resolution images and implementing a \"hero blur\" background layout to handle varying aspect ratios gracefully.\r\n  - Refactored the hamburger menu view toggle from individual buttons into a single consolidated dropdown menu with dynamic icons and enhanced theme compatibility for both dark and light modes.\r\n\r\n- **Auto-backup**: Added auto-backup for data.json, OPML, and userdata on plugin unload. By default, OPML and userdata are backed up to the plugin's data directory. These can be changed in the import/export settings.\r\n\r\n### Fixes\r\n\r\n- **Pagination**: Fixed a bug where the Dashboard would bypass pagination limits and display all articles when toggling view filters or switching to the \"Unread\" sidebar view.\r\n\r\n- **Scroll Restoration**: Fixed a bug where the Dashboard would reset to the top when opening the Reader panel or resizing the window; implemented a focus-locking mechanism to keep the selected article in view.\r\n\r\n- **Auto-delete bug**: Fixed a bug where imported feeds were not respecting the global default auto-delete duration.\r\n\r\n### Development\r\n\r\n- **Refactor article-list.ts**: Refactored article-list.ts monolith - extracted the filter menu and hamburger menu into separate components.",
-      "downloadCount": 2351,
+      "downloadCount": 2372,
       "draft": false,
       "name": "2.2.0-beta.9",
       "prerelease": false,
@@ -468,7 +468,7 @@
         },
         {
           "digest": "sha256:f308bbfe20c84f3ff3dd7b0a2ccdce2f7c1ca7dcb1d57b0eab3b557e011e9c44",
-          "downloadCount": 729,
+          "downloadCount": 750,
           "name": "manifest.json",
           "size": 453
         },
@@ -481,7 +481,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## [2.2.0-beta.8] - March 24, 2026\r\n\r\n- **IMPORTANT**: Earlier limited releases intended for users experiencing specific issues were tagged as 2.3.0-alpha.1, 2.3.0-alpha.2, and 2.3.0-alpha.3. These were incorrectly versioned. They have been retroactively designated as 2.2.0-beta.5, 2.2.0-beta.6, and 2.2.0-beta.7 in our internal documentation. The original GitHub release tags have been left intact to avoid breaking any shared links. Development continues from 2.2.0-beta.8 forward.\r\n\r\n### New Features\r\n\r\n- **Customizable sidebar ordering (drag-and-drop)**:\r\n  - Drag feeds to reorder within a folder (or move + insert between feeds).\r\n  - Drag folders to reorder, and drag onto another folder to nest/un-nest (supports hierarchical organization).\r\n  - Any manual reorder automatically switches the sidebar sort mode to a new **Custom** row to preserve your ordering.\r\n\r\n- **Customizable sidebar toolbar icons**:\r\n  - New setting: `Settings > Display > Icon visibility`.\r\n  - Drag-and-drop or up/down buttons (mobile friendly).\r\n  - Hide/show individual icons.\r\n  - Hide/show entire toolbar.\r\n  - New sidebar toolbar \"settings\" button (opens RSS-Dashboard settings).\r\n\r\n- **Sidebar Tag Filtering**:\r\n  - Revamped **Tags** section in the sidebar for easy management and improved filtering logic: **AND** (match all), **OR** (match any), and **NOT** (match none).\r\n  - Inline **Add Tag** row with color picker integrated directly into the sidebar.\r\n\r\n- **Podcast Player Sleep Timer**: Added a sleep timer to the podcast player to automatically stop playback after a specified duration (5, 10, 15, 30, 45, 60, 90, or 120 minutes) (GitHub issue #75).\r\n\r\n- **Podcast \"Open in Browser\" improvements**:\r\n  - Fixed the toolbar button, which was previously non-functioning.\r\n  - The button now attempts to resolve the podcast’s website URL from feed metadata, falling back to the podcast’s RSS feed URL if no website URL is found.\r\n  - The dropdown now includes URLs found in the \"Episode details\" section of the podcast page, plus a link to the direct audio file.\r\n\r\n- **Pocket Casts Support**: Added support for importing podcasts directly from Pocket Casts URLs (e.g., `https://pocketcasts.com/podcast/...`).\r\n\r\n- **Robust Podcast Resolution**:\r\n  - Implemented a multi-proxy fallback system (AllOrigins, CodeTabs) to handle network timeouts and CORS restrictions when resolving podcast feeds.\r\n  - Added a \"Semantic Discovery\" fallback using the **iTunes Search API** to resolve feeds when Pocket Casts hides the RSS link from their web player source.\r\n  - Added flexible metadata scraping to handle varied HTML attribute ordering in modern web layouts.\r\n\r\n- **Proactive Proxy Validation**: The Add Feed and Edit Feed modals now check whether the CORS proxy is enabled before attempting to resolve Pocket Casts URLs, providing a clear warning and guidance if it’s disabled.\r\n\r\n- **OPML Import Menu Overhaul**: The OPML import menu has been completely overhauled to improve reliability and user experience.\r\n\r\n- **View Filter Setting Improvements**:\r\n  - All applied view filters now persist across navigation (state is saved and restored on reopen/restart).\r\n  - All applied view filters now explicitly state which ones are currently applied in the dashboard header.\r\n  - Updated `Settings > Display > Startup filters` to mirror the dashboard filter UI, allowing multiple viewing filters to be applied at startup.\r\n\r\n### Fixed\r\n\r\n- **Reader tags menu**: Reader toolbar now uses the same tag management portal UI as dashboard cards (edit/delete/add tags, mobile sheet support).\r\n\r\n- **Reader save button**: The save button icon in the reader now appropriately turns purple when saved and changes its tooltip to \"Click to open saved article\". Clicking it in this state will directly open the saved markdown file in your vault, mirroring the dashboard functionality. Also updated the \"custom folder location\" option to suggest folders based on your vault structure, with proper text validation that adheres to Obsidian’s folder naming conventions.\r\n\r\n- **Reader Nitter rendering**: Improved X/Twitter (Nitter) feed items in Reader view with a compact author/handle/date title, a single formatted tweet body (no \"Feed description\" callout), and a compact stats icon row when present. Article titles no longer show the entire tweet and instead show the author, handle, and date.\r\n\r\n- **Obsidian Properties UI compatibility**: Fixed a critical issue where enabling the plugin could cause vault-wide Properties \"type mismatch\" error indicators due to unscoped global CSS overrides.\r\n\r\n- **Settings migration (Filters → Rules)**: The global `filters` setting has been renamed to `rules` to avoid confusion with viewing filters. The new implementation is backwards compatible with existing beta users’ settings via a one-time migration.\r\n\r\n- **Article dedupe bug** Fixed duplicate articles for feeds (e.g. BBC) where item GUIDs can change between refreshes via numeric URL fragments (`#0`, `#1`, ...); existing stored duplicates are auto-deduped on load.\r\n\r\n- **Pagination**: Fixed pagination controls not updating when switching between views. Added new 'All' option to page size dropdowns. Adjusting the pagination at the bottom of the page now sychronizes with the pagination controls in settings (General > Results shown per page).\r\n\r\n### Development\r\n\r\n- **Developer Documentation**: Added a new \"Advanced Podcast Platform Resolution\" section to the developer docs describing proxy rotation and semantic search patterns.\r\n\r\n- **CSS Guardrail**: Added `npm run check:css-scope` (runs during `npm run build`) to prevent unscoped CSS rules from targeting Obsidian core selectors (e.g., `.clickable-icon`, `.suggestion-container`, `.hidden`).\r\n\r\n- **Settings Architecture Refactor**:\r\n  - Refactored the monolithic settings tab into a modular architecture for maintainability and performance.\r\n  - Split settings rendering into 9 dedicated tab renderer modules.\r\n  - Centralized shared settings modal classes.\r\n  - Isolated pure tab-name helpers to enable zero-dependency unit testing.\r\n  - Used TDD-driven logic for color normalization, icon reordering, and preset detection.\r\n  - Added many new unit tests covering settings-related logic.\r\n  - Reduced the main settings tab orchestrator to ~119 lines.\r\n\r\n- **Feed manager refactor**:\r\n  - Reorganized the feed manager modal code to be more modular and maintainable (kept backwards compatibility for now; planned for deprecation in the next major release).\r\n  - UI: standardized “supported formats” badges using Lucide icons.\r\n  - Folder handling: improved folder-path collection and removed duplicate folder traversal across folder pickers and the sidebar.\r\n  - Fix: corrected nested folder deletion behavior.\r\n  - Tests: expanded unit coverage across feed manager behavior, sidebar “Add Feed” opening, folder-path utilities, preview loading, and nested folder removal.\r\n\r\n- **ReaderView Refactor**: Extracted the reader format settings portal into a helper, added ReaderView cleanup on close, and added unit coverage.",
-      "downloadCount": 729,
+      "downloadCount": 750,
       "draft": false,
       "name": "2.2.0-beta.8",
       "prerelease": false,
@@ -498,7 +498,7 @@
         },
         {
           "digest": "sha256:64ef52b43f99efc6ba2cb326e621a69ceea44f10f692378db4dab1c0ee797271",
-          "downloadCount": 50,
+          "downloadCount": 71,
           "name": "manifest.json",
           "size": 453
         },
@@ -511,7 +511,7 @@
       ],
       "author": "marcd35",
       "description": "### New Features\r\n\r\n- **Sidebar Feed Filtering** (github issue #74): Added a new setting \"Hide empty feeds/no unread articles\" to automatically hide feeds with zero articles or only read articles from the sidebar.\r\n- **New Article Filter Settings**: \r\n  - Added 'All' Filter checkbox for clarification that the user is viewing all articles with no filters applied\r\n  - Added 'Untagged' Filter checkbox for more filtering combination possibilities (for example: Unread AND Untagged) (github issues #46 )\r\n\r\n- **Standardized Icon Rendering**:\r\n  - Refactored all interactive icons to use the Obsidian-recommended `clickable-icon` pattern.\r\n  - Replaced standard HTML `<button>` elements with accessible `div` structures for better cross-platform (Android) compatibility.\r\n  - Added full keyboard support (Enter/Space) to all interactive icons.\r\n  - Centralized icon sizing via the `--icon-size` CSS variable.\r\n- **Reader Settings Refactor**:\r\n  - Touch sliders not ideal for mobile devices due to base Obsidian touch behavior, replaced with dropdowns to ensure consistent behavior across platforms.\r\n    - Replaced \"Words per row\" slider with a percentage-based \"Paragraph width\" dropdown (25%, 50%, 75%, 100%).\r\n    - Replaced \"Font size\" slider with a discrete dropdown (80% to 200%).\r\n    - Replaced \"Line height\" slider with a discrete dropdown (100% to 200%).\r\n  - Added 2px horizontal padding for 100% paragraph width to improve readability.\r\n\r\n### Fixed\r\n\r\n- **YouTube Feed Discovery** (github issue #77): Fixed an issue where adding certain YouTube channels would return the wrong RSS feed by prioritizing metadata tags (`rel=\"canonical\"` and `itemprop=\"channelId\"`) over generic page content.\r\n- **Android/iOS Rendering**: Fixed multiple instances where icons failed to render or appeared broken on mobile devices.\r\n- **iOS Feed Content**:\r\n  - Fixed an issue where Substack and Psychology Today articles appeared empty on iPhone by implementing robust XML namespace extraction using `getElementsByTagNameNS` instead of `querySelector`.\r\n  - Fixed full article content fetching (via Readability) failing on iOS for sites with strict WAFs (like Psychology Today) by introducing a tiered fetch mechanism with a configurable CORS Proxy fallback. You can now enable and configure a CORS proxy in the settings (see reference `docs/bugs/ios-full-article-fetch-failure.md`).\r\n- **Reader Rendering** (discord issue): Improved article display logic to ensure content is always rendered as the primary body, even if it matches the feed description.\r\n- **ESLint/Build Integrity**:\r\n  - Cleaned up multiple ESLint & TypeScript compilation errors in `ReaderView`.\r\n  - Implemented strictly-typed Obsidian app and plugin interfaces for safer API access.\r\n  - Standardized `HighlightService` and `robustFetch` usage to match modern patterns.\r\n- **Feed and Folder Validation** (github issue #67):\r\n  - Added strict validation for forbidden characters (`[ ] # ^ | / \\ : * \" < > ?`) and leading dots in feed titles and folder names.\r\n  - Integrated validation into Add Feed, Edit Feed, and Folder Rename modals to prevent data corruption and filesystem issues.\r\n  - Improved `sanitizeName` logic to provide better defaults during automated imports (e.g., OPML).\r\n\r\n### Development\r\n\r\n- **Testing**: Added unit tests for namespaced XML extraction and reader logic in `test_files/unit/ios-namespace-fix.test.ts`.\r\n- **Build Logging**: Added explicit confirmation messages to `esbuild.config.mjs` to verify successful JS and CSS bundling.\r\n- **Removed**\r\n  - **YouTube Short Detection**: removed feature introduced in 2.3.0-alpha.1 due to inconsistent tagging. Added a comprehensive bug report in `docs/bugs/youtube-shorts-tagging-failure.md` for future reference.",
-      "downloadCount": 50,
+      "downloadCount": 71,
       "draft": false,
       "name": "2.2.0-beta.7",
       "prerelease": false,
@@ -528,7 +528,7 @@
         },
         {
           "digest": "sha256:a6893ce8e4af474ca04e9f11e4e637549526c9d7c6e44db1288773a2dbfe414d",
-          "downloadCount": 46,
+          "downloadCount": 67,
           "name": "manifest.json",
           "size": 453
         },
@@ -541,7 +541,7 @@
       ],
       "author": "marcd35",
       "description": "### New Features\r\n\r\n- **Podcast Player Improvements**:\r\n  - **UI** - Refreshed in-app podcast player layout and controls.\r\n  - **Episode Details**: Added a collapsible \"Episode details\" section under the seek bar showing episode metadata and sanitized show notes (from parsed feed content).\r\n  - **Podcast Tags**: Show episode tags in the player and in playlist rows (with overflow handling).\r\n- **Export Settings**: Added copy-to-clipboard actions for Settings exports (data.json, usersettings.json, OPML)\r\n- **Global Feed Settings**: Added a global feed settings in General tab to set default values for new feeds\r\n\r\n### Fixed\r\n\r\n- Fixed some feeds losing older history (often collapsing to ~25 items) after refresh; refresh now preserves previously cached items outside the server “latest N” window and applies per-feed retention deterministically.\r\n- Per-feed options now always show when adding a new feed (collapsed by default, follows default global feed settings)\r\n- Podcast player now keeps play/pause button state in sync during autoplay\r\n- Sorting/shuffling the podcast playlist no longer interrupts playback\r\n- Switching episodes via the playlist no longer auto-plays unexpectedly\r\n- Article title in reader now hidden on mobile view\r\n- Reader settings sheet now notch-safe on iPhone, with improved touch layout, slider sizing, and a bottom “Done” CTA\r\n- Card/List view: Article titles no longer reserve an empty second line for short titles; titles now clamp to 2 lines with truncation.",
-      "downloadCount": 46,
+      "downloadCount": 67,
       "draft": false,
       "name": "2.2.0-beta.6",
       "prerelease": false,
@@ -558,7 +558,7 @@
         },
         {
           "digest": "sha256:d972e356413ea3a48b78197ef5f425003ca2718e7d5f82fd654d04294699cbf3",
-          "downloadCount": 47,
+          "downloadCount": 68,
           "name": "manifest.json",
           "size": 453
         },
@@ -577,7 +577,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n\r\n- Added automatic YouTube Shorts detection and tagging from feed XML\r\n- Added a media setting to enable or disable YouTube Shorts detection\r\n- **Tag Management**: Recreated and enhanced tag editing functionality across Sidebar, Article List, and Reader View, allowing direct modification of tag names and colors.\r\n- **X/Twitter to Nitter**: Added automatic redirection of X/Twitter feeds to Nitter RSS feeds.\r\n- New reader settings menu for adjusting font and paragraph settings\r\n\r\n### Improvements\r\n\r\n- **Tagging UX**: Expanded clickable area for tags in dropdowns; clicking the label text now toggles the tag checkbox.\r\n- **Feed Validation**:\r\n  - Allow adding valid feeds that currently have no items.\r\n  - Display a warning for valid but empty feeds in Add and Edit feed modals.\r\n  - Prevent Add Feed modal from closing if background validation fails.\r\n\r\n### Development\r\n\r\n- Added CONTIRUBTING.MD to root directory for contribution guidelines\r\n\r\n### Improved\r\n\r\n- Standardized YouTube embed generation through a shared media-service helper\r\n- Routed embedded playback through Privacy Enhanced Mode using `youtube-nocookie.com`\r\n- Added a visible `Watch on YouTube` handoff from the in-app player\r\n- Documented YouTube embed behavior and legal links in the README\r\n\r\n### Fixed\r\n\r\n- Fixed YouTube embed Error 153 by setting iframe `referrerpolicy=\"strict-origin-when-cross-origin\"`\r\n- Removed unsupported YouTube quality override URL rewriting from the player\r\n- Enforced a minimum 200x200 YouTube player surface to better match RMF requirements\r\n- Added regression tests for YouTube embed URL generation and feed video-id normalization\r\n- Fixed Substack inline reader images not loading by stripping broken `srcset` / `<picture><source>` entries and falling back to a hero cover image when inline images fail\r\n- Removed Substack image expand/view controls that rendered as blank bordered buttons in the reader\r\n",
-      "downloadCount": 47,
+      "downloadCount": 68,
       "draft": false,
       "name": "2.2.0-beta.5",
       "prerelease": false,
@@ -594,7 +594,7 @@
         },
         {
           "digest": "sha256:1a7ddb3b3ebacee011c1bf2617f9eec85ab5301125748ec5f85ef45282367fee",
-          "downloadCount": 4891,
+          "downloadCount": 4912,
           "name": "manifest.json",
           "size": 442
         },
@@ -613,7 +613,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Beta release 2.2.0-beta.4\r\n\r\n### ℹ️ Important: Migration Steps Required Before Updating to Beta 4\r\n\r\nHey everyone,\r\n\r\nBeta 4 reverts the storage backend from SQLite back to JSON (data.json). If you're currently on Beta 3, please follow these steps before updating to avoid losing your feeds and articles:\r\n\r\nBefore updating:\r\n\r\n- Open RSS Dashboard Settings\r\n- Go to Backup & Restore\r\n- Click Export Settings to JSON and save the file somewhere safe\r\n\r\nAfter updating to Beta 4:\r\n\r\n- Install the update (your old SQLite data will no longer be read)\r\n- Go to Settings → Backup & Restore\r\n- Click Import Settings from JSON and select the file you exported\r\n- This will restore all your feeds, articles, folders, tags, and settings.\r\n\r\nWhy the change?\r\n\r\nWe originally planned to ship SQLite as part of 2.2.0, but during beta testing we ran into cross-device sync issues, sqlite performs a full binary rewrite on every save, doesn't support merging, and sync conflicts can corrupt the database entirely. These are fundamental problems that need a proper solution, not a quick fix.\r\n\r\nWe've decided to hold off on SQLite and revisit it for a future major release (3.0.0) where we can do it right.\r\n\r\nSorry for the inconvenience and thank you all for your patience and support through the beta. Your testing and feedback have been incredibly valuable.",
-      "downloadCount": 4891,
+      "downloadCount": 4912,
       "draft": false,
       "name": "2.2.0-beta.4",
       "prerelease": false,
@@ -630,7 +630,7 @@
         },
         {
           "digest": "sha256:85c194b725adccef943d56772de7324e2db379e70743c0bf9f426bee183c6bb4",
-          "downloadCount": 265,
+          "downloadCount": 286,
           "name": "manifest.json",
           "size": 442
         },
@@ -649,7 +649,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Beta release 2.2.0-beta.3\r\n\r\n### ⚠️ Important: Database Migration (for Existing Users)\r\n\r\nStarting in **2.2.0**, feed data is migrated from JSON storage to SQLite for better performance.\r\n\r\n- **What migrates:** feeds, articles, folders, and tags\r\n- **One-time migration:** runs automatically on first launch after updating to 2.2.0\r\n- **What to expect:** first load may take longer than usual if you have a large feed/article history\r\n- **Backup created:** `data.json.backup` is written in the plugin folder during migration\r\n- **New storage split:**\r\n  - `rss-dashboard.sqlite` stores bulk feed/article data\r\n  - `usersettings.json` stores plugin settings\r\n\r\nIf something looks wrong after migration:\r\n\r\n1. Run command palette action: **Restore from JSON backup**\r\n2. Reload Obsidian/plugin\r\n\r\nFresh installs are not affected by this migration path.",
-      "downloadCount": 265,
+      "downloadCount": 286,
       "draft": false,
       "name": "2.2.0-beta.3",
       "prerelease": false,
@@ -666,7 +666,7 @@
         },
         {
           "digest": "sha256:72a7edf82808c2bbc40d2d40392e6090fbeee88837992e2451edc8c69d1de176",
-          "downloadCount": 174,
+          "downloadCount": 195,
           "name": "manifest.json",
           "size": 442
         },
@@ -685,7 +685,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Beta release 2.2.0-beta.2\r\n\r\n### ⚠️ Important: Database Migration (for Existing Users)\r\n\r\nStarting in **2.2.0**, feed data is migrated from JSON storage to SQLite for better performance.\r\n\r\n- **What migrates:** feeds, articles, folders, and tags\r\n- **One-time migration:** runs automatically on first launch after updating to 2.2.0\r\n- **What to expect:** first load may take longer than usual if you have a large feed/article history\r\n- **Backup created:** `data.json.backup` is written in the plugin folder during migration\r\n- **New storage split:**\r\n  - `rss-dashboard.sqlite` stores bulk feed/article data\r\n  - `usersettings.json` stores plugin settings\r\n\r\nIf something looks wrong after migration:\r\n\r\n1. Run command palette action: **Restore from JSON backup**\r\n2. Reload Obsidian/plugin\r\n\r\nFresh installs are not affected by this migration path.\r\n",
-      "downloadCount": 174,
+      "downloadCount": 195,
       "draft": false,
       "name": "2.2.0-beta.2",
       "prerelease": false,
@@ -702,7 +702,7 @@
         },
         {
           "digest": "sha256:8146884c7a5e7d237a2a698527f59f54b6d8c9939482c55c953af58cb8269458",
-          "downloadCount": 281,
+          "downloadCount": 301,
           "name": "manifest.json",
           "size": 442
         },
@@ -721,7 +721,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.2.0-beta.1\r\n\r\n> Large feature release built on top of 2.1.9, focused on content filtering, word highlighting, Discover workflow improvements, mobile/tablet UX, and feed management quality-of-life updates.\r\n\r\n---\r\n\r\n### New Features\r\n\r\n#### Keyword & Phrase Filtering\r\n\r\n- Global and per-feed filter rule sets, configurable via the Add & Edit Feed modals\r\n- Include/exclude rules with exact or partial matching\r\n- Selectable rule targets: title, summary, or content\r\n- Rule logic: AND or OR per rule set\r\n- Per-feed \"Override global filters\" support\r\n- Dashboard-level \"Bypass All Filters\" toggle\r\n- Clear-search button and filter status area with optional match statistics\r\n\r\n#### Word Highlighting\r\n\r\n- Highlight custom words or phrases in article titles, summaries, and reader content\r\n- Per-word custom colors and a configurable default highlight color for new entries\r\n- Per-word whole-word matching (exact or partial)\r\n- Case sensitivity option per highlight word\r\n- Location control: titles in list/card view, summaries in card view, content in reader view\r\n- Quick \"Show Highlights\" toggle in the Filters menu\r\n\r\n#### Dashboard & Navigation Controls\r\n\r\n- Cards-per-row selector in the hamburger menu and Display settings\r\n- Custom card spacing slider in the hamburger menu and Display settings\r\n- Mark All Unread button added alongside Mark All Read in the hamburger menu\r\n- Article search on the dashboard page\r\n- Resizable left and right sidebars\r\n\r\n#### Sidebar Customization\r\n\r\n- Configurable row spacing and indentation via settings\r\n- Adjustable left and right sidebar padding\r\n- Option to show or hide the sidebar scrollbar\r\n- Customizable unread badges for All Feeds, Folder rows, and Feed rows with per-badge visibility toggles and custom colors\r\n\r\n#### Discover & Feed Management\r\n\r\n- Kagi Smallweb integration (50 most recently updated independent feeds, refreshed every 5 hours)\r\n- Feed filtering in Discover: All / Followed / Unfollowed\r\n- Folder picker popup for Discover and Smallweb follow actions\r\n- Follow-status indicators and streamlined follow actions throughout Discover\r\n- Apple Podcasts URL support\r\n- Smarter auto-folder assignment for podcasts, RSS feeds, and YouTube/video feeds\r\n- Modern OPML import modal with validation, preview, and update/overwrite modes\r\n- Option to delete a folder or delete all feeds from the OPML import flow\r\n\r\n#### Settings\r\n\r\n- New **Highlights** settings tab\r\n- New **Filters** settings tab\r\n- Updated **Display** settings tab with new sidebar row controls and list/card toolbar options\r\n\r\n---\r\n\r\n### Improvements\r\n\r\n- Consolidated RSS, Podcast, and YouTube add-feed workflows into a more streamlined unified flow\r\n- Redesigned Add/Edit Feed modal with clearer actions, better icon and button alignment, and improved mobile usability\r\n- Simplified Discover controls removed redundant menus, tightened button and filter layout, improved category tree hierarchy and sorting\r\n- Sidebar button and navigation layout reworked for cleaner behavior across desktop, tablet, and mobile\r\n- Improved list and card readability: stabilized row heights, prevented title squishing, normalized feed label truncation\r\n- Dashboard spacing changes no longer force disruptive re-renders\r\n- Light-mode color toggles remain readable after theme changes\r\n- Unified action toolbar in Reader view with configurable mobile toolbar mode options\r\n- Improved responsive drawer and modal spacing for more consistent behavior with Obsidian on mobile\r\n- Cleaner settings layouts for badge and status controls with better mobile/tablet organization\r\n\r\n---\r\n\r\n### Bug Fixes\r\n\r\n- Fixed feed filter edits not refreshing dashboard content immediately\r\n- Fixed intermittent filter menu closures caused by stale outside-click listeners\r\n- Fixed unread/read state updates so articles are correctly removed and reinserted when filters are active\r\n- Fixed scroll-jump issues position is now preserved when filtering articles or changing follow state in Discover\r\n- Fixed multiple mobile/tablet sidebar issues including missing hamburger/toolbar icons and incorrect header inset behavior on iOS and Android\r\n- Fixed an iOS rendering issue where the article scroll layer could cover the filter status bar\r\n- Fixed OPML workflows: resolved iOS export failures and duplication, and ensured imported feeds refresh correctly in the sidebar\r\n- Fixed mobile tag management issues including keyboard overlap, missing delete actions, and incorrect settings redirects\r\n- Fixed Discover category indentation, badge alignment, and sorting consistency\r\n- Fixed resizable sidebar handle lifecycle and render timing regressions\r\n- Fixed sidebar and Discover edge cases: broken resize-handle behavior, stale folder cache after import, and filter visibility mismatches\r\n- Fixed mobile/tablet issues across manage-feeds modal access, hamburger visibility, and close-button alignment\r\n- Fixed multiple build, lint, and type issues affecting release stability\r\n\r\n---\r\n\r\n_Released by [@marcd35](https://github.com/marcd35) ; Fork of [amatya-aditya/obsidian-rss-dashboard](https://github.com/amatya-aditya/obsidian-rss-dashboard)_\r\n\r\n_Original release: https://github.com/marcd35/obsidian-rss-dashboard/releases/tag/2.2.16_\r\n",
-      "downloadCount": 281,
+      "downloadCount": 301,
       "draft": false,
       "name": "2.2.0-beta.1",
       "prerelease": false,
@@ -738,7 +738,7 @@
         },
         {
           "digest": "sha256:b719be74a25204029b287f08ff0516ee37944dce19956e0ee6c60fe67fbb910b",
-          "downloadCount": 11862,
+          "downloadCount": 11882,
           "name": "manifest.json",
           "size": 428
         },
@@ -757,7 +757,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.1.9\r\n\r\n### Added\r\n\r\n- 6 new podcast player themes: Nord, Dracula, Solarized Dark, Catppuccin Mocha, Gruvbox, Tokyo Night\r\n- Setting to hide the default RSS icon for regular feeds in the sidebar\r\n- CSS modular build system: styles split into 15 files under `src/styles/`, bundled via esbuild\r\n- Instant podcast theme switching from settings (no reload needed)\r\n\r\n### Fixed\r\n\r\n- Podcast playlist scroll position preserved when switching episodes\r\n- Replaced deprecated `lucide-` prefixed icon names with standard Obsidian icon names\r\n",
-      "downloadCount": 11862,
+      "downloadCount": 11882,
       "draft": false,
       "name": "2.1.9",
       "prerelease": false,
@@ -774,7 +774,7 @@
         },
         {
           "digest": "sha256:8251f7045f09309af5fb51583260b2f56a77d16946643cce2b30ae5e88e5bedb",
-          "downloadCount": 5560,
+          "downloadCount": 5581,
           "name": "manifest.json",
           "size": 428
         },
@@ -793,7 +793,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.1.8\r\n\r\n### Fixed\r\n\r\n- Fixed folder selection not persisting after selecting from suggestions by dispatching proper DOM events\r\n- Fixed template name modal not receiving input focus by using Obsidian's native Modal class\r\n- Fixed ESLint \"unsafe assignment\" warnings in reader-view.ts with proper type annotations\r\n- Removed manual event listener management in discover-view.ts (using Obsidian's registerDomEvent)\r\n- Fixed folder suggestions showing RSS sidebar folders for article save path (now shows vault folders)\r\n\r\n### Added\r\n\r\n- Template management system for article saving:\r\n  - \"Reset to default\" button to restore the default article template\r\n  - \"Save as template\" button to save current template with a custom name\r\n  - Saved templates section with Load, Update, and Delete functionality\r\n- Per-feed template selection in Feed Manager modal\r\n  - Feeds can now have a custom template assigned\r\n  - Template is resolved at save time from saved templates\r\n- VaultFolderSuggest component for suggesting folders from the entire vault\r\n\r\n### Changed\r\n\r\n- Article save path setting now suggests folders from the vault instead of RSS sidebar folders\r\n- YouTube and Podcast folder settings continue to suggest RSS sidebar folders\r\n- Improved type safety with explicit ArticleSavingSettings and SavedTemplate types\r\n",
-      "downloadCount": 5560,
+      "downloadCount": 5581,
       "draft": false,
       "name": "2.1.8",
       "prerelease": false,
@@ -810,7 +810,7 @@
         },
         {
           "digest": "sha256:3b6c1ab2faf1e060d3d226dfd7f8ce676ff88f7b67c44427147e3db5c067e1d8",
-          "downloadCount": 4153,
+          "downloadCount": 4174,
           "name": "manifest.json",
           "size": 428
         },
@@ -829,7 +829,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## 2.1.7\r\n\r\n### Fixed\r\n- Improved CSS specificity to avoid conflicts with other plugins by adding plugin-specific classes\r\n- Fixed UI text to use sentence case as per Obsidian guidelines\r\n- Replaced type casting with `requireApiVersion()` for proper API version checking\r\n- Updated to use `FileManager.renameFile()` instead of `Vault.rename()` for better link updating\r\n- Made commands conditional based on active dashboard view\r\n- Implemented `AbstractInputSuggest` for file/folder selection with type-ahead support\r\n- Added `normalizePath()` for cleaning user-defined paths\r\n- Properly registered event listeners for clean plugin unloading\r\n- Removed manual folder hierarchy creation (let `Vault.createFolder()` handle it)\r\n- Considered media query alternatives to resize observers for better performance\r\n\r\n### Added\r\n- Search functionality to Feed Manager modal with real-time filtering\r\n- Visual differentiation between folder names and feed names with improved hierarchy styling\r\n\r\n### Changed\r\n- Removed URL column from Feed Manager modal for cleaner layout\r\n- Enhanced Feed Manager UI with top controls layout (search + add button)\r\n",
-      "downloadCount": 4153,
+      "downloadCount": 4174,
       "draft": false,
       "name": "2.1.7",
       "prerelease": false,
@@ -846,7 +846,7 @@
         },
         {
           "digest": "sha256:938af7378d12fddb4e229e86f168343bd023d0eb120a51285a93449c60be1ddb",
-          "downloadCount": 686,
+          "downloadCount": 706,
           "name": "manifest.json",
           "size": 428
         },
@@ -865,7 +865,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.1.6",
-      "downloadCount": 686,
+      "downloadCount": 706,
       "draft": false,
       "name": "2.1.6",
       "prerelease": false,
@@ -882,7 +882,7 @@
         },
         {
           "digest": "sha256:d7a067df05ecb2ef3c17fe60481f518dadce3480594372014561b385938c65fd",
-          "downloadCount": 180,
+          "downloadCount": 201,
           "name": "manifest.json",
           "size": 428
         },
@@ -901,7 +901,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.5\r\n\r\n## Fixes\r\n- Fixed multiple TypeScript linter errors related to unnecessary `await` expressions\r\n- Improved async method handling across dashboard and reader views\r\n- Enhanced type safety for file existence checks\r\n- Resolved unsafe type assignments in settings and view components",
-      "downloadCount": 180,
+      "downloadCount": 201,
       "draft": false,
       "name": "2.1.5",
       "prerelease": false,
@@ -918,7 +918,7 @@
         },
         {
           "digest": "sha256:4f23ad5fd9f0c1400e973b3607eddcc9a4e5abd7e0e590526af40110131afa5c",
-          "downloadCount": 50,
+          "downloadCount": 71,
           "name": "manifest.json",
           "size": 428
         },
@@ -937,7 +937,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.4\r\n\r\n## Fixes\r\n- Fixed TypeScript type safety issues across multiple files\r\n- Fixed sentence case for UI text consistency\r\n- Replaced deprecated Clearbit favicon API with Google Favicon API\r\n- Updated favicon fallback mechanism to use Google's faviconV2 API\r\n\r\n",
-      "downloadCount": 50,
+      "downloadCount": 71,
       "draft": false,
       "name": "2.1.4",
       "prerelease": false,
@@ -954,7 +954,7 @@
         },
         {
           "digest": "sha256:aa1609dbe13a78eac8c8379490cb5b6a6d40694ec06d7aae076ed33e434c09c7",
-          "downloadCount": 1014,
+          "downloadCount": 1035,
           "name": "manifest.json",
           "size": 428
         },
@@ -973,7 +973,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.3\r\n\r\n## Bug Fixes & Improvements\r\n\r\nThis release fixes several issues and improves code quality.\r\n\r\n### Fixes\r\n- Template setting now properly applied when saving articles with full content\r\n- Tag picker menu now appears in the correct window when RSS Dashboard is opened separately\r\n- Fixed unused variable warnings in code\r\n\r\n### Improvements\r\n- Converted Promise chains to async/await for better code readability\r\n- Updated UI text to follow sentence case guidelines\r\n- Enhanced code quality and maintainability\r\n",
-      "downloadCount": 1014,
+      "downloadCount": 1035,
       "draft": false,
       "name": "2.1.3",
       "prerelease": false,
@@ -990,7 +990,7 @@
         },
         {
           "digest": "sha256:6f7930127b01b455ec6f2faf2f753417aad862a18d286eb1a9733b6382339a71",
-          "downloadCount": 488,
+          "downloadCount": 509,
           "name": "manifest.json",
           "size": 428
         },
@@ -1009,7 +1009,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.2\r\n\r\n## Code Quality & Compatibility\r\n\r\nThis release addresses plugin review feedback and fixes CSS compatibility issues.\r\n\r\n### Improvements\r\n- Fixed CSS linter errors for better browser compatibility\r\n- Improved deferred view handling for better reliability\r\n- Updated UI text to follow sentence case guidelines\r\n\r\n### Technical Updates\r\n- Enhanced view loading with proper deferred view checks\r\n- Replaced HTML heading elements with Obsidian's `setHeading()` API",
-      "downloadCount": 488,
+      "downloadCount": 509,
       "draft": false,
       "name": "2.1.2",
       "prerelease": false,
@@ -1026,7 +1026,7 @@
         },
         {
           "digest": "sha256:fbb2e4a6d75e0ad8c779b101ad001a498d9720fd66f4d4168942de13fdf67ae5",
-          "downloadCount": 372,
+          "downloadCount": 393,
           "name": "manifest.json",
           "size": 428
         },
@@ -1045,7 +1045,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.1\r\n\r\n## Code Quality & Compatibility\r\n\r\nThis release focuses on improving code quality and ensuring full compatibility with Obsidian's plugin guidelines.\r\n\r\n### Improvements\r\n- Enhanced type safety and error handling throughout the plugin\r\n- Better cross-platform compatibility for file operations\r\n- Improved memory management for better performance\r\n- More consistent UI text formatting\r\n\r\n### Technical Updates\r\n- Updated to use Obsidian's recommended APIs and best practices\r\n- Improved code structure for better maintainability\r\n- Enhanced compatibility with different operating systems\r\n\r\n",
-      "downloadCount": 372,
+      "downloadCount": 393,
       "draft": false,
       "name": "2.1.1",
       "prerelease": false,
@@ -1062,7 +1062,7 @@
         },
         {
           "digest": "sha256:17b14959ccd719b5c6f654e64d9919391b0bcebda2700a9a5d12181c7724bdf6",
-          "downloadCount": 33894,
+          "downloadCount": 33914,
           "name": "manifest.json",
           "size": 428
         },
@@ -1081,7 +1081,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release 2.1.0\r\n\r\n## 🚀 New Features\r\n\r\n### Enhanced Feed Management\r\n- **Smart Podcast Detection**: Improved auto-podcast handling prevents non-podcast feeds from being incorrectly recognized as podcasts\r\n- **MDPI Journal Support**: Feed parser now supports journal feeds from MDPI\r\n- **Dynamic Feed Naming**: Renamed feed names now properly reflect across article lists and reader views\r\n- **Folder Organization**: Context menu option to move feeds to different folders\r\n- **Subfolder Priority**: Subfolders now appear before feeds within each folder for better organization\r\n\r\n### Improved Sidebar Experience\r\n- **Flexible Filter Views**: Choose between vertical list and inline icon views for sidebar filters\r\n- **Default Filter Selection**: Set your preferred filter as the default option\r\n- **Filter Visibility Control**: Option to hide filter items when not needed\r\n- **Integrated Search & Tags**: Search container and tag container now inline with the filter section\r\n\r\n### Enhanced Visual Experience\r\n- **Domain-Specific Favicons**: Settings option to use actual website favicons instead of generic RSS icons\r\n- **Modern UI Layout**: Streamlined interface with better visual hierarchy\r\n\r\n## 🔧 Technical Improvements\r\n- Enhanced feed parsing accuracy\r\n- Improved sidebar performance and responsiveness\r\n- Better folder structure handling\r\n\r\n## 📱 User Experience\r\n- More intuitive feed organization\r\n- Cleaner, more professional appearance\r\n- Improved accessibility and usability\r\n",
-      "downloadCount": 33894,
+      "downloadCount": 33914,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -1098,7 +1098,7 @@
         },
         {
           "digest": "sha256:b8f25eff3b8ed7b5c7b964b76647a45f92136cacdc413699d816b68e663c488b",
-          "downloadCount": 6970,
+          "downloadCount": 6990,
           "name": "manifest.json",
           "size": 428
         },
@@ -1117,7 +1117,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.5\r\n\r\n**Full Changelog**: https://github.com/amatya-aditya/obsidian-rss-dashboard/compare/2.0.4...2.0.5",
-      "downloadCount": 6970,
+      "downloadCount": 6990,
       "draft": false,
       "name": "2.0.5",
       "prerelease": false,
@@ -1134,7 +1134,7 @@
         },
         {
           "digest": "sha256:333007324328273843ec6a0c599b77a763e356fd1894e2e8fb4b076de14383ae",
-          "downloadCount": 1703,
+          "downloadCount": 1724,
           "name": "manifest.json",
           "size": 428
         },
@@ -1153,7 +1153,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.4",
-      "downloadCount": 1703,
+      "downloadCount": 1724,
       "draft": false,
       "name": "2.0.4",
       "prerelease": false,
@@ -1170,7 +1170,7 @@
         },
         {
           "digest": "sha256:ffbb095bb0f1afe788b8bba7b90ccd32bcf32d2cf6ca25b3c8b8a9e8edf7b590",
-          "downloadCount": 213,
+          "downloadCount": 234,
           "name": "manifest.json",
           "size": 428
         },
@@ -1189,7 +1189,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.3",
-      "downloadCount": 213,
+      "downloadCount": 234,
       "draft": false,
       "name": "2.0.3",
       "prerelease": false,
@@ -1206,7 +1206,7 @@
         },
         {
           "digest": "sha256:7d7c2eab33071bbf746c94175022de5f8491aa415a7ba240cc6a73569e87d49f",
-          "downloadCount": 45,
+          "downloadCount": 66,
           "name": "manifest.json",
           "size": 439
         },
@@ -1225,7 +1225,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.2",
-      "downloadCount": 45,
+      "downloadCount": 66,
       "draft": false,
       "name": "2.0.2",
       "prerelease": false,
@@ -1242,7 +1242,7 @@
         },
         {
           "digest": "sha256:53a36e7f82960db0aaf20b83703a622e41d7977638cbaf788add4dcf9728bdf9",
-          "downloadCount": 200,
+          "downloadCount": 221,
           "name": "manifest.json",
           "size": 428
         },
@@ -1261,7 +1261,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.1",
-      "downloadCount": 200,
+      "downloadCount": 221,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
@@ -1278,7 +1278,7 @@
         },
         {
           "digest": "sha256:f68892158974f0f9513184ab843f9ff1fc290118950d3659b2c8c165b197e039",
-          "downloadCount": 68,
+          "downloadCount": 89,
           "name": "manifest.json",
           "size": 428
         },
@@ -1297,7 +1297,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Release 2.0.0\r\n\r\n### ✨Shiny New Things\r\n\r\n- Android/iPad Support\r\n- Discover page to find awesome feeds\r\n- Individual feed controls\r\n- Nice Podcast Player\r\n- and many more fixes and enhancements.",
-      "downloadCount": 68,
+      "downloadCount": 89,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -1314,7 +1314,7 @@
         },
         {
           "digest": "sha256:0a7d65e5f768c4eba6fc1d6b00c1912badb0c6da3e55b588c4414ee7870555b7",
-          "downloadCount": 5206,
+          "downloadCount": 5226,
           "name": "manifest.json",
           "size": 428
         },
@@ -1327,7 +1327,7 @@
       ],
       "author": "amatya-aditya",
       "description": "**Full Changelog**: https://github.com/amatya-aditya/obsidian-rss-dashboard/compare/1.1.1...1.1.2\r\n\r\n",
-      "downloadCount": 5206,
+      "downloadCount": 5226,
       "draft": false,
       "name": "1.1.2",
       "prerelease": false,
@@ -1344,7 +1344,7 @@
         },
         {
           "digest": "sha256:d505c7fbebf105fd49ba9f09c96a1e92fb58f571cac903be622cdf0c5ce0d242",
-          "downloadCount": 75,
+          "downloadCount": 96,
           "name": "manifest.json",
           "size": 428
         },
@@ -1357,7 +1357,7 @@
       ],
       "author": "amatya-aditya",
       "description": "**Full Changelog**: https://github.com/amatya-aditya/obsidian-rss-dashboard/compare/1.1.0...1.1.1\r\n\r\nHey there! Just a heads-up that the plugin has a new name: RSS Dashboard! The ID has also changed to `rss-dashboard`. After you update, you might see both the old \"RSS Board\" and the new \"RSS Dashboard\" listed. No worries, just uninstall the old \"RSS Board\" version and enable the new \"RSS Dashboard\" one.\r\n\r\nAlso, before you update, you might want to export your `data.json` file (you can find it in the settings) so you can easily import it back in after the update. This way, you won't lose any of your settings and feeds!",
-      "downloadCount": 75,
+      "downloadCount": 96,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -1380,7 +1380,7 @@
         },
         {
           "digest": "sha256:06b258b63e74895a2f5990c54900bd992881ac57a5ccd3e31052afdf2dbd97ec",
-          "downloadCount": 1068,
+          "downloadCount": 1089,
           "name": "manifest.json",
           "size": 420
         },
@@ -1393,7 +1393,7 @@
       ],
       "author": "amatya-aditya",
       "description": "# Release Highlights\r\n\r\nfeat: Sanitized article filename during saving for offline ",
-      "downloadCount": 1068,
+      "downloadCount": 1089,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -1410,7 +1410,7 @@
         },
         {
           "digest": "sha256:757678822b0a18773086ed74c97387b77860870d3a94e23921e43bd90d7fb3bd",
-          "downloadCount": 72,
+          "downloadCount": 93,
           "name": "manifest.json",
           "size": 428
         },
@@ -1423,7 +1423,7 @@
       ],
       "author": "amatya-aditya",
       "description": "",
-      "downloadCount": 72,
+      "downloadCount": 93,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
