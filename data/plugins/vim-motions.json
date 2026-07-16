@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-15T07:04:26.994Z",
-  "lastFetchedAt": "2026-07-15T07:04:26.994Z",
+  "lastChangedAt": "2026-07-16T07:01:26.996Z",
+  "lastFetchedAt": "2026-07-16T07:01:26.996Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.58.0"
+    "version": "0.62.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,177 @@
     {
       "assets": [
         {
-          "digest": "sha256:76400a8efae426f5b1376ca26fd870a041abaa5bfef88c25ab4f1ed11a8ff973",
+          "digest": "sha256:4c1b0e7668f80ad32b35b30e8aa6d4d66c3ab4e246f4de2b71f1e524a43e7e5a",
+          "downloadCount": 22,
+          "name": "main.js",
+          "size": 934193
+        },
+        {
+          "digest": "sha256:cd9ef1f3455d6a278f68966fb664ea27bdf1960dcdcb0440cca978980c44c3a7",
+          "downloadCount": 22,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ae91449e71ebd99e7608d65a875a1fe150c741f42f4cced3909d09ba9adbd992",
           "downloadCount": 21,
+          "name": "styles.css",
+          "size": 34070
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Textarea vim overlay height collapses to near-zero after 0.60.1** — the 0.60.1 fix for unbounded textarea growth replaced `minHeight` with fixed `height` + `maxHeight` copied from the original textarea's computed size. When the original textarea used dynamic height (e.g., `height: auto` or content-dependent sizing), the captured height could be very small, trapping the CM6 overlay at a tiny fixed size with content hidden. Fixed by using adaptive height calculation: `minHeight = max(cssHeight, scrollHeight, 100px)` ensures a reasonable minimum, and `maxHeight = max(effectiveHeight, 50vh)` caps growth at half the viewport with scrollbar overflow. The wrapper's CSS `overflow` changed from `hidden` to `auto` so content exceeding `maxHeight` scrolls instead of being clipped. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (adaptive height calculation with `MIN_HEIGHT_PX` floor), `styles.css` (`overflow: auto` on `.vim-motions-textarea-overlay`)\r\n- **Which-key \"all\" mode intercepting multi-key Oil bindings** — in \"All partial keys\" mode, the popup delay timer (default 500ms) caused the which-key overlay to appear between the `g` and second keystroke (`?`, `.`, `s`, `f`), disrupting Oil's `g?` help modal and other `g`-prefixed bindings. Fixed by bypassing the popup delay timer when the active view is an OilView — the overlay shows immediately, allowing multi-key bindings to complete without interference. Operator-pending hints (`d`, `c`, `y`) still work normally in Oil.\r\n    - Plugin: `src/ui/which-key.ts` (`onKeyPressGeneral` Oil context check)\r\n- **`ci*` marked as permanent Live Preview limitation** — investigation found that `ci*` (change inside bold) works correctly in Live Preview for multi-character content. On the active line, Obsidian uses `Decoration.mark` (visible text nodes), not `Decoration.replace` — the cursor is not displaced by collapsed decorations. The original limitation was overstated based on early testing with a transaction filter that has since been removed.\r\n    - Plugin: `test/specs/text-objects.e2e.ts` (unskipped `ci*` test, now passing)\r\n\r\n### Tests\r\n\r\n- 4 new e2e tests in `test/specs/oil-which-key.e2e.ts`: `g?` opens Oil help modal with which-key \"all\" mode, `g.` not intercepted, no stale overlay after `g?`, leader-mode control\r\n- 1 unskipped e2e test in `test/specs/text-objects.e2e.ts`: `ci*` on multi-character bold content\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for which-key + Oil fix, `ci*` limitation resolution, and textarea height fix\r\n- `KNOWN_LIMITATIONS.md`: Which-key + Oil non-editor context → Fixed; which-key \"all\" mode Oil interception → Fixed; `ci*` Live Preview → resolved (was overstated); textarea overlay height collapse → Fixed\r\n- `docs/configuration/which-key.md`: Updated Oil explorer context section — removed non-editor and \"all\" mode warnings\r\n- `docs/features/text-objects.md`: Removed `ci*` limitation note if present\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.61.0...0.62.0",
+      "downloadCount": 22,
+      "draft": false,
+      "name": "0.62.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T21:44:38Z",
+      "tag": "0.62.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2afda3da241b2bf7087edcbcc14c2a5941ede71717128e6e0f4c6dd0e066123d",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 934035
+        },
+        {
+          "digest": "sha256:338461d811baafc601c2b69b3536f9130d719309e4264136151e246dcfb4713e",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:42a4dfa2f62d4e3fa68677021781d4c4c0bdf0fc4012c0896fba111fab2828e6",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 34072
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Hint mode `F` on pane targets opens in same tab instead of new tab** — pressing `F` in hint mode on a pane target (`.workspace-leaf-content`) behaved identically to `f` (focus the pane) instead of opening the pane's content in a new tab. The `hintActivate()` function ignored the `openInNewPane` parameter for `targetType === 'pane'`, always calling `setActiveLeaf()`. Now calls `workspace.duplicateLeaf(leaf, 'tab')` when `openInNewPane` is true. Link targets were unaffected — `openLinkText()` already used the parameter correctly. ([#70](https://github.com/saberzero1/motions/issues/70))\r\n    - Plugin: `src/ui/hint-mode.ts` (`hintActivate` pane branch)\r\n- **`j`/`k` and other standard-gate keys not working in Bases views** — Obsidian Bases views (`.base` files) use the view type `\"bases\"`, which was missing from the default `GLOBAL_NAV_VIEW_TYPES` set. The `isPluginLeafActive()` check treated Bases as a plugin view and blocked standard-gate keys (`j`/`k` scroll, `H`/`L` tab switch, count-prefix digits). ([#70](https://github.com/saberzero1/motions/issues/70))\r\n    - Plugin: `src/workspace/global-key-handler.ts` (added `'bases'` to `GLOBAL_NAV_VIEW_TYPES`), `src/settings.ts` (updated default list in description)\r\n\r\n### Tests\r\n\r\n- 1 new e2e test in `test/specs/hint-mode.e2e.ts`: `F` on pane target calls `duplicateLeaf` (spy-based verification)\r\n- 1 new e2e test in `test/specs/global-nav.e2e.ts`: `H` from bases view switches to previous tab (creates `.base` file, verifies standard-gate key interception)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for hint mode `F` pane fix and Bases view type fix\r\n- `KNOWN_LIMITATIONS.md`: Updated hint mode target classification (pane `F` → `duplicateLeaf`); updated workspace navigation view type list to include `bases`\r\n- `docs/features/hint-mode.md`: Updated pane target behavior description\r\n- `docs/features/workspace-navigation.md`: Added `bases` to default view types\r\n- `docs/configuration/settings.md`: Updated workspace navigation view types default list\r\n- `docs/configuration/vimrc.md`: Updated default view types in description\r\n- `docs/configuration/lua-config.md`: Updated default view types in examples\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.60.1...0.61.0",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.61.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T19:59:31Z",
+      "tag": "0.61.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:072d535a4d6cfd0af2c2e16cc6f89a1d795af84ab86db661e80e00acbbc5664a",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 934663
+        },
+        {
+          "digest": "sha256:328596860399f75e8b90e6f12eea5e7afb8405f8e72e5bb4fe5200252ee8c335",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:42a4dfa2f62d4e3fa68677021781d4c4c0bdf0fc4012c0896fba111fab2828e6",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 34072
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Textarea vim setting not visible in legacy settings UI** — the \"Vim keybindings in text areas\" toggle was only added to the new `getSettingDefinitions()` API (Obsidian 1.13+). Users on Obsidian <1.13 could not find or enable the setting. Added the toggle to the legacy `display()` method in the \"Vim features\" section. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/settings.ts` (added `enableVimTextareas` toggle to legacy settings UI)\r\n- **Textarea vim overlay grows with content instead of fixed size** — the CM6 editor overlay expanded vertically as content grew, unlike the original textarea which had a fixed height with scrollbar. Changed the wrapper to use `height` + `maxHeight` (copied from the original textarea's computed size) and added `overflow: auto` to the CM6 scroller, so content scrolls within the original textarea's dimensions. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (`height` + `maxHeight` instead of `minHeight`), `styles.css` (`overflow: auto` on `.cm-scroller`)\r\n- **Textarea vim overlay text larger than original** — the CM6 editor used Obsidian's default editor font size instead of inheriting from the original textarea. Added `font-size: inherit` to `.vim-motions-textarea-overlay .cm-editor` so the overlay matches the original element's font size. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `styles.css` (`font-size: inherit` on `.cm-editor`)\r\n- **Removed `!important` from textarea hidden styles** — the `.vim-motions-textarea-hidden` CSS class used `!important` on all four properties, which is not allowed by the project's CSS conventions.\r\n    - Plugin: `styles.css`\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.60.0...0.60.1",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.60.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T17:23:58Z",
+      "tag": "0.60.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cc6bbc2a4872640320cd085e4768420c0a7a8637bba76846b9c879126be646c1",
+          "downloadCount": 17,
+          "name": "main.js",
+          "size": 934083
+        },
+        {
+          "digest": "sha256:aa13192b09ba3633d05d19d02d49d61ddc71b5f84b419913ae4ccacfad5d1262",
+          "downloadCount": 17,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:62f00346e5b9d543cd0cb2a3732b749586304dd3f8b16de25cc6d9330a54a10c",
+          "downloadCount": 16,
+          "name": "styles.css",
+          "size": 34028
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Vim keybindings in text areas** — focused `<textarea>` elements (e.g., flashcard edit modals from Spaced Repetition) are replaced with a vim-enabled CodeMirror 6 editor overlay. Starts in insert mode for transparent typing; press Escape for normal mode with full vim support. Second Escape blurs the overlay and re-dispatches Escape to the parent UI (modal close, etc.). Content syncs back to the hidden textarea continuously (100ms debounce) with synthetic `input`/`change` events. Desktop only, disabled by default. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (new), `src/editors/embeddable-editor.ts` (`skipActiveEditor` option), `src/main.ts` (registration), `src/settings.ts` (`enableVimTextareas`), `src/vim/options.ts` (`vimtextareas`/`vta`), `src/vimrc/loader.ts` (`KNOWN_SET_OPTIONS`), `styles.css` (overlay + hidden styles)\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Added \"Vim keybindings in text areas\" section with scope, limitations (no input/contenteditable/iframe support, framework re-render conflicts, programmatic value detection, popout windows, maxlength enforcement)\r\n- `docs/configuration/settings.md`: Added \"Vim keybindings in text areas\" setting to Vim features table\r\n- `docs/configuration/vimrc.md`: Added `vimtextareas`/`vta` to boolean options table\r\n- `docs/configuration/lua-config.md`: Added `vimtextareas` to `vim.opt` table\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.59.0...0.60.0",
+      "downloadCount": 17,
+      "draft": false,
+      "name": "0.60.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T15:19:55Z",
+      "tag": "0.60.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:177da38ef53818732fe004e1ec017784ed6bb544a735be40807756a3d32f9831",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 929128
+        },
+        {
+          "digest": "sha256:8ece690e5ad192aeea38b16a6b9651239571a62a459eee0bcaa83a114e7c3e4e",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:3a0350b9fffd6086cf658aa001b819e60239c192357bf1a8305f229867e70104",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 33317
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Absolute line number highlight not updating on cursor movement** — when only absolute line numbers were enabled (`set number` without `set relativenumber`), the `vim-motions-line-num-current` highlight (bold current line number) did not follow the cursor. The `lineMarkerChange` callback in both the standalone line number gutter and the unified `statuscolumn` gutter only checked `update.docChanged` in absolute mode, ignoring `update.selectionSet` (cursor movement). Relative and hybrid modes were unaffected because they already included `update.selectionSet`. The highlight only updated incidentally when entering special content (MathJax, images) that triggered `docChanged` or `viewportChanged`. ([#68](https://github.com/saberzero1/motions/issues/68))\r\n    - Plugin: `src/vim/line-number-gutter.ts` (`lineMarkerChange` absolute branch), `src/vim/statuscolumn.ts` (`lineMarkerChange` `!hasRelative` branch)\r\n- **Typing `|` moves cursor to the left of `|`** — typing `|` anywhere in insert mode triggered the table auto-format inputHandler, which intercepted the keystroke and repositioned the cursor even on non-table lines (any line matching `/^\\s*\\|/`). The mid-edit interception caused cursor jumps, making it impossible to type `|` normally in an empty document or at the start of a line. ([#66](https://github.com/saberzero1/motions/issues/66))\r\n- **Tables do not handle escaped `|` characters correctly** — in raw/cursor-aware table modes, escaped pipes (`\\|`) inside cells were treated as cell boundaries during mid-edit auto-formatting, causing the cursor to jump and live preview to render extra cells. The auto-format inputHandler ran `realignTableLines()` after every `|` keystroke, which repositioned the cursor based on the realigned table structure — even when the `|` was escaped. Wikilinks (`[[page|alias]]`) inside raw table cells also triggered incorrect cell boundary detection. ([#67](https://github.com/saberzero1/motions/issues/67))\r\n    - Root cause for both: `table-auto-format.ts` intercepted every `|` keystroke in insert mode and ran column realignment mid-edit.\r\n    - Fix: Replaced mid-edit `|` interception with format-on-exit — tables are only realigned when the cursor leaves the table range. A CM6 `ViewPlugin` tracks cursor entry/exit from table ranges and dispatches `realignTableLines()` via `queueMicrotask` when the cursor exits a dirty (edited) table. Uses `Annotation.define<boolean>()` as a re-entrancy guard. The `||` → separator row auto-generation is preserved as a standalone inputHandler.\r\n    - Plugin: `src/vim/table-format-on-exit.ts` (new: format-on-exit ViewPlugin + separator handler), `src/vim/table-utils.ts` (added `realignTableLines()`, `parseAlignments()`, `buildSepCell()`, `findTableBounds()`, canonical `Alignment` type), `src/vim/table-auto-format.ts` (deleted), `src/vim/table-cursor-fix.ts` (deleted), `src/vim/table-operations.ts` (refactored to use shared `realignTableLines()`), `src/motions/tables.ts` (refactored to use shared `realignTableLines()`, removed 5 duplicate helpers), `src/vim/table-render-widget.ts` (uses canonical `Alignment` type), `src/vim/table-nav-controller.ts` (added `tableRealign()` in `doRefreshAfterOp()` for embedded cell edit alignment), `src/vim/table-cell-editor.ts` (removed `createTableAutoFormatExtension` dependency), `src/motions/register.ts` (removed `tableAwareMoveUp` override on `k`), `src/main.ts` (replaced auto-format/cursor-fix registration with format-on-exit)\r\n\r\n### Changed\r\n\r\n- **Neovim-style modal styling for `GlobalExCommandModal` and `VimInfoModal`** — the ex command modal (`:` in non-editor views) and the info modal (`:marks`, `:buffers`, `:registers`, Oil `g?`) now use Neovim-inspired styling: transparent container, accent border (`--color-accent`), floating title label positioned on the top border, monospace font, and hidden Obsidian chrome (close button, modal header). `GlobalExCommandModal` uses a prompt-modal pattern with three styled sections (input, results, instructions) and two-column suggestion rows showing `:command` + description. All 40+ ex commands now have `description` fields. `VimInfoModal` uses an info-modal pattern with an accent-bordered inner wrapper. Both patterns use `--modal-background`, `--font-monospace`, and `--color-accent` CSS variables for full theme compatibility.\r\n    - Plugin: `src/ui/global-ex-command.ts` (`description` field on `GlobalExEntry` and `ExSuggestion`, prompt-modal container styling, two-column `renderSuggestion`), `src/ui/vim-info-modal.ts` (info-modal container styling, floating title, inner wrapper), `styles.css` (new prompt-modal and info-modal CSS sections)\r\n- **Neovim-style modal styling extended to remaining modals** — `OutlineModal` (`:outline`/`gO`), `SearchResultsModal` (`:vimgrep`), `ContextActionsModal` (`gra`), and `OilConfirmModal` (Oil destructive commit) now use the same Neovim-inspired styling as `GlobalExCommandModal` and `VimInfoModal`. `OutlineModal` shows heading text + line number, `SearchResultsModal` shows filename + line preview, `ContextActionsModal` shows command name + command ID. `OilConfirmModal` uses the info-modal pattern with accent-bordered buttons. Removed 3 unused CSS classes (`vim-motions-search-file`, `vim-motions-search-preview`, `vim-motions-outline-item`).\r\n    - Plugin: `src/ui/outline-modal.ts`, `src/workspace/vault-search.ts`, `src/ui/context-actions.ts`, `src/oil/manager.ts`, `styles.css`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Absolute line number highlight not updating on cursor movement → Fixed\r\n- `KNOWN_LIMITATIONS.md`: Table auto-formatting → updated to describe format-on-exit behavior; typing `|` cursor jump (#66) → Fixed; escaped `\\|` handling (#67) → Fixed\r\n- `docs/features/tables.md`: Auto-formatting section rewritten to describe format-on-exit behavior\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.58.0...0.59.0",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.59.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T13:22:40Z",
+      "tag": "0.59.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:76400a8efae426f5b1376ca26fd870a041abaa5bfef88c25ab4f1ed11a8ff973",
+          "downloadCount": 35,
           "name": "main.js",
           "size": 926113
         },
         {
           "digest": "sha256:598721cc44a80523d1e4dad330d3266fb5b66314a8edb4bb4ee668aadc654a87",
-          "downloadCount": 21,
+          "downloadCount": 35,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:a4009509d9c5a720bfec82dfc01d89d0ff621dc199729ddb4bed4340ed633004",
-          "downloadCount": 20,
+          "downloadCount": 34,
           "name": "styles.css",
           "size": 29552
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Table escaped pipes** — cells containing escaped pipes (`\\|`) no longer corrupt cell boundaries during navigation, text object operations, or embedded cell editing write-back. All pipe-boundary detection across 7 files now uses shared escape-aware utilities (`findUnescapedPipes()` / `splitCellsEscapeAware()`) in `table-utils.ts`. Escaped pipes (`\\|`) are treated as cell content; `\\\\|` (escaped backslash + real pipe) is correctly treated as a boundary via backslash-parity checking.\r\n    - Plugin: `src/vim/table-utils.ts` (new: `findUnescapedPipes()`, `splitCellsEscapeAware()`, `countPrecedingBackslashes()`), `src/vim/table-render-widget.ts`, `src/vim/table-operations.ts`, `src/vim/table-auto-format.ts`, `src/vim/table-nav-controller.ts`, `src/text-objects/table-cell.ts`, `src/motions/tables.ts` (all updated to use shared utilities)\r\n- **Vimrc file I/O timing** — `readVimrcFile()` now uses `stat()` as a readiness probe before `read()`, distinguishing genuinely empty files (`stat.size === 0`, no retry) from timing-empty reads (`stat.size > 0`, retry with extended backoff 50/100/200/400ms). `fileExists()` uses `stat()` instead of a full `read()`. On retry exhaustion, a user-facing Notice is shown. The `vimrcLoading` flag is now wrapped in `try/finally` so a failed `loadVimrc()` call no longer permanently blocks future retry attempts. The same `stat()`+retry pattern is applied to `readLuaFile()` in the Lua config loader.\r\n    - Plugin: `src/vimrc/loader.ts` (`readVimrcFile`, `fileExists`), `src/lua/loader.ts` (`readLuaFile`), `src/main.ts` (`try/finally` around vimrc loading)\r\n- **Oil which-key labels not appearing** — `getCommandLabels()` in `OilKeybindingManager` returned empty when oil bindings were not yet applied (the `if (!this.applied) return []` guard prevented labels from being registered during `rebuildWhichKey()`). Labels are now always returned — they are static metadata from `OIL_MAPPINGS`, valid regardless of whether the vim mappings are currently active.\r\n    - Plugin: `src/oil/keybindings.ts` (removed `applied` guard from `getCommandLabels()`)\r\n- **Live grep UI blocking on large vaults** — the live grep picker source now uses chunked async iteration (50 files per chunk) with event loop yields between chunks, preventing UI freezes during searches on vaults with many files. Functionally identical results.\r\n    - Plugin: `src/picker/sources/live-grep.ts` (chunked iteration with `window.setTimeout(0)` yields)\r\n\r\n### Changed\r\n\r\n- **Oil `g?` help uses `VimInfoModal`** — `g?` in Oil now opens a modal dialog (Key/Action table) instead of a custom DOM overlay. This follows the same pattern used by `:marks`, `:buffers`, and `:registers` when the picker is disabled. Dismissible via Escape.\r\n    - Plugin: `src/oil/keybindings.ts` (`showOilHelp` rewritten to use `VimInfoModal`), `styles.css` (removed `.vim-motions-oil-help*` CSS)\r\n\r\n### Tests\r\n\r\n- 5 e2e tests in `test/specs/table-escaped-pipes.e2e.ts` (new): `di|` with `\\|` content, `\\\\|` as real pipe boundary, `]|` navigation skipping `\\|`, `yi|` yanking cell with `\\|`, `:tablerealign` preserving `\\|` cell content\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Table escaped pipes → Fixed; `g?` oil help command → Fixed (was listed as \"planned but not yet implemented\"); oil which-key integration → Fixed; surround `ys` dot-repeat with tag/function → clarified as working at runtime (test infrastructure limitation only); vimrc timing section updated with improved retry mechanism\r\n- `KNOWN_LIMITATIONS.md`: Added two new Oil limitations — which-key/`g?` not working in non-editor context (no prior editor leaf), and which-key \"all\" mode intercepting multi-key Oil bindings (`g?`, `g.`, `gs`, `gf`)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.57.0...0.58.0",
-      "downloadCount": 21,
+      "downloadCount": 35,
       "draft": false,
       "name": "0.58.0",
       "prerelease": false,

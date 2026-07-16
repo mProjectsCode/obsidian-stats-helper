@@ -4,21 +4,93 @@
   "description": "Insert LaTeX math with customizable keyboard shortcuts, inline MathJax preview, and display-math environments. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "math-chords",
-  "lastChangedAt": "2026-07-14T07:02:26.986Z",
-  "lastFetchedAt": "2026-07-14T07:02:26.986Z",
+  "lastChangedAt": "2026-07-16T07:01:26.996Z",
+  "lastFetchedAt": "2026-07-16T07:01:26.996Z",
   "manifest": {
     "author": "CHEH Hua",
     "authorUrl": "https://github.com/ichenh",
-    "description": "Type LaTeX math with keyboard shortcuts—fractions, Greek letters, integrals, and 100+ snippets (leader key + keys). Inline preview, display-math wrap. Settings UI in 70+ languages incl. Chinese.",
+    "description": "Write and normalize LaTeX math with leader-key snippets, protected delimiter conversion, preview, brace navigation, and display environments.",
     "id": "math-chords",
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Math Chords",
-    "version": "0.2.3"
+    "version": "0.3.1"
   },
   "name": "Math Chords",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:28cf6b040d4c4b57adef3a9ecde19d9c856b0bc913a279a3db35cf8622f17f51",
+          "downloadCount": 0,
+          "name": "locales-extras.json",
+          "size": 479602
+        },
+        {
+          "digest": "sha256:d63e166f8c38ff1d9809ebe1e59a9e6d6f615ca50adfb349ea6c674233d622d9",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 220358
+        },
+        {
+          "digest": "sha256:60b3ec152a4608cb203e19c59bc31d3929dd27b9ae1c109924b8a1cf592b34a0",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 357
+        },
+        {
+          "digest": "sha256:0b8c4ab356dbfe62904eca6465d5ad673d8906a0243ed5ef04889d9d38b3e397",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 10396
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- Removed the redundant product name from the plugin description to satisfy the community directory metadata rules.\n- Shortcut group headings now use Obsidian's `Setting.setHeading()` API for consistent settings-page structure and styling.\n- Removed the selection converter's registered default hotkey; all built-in command hotkeys are now assigned explicitly by users in Obsidian settings.\n- Release validation now rejects redundant product naming and registered default command hotkeys before publication.\n\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "Math Chords 0.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T10:05:53Z",
+      "tag": "0.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:28cf6b040d4c4b57adef3a9ecde19d9c856b0bc913a279a3db35cf8622f17f51",
+          "downloadCount": 0,
+          "name": "locales-extras.json",
+          "size": 479602
+        },
+        {
+          "digest": "sha256:019065eb05665683e1f5af4a434c63de3cf9ae41b12e92b6ee6e0b58165fbfb2",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 220361
+        },
+        {
+          "digest": "sha256:a628ddedd7e3e20e0535bf54cb23d882e083c181eaaf414b0907a62f0deed8e4",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 369
+        },
+        {
+          "digest": "sha256:02106c36bfd070357e8605ecb99a79818940b5d2500e288ca755e193cf221812",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 10396
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- Commands to safely convert LaTeX `\\(...\\)` / `\\[...\\]` delimiters in the selection or current Markdown file, with protected-region parsing and single-step undo.\n- Optional automatic conversion of pasted LaTeX math delimiters (off by default).\n\n### Changed\n\n- Inline/display math commands now follow one deterministic rule set: a non-empty selection is wrapped, the matching command always unwraps at a caret, and Smart math toggle controls cross-kind conversion only.\n- Display-to-inline conversion normalizes multiline content to a valid single-line formula while preserving the mathematical text and caret position.\n- The settings page now uses grouped, responsive shortcut rows with derived MathJax previews, readable keycaps, in-place search filtering, accessible row actions, and confirmed deletion; math environments retain direct drag-to-reorder handling in a more consistently aligned table.\n- Shared Markdown protection and math-region parsing now runs in linear time and is reused by delimiter conversion, preview, brace navigation, and snippet auto-wrap.\n- CI and releases validate locale and version metadata; GitHub Actions are pinned to audited commits.\n- README introductions and plugin metadata now describe both core responsibilities: structured LaTeX input and context-aware delimiter normalization for imported text.\n- AI-assistance documentation now defines its scope, human accountability, verification limits, privacy and provenance requirements, and contributor disclosure expectations.\n- Repository guidance is unified around Codex-compatible `AGENTS.md` and bilingual contribution guides; obsolete Cursor-specific rule files were removed.\n- The bilingual project roadmap now records a safe, document-scoped design for possible future LaTeX macro support without relying on undocumented global MathJax mutation.\n- Generation and validation scripts now share locale definitions, detect stale generated artifacts and shortcut YAML, and expose a single `npm run check` verification path.\n- Delimiter editor transactions are separated from pure parsing, and overlapping selections no longer duplicate conversion counts.\n\n### Fixed\n\n- Cross-kind math commands no longer create nested delimiters when Smart math toggle is disabled; the note is left unchanged and a notice explains the setting.\n- Math toggle detection is independent of selection direction, respects exact delimiter boundaries, and remains available for explicitly invoked edits in large notes.\n- Shortcut YAML is validated atomically, duplicate canonical key sequences are rejected, failed writes no longer leave in-memory shortcut state out of sync, and leader sequences support configured modifier chords.\n- Leader input now cancels safely for IME composition and ignores key-repeat noise; preview and hint DOM/timers use the active editor window in Obsidian popouts.\n- Locale state is refreshed on plugin reload, and synchronous MathJax preview failures no longer escape into the editor update loop.\n- Cancelling the display-environment picker no longer inserts an empty math block; choosing an environment creates and wraps display math in one transaction and one Undo step.\n- Caret placement after transactions is calculated against the resulting document, preventing line/ch drift when a math toggle or environment edit adds line breaks.\n- An intentionally empty math-environment list now remains empty after plugin reload instead of being replaced by defaults.\n- Settings and shortcut write failures now produce one actionable notice instead of duplicate notices from nested error handlers.\n- Settings and shortcut writes are serialized from immutable snapshots so rapid UI changes cannot complete out of order or persist a later-mutated object accidentally.\n- Key-setting fields now validate and persist complete values on blur instead of saving transient incomplete chords on every keystroke.\n- Shortcut hints and inline previews now clamp to the active window and flip around the caret when there is insufficient viewport space.\n- Disabling hints, previews, leader handling, or environment wrapping now clears pending leader state and refreshes every open Markdown editor immediately.\n- The leader-key master switch no longer disables the independently configured inline-preview feature.\n- Closing an Obsidian popout now removes its document-level keyboard listener immediately instead of retaining the closed window until plugin unload.\n- Shortcut previews now separate placeholder samples from TeX control words, fixing MathJax rendering for Angle brackets, Floor, and Ceiling.\n- Shortcut previews now wait for MathJax initialization before rendering, preventing every formula preview from degrading to a dash when settings are opened first in a new Obsidian session.\n- Shortcut rows now use their two-line height more effectively with a larger, consistently aligned MathJax preview column on desktop and narrow settings panels.\n- The settings introduction now explains both core workflows and the supporting editor features, uses the full settings content width without an artificial empty column, and is synchronized across bundled and extra locale resources.\n- Literal `+` shortcut parsing, shifted-punctuation fallback, and persisted key-setting validation now handle common keyboard layouts and reject incomplete chords.\n- Currency text is no longer mistaken for existing Markdown math during delimiter conversion.\n- Unclosed HTML `<pre>` / `<code>` blocks, fenced code, inline code, YAML frontmatter, and existing Markdown math remain untouched.\n- Selection conversion handles all editor selections in one transaction, and paste conversion respects earlier paste handlers.\n\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Math Chords 0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-15T09:50:05Z",
+      "tag": "0.3.0"
+    },
     {
       "assets": [
         {
@@ -29,26 +101,26 @@
         },
         {
           "digest": "sha256:28335d0316aa606d26d6c2dd911815e64071c36e6b94e697a503400feb1fa41d",
-          "downloadCount": 68,
+          "downloadCount": 70,
           "name": "main.js",
           "size": 158062
         },
         {
           "digest": "sha256:459eb432270b3e026ea6d59c2989cf93168f68c24a4d22c447e69e1a6b9cd9ad",
-          "downloadCount": 66,
+          "downloadCount": 68,
           "name": "manifest.json",
           "size": 412
         },
         {
           "digest": "sha256:8f47f686bb078292ce52e0e3481150a2ef15e13cfbdf9a4bc4adc85975fd31cf",
-          "downloadCount": 29,
+          "downloadCount": 31,
           "name": "styles.css",
           "size": 4147
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- Default shortcut **`,`** (after leader): `\\,` thin space.\n\n### Fixed\n\n- **Auto-wrap outside math** works again in plain text that follows closed inline math\n  (`$x$` then more text); a backward `$` scan had treated closing delimiters as unclosed\n  openers.\n\n",
-      "downloadCount": 66,
+      "downloadCount": 68,
       "draft": false,
       "name": "Math Chords 0.2.3",
       "prerelease": false,
