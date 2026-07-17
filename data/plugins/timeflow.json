@@ -4,8 +4,8 @@
   "description": "Track flexible work hours and time off with built-in timer, visualizations, and statistics. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "timeflow",
-  "lastChangedAt": "2026-07-16T04:01:27.001Z",
-  "lastFetchedAt": "2026-07-16T04:01:27.001Z",
+  "lastChangedAt": "2026-07-17T04:02:27.009Z",
+  "lastFetchedAt": "2026-07-17T04:02:27.009Z",
   "manifest": {
     "author": "gaut3",
     "authorUrl": "https://github.com/gaut3",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:c3917cd3baf1868fea06df87ed022c8760e283788e17398d65d64287dd65431c",
-          "downloadCount": 7,
+          "downloadCount": 12,
           "name": "main.js",
           "size": 524875
         },
         {
           "digest": "sha256:55941c5730b7755d7c7aaa13c8356783705fcb9b54d6be32b1b0bf68716af9d6",
-          "downloadCount": 21,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 288
         },
         {
           "digest": "sha256:0ad7c91e2c2445bcb2bbf7f9fe25f2df32a1540a1e16ec81df22f83245677d35",
-          "downloadCount": 6,
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 119429
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nCalculation-correctness pass from a full code review. Focus: the time/balance math must be\nright under every workday/week configuration.\n\n> **Heads-up:** several balance-semantics fixes below (avspasering no longer double-charging,\n> lunch deducted once per day, alternating weeks honored, averages derived from your actual\n> work-days setting) will **legitimately change your historical flextime numbers**. This is\n> the numbers becoming correct, not data loss — no action needed.\n\n### Fixed\n- **Data corruption:** timestamps ending at exactly midnight are no longer rewritten to\n  08:00 on load (only legacy full-day entries with both start AND end at 00:00 are);\n  expanded (non-collapsed) Timekeep groups no longer drop their sub-entries' hours;\n  imports now store local-format timestamps (was UTC `Z`, which double-counted entries on\n  re-import and shifted displayed clock times); Timekeep imports with numeric epoch\n  timestamps no longer produce invalid `NaN` dates; the \"Log work\" calendar modal also\n  stored UTC — fixed.\n- **Balance/goal engine:** work + avspasering on the same day no longer double-charges the\n  balance (withdrawn hours now cover the goal gap); alternating weeks are now respected by\n  the daily goal (previously only calendar coloring honored them) and the week-parity no\n  longer breaks after 53-ISO-week years; lunch break is deducted once per **day** (was per\n  entry — split days lost 30 min per extra segment); a running timer now only defers\n  *today* from the balance (a forgotten timer no longer hides that whole past day's hours\n  and withdrawals); per-entry flextime on mixed work+studie/kurs days now sums to the same\n  delta as the balance; date-only strings are parsed as local dates (west-of-UTC timezones\n  previously had every date shifted one day — Mondays treated as Sunday); half-day markers\n  on no-hours-required types (e.g. `helligdag:half`) now yield a half-day goal; the\n  `annet:HH:MM-HH:MM:` planned-day format now parses correctly.\n- **Displays:** week-compliance dots and bar-chart targets now use the schedule-history-\n  and holiday-aware daily goal (historical weeks were graded against *current* settings);\n  the hero \"added today\" badge and the day drawer now use the same per-entry flextime sum\n  as history (avspasering/sick days no longer show misleading day balances); day drawer\n  time ranges are parsed, not sliced from raw strings; overtime-payout offers are based on\n  lunch-adjusted work hours (no more paying out overtime you never earned); a stale\n  running timer from another day no longer inflates \"today\"/\"this week\"; planned days\n  that are *today* show in the Upcoming list; dashboard refreshes no longer leak update\n  intervals (CPU grew with every timer start/stop).\n- **Migrations:** run independently (an earlier `||` chain ran at most one per restart);\n  the sick-day migration is now run-once and no longer reverts user-customized behaviors\n  on every load; import duplicate detection compares instants, not raw strings.\n- **Settings & export:** numeric settings accept a decimal comma (`37,5` is no longer\n  read as `37`); \"reset to default\" buttons work again (settings defaults were being\n  mutated by reference on load); editing your current schedule no longer overwrites a\n  schedule period you'd set up for a future date; two schedule periods can't share the\n  same start date; average-workload stats now derive expected work days from your actual\n  work-days setting instead of a fixed 5-day week (this can shift monthly/yearly averages\n  for non–5-day schedules); CSV export groups months by local date (entries near a month\n  boundary no longer land in the wrong month) and the in-view export's type breakdown now\n  lists custom absence types too; a running timer now refreshes every open dashboard, not\n  just the last one opened; stopping a work timer reports the lunch-adjusted duration.\n\n",
-      "downloadCount": 21,
+      "downloadCount": 26,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,

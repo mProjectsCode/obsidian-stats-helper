@@ -4,18 +4,18 @@
   "description": "Advanced audio recording with input device and folder configuration. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "advanced-audio-recorder",
-  "lastChangedAt": "2026-07-16T04:01:27.001Z",
-  "lastFetchedAt": "2026-07-16T04:01:27.001Z",
+  "lastChangedAt": "2026-07-17T04:02:27.009Z",
+  "lastFetchedAt": "2026-07-17T04:02:27.009Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
     "description": "Record, play, and transcribe audio in your vault: multi-track recording, a waveform player with bookmarks, format conversion, cleanup, and speech-to-text (Whisper, Deepgram, Gemini, offline).",
     "fundingUrl": "https://coff.ee/akhmelevskiy",
     "id": "advanced-audio-recorder",
-    "isDesktopOnly": true,
+    "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Advanced Audio Recorder",
-    "version": "2.1.0"
+    "version": "2.1.1"
   },
   "name": "Advanced Audio Recorder",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:cc7f82584e8250a696c05d1ec6f515eaa42537ce97165c0c4496d730748ff81b",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 2751094
+        },
+        {
+          "digest": "sha256:5f35a70f8c4f07d75197f89a4a89fba581f81102cad7a7f7c58b1f2ad9ef2c8e",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 483
+        },
+        {
+          "digest": "sha256:6c4ab88928650ddf9f62f3b33c1ee410a4a3949e1116279d393a56a3d4079a85",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 17818
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "This release adds **basic mobile support**: Advanced Audio Recorder now runs on Obsidian for iOS and Android, not just desktop. Recording, playback, format conversion, splitting, and transcription each operate within the current device's real capabilities, and any feature a platform cannot deliver is detected and gated up front instead of failing partway through. Existing desktop recordings, stored settings, and the recorder are unaffected.\n\n## New: Mobile support\n\nA platform capability layer probes what the device can actually do and adapts the plugin to it, so what the format list and settings offer is what the device can deliver.\n\n- Recording now produces valid files on mobile, because every session flushes self-contained recorder-container segments and finalizes through one conversion matrix, so a saved file's contents always match its extension. On iOS, m4a records directly through its canonical `audio/mp4` container, and a stored format the device cannot record (for example the desktop `webm` default on iOS) falls back to the platform's best recordable format with a notice instead of corrupting the output.\n- Long recordings rotate safely on platforms that lack the desktop recovery journal, because the size boundary now rotates a full self-contained part rather than leaving headerless mid-stream fragments, so long mobile recordings yield playable parts.\n- Format availability is probed honestly through the encoder's real `canEncodeAudio` check, with the bundled mp3 and flac encoders registered first, so the plugin only offers formats the device can actually encode.\n- Transcription is gated per platform: an engine that cannot run on the current device, such as offline whisper.cpp on mobile, is disabled in the run modal and refused with a clear notice that explains why, instead of starting a run that would only fail later.\n- Settings adapt to the device by hiding or disabling options that do not apply, and they show a fallback note when a stored recording format is unavailable on the current platform.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+. This release is backward compatible: existing recordings, stored settings, and the recorder are unaffected, desktop behavior is unchanged, and mobile support is purely additive and adapts to each device's capabilities.\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/2.1.0...2.1.1\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "2.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T18:00:55Z",
+      "tag": "2.1.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:e1467e8bc569ad2eaaa2b8e27fc5260f06c404f0b4ce5bfc1cfd6c85bb0758b8",
-          "downloadCount": 15,
+          "downloadCount": 25,
           "name": "main.js",
           "size": 2745309
         },
         {
           "digest": "sha256:95dfe26aa108d2ee09e02b71fbd68e6f636fbbe3c57b27a3dc7ca237c46f9404",
-          "downloadCount": 15,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 482
         },
         {
           "digest": "sha256:7002d4a3b4526b11d4a271fa5f6a07e36535ddb990e7a79f8d437f8553bf1442",
-          "downloadCount": 14,
+          "downloadCount": 24,
           "name": "styles.css",
           "size": 17470
         }
       ],
       "author": "github-actions[bot]",
       "description": "This release adds **mono recording with an in-capture downmix** and a **floating status-bar playback strip** that follows a playing recording anywhere in the note, on top of player click-routing and timecode fixes. Existing recordings, stored settings, and the recorder are unaffected, and both additions are either opt-in or gated behind a default-on toggle.\n\n## New: Mono recording\n\nA **Recording channels** setting (Settings > Audio input) reduces a recording to mono during capture instead of after the fact:\n\n- **Same as input device** keeps the device's own layout (default, unchanged behavior).\n- **Mono (mix all channels)** averages every input channel, the standard stereo-to-mono downmix.\n- **Mono (left channel)** and **Mono (right channel)** keep exactly one channel at full level.\n\nThe left/right options target a common setup: an audio interface with two mono inputs (mic on input 1, instrument on input 2) that the operating system exposes as one stereo device, where recording a single microphone yields a stereo file with the voice hard-panned to one side. Keeping just that channel records it at full level, whereas mixing would fold in the silent channel and land the voice 6 dB quieter. The downmix happens during capture on every format: WAV writes mono samples directly at half the file size, and compressed formats encode a single-channel stream, with no extra re-encode. Each track of a multi-track session gets its own **Channels for track N** selector, so a hard-panned microphone track can go mono while a genuine stereo track stays untouched. The selector greys out when the selected device reports a mono-only input or is disconnected, and the saved choice is restored when a capable device is available again.\n\n## New: Automatic silent-channel prompt\n\nWith **Detect silent channel after recording** on (Settings > Audio processing & feedback, default on), one file per output track is checked for the stereo-with-one-silent-channel pattern after a recording is saved. When it is found, a notice names the affected file and offers a **Convert to mono** action already preset to keep the channel that carries audio; you still confirm the format and link handling before it runs. Sessions over 20 minutes are skipped before any file is read, shorter files are metadata-probed before decoding, and the check uses short RMS windows so a brief but real sound is preserved instead of being diluted by a long quiet stretch.\n\n## New: Floating playback controls\n\nWhile an enhanced player is playing, a compact transport strip appears in the status bar at the bottom-right, so you can drive the recording without scrolling back to the embed. It carries skip back and skip forward by 10 seconds, play-or-pause and stop, mute and a volume slider, and the elapsed-over-total time readout; **Add marker** and **Add chapter** appear when markers and chapters are enabled for the playing recording. Every button drives the same shared audio element as the embed, so an action in one surface is reflected in the other. The strip appears when playback starts and disappears when you stop it or the recording reaches its end; pausing keeps it visible so you can resume from the status bar. Recording always takes precedence: starting a recording swaps the strip for the recording controls, which return once recording stops if the audio is still active.\n\n## Player fixes\n\n- A timecode link (`#t=` offset) now plays from that moment even when no player for the file is on screen, for example when the embed has scrolled out of view in Live Preview, driven straight from the file and controlled through the status-bar strip, instead of dumping you onto the raw file in a new tab.\n- Timecode-link clicks now resolve in Live Preview from the editor source, not only in Reading view's rendered link.\n- Click routing and the playback lifecycle were corrected so a click lands on the intended surface and playback stops and restarts cleanly.\n\n## Internal\n\nPlayback is unified through a single `playbackCommands` module with one shared audio element per file, note-independent playback lives in a new `DetachedPlayback`, and mono capture is handled by `MonoCaptureBridge`, a `downmix` helper, and a `silentChannelDetector`. A new `PlaybackSync` integration test drives the real player, registry, and status bar together, and CI moved to a single `ci.yml` workflow. 1676 tests across 111 suites.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+; desktop-only as before. Backward compatible: existing recordings, stored settings, and the recorder are unaffected; the recording-channels setting defaults to the previous device-layout behavior, and the floating controls follow the existing enhanced-player opt-in.\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/2.0.1...2.1.0\n",
-      "downloadCount": 15,
+      "downloadCount": 25,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
