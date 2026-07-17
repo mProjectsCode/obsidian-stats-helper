@@ -4,8 +4,8 @@
   "description": "Turn a Markdown note into a slide deck and export it to PDF or a PNG image series, with live readability checks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "slide-deck",
-  "lastChangedAt": "2026-07-16T08:01:28.006Z",
-  "lastFetchedAt": "2026-07-16T08:01:28.006Z",
+  "lastChangedAt": "2026-07-17T08:03:26.992Z",
+  "lastFetchedAt": "2026-07-17T08:03:26.992Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://jkaindl.de",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Slide Deck",
-    "version": "0.5.0"
+    "version": "0.6.0"
   },
   "name": "Slide Deck",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:5e65392945281b99f41a57ae9e9669dbe68a229b8b86e8d8db4d2d471ef9375e",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 5235770
+        },
+        {
+          "digest": "sha256:127ef7acd83557dd9c831ecc872f6c4ec30bcc4c8612e4b1e6f60c56aac8d6df",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 346
+        },
+        {
+          "digest": "sha256:8528e13926af6dc0b4883bcbfcdd7c16132fdf930e60b164ce742fdb487d274f",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 6146
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- AI settings: endpoint row editor with a live connection check, one-click provider presets\n  (LM Studio / Ollama), a plain-text diagnosis per endpoint, and non-blocking input warnings.\n- AI settings: model dropdown populated from the endpoint, with a plain-text fallback when\n  offline and the model's context length shown when the server reports it.\n- AI settings: a \"Test\" button next to the thinking toggle — runs one real minimal call and\n  reports whether the model actually stopped thinking. Models that cannot disable thinking\n  (gpt-oss/harmony) now show a disabled toggle instead of a silently ineffective one.\n\n### Fixed\n- Connection checks reported \"reachable\" for any endpoint answering HTTP 200, including\n  servers that are not an OpenAI-compatible API.\n- Thinking suppression parameters were sent to always-on reasoning models that reject them.\n- Plugin activation no longer crashes with `NotAllowedError` when a popout window is active\n  at load time: the explorer-hide stylesheet is now built and adopted in the main window's\n  document (where the file explorer lives), wrapped so the cosmetic hide can never break\n  `onload`.\n- `npm run release` now verifies the GitHub mirror after the dual-push: tag and default\n  branch must carry the release commit, otherwise the release fails loudly. A silently\n  failed branch push had frozen the community store on 0.4.0 (the store reads the plugin\n  version from the default branch's `manifest.json`).\n- Cover-image corner slots (header/footer/pagination) no longer double their glyph edge into\n  a faint \"ghost\" ring over bright backgrounds — one soft `text-shadow` instead of two.\n- The content `<hr>` gradient is symmetric now: both ends fade equally through matching\n  gold-tinted shoulders (previously the left edge read slightly harder than the right).",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T14:56:32Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:550945f738930124a0ade7236a44d822f6cd95f839512152157064beafa74225",
-          "downloadCount": 18,
+          "downloadCount": 20,
           "name": "main.js",
           "size": 5220212
         },
         {
           "digest": "sha256:43a808becdf049af10e3866f04a3e5c64dd1dab2c3e60d9461e3c1325d608c42",
-          "downloadCount": 17,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 346
         },
         {
           "digest": "sha256:cc14f78214949b4af4147d2f3737896123c8d06d01bc05bdbf6b4bc60fc37079",
-          "downloadCount": 15,
+          "downloadCount": 17,
           "name": "styles.css",
           "size": 4301
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nFirst release to ship local-LLM deck generation (developed but never released on 0.4.x)\nalongside the new design system.\n\n### Added\n- **Generate a deck from a note with a local LLM** — a sidebar view (ribbon 🪄) turns the active\n  note into a slide deck via an OpenAI-compatible local endpoint (LM Studio / Ollama). Model\n  picker from the endpoint, streaming with a non-streaming fallback for the CORS \"ping ✓, stream ✗\"\n  asymmetry, a retry cap, and an \"AI (local)\" settings group. No cloud, no telemetry.\n- Generated decks record their origin (`source: \"[[Note]]\"` backlink) and the model used\n  (`model:` in frontmatter).\n\n### Changed (BREAKING)\n- **Design system**: modular type scale (ratio 1.25), spacing tokens, vertical rhythm, alignment\n  axioms (lists never line-centered; hero layouts center blocks). Existing decks render\n  differently (better).\n- **Built-in themes replaced**: shiro 白 (new default, light), kuro 黒, sumi 墨, kairo 回路,\n  kurenai 紅. Legacy keys (default, dark, serif, high-contrast) resolve silently via aliases;\n  a persisted `defaultTheme` migrates on load.\n- Dark built-ins use a real dark highlight.js scheme and mermaid \"dark\" (fixes light mermaid on\n  dark themes); kuro carries an atmosphere layer (grain, glow, vignette) and warm, semantically\n  separated callout hues.\n- User themes inherit the code/mermaid scheme from shiro; new optional character tokens\n  (display style/weight/tracking, eyebrow font — see THEMING-GUIDE) and a `/* sd-label */` meta\n  for readable dropdown names.\n- LLM deck prompts: hero layouts restricted to sparse content, bullet budgets, kicker convention.\n\n### Fixed\n- **Plugin failed to re-enable or update** (\"could not be loaded\") — the themes-folder hide built\n  its stylesheet in the main-window realm but adopted it into `activeDocument`; adopting a\n  constructed stylesheet across documents throws `NotAllowedError`. Now built in the active\n  document's own realm.\n- **Settings tab rendered blank on Obsidian < 1.13** — the imperative `display()` fallback is\n  restored (walks the same `getSettingDefinitions`), so the tab works on public Obsidian again.\n- **Export layout**: two-column stagger (phantom grid cell), the missing `cover` layout alias,\n  and `header/footer/paginate` landing in the body instead of the frontmatter.\n\n### Compatibility\n- **`minAppVersion` back to 1.8.7** (reverses the 0.4.0 raise to 1.13.0). 0.4.0 was effectively\n  gated to Obsidian Catalyst/Insider; 0.5.0 runs on public Obsidian again.\n\n### Internal\n- Regression net: canonical testdeck fixture + per-slide HTML and owned-CSS snapshots + targeted\n  guards (separator vs. `<hr>`, embed refs with spaces/em-dash, callout token cascade).\n- Shared modules vendored from obsidian-kit (ThinkSplitter, parseSSE, endpoint, mergeSettings).",
-      "downloadCount": 17,
+      "downloadCount": 19,
       "draft": false,
       "name": "0.5.0",
       "prerelease": false,
