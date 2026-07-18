@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-17T03:01:27.013Z",
-  "lastFetchedAt": "2026-07-16T07:01:26.996Z",
+  "lastChangedAt": "2026-07-18T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-18T07:02:26.999Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,35 +19,155 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.6.6",
     "name": "Vim Motions",
-    "version": "0.62.0"
+    "version": "0.66.0"
   },
   "name": "Vim Motions",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:4c1b0e7668f80ad32b35b30e8aa6d4d66c3ab4e246f4de2b71f1e524a43e7e5a",
-          "downloadCount": 22,
+          "digest": "sha256:7a12fab2f9ff34fa1263afe45ba50f82213dd553d9a145ab14e2b48e3577be81",
+          "downloadCount": 18,
           "name": "main.js",
-          "size": 934193
+          "size": 957691
         },
         {
-          "digest": "sha256:cd9ef1f3455d6a278f68966fb664ea27bdf1960dcdcb0440cca978980c44c3a7",
-          "downloadCount": 22,
+          "digest": "sha256:ca501e37ce09356fc03030ea638cc3ac2f5f34ea325416db203386f03f6ee471",
+          "downloadCount": 21,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:3c0fcb4e28f3c489f4eeb25dd42dd7d1e55de1fa35297dbed4b54066eddd301a",
+          "downloadCount": 17,
+          "name": "styles.css",
+          "size": 34303
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **`vim.regex()` — ECMAScript regular expressions in Lua** — `vim.regex(pattern, flags?)` creates a regex object exposing `match_str`, `match_line`, `match_pos`, `replace`, and `test` methods. Uses JavaScript's `RegExp` engine (not Vim regex syntax). Returns 0-based byte offsets matching Neovim's `vim.regex()` convention. Invalid patterns raise a Lua error catchable with `pcall`.\r\n    - Plugin: `src/lua/regex.ts` (new), `src/lua/api.ts` (registration via `injectRegex`)\r\n- **Fengari fork: `__gc` metamethods via FinalizationRegistry** — `__gc` metamethods on userdata are now invoked when the userdata becomes unreachable from JavaScript. Registration happens at `lua_setmetatable` time (only when the metatable contains `__gc`). Finalizers are drained at three points: outermost `luaD_pcall` return, `collectgarbage(\"collect\")`, and `lua_close`. Errors in `__gc` are silently swallowed (PUC-Rio semantics). Finalization order is unspecified. Tables with `__gc` are not finalized (userdata only). Environments without `FinalizationRegistry` gracefully degrade (no registration, no errors).\r\n    - Fork: `~/Repos/fengari/src/lstate.js` (finalizer infrastructure on `global_State`, `drainFinalizers`, `lua_close` drain + unregister), `~/Repos/fengari/src/lapi.js` (`lua_setmetatable` split `LUA_TUSERDATA`/`LUA_TTABLE`, FR registration), `~/Repos/fengari/src/ldo.js` (drain point in `luaD_pcall`), `~/Repos/fengari/src/lbaselib.js` (`collectgarbage(\"collect\")` drain integration)\r\n- **Fengari fork: `collectgarbage()` no longer crashes** — all 8 `collectgarbage` modes now return safe values instead of throwing `luaL_error(\"lua_gc not implemented\")`. `\"count\"` returns `0, 0` (no memory tracking). `\"collect\"` drains the `__gc` finalizer queue. `\"isrunning\"` returns `false`. All other modes return `0`. Previously, any Lua code calling `collectgarbage()` crashed the entire init sequence.\r\n    - Fork: `~/Repos/fengari/src/lbaselib.js`\r\n- **Native JS error propagation via `lua_atnativeerror`** — the plugin now installs a `lua_atnativeerror` handler that converts native JS errors (TypeError, RangeError, etc.) to extractable Lua strings. Previously, native JS errors thrown inside fengari C functions were pushed as `lightuserdata` and lost — `lua_tolstring` returned `null`, producing generic \"Unknown Lua error\" messages. The handler extracts `Error.message` (or `String(e)` for non-Error values) and pushes it as a Lua string. Covers all threads including coroutines (handler is on `global_State`).\r\n    - Plugin: `src/lua/engine.ts` (`lua_atnativeerror` handler in `createSandboxedState`), `src/lua/types.d.ts` (`lua_touserdata`, `lua_atnativeerror`, `lua_pushinteger` type declarations)\r\n\r\n### Changed\r\n\r\n- **Fengari fork: `sprintf-js` replaced with custom formatter** — the `sprintf-js` npm dependency (sole runtime dependency) has been replaced with a purpose-built `luaSprintf` function in the fork's `src/lstrlib.js`. The fork now ships with zero runtime dependencies. Output is byte-identical to the previous implementation for all standard format patterns.\r\n    - Fork: `~/Repos/fengari/src/lstrlib.js`, `~/Repos/fengari/package.json`, `~/Repos/fengari/DIFFERENCES.md`\r\n- **Fengari fork: integers widened from 32-bit to 53-bit** — `math.maxinteger` is now `9007199254740991` (2^53 - 1). Arithmetic operations use full 53-bit `Number` precision. `string.packsize(\"j\")` returns 8 (was 4). `tonumber(\"1099511627776\")` now returns the integer (was `nil`). Bitwise operations remain 32-bit (JavaScript platform limitation). See `~/Repos/fengari/DIFFERENCES.md` § \"Integer widening\" for the full change list and remaining limitations.\r\n    - Fork: `~/Repos/fengari/src/luaconf.js`, `~/Repos/fengari/src/llimits.js`, `~/Repos/fengari/src/lvm.js`, `~/Repos/fengari/src/lobject.js`, `~/Repos/fengari/src/lstrlib.js`, `~/Repos/fengari/src/ltable.js`, `~/Repos/fengari/src/lapi.js`, `~/Repos/fengari/src/ldo.js`, `~/Repos/fengari/src/lmathlib.js`, `~/Repos/fengari/src/lbaselib.js`\r\n- **Coroutine↔Promise bridge for async Lua execution** — Lua callbacks (keymap functions, autocmd handlers, timer callbacks, user commands) can now call async APIs that yield the coroutine and resume when the Promise resolves. The bridge uses fengari's `lua_yieldk` continuations with a `CoroutineRunner` managing thread lifecycle, instruction hooks, timeouts (10s), and concurrency limits (16 concurrent operations). `pcall` correctly catches async errors across yield/resume boundaries.\r\n    - Plugin: `src/lua/coroutine-runner.ts` (new: `CoroutineRunner` + `AsyncRegistry`), `src/lua/engine.ts` (`evalLuaAsync`, `INSTRUCTION_LIMIT` export), `src/lua/types.d.ts` (7 new fengari type declarations: `lua_newthread`, `lua_resume`, `lua_yieldk`, `lua_status`, `lua_xmove`, `lua_isyieldable`, `LUA_YIELD`)\r\n- **`vim.ob.fs.read(path)` and `vim.ob.fs.readlines(path)`** — read vault files from Lua. `read` returns a string, `readlines` returns a table of lines. Both yield internally via the coroutine bridge. Errors are catchable with `pcall`. Works in keymap callbacks, autocmd handlers, timer callbacks, and user commands. Also works at top level in `init.lua`. Blocked in snippet `f()`/`d()` nodes (raises \"async APIs cannot be called from snippet nodes\").\r\n    - Plugin: `src/lua/obsidian-api.ts` (`read`/`readlines` C-functions), `src/lua/loader.ts` (`fsRead` callback via `adapter.read` + `readExternalFile` for absolute paths), `src/lua/api.ts` (`fsRead` on `VimApiCallbacks`)\r\n- **`require()` for multi-file Lua configs** — `require('mymodule')` loads `lua/mymodule.lua` from the vault root. Dot-separated names resolve to subdirectories (`require('utils.strings')` → `lua/utils/strings.lua`). Modules are cached in `package.loaded`. Circular requires detected via sentinel. Security: path traversal (`..`), absolute paths, and backslash paths are rejected.\r\n    - Plugin: `src/lua/package.ts` (new: `package` table, sandboxed `load()`, Lua-implemented `require()`), `src/lua/engine.ts` (`load` kept in disabled list with re-enable note)\r\n- **`load(chunk)` re-enabled with sandboxing** — `load()` compiles a string chunk and returns the compiled function (or `nil` + error). `dofile` and `loadfile` remain disabled. The instruction count hook applies to loaded code.\r\n    - Plugin: `src/lua/package.ts` (`injectSandboxedLoad`)\r\n- **`evalLuaAsync` for async init.lua execution** — top-level `init.lua` code can now call async APIs like `vim.ob.fs.read`. The init.lua chunk runs inside a coroutine via `evalLuaAsync`, which compiles on the main state and delegates to `invokeAsyncCapable`. `autocmdManager.activate()` fires only after all yields complete.\r\n    - Plugin: `src/lua/engine.ts` (`evalLuaAsync`), `src/lua/loader.ts` (`evalLua` → `await evalLuaAsync`)\r\n- **Callback sites refactored for async capability** — all 4 Lua callback invocation sites now use `CoroutineRunner.invokeAsyncCapable` when a runner is available, with fallback to the original `lua_pcall` path when not. Existing sync callbacks work identically.\r\n    - Plugin: `src/lua/api.ts` (keymap, user command, autocmd callbacks), `src/lua/timers.ts` (`invokeLuaCallback` + 5 call sites)\r\n- **Snippet async guard** — `f()` and `d()` snippet node evaluations are wrapped with `runner.setAsyncBlocked(true/false)` to prevent async API calls during snippet expansion.\r\n    - Plugin: `src/snippets/dynamic-bridge.ts` (guards in `recomputeIfNeeded` and `expandDynamicSnippet`)\r\n\r\n### Tests\r\n\r\n- 11 tests in `~/Repos/fengari/test/collectgarbage.test.js`: all 8 modes return safe values, pcall succeeds, invalid mode errors\r\n- 7 tests in `~/Repos/fengari/test/atnativeerror.test.js`: TypeError/RangeError extraction, string/number throws, pure Lua error unaffected, handler covers coroutine threads, without-handler baseline\r\n- 10 tests in `~/Repos/fengari/test/gc-finalizers.test.js`: userdata `__gc` drain, no-overhead without `__gc`, tables not registered, error swallowing, metatable nil/change unregister, recursive drain guard, `lua_close` drain, post-close guard, no-FR graceful degradation\r\n- 8 tests in `~/Repos/fengari/test/53bit-integers.test.js`: sprintf replacement (format specifiers, flags, hex float), 53-bit integer constants/boundaries, wide arithmetic, string parsing/formatting, table keying, pack/unpack with SZINT=8, 32-bit bitwise verification, wide for-loop\r\n- 9 unit tests in `test/unit/lua/regex.test.ts`: constructor validation, `match_str` (offsets + nil), `match_line` alias, `match_pos` from offset, `replace` with captures + global flag, `test` boolean, flags (case-insensitive), invalid pattern error, missing pattern error\r\n- 8 spike tests in `~/Repos/fengari/test/coroutine-promise-bridge.test.js`: `lua_yieldk` continuations, `lua_isyieldable`, `pcall` across yield, instruction hooks, error propagation, sequential yields, Lua-level vs C-level coroutines\r\n- 11 unit tests in `test/unit/lua/coroutine-runner.test.ts`: sync path, yield/resume, rejected Promise, pcall error catch, instruction limit, timeout, concurrency limit, destroyAll, sequential async, snippet guard, thread-targeted hooks\r\n- 7 unit tests in `test/unit/lua/eval-lua-async.test.ts`: sync code, syntax errors, top-level async, sequential async, pcall at top level, side effects across yield, instruction limit\r\n- 6 unit tests in `test/unit/lua/fs-read.test.ts`: file read, pcall error catch, empty file, readlines, sequential reads, snippet guard\r\n- 10 unit tests in `test/unit/lua/package-require.test.ts`: module loading, caching, subdirectory resolution, circular require, missing module, path traversal, syntax error, runtime error, load() compilation, load() error\r\n- 22 e2e tests in `test/specs/lua-require.e2e.ts`: functional behavior (7), error handling (4), sandbox security (11)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added fengari fork improvements (sprintf, 53-bit integers, `__gc`, `collectgarbage`, `atnativeerror`), `vim.regex()`, coroutine bridge, async Lua APIs, require(), load(), evalLuaAsync entries\r\n- `KNOWN_LIMITATIONS.md`: 32-bit integer limitation → Implemented (widened to 53-bit), hrtime overflow claim corrected; JS RegExp item 5 → Implemented; sprintf item 7 → Implemented (zero deps); vault file reading → Implemented; coroutine bridge item 1 → Implemented (Phases 1–3); require() item 2 → Implemented; load() item 6 → Implemented; `__gc` item 4 → Implemented (userdata via FinalizationRegistry); error message quality item 8 → Implemented (atnativeerror handler); `collectgarbage` item 10 → Implemented (safe no-ops); fengari improvement opportunities priority table updated (9/10 implemented, only weak tables remaining)\r\n- `README.md`: Updated Lua configuration feature bullet with `vim.regex()`, async file reading, multi-file configs, and `__gc` userdata finalization\r\n- `CONTRIBUTING.md`: Added `regex.ts`, `coroutine-runner.ts` and `package.ts` to codebase structure\r\n- `AGENTS.md`: Updated fengari fork section — sprintf-js removed (zero deps), 53-bit integers, `vim.regex()`, async bridge, require(), load(), `__gc` via FinalizationRegistry, `collectgarbage` safe no-ops, native error propagation via `atnativeerror`\r\n- `docs/configuration/lua-config.md`: Added `vim.regex()` API reference section, `vim.ob.fs.read`/`readlines` to fs table, `require()` and `load()` sections, `collectgarbage` behavior, updated unsupported APIs list\r\n- `~/Repos/fengari/DIFFERENCES.md`: Updated behavioral differences table (`collectgarbage`, `__gc`), updated inherited limitations (collectgarbage and `__gc` addressed)\r\n- `~/Repos/fengari/DIFFERENCES.md`: Added \"Integer widening\" section, sprintf replacement documentation, updated behavioral differences table, updated files modified list\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.65.0...0.66.0",
+      "downloadCount": 21,
+      "draft": false,
+      "name": "0.66.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T00:31:45Z",
+      "tag": "0.66.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d68a202ec670cdc9f6f63f115838212e811713e70d5673056f566804e4af9ca5",
+          "downloadCount": 48,
+          "name": "main.js",
+          "size": 945488
+        },
+        {
+          "digest": "sha256:050d996900f1cb45cafccfcce6ee6be3709c49b9497683610d33ce5130b253ff",
+          "downloadCount": 51,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:3c0fcb4e28f3c489f4eeb25dd42dd7d1e55de1fa35297dbed4b54066eddd301a",
+          "downloadCount": 46,
+          "name": "styles.css",
+          "size": 34303
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Block cursor displays wrong character after editor refocus in Live Preview** — when the editor lost and regained focus (e.g., opening/closing DevTools), Obsidian's Live Preview re-expanded hidden markdown formatting (like `## ` in headings) after focus returned. The block cursor's `requestMeasure` ran in the same frame as the decoration change, before the browser reflowed the new DOM — causing `coordsAtPos()` to read stale layout coordinates and the cursor to display the wrong character. Fixed in the codemirror-vim fork by adding `focusChanged` to the block cursor's redraw trigger and scheduling a deferred `requestAnimationFrame` re-measure on focus gain, ensuring the cursor reads post-reflow coordinates. ([#71](https://github.com/saberzero1/motions/issues/71))\r\n    - Fork: `~/Repos/codemirror-vim/src/block-cursor.ts` (`focusChanged` trigger, deferred `requestAnimationFrame` re-measure), `~/Repos/codemirror-vim/src/index.ts` (focus event handler on `contentDOM`)\r\n\r\n### Added\r\n\r\n- **Replace-with-register operator (`gr{motion}`)** — implements the `gr` operator from [vim-ReplaceWithRegister](https://github.com/inkarkat/vim-ReplaceWithRegister). `gr{motion}` replaces the text covered by {motion} with register contents, discarding the replaced text (register preserved). Supports `grr` (linewise), `\"xgr{motion}` (named registers), `{Visual}gr` (visual charwise and linewise), `[count]grr`, and dot-repeat. Blockwise visual mode is a documented no-op for v1. ([#72](https://github.com/saberzero1/motions/issues/72))\r\n    - Plugin: `src/operators/replace-with-register.ts` (new: operator implementation), `src/operators/register.ts` (new: `registerReplaceWithRegister()` export), `src/main.ts` (independent gating via `enableReplaceWithRegister`), `src/workspace/navigation.ts` (conditional `grn`/`grr`/`gra` → `<leader>rn`/`<leader>rb`/`<leader>ra` relocation), `src/settings.ts` (`enableReplaceWithRegister` setting in both UI versions), `src/vimrc/loader.ts` (`replacewithregister`/`rwr` options), `src/types/vim-api.d.ts` (`getRegister()` type)\r\n- **`enableReplaceWithRegister` setting** — boolean toggle (default: `true`) gating the `gr` operator independently from `enableHardWrap`. When enabled, `grn`/`grr`/`gra` workspace bindings are relocated to `<leader>rn`/`<leader>rb`/`<leader>ra` under a \"Notes\" which-key group. When disabled, legacy `grn`/`grr`/`gra` bindings are restored. Configurable via Settings UI (both pre-1.13 and post-1.13), `:set replacewithregister` / `:set rwr` in vimrc, or `vim.opt.replacewithregister` in Lua.\r\n\r\n### Tests\r\n\r\n- 22 e2e tests in `test/specs/operators.e2e.ts` for replace-with-register: `grr` (single, multi-line, count), `griw`, `gr$`, `grl`, `gri'`, `gr}`, named registers (`\"agriw`, `\"a3grr`), visual `gr` (charwise and linewise `V`), register type coercion (linewise↔charwise), cursor positioning, dot-repeat (`griw`, `grr`, `3grr`+`.`), multi-line register expansion, text object at line boundary. 4 skipped blockwise visual mode tests documenting expected behavior for future implementation.\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added replace-with-register operator entry; added block cursor refocus fix entry\r\n- `KNOWN_LIMITATIONS.md`: Updated `gr` replace-with-register parity section — removed `[count]grr` and dot-repeat gaps (confirmed working), updated test coverage line; added block cursor refocus → Fixed\r\n- `README.md`: Added replace-with-register to features list\r\n- `CONTRIBUTING.md`: Added `replace-with-register.ts` to codebase structure, updated workspace navigation description\r\n- `AGENTS.md`: Updated workspace navigation description\r\n- `docs/reference/keybindings.md`: Added replace-with-register section, updated workspace nav with `<leader>r*` bindings\r\n- `docs/features/workspace-navigation.md`: Updated migration note with new `<leader>r*` defaults\r\n- `docs/features/ex-commands.md`: Updated default-key column for relocated commands\r\n- `docs/configuration/settings.md`: Added `enableReplaceWithRegister` to Vim features group\r\n- `docs/configuration/vimrc.md`: Added `replacewithregister`/`rwr` to boolean options\r\n- `docs/configuration/lua-config.md`: Added `replacewithregister` to vim.opt table\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.64.0...0.65.0",
+      "downloadCount": 51,
+      "draft": false,
+      "name": "0.65.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T00:09:44Z",
+      "tag": "0.65.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f1339affb5e217af248b2d30ccb7872f1c0e72f2ddc49432fe685a472dfdf239",
+          "downloadCount": 36,
+          "name": "main.js",
+          "size": 942276
+        },
+        {
+          "digest": "sha256:5420366d14e4691440975ca71504362ae1dc17a10db09468b5349b05095e794b",
+          "downloadCount": 36,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:3c0fcb4e28f3c489f4eeb25dd42dd7d1e55de1fa35297dbed4b54066eddd301a",
+          "downloadCount": 35,
+          "name": "styles.css",
+          "size": 34303
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Embedded table cell editor cursor shapes** — cell editors in embedded table widget mode now display correct cursor shapes (block for normal, bar for insert) matching the user's configured `cursorShapes` settings. Previously, insert mode showed no cursor and normal mode showed a hollow block due to two issues: (1) `cursorShapes` was not passed to `createEmbeddableEditor()` in `table-cell-editor.ts`, and (2) the cell editor's CM6 instance does not receive `.cm-focused` from Obsidian, causing the fork's unfocused-cursor rule to apply. Fixed with a module-level setter (`setCellEditorCursorShapes`) wired in both `onload()` and `reloadFeatures()`, a `pendingCursorShapes` stash in `embeddable-editor.ts` to handle the super-before-assignment timing issue, and a dynamic `CSSStyleSheet` (via `document.adoptedStyleSheets`) that generates cursor CSS from the user's configured shapes. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `src/vim/table-cell-editor.ts` (setter, dynamic stylesheet), `src/editors/embeddable-editor.ts` (`pendingCursorShapes` stash), `src/main.ts` (setter calls + cleanup)\r\n- **Embedded table cell editor font size and line height mismatch** — the cell editor text appeared larger than surrounding rendered table text in some themes, and cell height increased when entering edit mode. Added `font-size: inherit`, `font-family: inherit`, `line-height: inherit` to `.vim-table-cell-editor .cm-editor`, `font-size: inherit` to `.cm-content`, and `padding: 0` + `line-height: var(--table-line-height, var(--line-height-tight))` to `.cm-line`. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `styles.css` (table cell editor CSS)\r\n- **Table cell editor destroying wikilinks and formatting** — editing a cell containing `[[wikilink]]`, `**bold**`, or other markdown syntax stripped the syntax on write-back. Two issues: (1) the cell editor read its initial value from `wrapper.textContent` (the rendered DOM), which returns plain text without markdown syntax — `[[note-a]]` became `note-a`. Now reads raw markdown from the document source via `getCellDocumentRange()`. (2) On cell editor close, the cell content was restored as plain `textContent` without re-rendering markdown. Now uses `MarkdownRenderer.render()` to restore proper inline formatting (wikilinks, bold, italic, code) in the cell wrapper after the editor is destroyed. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `src/vim/table-cell-editor.ts` (accepts `rawMarkdown` parameter, `rerenderCellContent()` on close), `src/vim/table-nav-controller.ts` (passes raw text from document)\r\n- **Textarea vim overlay content not synced on rapid teardown** — clicking \"Save\" via hint mode (`f` key) on a modal while a debounced content sync was pending could close the modal before the CM6 overlay flushed its content to the hidden `<textarea>`. The host plugin (e.g., Spaced Repetition) read the textarea's stale value and saved incomplete content. Root cause: `teardownActive()` cancelled the pending 100ms sync timer and destroyed the editor without flushing. The `handleBlur()` and `handleEscapeAndRedispatch()` paths already called `syncNow()` before teardown, but the MutationObserver path (modal removed from DOM) went straight to `teardownActive()`. Fixed by adding a `syncNow()` call in `teardownActive()` immediately after cancelling the timer but before destroying the editor. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (`syncNow` flush in `teardownActive`)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for embedded table cell editor cursor shapes, font size/line height, wikilink color fixes, and textarea sync-on-teardown fix\r\n- `KNOWN_LIMITATIONS.md`: Added Live Preview rendering, cursor shapes, visual mode highlighting, and wikilink color loss limitations under \"Table cell vim modality\"; textarea content sync race condition → Fixed\r\n- `docs/features/tables.md`: Added Live Preview callout for cell editors\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.63.0...0.64.0",
+      "downloadCount": 36,
+      "draft": false,
+      "name": "0.64.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T13:03:05Z",
+      "tag": "0.64.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:97dbf750eb3161385f78a6898a0c665ffe62360f84db195ce4c5b56d692444bb",
+          "downloadCount": 27,
+          "name": "main.js",
+          "size": 940461
+        },
+        {
+          "digest": "sha256:8dda630aa861aa22a0a64f39e3f7b9aac6a99f20a8d216a4eaf642883cbc2c86",
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:ae91449e71ebd99e7608d65a875a1fe150c741f42f4cced3909d09ba9adbd992",
-          "downloadCount": 21,
+          "downloadCount": 26,
+          "name": "styles.css",
+          "size": 34070
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Cross-note vim jump list** — `<C-o>` and `<C-i>` now navigate backward/forward through a cross-note jump history. Jumps are recorded when navigating between notes via `gd`/`gD`, picker file selection (all 12 sources), harpoon, oil, hint mode, `:e`/`:find`/`:tabnew`/`:buffer`/`:bfirst`/`:blast`, structural buffer cycling (`]b`/`[b`), and Lua `vim.cmd(\"e ...\")`. Within-buffer jumps (G, gg, /, ?) continue to use the fork's built-in jump list. Standalone EasyMotion jumps (not operator-pending) are also recorded. The jump list persists across sessions, handles file rename/delete, and supports count prefixes (`3<C-o>`). New `:jumps` ex command displays the list. New `jumplist` (boolean, default true) and `jumplistsize` (number, default 200) vim options.\r\n    - Plugin: `src/vim/jumplist.ts` (new: `JumpList` class), `src/workspace/navigate.ts` (new: `navigateWithJump`/`navigateWithJumpFile`/`navigateWithJumpSetActive` wrappers), `src/workspace/global-defaults.ts` (`createJumpListWalkOverride`), `src/vim/jumplist-bridge.ts` (new: CM6 ViewPlugin for fork bridge), `src/vim/options.ts` (`jumplist`/`jumplistsize`), `src/easymotion/register.ts` (jump recording), `src/main.ts` (lifecycle, persistence, rename/delete handlers)\r\n    - 43 navigation call sites migrated across 23 files (goto-definition, picker sources, oil, harpoon, hint mode, global-ex-command, Lua API, buffer cycling, workspace commands, vault search)\r\n- **Table cell vim modality (embedded mode)** — cell editors in embedded table widget mode now support a two-Escape pattern: first Escape exits insert → normal mode within the cell editor, second Escape exits the cell editor back to table-nav mode. Entry mode semantics: `i` (insert at start), `a` (append at end), `c` (clear + insert), `s` (substitute). Vim registers are shared between cell editors and the main editor. Status bar reflects cell editor vim mode when active.\r\n    - Plugin: `src/editors/embeddable-editor.ts` (mode-aware Escape keymap), `src/vim/table-nav-controller.ts` (entry mode dispatch via `handleKey`), `src/vim/mode-tracker.ts` (cell editor mode sync)\r\n- **`ir`/`ar` table row text objects** — `ir` selects inner row content (between first and last `|`, excluding pipes), `ar` selects the entire row including pipes. Works in raw markdown mode. Follows the same pattern as `i|`/`a|` cell text objects.\r\n    - Plugin: `src/text-objects/table-row.ts` (new), `src/text-objects/register.ts`\r\n\r\n### Fixed\r\n\r\n- **Hint mode `F` on file explorer and other generic targets opens in current tab instead of new tab** — pressing `F` in hint mode on a file in the left sidebar file explorer (`.nav-file-title`) opened it in the current tab, identical to `f`. The `hintOpenNew()` function only passed `openInNewPane=true` for `link` and `pane` target types; all other targets (`generic`, `button`, `input`) fell through to `openInNewPane=false`, bypassing the existing Ctrl+Meta click path that Obsidian interprets as \"open in new tab\". Simplified `hintOpenNew()` to always pass `openInNewPane=true` — the Ctrl+Meta click dispatch at line 344 already handles all non-link, non-pane targets correctly. ([#70](https://github.com/saberzero1/motions/issues/70))\r\n    - Plugin: `src/ui/hint-mode.ts` (`hintOpenNew` simplified to unconditional `openInNewPane=true`)\r\n- **`jumpListWalk` action override lost after `reloadFeatures()`** — the `defineActionOverride('jumpListWalk', ...)` applied during `onload()` was wiped by `reloadFeatures()` (called during vimrc loading) because `unregisterAll()` restored the original action and the override was not re-registered. Fixed by adding the override to `reloadFeatures()` alongside the existing `newLineAndEnterInsertMode` override.\r\n    - Plugin: `src/main.ts` (added `jumpListWalk` override to `reloadFeatures()`)\r\n- **First character swallowed when entering table cell editor** — pressing `i` in table-nav mode opened the cell editor and immediately dispatched `handleKey(adapter, 'i')`, but the vim extension on the cell editor's CM6 instance hadn't finished initializing. The dispatched `i` was either a no-op (vim not ready) or treated as typed text. Fixed by deferring the `handleKey` dispatch via `setTimeout(fn, 0)`.\r\n    - Plugin: `src/vim/table-nav-controller.ts` (deferred `handleKey` in `enterCellEdit`)\r\n\r\n### Tests\r\n\r\n- 27 unit tests in `test/unit/jumplist.test.ts`: `JumpList` class — record, deduplication, jumpOlder/jumpNewer with count, handleRename, handleDelete with index adjustment, serialize/deserialize, max size eviction, forward history truncation, onRecord callback\r\n- 10 e2e tests in `test/specs/jump-list.e2e.ts`: within-buffer G/gg/count `<C-o>`, cross-note `gd` → `<C-o>` → `<C-i>`, jump list data structure verification, `:jumps` modal, jumplist setting toggle, deleted file resilience\r\n- 4 e2e tests in `test/specs/table-cell-vim-mode.e2e.ts`: `dir`/`dar`/`yir` table row text objects, `ir` no-op on non-table content\r\n- 9 skipped e2e tests for embedded table cell editing (two-Escape, entry modes, register sharing) — test-environment limitation where CM6 table widget rendering does not activate through `registerEditorExtension` in WDIO; features verified manually\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for cross-note jump list, table cell vim modality, ir/ar text objects, jumpListWalk override fix, cell editor first-character fix, hint mode `F` file explorer fix\r\n- `KNOWN_LIMITATIONS.md`: Cross-note jump list → Implemented (with cross-window limitation noted); table cell vim modality → documented two-Escape pattern and entry modes; ir/ar text objects → documented; hint mode `F` → updated behavior table (all targets now open in new tab)\r\n- `README.md`: Added cross-note jump list to features list\r\n- `CONTRIBUTING.md`: Added jumplist.ts, navigate.ts, table-row.ts, jumplist-bridge.ts to codebase structure\r\n- `docs/reference/keybindings.md`: Added `<C-o>`/`<C-i>` jump list, `:jumps`, `ir`/`ar` text objects\r\n- `docs/features/hint-mode.md`: Updated `F` action description to include file explorer and generic targets\r\n- `docs/features/tables.md`: Added vim modality in cell editors section, table row text objects\r\n- `docs/configuration/settings.md`: Added `jumplist` and `jumplistsize` settings\r\n- `docs/configuration/vimrc.md`: Added `jumplist`/`jumplistsize` options\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.62.0...0.63.0",
+      "downloadCount": 27,
+      "draft": false,
+      "name": "0.63.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T07:32:48Z",
+      "tag": "0.63.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4c1b0e7668f80ad32b35b30e8aa6d4d66c3ab4e246f4de2b71f1e524a43e7e5a",
+          "downloadCount": 25,
+          "name": "main.js",
+          "size": 934193
+        },
+        {
+          "digest": "sha256:cd9ef1f3455d6a278f68966fb664ea27bdf1960dcdcb0440cca978980c44c3a7",
+          "downloadCount": 25,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:ae91449e71ebd99e7608d65a875a1fe150c741f42f4cced3909d09ba9adbd992",
+          "downloadCount": 24,
           "name": "styles.css",
           "size": 34070
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Textarea vim overlay height collapses to near-zero after 0.60.1** — the 0.60.1 fix for unbounded textarea growth replaced `minHeight` with fixed `height` + `maxHeight` copied from the original textarea's computed size. When the original textarea used dynamic height (e.g., `height: auto` or content-dependent sizing), the captured height could be very small, trapping the CM6 overlay at a tiny fixed size with content hidden. Fixed by using adaptive height calculation: `minHeight = max(cssHeight, scrollHeight, 100px)` ensures a reasonable minimum, and `maxHeight = max(effectiveHeight, 50vh)` caps growth at half the viewport with scrollbar overflow. The wrapper's CSS `overflow` changed from `hidden` to `auto` so content exceeding `maxHeight` scrolls instead of being clipped. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (adaptive height calculation with `MIN_HEIGHT_PX` floor), `styles.css` (`overflow: auto` on `.vim-motions-textarea-overlay`)\r\n- **Which-key \"all\" mode intercepting multi-key Oil bindings** — in \"All partial keys\" mode, the popup delay timer (default 500ms) caused the which-key overlay to appear between the `g` and second keystroke (`?`, `.`, `s`, `f`), disrupting Oil's `g?` help modal and other `g`-prefixed bindings. Fixed by bypassing the popup delay timer when the active view is an OilView — the overlay shows immediately, allowing multi-key bindings to complete without interference. Operator-pending hints (`d`, `c`, `y`) still work normally in Oil.\r\n    - Plugin: `src/ui/which-key.ts` (`onKeyPressGeneral` Oil context check)\r\n- **`ci*` marked as permanent Live Preview limitation** — investigation found that `ci*` (change inside bold) works correctly in Live Preview for multi-character content. On the active line, Obsidian uses `Decoration.mark` (visible text nodes), not `Decoration.replace` — the cursor is not displaced by collapsed decorations. The original limitation was overstated based on early testing with a transaction filter that has since been removed.\r\n    - Plugin: `test/specs/text-objects.e2e.ts` (unskipped `ci*` test, now passing)\r\n\r\n### Tests\r\n\r\n- 4 new e2e tests in `test/specs/oil-which-key.e2e.ts`: `g?` opens Oil help modal with which-key \"all\" mode, `g.` not intercepted, no stale overlay after `g?`, leader-mode control\r\n- 1 unskipped e2e test in `test/specs/text-objects.e2e.ts`: `ci*` on multi-character bold content\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for which-key + Oil fix, `ci*` limitation resolution, and textarea height fix\r\n- `KNOWN_LIMITATIONS.md`: Which-key + Oil non-editor context → Fixed; which-key \"all\" mode Oil interception → Fixed; `ci*` Live Preview → resolved (was overstated); textarea overlay height collapse → Fixed\r\n- `docs/configuration/which-key.md`: Updated Oil explorer context section — removed non-editor and \"all\" mode warnings\r\n- `docs/features/text-objects.md`: Removed `ci*` limitation note if present\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.61.0...0.62.0",
-      "downloadCount": 22,
+      "downloadCount": 25,
       "draft": false,
       "name": "0.62.0",
       "prerelease": false,
@@ -58,26 +178,26 @@
       "assets": [
         {
           "digest": "sha256:2afda3da241b2bf7087edcbcc14c2a5941ede71717128e6e0f4c6dd0e066123d",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 934035
         },
         {
           "digest": "sha256:338461d811baafc601c2b69b3536f9130d719309e4264136151e246dcfb4713e",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:42a4dfa2f62d4e3fa68677021781d4c4c0bdf0fc4012c0896fba111fab2828e6",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 34072
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Hint mode `F` on pane targets opens in same tab instead of new tab** — pressing `F` in hint mode on a pane target (`.workspace-leaf-content`) behaved identically to `f` (focus the pane) instead of opening the pane's content in a new tab. The `hintActivate()` function ignored the `openInNewPane` parameter for `targetType === 'pane'`, always calling `setActiveLeaf()`. Now calls `workspace.duplicateLeaf(leaf, 'tab')` when `openInNewPane` is true. Link targets were unaffected — `openLinkText()` already used the parameter correctly. ([#70](https://github.com/saberzero1/motions/issues/70))\r\n    - Plugin: `src/ui/hint-mode.ts` (`hintActivate` pane branch)\r\n- **`j`/`k` and other standard-gate keys not working in Bases views** — Obsidian Bases views (`.base` files) use the view type `\"bases\"`, which was missing from the default `GLOBAL_NAV_VIEW_TYPES` set. The `isPluginLeafActive()` check treated Bases as a plugin view and blocked standard-gate keys (`j`/`k` scroll, `H`/`L` tab switch, count-prefix digits). ([#70](https://github.com/saberzero1/motions/issues/70))\r\n    - Plugin: `src/workspace/global-key-handler.ts` (added `'bases'` to `GLOBAL_NAV_VIEW_TYPES`), `src/settings.ts` (updated default list in description)\r\n\r\n### Tests\r\n\r\n- 1 new e2e test in `test/specs/hint-mode.e2e.ts`: `F` on pane target calls `duplicateLeaf` (spy-based verification)\r\n- 1 new e2e test in `test/specs/global-nav.e2e.ts`: `H` from bases view switches to previous tab (creates `.base` file, verifies standard-gate key interception)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added entries for hint mode `F` pane fix and Bases view type fix\r\n- `KNOWN_LIMITATIONS.md`: Updated hint mode target classification (pane `F` → `duplicateLeaf`); updated workspace navigation view type list to include `bases`\r\n- `docs/features/hint-mode.md`: Updated pane target behavior description\r\n- `docs/features/workspace-navigation.md`: Added `bases` to default view types\r\n- `docs/configuration/settings.md`: Updated workspace navigation view types default list\r\n- `docs/configuration/vimrc.md`: Updated default view types in description\r\n- `docs/configuration/lua-config.md`: Updated default view types in examples\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.60.1...0.61.0",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.61.0",
       "prerelease": false,
@@ -148,26 +268,26 @@
       "assets": [
         {
           "digest": "sha256:177da38ef53818732fe004e1ec017784ed6bb544a735be40807756a3d32f9831",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 929128
         },
         {
           "digest": "sha256:8ece690e5ad192aeea38b16a6b9651239571a62a459eee0bcaa83a114e7c3e4e",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:3a0350b9fffd6086cf658aa001b819e60239c192357bf1a8305f229867e70104",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 33317
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Absolute line number highlight not updating on cursor movement** — when only absolute line numbers were enabled (`set number` without `set relativenumber`), the `vim-motions-line-num-current` highlight (bold current line number) did not follow the cursor. The `lineMarkerChange` callback in both the standalone line number gutter and the unified `statuscolumn` gutter only checked `update.docChanged` in absolute mode, ignoring `update.selectionSet` (cursor movement). Relative and hybrid modes were unaffected because they already included `update.selectionSet`. The highlight only updated incidentally when entering special content (MathJax, images) that triggered `docChanged` or `viewportChanged`. ([#68](https://github.com/saberzero1/motions/issues/68))\r\n    - Plugin: `src/vim/line-number-gutter.ts` (`lineMarkerChange` absolute branch), `src/vim/statuscolumn.ts` (`lineMarkerChange` `!hasRelative` branch)\r\n- **Typing `|` moves cursor to the left of `|`** — typing `|` anywhere in insert mode triggered the table auto-format inputHandler, which intercepted the keystroke and repositioned the cursor even on non-table lines (any line matching `/^\\s*\\|/`). The mid-edit interception caused cursor jumps, making it impossible to type `|` normally in an empty document or at the start of a line. ([#66](https://github.com/saberzero1/motions/issues/66))\r\n- **Tables do not handle escaped `|` characters correctly** — in raw/cursor-aware table modes, escaped pipes (`\\|`) inside cells were treated as cell boundaries during mid-edit auto-formatting, causing the cursor to jump and live preview to render extra cells. The auto-format inputHandler ran `realignTableLines()` after every `|` keystroke, which repositioned the cursor based on the realigned table structure — even when the `|` was escaped. Wikilinks (`[[page|alias]]`) inside raw table cells also triggered incorrect cell boundary detection. ([#67](https://github.com/saberzero1/motions/issues/67))\r\n    - Root cause for both: `table-auto-format.ts` intercepted every `|` keystroke in insert mode and ran column realignment mid-edit.\r\n    - Fix: Replaced mid-edit `|` interception with format-on-exit — tables are only realigned when the cursor leaves the table range. A CM6 `ViewPlugin` tracks cursor entry/exit from table ranges and dispatches `realignTableLines()` via `queueMicrotask` when the cursor exits a dirty (edited) table. Uses `Annotation.define<boolean>()` as a re-entrancy guard. The `||` → separator row auto-generation is preserved as a standalone inputHandler.\r\n    - Plugin: `src/vim/table-format-on-exit.ts` (new: format-on-exit ViewPlugin + separator handler), `src/vim/table-utils.ts` (added `realignTableLines()`, `parseAlignments()`, `buildSepCell()`, `findTableBounds()`, canonical `Alignment` type), `src/vim/table-auto-format.ts` (deleted), `src/vim/table-cursor-fix.ts` (deleted), `src/vim/table-operations.ts` (refactored to use shared `realignTableLines()`), `src/motions/tables.ts` (refactored to use shared `realignTableLines()`, removed 5 duplicate helpers), `src/vim/table-render-widget.ts` (uses canonical `Alignment` type), `src/vim/table-nav-controller.ts` (added `tableRealign()` in `doRefreshAfterOp()` for embedded cell edit alignment), `src/vim/table-cell-editor.ts` (removed `createTableAutoFormatExtension` dependency), `src/motions/register.ts` (removed `tableAwareMoveUp` override on `k`), `src/main.ts` (replaced auto-format/cursor-fix registration with format-on-exit)\r\n\r\n### Changed\r\n\r\n- **Neovim-style modal styling for `GlobalExCommandModal` and `VimInfoModal`** — the ex command modal (`:` in non-editor views) and the info modal (`:marks`, `:buffers`, `:registers`, Oil `g?`) now use Neovim-inspired styling: transparent container, accent border (`--color-accent`), floating title label positioned on the top border, monospace font, and hidden Obsidian chrome (close button, modal header). `GlobalExCommandModal` uses a prompt-modal pattern with three styled sections (input, results, instructions) and two-column suggestion rows showing `:command` + description. All 40+ ex commands now have `description` fields. `VimInfoModal` uses an info-modal pattern with an accent-bordered inner wrapper. Both patterns use `--modal-background`, `--font-monospace`, and `--color-accent` CSS variables for full theme compatibility.\r\n    - Plugin: `src/ui/global-ex-command.ts` (`description` field on `GlobalExEntry` and `ExSuggestion`, prompt-modal container styling, two-column `renderSuggestion`), `src/ui/vim-info-modal.ts` (info-modal container styling, floating title, inner wrapper), `styles.css` (new prompt-modal and info-modal CSS sections)\r\n- **Neovim-style modal styling extended to remaining modals** — `OutlineModal` (`:outline`/`gO`), `SearchResultsModal` (`:vimgrep`), `ContextActionsModal` (`gra`), and `OilConfirmModal` (Oil destructive commit) now use the same Neovim-inspired styling as `GlobalExCommandModal` and `VimInfoModal`. `OutlineModal` shows heading text + line number, `SearchResultsModal` shows filename + line preview, `ContextActionsModal` shows command name + command ID. `OilConfirmModal` uses the info-modal pattern with accent-bordered buttons. Removed 3 unused CSS classes (`vim-motions-search-file`, `vim-motions-search-preview`, `vim-motions-outline-item`).\r\n    - Plugin: `src/ui/outline-modal.ts`, `src/workspace/vault-search.ts`, `src/ui/context-actions.ts`, `src/oil/manager.ts`, `styles.css`\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Absolute line number highlight not updating on cursor movement → Fixed\r\n- `KNOWN_LIMITATIONS.md`: Table auto-formatting → updated to describe format-on-exit behavior; typing `|` cursor jump (#66) → Fixed; escaped `\\|` handling (#67) → Fixed\r\n- `docs/features/tables.md`: Auto-formatting section rewritten to describe format-on-exit behavior\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.58.0...0.59.0",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.59.0",
       "prerelease": false,
@@ -184,7 +304,7 @@
         },
         {
           "digest": "sha256:598721cc44a80523d1e4dad330d3266fb5b66314a8edb4bb4ee668aadc654a87",
-          "downloadCount": 35,
+          "downloadCount": 36,
           "name": "manifest.json",
           "size": 606
         },
@@ -197,7 +317,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Table escaped pipes** — cells containing escaped pipes (`\\|`) no longer corrupt cell boundaries during navigation, text object operations, or embedded cell editing write-back. All pipe-boundary detection across 7 files now uses shared escape-aware utilities (`findUnescapedPipes()` / `splitCellsEscapeAware()`) in `table-utils.ts`. Escaped pipes (`\\|`) are treated as cell content; `\\\\|` (escaped backslash + real pipe) is correctly treated as a boundary via backslash-parity checking.\r\n    - Plugin: `src/vim/table-utils.ts` (new: `findUnescapedPipes()`, `splitCellsEscapeAware()`, `countPrecedingBackslashes()`), `src/vim/table-render-widget.ts`, `src/vim/table-operations.ts`, `src/vim/table-auto-format.ts`, `src/vim/table-nav-controller.ts`, `src/text-objects/table-cell.ts`, `src/motions/tables.ts` (all updated to use shared utilities)\r\n- **Vimrc file I/O timing** — `readVimrcFile()` now uses `stat()` as a readiness probe before `read()`, distinguishing genuinely empty files (`stat.size === 0`, no retry) from timing-empty reads (`stat.size > 0`, retry with extended backoff 50/100/200/400ms). `fileExists()` uses `stat()` instead of a full `read()`. On retry exhaustion, a user-facing Notice is shown. The `vimrcLoading` flag is now wrapped in `try/finally` so a failed `loadVimrc()` call no longer permanently blocks future retry attempts. The same `stat()`+retry pattern is applied to `readLuaFile()` in the Lua config loader.\r\n    - Plugin: `src/vimrc/loader.ts` (`readVimrcFile`, `fileExists`), `src/lua/loader.ts` (`readLuaFile`), `src/main.ts` (`try/finally` around vimrc loading)\r\n- **Oil which-key labels not appearing** — `getCommandLabels()` in `OilKeybindingManager` returned empty when oil bindings were not yet applied (the `if (!this.applied) return []` guard prevented labels from being registered during `rebuildWhichKey()`). Labels are now always returned — they are static metadata from `OIL_MAPPINGS`, valid regardless of whether the vim mappings are currently active.\r\n    - Plugin: `src/oil/keybindings.ts` (removed `applied` guard from `getCommandLabels()`)\r\n- **Live grep UI blocking on large vaults** — the live grep picker source now uses chunked async iteration (50 files per chunk) with event loop yields between chunks, preventing UI freezes during searches on vaults with many files. Functionally identical results.\r\n    - Plugin: `src/picker/sources/live-grep.ts` (chunked iteration with `window.setTimeout(0)` yields)\r\n\r\n### Changed\r\n\r\n- **Oil `g?` help uses `VimInfoModal`** — `g?` in Oil now opens a modal dialog (Key/Action table) instead of a custom DOM overlay. This follows the same pattern used by `:marks`, `:buffers`, and `:registers` when the picker is disabled. Dismissible via Escape.\r\n    - Plugin: `src/oil/keybindings.ts` (`showOilHelp` rewritten to use `VimInfoModal`), `styles.css` (removed `.vim-motions-oil-help*` CSS)\r\n\r\n### Tests\r\n\r\n- 5 e2e tests in `test/specs/table-escaped-pipes.e2e.ts` (new): `di|` with `\\|` content, `\\\\|` as real pipe boundary, `]|` navigation skipping `\\|`, `yi|` yanking cell with `\\|`, `:tablerealign` preserving `\\|` cell content\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Table escaped pipes → Fixed; `g?` oil help command → Fixed (was listed as \"planned but not yet implemented\"); oil which-key integration → Fixed; surround `ys` dot-repeat with tag/function → clarified as working at runtime (test infrastructure limitation only); vimrc timing section updated with improved retry mechanism\r\n- `KNOWN_LIMITATIONS.md`: Added two new Oil limitations — which-key/`g?` not working in non-editor context (no prior editor leaf), and which-key \"all\" mode intercepting multi-key Oil bindings (`g?`, `g.`, `gs`, `gf`)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.57.0...0.58.0",
-      "downloadCount": 35,
+      "downloadCount": 36,
       "draft": false,
       "name": "0.58.0",
       "prerelease": false,
@@ -2125,6 +2245,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-17T03:01:27.013Z",
+  "removedAt": null,
   "repo": "saberzero1/motions"
 }

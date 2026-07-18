@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-17T07:01:27.012Z",
-  "lastFetchedAt": "2026-07-17T07:01:27.012Z",
+  "lastChangedAt": "2026-07-18T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-18T07:02:26.999Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.30.1"
+    "version": "0.30.3"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,27 +22,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:b0d448e4a052145f8e980446f16fb75e9dfe81a7114b0b6968348de4f8578801",
-          "downloadCount": 96,
+          "digest": "sha256:8b421b37f0855059ace4211182de9ff1911799ce69090b52a0fd2a15201e1806",
+          "downloadCount": 8,
           "name": "main.js",
-          "size": 215424
+          "size": 216289
         },
         {
-          "digest": "sha256:da34bba62394e84554c9541c995655b06c9a9ef7e298dc77ecca0e3ab40cf2d0",
-          "downloadCount": 95,
+          "digest": "sha256:16aea09d76a39a646ed9ed50bc4312627315764ae6d493bd2dac8bd3d76ac906",
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 93,
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **Email sign-in truly no longer opens plaud.ai in your web browser.** The 0.30.2 fix hardened the popup blocker, but the real leak turned out to be different: Obsidian 1.13 (which auto-installed in late June) began rerouting every page navigation inside plugin windows to your default browser, so when Plaud's site redirected itself to its login page, that redirect landed in your browser as a stray tab. The sign-in window now keeps its navigation to itself. Verified end to end against Obsidian 1.13.2: the login redirect stays inside the in-app window and nothing opens externally. If the plugin ever cannot apply this protection, it refuses to open the sign-in window rather than leak sign-in URLs to your browser.\n\n",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.30.3",
+      "prerelease": true,
+      "publishedAt": "2026-07-17T23:22:18Z",
+      "tag": "0.30.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d6d688f0d9da8e701a2308836650a19a726f6c1df80e58e086e42b751a0753bb",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 215629
+        },
+        {
+          "digest": "sha256:c3da364ed2566ad43da2b2ffcd15659e97637f7d8481f5298249516d0a5309d4",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **Email sign-in no longer also opens plaud.ai in your web browser.** The in-app sign-in window is meant to block the popups Plaud's web page fires while it loads, but the block was silently broken, so those popups escaped to your default browser as stray tabs. The block now actually holds: clicking Sign in with email opens only the in-app window. The Google and Apple sign-in flow still opens your browser, which is intentional.\n\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.30.2",
+      "prerelease": true,
+      "publishedAt": "2026-07-17T22:48:15Z",
+      "tag": "0.30.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b0d448e4a052145f8e980446f16fb75e9dfe81a7114b0b6968348de4f8578801",
+          "downloadCount": 103,
+          "name": "main.js",
+          "size": 215424
+        },
+        {
+          "digest": "sha256:da34bba62394e84554c9541c995655b06c9a9ef7e298dc77ecca0e3ab40cf2d0",
+          "downloadCount": 103,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 100,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Reconnecting a Google or Apple (SSO) account no longer sends you to a dead end.** When a Google or Apple session lapsed during background auto-sync, the pause notice's Reconnect button opened the email sign-in window, where Google and Apple logins do not work. Reconnect now detects an SSO account and reopens the browser bookmarklet sign-in that actually works for it, and pasting the fresh token resumes the paused sync. Email and password accounts keep using the sign-in window as before.\n- **A Google or Apple session that cannot be renewed silently stops retrying instead of hammering Plaud hourly.** Those accounts keep their renewable session in your browser, not the plugin, so the silent background refresh can never succeed for them. It used to keep retrying about hourly forever. It now stops after its short backoff and waits for you to reconnect (auto-sync still recovers on its next run and via the Reconnect notice), which also avoids Plaud's per-hour refresh limit. Email and password sessions keep retrying as before, since their failures may be temporary.\n\n### Changed\n\n- **Clearer explanation of why Google and Apple accounts reconnect about daily.** The sign-in help and README now state that Plaud keeps the renewable session in your own browser, out of the plugin's reach, so SSO accounts cannot be refreshed silently the way email and password accounts can.\n\n",
-      "downloadCount": 95,
+      "downloadCount": 103,
       "draft": false,
       "name": "0.30.1",
       "prerelease": false,
