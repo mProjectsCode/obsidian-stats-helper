@@ -4,8 +4,8 @@
   "description": "Obsidian mind map / mindmap plugin for visual thinking and knowledge management. Create interactive SVG maps from yxmm code blocks with layouts, themes, shortcuts, export, and fullscreen editing. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "yonxao-mindmap",
-  "lastChangedAt": "2026-07-17T08:03:26.992Z",
-  "lastFetchedAt": "2026-07-17T08:03:26.992Z",
+  "lastChangedAt": "2026-07-18T08:00:26.985Z",
+  "lastFetchedAt": "2026-07-18T08:00:26.985Z",
   "manifest": {
     "author": "yonxao",
     "description": "A feature-rich mind map plugin that renders `yxmm` code blocks as interactive SVG mind maps. Supports 20+ layouts, interactive editing, multiple themes, and rich customization options.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "Yonxao Mind Map",
-    "version": "1.5.2"
+    "version": "1.5.3"
   },
   "name": "Yonxao Mind Map",
   "presentInCommunityList": true,
@@ -21,20 +21,56 @@
     {
       "assets": [
         {
+          "digest": "sha256:7c41f708081679c3f838660074cea0db34830934bae5c8ea647386a70ecfd711",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 832741
+        },
+        {
+          "digest": "sha256:936aebc50be65cc8de279e6ce345b92465d94754c31b815e7e493e1744ae4142",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:5d4a429cdff3a01fae2f421dea5c9af570350c31581b7b95c5d90ed53bba6beb",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 104722
+        },
+        {
+          "digest": "sha256:80dd11918ae7a6ed2ee01776c7110fff3496afc8195b06092b86765f66e62fae",
+          "downloadCount": 0,
+          "name": "yonxao-mindmap-1.5.3.zip",
+          "size": 379940
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.2...1.5.3](https://github.com/yonxao/yonxao-mindmap/compare/1.5.2...1.5.3)\n\n#### 1.5.3 - 2026-07-18\n\n##### Added\n\n- Added topic cut and paste support. Right-click a topic to use the new **Cut Topic** and **Paste Topic** actions, or press `Ctrl/Cmd+X` and `Ctrl/Cmd+V`. Cutting a topic preserves its full subtree on paste, while plain paste still inserts only the topic text as a subtopic of the focused topic.\n- Added **Copy Topic with Attributes** and **Paste Topic with Attributes** actions to the topic context menu. Attribute-aware paste restores the copied topic's attributes and entire subtree.\n- Added **Undo** and **Redo** entries to the canvas context menu for quick access to topic-tree history operations without using keyboard shortcuts.\n\n##### Changed\n\n- Reorganized i18n locale files into a unified entry, with all locale modules bundled and minified through the JS build pipeline instead of being concatenated at runtime.\n- Extracted source-mode shortcuts into a dedicated `sourceShortcuts.js` module and unified focus management across the topic editing flows.\n- Introduced a shared `sessionMemory` utility that provides TTL, LRU, and capacity-budget controls for renderer state, topic history, and image caches, replacing the previous manual Map operations.\n- Added a topic-history memory trimmer that caps the number of undo entries and total memory usage, preventing unbounded growth during long editing sessions.\n- Unified cache-key generation through a new `codeBlockMemoryKey` helper that covers line number, editor offset, and source-prefix positioning strategies, reused by topic history and renderer state.\n- Upgraded the `esbuild` build dependency from `0.27.7` to `0.28.1`.\n\n##### Fixed\n\n- Fixed the relationship structure selection menu always showing a \"Finish member selection\" item for relation types, even though the second target topic already auto-creates the relationship.\n- Fixed native `window.confirm()` dialogs triggered by deleting or cutting a topic inside fullscreen mode exiting the browser's physical fullscreen. Fullscreen now uses an in-canvas custom confirmation overlay that preserves the fullscreen state.\n\n##### 新增\n\n- 主题新增剪切和粘贴功能：右键主题菜单新增 **剪切主题** 和 **粘贴主题**，也可使用 `Ctrl/Cmd+X` 与 `Ctrl/Cmd+V`。剪切后再粘贴会恢复完整子树；普通粘贴仍按原有行为，仅把主题文字作为当前焦点主题的子主题插入。\n- 主题右键菜单新增 **复制主题及属性** 与 **粘贴主题及属性**。带属性粘贴会按剪贴板快照恢复当前可用的属性和完整子主题。\n- 画布右键菜单新增 **撤销** 和 **重做** 菜单项，无需快捷键即可操作主题树历史。\n\n##### 调整\n\n- 重构国际化语言包管理：将分散的多语言文件合并为统一入口，所有语言模块通过 JS 构建流程打包压缩，不再运行时拼接。\n- 抽离源码模式快捷键逻辑到独立的 `sourceShortcuts.js` 模块，统一主题编辑流程中的焦点管理逻辑。\n- 新增通用 `sessionMemory` 会话内存管理模块，提供 TTL、LRU 和容量预算控制，统一主题历史、视图状态和图片缓存的内存管理，替换原有的手动 Map 操作。\n- 新增主题历史内存裁剪工具，限制撤销历史的条目数和总内存占用，避免长时间编辑导致内存无限增长。\n- 统一缓存键生成逻辑，新增 `codeBlockMemoryKey` 通用函数，覆盖行号、编辑器偏移和源码前缀三种定位策略，主题历史和渲染状态共同复用。\n- 升级 `esbuild` 构建依赖从 `0.27.7` 到 `0.28.1` 版本。\n\n##### 修复\n\n- 修复关联结构选择菜单对所有结构类型都显示\"完成成员选取\"选项的问题。关联类型在第二个目标主题选中后会自动创建，不需要\"完成成员选取\"步骤，该菜单项此前会冗余出现。\n- 修复全屏模式下删除或剪切主题时，原生 `window.confirm()` 弹窗会让浏览器退出物理全屏的问题。全屏模式下改用画布内的自定义确认浮层，确保全屏状态不被打断。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "1.5.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T19:33:00Z",
+      "tag": "1.5.3"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3da4c87497f756f9acc87d313c8298c9b5fdb0034ce3976ded827528e3f1e804",
-          "downloadCount": 29,
+          "downloadCount": 35,
           "name": "main.js",
           "size": 801521
         },
         {
           "digest": "sha256:c4372c088bec6856be23b29e12a8117a8f265fab0078e2d6a9a9eac377876eb2",
-          "downloadCount": 30,
+          "downloadCount": 36,
           "name": "manifest.json",
           "size": 362
         },
         {
           "digest": "sha256:d596052fc28e5f50d78f50bcd4f82fb416cf22bfa29f27857c9259b4f8a3ce39",
-          "downloadCount": 27,
+          "downloadCount": 33,
           "name": "styles.css",
           "size": 103234
         },
@@ -47,7 +83,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.1...1.5.2](https://github.com/yonxao/yonxao-mindmap/compare/1.5.1...1.5.2)\n\n#### 1.5.2 - 2026-07-14\n\n##### Added\n\n- Added relationship line endpoint anchor support: both ends of a relationship line can now be fixed to one of 8 anchor points on the topic border. Dragging an endpoint automatically snaps to the nearest anchor, and the anchor positions are persisted as `fromAnchor`/`toAnchor` attributes. New visual feedback controls appear on the endpoints during drag, and a dedicated `relationAnchors.js` module handles anchor coordinate calculation and nearest-point snapping.\n- Improved radial layout collision detection and connector handling:\n  - Added segment-to-rectangle intersection detection using slab clipping to avoid missing diagonal line crossings.\n  - Implemented connector obstacle repulsion that calculates the displacement needed for branches to clear the connector corridor.\n  - Added root branch collision resolution to prevent center connectors from passing through other branch topics.\n  - Improved collapsed topic child-line exit angle logic to record the actual expansion direction.\n- Optimized image rendering performance to eliminate flicker:\n  - Implemented image element pool reuse to avoid repeated creation and destruction.\n  - Added cross-renderer caching of image natural dimensions to prevent redundant loading and measurement.\n  - Established image resource address mapping to support reuse of the same image across multiple locations.\n  - Set cache size limits to prevent unbounded memory growth.\n  - Improved image size capture logic for better cache hit rates.\n- Refactored structure control drag logic into a dedicated `beginStructureControlDrag` method, removing duplicate event listener bindings and improving code clarity.\n\n##### Fixed\n\n- Fixed PNG export dark mode background fallback: solidified the `--background-primary` CSS variable value during SVG export, preventing export styles from overriding summary background and text stroke display properties. Ensures summary text box backgrounds remain consistent with the preview in dark mode, and prevents incorrect fallback to white backgrounds.\n- Fixed boundary title avoidance breaking tree layout branch alignment: refactored boundary title vertical space reservation into `structureBounds.js` with a dedicated `reserveBoundaryLabelVerticalSpace` function that correctly offsets subsequent topics as a whole, preventing parent-child misalignment caused by boundary titles pushing only same-column topics.\n\n##### 新增\n\n- 关联线端点锚点功能：关联线两端可固定到主题边框的 8 个锚点位置，拖拽端点时自动吸附最近锚点，锚点位置持久化为 `fromAnchor`/`toAnchor` 属性。新增端点拖拽视觉反馈控件，独立的 `relationAnchors.js` 模块负责锚点坐标计算与最近点吸附。\n- 改进放射布局碰撞检测与连接线处理：\n  - 新增线段与矩形边界相交检测算法，使用 slab 裁剪避免斜线漏判。\n  - 实现连接线障碍物推离功能，计算分支移出连线走廊所需的最小位移。\n  - 新增根节点分支碰撞解决机制，防止中心连线穿过其他分支主题。\n  - 优化折叠主题子线出口角度逻辑，记录实际展开方向以保持折叠状态下的连线一致性。\n- 优化图片渲染性能，消除闪动：\n  - 实现图片元素池复用机制，避免重复创建和销毁。\n  - 新增图片自然尺寸的跨渲染器缓存，防止重复加载和测量。\n  - 建立图片资源地址映射，支持同一图片多处复用。\n  - 设置缓存大小上限，防止内存无限增长。\n  - 改进图片尺寸捕获逻辑，提升缓存命中率。\n- 重构结构控制拖拽逻辑，提取为独立的 `beginStructureControlDrag` 方法，移除重复的事件监听器绑定，提升代码清晰度。\n\n##### 修复\n\n- 修复 PNG 导出在深色模式下背景回退为白色的问题：在 SVG 导出时固化 `--background-primary` CSS 变量值，防止导出样式覆盖概要背景和文字描边的展示属性，确保深色模式下概要文字框背景与预览一致。\n- 修复外框标题避让导致树形图分支对齐错乱的问题：将外框标题垂直空间预留逻辑重构到 `structureBounds.js` 中的 `reserveBoundaryLabelVerticalSpace` 函数，正确处理后续主题的整体偏移，避免仅移动同列主题导致父子节点对齐被破坏。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 30,
+      "downloadCount": 36,
       "draft": false,
       "name": "1.5.2",
       "prerelease": false,
