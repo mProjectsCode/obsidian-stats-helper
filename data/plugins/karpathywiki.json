@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-07-17T05:04:27.066Z",
-  "lastFetchedAt": "2026-07-17T05:04:27.066Z",
+  "lastChangedAt": "2026-07-18T05:05:27.020Z",
+  "lastFetchedAt": "2026-07-18T05:05:27.020Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:fae49038ce9cadcdd789352ced1084854f4e84884cdea0e3e39205ddfa1a2068",
-          "downloadCount": 1351,
+          "downloadCount": 1693,
           "name": "main.js",
           "size": 3282004
         },
         {
           "digest": "sha256:c53bc2238e147a2b94de29fa9949f0dbd44e334705cdb5e7ab4e811d6434db26",
-          "downloadCount": 1388,
+          "downloadCount": 1729,
           "name": "manifest.json",
           "size": 404
         },
         {
           "digest": "sha256:95de0dded79775a99e05d814b9d109cbdf56531d3b146ede18880388e2bcaefd",
-          "downloadCount": 1321,
+          "downloadCount": 1657,
           "name": "styles.css",
           "size": 29819
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 🌟 Karpathy LLM Wiki v1.24.1\n\n## Highlights\n\nv1.24.1 is a **PATCH release** with 7 merged PRs — one major new Query Wiki pipeline improvement, targeted bug fixes across providers and code paths, and internal cleanup. **2080 tests passing across 158 files** (+255 since v1.24.0). Fully backward compatible — `data.json` from v1.24.0 continues to work unchanged.\n\n## Added\n\n- **🔍 5-stage PPR seed-selection cascade (PR #281).** Query Wiki now composes context through five complementary stages before generation: (1) lex fast path over entity/concept titles and aliases; (2) LLM keyword generation for synonyms and abbreviations; (3) local substring scan of generated keywords across titles and body snippets; (4) LLM KB fallback that re-seeds top-N candidates semantically when earlier stages are weak; (5) Personalized PageRank (Haveliwala 2002) over the `[[wiki-link]]` graph. The cascade auto-truncates at the stage that returns enough signal — no fixed cost, no LLM calls when lex suffices. PPR @5 = 27.1% vs pure knn baseline 24.1% on the project's benchmark corpus. Replaces the older binary-tier cascade.\n\n- **☁️ Bedrock Stage 1 providers (PR #277/280).** Added `bedrock-anthropic` and `bedrock-openai` provider options routed through the AWS `bedrock-mantle.<region>.api.aws` endpoint. Region selector with 14 regions (default `us-east-1`). Zero new npm dependencies; bundle ~+3 KB.\n\n- **🏗️ page-factory split + 99 new tests (PR #276).** `page-factory.ts` (1297 LOC) decomposed into 10 focused modules under `src/wiki/page-factory/`. Each module has dedicated unit tests (99 total). External API preserved via facade.\n\n## Changed\n\n- **Reviewed protection consolidated (#244 follow-up, PR #283).** Removed the hidden `<!-- reviewed: keep -->` comment marker in favor of frontmatter `reviewed: true`. If you had manually added the comment marker to protect a page's Mentions section, set `reviewed: true` in the page frontmatter instead.\n\n- **Welcome note recreate bypass (PR #271).** The `Recreate Wiki Welcome Note` command now bypasses a Tier C short-circuit that was producing a misleading German error Notice even though the LLM configuration was valid.\n\n## Fixed\n\n- **Non-lossy Mentions re-ingest (#267, DocTpoint).** On a merge, the `## Mentions in Source` section was previously rebuilt from only the new source's quotes, dropping every earlier source's accumulated mentions. The merge now parses the existing page's mentions and unions them with the new source's quotes (deduped by `(quote, source_path)` composite key). A fail-safe preserves hand-edited sections verbatim.\n\n- **Empty-response quiet path (PR #282).** Lint batch paths (`source-analyzer`, `fix-runners`, `merge-duplicates`) and the seed selector now gracefully handle empty LLM responses without noisy console errors. Closes #255 (Lint console errors, reported by `@issaqua`) and #274 (Ollama Qwen3.5:9b empty-body fail, reported by `@shyejun`). The seed selector also throws `EmptyResponseError` on empty body as defense-in-depth for the `selectSeedsWithLLM` path (#275).\n\n- **Redundant `## 基本信息` block removed (PR #283).** Five independent code paths — generation prompt, merge prompts (entity + concept), default schema, canonical schema fallback, and lint hint — all declared \"Basic Information\" as the first entity section, causing the LLM to occasionally emit a duplicate-info block. Removed from all five locations. New entity pages go frontmatter → H1 → description → related sections.\n\n- **LM Studio no-key ingest (PR #269/272, DocTpoint).** Ingestion now works with LM Studio's empty API key, consistent with Test Connection behavior.\n\n- **Settings cascade fixes (PR #281 post-e2e).** Fixed edge cases where toggling Model Scope or editing per-task model fields could leave `tempSettings` out of sync.\n\n- **`load-pages` path normalization (`#281`).** `.md` suffix handling normalized for consistent page resolution during seed-selection context loading.\n\n## Contributors\n\n- **@green-dalii** — 5-stage PPR cascade (#281), Bedrock Stage 1 (#277/280), page-factory split (#276), Tier C bypass (#271), empty-response quiet path (#282), Basic Information removal (#283), release workflow\n- **@DocTpoint** — Non-lossy Mentions re-ingest (#267), reviewed-protection consolidation (#244 follow-up), improved merge integrity for curated wiki pages\n- **@issaqua** — Reported Lint console noise (#255), leading to the empty-response quiet path\n- **@shyejun** — Tested and reported the Ollama Qwen3.5:9b empty-body regression (#274)\n- **@rkuzmin** — LM Studio no-key ingest fix (#272), enabling ingestion for local LM Studio users\n\n## Installation\n\n**From Obsidian Community Plugins:**\n1. Open Obsidian **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n4. (Or visit the [Community Plugin website](https://community.obsidian.md/plugins/karpathywiki))\n\n**Manual installation:**\n- Download `main.js` + `manifest.json` + `styles.css` from this release\n- Place them in `<vault>/.obsidian/plugins/karpathywiki/`\n\n## Configuration\n\n- **5-stage cascade:** No configuration needed — runs automatically with Query Wiki.\n- **Bedrock:** Select `bedrock-anthropic` or `bedrock-openai` in Settings → Wiki → LLM Provider, enter your AWS access key, and choose a region.\n- **Model per task:** Settings → Wiki → Model Scope dropdown to switch between Unified / Per-Task mode.\n- **Custom Query Instructions:** Toggle the ⚙ panel inside the Query Wiki view.\n\n## Full Changelog\n\nFull changelog: [`1.24.0...1.24.1`](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.24.0...1.24.1)\n",
-      "downloadCount": 1388,
+      "downloadCount": 1729,
       "draft": false,
       "name": "1.24.1",
       "prerelease": false,
@@ -606,7 +606,7 @@
         },
         {
           "digest": "sha256:3c7b5d5d0c7b1385547612d0a9c91c4ea4b337fa7f65d0ad98d07e952fb0c6ec",
-          "downloadCount": 514,
+          "downloadCount": 515,
           "name": "styles.css",
           "size": 10322
         }
@@ -684,26 +684,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 545,
+          "downloadCount": 549,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 561,
+          "downloadCount": 565,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 542,
+          "downloadCount": 546,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 561,
+      "downloadCount": 565,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Search, display, and insert notes using a specified note property instead of the file name. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "property-over-file-name",
-  "lastChangedAt": "2026-07-17T05:04:27.066Z",
-  "lastFetchedAt": "2026-07-17T05:04:27.066Z",
+  "lastChangedAt": "2026-07-18T05:05:27.020Z",
+  "lastFetchedAt": "2026-07-18T05:05:27.020Z",
   "manifest": {
     "author": "David V. Kimball",
     "authorUrl": "https://davidvkimball.com",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:0437a77a85ce107350196f4311ce94763927299e7683bb292c5b9224f31da154",
-          "downloadCount": 183,
+          "downloadCount": 185,
           "name": "main.js",
           "size": 146821
         },
         {
           "digest": "sha256:1cf64bffdc999c27b2c19ed1caed6559168fa7a1d31c0923bd66425c77e74510",
-          "downloadCount": 430,
+          "downloadCount": 436,
           "name": "manifest.json",
           "size": 383
         },
         {
           "digest": "sha256:5f2db91851c0b2528bf684a70802c19bd6f25bfd532234f45de8e10c15a89dbd",
-          "downloadCount": 143,
+          "downloadCount": 145,
           "name": "styles.css",
           "size": 8073
         }
       ],
       "author": "github-actions[bot]",
       "description": "Remove backlinks integration and add a Hide unresolved links toggle\n\nBacklinks were unreliable to override and effectively unfixable, so the\nintegration is removed entirely. BacklinkService and all of its wiring,\nsettings, and styles are gone, leaving the rest of the plugin untouched.\n\nNew setting: Hide unresolved links. When enabled, the quick switcher and\nlink suggester only surface notes that already exist, hiding unresolved\nlink placeholders such as site-absolute paths like /blog/... that have no\nmatching note in the vault.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-property-over-file-name/compare/0.7.9...0.8.0",
-      "downloadCount": 430,
+      "downloadCount": 436,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -60,7 +60,7 @@
         },
         {
           "digest": "sha256:9084f8ef199ced0be5f1aeed60db5ed377a25eab5a82f764d7222d42d4a9c329",
-          "downloadCount": 546,
+          "downloadCount": 547,
           "name": "manifest.json",
           "size": 383
         },
@@ -73,7 +73,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Migrate settings to Obsidian 1.13 declarative API\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-property-over-file-name/compare/0.7.8...0.7.9",
-      "downloadCount": 546,
+      "downloadCount": 547,
       "draft": false,
       "name": "0.7.9",
       "prerelease": false,
@@ -90,7 +90,7 @@
         },
         {
           "digest": "sha256:35c0a6ad7dd4b92419b0759ffc4e298a1c6a2404da055c2322dab4ea81109868",
-          "downloadCount": 504,
+          "downloadCount": 505,
           "name": "manifest.json",
           "size": 383
         },
@@ -103,7 +103,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Disable the noisy sentence-case lint rule instead of maintaining per-rule exception lists\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-property-over-file-name/compare/0.7.7...0.7.8",
-      "downloadCount": 504,
+      "downloadCount": 505,
       "draft": false,
       "name": "0.7.8",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:79741a6f5e6790c217dbd19a281e9c69c97257b228a095dcbf000b36f68949e1",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 383
         },
@@ -133,7 +133,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Drop the inline sourcemap from production builds for reproducibility\n\nAn inline sourcemap base64-embeds the build machine's absolute file\npaths into main.js, so a CI build and the Obsidian scorecard's\nreproducer produce byte-different output and the \"build verification\"\ncheck fails even from identical source.\n\nGate the sourcemap on build mode: production (pnpm build) now ships\n`sourcemap: false`, while the dev/watch build keeps `sourcemap:\n\"inline\"` for local debugging. Production main.js is now deterministic\ngiven the locked dependency tree, so the reproducer matches. Bonus:\nsmaller shipped main.js, no leaked build paths.\n\nBump to 0.7.7.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-property-over-file-name/compare/0.7.6...0.7.7",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.7.7",
       "prerelease": false,
@@ -150,7 +150,7 @@
         },
         {
           "digest": "sha256:569092d2dc6ffa5590f5f4d4a2a32b638ce52b897f167027a64f433efcb13302",
-          "downloadCount": 110,
+          "downloadCount": 111,
           "name": "manifest.json",
           "size": 383
         },
@@ -163,7 +163,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Drive window title from events instead of the workspace.updateTitle hook\n\nThe previous implementation only worked when Obsidian exposed\n`workspace.updateTitle` as a method we could monkey-patch. That symbol\nis undocumented and not in the public type definitions; on the\nObsidian versions where it isn't there, `enable()` silently skipped\neverything, our handlers all gated on `this.enabled`, and the OS title\nfell through to Obsidian's own filename-based logic for every file.\n\nRewrite the service to stop depending on the override:\n\n- `applyTitle()` writes directly to `workspace.rootSplit.doc.title`\n  from each event handler. It also schedules a single deferred re-write\n  (80ms, debounced) so if Obsidian's own internal title code runs\n  synchronously *after* our handler returns on the same tick, we\n  overwrite it back to the property value on the next tick.\n- The legacy `workspace.updateTitle` override is still installed when\n  the symbol exists — defense in depth — but is no longer required.\n- Listen to a broader set of events that should refresh the title:\n  `file-open`, `active-leaf-change`, `metadataCache.changed` (filtered\n  to the active file path), `metadataCache.resolved`, `layout-change`,\n  and `vault.rename` / `vault.delete` (to keep the per-file memo\n  honest).\n- `enable()` and `registerEvents()` are idempotent; the per-file\n  `lastKnownTitles` memo is preserved from the previous fix so a\n  transient cache miss can't downgrade a correct title.\n- `onunload` clears the deferred timer and the memo.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-property-over-file-name/compare/0.7.5...0.7.6",
-      "downloadCount": 110,
+      "downloadCount": 111,
       "draft": false,
       "name": "0.7.6",
       "prerelease": false,
@@ -180,7 +180,7 @@
         },
         {
           "digest": "sha256:0966a2e00e02e0400b9f6924fb4280abf6b47ff3ee4d662b7f1659c73b3ef450",
-          "downloadCount": 707,
+          "downloadCount": 708,
           "name": "manifest.json",
           "size": 383
         },
@@ -193,7 +193,7 @@
       ],
       "author": "davidvkimball",
       "description": "In properties setting added.\r\nAddresses #4. ",
-      "downloadCount": 707,
+      "downloadCount": 708,
       "draft": false,
       "name": "0.7.5",
       "prerelease": false,
@@ -210,7 +210,7 @@
         },
         {
           "digest": "sha256:00f25ff7d1ac9a4d0e9fca12ffc8dff4d362d26153f6bfccb91d6c69bdac2014",
-          "downloadCount": 1570,
+          "downloadCount": 1571,
           "name": "manifest.json",
           "size": 383
         },
@@ -223,7 +223,7 @@
       ],
       "author": "davidvkimball",
       "description": "Completely refactored and rewrote graph functionality from scratch. \r\nFixed linked mentions section.\r\nOptional hide toggle for unlinked mentions section, which doesn't really work (especially if more than one note share a file name).\r\nRestored MIT license. ",
-      "downloadCount": 1570,
+      "downloadCount": 1571,
       "draft": false,
       "name": "0.7.4",
       "prerelease": false,
@@ -240,7 +240,7 @@
         },
         {
           "digest": "sha256:a39acd01390600f6fbf1139968f51ec65ca73a73e4986f62486a0a52d10d8064",
-          "downloadCount": 279,
+          "downloadCount": 280,
           "name": "manifest.json",
           "size": 383
         },
@@ -253,7 +253,7 @@
       ],
       "author": "davidvkimball",
       "description": "Update minimum version to 1.11.0 and remove backwards compatibility for SettingGroup.",
-      "downloadCount": 279,
+      "downloadCount": 280,
       "draft": false,
       "name": "0.7.3",
       "prerelease": false,
@@ -270,7 +270,7 @@
         },
         {
           "digest": "sha256:b59f8ce61e918d5f577cab53f5c537542c735c6b5f315f441ea6fc80574458ae",
-          "downloadCount": 147,
+          "downloadCount": 148,
           "name": "manifest.json",
           "size": 393
         },
@@ -283,7 +283,7 @@
       ],
       "author": "davidvkimball",
       "description": "Fixed quick switcher behavior to more closely match vanilla Obsidian's quick switcher.",
-      "downloadCount": 147,
+      "downloadCount": 148,
       "draft": false,
       "name": "0.7.2",
       "prerelease": false,
@@ -300,7 +300,7 @@
         },
         {
           "digest": "sha256:f1a0b91481979a1f69f3239c9e4056fdf33dcb9c4b57e070e95e9b6da64829cc",
-          "downloadCount": 40,
+          "downloadCount": 41,
           "name": "manifest.json",
           "size": 393
         },
@@ -313,7 +313,7 @@
       ],
       "author": "davidvkimball",
       "description": "### Excluded Files Support & Customization\r\n\r\n- **Flexible Behavior Settings**: Added dropdowns for both the **Quick Switcher** and **Link Suggester** with three modes:\r\n    - **Deemphasize** (Default): Moves excluded files to the bottom and grays them out.\r\n    - **Hide entirely**: Completely removes excluded files from all search results.\r\n    - **Ignore**: Treats them as normal files, bypassing Obsidian's exclusion rules.\r\n- **Smart Initial View**: Even in \"Deemphasize\" mode, excluded files are now hidden when the search box is empty. This keeps folders like `#tags/` out of your \"recent files\" list unless you explicitly search for them.\r\n- **Robust Detection**: Implemented a multi-stage check that uses both Obsidian's internal APIs and a manual fallback to `userIgnoreFilters`, ensuring consistent behavior across all vault structures.\r\n- **Stability Fix**: Resolved an issue where direct access to experimental Obsidian APIs was causing the Quick Switcher to crash.",
-      "downloadCount": 40,
+      "downloadCount": 41,
       "draft": false,
       "name": "0.7.1",
       "prerelease": false,
