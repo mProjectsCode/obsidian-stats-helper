@@ -4,8 +4,8 @@
   "description": "AI writing assistant with unified chat, planning, and ambient editing. Connects to local or cloud providers. Features vault-wide RAG retrieval, knowledge graph, agentic tool use. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "writing-assistant-chat",
-  "lastChangedAt": "2026-07-17T09:00:27.005Z",
-  "lastFetchedAt": "2026-07-17T09:00:27.005Z",
+  "lastChangedAt": "2026-07-18T09:01:27.009Z",
+  "lastFetchedAt": "2026-07-18T09:01:27.009Z",
   "manifest": {
     "author": "Resolve-public",
     "authorUrl": "https://github.com/Resolve-public",
@@ -15,7 +15,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.12.5",
     "name": "Writing Assistant Chat",
-    "version": "1.4.1"
+    "version": "1.4.2"
   },
   "name": "Writing Assistant Chat",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:4e427510a0005f0fc13c8986699fe62c8c58ff48c2408e0de4df2e094e34fec0",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 3017193
+        },
+        {
+          "digest": "sha256:ca37138624c2b38ed889478de60825e23d842feeeac52ee4211e36ad68ac16d1",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 523
+        },
+        {
+          "digest": "sha256:4709b0eb693b94756fd5836114f06de6f9fa1c8169f4309fbd19b772e05eb11f",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 219432
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Writing Assistant 1.4.2\r\n\r\nA compliance and hardening release. There are no new features and no intended change to how the plugin looks or behaves; this pass brings the codebase in line with Obsidian's developer guidelines from the plugin-directory review and tightens error handling, DOM access, and timer usage across the surface. The one visible fix keeps popout windows well-behaved and guards a CSS feature behind proper support detection.\r\n\r\n### Fixed\r\n\r\n- **Popout-safe DOM work**: chat DOM operations now resolve against the active document, so the plugin behaves correctly when a leaf is moved into a popout window rather than the main window.\r\n- **CSS anchor positioning is now feature-gated**: anchor-based positioning is guarded behind an `@supports` feature query, so browsers without support fall back cleanly instead of mispositioning.\r\n- **Safer error surfacing**: thrown errors in the transport and retry layers are normalized before they reach you, unknown JSON is guarded during conversation normalization, and rejected async UI callbacks are now surfaced to the user safely instead of being lost.\r\n\r\n### Changed\r\n\r\n- **Retired legacy singular edit fields**: the old single-edit proposal/applied-edit fields were removed in favor of the current multi-file edit model, with back-compat preserved for existing saved data.\r\n- **Window timer APIs across the plugin**: timer calls now consistently use the `window` timer APIs.\r\n\r\n### Developer\r\n\r\n- Adopted Obsidian's recommended ESLint config and the `prefer-create-el` rule, with the handful of deliberate exceptions documented and justified.\r\n- Added the stylelint dependency and simplified CSS `text-decoration` declarations.\r\n- Tightened dependency linting, moved to Node builtins where appropriate, and allowed `fetch` globals only in the transport modules.\r\n- Removed unnecessary TypeScript type assertions and the package dependency-ban rule.\r\n- Updated TypeScript and ESLint tooling for parity with the review server's toolchain.\r\n- Added third-party notices and Claude Code provider disclosures per Obsidian developer guidelines.\r\n- Release assets are now attested with build provenance.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.4.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T16:46:53Z",
+      "tag": "1.4.2"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:22dcb9f52af34f8ce2d66d859a6cdb1246741212a3a8ca4641a3152fe0837c1b",
-          "downloadCount": 16,
+          "downloadCount": 19,
           "name": "main.js",
           "size": 3014572
         },
         {
           "digest": "sha256:ab1c229b2b38843a7507bf30ea278b674e8656168353740067aa232c5858e2f3",
-          "downloadCount": 19,
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 523
         },
         {
           "digest": "sha256:ec816e4f235c0b711feaad86fba2b25cdbca42f505084fbed68919322c4b22da",
-          "downloadCount": 15,
+          "downloadCount": 18,
           "name": "styles.css",
           "size": 219069
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Writing Assistant 1.4.1\r\n\r\nA polish release on top of 1.4.0. The chat surface gets two small quality-of-life features and a coherent motion pass, while the styling pipeline moves to Tailwind CSS 4 underneath without any visual change. Nothing here alters provider behaviour or the agentic loop; it is about making the everyday surface calmer, faster to search, and more inviting when empty.\r\n\r\nThe empty chat state is no longer blank. It now presents a rotating carousel of writing prompts you can page through or let advance on its own. Conversation history became searchable by what was actually said, not just by title, so you can find a session by a phrase from inside it. Overlays across the chat now open and close with one shared, reduced-motion-aware animation, and the model and knowledge selectors share a single trigger style.\r\n\r\n### Added\r\n\r\n- **Empty-state prompt carousel**: the empty chat view now shows a sliding carousel of writing prompts that auto-advances, pauses on hover, and can be paged manually.\r\n- **History search by message body**: the history drawer now matches against the text inside each conversation, not only its title, using an on-demand exact substring scan with no persistent index.\r\n\r\n### Changed\r\n\r\n- **Unified overlay motion**: popovers and selectors across the chat now share one open-and-close animation, and it honours the system reduced-motion preference.\r\n- **Shared model and knowledge selector styling**: the model trigger and knowledge selector now draw from a common set of styles for a consistent appearance.\r\n- **Styling pipeline migrated to Tailwind CSS 4**: the entire CSS build moved from Tailwind 3 to 4 with no intended visual change, verified against a v3 visual baseline in both light and dark themes.\r\n\r\n### Fixed\r\n\r\n- **Benchmarks now require a loaded local model before running**, preventing runs from starting against a local provider with no model loaded.\r\n\r\n### Developer\r\n\r\n- Added an Obsidian UI visual rendering harness for catching unintended style regressions, and aligned it with provider brand icons.\r\n- Updated the Claude agent SDK to 0.3.207 with an added SDK contract test, and enabled type-check-only (`noEmit`) builds.",
-      "downloadCount": 19,
+      "downloadCount": 22,
       "draft": false,
       "name": "1.4.1",
       "prerelease": false,

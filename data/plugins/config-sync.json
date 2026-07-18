@@ -4,8 +4,8 @@
   "description": "Selective, on-demand distribution of vault configuration (snippets, hotkeys, plugin settings) across devices and vaults. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "config-sync",
-  "lastChangedAt": "2026-07-17T08:03:26.992Z",
-  "lastFetchedAt": "2026-07-16T09:02:26.990Z",
+  "lastChangedAt": "2026-07-18T09:01:27.009Z",
+  "lastFetchedAt": "2026-07-18T09:01:27.009Z",
   "manifest": {
     "author": "xooooooooox",
     "authorUrl": "https://github.com/xooooooooox",
@@ -14,11 +14,581 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Config Sync",
-    "version": "0.23.6"
+    "version": "0.29.0"
   },
   "name": "Config Sync",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:674ba9161209350b1e385f3ab5831e00f14b9b0d43e6f5f9bc5955aa2e7e299b",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 167483
+        },
+        {
+          "digest": "sha256:8b86760ea44d3a348d82c7d006d448c6850067de464c6256369c7c8d954f8e6b",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 51200
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Install now reproduces the version your settings were captured on, and fixes a class of installs that were failing outright.\r\n\r\n## Install picks the right version\r\n\r\n- **Fixes plugins whose GitHub \"latest release\" is a beta.** The installer used to grab GitHub's newest release, which for some plugins (e.g. Calendar) is a separate beta line whose manifest declares a different plugin id — so the install failed with \"…identifies as 'calendar-beta'\". It now resolves the version the way Obsidian's own community browser does: from the plugin's root manifest, then downloads that exact tagged release. Calendar and friends install cleanly again.\r\n- **Installs the captured version, not just the latest.** The store already records which plugin version each item's settings were captured on. Applying an install now targets that version, so a device reproduces the environment the settings came from and avoids settings/schema mismatches. If that version's release has since been removed, it falls back to the latest stable and tells you.\r\n- **Update targets the store's version too.** The \"Outdated on this device\" action now reads \"Update to 1.5.10\" (the version the store was captured on) instead of a vague \"Update to latest\", and only offers to update when this device is actually behind — never a surprise downgrade.\r\n- The expanded install detail names the target version (\"applying installs the captured version 1.5.10\").\r\n\r\n## Footer count fixed\r\n\r\nThe bottom-left summary counted only the main section, so staging nine plugins in \"Not installed\" showed \"0 selected · +9 to install\" while the section header said \"9 selected\" and the button \"Apply 9 items\". The summary now leads with the true total (\"9 selected · 9 to install\") and reads consistently with the section headers and the Apply button.\r\n\r\nVersion-pinning applies to community-catalog installs; BRAT-managed plugins continue to track their own beta channel.\r\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.29.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T21:20:51Z",
+      "tag": "0.29.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a54466835720a7d290b408e23974bd4ee669957ce16e76467eaf85a47b057313",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 166713
+        },
+        {
+          "digest": "sha256:d262340f191c74d1f9ea21e5c6e354d14e3b1d04f6b71a5ced2fae89f445f685",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 51200
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Bulk installs no longer freeze on a single stalled download.\r\n\r\n## The bug\r\n\r\nA fresh-device \"install & enable\" of dozens of community plugins runs the installs one at a time. Obsidian's network request has no timeout, so if any one plugin's download stalled — the connection neither completing nor failing — the whole run hung on that item. Progress stopped, and because the run never finished, the Apply button stayed disabled through refreshes and re-selection; only closing and reopening the Sync Center made it clickable again, after which it could stall on the next bad download.\r\n\r\n## The fix\r\n\r\n- Every install download is now bounded: each attempt has a 30-second ceiling, and an idempotent download retries up to three times before giving up. A dead or unreachable plugin now fails after at most ~90 seconds with an \"install failed\" warning, and the run moves on to the next plugin instead of hanging.\r\n- A definitive \"not found\" (HTTP 4xx) fails immediately without pointless retries; timeouts, network errors, and server errors (5xx) are the ones retried.\r\n- Retries surface in the live status line (\"download failed — retrying (2/3)…\") instead of silence.\r\n- Because every item now always settles, the run always completes and the Apply button always re-enables — no more close-and-reopen dance. Successful installs still persist, so a partial run is resumable by simply applying again.\r\n\r\nApplies to both community-catalog and BRAT installs.\r\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.28.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T19:12:37Z",
+      "tag": "0.28.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bb6555b0fd44a6cb6f82683287ee8c5b07f33f17f0cfde5f3ad3ae722a9326ce",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 165530
+        },
+        {
+          "digest": "sha256:76f378a60747b9f3437892589118359aacd3f8c431f80b4f85c6e57d6f104851",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 51200
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Search that stays coherent on phones, a legible All-items list, and a set of visual-language fixes — plus one remote-sync bug.\r\n\r\n## Search\r\n\r\n- **Mobile search keeps everything in sync.** The compact search field used to refresh only the item list; the filter pills and the action sections kept their pre-search numbers, so searching with a direction filter active could show \"0 of 58\" with no explanation. Typing now co-renders pills, sections, and select-all — without touching the input element, so the soft keyboard stays open.\r\n- **Starting a search resets the direction filter to All** (desktop and mobile). Searching means \"find this item\"; a leftover ↑/↓ filter silently hiding the matches was a trap.\r\n\r\n## All items, grouped\r\n\r\n- The All-items list now groups its rows under scope headers — Obsidian, Core plugins, Community plugins, Beta — alphabetical within each group, so the ordering reads as intended instead of looking shuffled at the invisible group seams. Single-scope views stay flat.\r\n- Group headers (here and in the remote comparison) get a real identity: smaller uppercase label with a hairline divider, clearly distinct from item rows.\r\n\r\n## Visual language\r\n\r\n- **Lock ↔ key.** An encrypted item without a passphrase on this device used to show a second lock (a gold emoji, no less) next to the mode badge's lock. The state column now shows a key — \"needs the passphrase\" — in the proper theme color.\r\n- **Direction-colored action buttons at every count.** Capture is a solid orange button, Apply solid accent — the same language as the remote Pull/Push buttons. At 0 items they keep their colors, just faded, instead of Capture washing out to grey.\r\n- **One type scale.** Item rows had never been given a size and rendered larger than every other list in Obsidian; the panel now uses the standard UI list size throughout.\r\n\r\n## Remote sync\r\n\r\n- **Pull lights up when only version info is newer.** The remote note \"contents match — remote has newer version info; Pull refreshes it\" now comes with a Pull button that actually offers to do it; before, both buttons stayed dimmed unless file contents differed.\r\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.27.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T17:57:50Z",
+      "tag": "0.27.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3a0376c355587c5dd73b7a0d8cbe2ca3b7884a267782cdd3d3b7c5c4d5219a58",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 164966
+        },
+        {
+          "digest": "sha256:b0de9af56a0f64ca4650fddca56201e3ca096f5b28770f96c965b78d2ccc6a8e",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:31a08a01dd28ca09ae6b7ec55a11147da3ef13a7ff88108c9c1e0a18a94e0a58",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 50157
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A Sync Center consistency pass, driven by a real-vault desktop + phone session: one checkbox column, one color per meaning, a Beta scope the sidebar had been missing, and two mobile-only bugs.\r\n\r\n## Layout & color\r\n\r\n- **One checkbox column.** The action sections (Outdated / Disabled / Not installed) kept their rows' checkboxes ~11px deeper than everything else — they were nested in a second framed card. That inner frame is gone (less visual noise, too), and the section-head checkboxes now right-align into the same column as every row checkbox and the select-all. Verified pixel-equal on desktop and phone.\r\n- **One color per meaning.** The apply direction (↓) used the theme accent in some places and palette purple/blue in others; \"active/selected\" had the same split. Both are now the theme accent everywhere — header pills, sidebar badges, state icons, checkbox fills, segment buttons, progress bars, the settings state text, and the sidebar's active scope. Capture orange, in-sync green, pull cyan / push pink are untouched.\r\n- **Select-all disappears when there's nothing to select** instead of lingering as a washed-out disabled box.\r\n\r\n## Sidebar & ordering\r\n\r\n- **Beta scope.** Plugins tracked in the BRAT index get their own sidebar entry (and scope-switcher entry on mobile), between Community plugins and custom items — matching the settings panel's Beta tab. Shown only when it has members, and those plugins leave the Community scope so each item lives in exactly one place.\r\n- **Deterministic ordering.** Items used to appear in store-accretion order, so a core item could sit mid-way through the Obsidian ones. The panel now sorts by scope (Obsidian → Core → Community → Beta → custom), then by name.\r\n\r\n## Mobile\r\n\r\n- **Selections no longer re-check themselves.** Mobile Obsidian recreates the view on tab switches, and each recreation re-ran the \"pre-check pending items\" seeding — so a cleared selection came back checked after an apply. Staging state now lives at session level: seeding happens once per session, and a recreated view restores your actual selection.\r\n- **Filter pills on one line.** On phones the pills use the panel's glyph language (All n · ↑ n · ↓ n · ✓ n · ○ n) so all five always fit without scrolling; the full labels remain as tooltips and on desktop.\r\n- **Capture/Apply stay side by side.** The \"N selected\" count takes its own line instead of pushing the buttons into a vertical stack.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.27.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T17:01:30Z",
+      "tag": "0.27.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3edcdc329f49991797019d3e1813179a1b9daefe85f6734aa5d8100670b15af2",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 164047
+        },
+        {
+          "digest": "sha256:488397c9929619841c6e413a4c91eb406267b23eecec23d5e62fec8d1f9955f5",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:49672bcd656692537bf6b6b812c145056742b6249918fd5df6ddddf841b43d37",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 48613
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Sync Center polish, in two batches: the mobile layout round 2, and a set of small desktop/shared fixes found right after.\r\n\r\n## Mobile layout, round 2\r\n\r\n- **Bottom actions clear the navigation bar.** The panel now reserves space below the footer for Obsidian's mobile toolbar (plus breathing room for floating status-bar snippets), so Capture/Apply are never covered.\r\n- **The compact header breathes.** The search field sits on its own line next to the select-all box, separate from the filter pills; the scope switcher gets a proper 44px touch height.\r\n- **One \"Sync Center\" title.** The pane header already names the view, so the in-panel duplicate is gone (desktop too).\r\n- **Expanded item details use one scale.** Version lines, policy buttons, and file rows inside an expanded card share the same compact size and indent on both platforms.\r\n\r\n## Shared fixes\r\n\r\n- **\"refreshed just now\" is back where it belongs.** A leftover auto-margin from the title removal centered the note in the header; it right-aligns next to the ↻ again.\r\n- **Mode badges now say what they mean.** The item-row badges are a lock family: a padlock for Encrypted mode (the whole file is stored encrypted) and a \"field lines + small padlock\" mark for Fields mode (only sensitive fields are filtered/encrypted). Both carry hover tooltips; the old ▤ glyph read as a broken rectangle.\r\n- **Select-all checkboxes brightened.** Select-alls stay grey — they carry no capture/apply direction — but the checked and half-checked fills lift from muted to bright grey, and the section-head select-alls join the same custom style instead of falling back to the native accent checkbox.\r\n- **One refresh icon.** The header ↻ was forced to 14px and read as a different icon than the Remotes ↻; both now use the default icon size, and the header glyph still lines up exactly with the checkbox column.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.27.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T16:13:23Z",
+      "tag": "0.27.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e8307a12b491badc4d54964f32b3bb525d06d75ad84616dd0bc49063451863b2",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 163516
+        },
+        {
+          "digest": "sha256:07f0e3a0da30261cccd5e0cad8fefcf727a69df73cc3a15cb37ee8a27fde3c0d",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:ccfc8acc6f61daa78e93226338f713620027e990ed54cf0f7b4944161a878ab3",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 45620
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Fixed\r\n\r\n- **Mobile layout, five fixes** (all scoped to mobile; desktop unchanged):\r\n  - The passphrase input takes a full line of its own — the text caret no longer lands on the Set button; Set/Clear follow on a row below.\r\n  - Exclusion-list rows put the plugin name on its own line (no more mid-name wrapping); the state phrase and toggle share the second line.\r\n  - Long plugin names in the Sync Center truncate with an ellipsis instead of pushing the checkbox out of its column.\r\n  - Checkboxes drop Obsidian mobile's giant block styling for a compact 24px box.\r\n  - The compact header keeps the title and small count pills on one line, hides the \"refreshed … ago\" text (the ↻ tooltip keeps it), and the search field is always present.\r\n- **\"Remote has newer version info\" now compares locks semantically.** The hint came from a byte comparison of the two store locks, so it never cleared after a pull (a merged local lock keeps local-only entries and its own formatting). It now shows only when the remote actually captured later or carries version entries this device hasn't adopted — right after a pull it reads \"remote matches the local store\", consistent with the header and the sidebar ✓.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.27.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T14:55:46Z",
+      "tag": "0.27.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:320a71e026b0e2a8152e3e98195f4306c222e8ebb9c3c18e1f99488f99df8c2e",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 163182
+        },
+        {
+          "digest": "sha256:d26741a713d60172c146494d5ec57327a26cf95fab308fce20493eed047a7bcb",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16c06913b0e65371a19674ffe8cee4cbcf8a93a33170c80ce1c23e2d3f6a39c3",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 43494
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Changed\r\n\r\n- **\"Selected\" replaces the git-flavored \"staged\" everywhere, and idle states go quiet.** Section headers no longer show \"not staged\" and the footer no longer shows \"0 staged\" — an empty selection needs no label (the checkboxes and count pills already carry that). A non-empty selection reads \"N selected\" / \"N selected · +N to install\". The not-installed ladder's no-action choice is now \"Settings only\" (sync the settings without installing), and the install-failure guidance says \"settings were applied\" — which is what actually happens — instead of \"staged\".\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.27.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T14:19:16Z",
+      "tag": "0.27.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d563b432ec5494b616e6b8e6b61f3f1b87d605b485a13b72ddcecb503492edac",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 163147
+        },
+        {
+          "digest": "sha256:45a505c1fcd75acbe16c2bb804c0eb595bfecec943edaa901608b09be82aa476",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16c06913b0e65371a19674ffe8cee4cbcf8a93a33170c80ce1c23e2d3f6a39c3",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 43494
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Fixed\r\n\r\n- **Every action-section row is now actionable.** A disabled plugin whose settings already match the store (✓ identical) had no enable control — the third appearance of the same gap (install-only 0.24.0, enable-only 0.27.0, update-only 0.27.1). The rule is now structural: in \"Not installed / Disabled / Outdated on this device\", every row stages except encrypted-locked ones — the section's action (install / enable / update) is the payload, whether or not the settings transfer happens to be empty. Newly covered cells:\r\n  - disabled + identical → \"identical to the store — applying just turns the plugin on\" with ⏻ Enable;\r\n  - not-installed + identical (leftover settings matching the store) → the install ladder;\r\n  - outdated + no settings → \"no settings anywhere — updates the plugin only\";\r\n  - and any state action with no store data runs action-only instead of tripping the missing-store-data error.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.27.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T13:02:34Z",
+      "tag": "0.27.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:de6fcf51d670c2b61895179514cf246a25b3ba6a6858430aacf72c2af10a85ef",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 162540
+        },
+        {
+          "digest": "sha256:7aa15e5f3aa8f0b98607c033857bbe09e3f6005d3aa96362d7c810804f1a298e",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16c06913b0e65371a19674ffe8cee4cbcf8a93a33170c80ce1c23e2d3f6a39c3",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 43494
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Release pipeline only — no functional changes\r\n\r\nIdentical plugin code to 0.27.1. This release restores the attestation step to the official obsidian-sample-plugin template (`actions/attest@v4`) after the 0.27.x \"attestation failed cryptographic verification\" review errors were identified as an ecosystem-wide scorecard false positive — GitHub's attestations API stopped inlining the Sigstore bundle (`bundle: null` + short-lived `bundle_url`) and the review's verifier still read the inline field. All of this repository's attestations verify cleanly with `gh attestation verify`.\r\n\r\nCommunity report: https://forum.obsidian.md/t/scorecard-false-positive-release-asset-attestations-reported-as-failing-cryptographic-verification/116203\r\n\r\nSee 0.27.1 for the latest functional changes.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.27.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T12:06:32Z",
+      "tag": "0.27.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:de6fcf51d670c2b61895179514cf246a25b3ba6a6858430aacf72c2af10a85ef",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 162540
+        },
+        {
+          "digest": "sha256:853cc9071e106574e79c7e81158f2edda90b6ce439c767d2a1d084e5b73a4f7e",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16c06913b0e65371a19674ffe8cee4cbcf8a93a33170c80ce1c23e2d3f6a39c3",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 43494
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Release pipeline only — no functional changes\n\nIdentical plugin code to 0.27.1. This release was cut while chasing the catalog review's \"attestation failed cryptographic verification\" errors, which later turned out to be a **scorecard false positive affecting the whole ecosystem**: GitHub's attestations API stopped inlining the Sigstore bundle (now `bundle: null` + a short-lived `bundle_url`), and the review's verifier still read the inline field. The attestations themselves verify cleanly with `gh attestation verify` for every release.\n\n- Community report: https://forum.obsidian.md/t/scorecard-false-positive-release-asset-attestations-reported-as-failing-cryptographic-verification/116203\n- The attestation workflow has since been reverted to the official obsidian-sample-plugin template (`actions/attest@v4`).\n\nSee 0.27.1 for the latest functional changes.\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.27.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T08:10:44Z",
+      "tag": "0.27.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:de6fcf51d670c2b61895179514cf246a25b3ba6a6858430aacf72c2af10a85ef",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 162540
+        },
+        {
+          "digest": "sha256:8e50146651117736cba27c3cd1e821a7b1aad740050ccac9e5df345d3493da6e",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16c06913b0e65371a19674ffe8cee4cbcf8a93a33170c80ce1c23e2d3f6a39c3",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 43494
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Fixed\r\n\r\n- **Phantom \"To capture\" on plugin on/off lists (devices with no exclusions).** The switch-list code paths detected \"this is an on/off list\" via `exceptions non-empty`, so exception-free devices fell back to byte comparison — local enable-order vs store-stable order read as a permanent To capture whose diff was empty and whose capture changed nothing. Status, capture, and apply now all take the switch path by group identity: status compares membership as a set, capture writes store-stable order, apply merges properly.\r\n- **Release attestations the catalog review can verify.** Release assets are now attested with `attest-build-provenance`, one single-subject attestation per file — the previous generic-attest bundle failed Obsidian's automated verification (even though `gh attestation verify` passed).\r\n\r\n## New\r\n\r\n- **Update-only staging.** An outdated plugin whose settings already match the store had no upgrade path (its row was inert). It now stages in \"Outdated on this device\" with \"⤓ Update to latest\" and the note \"no content changes — updates the plugin only\". Config Sync itself is exempt — updating it mid-run would unload the code running the update — and points at Obsidian's own plugin updater (both in the UI and as a core-level guard).\r\n- **Switch-list applies name what they toggle.** Applying an on/off list reports \"turns on: …\" / \"turns off: …\" with plugin ids, so a store list that flips a plugin you just enabled is visible in the report instead of silent.\r\n- **Live run progress.** While capturing/applying, a status line under the action bar shows the current item and step (\"Markmind — downloading from the community catalog…\", \"writing settings…\", \"enabling…\"), the button's progress bar shimmers while a step runs, and a step exceeding ~8 seconds notes that network fetches can take a while. Reduced-motion settings are respected.\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.27.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T07:24:59Z",
+      "tag": "0.27.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:435ec120a400568b8455b7fa44ed5c626995138574382f7ebaaa76c7abce262b",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 160493
+        },
+        {
+          "digest": "sha256:3cd3638b283e38bf1045df974e1b8de6a5a35ec82b5b392508f61d5fba591010",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:283b4973a8ae505203b0597020db49ce5da5e9affd3edd633b60b085270c4fec",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 42022
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## New\r\n\r\n- **Enable rides capture too.** The Disabled section's ⏻ Enable / Keep disabled choice now appears in BOTH directions, not just apply. A disabled plugin whose settings live only on this device (not captured yet) previously had no enable control at all — its ladder now shows \"On capture\" (default ⏻ Enable), and the capture run turns the plugin on after capturing its settings.\r\n- **Manual refresh on the Sync Center.** The header's \"refreshed Xm ago\" note gains a ↻ button (same affordance as the Remotes re-check). Toggling a plugin in Obsidian's settings modal doesn't fire any event the panel can hear — if a row looks stale, one click re-scans local state.\r\n\r\n## Fixed\r\n\r\n- **Opaque-blob settings default to Encrypt on enable.** Sensitive-default seeding only reacted to detected keys, so blob-style settings files (one opaque string — e.g. remotely-save) silently stayed Plain through both the per-item toggle and Sync all. Fields can't express a blob; such items now seed as whole-file Encrypt. Existing groups are left as-is — flip them manually if affected.\r\n- **Failures are visible on the result strip.** The strip's pills now include ✗ N / ⚠ N counts; a failed update no longer reads as \"nothing happened\" behind a collapsed details link.\r\n- **Clearer guidance when we can't update a plugin.** Plugins distributed outside the community catalog (e.g. via their own Gitee updaters) fail \"Update to latest\" honestly: \"settings not applied (they were captured on a newer plugin version); update the plugin manually, then apply again.\"\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.27.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T05:15:42Z",
+      "tag": "0.27.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d2ce91c1411d4f14166fe5ed5e828a33ca777bcf5fc20d088471cb3d6c42b1a9",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 159093
+        },
+        {
+          "digest": "sha256:d68e3693dd8c0bf65998891d95473c32c1c31af6ff62c7dede0b69c78673be6d",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:055b3e37d105726d90dfbd99c0d373ebb525ddecea94039bdb9959ed0171e40c",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 41822
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## New\r\n\r\n- **Bidirectional divergence warning on plugin on/off lists.** When this device's list and the store diverge both ways (locally-enabled extras AND store entries this device lacks), the row now says so instead of silently defaulting to one direction: an amber summary lists exactly which ids Capture would remove from the shared list (other devices would turn them off) and which ids Apply would turn off locally — plus a one-click \"⌂ Exclude this device's extras…\" shortcut that adds your local-only plugins to the device exceptions (confirmation with per-id checkboxes), after which Apply converges cleanly.\r\n- **Enable-only apply.** A plugin that is installed but disabled here and has no settings anywhere can now be staged in \"Disabled on this device\": applying simply turns it on (symmetric to 0.24.0's install-only). The row explains \"no settings to apply — enables the plugin only\".\r\n\r\n## Improved\r\n\r\n- **Search keeps its context.** While searching, the main card gets a labeled \"All items · n of m\" head (sections already showed theirs), the filter pills count the matched set (\"All n / m\"), and an inert match explains itself inline (e.g. \"🔒 encrypted — set the passphrase…\") instead of just sitting grey.\r\n- **Sorted inline diffs for on/off lists.** The Sync Center's capture/apply diff for switch lists renders both sides sorted (like the conflict modal), removing last-comma, trailing-newline, and ordering artifacts.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.26.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T01:33:49Z",
+      "tag": "0.26.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:77ee79526c7951341670687716f6953aed6dfb3bf96ffbc748d6b7324f903ea8",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 154997
+        },
+        {
+          "digest": "sha256:e7d26cbb96e13133199a73c991185ee2b2485d0d57f6042bb2c3a1ef628aee0b",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16dea6d689dfed9f9e87272858c053ce27d4403f4e4e3e3790779e7f231f5837",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 40472
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Fixed\r\n\r\n- **Reordered plugin on/off lists no longer pull as conflicts.** The pull merge and the remote deep diff compared switch-list store copies byte-by-byte, so the same membership captured in a different per-device order showed up as a \"both sides changed\" conflict (and as remote-diff noise). Both now compare membership as a set, matching the local status logic — identical members merge cleanly and keep the local bytes.\r\n- **Sorted diff view for real switch-list conflicts.** When an on/off list genuinely differs, the conflict diff renders both sides sorted (marked \"sorted view\"), so the actual adds/removes aren't buried in ordering noise.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.25.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T18:52:08Z",
+      "tag": "0.25.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d910f5577a18f31376d0c76899e7f217247e1b145a857fd41c979d41db6b502e",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 154415
+        },
+        {
+          "digest": "sha256:ee153d0bd4462cb6ba5c80ffb0aa776bc62dbff910f54bb3eb22ec29488a7acb",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16dea6d689dfed9f9e87272858c053ce27d4403f4e4e3e3790779e7f231f5837",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 40472
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## New\r\n\r\n- **Beta tab for BRAT-managed plugins.** A new settings tab (BRAT's own icon, after Community plugins) gathers plugins installed through BRAT instead of the community catalog — enabled / installed but disabled / not installed on this device — with each row showing its `owner/repo`. Membership comes from a new id→repo index (`bratPluginIndex`), resolved by reading each repo's `manifest.json` from BRAT's beta list and synced with the rest of your settings, so other devices classify offline. A map-note line shows the resolve state with a ↻ Re-scan button.\r\n- **Precise installs through BRAT.** Installing a BRAT-managed plugin (Sync Center → Not installed) now calls BRAT's own `addPlugin` for exactly that repo instead of failing against the community catalog. Everything is feature-detected; without BRAT the row explains how to install manually. Enable/keep-disabled stays your On-apply choice.\r\n\r\n## Fixed\r\n\r\n- **Switch-list captures no longer churn the store.** Captured on/off lists followed each device's local enable order with excluded ids appended at the tail — identical membership still rewrote the whole file, and diffs implicated the excluded ids. Captures now walk the store order (excluded ids and surviving members keep their positions) and append only true local additions: same members ⇒ byte-identical, diffs show only real adds/removes.\r\n- **Synced plugin groups stop leaking into Custom rules.** A plugin synced from the store but not installed on this device used to appear under Advanced → Custom rules (and nowhere else). Community and Beta tabs now have their own \"Not installed on this device\" sections; Custom rules is hand-written rules only.\r\n- **Honest install-only messaging.** A failed install no longer prints \"installed the plugin only\", and the failure guidance drops the \"settings were staged\" clause when the store holds no settings for the plugin.\r\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.25.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T18:35:05Z",
+      "tag": "0.25.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9a65509cd3779722416c4268683e32fe6771752c62bf88115311694a88b3faf6",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 149443
+        },
+        {
+          "digest": "sha256:81d14623b141120fffe2c1e5579259dc3894f467e7c0e5fff409191edfd2e2ea",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16dea6d689dfed9f9e87272858c053ce27d4403f4e4e3e3790779e7f231f5837",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 40472
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## New\r\n\r\n- **Install-only apply.** Plugins that are enabled on another device but carry no settings file could never be installed through config-sync — their rows sat inert in \"Not installed on this device\". They now stage as an apply: the install action itself is the payload (⤓ Install & enable / ⤓ Install), no settings file is written, and the footer counts them as \"+N to install\". The Stage-only choice is hidden for these rows since it would apply nothing.\r\n\r\n## Fixed\r\n\r\n- **Remote refresh no longer claims \"contents match\" on a fresh device.** The deep diff attributed every remote store file to a group via the *local* manifest; a device with few or no groups dropped the entire delta as store metadata and reported a match — while Pull then imported dozens of items. Attribution now falls back to the remote manifest, and files unknown to both surface under \"(other store files)\" instead of vanishing. Fresh devices now see the real \"↓ N to pull\" per group.\r\n- **Bulk enable seeds sensitive defaults.** The section \"Sync all\" toggle skipped the sensitive-key detection that the per-item toggle runs, so bulk-enabled items with ⚠ key badges synced plain. Both paths now share the same seeding: detected keys get Fields mode with encrypt/strip rules. Existing plain groups are left as-is — flip them manually or re-run Sync all.\r\n\r\n## Changed\r\n\r\n- **Switch-list rows drop the mode segment.** The plugin on/off lists are pinned to plain, so their disabled Plain/Fields/Encrypt buttons were noise — removed.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.24.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T16:35:45Z",
+      "tag": "0.24.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ec5e9c1f2711807d73be846b9f24015dbe1ec1767461e21c4e1fa8e2f4e4e57",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 148498
+        },
+        {
+          "digest": "sha256:8a30facd40e6d53e94ff851d704018ed1f7cd2edab9a9c15d6b5dc7a63d16980",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:16dea6d689dfed9f9e87272858c053ce27d4403f4e4e3e3790779e7f231f5837",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 40472
+        }
+      ],
+      "author": "xooooooooox",
+      "description": "## Fixed\n\n- **Row chevron back on the same line as the item name.** 0.23.8 moved the chevron inside the name element but left it `display: flex`, which turns into a block-level box outside a flex row — every row in the settings panel rendered as two lines (`>` above, name below). It is now `inline-flex`: identical inside flex rows, inline next to the text everywhere else.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T13:47:09Z",
+      "tag": "0.23.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ec5e9c1f2711807d73be846b9f24015dbe1ec1767461e21c4e1fa8e2f4e4e57",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 148498
+        },
+        {
+          "digest": "sha256:af362a5e1ae197f2b01500c4a28b7682a7865a0387011fd4adc2f78afe0892c3",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:dcddc66b756c7442b966dff7679f4f9a0440abd1aa0a08d1faa9d23045ec48bf",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 40269
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Clear the passphrase on purpose, and the row chevron behaves\r\n\r\n- **Explicit passphrase clear:** the passphrase lives in Obsidian's per-vault local storage — outside the plugin folder, never synced — so it deliberately survives a plugin reinstall. What was missing was a safe way to remove it: an ✕ **Clear** button now appears whenever a passphrase is set, and **Set** is disabled while the input is empty (previously an empty Set silently wiped the passphrase). Both actions confirm with a notice.\r\n- **Inline chevron:** an item row's expand chevron could wrap onto its own line above the title on narrower settings windows; it now lives inside the name element and always stays inline.\r\n\r\nNode suite at 328 tests.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.23.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T11:09:32Z",
+      "tag": "0.23.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1ff97af5a1f4da77aa2277d01c47d88d86c915c42bbeb2751fa88c42762e7fe1",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 148145
+        },
+        {
+          "digest": "sha256:b1f17396d9d3d8b4dd0023e75876aa734bdbf035e41c473122128c48b716617d",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:dcddc66b756c7442b966dff7679f4f9a0440abd1aa0a08d1faa9d23045ec48bf",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 40269
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Plugin-version updates now travel the whole chain\r\n\r\nCompletes the version-propagation story started in 0.23.4: device A updates a plugin, captures (a version-only refresh), and device B now actually receives it.\r\n\r\n- **Pull carries version lineage:** pulling a store whose contents match yours now adopts the remote's version records (`store.lock.json`) for those matching items — previously a version-only refresh arrived as \"nothing to pull\" and your Outdated section never fired. The full flow works end to end: A updates → A captures → B pulls → B sees **Outdated on this device** → one click updates and applies.\r\n- **Honest remote hint:** when contents match but the remote has newer version info, the remote view now says exactly that (\"contents match — remote has newer version info; Pull refreshes it\") instead of contradicting itself.\r\n- **Run UI polish:** the Capture/Apply progress no longer sits at the end waiting for a background rescan; the ribbon dot now counts version-ahead items like the panel does; the passphrase badge no longer overlaps the description text.\r\n\r\nNode suite at 328 tests.\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.23.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-16T10:10:56Z",
+      "tag": "0.23.7"
+    },
     {
       "assets": [
         {
@@ -29,7 +599,7 @@
         },
         {
           "digest": "sha256:1d05173bfb531f0b1cd5b96e085b847e0cb3373426adcb3c209af50a607a87b4",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 336
         },
@@ -42,7 +612,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## The ribbon menu opens instantly, and encrypted-field checks stop burning CPU\r\n\r\n- **Instant menu:** clicking the Config Sync ribbon icon previously ran a full status scan before the menu could appear — on vaults with many items (especially encrypted-field ones) that meant a visible wait. The menu now opens immediately with counts from the most recent check, and the scan refreshes in the background.\r\n- **Key derivation cache:** every stored encrypted-field envelope reuses a fixed salt, yet each status refresh re-derived the same PBKDF2 key (210k iterations) over and over. Derived keys are now memoized, so after the first scan, refreshes — panel opens, the periodic check, awareness events — skip the expensive derivation entirely.\r\n\r\nNode suite at 326 tests.\r\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.23.6",
       "prerelease": false,
@@ -59,7 +629,7 @@
         },
         {
           "digest": "sha256:247ec4f3fa4b17d39d1e6f328e13ea60690233c292cfa95348ad82c48227c277",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 336
         },
@@ -72,7 +642,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Counts match what the filters show\r\n\r\nFixes a 0.23.4 follow-up: a version-ahead item correctly appeared under **To capture**, but every count still said 0 — the filter pill, the header badges, and the sidebar badges were counting raw states instead of presented ones. All user-facing counts now agree with what the filters actually display.\r\n\r\nNode suite at 326 tests.\r\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.23.5",
       "prerelease": false,
@@ -89,7 +659,7 @@
         },
         {
           "digest": "sha256:1b1abe86ec8701b799eae5fd5d767f9d879b468fecc0cc9c6a332d09e981748c",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 336
         },
@@ -102,7 +672,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## See what changed, see your passphrase state, and version bumps propagate again\r\n\r\n- **Inline diffs:** every change line in a Sync Center row (`~ data.json`) is now clickable — it expands a git-style diff right below, showing exactly what the pending capture or apply would write vs what's there now. Unified or side-by-side view; field-protected items diff in their protected form; encrypted items stay undisclosed.\r\n- **Version updates propagate:** updating a plugin used to leave the store's recorded version stale forever if its settings hadn't changed — other devices' \"Outdated on this device\" flow never fired. An item whose local version is newer than the store's now surfaces under **To capture** with an amber hint; capturing refreshes the store version (no content is rewritten) so your other devices see the update.\r\n- **Passphrase at a glance:** the General tab now shows a clear badge — green \"✓ Set on this device\" or amber \"Not set\" — instead of a faint status buried in the description.\r\n\r\nNode suite at 326 tests.\r\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.23.4",
       "prerelease": false,
@@ -119,7 +689,7 @@
         },
         {
           "digest": "sha256:b648bbaa025ca52de0e0239b4ca3bbc04e7b79f6e89b5eb622c2cc3105db07f6",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 336
         },
@@ -132,7 +702,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## \"Update & apply\" now really does both in one pass\r\n\r\nFixes the Outdated/Disabled/Not-installed sections' combined actions: choosing **Apply store** together with **Update to latest** (or Enable / Install & enable) previously updated the plugin but the applied settings could be silently overwritten — you had to stage and apply a second time.\r\n\r\n- Root cause: the plugin was re-enabled **before** its settings file was written. A loading plugin reads its data.json — and many plugins re-save it shortly after startup — so the just-applied settings got clobbered by the plugin's stale in-memory state.\r\n- Now every enable (from Update, Install & enable, and Enable actions) runs **after** the config write: the plugin starts up already holding the applied settings. One staging pass, one Apply.\r\n\r\nNode suite at 323 tests.\r\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.23.3",
       "prerelease": false,
@@ -1160,6 +1730,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-17T08:03:26.992Z",
+  "removedAt": null,
   "repo": "xooooooooox/obsidian-config-sync"
 }
