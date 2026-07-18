@@ -4,8 +4,8 @@
   "description": "World building toolset with OnlyWorlds integration.",
   "errors": [],
   "id": "onlyworlds-builder",
-  "lastChangedAt": "2026-07-17T01:01:27.007Z",
-  "lastFetchedAt": "2026-07-17T01:01:27.007Z",
+  "lastChangedAt": "2026-07-18T01:01:27.069Z",
+  "lastFetchedAt": "2026-07-18T01:01:27.069Z",
   "manifest": {
     "author": "Titus",
     "authorUrl": "https://onlyworlds.github.io",
@@ -16,7 +16,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "OnlyWorlds Builder",
-    "version": "2.3.0"
+    "version": "3.0.0"
   },
   "name": "OnlyWorlds Builder",
   "presentInCommunityList": true,
@@ -24,27 +24,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:921ef6408bbfd6c415d3fe2f44fa35c617ba5221e63116264f624a7c53e541f1",
-          "downloadCount": 21,
-          "name": "main.js",
-          "size": 238561
+          "digest": "sha256:e3fe12aac608da3679b707fb296db79701d2a33b1c4de83f707ad27905a3a214",
+          "downloadCount": 0,
+          "name": "main.ts",
+          "size": 15945
         },
         {
-          "digest": "sha256:37ad6ddc7ff73add4d3ff607b58aeeb945add93eb0c849a2d6c35fa4be3b336e",
-          "downloadCount": 20,
+          "digest": "sha256:0ea6c712115b92104e0a1bbb15c7eb2cad50a1184d9f5bf33f69db48a30a38a0",
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 335
         },
         {
           "digest": "sha256:9c194734764562b9db9b77975c9a62618dc0fd0a0aad32b02091400b711ddd2a",
-          "downloadCount": 20,
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 4028
+        }
+      ],
+      "author": "tmoosting",
+      "description": "**What's New in 3.0.0**\r\n\r\nFrontmatter Format\r\n\r\nElement fields now live in the note's Properties (YAML frontmatter). Link fields are clickable [[Name]] wikilinks — they appear in Obsidian's graph and backlinks, and resolve by filename so a moved vault keeps working with no plugin needed. Empty fields are omitted; id/image_url sit at the bottom, name first. Extension/custom fields (atlas_*/shadow_*/x_*) round-trip verbatim (the silent-drop bug of older versions is gone).\r\nMigrate Command\r\n\r\nMigrate world notes to frontmatter converts an existing world. Backs up every note first (OW-backup--/), aborts if the backup fails, idempotent. Old span-format notes still READ correctly without migrating, so updating never breaks an existing vault.\r\nFolder Bridge\r\n\r\n(Open format, no account needed). Export as OnlyWorlds folder writes a portable OnlyWorlds folder — point it at your Atlas root to open the world in Atlas directly, or the vault default and move it. Import OnlyWorlds folder reads one back into frontmatter notes (never overwrites existing, never merges two worlds). The plugin is now a full implementation of the OnlyWorlds folder format.\r\nRead-Only Keys\r\n\r\nNeed no PIN. Downloading with a read-capability key (ow_r_) or a demo key no longer asks for a PIN — the PIN field greys out. Open a world someone shared with you without inventing a PIN you don't have. (Write keys and private-world write keys still require the PIN — unchanged.)\r\nLeaner Vaults\r\n\r\nNew/downloaded/pasted worlds no longer fetch or write the old PluginFiles/Templates + PluginFiles/Handlebars template sets — nothing read them anymore. No more per-world GitHub fetch. (Existing vaults keep their old template folders harmlessly; delete them if you like.)\r\nEvery Command is Frontmatter-Native\r\n\r\nCreate, Download, Paste, Copy, Save, Link, Migrate, Export/Import folder — all write/read the new format. Paste World (previously still wrote the old span format) now writes frontmatter and round-trips with Copy World.\r\nUnder the Hood\r\n\r\nAll sync on the v2 API: incremental /changes download, safe upload sweep (create + update, never delete), read-before-PATCH saves.",
+      "downloadCount": 10,
+      "draft": false,
+      "name": "3.0.0 ",
+      "prerelease": false,
+      "publishedAt": "2026-07-17T08:47:37Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:921ef6408bbfd6c415d3fe2f44fa35c617ba5221e63116264f624a7c53e541f1",
+          "downloadCount": 23,
+          "name": "main.js",
+          "size": 238561
+        },
+        {
+          "digest": "sha256:37ad6ddc7ff73add4d3ff607b58aeeb945add93eb0c849a2d6c35fa4be3b336e",
+          "downloadCount": 23,
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:9c194734764562b9db9b77975c9a62618dc0fd0a0aad32b02091400b711ddd2a",
+          "downloadCount": 22,
           "name": "styles.css",
           "size": 4028
         }
       ],
       "author": "tmoosting",
       "description": "### OnlyWorlds v2 API under the hood\n\nEvery sync path now speaks the OnlyWorlds v2 API. No note-format changes -- your vault works exactly as before, but sync is faster, safer, and more honest.\n\n- **Download World is incremental.** First download pulls everything; re-downloads pull only what changed (v2 change feed). Big worlds re-download in seconds.\n- **Upload World no longer full-replaces.** Elements are created or updated individually -- elements that exist on the server but not in your vault are reported, **never deleted**.\n- **New: Delete Element.** Permanently removes the active note's element from onlyworlds.com and trashes the note -- with a type-the-name confirmation.\n- **Link safety.** A link field containing an unresolvable link is skipped (server values kept, with a notice) instead of pushing a reduced list. Element names with characters like ':' no longer break note files on Windows.\n- **Progress feedback.** Downloading/uploading toasts with progress ticks.\n- **Clearer errors** with the server's actual message and a link to the error docs.\n\nLegacy endpoints fully retired; auth rides API-Key/API-Pin headers everywhere. Existing vaults work unchanged.",
-      "downloadCount": 20,
+      "downloadCount": 23,
       "draft": false,
       "name": "2.3.0 - OnlyWorlds v2 API + Delete Element",
       "prerelease": false,
@@ -61,7 +91,7 @@
         },
         {
           "digest": "sha256:d51f9b303ade6d6913dfc94e151ce9cac3bd09cfdfa93d201585706d32a7a43b",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 348
         },
@@ -74,7 +104,7 @@
       ],
       "author": "tmoosting",
       "description": "Fixes HTML-entity escaping of element names (apostrophes, ampersands, quotes).\n\n- Names like \"The Kid's Family\" were written into notes HTML-escaped (The Kid&#x27;s Family), breaking [[link]] file lookups and storing escaped names via the API.\n- Root fix: note templates no longer HTML-escape values; existing escaped notes are decoded on read, so old vaults self-repair on their next save/upload.\n\nNo settings or format changes.",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "2.2.2",
       "prerelease": false,
@@ -91,7 +121,7 @@
         },
         {
           "digest": "sha256:cd3049ed0742c143ae5fb6ab02edcbacb9d8fe8d0ff039220a2a340dd87f943f",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 356
         },
@@ -104,7 +134,7 @@
       ],
       "author": "tmoosting",
       "description": "Fixes a wrong-world write bug (edits could land in a different world when a stale key was set in plugin settings) and a rename that reported success without actually updating onlyworlds.com. Renames now sync only when the world has a write key, and say so clearly when they do not. Builds on 2.2.0: Download World, round-trip download-edit-upload, and both classic and ow_ key formats everywhere.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "2.2.1",
       "prerelease": false,
@@ -121,7 +151,7 @@
         },
         {
           "digest": "sha256:ad48fcdfbe740701a9bd58cb712c3a6255d33cdc50be78ca7a44c6540bbdad8f",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 346
         },
@@ -134,7 +164,7 @@
       ],
       "author": "tmoosting",
       "description": "Download World returns (works with ow_ keys and classic keys), Save Element creates new elements, Upload World (renamed from Export) shows real error messages, Rename World syncs to onlyworlds.com, and map/pin/marker notes now download correctly. Full round trip download-edit-upload verified against the new platform.",
-      "downloadCount": 0,
+      "downloadCount": 1,
       "draft": false,
       "name": "2.2.0",
       "prerelease": false,
@@ -151,7 +181,7 @@
         },
         {
           "digest": "sha256:5add2371e03f2a2f94d63f71304ede4ab09aff4b30d06d9feb9316091986ad63",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 346
         },
@@ -164,7 +194,7 @@
       ],
       "author": "tmoosting",
       "description": "Retires the legacy Import World command, whose modal only accepted 10-digit numeric API keys. OnlyWorlds is moving to prefixed keys (ow_...) for newly minted keys — existing 10-digit keys keep working everywhere. World import/sync lives in the plugin settings (link world + sync), which accepts both key formats.\n\nNo other changes.",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -175,7 +205,7 @@
       "assets": [
         {
           "digest": "sha256:cea2105bc999884f79f98c87688fd1c471679cd07b32cf1609bce08eb6edf873",
-          "downloadCount": 213,
+          "downloadCount": 214,
           "name": "manifest.json",
           "size": 348
         },
@@ -194,7 +224,7 @@
       ],
       "author": "tmoosting",
       "description": "  ## 2.0.1\r\nMobile support.\r\n\r\n- `isDesktopOnly: false`\r\n- Save Element, Create Element, and auto-sync already worked on mobile; now the rest of the commands do too.",
-      "downloadCount": 213,
+      "downloadCount": 214,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
@@ -211,7 +241,7 @@
         },
         {
           "digest": "sha256:8f18b2dcbac8f424672b17179b4063956c70623bc13d29d7400a57a1651369c8",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 347
         },
@@ -224,7 +254,7 @@
       ],
       "author": "tmoosting",
       "description": "OnlyWorlds Builder 2.0: rebuilt on the OnlyWorlds SDK with auto-sync, native settings, and PIN handling. See README for details.",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -241,7 +271,7 @@
         },
         {
           "digest": "sha256:4655972ff1aac3024f7a994e5dc21a71d6bb2fb6b6d8774e12919080c8988431",
-          "downloadCount": 688,
+          "downloadCount": 689,
           "name": "manifest.json",
           "size": 353
         },
@@ -254,7 +284,7 @@
       ],
       "author": "tmoosting",
       "description": "This update aligns the obsidian plugin with the OnlyWorlds 00.30.00 schema changes and new website and API infrastructure.\r\n\r\n- Uses new PIN & World Key auth system for web operations\r\n- New command: Save Element: saves the currently opened note individually\r\n- Allow duplicate names for worlds and elements\r\n- Add numeral indicators to element olders\r\n- Various modal and styling improvements\r\n- Integrate styles that were previously missing\r\n\r\n\r\nNOTE: \r\n- This update includes significant schema changes. Back up your files to be safe.\r\n- This plugin requires a free account at https://onlywords.com to unlock full functionality",
-      "downloadCount": 688,
+      "downloadCount": 689,
       "draft": false,
       "name": "OnlyWorlds schema & website refactor",
       "prerelease": false,
@@ -269,14 +299,14 @@
           "size": 320795
         },
         {
-          "downloadCount": 451,
+          "downloadCount": 452,
           "name": "manifest.json",
           "size": 330
         }
       ],
       "author": "tmoosting",
       "description": "- Fixed bundled files bug: README, Template and Handlebar files are now imported directly from GitHub\r\n- Added new setting: default new element category\r\n",
-      "downloadCount": 451,
+      "downloadCount": 452,
       "draft": false,
       "name": "",
       "prerelease": false,
@@ -286,7 +316,7 @@
     {
       "assets": [
         {
-          "downloadCount": 46,
+          "downloadCount": 47,
           "name": "manifest.json",
           "size": 330
         },
@@ -298,7 +328,7 @@
       ],
       "author": "tmoosting",
       "description": "Release for an Obsidian plugin that supports world building and organization, and integration with a particular world building framework (OnlyWorlds)",
-      "downloadCount": 46,
+      "downloadCount": 47,
       "draft": false,
       "name": "Obsidian OnlyWorlds Builder Release",
       "prerelease": false,
