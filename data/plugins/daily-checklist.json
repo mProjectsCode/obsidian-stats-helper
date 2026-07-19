@@ -4,8 +4,8 @@
   "description": "A minimal sidebar checklist for daily routines, with optional sync to your daily note. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "daily-checklist",
-  "lastChangedAt": "2026-07-18T06:01:27.017Z",
-  "lastFetchedAt": "2026-07-18T06:01:27.017Z",
+  "lastChangedAt": "2026-07-19T06:01:27.054Z",
+  "lastFetchedAt": "2026-07-19T06:01:27.054Z",
   "manifest": {
     "author": "Matt Maiorana",
     "authorUrl": "",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:df2a491c3b5207dcf411927adbdfbb30d30c230e6538f8957d2886cc3f1c1ebd",
-          "downloadCount": 40,
+          "downloadCount": 43,
           "name": "main.js",
           "size": 36442
         },
         {
           "digest": "sha256:307a7aa7e16ca5362a8ffc1c49da7a70cf542a0c290dd08e3fc6968ecc07bfcf",
-          "downloadCount": 40,
+          "downloadCount": 43,
           "name": "manifest.json",
           "size": 290
         },
         {
           "digest": "sha256:c2d4481cccc1a143cdaadcc535e28fd3bba1c203b3eb70a76c82677daa765a06",
-          "downloadCount": 38,
+          "downloadCount": 41,
           "name": "styles.css",
           "size": 8596
         }
       ],
       "author": "github-actions[bot]",
       "description": "This release hardens correctness and the daily-note write path based on a full-codebase review. No user-facing feature changes; no change to what the plugin writes to notes.\n\n### Fixed\n\n- **Duplicate item names no longer corrupt state.** Adding or renaming an item to a name already in the list is now rejected with a notice (at all three entry points). Previously, deleting one of two same-named items removed both, renames hit the wrong row, and both shared a single checked state.\n- **Items named like `Object.prototype` members are no longer permanently checked.** Checked-state reads now use an own-property guard (`isItemChecked`), so an item named `toString`, `constructor`, `valueOf`, etc. behaves normally.\n- **A hand-corrupted `data.json` can no longer silently break the writer.** `dailyNoteFolder`, `dailyNoteDateFormat`, and `dailyNoteTemplatePath` are now coerced to defaults when non-string, so the write path can't throw on `.trim()`. `writeChecklistToDailyNote` gained the same boolean type-guard the other toggles have.\n- **Midnight-boundary writes target the correct day.** Each mutation now captures a single timestamp and threads it through the daily reset and the note write, so a mutation that straddles local midnight can't write the previous day's checks into the new day's note.\n- **Foreground-sync no longer clobbers an unsaved mutation.** The visibility-change reload is skipped while a settings save is in flight.\n- **Daily-note writes are serialized.** Overlapping mutations now queue through a single promise chain, so a slower earlier write can't overwrite a newer state.\n- **Popout-window listener leak.** The `visibilitychange` handler captures its document once, so it always detaches from the document it attached to.\n\n### Changed\n\n- The settings-tab item editor no longer renders dead drag handles on mobile (drag-reorder is desktop-only, matching the sidebar).\n\n### Notes\n\n- Remaining low-priority review items (touchscreen-laptop drag gating, append-time trailing-whitespace trim, multi-leaf sidebar sync) are documented in `FUTURE_PLANS.md`.\n",
-      "downloadCount": 40,
+      "downloadCount": 43,
       "draft": false,
       "name": "1.0.9",
       "prerelease": false,
