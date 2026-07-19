@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-18T07:02:26.999Z",
-  "lastFetchedAt": "2026-07-18T07:02:26.999Z",
+  "lastChangedAt": "2026-07-19T07:02:26.975Z",
+  "lastFetchedAt": "2026-07-19T07:02:26.975Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.30.3"
+    "version": "0.32.1"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,30 +22,120 @@
     {
       "assets": [
         {
-          "digest": "sha256:8b421b37f0855059ace4211182de9ff1911799ce69090b52a0fd2a15201e1806",
-          "downloadCount": 8,
+          "digest": "sha256:6c75f536f99a6683e48781e8c5cba7ca8b5fef2f85e311a8af099d472c162050",
+          "downloadCount": 10,
           "name": "main.js",
-          "size": 216289
+          "size": 206215
         },
         {
-          "digest": "sha256:16aea09d76a39a646ed9ed50bc4312627315764ae6d493bd2dac8bd3d76ac906",
-          "downloadCount": 8,
+          "digest": "sha256:46abf51335d2856934768e76fc816a51f763794f8fbc284f7e6de33a25b5a665",
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 8,
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **Sending the token back through the bookmarklet link now finishes the reconnect properly.** During a browser reconnect, returning your token via the bookmarklet's send-to-Obsidian link stored it but left the job half done: paused background sync stayed paused until its next check, any retried action never ran, and the reconnect window stayed open. The link now completes the reconnect exactly like the Paste token button: sync resumes immediately, the retried action runs, and the window closes on its own. A token sent by link outside of a reconnect also resumes paused sync now.\n\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.32.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T15:12:50Z",
+      "tag": "0.32.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4e20bab99bdc0ecde70d5340a7afb7256de1fe459ee1dd7cfc0a13466149eaef",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 204643
+        },
+        {
+          "digest": "sha256:34deaa7ccccab9c018a935d934b022fb506f63a96cebc57761d97d7bd89655ea",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Removed\n\n- **The daily background session renewal machinery is gone.** Since 0.31.0 your sign-in captures Plaud's long-lived account token, which stays valid for months and needs no renewal, so the old 24-hour refresh subsystem (the background timers, the retry backoff, the \"Refresh session now\" command, and the \"Keep the session alive automatically\" setting) had nothing left to do and has been removed. When your session eventually lapses, the same one-click Reconnect prompt as before signs you back in. The \"Test connection\" button in settings remains the way to check session health.\n\n### Changed\n\n- **Reconnect now remembers how you signed in.** The prompt reopens the email sign-in window or the browser flow based on which one captured your current session, instead of inferring it from leftover renewal data. Sessions signed in before this version keep routing correctly via the old signal.\n\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.32.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T14:08:28Z",
+      "tag": "0.32.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d78dcb874658f38fb59bb72a819d2f55a57fa4627c712b04afb0c3637d0136a4",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 216152
+        },
+        {
+          "digest": "sha256:12c1c803fdbffe7a56e5b85d41700355068efaaed2fef292ecf35f3a9bf591b3",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n\n- **Your Plaud session now lasts about a year instead of pausing every day.** Sign-in captures Plaud's long-lived account token (read directly from Plaud's web app after you sign in) instead of the short-lived 24-hour token the plugin used to grab. Because the long-lived token stays valid for roughly 300 days, automatic sync and imports keep working for months between sign-ins, and this applies to Google and Apple (SSO) accounts too, not just email and password. When the token finally expires (or you sign out of Plaud elsewhere), the plugin shows the same one-click Reconnect prompt as before, now expected about once a year rather than daily.\n- **The daily background session renewal no longer runs on these sessions.** The long-lived token does not expire in 24 hours, so there is nothing to renew. Running the old renewal would only replace it with a short-lived token and bring back the daily pause, so it is now switched off whenever a long-lived token is stored. \"Refresh session now\" simply confirms the session is healthy in that case.\n\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.31.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T13:24:55Z",
+      "tag": "0.31.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8b421b37f0855059ace4211182de9ff1911799ce69090b52a0fd2a15201e1806",
+          "downloadCount": 13,
+          "name": "main.js",
+          "size": 216289
+        },
+        {
+          "digest": "sha256:16aea09d76a39a646ed9ed50bc4312627315764ae6d493bd2dac8bd3d76ac906",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Email sign-in truly no longer opens plaud.ai in your web browser.** The 0.30.2 fix hardened the popup blocker, but the real leak turned out to be different: Obsidian 1.13 (which auto-installed in late June) began rerouting every page navigation inside plugin windows to your default browser, so when Plaud's site redirected itself to its login page, that redirect landed in your browser as a stray tab. The sign-in window now keeps its navigation to itself. Verified end to end against Obsidian 1.13.2: the login redirect stays inside the in-app window and nothing opens externally. If the plugin ever cannot apply this protection, it refuses to open the sign-in window rather than leak sign-in URLs to your browser.\n\n",
-      "downloadCount": 8,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.30.3",
-      "prerelease": true,
+      "prerelease": false,
       "publishedAt": "2026-07-17T23:22:18Z",
       "tag": "0.30.3"
     },
