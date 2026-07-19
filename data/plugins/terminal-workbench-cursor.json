@@ -4,8 +4,8 @@
   "description": "A cursor engine for the Terminal Workbench family: gliding carets, torch spotlight, and a Ghost Trail that peels the Terminal Workbench Pet ghost off your text as you type. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "terminal-workbench-cursor",
-  "lastChangedAt": "2026-07-18T09:01:27.009Z",
-  "lastFetchedAt": "2026-07-18T09:01:27.009Z",
+  "lastChangedAt": "2026-07-19T09:00:27.001Z",
+  "lastFetchedAt": "2026-07-19T09:00:27.001Z",
   "manifest": {
     "author": "Real-Fruit-Snacks",
     "authorUrl": "https://github.com/Real-Fruit-Snacks",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Terminal Workbench Cursor",
-    "version": "1.0.5"
+    "version": "1.1.1"
   },
   "name": "Terminal Workbench Cursor",
   "presentInCommunityList": true,
@@ -22,20 +22,104 @@
     {
       "assets": [
         {
-          "digest": "sha256:a54916c08e9934bb61796966878bbd26c1e6945b8713bd0729890a3dee30ce2e",
-          "downloadCount": 29,
+          "digest": "sha256:d2b901a49f54dfd98a4e4afed075785a2c3eb1aa4d5eb7336b501317c2bd988d",
+          "downloadCount": 5,
           "name": "main.js",
-          "size": 82952
+          "size": 100675
         },
         {
-          "digest": "sha256:d35022777d4f6ae7635bae64b529ba2936c7ed4c8d8456be5f03aea53427cfb4",
-          "downloadCount": 29,
+          "digest": "sha256:f0c162958f57f958efaf9d596d0cd038ef45d8a5dffc5759364b3cb493826752",
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 436
         },
         {
           "digest": "sha256:919dc79fa97e881faf010a5f32ee60a9d94f5edb6204da51247dfe627dcecedd",
-          "downloadCount": 28,
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 5271
+        },
+        {
+          "digest": "sha256:de8c0a48dc8ce21f0eb1c84f4d84a8a2bcbc51bd168265ae7ec3920efce92b97",
+          "downloadCount": 0,
+          "name": "terminal-workbench-cursor-1.1.1.zip",
+          "size": 30256
+        },
+        {
+          "digest": "sha256:c2836dff2576ce0ffc4253dfff34f9c4c9b5cae77d4ce29d5e9124495f855bc1",
+          "downloadCount": 0,
+          "name": "versions.json",
+          "size": 163
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- Fresh installs now lead with the plugin's signature effect: **Ghost Trail is\n  on by default**, and the two effects that spawn competing particles at the\n  same spot — popping letters and the pixel trail — now default off (both\n  remain available in settings). Existing installs keep their saved choices.\n\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T20:35:56Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:fdf9e33265bcc0c434563017c6d30b19c2b701fcd94c8a76def4aefc082ab9f0",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 100502
+        },
+        {
+          "digest": "sha256:ec434edc01d01ff4f336c5ffeb5a8b8d6e7c54b428988ddd427d771f932790d3",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 436
+        },
+        {
+          "digest": "sha256:919dc79fa97e881faf010a5f32ee60a9d94f5edb6204da51247dfe627dcecedd",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 5271
+        },
+        {
+          "digest": "sha256:2f71b1c112afc32b2601f9c9b636d212e35890c71311c8e31e7396a8debf532a",
+          "downloadCount": 1,
+          "name": "terminal-workbench-cursor-1.1.0.zip",
+          "size": 30183
+        },
+        {
+          "digest": "sha256:22b36e878d9a319db7e476410dbaa12cc1a58d67ba340fbe1b579665a6d2e4ba",
+          "downloadCount": 0,
+          "name": "versions.json",
+          "size": 143
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nA performance overhaul for low-end machines.\n\n### Added\n- **Performance mode** (Settings → General) — one switch that turns off\n  blinking, motion smear, popping letters, and the pixel trail so the engine\n  can sleep between keystrokes. Turning it off restores your previous choices.\n\n### Changed\n- **The render loop now parks when nothing is animating.** Previously the\n  engine redrew the full window at display refresh rate from the moment it\n  loaded until it unloaded, even with a stationary caret. It now stops\n  entirely once every effect has finished and the caret is still (with\n  blinking on, this engages whenever no caret is visible — e.g. while the\n  window is unfocused), and is re-armed instantly by typing, clicks,\n  scrolling, focus, or layout changes, with a slow heartbeat as a safety net.\n- **Caret measurements are cached.** The expensive per-frame geometry queries\n  (`coordsAtPos`, computed styles, pane rects) are now keyed on the\n  selection, scroll position, window size, and a layout epoch — and shared\n  between the cursor and torch engines instead of measured twice per frame.\n- **The torch spotlight settles and stops.** Its loop parks once the light\n  reaches its target, and overlay styles are only written when they change.\n- Trail points are no longer collected while the cursor-trail effect is off.\n\n### Fixed\n- The injected style element is now removed from every window when the\n  plugin unloads.\n\n### Changed\n- Repository housekeeping: `LICENSE` restored to the standard MIT text so it is\n  recognised as MIT, with the fork attribution moved to a `NOTICE` file.\n  Documentation and the landing page updated for the community listing. No\n  changes to the plugin runtime since 1.0.4.\n\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T12:57:39Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a54916c08e9934bb61796966878bbd26c1e6945b8713bd0729890a3dee30ce2e",
+          "downloadCount": 30,
+          "name": "main.js",
+          "size": 82952
+        },
+        {
+          "digest": "sha256:d35022777d4f6ae7635bae64b529ba2936c7ed4c8d8456be5f03aea53427cfb4",
+          "downloadCount": 30,
+          "name": "manifest.json",
+          "size": 436
+        },
+        {
+          "digest": "sha256:919dc79fa97e881faf010a5f32ee60a9d94f5edb6204da51247dfe627dcecedd",
+          "downloadCount": 29,
           "name": "styles.css",
           "size": 5271
         },
@@ -54,7 +138,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n- Repository housekeeping: `LICENSE` restored to the standard MIT text so it is\n  recognised as MIT, with the fork attribution moved to a `NOTICE` file.\n  Documentation and the landing page updated for the community listing. No\n  changes to the plugin runtime since 1.0.4.\n\n",
-      "downloadCount": 29,
+      "downloadCount": 30,
       "draft": false,
       "name": "1.0.5",
       "prerelease": false,

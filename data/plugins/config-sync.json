@@ -4,8 +4,8 @@
   "description": "Selective, on-demand distribution of vault configuration (snippets, hotkeys, plugin settings) across devices and vaults. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "config-sync",
-  "lastChangedAt": "2026-07-18T09:01:27.009Z",
-  "lastFetchedAt": "2026-07-18T09:01:27.009Z",
+  "lastChangedAt": "2026-07-19T09:00:27.001Z",
+  "lastFetchedAt": "2026-07-19T09:00:27.001Z",
   "manifest": {
     "author": "xooooooooox",
     "authorUrl": "https://github.com/xooooooooox",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Config Sync",
-    "version": "0.29.0"
+    "version": "1.0.0"
   },
   "name": "Config Sync",
   "presentInCommunityList": true,
@@ -22,27 +22,237 @@
     {
       "assets": [
         {
-          "digest": "sha256:674ba9161209350b1e385f3ab5831e00f14b9b0d43e6f5f9bc5955aa2e7e299b",
-          "downloadCount": 10,
+          "digest": "sha256:610d4a29aaddeb225ff69fcc0ec476a3bc9cd5feec26edcef913baabb664190d",
+          "downloadCount": 3,
           "name": "main.js",
-          "size": 167483
+          "size": 186493
         },
         {
-          "digest": "sha256:8b86760ea44d3a348d82c7d006d448c6850067de464c6256369c7c8d954f8e6b",
+          "digest": "sha256:44fbbbce8a8191166a4a1780156fd0ba953d84fbfe52cbc97687c66169f29599",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 335
+        },
+        {
+          "digest": "sha256:99f75576ae173b2e17369a35f092846851c22b7095cbb06049ed2a5ae79e87e3",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 58644
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "The first stable release. Config Sync keeps your Obsidian setup consistent across devices — and this release marks the point where its model and interface are settled.\r\n\r\n## What it does\r\n\r\nConfig Sync mirrors your Obsidian configuration — app and editor settings, hotkeys, appearance and themes, CSS snippets, the enabled core- and community-plugin lists, and each plugin's own settings — into a **store folder inside your vault**. Whatever already syncs your vault (Obsidian Sync, remotely-save, iCloud, git…) carries the store between machines; Config Sync is the layer that decides, per item, what to send and what to accept.\r\n\r\nA **Sync Center** view is the hub. For every item it shows whether this device and the store agree — *in sync*, *to capture*, *to apply*, *not installed*, or *disabled here* — and lets you act with per-item control:\r\n\r\n- **Capture** (this device → store) and **Apply** (store → this device), one item or in bulk.\r\n- **Install & enable on apply**: applying a not-installed plugin can fetch it from the community catalog — pinned to the version the store recorded — and enable it. Beta plugins install through BRAT.\r\n- **Run history**: every run is recorded with an honest outcome (green / amber / red), expandable details, and a browsable, clearable log.\r\n\r\n## Highlights\r\n\r\n- **Field-level protection** — strip or encrypt sensitive keys (tokens, API keys) per plugin before they ever reach the store.\r\n- **Enabled-plugin lists compared as sets**, with per-plugin exceptions, so device-specific choices don't fight the shared list.\r\n- **Remotes** — sync the store to git or an external no-code database, with connection testing.\r\n- **Cold-start adopt** — a fresh device finds the store on its own and is guided to apply it, without overwriting the store with an empty device.\r\n- **Resilient bulk operations** — installs survive per-item failures and network timeouts; one bad plugin no longer aborts the batch, and the result stays visible in a sticky, always-on-screen strip.\r\n\r\n## Since the 0.x line\r\n\r\nRolls up the full 0.x development series into a stable baseline, plus a final fidelity fix: a capture that only refreshes the store's recorded plugin version (identical content, newer local version) is now recorded in run history as \"store version refreshed\" instead of \"no changes.\"\r\n\r\nConfig Sync is not affiliated with Obsidian.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.0.0 — first stable release",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T07:01:44Z",
+      "tag": "1.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b5129f78868736dce34265abb6c7d64beae58938212bd76f9a47eee5f09f2e1",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 186307
+        },
+        {
+          "digest": "sha256:792f093f022806c9b911d6af6f25fab2dc52613378e04ec6f859fdb0725b816c",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:99f75576ae173b2e17369a35f092846851c22b7095cbb06049ed2a5ae79e87e3",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58644
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Three fixes surfaced by a real cold-start session: a bulk apply that stopped silently partway, a running plugin shown as disabled, and a result that scrolled out of view.\r\n\r\n## A bulk apply no longer aborts on one bad item\r\n\r\nApplying a large batch (e.g. \"install & enable\" for dozens of not-installed plugins) used to stop dead the moment any single item threw — one plugin's failed download or enable would abandon every remaining item, with no error shown and the button quietly back to idle. It looked like a silent stop.\r\n\r\nEach item is now isolated: a failure becomes one `✗` row in the result report and the rest of the batch keeps going. You see exactly which item failed instead of losing the whole run.\r\n\r\n## A running plugin is no longer mislabeled \"Disabled on this device\"\r\n\r\nConfig Sync judged whether a plugin was enabled by reading only Obsidian's persisted list (community-plugins.json). But a plugin can be loaded and running — its toggle on, its ribbon icons present — without being in that list (Obsidian, and some plugin ecosystems, can load a plugin without persisting it). Such a plugin was wrongly filed under \"Disabled on this device.\"\r\n\r\nA plugin now counts as enabled when it is loaded **or** persisted, matching what Obsidian's own toggle shows. Running plugins land in their correct section.\r\n\r\n## The result strip stays visible when you're scrolled down\r\n\r\nAfter a long apply you're usually at the bottom of the list, but the result strip renders at the top — out of view. The strip now docks in a sticky, opaque bar pinned to the top of the panel, so the outcome (and any failures, expanded) stays visible no matter where you've scrolled. Because it doesn't depend on the run finishing to scroll you anywhere, it's shown even when a run is interrupted.\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.35.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T06:26:13Z",
+      "tag": "0.35.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71599788730246bc3a7a51a1319d1dcdfbd99872e864a5f7d9ffbd11d7b6d7a0",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 186145
+        },
+        {
+          "digest": "sha256:29174c53fab08831d532e8ddf03920d940033c821cee90dae977470bad35ebb7",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:025d0d555899fa5a7c6f0959f7b8878132d57c52de1cdd6c5e515aa480a7be84",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58168
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Applying Config Sync's own settings no longer reloads the plugin — which fixes the missing feedback after Adopt and removes a jarring reload from every self-apply.\r\n\r\n## The bug\r\n\r\nWhen applying a plugin's settings, Config Sync briefly disables that plugin so it can't overwrite the file, then re-enables it to load fresh. For every plugin except one that's correct — but the \"one\" is Config Sync itself: applying its own settings (which is exactly what Adopt does) disabled and re-enabled Config Sync mid-run, reloading the plugin and wiping the Sync Center. That's why, in 0.33.0, adopting showed no result strip and no guidance banner — they were erased by the reload the instant they appeared.\r\n\r\n## The fix\r\n\r\n- Config Sync now applies its own settings in place, without disabling itself, so the panel stays put. The result strip (\"✓ Adopted\") and the post-adopt guidance banner now appear as intended.\r\n- This also removes an unnecessary reload from any apply that touched Config Sync's own settings — no more flash.\r\n- The apply backup moved out of the plugin's folder (into a top-level `config-sync-backup` folder in the config directory), so setups with the Hot Reload plugin aren't reloaded mid-apply either.\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.34.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T05:02:10Z",
+      "tag": "0.34.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8de68fd9884abef95ed78dcee1d85cdcd0c07cee1d4eb5bae9a65dbf76689706",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 185788
+        },
+        {
+          "digest": "sha256:c4c78c97c4081ba4056b494814244ce4ad23352a952d6283e544b395800f7ffd",
           "downloadCount": 9,
           "name": "manifest.json",
           "size": 336
         },
         {
-          "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
+          "digest": "sha256:025d0d555899fa5a7c6f0959f7b8878132d57c52de1cdd6c5e515aa480a7be84",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 58168
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Setting up a device from an existing store (the \"adopt\" flow) is now robust — it finds the store on its own, doesn't miscount it, and guides you through the next step.\r\n\r\n## Finds the store automatically\r\n\r\nConfig Sync now locates the store wherever it actually lives — the default `config-sync` folder, the IOTO `0-Extra/config-sync` folder, or your configured store folder — instead of relying solely on PKM auto-detection. On a fresh device this matters: the IOTO detection depends on a plugin that isn't enabled until after you adopt, so the store used to be invisible (or, after adopting, the device would silently point at an empty folder and show \"nothing in the store\" for everything). Now the Adopt banner appears on its own, and the device keeps pointing at the real store afterward. An explicit Store folder you set by hand still takes precedence.\r\n\r\n## Safer before adopting\r\n\r\nThe \"Leftover in the store\" cleaner no longer treats the whole store as leftover on a device that hasn't adopted yet. Previously a brand-new device — which has no tracked items — counted every store file as leftover, one \"Delete all\" away from wiping the config you just captured. It now stays hidden until the device has a configuration to compare against.\r\n\r\n## Clearer after adopting\r\n\r\n- Adopt's result now shows in the panel (it survives the reload that follows), not only in History.\r\n- A one-time guidance banner appears after adopting: it explains that the device is new and you should **apply** the store to it — and warns against **capturing** (which would overwrite the store with this fresh device's blank defaults). \"Review what to apply\" jumps you to the items ready to apply; the banner clears once the device is in sync.\r\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "0.33.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T18:33:49Z",
+      "tag": "0.33.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4ab714d47ccbddbf71afbbd2309b327eccc9b59516a1685cd68e7a9cad9c92a4",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 184012
+        },
+        {
+          "digest": "sha256:25f60fe1ead7e5c27c8369a01be8407f99bbcb08ce958fb33c995abaf55be72c",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:0c43b972d7c9829a0530220a986b8eb85ad97d14a914f1e481ba39434c89bc02",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 57025
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Run history now also records removals, not just sync operations.\r\n\r\n- **Stop syncing** an item and **deleting leftover** store files are now logged in the history, alongside the existing capture / apply / pull / push / adopt runs.\r\n- Their rows use a neutral **⊘ Stop syncing** / **⌫ Delete leftover** action and always read **Done**, with a summary like \"Stopped syncing Editor Syntax Highlight · deleted 1 store file\" or \"Deleted 2 leftover store files\".\r\n- Opening one shows what it affected — the item that was removed and the store files that were deleted — instead of a per-item report.\r\n\r\nSettings-tab changes (toggling an item's sync on or off) remain config edits, not runs, and are not recorded.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.32.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T16:37:42Z",
+      "tag": "0.32.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:33f88ddb6e320fefc7dc30689718c32c06d4b96e08fdfa54fbccdace405177c6",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 182417
+        },
+        {
+          "digest": "sha256:9e06fa5a52fceecce6d70bd8a117ba6503fed80305ccebd76d078315a8040dd0",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:5f0dfa92e5b9f3959876c5f24e7a343dff80b4be757b754f9fa83e4ef6db29d3",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 56601
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Remove an item from sync directly in the Sync Center, and clean up settings the store kept for items you no longer sync.\r\n\r\n## Stop syncing\r\n\r\nPreviously, the only way to make Config Sync forget an item was a toggle buried in settings — and an uninstalled plugin would linger in \"Not installed on this device\" with nothing to sync.\r\n\r\n- Expand any item and use **Stop syncing** (next to the Install / apply actions). It removes the item from the tracked list on all your devices.\r\n- If the store holds saved settings for it, the confirmation offers to **also delete that stored copy** (checked by default, so nothing is left behind). Nothing installed is touched either way.\r\n\r\n## Leftover in the store\r\n\r\nSettings the store saved for items you no longer sync used to be invisible unless you compared against a remote.\r\n\r\n- A **Leftover** pill appears in the All-items filter row when the store has any. It lists each leftover file — a friendly name, its path, and size — with **Delete** per file and **Delete all**.\r\n- The pill and section disappear once the last leftover is cleared.\r\n\r\nTogether these give a complete removal flow: uninstall the plugin, Stop syncing the item (delete its stored copy), and any older leftovers are one click away.\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.31.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T12:59:35Z",
+      "tag": "0.31.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e1deab00e1719b09a4a15dfd6c80f8b4ef4401404c971fe2b26f8b012b031e0b",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 176806
+        },
+        {
+          "digest": "sha256:a501a947c8ac12eab26b351d9265ae0c456bbc6ac723e2db0871bd99c7918064",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:f4b959de4f44b88b89873a0df4539e21a1808dc54221993629e820bfd7d4d8e1",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 54766
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Run reports stop looking like silent success, and every run is now kept in a browsable history.\r\n\r\n## Honest run reports\r\n\r\nAfter a bulk apply, failures used to feel like a silent stop — the result strip was green (\"✓ Applied\") even with warnings, hid the reasons behind \"details\", and sat at the top while you were at the bottom. Now:\r\n\r\n- The strip's color reflects the actual outcome — green only when everything succeeded, amber when some items need manual follow-up, red when something failed.\r\n- The title says so (\"Applied with 3 issues\"), and the failure reasons are shown expanded, not hidden behind a toggle.\r\n- An \"open in history →\" link jumps to the full record.\r\n\r\n## Run history\r\n\r\nEvery capture, apply, pull, and push is now recorded and browsable from a new **History** entry in the Sync Center sidebar:\r\n\r\n- A table of past runs — status, time (`YYYY-MM-DD HH:MM:SS`), action (↓ Apply / ↑ Capture / ↓ Pull / ↑ Push / ↓ Adopt), how many items changed, how many need attention, and a one-line summary. Click a row for the full per-item detail.\r\n- Status reads in plain terms: **Done** (all succeeded), **Action needed** (applied what it could; finish some items manually), **Failed** (some items couldn't run).\r\n- History is kept on this device only — never synced — in a separate file next to the plugin's data.json.\r\n\r\nNew settings (General tab, \"Run history\"): turn recording on/off, choose the storage file, keep at most N runs (default 50), keep for N days (default 30), and clear the history.\r\n\r\n## Also\r\n\r\n- The \"N more items match\" list in a remote comparison now shows plugin display names instead of raw ids.\r\n- The \"not in the community catalog\" install message no longer repeats itself or leads with a raw plugin id — the report row already names the plugin.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.30.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T09:27:21Z",
+      "tag": "0.30.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:674ba9161209350b1e385f3ab5831e00f14b9b0d43e6f5f9bc5955aa2e7e299b",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 167483
+        },
+        {
+          "digest": "sha256:8b86760ea44d3a348d82c7d006d448c6850067de464c6256369c7c8d954f8e6b",
           "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 51200
         }
       ],
       "author": "github-actions[bot]",
       "description": "Install now reproduces the version your settings were captured on, and fixes a class of installs that were failing outright.\r\n\r\n## Install picks the right version\r\n\r\n- **Fixes plugins whose GitHub \"latest release\" is a beta.** The installer used to grab GitHub's newest release, which for some plugins (e.g. Calendar) is a separate beta line whose manifest declares a different plugin id — so the install failed with \"…identifies as 'calendar-beta'\". It now resolves the version the way Obsidian's own community browser does: from the plugin's root manifest, then downloads that exact tagged release. Calendar and friends install cleanly again.\r\n- **Installs the captured version, not just the latest.** The store already records which plugin version each item's settings were captured on. Applying an install now targets that version, so a device reproduces the environment the settings came from and avoids settings/schema mismatches. If that version's release has since been removed, it falls back to the latest stable and tells you.\r\n- **Update targets the store's version too.** The \"Outdated on this device\" action now reads \"Update to 1.5.10\" (the version the store was captured on) instead of a vague \"Update to latest\", and only offers to update when this device is actually behind — never a surprise downgrade.\r\n- The expanded install detail names the target version (\"applying installs the captured version 1.5.10\").\r\n\r\n## Footer count fixed\r\n\r\nThe bottom-left summary counted only the main section, so staging nine plugins in \"Not installed\" showed \"0 selected · +9 to install\" while the section header said \"9 selected\" and the button \"Apply 9 items\". The summary now leads with the true total (\"9 selected · 9 to install\") and reads consistently with the section headers and the Apply button.\r\n\r\nVersion-pinning applies to community-catalog installs; BRAT-managed plugins continue to track their own beta channel.\r\n",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.29.0",
       "prerelease": false,
@@ -53,26 +263,26 @@
       "assets": [
         {
           "digest": "sha256:a54466835720a7d290b408e23974bd4ee669957ce16e76467eaf85a47b057313",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 166713
         },
         {
           "digest": "sha256:d262340f191c74d1f9ea21e5c6e354d14e3b1d04f6b71a5ced2fae89f445f685",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 336
         },
         {
           "digest": "sha256:ecfc9294fffcda80166a4762f71cc429eeafeab93b4acfc0d0f546596a5e7515",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 51200
         }
       ],
       "author": "github-actions[bot]",
       "description": "Bulk installs no longer freeze on a single stalled download.\r\n\r\n## The bug\r\n\r\nA fresh-device \"install & enable\" of dozens of community plugins runs the installs one at a time. Obsidian's network request has no timeout, so if any one plugin's download stalled — the connection neither completing nor failing — the whole run hung on that item. Progress stopped, and because the run never finished, the Apply button stayed disabled through refreshes and re-selection; only closing and reopening the Sync Center made it clickable again, after which it could stall on the next bad download.\r\n\r\n## The fix\r\n\r\n- Every install download is now bounded: each attempt has a 30-second ceiling, and an idempotent download retries up to three times before giving up. A dead or unreachable plugin now fails after at most ~90 seconds with an \"install failed\" warning, and the run moves on to the next plugin instead of hanging.\r\n- A definitive \"not found\" (HTTP 4xx) fails immediately without pointless retries; timeouts, network errors, and server errors (5xx) are the ones retried.\r\n- Retries surface in the live status line (\"download failed — retrying (2/3)…\") instead of silence.\r\n- Because every item now always settles, the run always completes and the Apply button always re-enables — no more close-and-reopen dance. Successful installs still persist, so a partial run is resumable by simply applying again.\r\n\r\nApplies to both community-catalog and BRAT installs.\r\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.28.0",
       "prerelease": false,
