@@ -4,8 +4,8 @@
   "description": "Obsidian mind map / mindmap plugin for visual thinking and knowledge management. Create interactive SVG maps from yxmm code blocks with layouts, themes, shortcuts, export, and fullscreen editing. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "yonxao-mindmap",
-  "lastChangedAt": "2026-07-18T08:00:26.985Z",
-  "lastFetchedAt": "2026-07-18T08:00:26.985Z",
+  "lastChangedAt": "2026-07-19T08:01:26.998Z",
+  "lastFetchedAt": "2026-07-19T08:01:26.998Z",
   "manifest": {
     "author": "yonxao",
     "description": "A feature-rich mind map plugin that renders `yxmm` code blocks as interactive SVG mind maps. Supports 20+ layouts, interactive editing, multiple themes, and rich customization options.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "Yonxao Mind Map",
-    "version": "1.5.3"
+    "version": "1.5.5"
   },
   "name": "Yonxao Mind Map",
   "presentInCommunityList": true,
@@ -21,33 +21,105 @@
     {
       "assets": [
         {
+          "digest": "sha256:1cf4418e6b19bc3292f3efe6c5b42089c9be01c6ef66ae493cf7a6b9aaeab71b",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 839349
+        },
+        {
+          "digest": "sha256:6725ab52a3043da37a6d09b642a6e5f3b2950c044a56a56b07acad59c0934eeb",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:4377346e3fb8cff8809503f8df2576c8970cdad1509a3511812357c97e08b939",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 108556
+        },
+        {
+          "digest": "sha256:94207e20b3e1e4715da0f379639eb43280f00493d87036b9d36c38c10dec167c",
+          "downloadCount": 0,
+          "name": "yonxao-mindmap-1.5.5.zip",
+          "size": 382299
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.4...1.5.5](https://github.com/yonxao/yonxao-mindmap/compare/1.5.4...1.5.5)\n\n#### 1.5.5 - 2026-07-19\n\n##### Changed\n\n- Split the signature watermark's single `padding` option into separate `paddingX` (horizontal) and `paddingY` (vertical) options, so corner watermarks can fine-tune their distance from each canvas edge independently. Legacy `padding` values are automatically migrated on config normalization.\n- Enhanced watermark config normalization and validation: the canonicalize phase preserves the legacy `padding` field for migration, and the normalize phase maps it to `paddingX`/`paddingY` with proper min/max clamping (`WATERMARK_GAP_MIN` / `WATERMARK_GAP_MAX`).\n- Updated the watermark config panel UI: the signature padding field is now a horizontal/vertical number pair, with axis-aware labels (\"水平边距\" / \"垂直边距\" in Chinese, \"Padding X\" / \"Padding Y\" in other locales).\n- Optimized normal watermark size handling: single text watermarks now estimate their size from text length and font size (using `NORMAL_TEXT_WIDTH_FACTOR` and `NORMAL_TEXT_HEIGHT_FACTOR`) and hide the explicit width/height inputs, while image and tiled watermarks keep the explicit size controls with context-aware labels (\"Image size\" / \"Tile cell\").\n- Added automatic position correction when switching signature watermark styles: corner style keeps all 9 positions, but bar style auto-clamps to `top-right` or `bottom-right` to avoid invalid empty options.\n\n##### Fixed\n\n- Fixed corner signature watermark text being centered inside its background box instead of aligned to the corresponding edge. Text now uses SVG `text-anchor` and `dominant-baseline` values derived from the `position` option (left→`start`, right→`end`, top→`text-before-edge`, bottom→`text-after-edge`), so corner watermarks sit flush against their intended edge.\n\n##### 调整\n\n- 将签名水印的单个 `padding` 边距配置拆分为水平边距（`paddingX`）和垂直边距（`paddingY`），让角落水印可以独立调整距画布水平和垂直边缘的距离。旧版 `padding` 配置在归一化时会自动迁移。\n- 完善水印配置的归一化和校验逻辑：canonicalize 阶段保留旧版 `padding` 字段用于迁移，normalize 阶段将其映射到 `paddingX`/`paddingY` 并按 `WATERMARK_GAP_MIN` / `WATERMARK_GAP_MAX` 做边界夹紧。\n- 更新水印配置面板 UI：签名水印边距字段拆分为水平/垂直数字对，标签按轴方向显示（中文为\"水平边距\"/\"垂直边距\"，其他语言回退为\"Padding X\"/\"Padding Y\"）。\n- 优化普通水印尺寸处理：单个文字水印根据文本长度和字号估算尺寸（使用 `NORMAL_TEXT_WIDTH_FACTOR` 和 `NORMAL_TEXT_HEIGHT_FACTOR`）并隐藏显式宽高输入；图片和平铺水印保留显式尺寸控件，标签按类型显示（\"图片尺寸\" / \"平铺单元\"）。\n- 签名水印切换样式时自动校正 position：角落样式保留全部 9 个位置，水印条样式自动收敛为 `top-right` 或 `bottom-right`，避免出现空选项。\n\n##### 修复\n\n- 修复角落签名水印文字居中在背景框内、没有对齐到对应边缘的问题。文字现在根据 `position` 选项使用对应的 SVG `text-anchor` 和 `dominant-baseline` 值（left→`start`、right→`end`、top→`text-before-edge`、bottom→`text-after-edge`），角落水印会贴到目标边缘显示。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.5.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T23:38:49Z",
+      "tag": "1.5.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:11b614609292900cdd168283dedee863a8410a46835033789f508444b7f2435b",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 836592
+        },
+        {
+          "digest": "sha256:17690f894a57075e9942302bbf08b61c5871884c3af58ffc804cbf9ffdc1a7be",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 362
+        },
+        {
+          "digest": "sha256:3a809538d11ff38367c4ee7c779fde53971fb2a2375058130bbdbec09daf8f62",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 108425
+        },
+        {
+          "digest": "sha256:eef85023171fac5a95b3a5b21ed642c9ecdbb29aa98126b7687654a145c5e060",
+          "downloadCount": 0,
+          "name": "yonxao-mindmap-1.5.4.zip",
+          "size": 381593
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.3...1.5.4](https://github.com/yonxao/yonxao-mindmap/compare/1.5.3...1.5.4)\n\n#### 1.5.4 - 2026-07-19\n\n##### Added\n\n- Added mobile safe-area adaptation. A new `safeArea.js` utility reads system status bar and home indicator insets (supporting both CSS `env()` and WebView CSS variables), so floating elements stay tappable on notched devices.\n- Updated config modal dimensions and drag boundaries to respect safe-area insets on mobile, preventing the modal header or bottom edge from being unreachable behind the status bar or home indicator.\n- Updated floating toolbar positioning and fullscreen layout to avoid overlapping the system safe area, including toolbar drag boundary clamping and fullscreen viewport padding.\n- Added auto-hide logic for floating toolbars when multiple mind maps exist on the same page, so leftover toolbars from previous renders no longer accumulate.\n- Added view-operation entries to the canvas right-click menu, including **Toggle Source / Map**, **Open Config Panel**, **Fit View**, **Original Size**, **Zoom In**, **Zoom Out**, **Window Fullscreen**, **Fullscreen**, and **Reset Collapsed Topics** — all accessible without keyboard shortcuts.\n- Added a shared `resetCollapsedTopics` method that uniformly restores the collapsed state, reused by the floating toolbar and the canvas context menu to avoid duplicate logic.\n\n##### Changed\n\n- Optimized mobile touch-gesture handling: adjusted SVG `touch-action` to preserve normal page scrolling, and refined the pan-zoom controller to correctly distinguish touch-pan from tap interactions.\n- Refactored floating toolbar collapse-reset calls to use the shared `resetCollapsedTopics` method, reducing code duplication.\n- Added a dedicated mobile height-resize grip at the bottom center of the canvas; touch-based height resizing now starts only from this grip, while mouse resizing still uses the full bottom hot zone.\n- Adjusted config modal responsive sizing and drag boundaries for better mobile usability, paired with safe-area inset handling.\n- Refactored toolbar position calculation to use unified safe-area utilities, keeping boundary clamping consistent across toolbar drag, fullscreen, and normal view modes.\n- Added Chinese comments for safe-area calculation and touch gesture logic to improve code readability.\n\n##### Fixed\n\n- Fixed mobile canvas height resizing being accidentally triggered while scrolling the page. Touch events now require an explicit grip handle to start a resize, so swiping near the bottom no longer changes the canvas height.\n- Fixed fit-view not being properly centered in fullscreen mode. The fullscreen fit-view logic now computes the centered viewBox based on the viewport aspect ratio, so long or wide maps stay centered instead of aligning to the top-left.\n\n##### 新增\n\n- 移动端安全区域适配：新增 `safeArea.js` 工具类读取系统状态栏与手势栏间距（同时兼容 CSS `env()` 与 WebView CSS 变量），确保浮动控件在刘海屏设备上仍可正常点击。\n- 调整配置面板的宽高与拖拽边界，在移动端避让系统安全区域，避免面板顶部被状态栏遮挡、底部被手势栏挡住无法操作。\n- 调整悬浮工具栏定位与全屏布局，避开系统安全区域，包括工具栏拖拽边界夹紧和全屏视口内边距处理。\n- 新增多导图页面悬浮工具栏自动隐藏逻辑，避免上一次渲染残留的工具栏在页面上不断累积。\n- 画布右键菜单新增视图操作项，包括 **切换源码 / 导图视图**、**打开配置面板**、**适配视图**、**原始大小**、**放大**、**缩小**、**窗口全屏**、**全屏**、**重置折叠**，无需快捷键即可操作。\n- 新增 `resetCollapsedTopics` 统一重置折叠状态方法，悬浮工具栏与画布右键菜单共同复用，减少重复代码。\n\n##### 调整\n\n- 优化移动端触摸手势处理：调整 SVG `touch-action` 以保留正常页面滚动能力，优化平移缩放控制器以正确区分触摸平移与点击交互。\n- 重构悬浮工具栏折叠重置调用，改用统一的 `resetCollapsedTopics` 方法，减少重复逻辑。\n- 画布底部新增移动端专用高度调整抓手；触摸方式下仅从该抓手启动高度调整，鼠标方式下仍保留完整底部热区。\n- 调整配置面板响应式尺寸与拖拽边界，配合安全区域避让，提升移动端可用性。\n- 重构工具栏位置计算逻辑，统一使用安全区域工具，保持工具栏拖拽、全屏和普通视图模式下边界夹紧的一致性。\n- 为安全区域计算和触摸手势逻辑补充中文注释，提升代码可读性。\n\n##### 修复\n\n- 修复移动端滚动页面时容易误触发画布高度调整的问题。触摸事件现在必须从明确的抓手启动高度调整，底部滑动不再意外改变画布高度。\n- 修复全屏模式下适配视图没有正确居中的问题。全屏适配视图逻辑现在按视口宽高比计算居中的 viewBox，长图或宽图都会保持居中而不是贴靠左上角。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.5.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T20:44:34Z",
+      "tag": "1.5.4"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:7c41f708081679c3f838660074cea0db34830934bae5c8ea647386a70ecfd711",
-          "downloadCount": 9,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 832741
         },
         {
           "digest": "sha256:936aebc50be65cc8de279e6ce345b92465d94754c31b815e7e493e1744ae4142",
-          "downloadCount": 9,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 362
         },
         {
           "digest": "sha256:5d4a429cdff3a01fae2f421dea5c9af570350c31581b7b95c5d90ed53bba6beb",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 104722
         },
         {
           "digest": "sha256:80dd11918ae7a6ed2ee01776c7110fff3496afc8195b06092b86765f66e62fae",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "yonxao-mindmap-1.5.3.zip",
           "size": 379940
         }
       ],
       "author": "github-actions[bot]",
       "description": "## yonxao-mindmap\n\n### 安装方式\n\n1. 在 Obsidian 中打开 **设置 → 社区插件 → 浏览**，搜索 `yonxao-mindmap`。\n2. 或从 Obsidian 社区插件页安装：<https://community.obsidian.md/plugins/yonxao-mindmap>。\n3. 或手动下载压缩包，解压到 `.obsidian/plugins/yonxao-mindmap/`。\n\n### 更新内容\n\n版本对比：[1.5.2...1.5.3](https://github.com/yonxao/yonxao-mindmap/compare/1.5.2...1.5.3)\n\n#### 1.5.3 - 2026-07-18\n\n##### Added\n\n- Added topic cut and paste support. Right-click a topic to use the new **Cut Topic** and **Paste Topic** actions, or press `Ctrl/Cmd+X` and `Ctrl/Cmd+V`. Cutting a topic preserves its full subtree on paste, while plain paste still inserts only the topic text as a subtopic of the focused topic.\n- Added **Copy Topic with Attributes** and **Paste Topic with Attributes** actions to the topic context menu. Attribute-aware paste restores the copied topic's attributes and entire subtree.\n- Added **Undo** and **Redo** entries to the canvas context menu for quick access to topic-tree history operations without using keyboard shortcuts.\n\n##### Changed\n\n- Reorganized i18n locale files into a unified entry, with all locale modules bundled and minified through the JS build pipeline instead of being concatenated at runtime.\n- Extracted source-mode shortcuts into a dedicated `sourceShortcuts.js` module and unified focus management across the topic editing flows.\n- Introduced a shared `sessionMemory` utility that provides TTL, LRU, and capacity-budget controls for renderer state, topic history, and image caches, replacing the previous manual Map operations.\n- Added a topic-history memory trimmer that caps the number of undo entries and total memory usage, preventing unbounded growth during long editing sessions.\n- Unified cache-key generation through a new `codeBlockMemoryKey` helper that covers line number, editor offset, and source-prefix positioning strategies, reused by topic history and renderer state.\n- Upgraded the `esbuild` build dependency from `0.27.7` to `0.28.1`.\n\n##### Fixed\n\n- Fixed the relationship structure selection menu always showing a \"Finish member selection\" item for relation types, even though the second target topic already auto-creates the relationship.\n- Fixed native `window.confirm()` dialogs triggered by deleting or cutting a topic inside fullscreen mode exiting the browser's physical fullscreen. Fullscreen now uses an in-canvas custom confirmation overlay that preserves the fullscreen state.\n\n##### 新增\n\n- 主题新增剪切和粘贴功能：右键主题菜单新增 **剪切主题** 和 **粘贴主题**，也可使用 `Ctrl/Cmd+X` 与 `Ctrl/Cmd+V`。剪切后再粘贴会恢复完整子树；普通粘贴仍按原有行为，仅把主题文字作为当前焦点主题的子主题插入。\n- 主题右键菜单新增 **复制主题及属性** 与 **粘贴主题及属性**。带属性粘贴会按剪贴板快照恢复当前可用的属性和完整子主题。\n- 画布右键菜单新增 **撤销** 和 **重做** 菜单项，无需快捷键即可操作主题树历史。\n\n##### 调整\n\n- 重构国际化语言包管理：将分散的多语言文件合并为统一入口，所有语言模块通过 JS 构建流程打包压缩，不再运行时拼接。\n- 抽离源码模式快捷键逻辑到独立的 `sourceShortcuts.js` 模块，统一主题编辑流程中的焦点管理逻辑。\n- 新增通用 `sessionMemory` 会话内存管理模块，提供 TTL、LRU 和容量预算控制，统一主题历史、视图状态和图片缓存的内存管理，替换原有的手动 Map 操作。\n- 新增主题历史内存裁剪工具，限制撤销历史的条目数和总内存占用，避免长时间编辑导致内存无限增长。\n- 统一缓存键生成逻辑，新增 `codeBlockMemoryKey` 通用函数，覆盖行号、编辑器偏移和源码前缀三种定位策略，主题历史和渲染状态共同复用。\n- 升级 `esbuild` 构建依赖从 `0.27.7` 到 `0.28.1` 版本。\n\n##### 修复\n\n- 修复关联结构选择菜单对所有结构类型都显示\"完成成员选取\"选项的问题。关联类型在第二个目标主题选中后会自动创建，不需要\"完成成员选取\"步骤，该菜单项此前会冗余出现。\n- 修复全屏模式下删除或剪切主题时，原生 `window.confirm()` 弹窗会让浏览器退出物理全屏的问题。全屏模式下改用画布内的自定义确认浮层，确保全屏状态不被打断。\n\n完整更新日志请参阅 [CHANGELOG](https://github.com/yonxao/yonxao-mindmap/blob/main/CHANGELOG.md)。\n",
-      "downloadCount": 9,
+      "downloadCount": 11,
       "draft": false,
       "name": "1.5.3",
       "prerelease": false,
