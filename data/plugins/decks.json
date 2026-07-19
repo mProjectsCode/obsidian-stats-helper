@@ -4,8 +4,8 @@
   "description": "Decks - Spaced repetition flashcards plugin with FSRS algorithm.",
   "errors": [],
   "id": "decks",
-  "lastChangedAt": "2026-07-18T03:01:26.989Z",
-  "lastFetchedAt": "2026-07-18T03:01:26.989Z",
+  "lastChangedAt": "2026-07-19T03:05:26.996Z",
+  "lastFetchedAt": "2026-07-19T03:05:26.996Z",
   "manifest": {
     "author": "Xherdi Lika",
     "authorUrl": "https://github.com/dscherdi",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.10",
     "name": "Decks",
-    "version": "2.7.0"
+    "version": "2.7.1"
   },
   "name": "Decks",
   "presentInCommunityList": true,
@@ -24,19 +24,19 @@
       "assets": [
         {
           "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
-          "downloadCount": 1,
+          "downloadCount": 0,
           "name": "LICENSE",
           "size": 34523
         },
         {
-          "digest": "sha256:23458193d25b5bc6e1ec2201fb82ce58b32e05cb31dee57b7098290ee11ffbab",
-          "downloadCount": 22,
+          "digest": "sha256:034f37328b259bc8949d05d6f7a5d6416fd8ccb295dede58345f187fdbb81aea",
+          "downloadCount": 26,
           "name": "main.js",
-          "size": 5546815
+          "size": 5548124
         },
         {
-          "digest": "sha256:78d7f2a70795d65453672bb633bfced3c51d95bfda6ec139d668a0f90e88ed72",
-          "downloadCount": 22,
+          "digest": "sha256:2331ab752cbf57028c8ba877058849826c4a1980d9a514e2f3ad49b106608d6a",
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 381
         },
@@ -48,14 +48,56 @@
         },
         {
           "digest": "sha256:c8c677784854c19213ff5c10add4d7994534b9e96d094ff429c1923f7d98cf09",
-          "downloadCount": 21,
+          "downloadCount": 25,
+          "name": "styles.css",
+          "size": 142373
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Decks 2.7.1 — the Exams profile can be saved again\n\nThis release fixes two issues in the exam decks feature introduced in 2.7.0.\n\n#### **Fixed: saving the Exams profile rejected its own defaults**\n\nThe preinstalled Exams profile sets \"New cards per day\" to 0 so exam questions never enter your normal reviews as new cards. The profile editor, however, rejected values below 1 — so saving any change to the profile (a rename, a parsing tweak) was blocked until you raised the limit, which would then let exam questions trickle into daily reviews. A value of 0 is now valid when the limit is enabled and means \"introduce no new cards\". If you were forced to set 1 on your Exams profile, set it back to 0.\n\n#### **Fixed: the demo exam deck could appear as a regular deck**\n\nOn the very first start after the update, the demo exam deck could be created and parsed before its profile assignment existed, leaving it a plain review deck without the \"Start exam\" entry. Creation now waits for the profile assignment. If your demo deck was affected, delete the file and run the \"Create demo exam deck\" command to recreate it.\n",
+      "downloadCount": 27,
+      "draft": false,
+      "name": "2.7.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T13:18:18Z",
+      "tag": "2.7.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "downloadCount": 1,
+          "name": "LICENSE",
+          "size": 34523
+        },
+        {
+          "digest": "sha256:23458193d25b5bc6e1ec2201fb82ce58b32e05cb31dee57b7098290ee11ffbab",
+          "downloadCount": 49,
+          "name": "main.js",
+          "size": 5546815
+        },
+        {
+          "digest": "sha256:78d7f2a70795d65453672bb633bfced3c51d95bfda6ec139d668a0f90e88ed72",
+          "downloadCount": 50,
+          "name": "manifest.json",
+          "size": 381
+        },
+        {
+          "digest": "sha256:20871c0b826637b71cfeeb4740eb3c8254c77adc4b164078093cc7808cb309c9",
+          "downloadCount": 0,
+          "name": "README.md",
+          "size": 26560
+        },
+        {
+          "digest": "sha256:c8c677784854c19213ff5c10add4d7994534b9e96d094ff429c1923f7d98cf09",
+          "downloadCount": 48,
           "name": "styles.css",
           "size": 142373
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Decks 2.7.0 — exam decks\n\nThis release adds exams: draw a set of questions from a deck, answer them in one sitting in any order, and get a graded result at the end. Exams support multiple-choice, type-in, and cloze questions, an optional time limit, and a pass score.\n\n#### **Exams are enabled per profile**\n\nExam behavior is a profile setting. Turn on \"Exam questions\" under a profile's card parsing settings and every deck mapped to that profile becomes exam-capable. A preinstalled \"Exams\" profile is mapped to the `exams` subtag of your deck tag — with the default `#decks`, tagging a note `#decks/exams` is all it takes. Each profile also carries exam defaults — number of questions, time limit, minimum score to pass, question and option shuffling, feedback after each question or at the end, question selection, typed-answer grading, and letter or number option labels — which prefill the setup dialog of every exam started from its decks.\n\n#### **Multiple-choice authoring**\n\nIn an exam-enabled deck, a heading followed by a task list becomes a multiple-choice card:\n\n```markdown\n## Which element is a noble gas?\n\n- [ ] Oxygen\n- [x] Argon\n- [ ] Nitrogen\n```\n\n`- [x]` marks a correct option; checking several makes it a multi-select question. Decks on profiles without the setting parse exactly as before — nothing changes for existing decks unless you turn it on.\n\n#### **Taking an exam**\n\nStart from the deck's menu (⋮ → \"Start exam\") or by clicking an exam deck. A setup dialog shows how many questions are available and lets you adjust the defaults; during the exam a navigator lets you move freely between questions, with a countdown when a time limit is set. Besides multiple choice, header-and-answer cards and table rows are asked as type-in questions, and cloze cards show the full sentence with the highlighted parts as type-in blanks. Typed answers are graded exactly, tolerantly of small typos, or self-graded, per the profile's grading mode. Submitting shows a results screen with a per-question breakdown and, when a minimum score is set, pass or fail.\n\n#### **Results follow your vault**\n\nCompleted exams are stored in the plugin database, merge across devices like review history, and are included in backups.\n\n#### **Also**\n\n- A \"Demo exam\" deck showing every question format is created once after the update; the \"Create demo exam deck\" command recreates it on demand.\n- Multiple-choice cards are interactive in normal review too: pick options, then flip to check them against the solution.\n- Questions that can't be graded — no correct option marked, only one option, or a typed answer too long for text grading — get a badge in the flashcard manager and are left out when an exam is drawn.\n\nThe database migrates automatically on first load after the update; the Exams profile then appears in the profiles manager.\n",
-      "downloadCount": 22,
+      "downloadCount": 50,
       "draft": false,
       "name": "2.7.0",
       "prerelease": false,
@@ -198,13 +240,13 @@
         },
         {
           "digest": "sha256:8e41ecf056936e269b61f8e0cfd8bfe67d4d87a1c4b158c2c66be492c534bfa1",
-          "downloadCount": 81,
+          "downloadCount": 82,
           "name": "main.js",
           "size": 5209427
         },
         {
           "digest": "sha256:60a026f9a6f16f9438fd8de5118fbd5cb77f7dc96bb4a4c789ccfcd7a66e99e8",
-          "downloadCount": 92,
+          "downloadCount": 93,
           "name": "manifest.json",
           "size": 381
         },
@@ -216,14 +258,14 @@
         },
         {
           "digest": "sha256:eccf2fb8b427291da1fba95e274cbbfd240a1f67a71869fb292a11f060bfb6bc",
-          "downloadCount": 79,
+          "downloadCount": 80,
           "name": "styles.css",
           "size": 137465
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Decks 2.5.6 — Anki import and re-import fixes\n\nThis release fixes cards being lost during Anki import and re-import, and makes review progress survive when a card moves between decks.\n\n#### **Cards that share a word are no longer dropped on import**\n\nWhen an Anki deck repeats the same word across chapters — or contains homographs such as *object* (noun) and *object* (verb) — those cards used to collapse into a single card, silently dropping the rest. Each card is now kept. When two cards share the same front, a numbered marker (for example `object (2)`) distinguishes them.\n\n#### **Re-importing a deck no longer empties it**\n\nRe-importing an updated Anki deck — or importing into a vault that already held those cards — could leave the new decks showing 0 cards. The sync now moves an existing card into its new deck instead of skipping it, so every card lands where it belongs.\n\n#### **Review progress is preserved when a card moves**\n\nMoving a card to another deck, or re-importing it, now keeps its full scheduling state **and** its suspended or buried status. Previously a re-created card could lose that state.\n\n#### **Orphaned cards are cleaned up**\n\nA full sync now removes cards left stranded by earlier deletes or migrations — cards that were no longer attached to any deck — so the deck list and card counts stay accurate.\n",
-      "downloadCount": 92,
+      "downloadCount": 93,
       "draft": false,
       "name": "2.5.6",
       "prerelease": false,
