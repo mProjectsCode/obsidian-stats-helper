@@ -4,8 +4,8 @@
   "description": "Local-first bridge between reMarkable tablet and Obsidian. Extract PDF highlights as markdown without cloud dependency. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "eink-sync",
-  "lastChangedAt": "2026-07-18T05:05:27.020Z",
-  "lastFetchedAt": "2026-07-18T05:05:27.020Z",
+  "lastChangedAt": "2026-07-19T05:03:26.973Z",
+  "lastFetchedAt": "2026-07-19T05:03:26.973Z",
   "manifest": {
     "author": "hwangso595",
     "authorUrl": "https://github.com/hwangso595",
@@ -14,11 +14,71 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.5.0",
     "name": "E-Ink Sync",
-    "version": "0.1.1"
+    "version": "0.3.0"
   },
   "name": "E-Ink Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c7ba0eadd495393884b4ae93bbb6ebbe2075305353b35e53a75d77ea9bae326e",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 4079795
+        },
+        {
+          "digest": "sha256:d4df72856913a24830d0c2e3d5d5d869f641d02249b7bdee857a5cc51705ce27",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 307
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "hwangso595",
+      "description": "## Page templates now render on current firmware\n\nNotebook pages have been rendering on plain white for anyone on reMarkable firmware 3.x, and not because of a sync problem: the feature was written against the older device layout, where templates shipped as PNG art. Current firmware ships 65 `.template` files — declarative JSON with expression-driven layout — and no PNGs at all, so the fetch matched nothing and the renderer had nothing to draw.\n\nThis release interprets that format: a small expression language (arithmetic, comparisons, ternaries over `templateWidth`/`parentWidth`/`paperOrigin`), repeated groups (`down`/`up`/`right`/`infinite` and fixed counts), and `M`/`L`/`C`/`Z` paths, drawn with PyMuPDF so nothing new needs installing. Verified against all 65 stock templates on a device.\n\nScrolled notebook pages are taller than one screen, so templates are drawn once the final page height is known — the ruling continues to the bottom at its true spacing instead of stopping a screen down.\n\n`text` items (planner headings, day names) are not drawn: they need the device's own font to place correctly. Planner templates render their rules but not their words.\n\n## Fixes\n\n- **Disabling handwriting OCR now takes effect.** The render cache stored each page's OCR text and replayed it on cache hits regardless of the setting, so turning OCR off left the same callouts being rewritten into notes on every sync. Cached text is now withheld unless OCR is active (and kept, so re-enabling costs no re-run).\n- **OCR failures are retried instead of cached as final.** A Tesseract error or per-page timeout was indistinguishable from \"no text found\" and got cached as empty forever.\n- **`template_renderer.py` is now shipped.** It was missing from the runtime asset list, which would have broken page rendering with an `ImportError` inside a subprocess. A test now walks the real import graph and asserts the ship list covers it.\n- **The typecheck gate works again.** `virtual:extraction-assets` had no type declaration, so `tsc --noEmit` failed and 64 tests — covering the embedded-Python bundle that makes auto-updated installs work — never ran.\n\n## Upgrade notes\n\nExisting page images are not regenerated automatically: an unchanged page keeps its cached render. To pick up templates on pages you have already synced, run a full (non-incremental) extraction. Template art is fetched from the tablet over SFTP during sync, so the device needs to be reachable once.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T00:59:01Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5054c31ba15e055881133483bec40ae62e8a1cbdf78bc87aaa419b7ceda05137",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 4018329
+        },
+        {
+          "digest": "sha256:995d58f7b631cd6c196e9a4e7763e54a6c9f94770e3014dc4852f019f5511176",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 307
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "hwangso595",
+      "description": "First release since 0.1.1, covering five merged PRs.\n\n## Highlights\n\n**Plugin-managed Python environment (#7)** — the plugin now provisions and owns its own Python environment (uv when available, otherwise venv + pip) instead of trusting whatever `python3` happens to be on PATH. Missing dependencies now abort extraction with a clear notice rather than silently writing empty notes.\n\n**Faster sync and refresh (#6)** — unchanged documents no longer cost SFTP round trips: a notebook's page directory is only fetched when its `.metadata`/`.content` changed. Tablet `.cache`/`.thumbnails` previews are no longer downloaded at all. A per-document render cache reuses page PNGs, highlight text, and OCR text when a page's strokes haven't changed (measured: 9.1s → 0.2s on an unchanged 6-page notebook).\n\n**Page templates behind notebook strokes (#5)** — reMarkable's ruled/grid/planner template art is fetched from the tablet and drawn behind your handwriting, so rendered pages look like the device.\n\n**Blank-space trimming and handwriting OCR (#4)** — short notebook pages are cropped instead of padded with empty space, and optional local OCR (Tesseract) makes handwriting searchable in your vault.\n\n**Typed notes are never lost (#8)** — text you write inside a note's `<!-- notes -->` blocks is preserved across regeneration.\n\n## Upgrade notes\n\n- The managed Python environment is provisioned on first run after upgrading; extraction may take slightly longer that one time.\n- Page image filenames now derive from the page's stroke-file timestamp alone, so expect a one-time rename of existing page images on the first sync after upgrading.\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T21:46:33Z",
+      "tag": "0.2.0"
+    },
     {
       "assets": [
         {

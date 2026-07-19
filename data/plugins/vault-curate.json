@@ -4,8 +4,8 @@
   "description": "Hybrid semantic search for your vault notes. BM25 + WebGPU embedding + fuzzy retrieval, Multilingual, with particularly strong Chinese/CJK support, with optional LLM - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-curate",
-  "lastChangedAt": "2026-07-18T05:05:27.020Z",
-  "lastFetchedAt": "2026-07-18T05:05:27.020Z",
+  "lastChangedAt": "2026-07-19T05:03:26.973Z",
+  "lastFetchedAt": "2026-07-19T05:03:26.973Z",
   "manifest": {
     "author": "Jacob Mei",
     "authorUrl": "https://github.com/notoriouslab",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Vault Curate",
-    "version": "1.2.0"
+    "version": "1.2.2"
   },
   "name": "Vault Curate",
   "presentInCommunityList": true,
@@ -22,39 +22,81 @@
     {
       "assets": [
         {
-          "digest": "sha256:cc8fd2e9deb731e61836cce0c198d1c297502ac23817ac8d46e75761c0bc89fb",
-          "downloadCount": 12,
+          "digest": "sha256:5d05e2e02185fff863d31ce182c65ad226dbdd97b878b5b8af6fec7ff4a0b352",
+          "downloadCount": 23,
           "name": "main.js",
-          "size": 1693001
+          "size": 1764586
         },
         {
-          "digest": "sha256:f8803bb78f0aaea2f933232c9e68c1b115905830fbbf858c63d479e2766011b4",
-          "downloadCount": 13,
+          "digest": "sha256:8edbd74b65849151a025a51b50ec10f94155210c7d208a3eee574df93f07f8e3",
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 441
         },
         {
           "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
-          "downloadCount": 4,
+          "downloadCount": 8,
           "name": "ort-wasm-simd-threaded.wasm",
           "size": 12942611
         },
         {
           "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
-          "downloadCount": 2,
+          "downloadCount": 7,
           "name": "sql-wasm.wasm",
           "size": 659730
         },
         {
           "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
-          "downloadCount": 11,
+          "downloadCount": 21,
+          "name": "styles.css",
+          "size": 6966
+        }
+      ],
+      "author": "notoriouslab",
+      "description": "Retrieval-quality release for Chinese vaults, plus the 1.2.0 audit-compliance fixes (folded in unreleased as 1.2.1).\n\n## Changed\n- **Embedding input is converted Traditional→Simplified Chinese before encoding.** bge-small-zh is trained predominantly on Simplified Chinese; converting only the embedding input — via a bundled 4,105-entry character table, while stored text, keyword search, snippets, and generated descriptions all stay Traditional — moves vectors into the model's best-trained token space. Measured on a 2,500-note Traditional-Chinese vault: true positives hold or improve while unrelated \"hub\" notes drop 3-4x in rank. Queries convert through the same table, so both sides always share one space. Simplified-Chinese vaults are unaffected (no-op).\n- **Find similar / relation graph now cap same-folder results** (hidden setting `sameFolderCap`, default 3, 0 disables). Template siblings live in the same folder and tended to refill the list once hub noise was gone — the cap hands those slots to the note's actually-related content. Topic folders are unaffected in practice.\n- Upgrading triggers a one-time re-embed of CJK-bearing notes (a progress notice shows; interrupting is safe and resumes on next launch).\n- Settings tab builds its multi-line description with Obsidian's `createFragment`/`createEl` helpers (obsidianmd/prefer-create-el, 4 sites); one unsafe-`any` assignment in the BM25 index build resolved.\n\n## Notes\n- A Taiwan-phrase mapping layer was evaluated and deliberately excluded — benchmarks across four note-group domains showed no measurable gain over character-level conversion on a terminology-consistent vault. May revisit as an opt-in if mixed-terminology vaults surface.\n- **BRAT install is now documented in the README** — recommended path while community review is pending, with auto-updates on every release.",
+      "downloadCount": 24,
+      "draft": false,
+      "name": "1.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-18T13:31:40Z",
+      "tag": "1.2.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cc8fd2e9deb731e61836cce0c198d1c297502ac23817ac8d46e75761c0bc89fb",
+          "downloadCount": 20,
+          "name": "main.js",
+          "size": 1693001
+        },
+        {
+          "digest": "sha256:f8803bb78f0aaea2f933232c9e68c1b115905830fbbf858c63d479e2766011b4",
+          "downloadCount": 23,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 5,
+          "name": "ort-wasm-simd-threaded.wasm",
+          "size": 12942611
+        },
+        {
+          "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
+          "downloadCount": 3,
+          "name": "sql-wasm.wasm",
+          "size": 659730
+        },
+        {
+          "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 6966
         }
       ],
       "author": "notoriouslab",
       "description": "Search-quality release: template-heavy notes (person cards, log templates) no longer crowd similarity results with their template siblings — the genuinely related content surfaces instead.\n\n## Fixed\n- **Long notes were systematically under-scored.** Note-level vectors are mean-pooled without re-normalization, so multi-chunk notes had norm < 1 while rankers assumed unit vectors. Vectors are now L2-normalized at the read boundary — in our dogfood case this alone moved a note's truly-related conversation file from rank #10 to #1. Expect similarity results to change (for the better) across the vault.\n\n## Changed\n- **Embedding input is denoised.** Markdown structure symbols (table borders/divider rows, block/bar characters, middle-dot runs) are stripped from embedding input only — stored text, keyword search, and snippets are unaffected. Single middle dots (CJK name separators) are preserved.\n- **The frontmatter `description` now blends into each note's ranking vector** (weight 0.5 when a description of 10+ chars exists; body-only otherwise). A semantic description pins who/what a note is about — something template-shaped bodies can't. Tunable via `descWeight` in data.json.\n- **Description generator sees content, not template.** Sampling denoises first and takes head+tail (personal content tends to live at the end), and the prompt now forbids describing a note's format or structure.\n\n## Performance\n- **Keyword (BM25) search is ~1000x faster on large vaults**: a prebuilt compact inverted index replaces per-query re-tokenization of the whole corpus (measured ~2,000ms → <1ms per query on a 2,500-note vault). Ranking output is identical (pinned by equivalence tests, including repeated-token CJK queries).\n\n## Added\n- Descriptions are keyword-searchable (each joins the BM25 pool as a virtual document).\n- Zero-effort upgrade: first launch runs a one-time incremental pass (only symbol-bearing notes re-embed; descriptions get their embeddings backfilled) with progress notices. Interrupting is safe — it resumes on next launch.\n\n## Notes\n- Hidden settings `descWeight` (default 0.5) and `minDescChars` (default 10) are sanitized against malformed values.\n- Remaining topic-level neighbors reflect the built-in model's semantic resolution; a larger embedding model via the Ollama/OpenAI provider raises that ceiling at the cost of speed.",
-      "downloadCount": 13,
+      "downloadCount": 23,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -371,7 +413,7 @@
         },
         {
           "digest": "sha256:bc9737149b0c7d47d27068cfe60481ac388f0d760bce641bd8e875e47d9b4498",
-          "downloadCount": 82,
+          "downloadCount": 83,
           "name": "styles.css",
           "size": 3401
         }

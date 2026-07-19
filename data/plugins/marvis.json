@@ -4,8 +4,8 @@
   "description": "AI-powered multi-view project planner and habit tracker: Kanban, Timeline, Calendar, and more over your vault notes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "marvis",
-  "lastChangedAt": "2026-07-18T05:05:27.020Z",
-  "lastFetchedAt": "2026-07-18T05:05:27.020Z",
+  "lastChangedAt": "2026-07-19T05:03:26.973Z",
+  "lastFetchedAt": "2026-07-19T05:03:26.973Z",
   "manifest": {
     "author": "Mahdi Massahi",
     "description": "AI-powered multi-view project planner and habit tracker: Kanban, Timeline, Calendar, and more over your vault notes.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:ef85944568e03af7eb545025552aaa3df8763bf661d7a9aea2fdac98ee645046",
-          "downloadCount": 247,
+          "downloadCount": 248,
           "name": "main.js",
           "size": 549228
         },
         {
           "digest": "sha256:fa0f87d8a25595418743bd6b7ae15c44d0b55b9e7c5a350a08fdc17a7d89dcc3",
-          "downloadCount": 249,
+          "downloadCount": 250,
           "name": "manifest.json",
           "size": 283
         },
         {
           "digest": "sha256:1588305f5e165ae3631e2dfd6a81e28bdaea8519729f3c05db1c1bde7ba58a2c",
-          "downloadCount": 208,
+          "downloadCount": 209,
           "name": "styles.css",
           "size": 101449
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Changed\n\n- Calendar Week and Month chips (events, tasks, logs/habits) now fill with the project colour at the same low-opacity tint used in Day view, instead of only carrying a coloured border. Project membership is readable at a glance across all three calendar modes; chips without a project keep their plain background.\n\n### Performance\n\n- Indexer now coalesces vault and `metadataCache` events into a single 60ms flush. Bursty change streams (Apple Calendar sync, iCloud bursts, vault reload) previously triggered hundreds of cascading store updates and React re-renders; they now collapse to one. (`src/index/indexer.ts`)\n- Habit views (Today, Review, Habit table, Habit card) no longer re-derive `Object.values(s.logs)` on every store mutation. The list selector returned a new array on every tick, defeating Zustand's identity check and causing every habit view to re-run `completionCounts` / `dayCounts` / `bonusTickDays` / `computeStreak` per habit. Subscribers now read the logs map directly and group logs by habit name once per render, collapsing the worst case from O(habits × logs) to O(logs + habits). (`src/views/Habits.tsx`, `src/views/shared/HabitCard.tsx`, `src/views/table/HabitTable.tsx`)\n- Search filter caches the lowercased haystack per task and per habit in a `WeakMap` instead of rebuilding the (up-to-8000-char) body string on every keystroke. List-valued filter fields also pre-build their lookup `Set`s once per call. (`src/filter/filterEngine.ts`)\n- Project lookup by name now goes through a memoised `Map<name, Project>` (`useProjectByName` in `src/views/context.ts`) instead of an `Object.values(projects).find(...)` per row in every chip, bar, and table row.\n- Timeline `dayIndex` is now an arithmetic offset rather than a linear scan; for a 500-bar / 720-day chart this cuts ~1.5 M comparisons per render. (`src/views/Timeline.tsx`)\n- Timeline now caches parsed RRules and the resulting occurrence arrays in a `WeakMap` keyed by the event reference + range, instead of re-parsing every recurring event over a ±2-year window on every filter change. (`src/utils/recurrence.ts`)\n- `PlannerView` skips React re-renders when `layout-change` fires without an actual change in the assistant-leaf state. Tab focus, sidebar resize, and other layout events no longer rebuild the entire React tree. (`src/views/PlannerView.tsx`)\n\n### Added\n\n- Drag-to-reorder for habits in the Today view. Each row now exposes a grip handle on hover; dragging persists a fractional `order` to the habit's frontmatter so the new sequence carries across both Today and Review modes (and survives reloads). Uses the same dnd-kit + fractional-indexing pattern as Kanban cards.\n- Status and priority rows in Settings now have up/down arrow buttons to reorder them. The Kanban view follows this order for its columns, so users who accidentally remove and re-add a status can move it back into place instead of being stuck with the new column at the end.\n\n### Fixed\n\n- Reordering a status or priority in Settings did not update the open Kanban view until the plugin was reloaded. The `columns` memo in `src/views/Kanban.tsx` depended on the whole `settings` object reference, which doesn't change when `settings.statuses` is replaced in-place; the memo now depends on `settings.statuses` and `settings.priorities` directly so reorders take effect immediately.\n",
-      "downloadCount": 249,
+      "downloadCount": 250,
       "draft": false,
       "name": "0.2.4",
       "prerelease": false,
