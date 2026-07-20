@@ -4,22 +4,70 @@
   "description": "Automatically updates markdown image links when image files are renamed or moved in the vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "image-link-updater",
-  "lastChangedAt": "2026-07-19T04:05:27.025Z",
-  "lastFetchedAt": "2026-07-19T04:05:27.025Z",
+  "lastChangedAt": "2026-07-20T05:02:27.027Z",
+  "lastFetchedAt": "2026-07-20T05:02:27.027Z",
   "manifest": {
     "author": "Andy Lai",
     "authorUrl": "https://github.com/andy51002000",
-    "description": "Automatically updates Markdown image links when image files are renamed or moved in the vault.",
+    "description": "Auto-repairs broken image links vault-wide on rename, move, or paste. Supports Markdown links, Cut & Paste with link updates, and OS-level move detection.",
     "fundingUrl": "https://buymeacoffee.com/andy51002000",
     "id": "image-link-updater",
     "isDesktopOnly": true,
     "minAppVersion": "1.5.7",
     "name": "Image Link Updater",
-    "version": "1.3.13"
+    "version": "1.3.15"
   },
   "name": "Image Link Updater",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:355e86e5942000be5b8b5470a5870d27a2591133760925e11561d8965f4830dd",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 21367
+        },
+        {
+          "digest": "sha256:7ddcdfc289db7de88430250ada5bc38b26b1cbd67cc8a50f9bce5744b5f6edfc",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 447
+        }
+      ],
+      "author": "andy51002000",
+      "description": "## What's Changed\n\n### Fixed\n- **Race condition in Smart attachment folder unique-naming** — The previous release used an `adapter.exists()` probe loop to find a unique filename before calling `createBinary`. This check-then-create pattern has a TOCTOU window where a concurrent paste can create the same file between the probe and the write. Fixed by replacing the probe loop with `createBinaryWithRetry()`: the create is attempted directly and retried with an incremented numeric suffix on collision — atomically, no existence check required. This mirrors the `renameWithRetry()` approach used for file moves since 1.3.11.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.14...1.3.15",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.3.15",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T11:01:33Z",
+      "tag": "1.3.15"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dac4b7c0ae5b271c86a58f6ffceec74bb6d72a702d87cf67d955d80c048bcac2",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 20609
+        },
+        {
+          "digest": "sha256:10d997e07bd0175d82e6f69bb1e233c2ab026c288d077ed3b2188bbc996a252a",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 447
+        }
+      ],
+      "author": "andy51002000",
+      "description": "## What's Changed\n\n### Added\n- **Smart attachment folder** — New optional setting (disabled by default) that saves clipboard-pasted images into the first matching sibling folder from a configurable priority list. Zero behavior change when disabled.\n- **Smart folder names** — Companion text setting (default: `assets, images`) defining the priority-ordered list of sibling folder names to probe. Matching is case-sensitive. Field is disabled in the UI when Smart attachment folder is off.\n\n### Also in this release\n- Applied deferred GEO description update to manifest.json for improved plugin directory visibility.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.13...1.3.14",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "1.3.14",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T10:56:11Z",
+      "tag": "1.3.14"
+    },
     {
       "assets": [
         {
@@ -30,20 +78,20 @@
         },
         {
           "digest": "sha256:3ab73d3177632a8797447beac2c928d3ebf5a1bf5c0c37aadb3cc3bc4b392a02",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "main.js",
           "size": 16456
         },
         {
           "digest": "sha256:a07cba921c44a4a64cabca288dbb9df56ee38c31bc4ed6d5f5dc06bdd928ea9d",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 387
         }
       ],
       "author": "andy51002000",
       "description": "## What's Changed\n\n### Fixed\n- **License file corrected** — The LICENSE file now contains the exact canonical GNU AGPL-3.0 text, ensuring correct recognition by automated scanners in the Obsidian community directory.\n\n### Internal\n- Removed `as any` type casts from `vault.process()` — the API has been properly typed since Obsidian 1.1.0.\n- Removed unused `ObsFileManager` local interface.\n- Added `getSettingDefinitions()` to the settings tab for Obsidian 1.13+ settings search.\n- Fixed dead code path in link-replacement utility (`afterByName` unused variable).\n- Added `@wdio/globals` to `devDependencies` (was referenced in tsconfig but undeclared).\n- Fixed e2e test type casts: `FileSystemAdapter.getBasePath()` and typed `TFile` for rename.\n- Added `eslint-plugin-obsidianmd` recommended config; 0 lint errors on plugin source.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.12...1.3.13",
-      "downloadCount": 6,
+      "downloadCount": 9,
       "draft": false,
       "name": "1.3.13",
       "prerelease": false,
