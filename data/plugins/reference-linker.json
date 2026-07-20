@@ -1,0 +1,85 @@
+{
+  "author": "max-fluff",
+  "defaultBranch": "main",
+  "description": "Deep-link your notes to PDFs, Office files, and images outside your vault. Autocomplete a document or a PDF section and jump to the exact page. Hover to preview the page, embed it inline. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "reference-linker",
+  "lastChangedAt": "2026-07-20T10:01:27.003Z",
+  "lastFetchedAt": "2026-07-20T10:01:27.003Z",
+  "manifest": {
+    "author": "max-fluff",
+    "authorUrl": "https://github.com/max-fluff",
+    "description": "Autocomplete links to external documents (PDF, Office, images) and insert a deep-link that opens them at the right page in an external viewer.",
+    "id": "reference-linker",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.4.0",
+    "name": "Reference Linker",
+    "version": "1.0.1"
+  },
+  "name": "Reference Linker",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c721826cf7f08254cf61f33e85dd6e81fef92f9e610fbea90d682e4e9a38be25",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 202187
+        },
+        {
+          "digest": "sha256:be32aa0839a21fe04514fe3ab613d4740f64c404267ba252f429cef167041d1c",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:375f180477d151548907f752393acb0f534ec6a14a75803d61c9e97e1d737971",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 9110
+        }
+      ],
+      "author": "max-fluff",
+      "description": "Re-release of 1.0.0 for the community catalog: same plugin, no changes.",
+      "downloadCount": 12,
+      "draft": false,
+      "name": "v1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T17:54:20Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:935ee3f815f4965015de10fbdb875a540831e35175453bcd3563fb8e9b96579c",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 202187
+        },
+        {
+          "digest": "sha256:2b0b22f8f50f29d94dc4f3b98d991ed10e4fd0428653072640f9473583874ce6",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 371
+        },
+        {
+          "digest": "sha256:21dab574b8340f4648e6c41e68033f9cd84dddd75465b8be31bbf80afe6ac4e7",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 9110
+        }
+      ],
+      "author": "max-fluff",
+      "description": "First release. Reference Linker links your notes to documents that live outside the vault — PDFs, Office files and images — and opens them at the right page. Desktop only: it reads the files from disk through Node's filesystem API.\r\n\r\n### Added\r\n\r\n- Autocomplete: type the trigger (default `@!`) and part of a document name to insert a link at the cursor. The files under your **Reference root** are indexed in memory and matched fuzzily; set **File extensions** first, because the index stays empty until it knows which types to scan. **Scan folders** and **Skip folders** narrow the scan, **Auto-refresh index** rebuilds when documents change on disk, and **Rebuild reference index** forces one by hand. An inline prefix filters a common name: `pdf:`, `png:`, or `sec:` for sections only.\r\n- PDF sections: the outline is read and each section indexed with the page it starts on, so `@!intro` finds the *Introduction* of a paper rather than the file. The inserted link carries that page and a `sec:` binding in its title. A PDF without an outline, and every other document type, is still indexed by file name.\r\n- Portable links: the note keeps the literal `{ref-root}` token and a relative path, and the absolute base is filled in only when the link is opened or rendered, so a vault works on a machine with a different **Reference root**. The token is namespaced so a link says which linker owns it; a bare `{root}` written before the namespacing still resolves.\r\n- Clicking a link opens the document in your OS default app, and a `#page=` link lands on its page. The link goes to the OS through the shell, because Obsidian's own external-link opener mangles the fragment.\r\n- Hover a link to preview it in place: the target page of a PDF rendered to a canvas, or the image itself. Rendering uses the pdf.js Obsidian already ships. In live preview hold Ctrl/Cmd; in reading view a plain hover is enough. **Preview on hover** turns it off.\r\n- Inline embeds: a fenced ` ```reference-link ` block renders a page or an image inside the note. The target is a path, a path with `#page=N`, or a name resolved through the index, and `page:`, `width:` and `title:` lines tune it. The header opens the document at that page, right-click gives **Open** and **Refresh**, and an embed re-renders when the index rebuilds. **Insert reference embed** writes the block for you.\r\n- Stale and broken marks: a link pinned with `sec:` whose section has moved to another page is underlined in the warning colour; one whose section is gone from the outline is underlined in the error colour. **Update reference links in this note** / **… in the whole vault** rewrite the drifted pages through a preview you can check off link by link, and a note edited since the preview was opened is skipped rather than overwritten. **Pin unpinned reference links** retrofits notes written before pinning, and a link's right-click menu offers **Update this reference link**, **Pin to section** and **Unpin**. **Mark stale links** toggles the marks.\r\n- Commands: **Insert reference link**, **Insert reference link as…** (a one-off viewer choice that leaves the default alone), **Open referenced document**, **Copy reference link** (with the root resolved, for pasting outside the vault), **Convert selection to reference link** and **Find and open document**. **Viewer link preset** chooses the link format, with ask-on-insert and your own named URL templates.\r\n- The index is exposed read-only at `app.plugins.plugins['reference-linker'].api` for other plugins and DataviewJS: `getEntries()`, `getFiles()`, `getStats()`, `find()`, `linkFor()`, `uriFor()`, `onChange()`, plus `version` and `root()`.\r\n- Suggestions never fire inside code blocks, inline code, frontmatter or an existing link, and a pipe is escaped when a link lands in a table cell. The stale marks and update commands skip links inside code, where they are example text rather than live links.\r\n- Interface in English and Russian, following Obsidian's language. The stale and broken underline colours are exposed to Style Settings.\r\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T17:45:43Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "max-fluff/obsidian-reference-linker"
+}

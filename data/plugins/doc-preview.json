@@ -4,18 +4,18 @@
   "description": "Preview PowerPoint and Word documents inside Obsidian. Automatically refreshes when you, Claude, or another AI agent makes changes to the file, so your preview is always up to date. Renders via a local LibreOffice install (bring your own, or install one from Settings). - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "doc-preview",
-  "lastChangedAt": "2026-07-19T09:00:27.001Z",
-  "lastFetchedAt": "2026-07-19T09:00:27.001Z",
+  "lastChangedAt": "2026-07-20T10:01:27.003Z",
+  "lastFetchedAt": "2026-07-20T10:01:27.003Z",
   "manifest": {
     "author": "notenerd",
     "authorUrl": "",
-    "description": "Preview PowerPoint and Word documents. Automatically refreshes when you, Claude, or another AI agent changes the file, so your preview is always up to date. Renders via a local LibreOffice install (bring your own, or install one from Settings).",
+    "description": "Preview PowerPoint, Word, and Excel files. Automatically refreshes when you, Claude, or another AI agent changes the file, so your preview is always up to date. Renders via a local LibreOffice install (bring your own, or install one from Settings).",
     "fundingUrl": "",
     "id": "doc-preview",
     "isDesktopOnly": true,
-    "minAppVersion": "1.13.0",
+    "minAppVersion": "1.7.2",
     "name": "Doc Preview",
-    "version": "1.0.2"
+    "version": "1.0.14"
   },
   "name": "Doc Preview",
   "presentInCommunityList": true,
@@ -23,8 +23,368 @@
     {
       "assets": [
         {
-          "digest": "sha256:ab50469ff49f5b9a212e667f6bdde4e2c9c025de87e481bcd78f744dadcc4119",
+          "digest": "sha256:4715975e0ebe61a3821cd5054d715e9d4d60901f51ca699c5be7f066fedac91b",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2176370
+        },
+        {
+          "digest": "sha256:c1d012ffe3e3e41cde5d3311d1206370468e13f52f41ffc33903c7bada0c06a5",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 459
+        },
+        {
+          "digest": "sha256:11d6ee7302859569e806c05c02b7ae40a136ecf390868582c146a84ad30a50fe",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 6452
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "## Fix: Obsidian review flag (code obfuscation / dynamic script elements)\n\n1.0.13 was flagged by Obsidian's plugin review for \"4 dynamic \\`<script>\\` element creations.\" These came from \\`jszip\\`'s bundled IE-compatibility polyfills (\\`lie\\` and \\`setimmediate\\`), which use a legacy technique of creating an inert \\`<script>\\` element purely to fire a scheduling event — never setting \\`src\\`, never executing anything, but indistinguishable from something malicious to a static scanner.\n\nReplaced jszip with a small hand-rolled zip reader (\\`miniZip.ts\\`) built for exactly what this plugin needs: pulling one named XML file out of a plain \\`.xlsx\\`. No functional or behavioral change — same hidden-sheet filtering as 1.0.13, verified against the same test cases with identical results.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.0.14",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T07:17:47Z",
+      "tag": "1.0.14"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b97fac46e18b8d944c3b8bc7155fab76898d2a5fecadeb17e78c18bdc6465b55",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 2332452
+        },
+        {
+          "digest": "sha256:20fc1dccca594dd9f240ecfdc29c6404172291e0fd0144d7962d51fcd7763ac3",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 459
+        },
+        {
+          "digest": "sha256:11d6ee7302859569e806c05c02b7ae40a136ecf390868582c146a84ad30a50fe",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 6452
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "## Fix: hidden Excel sheets no longer show up as blank tabs\n\nLibreOffice's headless PDF export includes hidden sheets as real pages, even though Excel (and LibreOffice's own GUI export) hide them. If your workbook has hidden helper/calculation sheets, this could make Doc Preview show far more tabs than the workbook actually has, many of them blank or nearly blank.\n\nDoc Preview now reads sheet visibility straight from the workbook's own file and filters those sheets out of the tab bar, thumbnails, and page count — so what you see here should now match what you'd see opening the file in Excel.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.13",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T07:06:21Z",
+      "tag": "1.0.13"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71dfb18f09043bc519704368cdd42c7acca85dee9f091d20ce3af94aa0f05ec8",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2169469
+        },
+        {
+          "digest": "sha256:6547d5ad9a6b763bcd45f1788567a2cac600838482d1558ed3b9b3118ec7eb9c",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 459
+        },
+        {
+          "digest": "sha256:11d6ee7302859569e806c05c02b7ae40a136ecf390868582c146a84ad30a50fe",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 6452
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "## Fix: Excel sheets now render as one whole page instead of tiled print pages\n\nPreviously each Excel sheet was exported the same way LibreOffice prints it — split across as many portrait 8.5x11 pages as the content needed, which made a sheet with any real amount of data hard to follow across disconnected pages.\n\nSheets now export as a single page sized to fit the sheet's entire content, so each sheet tab maps to exactly one page, at the cost of needing to zoom in on very dense sheets. Falls back gracefully to the old tiled behavior on older LibreOffice installs that don't support this option.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.0.12",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T06:28:23Z",
+      "tag": "1.0.12"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:71c0c2bcb94096f816f265997808557457ee7b438c149c7a3f2a566043092388",
           "downloadCount": 2,
+          "name": "main.js",
+          "size": 2169286
+        },
+        {
+          "digest": "sha256:b342e502db0b12fbe92bc4cb9c2cf759cb7a621adad4ac26beff34c3bd1abce3",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 459
+        },
+        {
+          "digest": "sha256:11d6ee7302859569e806c05c02b7ae40a136ecf390868582c146a84ad30a50fe",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 6452
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "## Excel (.xlsx) support\n\nDoc Preview now previews Excel workbooks alongside PowerPoint and Word.\n\n- Opens `.xlsx` files directly in an Obsidian tab, converted headlessly via LibreOffice like the existing pptx/docx support.\n- Since spreadsheets have no natural \"page,\" sheet navigation is built from the PDF's own outline/bookmarks (which LibreOffice's Calc PDF export includes by default) — a bottom sheet-tab bar mirrors Excel's own tab convention, and the page indicator shows which sheet is active.\n- Falls back to a plain page view with no tabs if a specific export lacks an outline.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.11",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T05:56:26Z",
+      "tag": "1.0.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a0e85a2969cfe3a0990147c3fb1c4d126520d99069adbd21e091d4aad7bb07d9",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 2166247
+        },
+        {
+          "digest": "sha256:28ed225de0c392e5de4f05fc5a6cc9af521fed901ab72a3633c289aabf083d2d",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 455
+        },
+        {
+          "digest": "sha256:785a6f5d517128a676b71f834f8cc905e16ff843f32d333ec61c8c90f7f102b2",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 5671
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Fixes the page-number indicator drifting with zoom/pan instead of staying fixed in the bottom-center of the panel. It was a child of the scrolling canvas container, so it scrolled along with everything else despite being absolutely positioned — moved it to a non-scrolling wrapper instead.",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "1.0.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T22:11:57Z",
+      "tag": "1.0.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d454271d8cab4053c4c61a4b02473678bdc378f823a63c440c16731bcca253ed",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2166160
+        },
+        {
+          "digest": "sha256:348ff4bedf5a04a990c7707af2887b71853c433d65f8b7f96be5ad3a61d55f1c",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:e81c6c6180a75dbe7798dcd96b88e46f0724ba584aea5b6d3da1a5992b70ac0a",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 5376
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Adds space+drag panning when zoomed in (hold Space and drag, the Figma/Photoshop convention) — kept as a distinct modifier from plain click-drag so it never conflicts with text selection. Also fixes a flex-centering edge case that could make zoomed content unreachable by scrolling in some browser engines.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T21:45:19Z",
+      "tag": "1.0.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:176734886e73334587c0d187b3155b8baaac95b7a0a9c4855843f2cbd362a876",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 2163773
+        },
+        {
+          "digest": "sha256:cabc68da00f633f6a14fd821a7bc384881bc0756cc6b1bf8881da47646f18756",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:54120cc550212cbd18a1b471f167e94ab70708dd2bba86ab04a4e2510e6e84a4",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 4946
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Fixes text selection in the preview (Obsidian's app-wide CSS was overriding user-select on the text layer). Adds a manual-download link next to the Install LibreOffice button as a fallback for networks that block the automated download.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "1.0.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T21:26:19Z",
+      "tag": "1.0.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:703700b4bbcc405f4c2b96ba3b82a8848281d363bb63def70d813733a0281766",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2163112
+        },
+        {
+          "digest": "sha256:a0da17c619eb7f25879b7193a752fad32c5a5850570eff27b9100e7c02f306bd",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:cdc5287b95329155875bc0230044da4599d339fff9e05e95c7fabd93bb951fc2",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 4410
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Adds trackpad pinch-to-zoom (and ctrl+scroll-wheel) in the preview, and makes rendered text selectable/copyable via a pdf.js text layer overlaid on the canvas.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.0.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T21:11:15Z",
+      "tag": "1.0.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:835bb79b31de3667815b0536d7401a0a9a72e3f03347a08deb798a761cf7665d",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 2161338
+        },
+        {
+          "digest": "sha256:60a96b19f849b18d43120c37707e0dadf9da2066f89f4bcf835f925466042aaa",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:690fa61587379aa9650ab1203006ba903b8d4cdc7c99f645e35b51046a909b0b",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 3528
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Fixes the in-app LibreOffice installer on macOS: the .dmg filename uses a hyphen (x86-64) while the containing directory path uses an underscore (x86_64) — our code built both the same way, so every download 404'd. Verified fixed end-to-end with a real download/install/run. Also improves Apple Silicon detection to check true hardware architecture rather than trusting the running process's reported arch, which can be wrong under Rosetta translation.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T20:58:57Z",
+      "tag": "1.0.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:78fd152f93500f7ba010ba221258ab40fd2c12c152d2d77bc5ba635b7b426637",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 2161023
+        },
+        {
+          "digest": "sha256:903499a9c92e88175ab533bc17a5027f523eee28e465c9373ecbd01a4e12b49b",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:690fa61587379aa9650ab1203006ba903b8d4cdc7c99f645e35b51046a909b0b",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 3528
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Critical fix: the PDF viewer's worker script is now embedded directly in main.js instead of shipped as a separate pdf.worker.min.mjs file. Obsidian's plugin installer never fetches a 4th release asset, so the separate file 404'd for every normal install — this was breaking preview rendering entirely outside of a symlinked dev setup.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.0.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T16:03:03Z",
+      "tag": "1.0.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6b8019c0aa5e8455e945b06e8a95f928bf1c6432ac47e9ecaedee2d961879434",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 790673
+        },
+        {
+          "digest": "sha256:0b4c98a853c250194810f28f0901cdbe273411d15df513ccfddce52f614324f2",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:690fa61587379aa9650ab1203006ba903b8d4cdc7c99f645e35b51046a909b0b",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 3528
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Adds HTTPS_PROXY/HTTP_PROXY support for the in-app LibreOffice installer, for corporate-proxy networks where a plain outbound HTTPS request fails.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "1.0.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T15:51:24Z",
+      "tag": "1.0.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b334e4c0d9064ba0e100ff5ca2dc8d285bf84a09e789aeb0bd3495a3a4dd9378",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 758575
+        },
+        {
+          "digest": "sha256:a6eb146f38b824dfe8c12d91bac59accfeb9710357ae26cec8bc9f8622d3e8bf",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 454
+        },
+        {
+          "digest": "sha256:690fa61587379aa9650ab1203006ba903b8d4cdc7c99f645e35b51046a909b0b",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 3528
+        }
+      ],
+      "author": "NoteNerdOfficial",
+      "description": "Reverts minAppVersion to 1.7.2 (1.13.0 is Catalyst early-access only — the actual latest general release is 1.12.7, so requiring it made the plugin uninstallable for nearly everyone). Restores a fully working display() fallback for pre-1.13.0 Obsidian alongside getSettingDefinitions() for 1.13.0+.",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "1.0.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T12:52:56Z",
+      "tag": "1.0.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ab50469ff49f5b9a212e667f6bdde4e2c9c025de87e481bcd78f744dadcc4119",
+          "downloadCount": 4,
           "name": "main.js",
           "size": 757195
         },

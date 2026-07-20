@@ -4,17 +4,17 @@
   "description": "Graph functions, systems, derivatives and integrals in interactive blocks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lmath",
-  "lastChangedAt": "2026-07-19T09:00:27.001Z",
-  "lastFetchedAt": "2026-07-19T09:00:27.001Z",
+  "lastChangedAt": "2026-07-20T10:01:27.003Z",
+  "lastFetchedAt": "2026-07-20T10:01:27.003Z",
   "manifest": {
     "author": "Lenin",
     "authorUrl": "https://github.com/LubrieDev",
     "description": "Graph functions, systems, derivatives and integrals in interactive blocks.",
     "id": "lmath",
     "isDesktopOnly": false,
-    "minAppVersion": "1.5.0",
+    "minAppVersion": "1.12.7",
     "name": "LMath",
-    "version": "1.1.6"
+    "version": "1.2.1"
   },
   "name": "LMath",
   "presentInCommunityList": true,
@@ -22,27 +22,177 @@
     {
       "assets": [
         {
-          "digest": "sha256:ce2b82e3404f6281583ea956e5e32aa8bba63e230b3db2f8663193aa9f9c70c7",
-          "downloadCount": 1,
+          "digest": "sha256:a27bf4c20d11ad7d95dd04098ecb21ffd47671e2f44f6ff36b936cfa62500470",
+          "downloadCount": 6,
           "name": "main.js",
-          "size": 2387413
+          "size": 2382145
         },
         {
-          "digest": "sha256:d62e3577067c5219c406acb73cd88225965de25bf61e38b33f33a18625040d96",
-          "downloadCount": 1,
+          "digest": "sha256:eb57a2b53500ad1b00bbf7d7309d83a4cbcb8897fc203a10dae35da98910a4d1",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 287
+        },
+        {
+          "digest": "sha256:01cb6513d954a2f803d19f6586fe1fe2e502943c7bc100f329f08e12724d1970",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 4049
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.2.1\r\n\r\n## Bug fixes\r\n\r\nPatch release fixing two rendering glitches. No graphing math, equation-solving,\r\nderivative, integral, or parsing behavior was changed.\r\n\r\n- **Formula panel: no more native scrollbar leaking through.** In Live Preview,\r\n  a redundant native scrollbar (the one with arrows) could appear at the bottom\r\n  of the formula card for wide formulas — most visibly on parametric curves such\r\n  as `(x(t), y(t)) = (5cos t − cos 5t, 5sin t − sin 5t)`. The plugin already\r\n  routes horizontal scrolling through its own thin, faded scroller, and a CSS\r\n  rule was meant to suppress Obsidian's native math-block overflow. That rule was\r\n  losing a specificity tie: Obsidian scrolls the equation with\r\n  `.markdown-source-view.mod-cm6 .math-block > mjx-container` (specificity\r\n  `(0,3,1)`), which edged out the plugin's `.lmath-latex .MathJax` (`(0,3,0)`).\r\n  The neutralization now targets `.math-block .MathJax` (`(0,3,0)` → `(0,4,0)`),\r\n  winning by class count without resorting to `!important` or an unknown\r\n  `mjx-container` type selector.\r\n\r\n- **Step functions: no more phantom vertical risers when zoomed far out.** Step\r\n  functions such as `floor(x^2)` and `ceil(x^2)` draw as horizontal treads with\r\n  no vertical connectors. Past a certain zoom-out (roughly when a single unit\r\n  step shrinks below 8 px on screen) the tracer started joining the steps into\r\n  one connected polyline, painting the vertical risers the function does not\r\n  have. The discontinuity cut that removes those risers was gated behind the\r\n  adaptive refinement, which only fires for on-screen jumps taller than 8 px; a\r\n  shrunk step never triggered it. The cut is now decoupled from refinement — a\r\n  jump inside an already-subpixel interval is cut on the strength of the\r\n  two-plateau probe alone — so floor/ceil (and any finite-jump step function)\r\n  stay clean at every zoom level. Smooth curves are unaffected: the probe still\r\n  distinguishes a genuine jump from a steep continuous slope.\r\n\r\nExisting behavior is unchanged: the full test suite (314 tests) passes exactly\r\nas before.\r\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T05:02:30Z",
+      "tag": "1.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0164c71fb8c84f2d45359b5bde52aca5a8e9d6f9619c47e1539cb28082ac41e0",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2382144
+        },
+        {
+          "digest": "sha256:320b8c46a5c41dcd8eb7303932d04fabe8c00d17c55ae69fb7fba0650f6f5d63",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 287
+        },
+        {
+          "digest": "sha256:5db645b3b286921952fc6578c2e2d8ffc96ad0ba6fc5364f707d95f49cce0e24",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 3377
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.2.0\r\n\r\n## Supply chain\r\n\r\nMaintenance release with **no user-facing feature changes**. It clears the\r\nartifact-attestation item from Obsidian's automated plugin review by publishing\r\nbuild provenance for the release assets. No graphing, equation-solving,\r\nderivative, integral, or parsing behavior was changed.\r\n\r\n- **Artifact attestations.** Releases now publish GitHub Artifact Attestations\r\n  (SLSA build provenance) for `main.js` and `styles.css`, so anyone can\r\n  cryptographically verify that the distributed assets were produced from this\r\n  repository. A GitHub Actions workflow generates the attestations automatically\r\n  when a release is published.\r\n- **No plugin code changes.** Only release tooling was added; the plugin build is\r\n  identical to 1.1.9.\r\n- **Pinned `obsidian` dev dependency.** The `obsidian` devDependency was changed\r\n  from `latest` to an exact `1.13.1` for reproducible builds. This is a\r\n  development-only change: it does not affect the shipped bundle (the types\r\n  already resolved to 1.13.1), so `main.js` remains identical to 1.1.9.\r\n\r\nExisting behavior is unchanged: the full test suite passes exactly as before.\r\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T03:38:10Z",
+      "tag": "1.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0164c71fb8c84f2d45359b5bde52aca5a8e9d6f9619c47e1539cb28082ac41e0",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 2382144
+        },
+        {
+          "digest": "sha256:7deac749c1a84aba79c60038ed7b4bf8ea385a3c8e2db12d4f5401f89d8a77ca",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 287
+        },
+        {
+          "digest": "sha256:5db645b3b286921952fc6578c2e2d8ffc96ad0ba6fc5364f707d95f49cce0e24",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 3377
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.1.9\r\n\r\n## Maintenance\r\n\r\nMaintenance release with **no user-facing feature changes**. It clears the\r\nsettings-related item from Obsidian's automated plugin review by adopting the\r\ndeclarative settings API introduced in Obsidian 1.13. No graphing,\r\nequation-solving, derivative, integral, or parsing behavior was changed, and the\r\nsettings panel looks and behaves the same.\r\n\r\n- **Declarative settings API.** The settings tab now implements\r\n  `getSettingDefinitions()`, so on Obsidian 1.13 or later the plugin's settings\r\n  are indexed by the built-in settings search. The imperative `display()` render\r\n  is kept as a fallback for older versions, so the panel continues to work\r\n  exactly as before on the currently supported releases.\r\n- **Minimum app version.** `minAppVersion` is now `1.12.7`.\r\n\r\nExisting behavior is unchanged: the full test suite passes exactly as before.\r\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T02:22:02Z",
+      "tag": "1.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2e7974fbb6785d83bf9acfd4cc858b75e947e9fca6c5f7a145c6986a0dd94762",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 2378467
+        },
+        {
+          "digest": "sha256:f26ce40f1985bc071ebef069d012cd9a0bd9d51e4faba8e1ec5a61e6ceb99c89",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 286
+        },
+        {
+          "digest": "sha256:5db645b3b286921952fc6578c2e2d8ffc96ad0ba6fc5364f707d95f49cce0e24",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 3377
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.1.8\r\n\r\n## Maintenance\r\n\r\nMaintenance release with **no user-facing feature changes**. It clears the\r\nremaining warnings from Obsidian's automated plugin review — the loose\r\ntype-safety, logging and CSS items left after 1.1.7 cleared the large `Nodo`\r\ngroup. No graphing, equation-solving, derivative, integral, or parsing behavior\r\nwas changed, and the rendered output is visually identical.\r\n\r\n- **Type safety.** Typed the few remaining spots that still produced `any`:\r\n  the sampling arrays in function analysis, the root-conversion callback in the\r\n  parser, and the complex-number check in degenerate-function detection. These\r\n  were isolated leftovers, unrelated to the symbolic AST refactor of 1.1.7.\r\n- **Console logging.** The terminal tracer CLI now writes its output directly to\r\n  stdout instead of going through `console`. The in-app developer console (the\r\n  `lmath.*` global in DevTools, kept in place through 1.1.7) has been removed\r\n  from the plugin; the exact same tracing is still available from the terminal\r\n  via `npm run trazar`.\r\n- **Styles.** Removed the `!important` declarations from `styles.css`, relying on\r\n  more specific selectors instead, and replaced the unknown MathJax type\r\n  selectors (`mjx-container` / `mjx-math`) with their class equivalents. The\r\n  formula panel — size, horizontal scroll and edge fades — renders exactly as\r\n  before.\r\n\r\nExisting behavior is unchanged: the full test suite passes exactly as before.\r\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T01:41:35Z",
+      "tag": "1.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:db1c0c4b5e0d38716fa5cfb94e7bc1030c877a897fc628a60403b9a44dd335cd",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 2387439
+        },
+        {
+          "digest": "sha256:9b380c2fd55f6f858cbb81c264569ce418411f3638c71f24c08e38cbff311ca5",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 286
         },
         {
           "digest": "sha256:939206cd7cc865f6844eb4f7ef49195bacf35a27024dd79bd1db801403a56435",
-          "downloadCount": 1,
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 2796
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.1.7\r\n\r\n## Maintenance\r\n\r\nMaintenance release with **no user-facing changes**. It resolves the largest\r\nremaining group of type-safety warnings reported by Obsidian's automated plugin\r\nreview. No graphing, equation-solving, derivative, integral, or parsing behavior\r\nwas changed — the fix is purely internal typing.\r\n\r\n- The shared symbolic AST type (`Nodo`), previously an alias for `any`, is now a\r\n  structural interface over mathjs nodes. This clears the cascade of\r\n  `no-unsafe-*` / `no-explicit-any` warnings across the symbolic engine —\r\n  expression formatting, derivatives, integrals, equation solving, inverse\r\n  solving, simplification, LaTeX output, and parametric/polar parsing — which\r\n  accounted for the vast majority of the review's warnings.\r\n- Node construction now goes through small typed helpers, and the boundary with\r\n  mathjs's own API is the only place a cast remains. Internally the engine no\r\n  longer passes untyped values around.\r\n\r\nExisting behavior is unchanged: the full test suite passes exactly as before.",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T23:20:25Z",
+      "tag": "1.1.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ce2b82e3404f6281583ea956e5e32aa8bba63e230b3db2f8663193aa9f9c70c7",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 2387413
+        },
+        {
+          "digest": "sha256:d62e3577067c5219c406acb73cd88225965de25bf61e38b33f33a18625040d96",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 286
+        },
+        {
+          "digest": "sha256:939206cd7cc865f6844eb4f7ef49195bacf35a27024dd79bd1db801403a56435",
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 2796
         }
       ],
       "author": "LubrieDev",
       "description": "# 1.1.6\r\n\r\n## Bug fixes\r\n\r\n- **Fixed a freeze in `obs-integral` with singular integrands.** A definite\r\n  integral whose integrand blows up near a limit — for example\r\n  `\\int_{0}^{\\pi/2}\\frac{1}{\\csc 2x-\\cot 2x}\\,dx` — could hang Obsidian completely\r\n  when leaving the block. The adaptive area quadrature capped recursion depth\r\n  but not the total number of subdivisions, so a numerically jagged integrand\r\n  (here, catastrophic cancellation near `x=0`) drove it toward an exponential\r\n  blow-up. The quadrature now has a subdivision budget: such integrals resolve\r\n  in a fraction of a second and report **\"Divergent integral\"** instead of\r\n  freezing the app.\r\n\r\n## Maintenance\r\n\r\nThis release also resolves a group of type-safety warnings reported by\r\nObsidian's automated plugin review:\r\n\r\n- The shared expression evaluator (`compilarExpresion` / `compilarFuncion`)\r\n  now returns `unknown` instead of `any`. Every caller narrows the value to a\r\n  number before using it, so the graphing and analysis paths no longer rely on\r\n  an untyped result.\r\n- Non-real results (for example `sqrt(-1)`) are still treated exactly as\r\n  before — as outside the real domain — so degenerate-function detection and\r\n  the \"not defined in ℝ\" label are unchanged.",
-      "downloadCount": 1,
+      "downloadCount": 6,
       "draft": false,
       "name": "1.1.6",
       "prerelease": false,
