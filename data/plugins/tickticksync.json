@@ -4,8 +4,8 @@
   "description": "Sync TickTick tasks.",
   "errors": [],
   "id": "tickticksync",
-  "lastChangedAt": "2026-07-19T00:01:27.003Z",
-  "lastFetchedAt": "2026-07-19T00:01:27.003Z",
+  "lastChangedAt": "2026-07-20T00:02:27.002Z",
+  "lastFetchedAt": "2026-07-20T00:02:27.002Z",
   "manifest": {
     "author": "thesamim",
     "authorUrl": "https://github.com/thesamim",
@@ -24,19 +24,19 @@
       "assets": [
         {
           "digest": "sha256:9b0fad523af7ef49a919a51138e82db8007cc42cf370d0c8fc6cd9314e79edf2",
-          "downloadCount": 146,
+          "downloadCount": 195,
           "name": "main.js",
           "size": 550210
         },
         {
           "digest": "sha256:1791158519ad5e085c12ab42b97981c209cb578957364789268c67afb012a746",
-          "downloadCount": 148,
+          "downloadCount": 196,
           "name": "manifest.json",
           "size": 321
         },
         {
           "digest": "sha256:321b2ce7672eace95484905191d4e36d39b0eb8abc3d1206e0b37c43e592ee02",
-          "downloadCount": 143,
+          "downloadCount": 191,
           "name": "styles.css",
           "size": 7031
         },
@@ -49,7 +49,7 @@
       ],
       "author": "thesamim",
       "description": "## Title: `NewArch2` — Architecture overhaul, feature expansion & maintenance\r\n\r\n### Summary\r\n147 files changed (+20,032 / −6,506). Complete re-architecture of the TickTick Sync plugin: Dexie-backed local storage, service-oriented file/repository layer, Dexie-based sync journal, expanded settings, soft-delete lifecycle, tag & link handling improvements, new MkDocs documentation site with GitHub Actions deployment, and numerous bug fixes.\r\n\r\n### Highlights\r\n\r\n**Architecture & Storage**\r\n- Migrated caching from flat arrays to **Dexie** indexed DB (schema in `src/db/`, migrations in `src/db/migrations.ts`)\r\n- Extracted domain repositories: `TaskRepository`, `FileMetadataService`, `FileTaskQueries`, `ProjectGroupRepository`, `TaskCache`\r\n- New service layer: `EventHandlerService`, `FolderSyncService`, `FolderMigrationService`, `ProjectSyncService`, `VaultSyncCoordinator`, `TaskModificationDetector`, `TaskOperationsService`, `TaskDeletionHandler`, `TagService`\r\n- Removed monolithic `cacheOperation.ts` and old `fileMap.ts`\r\n\r\n**New Features**\r\n- **Recurrence processing** (closes #203)\r\n- **Task display visibility controls** — custom rendering for TickTick tasks in reading & edit mode (`src/query/TaskDisplayProcessor.ts`)\r\n- **Granular link hiding** for TickTick tasks in reading & edit mode\r\n- **Sync journal persisted to Dexie**, with modal viewer (`SyncJournalModal`)\r\n- **Device identity & tracking** — mobile device ID capture, device naming in settings\r\n- **Project preservation** — follow TickTick project folder structure\r\n- **Orphan task detection** modal, **found duplicate tasks** modal\r\n- **Conflict resolution** logging (`src/sync/conflicts.ts`)\r\n- **Access control / SSO 2FA login** improvements\r\n- **Soft-delete task lifecycle** — auto-cleanup of deleted tasks after configurable retention period (default 7 days), manual permanent deletion via `CleanupDeletedTasksModal`, recovery via `RecoverDeletedTasksModal`, new `deletedTaskRetentionDays` setting (1–31)\r\n- **Tag handling overhaul** — case-sensitivity respected, sub-tags handled correctly, new `TagService` with comprehensive test coverage\r\n- **Case-insensitive project matching** (via normalized dashes)\r\n- **Task file stickiness on sync** — tasks stay associated with their source file across syncs\r\n\r\n**Bug Fixes**\r\n- Resolved task sync loop; wire up file-content duplicate detection\r\n- Fixed cut/paste move task regression (closes #350)\r\n- Preserve reminder fields (closes #264)\r\n- Handle moved tasks edge cases; better link location detection\r\n- Fixed note sync issues (#309, #313)\r\n- Better task item detection; parentage change fixes\r\n- Fixed decorate / rendering of TickTick tasks\r\n- Fixed `plugin.tickTickService` → `plugin.service` call in `TasksSettings.svelte` (broken service reference)\r\n- Replaced browser `fetch()` with Obsidian's `requestUrl()` in `cookie-utils.ts` for proper plugin compatibility\r\n- Tag handling regression fix\r\n- UI regression fix in modals\r\n- Wait for Obsidian Sync to complete before running (closes #233)\r\n\r\n**Settings & UI**\r\n- Tabbed settings with `DebugOptions`, `NotesSettings`, `TasksSettings` sections\r\n- `DeviceIdentitySection` for naming mobile devices\r\n- `SyncControlSettings`, `LimitSyncSection`, `FullVaultSyncSection` refinements\r\n- \"Manual Operations\" tab renamed to **\"Maintenance\"**\r\n- Improved `LatestChangesModal` text with backup recommendation\r\n- Additional Manage/Recover Deleted Tasks buttons in Maintenance section\r\n- **Ko-fi support button** added to `LatestChangesModal` (callout at top) and docs index/changelog pages\r\n- `LatestChangesModal`: changelog URL points to GitHub Pages instead of wiki; link text uses `innerHTML` for rich formatting; null-safe `resolvePromise` guard in `onClose`\r\n\r\n**Documentation**\r\n- New **MkDocs**-based documentation site under `docs-src/` (Material theme) covering getting started, configuration, task format, login, moving tasks, and troubleshooting\r\n- **GitHub Actions workflow** (`.github/workflows/docs.yml`) auto-builds and deploys to `gh-pages` branch on push to `master`\r\n- GitHub Pages replaces the old wiki: README links updated to `https://thesamim.github.io/TickTickSync/`\r\n- Old wiki notion of \"reset/checkpoint\" removed — directs users to Settings → Maintenance\r\n- Changelog at `docs-src/changelog.md`, synced from `src/notable-changes.ts` (single source of truth)\r\n- Custom nav indentation CSS for nested config pages; Ko-fi button on index page\r\n\r\n**Testing**\r\n- Added comprehensive test suite: `RecurrenceConverter.test.ts`, `FileTaskQueries.test.ts`, `TaskCache.test.ts`, `TaskRepository.test.ts`, `VaultSyncCoordinator.test.ts`, `TickTickService.test.ts`, `TagService.test.ts`, conflict tests, journal tests, sync tests, and more\r\n- Updated vitest-setup and test utilities\r\n\r\n**Misc**\r\n- NPM audit fix; dependency bumps (vite 6→8, svelte 4→5, js-yaml)\r\n- `capacitor.config.json` added for mobile SSO/2FA login cookie support\r\n- `fake-indexeddb` added for Dexie-backed test environment\r\n- Debug log cleanup\r\n- Removed stale `version.test.ts` and deprecated `suggest.ts`\r\n- Linting cleanup: resolved 2 `no-unsanitized/property` errors in `LatestChangesModal.ts` (DOM API for Ko-fi callout, eslint-suppressed for trusted static content)\r\n\r\n## What's Changed\r\n* `NewArch2` — Architecture overhaul, feature expansion & maintenance by @thesamim in https://github.com/thesamim/TickTickSync/pull/358\r\n* Min App Version fix. by @thesamim in https://github.com/thesamim/TickTickSync/pull/360\r\n* New arch2 by @thesamim in https://github.com/thesamim/TickTickSync/pull/362\r\n\r\n\r\n**Full Changelog**: https://github.com/thesamim/TickTickSync/compare/1.1.17...2.0.1",
-      "downloadCount": 148,
+      "downloadCount": 196,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
