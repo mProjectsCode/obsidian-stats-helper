@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-19T07:02:26.975Z",
-  "lastFetchedAt": "2026-07-19T07:02:26.975Z",
+  "lastChangedAt": "2026-07-20T08:02:27.008Z",
+  "lastFetchedAt": "2026-07-20T08:02:27.008Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -17,9 +17,9 @@
     },
     "id": "vim-motions",
     "isDesktopOnly": false,
-    "minAppVersion": "1.6.6",
+    "minAppVersion": "1.7.2",
     "name": "Vim Motions",
-    "version": "0.68.0"
+    "version": "0.70.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:7c19e0c0f38b643e7bb327755f6536be502921ff71cd95a9fa88a8b220e219f9",
-          "downloadCount": 22,
+          "digest": "sha256:49f81c23271fd789beae61ab2baf07128acbf7a7159bf1d5766d81e35d11cffa",
+          "downloadCount": 26,
           "name": "main.js",
-          "size": 974655
+          "size": 1021284
         },
         {
-          "digest": "sha256:b3b6799c770c7efc6c36cc33d1b6f0d8c6ebed16514ba7bf3af602f9f2b5e272",
-          "downloadCount": 23,
+          "digest": "sha256:825c0c90d2cb88a6dbbfa7a2574264ea4023d39df734b87b1f854e2261a8eec3",
+          "downloadCount": 27,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:279fde1ab901b09953e2253fe30cd507eef57c970afb849c4df3fd8fc2f3c8c6",
+          "downloadCount": 25,
+          "name": "styles.css",
+          "size": 36898
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Undo tree visualization** — branching undo history with `g+`/`g-` chronological navigation across all branches (buffer content changes via ChangeSet dispatch), `:earlier N/Ns/Nm/Nh/Nd/Nf` and `:later` time/count/save-point navigation, `:undolist` modal, sidebar view (`:UndoTreeToggle/Show/Hide`) with DOM tree rendering, click-to-navigate, keyboard nav (j/k/Enter/q), collapse/expand branches, relative timestamps, summary diff preview, `vim.fn.undotree()` Lua API (Neovim-compatible dict), optional persistence (`set undofile`), per-file undo tree map, Obsidian commands for sidebar management. Inspired by [undotree](https://github.com/mbbill/undotree).\r\n    - Plugin: `src/vim/undo-tree.ts` (shadow tree data structure), `src/vim/undo-tree-view.ts` (sidebar view), `src/main.ts` (CM6 integration, g+/g- actions, persistence hooks), `src/workspace/commands.ts` (ex commands), `src/lua/fn.ts` (`vim.fn.undotree()`)\r\n\r\n### Changed\r\n\r\n- **`minAppVersion` bumped from 1.6.6 to 1.7.2** — required for `Workspace.revealLeaf()` used by undo tree.\r\n\r\n### Fixed\r\n\r\n- **`g;`/`g,`/`g-`/`g+` keymaps not working after `reloadFeatures()`** — the changelist and undo tree `mapCommand` registrations were only in `onload()` but not in `reloadFeatures()`. Since `reloadFeatures()` calls `unregisterAll()` (which wipes all custom keymaps) and then re-registers features, these keymaps were silently wiped on any settings change, vimrc load, or Lua config load. Fixed by adding the registrations to `reloadFeatures()`.\r\n    - Plugin: `src/main.ts` (added changelist + undo tree mapCommand calls to `reloadFeatures()`)\r\n\r\n### Tests\r\n\r\n- 66 unit tests in `test/unit/undo-tree.test.ts`: data structure (branching, navigation, pruning, time lookup, Neovim dict), serialize/deserialize round-trip, findBySaveCount, computePath, navigating flag, ChangeSet storage\r\n- 8 e2e tests in `test/specs/undo-tree.e2e.ts`: CM6 integration, g+/g-, :earlier/:later, :undolist\r\n- 4 e2e tests in `test/specs/undo-tree-view.e2e.ts`: sidebar open/close, node rendering, current marker\r\n- 5 e2e tests in `test/specs/undo-tree-navigation.e2e.ts`: buffer content changes via :earlier/:later, g+/g- safety\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added undo tree visualization feature and reloadFeatures fix\r\n- `KNOWN_LIMITATIONS.md`: Added undo tree section\r\n- `README.md`: Added undo tree to features list\r\n- `CONTRIBUTING.md`: Added undo-tree.ts, undo-tree-view.ts to codebase structure\r\n- `AGENTS.md`: Added undo tree to page ownership table\r\n- `docs/features/undo-tree.md`: New feature page\r\n- `docs/features/index.md`: Added undo tree link\r\n- `docs/features/quality-of-life.md`: Added g+/g- and :earlier/:later to change navigation\r\n- `docs/reference/keybindings.md`: Added undo tree navigation section\r\n- `docs/configuration/settings.md`: Added Undo tree settings group\r\n- `docs/configuration/vimrc.md`: Added undotree/undofile options\r\n- `docs/configuration/lua-config.md`: Added vim.fn.undotree() and vim.opt entries\r\n- `docs/features/ex-commands.md`: Added :earlier/:later/:undolist/:UndoTreeToggle\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.69.0...0.70.0",
+      "downloadCount": 27,
+      "draft": false,
+      "name": "0.70.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T23:04:14Z",
+      "tag": "0.70.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ca2f038bf7e58c1b83ba23414ad8efebe0c63f60362470f23acb41b6f29ee4fa",
+          "downloadCount": 21,
+          "name": "main.js",
+          "size": 997762
+        },
+        {
+          "digest": "sha256:5d168a4d9f954a256b870be8b171dc2a0b7f140e562c54c654b8399b488b1925",
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:c0d9b0c234565cc3dd6bebe205ceb83808f1c343b54c76ed6d5806f3a5fcc216",
-          "downloadCount": 22,
+          "downloadCount": 20,
+          "name": "styles.css",
+          "size": 34698
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Textarea vim overlay re-activates immediately after Escape exit** — pressing Escape in normal mode tore down the overlay and called `originalEl.focus()`, which triggered the `focusin` listener and re-created the overlay in insert mode after the 150ms debounce. Users saw a brief flash of the textarea before being placed back in insert mode, making it impossible to return to the modal context. Fixed by adding a `recentlyExited` guard (`WeakRef` + 250ms cooldown) that suppresses the `focusin` handler for the textarea that was just exited. After the cooldown, the textarea can be re-activated by clicking into it again. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (`recentlyExited` WeakRef guard, `markRecentlyExited` cooldown)\r\n- **Lua text objects lost after `reloadFeatures()`** — `vim.textobject.add()` registrations from `.obsidian.init.lua` were silently discarded because `loadLuaConfigInternal()` called `reloadFeatures()` after Lua evaluation, destroying the `VimRegistration` instance that held the keybindings. Fixed by persisting text object specs in `luaTextObjectSpecs[]` and re-registering them via `reregisterLuaTextObjects()` after `reloadFeatures()` completes.\r\n    - Plugin: `src/main.ts` (`luaTextObjectSpecs`, `registerLuaTextObject`, `reregisterLuaTextObjects`)\r\n\r\n### Added\r\n\r\n- **Subword motions (spider.nvim-style)** — `w`/`b`/`e`/`ge` override stopping at camelCase, snake_case, and kebab-case word boundaries. Opt-in via `set subword` / **Settings → Vim features → Subword motions**. 10,000-char performance guard falls back to standard word motions on pathological lines.\r\n    - Plugin: `src/util/subword.ts` (shared boundary detection), `src/motions/subword.ts` (4 motion variants)\r\n- **General-purpose text objects** — 6 new text objects complementing the existing 13 Markdown-specific ones: `iS`/`aS` (subword segment), `in`/`an` (numeric literal with sign/decimal), `iq`/`aq` (nearest quote pair on line), `iD`/`aD` (wikilink `[[...]]` with nesting), `gL` (forward-seeking URL), `i,`/`a,` (comma-separated argument with nesting). All work with operators (`d`, `c`, `y`) and visual mode.\r\n    - Plugin: `src/text-objects/{pair-util,subword,number,any-quote,double-bracket,url,argument}.ts`\r\n- **Enhanced increment/decrement (dial.nvim-style)** — `<C-a>`/`<C-x>` extended to cycle: markdown checkboxes (`[ ]`↔`[x]`), booleans (`true`↔`false`, case-preserved), hex colors (component-wise R/G/B, clamped 0–255), dates (`YYYY-MM-DD` with rollover), CSS values (preserving unit), and integers. Priority-ordered rules (first match wins). Opt-in via `set dial` / **Settings → Vim features → Enhanced increment/decrement**. Falls back to default `<C-a>`/`<C-x>` when no rule matches.\r\n    - Plugin: `src/actions/{dial-rules,dial,register-dial}.ts`\r\n- **Custom text objects via Lua** — `vim.textobject.add(keys, spec)` and `vim.textobject.del(keys)` API for defining custom text objects from `.obsidian.init.lua`. `vim.gen_spec.pair(open, close, opts?)` generates pair-matching specs with nesting and multi-line support. Keys must start with `i` (inner) or `a` (around). Invalid inputs produce error notices.\r\n    - Plugin: `src/lua/textobject-api.ts`\r\n- **External grep binary integration** — optional native ripgrep or GNU grep binary for the picker's grep/live-grep sources. Supports `rg --json` (structured output) and `grep -rn` (file:line:content format). Desktop-only with automatic fallback to in-memory search on mobile or binary failure. Circuit breaker (3 errors in 60s → auto-disable). Process cancellation on new query.\r\n    - Plugin: `src/picker/sources/ripgrep-process.ts`, settings: `ripgrepEnabled`, `ripgrepBinaryPath`, `ripgrepArgs`, `grepMode`\r\n\r\n### Tests\r\n\r\n- 37 unit tests in `test/unit/subword.test.ts`: boundary detection (13 patterns), motion logic (20 cases including cross-line, count, performance guard)\r\n- 45 unit tests in `test/unit/text-objects-extended.test.ts`: all 6 text objects with inner/around, edge cases, nesting\r\n- 31 unit tests in `test/unit/dial.test.ts`: all 6 rules individually + priority ordering + tryDial integration\r\n- 26 unit tests in `test/unit/lua-textobject-api.test.ts`: asymmetric/symmetric pair matching, nesting, multi-line, scanLimit\r\n- 21 unit tests in `test/unit/ripgrep-process.test.ts`: JSON/grep output parsing, arg building, error classification\r\n- 10 e2e tests in `test/specs/subword-motions.e2e.ts`: navigation, operators, snake/kebab, count, setting toggle\r\n- 11 e2e tests in `test/specs/text-objects-extended.e2e.ts`: all text objects with delete/change operators\r\n- 9 e2e tests in `test/specs/dial.e2e.ts`: all rule types, count prefix, no-match fallback, setting toggle\r\n- 5 e2e tests in `test/specs/lua-textobject.e2e.ts`: custom pairs (single-char, multi-char, nested), error handling\r\n- 3 e2e tests in `test/specs/ripgrep.e2e.ts`: conditional skip (binary availability)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added textarea re-activation prevention fix\r\n- `KNOWN_LIMITATIONS.md`: Textarea re-activation after Escape → Fixed (recentlyExited guard)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.68.0...0.69.0",
+      "downloadCount": 21,
+      "draft": false,
+      "name": "0.69.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T15:14:28Z",
+      "tag": "0.69.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7c19e0c0f38b643e7bb327755f6536be502921ff71cd95a9fa88a8b220e219f9",
+          "downloadCount": 40,
+          "name": "main.js",
+          "size": 974655
+        },
+        {
+          "digest": "sha256:b3b6799c770c7efc6c36cc33d1b6f0d8c6ebed16514ba7bf3af602f9f2b5e272",
+          "downloadCount": 41,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:c0d9b0c234565cc3dd6bebe205ceb83808f1c343b54c76ed6d5806f3a5fcc216",
+          "downloadCount": 40,
           "name": "styles.css",
           "size": 34698
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Tests\r\n\r\n- 13 regression tests in `test/specs/table-escaped-pipes.e2e.ts` for issues [#66](https://github.com/saberzero1/motions/issues/66) and [#67](https://github.com/saberzero1/motions/issues/67): typing `|` outside tables (empty doc, mid-text, non-table line, multiple pipes), escaped `\\|` navigation (`]|` skips escaped pipes, wikilink pipe doesn't split cell), typing `|` in table cells (auto-escape, cell count preservation). 1 test skipped (Obsidian swallows `|` at DOM level — see KNOWN_LIMITATIONS.md)\r\n\r\n### Documentation\r\n\r\n- `KNOWN_LIMITATIONS.md`: Updated #67 from \"Fixed\" to \"Partially fixed\" — documented remaining Obsidian platform behavior where typing `|` in table cells is swallowed by the 1.7+ table editor at the DOM level (identical in built-in vim, bundled fork, and no-vim modes). Documented workaround via Embedded table widget mode.\r\n- `docs/features/tables.md`: Added `[!bug]` callout about `|` typing limitation in Live Preview table cells\r\n- **Documentation audit** — systematic audit of all `docs/` pages against source code. Corrected stale counts and inaccurate information across 11 files:\r\n    - `docs/configuration/lua-config.md`: Fixed `insert_normal` mode prompt default from `(insert)` to `NORMAL` (matching `src/settings.ts`)\r\n    - `docs/features/text-objects.md`, `docs/features/index.md`: Updated \"12 text objects\" → 13 (includes table rows)\r\n    - `AGENTS.md`, `CONTRIBUTING.md`, `docs/development/architecture.md`: Updated \"27 vim.fn functions\" → 26 (matches `src/lua/fn.ts`)\r\n    - `README.md`, `docs/features/index.md`: Updated \"12 built-in picker sources\" → 14\r\n    - `docs/features/index.md`: Updated \"60+ ex commands\" → 100+\r\n    - `README.md`, `docs/features/snippets.md`: Updated \"40+ bundled snippets\" → 60+\r\n    - `docs/configuration/settings.md`: Moved jumplist/jumplistsize to \"Vimrc / Lua only\" subsection (not in Settings UI); added updatetime for consistency; moved stray cursorlineopt row from inside callout into Line numbers table; added Cursor line highlight mode row\r\n    - `docs/features/quality-of-life.md`: Added change list navigation (`g;`/`g,`) section\r\n    - `docs/features/workspace-navigation.md`: Made fold providers (frontmatter, callouts) more explicit\r\n    - `KNOWN_LIMITATIONS.md`: Updated \"all 12 sources\" → \"all 14 sources\" in cross-note jump list section\r\n    - `docs/features/index.md`: Updated \"Ships 40+ snippets\" → \"Ships 60+ snippets\"\r\n    - `docs/getting-started/index.md`: Updated \"60+ ex commands\" → \"100+ ex commands\"\r\n- `CHANGELOG.md`: This entry\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.67.0...0.68.0",
-      "downloadCount": 23,
+      "downloadCount": 41,
       "draft": false,
       "name": "0.68.0",
       "prerelease": false,
@@ -58,26 +118,26 @@
       "assets": [
         {
           "digest": "sha256:7c19e0c0f38b643e7bb327755f6536be502921ff71cd95a9fa88a8b220e219f9",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 974655
         },
         {
           "digest": "sha256:8e2d13e493b70eb871ff1a4dda9d2bdca3510fb1d973018414afa2319562f9d8",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:c0d9b0c234565cc3dd6bebe205ceb83808f1c343b54c76ed6d5806f3a5fcc216",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 34698
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **Flash motions — enhanced f/F/t/T with labels** — when pressing `f{char}` and 2+ matches exist in the viewport, jump labels appear on all matches. Single match auto-jumps (stock Vim behavior preserved). Works with operators (`df{char}{label}`, `cf`, `yf`), visual mode (`vf{char}{label}`), and `;`/`,` repeat. Multi-line search enabled by default (configurable via `set flashmultiline`). Inspired by [flash.nvim](https://github.com/folke/flash.nvim).\r\n    - Plugin: `src/flash/char-mode.ts` (core motion override), `src/flash/register.ts` (registration with original capture), `src/flash/labeler.ts` (distance-based label assignment with reuse + conflict skip), `src/flash/state.ts` (active flag, clever-f state)\r\n- **Flash jump mode (s)** — bidirectional character jump bound to a configurable key (default: `s`). Press `s{char}` to search both directions with labels. Disabled by default (`set flashjump` to enable). Normal mode only — visual `s` retains `c` mapping.\r\n    - Plugin: `src/flash/jump-mode.ts`\r\n- **Flash clever-f** — when enabled (`set flashcleverf`), pressing `f{same-char}` after a flash jump falls through to stock `f` behavior (acts as `;`). Uses a 5-second timeout window.\r\n    - Plugin: `src/flash/char-mode.ts` (clever-f check), `src/flash/state.ts` (last search tracking)\r\n- **Search match counter** — hlslens-style `[3/15]` indicator in the status bar showing the current match index and total count after `/` search and `n`/`N` navigation. Hides when cursor moves off a match or mode changes from normal. General feature, not flash-specific.\r\n    - Plugin: `src/vim/search-counter.ts` (new), `src/vim/mode-tracker.ts` (status bar integration)\r\n- **Incremental jump search** — jump mode (`s`) now accepts multiple characters incrementally. Each keystroke narrows the match set; labels update in real-time with stable assignment via `FlashLabeler`. Supports Backspace (remove last char, widen matches), Enter (jump to nearest), and autojump on single match. Operator-pending (`ds{pattern}{label}`) and visual mode supported.\r\n    - Plugin: `src/flash/jump-mode.ts` (rewritten), `src/easymotion/targets.ts` (`findSubstringTargets`)\r\n- **Label conflict skipping** — labels that match the next character after a match position are excluded from the label pool, preventing ambiguity when the user might type that character to narrow the search.\r\n    - Plugin: `src/flash/jump-mode.ts` (`computeSkipChars`)\r\n- **`flashMinPatternLength` setting** — configurable minimum characters before labels appear in jump mode (default: 1). Below the threshold, matches are highlighted without labels.\r\n    - Plugin: `src/settings.ts`, `src/vim/options.ts`, `src/vimrc/loader.ts`\r\n- **Match highlighting without labels** — `showMatchHighlights()` renders subtle position indicators for matches below the `minPatternLength` threshold, distinct from label overlays.\r\n    - Plugin: `src/easymotion/overlay.ts` (`showMatchHighlights`), `styles.css` (`.vim-motions-flash-match`)\r\n- **Flash search mode** — after committing a `/` or `?` search with Enter, labels appear on all visible matches. Press a label key to jump directly; any non-label key clears labels. Configurable via `set flashsearch` / `set noflashsearch`.\r\n    - Plugin: `src/flash/search-mode.ts` (new), `src/main.ts` (registration with cleanup)\r\n- **codemirror-vim fork API additions** — `getMotion(name)` retrieves a motion function by name (for capturing originals before override). `recordLastCharacterSearch(increment, args)` sets the `;`/`,` repeat state from plugin code.\r\n    - Fork: `~/Repos/codemirror-vim/src/vim.js`\r\n\r\n### Changed\r\n\r\n- **Flash labeler** — `FlashLabeler` class with distance-based assignment (closest targets get home-row labels), label reuse across narrowing (labels stay stable as match set shrinks), and conflict skipping via `skipChars` set.\r\n- **EasyMotion dimming description** — updated to \"Dim non-target text when EasyMotion or flash is active\" since both features share the dimming overlay.\r\n- **Textarea vim overlay Escape no longer closes parent modal** — pressing Escape in normal mode within the textarea overlay now tears down the overlay and returns focus to the original textarea, but no longer re-dispatches a synthetic Escape keydown to the parent UI. Previously, the second Escape closed the host modal (e.g., Spaced Repetition's edit flashcard dialog), which could cause data loss if the user hadn't clicked Save. The new behavior follows a symmetric context stack: modal → vim overlay → modal → user closes modal manually. ([#69](https://github.com/saberzero1/motions/issues/69))\r\n    - Plugin: `src/vim/textarea-vim-manager.ts` (removed synthetic Escape dispatch from `handleEscapeAndRedispatch`)\r\n\r\n### Tests\r\n\r\n- 1 new e2e test in `test/specs/textarea-vim.e2e.ts`: Escape from normal mode returns to textarea without closing modal — verifies overlay removed, modal still present, textarea restored, content synced\r\n- 6 spike tests in `test/specs/spikes/spike-flash-override.e2e.ts`: defineMotion override, async motion, operator-pending, getMotion, recordLastCharacterSearch\r\n- 17 baseline tests in `test/specs/flash-baseline.e2e.ts`: stock f/F/t/T with flash disabled (regression guards)\r\n- 9 e2e tests in `test/specs/flash-char-mode.e2e.ts`: autojump, multi-match labels, escape cancel, settings toggle, multi_line, operator-pending, semicolon repeat\r\n- 7 e2e tests in `test/specs/flash-jump-mode.e2e.ts`: jump mode setting, autojump, labels, no-match, escape, default key, clever-f\r\n- 8 e2e tests in `test/specs/flash-incremental.e2e.ts`: incremental narrowing, autojump on single match, backspace, zero matches, escape, enter, min_pattern_length, operator-pending\r\n- 5 e2e tests in `test/specs/flash-search-mode.e2e.ts`: labels after /pattern Enter, label jump, non-label key clears, no labels on zero/single match\r\n- 3 e2e tests in `test/specs/search-counter.e2e.ts`: count after search, update after n, hide when cleared\r\n- operator-combos.e2e.ts updated to disable flash (stock f/F/t/T behavior preserved)\r\n\r\n### Documentation\r\n\r\n- `docs/features/flash.md`: New feature page — usage, multi-line, operator-pending, visual, jump mode, clever-f, configuration\r\n- `docs/features/index.md`: Added flash motions link\r\n- `docs/features/easymotion.md`: Added cross-reference to flash\r\n- `docs/features/index.md`: Updated flash description with incremental + search labels\r\n- `docs/configuration/settings.md`: Added flash, flashmultiline, flashjump, flashjumpkey, flashcleverf, flashminpatternlength, flashsearch settings\r\n- `docs/configuration/vimrc.md`: Added flash boolean and string options (including flashminpatternlength, flashsearch)\r\n- `docs/configuration/lua-config.md`: Added flash vim.opt entries (including flashminpatternlength, flashsearch)\r\n- `docs/reference/keybindings.md`: Added flash motions, jump mode, and search labels sections\r\n- `KNOWN_LIMITATIONS.md`: Added flash motions section (Phase 1 + Phase 2 + Phase 3A + Phase 3B limitations)\r\n- `README.md`: Updated flash motions feature bullet with incremental search + post-commit search labels\r\n- `CONTRIBUTING.md`: Added flash/ module, search-counter.ts, updated jump-mode.ts description\r\n- `AGENTS.md`: Updated flash motions page ownership with all settings\r\n- `KNOWN_LIMITATIONS.md`: Textarea Escape behavior updated — no longer re-dispatches to parent, symmetric context stack documented\r\n- `README.md`: Updated textarea feature description with new Escape behavior\r\n- `CHANGELOG.md`: This entry\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.66.0...0.67.0",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.67.0",
       "prerelease": false,
@@ -118,26 +178,26 @@
       "assets": [
         {
           "digest": "sha256:d68a202ec670cdc9f6f63f115838212e811713e70d5673056f566804e4af9ca5",
-          "downloadCount": 48,
+          "downloadCount": 49,
           "name": "main.js",
           "size": 945488
         },
         {
           "digest": "sha256:050d996900f1cb45cafccfcce6ee6be3709c49b9497683610d33ce5130b253ff",
-          "downloadCount": 51,
+          "downloadCount": 52,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:3c0fcb4e28f3c489f4eeb25dd42dd7d1e55de1fa35297dbed4b54066eddd301a",
-          "downloadCount": 46,
+          "downloadCount": 47,
           "name": "styles.css",
           "size": 34303
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Block cursor displays wrong character after editor refocus in Live Preview** — when the editor lost and regained focus (e.g., opening/closing DevTools), Obsidian's Live Preview re-expanded hidden markdown formatting (like `## ` in headings) after focus returned. The block cursor's `requestMeasure` ran in the same frame as the decoration change, before the browser reflowed the new DOM — causing `coordsAtPos()` to read stale layout coordinates and the cursor to display the wrong character. Fixed in the codemirror-vim fork by adding `focusChanged` to the block cursor's redraw trigger and scheduling a deferred `requestAnimationFrame` re-measure on focus gain, ensuring the cursor reads post-reflow coordinates. ([#71](https://github.com/saberzero1/motions/issues/71))\r\n    - Fork: `~/Repos/codemirror-vim/src/block-cursor.ts` (`focusChanged` trigger, deferred `requestAnimationFrame` re-measure), `~/Repos/codemirror-vim/src/index.ts` (focus event handler on `contentDOM`)\r\n\r\n### Added\r\n\r\n- **Replace-with-register operator (`gr{motion}`)** — implements the `gr` operator from [vim-ReplaceWithRegister](https://github.com/inkarkat/vim-ReplaceWithRegister). `gr{motion}` replaces the text covered by {motion} with register contents, discarding the replaced text (register preserved). Supports `grr` (linewise), `\"xgr{motion}` (named registers), `{Visual}gr` (visual charwise and linewise), `[count]grr`, and dot-repeat. Blockwise visual mode is a documented no-op for v1. ([#72](https://github.com/saberzero1/motions/issues/72))\r\n    - Plugin: `src/operators/replace-with-register.ts` (new: operator implementation), `src/operators/register.ts` (new: `registerReplaceWithRegister()` export), `src/main.ts` (independent gating via `enableReplaceWithRegister`), `src/workspace/navigation.ts` (conditional `grn`/`grr`/`gra` → `<leader>rn`/`<leader>rb`/`<leader>ra` relocation), `src/settings.ts` (`enableReplaceWithRegister` setting in both UI versions), `src/vimrc/loader.ts` (`replacewithregister`/`rwr` options), `src/types/vim-api.d.ts` (`getRegister()` type)\r\n- **`enableReplaceWithRegister` setting** — boolean toggle (default: `true`) gating the `gr` operator independently from `enableHardWrap`. When enabled, `grn`/`grr`/`gra` workspace bindings are relocated to `<leader>rn`/`<leader>rb`/`<leader>ra` under a \"Notes\" which-key group. When disabled, legacy `grn`/`grr`/`gra` bindings are restored. Configurable via Settings UI (both pre-1.13 and post-1.13), `:set replacewithregister` / `:set rwr` in vimrc, or `vim.opt.replacewithregister` in Lua.\r\n\r\n### Tests\r\n\r\n- 22 e2e tests in `test/specs/operators.e2e.ts` for replace-with-register: `grr` (single, multi-line, count), `griw`, `gr$`, `grl`, `gri'`, `gr}`, named registers (`\"agriw`, `\"a3grr`), visual `gr` (charwise and linewise `V`), register type coercion (linewise↔charwise), cursor positioning, dot-repeat (`griw`, `grr`, `3grr`+`.`), multi-line register expansion, text object at line boundary. 4 skipped blockwise visual mode tests documenting expected behavior for future implementation.\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`: Added replace-with-register operator entry; added block cursor refocus fix entry\r\n- `KNOWN_LIMITATIONS.md`: Updated `gr` replace-with-register parity section — removed `[count]grr` and dot-repeat gaps (confirmed working), updated test coverage line; added block cursor refocus → Fixed\r\n- `README.md`: Added replace-with-register to features list\r\n- `CONTRIBUTING.md`: Added `replace-with-register.ts` to codebase structure, updated workspace navigation description\r\n- `AGENTS.md`: Updated workspace navigation description\r\n- `docs/reference/keybindings.md`: Added replace-with-register section, updated workspace nav with `<leader>r*` bindings\r\n- `docs/features/workspace-navigation.md`: Updated migration note with new `<leader>r*` defaults\r\n- `docs/features/ex-commands.md`: Updated default-key column for relocated commands\r\n- `docs/configuration/settings.md`: Added `enableReplaceWithRegister` to Vim features group\r\n- `docs/configuration/vimrc.md`: Added `replacewithregister`/`rwr` to boolean options\r\n- `docs/configuration/lua-config.md`: Added `replacewithregister` to vim.opt table\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.64.0...0.65.0",
-      "downloadCount": 51,
+      "downloadCount": 52,
       "draft": false,
       "name": "0.65.0",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-retrieval",
-  "lastChangedAt": "2026-07-19T08:01:26.998Z",
-  "lastFetchedAt": "2026-07-19T08:01:26.998Z",
+  "lastChangedAt": "2026-07-20T08:02:27.008Z",
+  "lastFetchedAt": "2026-07-20T08:02:27.008Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine.",
@@ -13,11 +13,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Vault Retrieval",
-    "version": "0.15.1"
+    "version": "0.16.0"
   },
   "name": "Vault Retrieval",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:cf06bbde25f912f8454dc91f304ef9065e8b104c804fd582ca28d87eedc5526f",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 1745394
+        },
+        {
+          "digest": "sha256:8661ba4533ad08db80cf356b01883c1bfa0e0693ce714a56129ee8b1658db8b4",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 329
+        },
+        {
+          "digest": "sha256:70c73f3906da4e061adc1287c3a8084546f7316d966e4115a6a948e44a014d00",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 18511
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n- **Reformat a selection.** A new \"Abschnitt umformatieren\" command (and editor context-menu\n  entry) turns a selected block into a different shape: mechanical transforms (table ↔\n  columns/rows transpose, table → bullet list, wrap in callout) apply instantly with no LLM\n  round-trip, while shape-changing ones (→ list, → prose, → table, → Mermaid diagram, or a free-\n  text instruction) stream a preview from your local chat LLM that you review before applying.\n- **Reformat sidebar tab.** The transforms are now launchable from a \"Umformatieren\" tab in the\n  Vault Retrieval sidebar, grouped by effect (instant/offline vs. preview/LLM). Buttons are\n  disabled with a plain-language reason when there is nothing to act on.\n- **Model dropdown for Smart Apply.** The Smart Apply model is picked from the endpoint's model\n  list instead of typed by hand, with an explicit \"use chat model\" option.\n- **Waiting state in the reformat preview.** Until the first token arrives, the result area shows\n  a running seconds counter, so a cold model start is distinguishable from a hang; after five\n  seconds it adds a hint that the first call may still be loading the model. It deliberately does\n  not claim the model *is* loading — the endpoint does not tell us whether it is loading or just\n  thinking.\n\n### Fixed\n- **\"Abschnitt umformatieren\" no longer disappears from the command palette.** It used\n  `editorCallback`, which Obsidian hides whenever no editor is focused — reading mode, or focus in\n  the sidebar. It is now always listed and explains why it cannot run.\n- **Replacements are guarded against a stale selection.** If the text at the captured position\n  changed between selecting and applying, nothing is written and a notice explains why.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.16.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T07:54:41Z",
+      "tag": "0.16.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0c6139c6f4ee2c6cee3068b3af76fc42661cd91ab691487e3347a75fad48099c",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1724680
+        },
+        {
+          "digest": "sha256:171541eb2375e76f756a1092220965bca4127ba757b1a834d54d8f1d652a587a",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 329
+        },
+        {
+          "digest": "sha256:eabdffbf2dcf03ed7773f1c9d499689b29154da29c78fb12282ff6a2b04cb571",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 17243
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **Device-local index backups no longer accumulate indefinitely.** A backup snapshot could\n  race against a concurrent live index write and leave an incomplete, empty folder behind\n  instead of a real backup — and since rotation only ran after a successful copy, each failed\n  attempt left another orphan. A real vault had accumulated 1127 backup folders instead of the\n  intended 3 (1124 of them empty). Snapshots are now serialized against live index writes, and\n  an incomplete copy is discarded immediately instead of left behind.\n- **The shared index could get wiped out after using a second device (e.g. iPhone).** The\n  live-persist safety guard checked a cached in-memory note count instead of the actual index\n  on disk. If the plugin started before Obsidian Sync finished delivering the shared index, a\n  subsequent edit could overwrite the real, larger index with a tiny one — which then\n  propagated the loss to every synced device. The guard now reads the real index from disk\n  immediately before every live write.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.15.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-19T12:03:58Z",
+      "tag": "0.15.2"
+    },
     {
       "assets": [
         {
