@@ -4,16 +4,16 @@
   "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-retrieval",
-  "lastChangedAt": "2026-07-20T08:02:27.008Z",
-  "lastFetchedAt": "2026-07-20T08:02:27.008Z",
+  "lastChangedAt": "2026-07-21T08:01:27.019Z",
+  "lastFetchedAt": "2026-07-21T08:01:27.019Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "description": "Local, offline retrieval over your vault: related notes, semantic search, and grounded chat with a local LLM — nothing leaves your machine.",
     "id": "vault-retrieval",
     "isDesktopOnly": false,
-    "minAppVersion": "1.7.2",
+    "minAppVersion": "1.13.0",
     "name": "Vault Retrieval",
-    "version": "0.16.0"
+    "version": "0.16.1"
   },
   "name": "Vault Retrieval",
   "presentInCommunityList": true,
@@ -21,27 +21,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:d36e72d419010e446ef77b69828e8b27c79dad09432c6c670acd80e156196e0c",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1745568
+        },
+        {
+          "digest": "sha256:8bc35e0893e4eb99c072ba429cec07dce59c1c8d2f13f6676b5991c04f73f838",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 330
+        },
+        {
+          "digest": "sha256:70c73f3906da4e061adc1287c3a8084546f7316d966e4115a6a948e44a014d00",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 18511
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **Bumped `minAppVersion` to 1.13.0.** Installations on Obsidian below 1.13 will no longer receive\n  updates. Reason: `setDestructive()` — used for the three destructive-action buttons below — only\n  exists from 1.13 onward.\n- Cleared the remaining Obsidian community-store review warnings: `createSpan(…)` instead of\n  `createEl(\"span\", …)` at 7 call sites, and `setDestructive()` instead of the deprecated\n  `setWarning()` at 3 call sites (reindex, MCP token regeneration, backup restore).\n- Removed every `node:` import flagged by the store review's `no-nodejs-modules` lint. Node\n  operations are now injected into the read-guard instead of imported at module top level, desktop-\n  only code paths load Node built-ins via `await import(…)` inside `Platform.isDesktop` checks\n  or with early platform guards instead of static imports or `require`, and the `node:http` type\n  import was replaced with local structural interfaces. `npm run lint` now reports zero\n  `no-nodejs-modules` occurrences.\n- The MCP server now throws explicitly when started outside a desktop platform, instead of relying\n  solely on its caller's guard.\n\n### Not changed\nFour points the store review flags are properties of the plugin or its dependencies, not bugs, and\nwere left as-is:\n- **Direct Filesystem Access** — `fs.realpath` in the MCP server's symlink-escape guard; desktop-only\n  and scoped to that one check.\n- **Vault Enumeration** — the core function of a retrieval plugin.\n- **Clipboard Access** — write-only (`writeText`), always user-initiated; the clipboard is never read.\n- **Dynamic Code Execution** — `new Function` comes from `ajv`, pulled in via\n  `@modelcontextprotocol/sdk`; not code of this plugin.\n\nAlso out of scope for this slice: `getSettingDefinitions()` (the declarative settings search\navailable from Obsidian 1.13) and the `display()` deprecation it would resolve — both are reserved\nfor a separate slice.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.16.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T12:32:59Z",
+      "tag": "0.16.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:cf06bbde25f912f8454dc91f304ef9065e8b104c804fd582ca28d87eedc5526f",
-          "downloadCount": 0,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 1745394
         },
         {
           "digest": "sha256:8661ba4533ad08db80cf356b01883c1bfa0e0693ce714a56129ee8b1658db8b4",
-          "downloadCount": 0,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 329
         },
         {
           "digest": "sha256:70c73f3906da4e061adc1287c3a8084546f7316d966e4115a6a948e44a014d00",
-          "downloadCount": 0,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 18511
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Reformat a selection.** A new \"Abschnitt umformatieren\" command (and editor context-menu\n  entry) turns a selected block into a different shape: mechanical transforms (table ↔\n  columns/rows transpose, table → bullet list, wrap in callout) apply instantly with no LLM\n  round-trip, while shape-changing ones (→ list, → prose, → table, → Mermaid diagram, or a free-\n  text instruction) stream a preview from your local chat LLM that you review before applying.\n- **Reformat sidebar tab.** The transforms are now launchable from a \"Umformatieren\" tab in the\n  Vault Retrieval sidebar, grouped by effect (instant/offline vs. preview/LLM). Buttons are\n  disabled with a plain-language reason when there is nothing to act on.\n- **Model dropdown for Smart Apply.** The Smart Apply model is picked from the endpoint's model\n  list instead of typed by hand, with an explicit \"use chat model\" option.\n- **Waiting state in the reformat preview.** Until the first token arrives, the result area shows\n  a running seconds counter, so a cold model start is distinguishable from a hang; after five\n  seconds it adds a hint that the first call may still be loading the model. It deliberately does\n  not claim the model *is* loading — the endpoint does not tell us whether it is loading or just\n  thinking.\n\n### Fixed\n- **\"Abschnitt umformatieren\" no longer disappears from the command palette.** It used\n  `editorCallback`, which Obsidian hides whenever no editor is focused — reading mode, or focus in\n  the sidebar. It is now always listed and explains why it cannot run.\n- **Replacements are guarded against a stale selection.** If the text at the captured position\n  changed between selecting and applying, nothing is written and a notice explains why.",
-      "downloadCount": 0,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.16.0",
       "prerelease": false,

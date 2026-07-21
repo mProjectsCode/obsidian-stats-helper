@@ -4,8 +4,8 @@
   "description": "Multi-color highlights using Obsidian's native ==text== syntax. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "hilo",
-  "lastChangedAt": "2026-07-20T09:05:27.006Z",
-  "lastFetchedAt": "2026-07-20T09:05:27.006Z",
+  "lastChangedAt": "2026-07-21T08:01:27.019Z",
+  "lastFetchedAt": "2026-07-21T08:01:27.019Z",
   "manifest": {
     "author": "San",
     "authorUrl": "https://github.com/opellen",
@@ -14,11 +14,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Hilo",
-    "version": "0.1.6"
+    "version": "0.1.8"
   },
   "name": "Hilo",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:c7f470c61f032256d0ca1a65ca5820460f4fd0a4c84262e76716252f7dc837c1",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 22874
+        },
+        {
+          "digest": "sha256:6cd94e78eab4eac8230ceb86c0162b0c089f53eec19c68370568553f7cdb3ce5",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 262
+        },
+        {
+          "digest": "sha256:24dd4c4157fa9feffd9871c5fdb3881362f511b55b532a74abe0374d6d447189",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 4699
+        }
+      ],
+      "author": "san-tekart",
+      "description": "Small quality-of-life patch — settings-tab color edits now paint into open notes immediately, and popout-window compatibility is tightened.\n\n## Fixes\n\n- **Live-refresh on settings save** — editing a color's hex in Settings → Hilo now repaints the color in every open note the moment the settings modal closes. Previously the change didn't render until the next cursor click / viewport shift, because the plugin was dispatching an empty transaction into an internal API (`iterateCodeMirrors`) that returns no markdown views on recent Obsidian builds. Fixed by dispatching a dedicated CodeMirror `StateEffect` into each open markdown editor via `iterateAllLeaves` (a public API).\n- **`resolveBuiltinDisplayHex` uses `activeDocument`** — the settings-tab preview swatch for locked builtin rows now reads its computed color from the currently focused document, so popout windows resolve against their own DOM instead of always falling back to the main window's `document.body`.\n\n## Compatibility\n\n- No breaking changes.\n- Same `minAppVersion` (1.5.0).\n- 143/143 tests pass.\n\n## Install\n\n**Marketplace**: Settings → Community plugins → Browse → search \"Hilo\".\n\n**Manual**: download `main.js`, `manifest.json`, and `styles.css` below and drop them into your vault's `.obsidian/plugins/hilo/` folder, then enable Hilo under Community plugins.\n",
+      "downloadCount": 12,
+      "draft": false,
+      "name": "0.1.8 — Live-refresh fix + activeDocument compat",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T11:28:18Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c63e28730679ebe3b9cb9274dee6bc4f7511ca6d2e43dfefdba303b43458c5ff",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 22654
+        },
+        {
+          "digest": "sha256:d2bec775ce86a25ffbbe09e249a5e89d3525e345924593f6bedaee5518e81e0b",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 262
+        },
+        {
+          "digest": "sha256:24dd4c4157fa9feffd9871c5fdb3881362f511b55b532a74abe0374d6d447189",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 4699
+        }
+      ],
+      "author": "san-tekart",
+      "description": "Builtin theme-derived color palette (from @PostPollux's [#4](https://github.com/opellen/Hilo/pull/4)) plus a couple of polish fixes. Existing installs migrate automatically.\n\n## What's new\n\n### 🎨 Color palette dropdown (**Settings → Hilo**)\n\nHilo now ships with two color catalogs, switchable via a new **Color palette** dropdown at the top of the settings tab.\n\n- **Builtin (Theme)** — 8 colors bound to Obsidian's theme CSS variables (`--color-red` through `--color-pink`). Switching your Obsidian theme updates highlight colors immediately, no reload. This is the default on fresh installs.\n- **Custom** — the previous 3-pastel starter (yellow / red / green), fully editable.\n\nBoth palettes coexist. A highlight written under one palette keeps rendering when you switch to another; on slug conflicts the active palette wins.\n\nYou can also add your own colors on top of the builtin 8 — the theme-owned rows stay locked, but any color you add is fully editable.\n\n### Fixes\n\n- **Unknown-slug fallback** — highlights whose slug isn't in the active catalog now fall back to Obsidian's native `==text==` yellow. Previously (as of 0.1.5) they rendered invisible when the Underlined-style neutralizer stripped their background but no color class was attached.\n- **Locked builtin rows** now show a visual disabled cue (`opacity: 0.55`, `cursor: not-allowed`) so it's clear at a glance which fields are theme-owned vs. user-editable.\n\n### Migration\n\nIf you're upgrading from 0.1.6 or earlier, your saved `{colors, style}` shape is upgraded automatically to the new `{palettes, activePalette, style}` shape. Your custom palette is preserved verbatim; the active palette becomes Builtin so you see the new default experience. Switch back to Custom at any time via the dropdown.\n\n## Compatibility\n\n- No breaking changes for note content — `==text==` and `=={slug}text==` unchanged.\n- Same `minAppVersion` (1.5.0).\n- 143/143 tests pass (up from 127 at 0.1.6; +16 new tests around palette shape, migration, and cross-palette rendering).\n\n## Credits\n\nThanks to **[@PostPollux](https://github.com/PostPollux)** for the substantial PR ([#4](https://github.com/opellen/Hilo/pull/4)) implementing the builtin palette, migration, and the unknown-slug bug fix.\n\n## Install\n\n**Marketplace**: Settings → Community plugins → Browse → search \"Hilo\".\n\n**Manual**: download `main.js`, `manifest.json`, and `styles.css` below and drop them into your vault's `.obsidian/plugins/hilo/` folder, then enable Hilo under Community plugins.\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.1.7 — Builtin theme-derived color palette",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T09:24:29Z",
+      "tag": "0.1.7"
+    },
     {
       "assets": [
         {

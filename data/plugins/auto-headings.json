@@ -4,8 +4,8 @@
   "description": "Automatic heading numbering with fully customizable templates, per-folder rules, whitelist and backlink sync. Bilingual UI (English / 中文). - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "auto-headings",
-  "lastChangedAt": "2026-07-20T09:05:27.006Z",
-  "lastFetchedAt": "2026-07-20T09:05:27.006Z",
+  "lastChangedAt": "2026-07-21T08:01:27.019Z",
+  "lastFetchedAt": "2026-07-21T08:01:27.019Z",
   "manifest": {
     "author": "AArlert",
     "authorUrl": "https://github.com/AArlert",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:f9aded6b6758806c9257b8895541dbfb038eee70427994aeb598c90f20228f73",
-          "downloadCount": 15,
+          "downloadCount": 24,
           "name": "main.js",
           "size": 92328
         },
         {
           "digest": "sha256:0469832554f51d32f952a4477102c80472bb9243200d93510536353c08306e38",
-          "downloadCount": 16,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 355
         },
         {
           "digest": "sha256:ca61342377ce00a48a029ca3a2f0a5d4c4f353be462d770c8c7fed23803f56ac",
-          "downloadCount": 14,
+          "downloadCount": 23,
           "name": "styles.css",
           "size": 15504
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Batch renumber & \"No numbering\" pseudo-template / 批量重编号与「不编号」伪模板\n\n**English**\n\n- **Per-rule batch renumber**: every path rule now has an inline batch button. One confirmed click renumbers **all** files the rule matches — each file with its own effective template, so a root-rule batch never overrides more specific folder/file rules. Files opted out via frontmatter, containing foreign (non-plugin) numbering, or resolving to \"No numbering\" are skipped automatically; open files keep undo support, and the confirmation dialog shows the affected file count up front.\n- **\"No numbering\" pseudo-template**: the template dropdown of each path rule gains a **No numbering** option — switch off numbering for a whole folder in one move instead of adding a frontmatter flag to every file. It participates in normal most-specific-wins resolution (so `daily/ → No numbering` beats your root rule), and existing numbers are left frozen, not stripped.\n- **Polish**: the folder browser in the path suggestion popup now uses matching lucide arrow icons for \"go up one level\" (arrow-left) and \"drill down\" (arrow-right).\n\n**中文**\n\n- **规则级批量重编号**：每条路径规则行内新增批量按钮，确认一次即可对该规则命中的**全部**文件重新编号——每个文件用它自己生效的模板，点根规则的批量不会覆盖更具体的文件夹/文件规则。frontmatter 已关闭、含外来（非本插件）编号、或解析为「不编号」的文件会被自动跳过；已打开的文件支持撤销，确认框会先显示受影响的文件数。\n- **「不编号」伪模板**：路径规则的模板下拉新增**「不编号」**选项——一步关闭整个文件夹的编号，不用再逐文件写 frontmatter 开关。它参与正常的「最具体规则优先」解析（`daily/ → 不编号` 能压过根规则），已有编号会冻结保留、不会被剥除。\n- **打磨**：路径建议弹窗的文件夹浏览中，「返回上一级」与「下钻」改用同族 lucide 箭头图标（arrow-left / arrow-right）。\n\n---\n\n**Also included since 1.0.9** (1.0.10–1.0.12 were never published as releases):\n\n- **Clipboard sanitizing** (1.0.10, on by default): copying numbered headings now strips the invisible Word Joiner marker from the clipboard, so pasting into chats/documents is clean — while pasting back into your own vault restores the original text via an in-memory map, avoiding double numbering.\n- **Folder browsing in path suggestions** (1.0.11–1.0.12): the path-rule input now opens a level-by-level folder browser (click a name to select it, use the arrow to drill down, header to select the current level), consistently — including when you re-click a rule already set to `/` or a folder.\n\n**另附 1.0.9 以来的变化**（1.0.10–1.0.12 未单独发布过 Release）：\n\n- **复制净化**（1.0.10，默认开）：复制已编号标题时会剥离剪贴板里的不可见 Word Joiner 标记，粘贴到聊天/文档更干净；粘贴回自己库内时经内存映射还原原文，避免双重编号。\n- **路径建议的文件夹浏览**（1.0.11–1.0.12）：路径规则输入框改为按层级浏览文件夹（点名字选中、点箭头下钻、点顶部选中当前层），且外观一致——包括重新点击已配置为 `/` 或某文件夹的规则行。\n",
-      "downloadCount": 16,
+      "downloadCount": 26,
       "draft": false,
       "name": "1.0.13",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:5c401440d4aa26b2857bfcea6a0651454d2a9a4f2801d3d78cfb72d78300a311",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 355
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Copy sanitization — new, on by default / 复制净化——新功能，默认开启\n\n**English**\n\n- **Clean clipboard**: copying or cutting numbered headings no longer leaks the plugin's invisible marker character (Word Joiner, U+2060) into your clipboard. External apps — WeChat, Notion, Word, email clients, search boxes — now receive plain, clean text.\n- **No double numbering on paste-back**: pasting the same copied text back into your vault (within the same Obsidian session) automatically restores the original markers, so numbering re-flows correctly instead of producing `## 2 1 Heading`-style double numbers.\n- **Works everywhere you copy**: both the editor and reading view are covered; rich-text copies from reading view keep their formatting, minus the invisible characters.\n- **Fail-safe by design**: every step is synchronous and guarded — if anything is unavailable (e.g. a restricted WebView), the plugin backs off silently and the clipboard behaves exactly as before. Turn it off any time in **Settings → General → \"Sanitize copied text\"**.\n- **Privacy**: the copied-text mapping used for restore lives in memory only and is never written to disk.\n- Known limitation: text that was edited in another app, or pasted back after restarting Obsidian, is treated as new content (it may get freshly numbered on top of its visible numbers — same as pasting any external text).\n\n**中文**\n\n- **干净的剪贴板**：复制 / 剪切带编号的标题时，插件写入的不可见标记字符（Word Joiner，U+2060）不再随剪贴板外泄——微信、Notion、Word、邮件客户端、搜索框收到的都是干净文本。\n- **粘贴回不再双重编号**：同一 Obsidian 会话内把复制的内容原样粘贴回库里，插件自动还原原始标记，编号照常重排，不会出现 `## 2 1 标题` 式的双重编号。\n- **复制路径全覆盖**：编辑器与阅读视图都生效；从阅读视图复制的富文本保留格式，仅剥去不可见字符。\n- **失败即让路**：所有判断同步完成、层层守卫——任一环节不可用（如受限 WebView）即静默退让，剪贴板行为与从前完全一致。可随时在 **设置 → 全局设置 → 「复制净化」** 关闭。\n- **隐私**：用于还原的复制内容映射只存在内存中，绝不写入磁盘。\n- 已知边界：在外部应用改动过的文本、或重启 Obsidian 后再粘贴回，按新内容处理（其可见序号可能被叠加新编号——与粘贴任何外部文本一致）。\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.10",
       "prerelease": false,
