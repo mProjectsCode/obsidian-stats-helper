@@ -1,20 +1,20 @@
 {
   "author": "Jacob Mei",
   "defaultBranch": "main",
-  "description": "Hybrid semantic search for your vault notes. BM25 + WebGPU embedding + fuzzy retrieval, Multilingual, with particularly strong Chinese/CJK support, with optional LLM - This plugin has not been manually reviewed by Obsidian staff.",
+  "description": "A local-first second brain for Obsidian — semantic search · relation graph · semantic paths · Hot/Cold rediscovery · strong Chinese/CJK · WebGPU on-device · no API keys. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-curate",
-  "lastChangedAt": "2026-07-20T06:04:26.995Z",
-  "lastFetchedAt": "2026-07-20T06:04:26.995Z",
+  "lastChangedAt": "2026-07-21T05:04:27.063Z",
+  "lastFetchedAt": "2026-07-21T05:04:27.063Z",
   "manifest": {
     "author": "Jacob Mei",
     "authorUrl": "https://github.com/notoriouslab",
-    "description": "Hybrid search: BM25, on-device WebGPU embeddings, fuzzy title matching. Multilingual with strong Chinese/CJK support. Optional AI auto-generates note descriptions and grouped Maps of Content. Local-first, no API keys.",
+    "description": "Find, connect, rediscover your notes. Local semantic search (BM25 + embeddings), relation graph + semantic paths for related, unlinked notes, Hot/Cold surfacing of forgotten ones, strong Chinese/CJK. A second brain, no API keys, optional AI curation.",
     "id": "vault-curate",
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Vault Curate",
-    "version": "1.2.2"
+    "version": "1.3.1"
   },
   "name": "Vault Curate",
   "presentInCommunityList": true,
@@ -22,20 +22,104 @@
     {
       "assets": [
         {
-          "digest": "sha256:5d05e2e02185fff863d31ce182c65ad226dbdd97b878b5b8af6fec7ff4a0b352",
-          "downloadCount": 69,
+          "digest": "sha256:dbfe51b2cd66ed42a27e33fe8786dbe1ba3d64c9d5cec935dc543b87353dfa57",
+          "downloadCount": 59,
           "name": "main.js",
-          "size": 1764586
+          "size": 1778843
         },
         {
-          "digest": "sha256:8edbd74b65849151a025a51b50ec10f94155210c7d208a3eee574df93f07f8e3",
-          "downloadCount": 78,
+          "digest": "sha256:79d2d74622ca0e89119564c44414cb1e21af49c53fa76b300c1b3d2ccca3f6ce",
+          "downloadCount": 65,
+          "name": "manifest.json",
+          "size": 474
+        },
+        {
+          "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 44,
+          "name": "ort-wasm-simd-threaded.wasm",
+          "size": 12942611
+        },
+        {
+          "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
+          "downloadCount": 44,
+          "name": "sql-wasm.wasm",
+          "size": 659730
+        },
+        {
+          "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
+          "downloadCount": 58,
+          "name": "styles.css",
+          "size": 6966
+        }
+      ],
+      "author": "notoriouslab",
+      "description": "Positioning & docs release — no functional changes since 1.3.0.\n\nVault Curate is a local-first second brain for Obsidian: **find → connect → rediscover**.\n\n- **Find** — hybrid semantic search (BM25 + embeddings + fuzzy title), strong on Chinese/CJK\n- **Connect** — a relation graph and semantic paths surface related notes you never linked\n- **Rediscover** — Hot/Cold tiering resurfaces notes you'd forgotten\n\nThe README (English + 繁體中文) and the store description were rewritten around this loop. No code changes; the runtime is identical to 1.3.0.",
+      "downloadCount": 65,
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T10:52:29Z",
+      "tag": "1.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dbfe51b2cd66ed42a27e33fe8786dbe1ba3d64c9d5cec935dc543b87353dfa57",
+          "downloadCount": 52,
+          "name": "main.js",
+          "size": 1778843
+        },
+        {
+          "digest": "sha256:ab04e28d36abacd8c0e22ee3976d195a120f3b3b76977d71c56dc2b9912584de",
+          "downloadCount": 56,
           "name": "manifest.json",
           "size": 441
         },
         {
           "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 43,
+          "name": "ort-wasm-simd-threaded.wasm",
+          "size": 12942611
+        },
+        {
+          "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
           "downloadCount": 35,
+          "name": "sql-wasm.wasm",
+          "size": 659730
+        },
+        {
+          "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
+          "downloadCount": 46,
+          "name": "styles.css",
+          "size": 6966
+        }
+      ],
+      "author": "notoriouslab",
+      "description": "## Semantic path + in-place graph expansion\n\nBoth features grew out of community requests on the Chinese Obsidian forum (forum-zh #61655).\n\n### Semantic path (Canvas)\nPick a destination note and get the chain of stepping-stone notes connecting it to the active note — a widest-path (bottleneck) search over an on-demand semantic k-NN graph. The chain is judged by its *weakest* hop, rendered as a left-to-right editable Canvas (endpoints green, hops labeled with similarity, un-linked hops purple). When no chain of consistently strong links exists, you get an honest \"not connected\" notice with the actual numbers — the threshold is percentile-anchored to your vault's own score distribution, so it holds across embedding providers.\n\n### Expand in this graph\nRight-click any node inside a generated canvas → **VC: Expand in this graph** grows the graph in place: new nodes slot into free space around the clicked node, notes already on the canvas get connecting edges instead of duplicates, and a note pointed at by 2+ edges turns **orange** (several expansions independently converged on it). Layout edits and user-applied colors are never touched (atomic read-modify-write, verified against Obsidian's canvas autosave).\n\n### Under the hood\n- k-NN graph memoized per index revision — repeat path queries skip the ~4s build (2,500-note vault)\n- Same-folder cap applies to graph edges, so template siblings don't crowd out cross-folder bridges\n- Corrupted (NaN) embeddings are excluded at three layers (build / path search / threshold)\n- Known limitation: cyan and orange are also user-pickable Canvas palette colors; nodes hand-painted in exactly those shades may be repainted by hub detection\n\nFull details in [CHANGELOG.md](https://github.com/notoriouslab/vault-curate/blob/main/CHANGELOG.md).",
+      "downloadCount": 56,
+      "draft": false,
+      "name": "1.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T06:15:47Z",
+      "tag": "1.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:5d05e2e02185fff863d31ce182c65ad226dbdd97b878b5b8af6fec7ff4a0b352",
+          "downloadCount": 70,
+          "name": "main.js",
+          "size": 1764586
+        },
+        {
+          "digest": "sha256:8edbd74b65849151a025a51b50ec10f94155210c7d208a3eee574df93f07f8e3",
+          "downloadCount": 79,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 36,
           "name": "ort-wasm-simd-threaded.wasm",
           "size": 12942611
         },
@@ -47,14 +131,14 @@
         },
         {
           "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
-          "downloadCount": 67,
+          "downloadCount": 68,
           "name": "styles.css",
           "size": 6966
         }
       ],
       "author": "notoriouslab",
       "description": "Retrieval-quality release for Chinese vaults, plus the 1.2.0 audit-compliance fixes (folded in unreleased as 1.2.1).\n\n## Changed\n- **Embedding input is converted Traditional→Simplified Chinese before encoding.** bge-small-zh is trained predominantly on Simplified Chinese; converting only the embedding input — via a bundled 4,105-entry character table, while stored text, keyword search, snippets, and generated descriptions all stay Traditional — moves vectors into the model's best-trained token space. Measured on a 2,500-note Traditional-Chinese vault: true positives hold or improve while unrelated \"hub\" notes drop 3-4x in rank. Queries convert through the same table, so both sides always share one space. Simplified-Chinese vaults are unaffected (no-op).\n- **Find similar / relation graph now cap same-folder results** (hidden setting `sameFolderCap`, default 3, 0 disables). Template siblings live in the same folder and tended to refill the list once hub noise was gone — the cap hands those slots to the note's actually-related content. Topic folders are unaffected in practice.\n- Upgrading triggers a one-time re-embed of CJK-bearing notes (a progress notice shows; interrupting is safe and resumes on next launch).\n- Settings tab builds its multi-line description with Obsidian's `createFragment`/`createEl` helpers (obsidianmd/prefer-create-el, 4 sites); one unsafe-`any` assignment in the BM25 index build resolved.\n\n## Notes\n- A Taiwan-phrase mapping layer was evaluated and deliberately excluded — benchmarks across four note-group domains showed no measurable gain over character-level conversion on a terminology-consistent vault. May revisit as an opt-in if mixed-terminology vaults surface.\n- **BRAT install is now documented in the README** — recommended path while community review is pending, with auto-updates on every release.",
-      "downloadCount": 78,
+      "downloadCount": 79,
       "draft": false,
       "name": "1.2.2",
       "prerelease": false,
@@ -233,7 +317,7 @@
       "assets": [
         {
           "digest": "sha256:dc891abf00c966378452ad22c08fc9ab183b1b4a5b92c2383451d7f55b5039fb",
-          "downloadCount": 131,
+          "downloadCount": 132,
           "name": "main.js",
           "size": 1679785
         },
@@ -251,13 +335,13 @@
         },
         {
           "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
-          "downloadCount": 71,
+          "downloadCount": 72,
           "name": "sql-wasm.wasm",
           "size": 659730
         },
         {
           "digest": "sha256:94042d3b8f23446a4ba21475870de36a2d28c15f95006f26637562d0b4518ed5",
-          "downloadCount": 126,
+          "downloadCount": 127,
           "name": "styles.css",
           "size": 6966
         }
@@ -401,7 +485,7 @@
       "assets": [
         {
           "digest": "sha256:d4025ad8775ee5a1e444f9dcdb270bd75af02b4d639531ad04845fe143a28d69",
-          "downloadCount": 83,
+          "downloadCount": 84,
           "name": "main.js",
           "size": 96633
         },
