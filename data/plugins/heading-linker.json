@@ -4,8 +4,8 @@
   "description": "Auto-link unlinked mentions in your notes to headings in your glossary files, in any word form: plurals, declensions, verb endings, with stemming for six languages. Convert them to real wiki links. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "heading-linker",
-  "lastChangedAt": "2026-07-20T10:01:27.003Z",
-  "lastFetchedAt": "2026-07-20T10:01:27.003Z",
+  "lastChangedAt": "2026-07-21T09:00:27.035Z",
+  "lastFetchedAt": "2026-07-21T09:00:27.035Z",
   "manifest": {
     "author": "max-fluff",
     "authorUrl": "https://github.com/max-fluff",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.4.0",
     "name": "Heading Linker",
-    "version": "1.2.0"
+    "version": "1.2.1"
   },
   "name": "Heading Linker",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:687685a99c8f78f67fd3d3957a005ee85fc31059c89d89fa562640a3d30b6735",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 269481
+        },
+        {
+          "digest": "sha256:5cb30949882b09f5a179ec7f541380f3ddbfff6c78e9963c16b79420d7c86570",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 339
+        },
+        {
+          "digest": "sha256:548c4f579dc41bb725c708dd1c57cc8c942472a60bf05d6720dde3865fa55588",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 7895
+        }
+      ],
+      "author": "max-fluff",
+      "description": "- Latin and Greek morphology modules (opt-in) for scholarly notes that quote classical terms.\n- English now links common classical plurals out of the box: `indices`↔`index`, `phenomena`↔`phenomenon`, `cactus`↔`cacti`.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T21:10:58Z",
+      "tag": "1.2.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:ee43d03b5e0c09e8f40fd71b410f04bc515687cbae809c73c64e831ca0c32f44",
-          "downloadCount": 9,
+          "downloadCount": 12,
           "name": "main.js",
           "size": 262336
         },
         {
           "digest": "sha256:5cb5228d61f5cc54e0bf6e1f249f44c0affef70b9853e62f8e8693588ac80164",
-          "downloadCount": 10,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 339
         },
         {
           "digest": "sha256:c72c28c4ce406b6ddc83c76bde13d9fb08f8eef34d09a56a5dde826aed5b5aa0",
-          "downloadCount": 9,
+          "downloadCount": 12,
           "name": "styles.css",
           "size": 7895
         }
       ],
       "author": "max-fluff",
       "description": "### Added\r\n- Aliases can now be collected from links you have already written. Right-click a heading link and choose **Collect this alias** to save its wording as an alias of the heading it points at; right-click a note and choose **Collect heading aliases from links** to do the same for every heading link in it; the command palette has **Collect aliases from links: this note**. The alias is written into the `%% alias: … %%` comment inside the heading's own section, extending an existing comment rather than stacking a new one. A new **\"Collect aliases\" items** toggle in the context-menu settings turns all of this off.\r\n- Hovering a word that matches more than one heading now lists the candidates instead of showing a bare tooltip, and each row previews its own note on hover and opens it on click. Every row carries a second line naming the file the heading lives in — usually the only thing telling two identical headings apart — and says so when the row was reached through an alias rather than the heading's own text.\r\n- Heading Linker now cooperates with the sibling linker plugins when more than one is installed. A word both of them match is drawn once, by whichever sits higher in the new **Priority among linker plugins** setting (Settings → Maintenance), and the other stands aside; the right-click menu gets one entry per action instead of one per plugin, the autocomplete popup merges both plugins' suggestions into one list, and the \"which one?\" dialog offers the other plugin's readings of the word alongside this one's. The setting appears only when another linker is present.\r\n- **Insert plain text**, a new autocomplete setting: picking a suggestion completes the word without turning it into a link.\r\n\r\n### Changed\r\n- Everything you can do to a highlighted word now lives in Obsidian's own right-click menu in the editor, instead of a separate menu attached to the highlight. The three ways to link — **Link \"word\" here**, in this note, in all notes — sit under one **Link \"word\"** entry with the choice inside it, and opening is a single **Open \"word\"** item rather than separate open/open-in-new-tab lines.\r\n- Reading view no longer shows a plugin context menu on a highlighted word: a click opens it (asking which heading when there are several), and everything that edits the note is in the editor. The long-press that stood in for right-click on mobile is gone with it.\r\n- Menu items that act on the thing under the cursor dropped the `Heading:` prefix — **Unlink this link**, and the add/remove items for excluded headings. The prefix stays on the configuration items in the file-explorer menu, where it says which plugin's sources or scope you are changing.\r\n- The autocomplete's second line is shorter and reads as a fragment: `word form · File` and `as \"wording\" · File` in place of the previous sentences.\r\n- Settings wording was tightened. The scope and source lists are now labelled **Paths to include** and **Always excluded** and state that an entry can be a file or a folder; **Skip after characters** mentions that leaving it empty disables the check.\r\n\r\n### Fixed\r\n- In Reading view a theme that underlines links drew a second line under every highlighted word, so the underline-style setting appeared to have no effect. The plugin's own underline is now the only one.\r\n- Excluding a heading from the right-click menu left no way to undo it there: exclusion removes the word from the index, so the menu then found nothing under the cursor and offered nothing. The remove-from-excluded item is now shown on an already-excluded word.\r\n- When another linker also matched the word under the cursor, the link picker offered that plugin's target even though only the plugin that owns a word can write its link. Linking now offers this plugin's headings only; opening still offers both.\r\n\r\n### Internal\r\n- The morphology engine and its language modules, the locales, styles, dialogs, autocomplete and the prose matching core moved into the shared `obsidian-linker-shared` submodule, so the four linkers stay in step; the top-level `languages/` folder is gone with them.\r\n- Tests were rebuilt on the shared harness, and CI now gates on the cross-version compatibility check.\r\n",
-      "downloadCount": 10,
+      "downloadCount": 13,
       "draft": false,
       "name": "v1.2.0",
       "prerelease": false,

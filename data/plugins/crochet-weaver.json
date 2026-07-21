@@ -4,8 +4,8 @@
   "description": "Render crochet stitch charts and progress tools from text patterns in Obsidian code blocks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "crochet-weaver",
-  "lastChangedAt": "2026-07-20T10:01:27.003Z",
-  "lastFetchedAt": "2026-07-20T10:01:27.003Z",
+  "lastChangedAt": "2026-07-21T09:00:27.035Z",
+  "lastFetchedAt": "2026-07-21T09:00:27.035Z",
   "manifest": {
     "author": "Evan Lyu",
     "authorUrl": "https://www.kiyudesign.com/",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Crochet Weaver",
-    "version": "1.0.1"
+    "version": "1.1.0"
   },
   "name": "Crochet Weaver",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:dd67bbd08096754887b4924da133821f8388e8e7882a41010a8828819ff78552",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 87594
+        },
+        {
+          "digest": "sha256:ff1d1059d7db1f33c84cf8dca8c362ceeb86afa8bcfbb8367055399115357554",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 297
+        },
+        {
+          "digest": "sha256:9ebebc4bb35806dac8113ff11edbf1b8b400ab8b37f60c06515f0ae7c9238e89",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 5131
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Blank drafting grid (`crochet-grid` block)**: a new code-block language for sketching a design by hand, independent of any pattern — a blank polar grid (`shape: polar`, concentric rings + radial spokes sized by `rounds`/`columns`) or a rectangular mesh (`shape: rect`, sized by `rows`/`columns`). New global settings (`gridDefaultShape`, `gridDefaultRounds`, `gridDefaultColumns`, `gridDefaultRows`) and an **\"Insert blank crochet grid\"** command that drops in a starter block pre-filled with your defaults.\r\n- **Grid guide overlay on real charts (`grid: on`)**: any `crochet` block can now draw a faint reference guide behind its own stitches, aligned to the chart's real geometry — concentric round guides for `type: round`/`spiral` (spokes default to the outer round's stitch count), or a row/column mesh for `type: flat`. The guide matches the pattern's real extent by default; `rounds`/`rows` and `columns` frontmatter keys let it extend *beyond* the written pattern (e.g. to preview how many more rounds a design might need) but never shrink below it. New **\"Show background grid guide\"** global setting.\r\n- **32 new stitch symbols**, bringing the supported library to 46: `picot`, `rsc` (reverse single crochet / crab stitch); N-together decreases `sc2tog`, `sc3tog`, `hdc2tog`–`hdc5tog`, `dc2tog`–`dc5tog`; post stitches `fpsc`, `fphdc`, `fptr`, `bpsc`, `bphdc`, `bptr`; crossed stitches `xhdc`, `xdc`, `xtr`; clusters/puffs `hdc2cl`/`3cl`/`5cl`, `dc2cl`/`3cl`/`5cl`, `tr2cl`/`3cl`/`5cl`; and popcorns `hdc popcorn`, `tr popcorn`. The `highlightIncDec` accent now also covers the new N-together decreases.\r\n- Safety limits for the grid features (max 40 rounds, 72 columns, 40 rows) so a mistyped override can't generate an unbounded SVG, matching the existing pattern-chart budget checks.\r\n\r\n### Changed\r\n\r\n- Rewrote the stitch-name guidance in the AI pattern-authoring reference (`docs/ai-pattern-authoring.md`) and the `crochet-weaver-pattern` skill's fallback cheat sheet: previously both told an assistant to collapse every decrease into `dec` because dedicated tog/cluster tokens didn't exist yet.\r\n- The flat-chart row-connector (\"S\" turning path) line is now more visible (`opacity: 0.5`, up from `0.2`).\r\n- `README.md` (and its zh-TW/zh-CN/ja translations): stitch list replaced with a full reference table; new sections documenting the blank grid block and the grid guide overlay; updated Settings and Safety Limits sections.\r\n\r\n### Notes\r\n\r\n- All additions are backward compatible — existing `crochet`/`crochet-tool` blocks render identically; `grid`, `showGrid`, and the new stitch names are opt-in.\r\n- No settings migration needed; new settings default to off/unused until configured.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-20T12:37:21Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:17fd34f0210517d4394bcdb5c62620dc0febee514b32de82e5a53a16efb7defe",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 60178
         },
         {
           "digest": "sha256:42d995493193df05f8523e60e91ea4027a486c0358eb8d4c6ea2e60556a79730",
-          "downloadCount": 10,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 297
         },
         {
           "digest": "sha256:c0ac278b7c71bd213368676e8cff8079e4e9e6681d4a9ea3ad7f310db61c6a32",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 4810
         }
       ],
       "author": "github-actions[bot]",
       "description": "---\r\nv1.0.1\r\n\r\nFixed\r\n- Round charts no longer shrink a decrease round's ring back inward. Every round is now placed farther out than the one before it — a decrease just spreads fewer stitches around a same-or-larger ring — so later rounds never overlap or nest inside earlier, larger ones.\r\n- BLO/FLO loop markers now share the embedded progress tool's current-position highlight with their stitch (same highlight class and color when the tool focuses that row/stitch), instead of rendering with no distinguishing color at all.\r\n- Removed an unsafe function call flagged by type-aware linting: chart parsing is now centralized through a single, simply-typed parseChart() helper instead of repeating an any-prone cast at each call site.\r\n\r\nAdded\r\n- The round-1 anchor (in MR / in ch ring) can now be followed by additional steps on the same row — for example R1: 6 sc in MR, sl st to join round 1 right after starting it.\r\n\r\nRemoved\r\n- The \"next round marker\" feature (the arrow indicator on concentric round charts, plus its settings-tab toggle) has been removed.\r\n\r\n---",
-      "downloadCount": 10,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
