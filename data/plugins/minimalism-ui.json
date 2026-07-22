@@ -4,8 +4,8 @@
   "description": "Transform UI into a Typora-like style, with the left side fixing the note status information and the right side focusing on the content of the note. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "minimalism-ui",
-  "lastChangedAt": "2026-07-21T03:05:27.015Z",
-  "lastFetchedAt": "2026-07-21T03:05:27.015Z",
+  "lastChangedAt": "2026-07-22T03:03:27.006Z",
+  "lastFetchedAt": "2026-07-22T03:03:27.006Z",
   "manifest": {
     "author": "Lucas",
     "authorUrl": "",
@@ -13,13 +13,103 @@
     "fundingUrl": "",
     "id": "minimalism-ui",
     "isDesktopOnly": true,
-    "minAppVersion": "1.13.0",
+    "minAppVersion": "1.7.2",
     "name": "Minimalism UI",
-    "version": "1.3.14"
+    "version": "1.3.17"
   },
   "name": "Minimalism UI",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:7e034c8de179acc228556602141d587e8385c73ff88bea4d4eb5b2af3634b72f",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1951332
+        },
+        {
+          "digest": "sha256:182a30e219fc478bd0409b26ca0e177af6743383a2d5df9d8b3ed638846b628d",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:36f2a8691de765543e55649a98f23d31dc21831705a62960f8900a17ebf0b30d",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 160589
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- **1.3.16 was rejected by Obsidian's plugin review** and never went out through official channels — this release supersedes it with compliant fixes for the same two review items\n- Fixed: reverted the 1.3.16 declarative settings API experiment — Obsidian's review flags any reference to the new `getSettingDefinitions()`/`update()`/`refreshDomState()` APIs as a blocking error when `minAppVersion` is below `1.13.0`, even when the call is behind a runtime version check; the settings tab is back to the `display()` API only (same as 1.3.15), and this plugin will keep accepting the \"settings search indexing\" recommendation as a permanent, non-blocking known item rather than raising the minimum Obsidian version again\n- Fixed: theme CSS is no longer injected at runtime as a `<style>` element (creating/attaching `<style>` elements is banned outright by Obsidian's review, regardless of which DOM API creates them) — each theme's CSS is now compiled directly into `styles.css` at build time, and switching themes only toggles a body class to select which theme's (already-scoped) rules apply\n\n- **1.3.16 未通过 Obsidian 插件审核**，从未通过官方渠道正式发布——本次版本针对同样两项审核意见提供了合规修复\n- 修复：回退了 1.3.16 中试验性的声明式设置 API——当 `minAppVersion` 低于 `1.13.0` 时，Obsidian 审核会把任何引用新版 `getSettingDefinitions()`/`update()`/`refreshDomState()` API 的代码都判定为阻断性错误，即使调用被运行时版本判断包裹也一样；设置页面已改回只使用 `display()` API（与 1.3.15 相同），本插件后续会将\"设置项可被搜索索引\"这条审核建议作为长期保留、不再修复的已知事项，而不是再次提高最低 Obsidian 版本要求\n- 修复：主题 CSS 不再在运行时以 `<style>` 元素的形式注入（Obsidian 审核明确禁止在运行时创建/挂载任何 `<style>` 元素，无论用哪个 DOM API 创建）——各主题的 CSS 现在会在构建期直接编译进 `styles.css`，切换主题时只切换一个 body 类名来选中对应主题（已作用域隔离）的规则生效\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.3.17",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T16:55:24Z",
+      "tag": "1.3.17"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:edbb9aa9390f16ca1bd6a02741b5c7be6be82ab1db6327a92c501fcba1147743",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 2091004
+        },
+        {
+          "digest": "sha256:99082aea1a517008f76f7288866a905acedfbc8105dee03dbf56a44504cd75d8",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:687a581e9d14caf2ae9369d588ff15fc1cc7bccf6208b8bd2937a83924963f7a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 53694
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- Fixed: the settings tab now also implements Obsidian's new declarative `getSettingDefinitions()` API, so it's indexed by Obsidian's built-in settings search on 1.13+ — unlike the reverted 1.3.14 attempt, this does **not** raise the minimum Obsidian version; the old `display()` API is kept fully working side by side for users on 1.7.2–1.12.x\n- Internal: the injected theme `<style>` element now uses Obsidian's own DOM helper instead of raw `document.createElement`, per plugin-review feedback\n\n- 修复：设置页面现在同时实现了 Obsidian 新的声明式 `getSettingDefinitions()` API，因此可以被 Obsidian 内置的设置搜索索引（1.13 及以上版本）——与被回退的 1.3.14 不同，这次**不会**提升最低 Obsidian 版本要求，旧的 `display()` API 会与新 API 并存，继续为 1.7.2–1.12.x 版本的用户提供完整支持\n- 内部修复：根据插件审核反馈，注入的主题 `<style>` 元素改用 Obsidian 自带的 DOM 辅助方法创建，不再使用原生 `document.createElement`\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.3.16",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T16:14:25Z",
+      "tag": "1.3.16"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:574161d39764e84a85db46d38ccd8f8e436317e4fcbfcf3adbb8e699a77c5643",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 2085485
+        },
+        {
+          "digest": "sha256:80b241c64e99e176d6c0646e3cede420b831b0cdd1f240b041160a01252f4c92",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 360
+        },
+        {
+          "digest": "sha256:1296891fe09eb4bd039cf4ca70e1e9c5ef97ced2c61d26fe223b7d6c120e0a28",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 53418
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "- **Reverted the 1.3.14 minimum-version bump — Obsidian 1.7.2 is supported again** (settings tab is back on the imperative `display()` API instead of the new declarative one, which required 1.13.0)\n- Fixed: the status bar's lock indicator is now a plain state icon shown only in reading mode, instead of a clickable mode-toggle with a misleading aria-label\n- Fixed: the Local Graph panel could render broken/blank right after the sidebar first mounts or a pane is resized to a near-zero width, before ever being shown at a real size\n- Internal: closed several lifecycle/leak edge cases — a disabled plugin could get ghost-reapplied if a layout callback fired after unload, a mid-flight settings change to the sidebar layout could get silently dropped, Mermaid zoom now follows popout windows opening/closing, and a leaf detached immediately after creation could be missed by cleanup; the right sidebar's last-selected panel is now restored after a restart\n- Internal: patched a high-severity dependency vulnerability (ReDoS in `brace-expansion`, pulled in via the eslint toolchain) — dev-only, no effect on the shipped plugin\n\n- **回退了 1.3.14 引入的最低版本要求，重新支持 Obsidian 1.7.2**（设置页面改回使用命令式的 `display()` API，不再依赖需要 1.13.0 的新声明式 API）\n- 修复：状态栏的锁定图标现在只是一个纯状态展示，仅在阅读模式下显示，不再是带有误导性 aria-label 的可点击模式切换按钮\n- 修复：本地关系图面板在侧边栏刚挂载或窗格被缩放到接近零宽度后、尚未获得真实尺寸前，可能渲染异常或空白\n- 内部修复：修复了若干生命周期/内存泄漏边界情况——布局回调在插件卸载后才触发时，禁用的插件可能被\"幽灵式\"重新应用；侧边栏布局中途收到设置变更时可能被静默丢弃；Mermaid 缩放功能现在会跟随弹出窗口的打开/关闭；紧接创建后就被分离的标签页此前可能未被正确清理；右侧栏现在会在重启后恢复上次选中的面板\n- 内部修复：修复了一处高危依赖漏洞（`brace-expansion` 的 ReDoS，通过 eslint 工具链引入）——仅影响开发依赖，不影响已发布插件\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "1.3.15",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T12:34:10Z",
+      "tag": "1.3.15"
+    },
     {
       "assets": [
         {
