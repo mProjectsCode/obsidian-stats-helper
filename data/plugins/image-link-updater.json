@@ -1,11 +1,11 @@
 {
-  "author": "andy51002000",
+  "author": "hikosalaidarkcommit",
   "defaultBranch": "main",
   "description": "Automatically updates markdown image links when image files are renamed or moved in the vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "image-link-updater",
-  "lastChangedAt": "2026-07-21T04:02:26.981Z",
-  "lastFetchedAt": "2026-07-21T04:02:26.981Z",
+  "lastChangedAt": "2026-07-22T04:05:26.999Z",
+  "lastFetchedAt": "2026-07-22T04:05:26.999Z",
   "manifest": {
     "author": "Andy Lai",
     "authorUrl": "https://github.com/andy51002000",
@@ -15,7 +15,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.5.7",
     "name": "Image Link Updater",
-    "version": "1.3.15"
+    "version": "1.3.17"
   },
   "name": "Image Link Updater",
   "presentInCommunityList": true,
@@ -23,21 +23,69 @@
     {
       "assets": [
         {
+          "digest": "sha256:a9e9cb949b42f3001196c186ab25cc5d594bcf500a33364bf8cae647d95c37dd",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 27322
+        },
+        {
+          "digest": "sha256:66c2f9f13d558ab4cc667171b9dae7e077182041f2d1991d328bcd0fd7a61ca1",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 447
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n\n- **Faster, more private link updates** — Link updates no longer enumerate every file in the vault. The plugin now uses Obsidian's metadata cache (`resolvedLinks`) to target only the notes that actually reference the renamed or moved image, which is faster in large vaults and means the plugin no longer requests a listing of every file path.\n- **More robust link repair after quick successive moves** — Metadata-cache lookups now use a bounded retry with per-destination-path isolation, so moving several images in quick succession (or moving the same image twice quickly) can no longer cause one update to cancel or starve another.\n\n### Internal\n\n- Cleaned up the remaining automated-review warnings in the E2E test suite (unnecessary type assertions, `TFile` cast, bare `setTimeout`).\n- Committed `package-lock.json` and switched CI to `npm ci` so builds are reproducible byte-for-byte.\n- Release workflow now generates GitHub build provenance attestations (`actions/attest@v4`) for every published asset, and runs the unit test suite before building.\n\n\n\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.3.17",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T15:05:04Z",
+      "tag": "1.3.17"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:355e86e5942000be5b8b5470a5870d27a2591133760925e11561d8965f4830dd",
-          "downloadCount": 8,
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 21367
+        },
+        {
+          "digest": "sha256:d6fa97a57e8af2249e0e8475af67d8318d9fabe45dbe1edfd1412957bf93abf9",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 447
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n\n- **License changed to MIT** — The project is now released under the MIT License (Copyright (c) 2026 Andy Lai), replacing the previous AGPL-3.0-or-later license. The AGPL history prior to this release is preserved in the changelog for accuracy.\n- **Removed owner-bound repository URLs from README** — The `github.com/andy51002000/...` release badge, manual-install release link, Plugin Details Repository row, and Building-from-source clone URL have been removed or replaced with owner-neutral text to support a potential repository transfer. The Obsidian community listing URL (`obsidian.md/plugins?id=image-link-updater`) is unaffected. Author identity links (authorUrl, fundingUrl) are retained.\n\n\n\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.3.16",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T06:07:43Z",
+      "tag": "1.3.16"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:355e86e5942000be5b8b5470a5870d27a2591133760925e11561d8965f4830dd",
+          "downloadCount": 10,
           "name": "main.js",
           "size": 21367
         },
         {
           "digest": "sha256:7ddcdfc289db7de88430250ada5bc38b26b1cbd67cc8a50f9bce5744b5f6edfc",
-          "downloadCount": 10,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "andy51002000",
       "description": "## What's Changed\n\n### Fixed\n- **Race condition in Smart attachment folder unique-naming** — The previous release used an `adapter.exists()` probe loop to find a unique filename before calling `createBinary`. This check-then-create pattern has a TOCTOU window where a concurrent paste can create the same file between the probe and the write. Fixed by replacing the probe loop with `createBinaryWithRetry()`: the create is attempted directly and retried with an incremented numeric suffix on collision — atomically, no existence check required. This mirrors the `renameWithRetry()` approach used for file moves since 1.3.11.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.14...1.3.15",
-      "downloadCount": 10,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.3.15",
       "prerelease": false,
