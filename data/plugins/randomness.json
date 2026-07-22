@@ -4,8 +4,8 @@
   "description": "Random generator engine. Render `randomness` codeblocks inline with rich text output, plus support for legacy Inspiration Pad Pro 3 .ipt files. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "randomness",
-  "lastChangedAt": "2026-07-21T06:03:27.002Z",
-  "lastFetchedAt": "2026-07-21T06:03:27.002Z",
+  "lastChangedAt": "2026-07-22T06:01:26.994Z",
+  "lastFetchedAt": "2026-07-22T06:01:26.994Z",
   "manifest": {
     "author": "Josh",
     "description": "Random generators for TTRPGs and creative writing: tables, dice, NPC portraits, locked rolls, a sidebar browser, and one-click town content. Reads .rdm generator files (and legacy .ipt).",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Randomness",
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "name": "Randomness",
   "presentInCommunityList": true,
@@ -21,27 +21,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:9a15bb09ba191bcfc52e3107987f8bf3dc72c32ca84459a5178d68c01723c26e",
+          "downloadCount": 40,
+          "name": "main.js",
+          "size": 281906
+        },
+        {
+          "digest": "sha256:b60d47d860785f70a923182546b1212dc780d995699b07a6d469f85d5665d258",
+          "downloadCount": 43,
+          "name": "manifest.json",
+          "size": 345
+        },
+        {
+          "digest": "sha256:ce1c3541ea2ff97dd3748e4e3084fdcea7c5cbd482c73756bbe95bd4f2fc994e",
+          "downloadCount": 39,
+          "name": "styles.css",
+          "size": 33360
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\n- **Copy button on Android pasted a `tempNNNN.html` attachment link\n  instead of the result.** The sidebar's Copy button used to put an\n  HTML flavour on the clipboard and let Obsidian convert it to\n  markdown on paste. Android's WebView hands that flavour back as a\n  file, so Obsidian saved it into the attachment folder and linked to\n  it. Copy now converts to markdown itself and writes plain text only\n  — formatting is preserved on every platform, and there's no HTML\n  flavour left to be mishandled.\n\n### Added\n- **Folder filters on tag rolls.** `folder=` is a reserved filter\n  segment restricting candidates to notes under a folder (recursive;\n  comma for OR) — combine with tag and property filters:\n  `` `rdm:*|folder=Bestiary|cr=3|link` `` rolls a random CR 3 monster\n  note, ready to drop into an `encounter:` line.\n- **Visible re-roll die on API-shim rollers.** Encounter counts\n  rendered through the `window.DiceRoller` shim (Initiative Tracker's\n  `1d6: [[Monster]]`) now show a small die icon; clicking the count\n  re-rolls it.\n",
+      "downloadCount": 43,
+      "draft": false,
+      "name": "Randomness 1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T12:23:59Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:ff868518b3da61d7678c8ff0ff2b64914dda8cdda072802ab4705dbe6c573cc5",
-          "downloadCount": 189,
+          "downloadCount": 193,
           "name": "main.js",
           "size": 278138
         },
         {
           "digest": "sha256:60ea173843a897c92f481278646d0d068293c6478171b10db6728a4f300c6dec",
-          "downloadCount": 201,
+          "downloadCount": 207,
           "name": "manifest.json",
           "size": 345
         },
         {
           "digest": "sha256:f8101f3fc98110893a2d6ac0867a2944ba1143dc1a5f9f9971bfd1531b62ebc9",
-          "downloadCount": 188,
+          "downloadCount": 192,
           "name": "styles.css",
           "size": 32858
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\n- **Dice breakdown — see what each die rolled.** The engine now reports\n  every die's face alongside the sum (Ironsworn challenge dice, stat\n  arrays, …):\n  - **Hover any inline roll** for the per-die breakdown\n    (`4d6dl1 → 5, 3, (1), 6` — dropped dice in parens, explosions `!`,\n    re-rolls `r`). Always on; works for `rdm:` and `dice:` spans alike,\n    including dice inside table results.\n  - **Settings → Randomness → Show dice breakdown** appends the faces to\n    the visible result — `13 (7, 6)` instead of just `13`. Individual\n    `dice:` spans can opt in with the new `|dice` flag instead.\n  - **Locks commit the faces when they're visible**, so the record\n    survives in the note.\n  - **Dice tray history** shows the breakdown under each roll, and the\n    big result's tooltip carries it too.\n  - For scripts: `EvaluatorOptions.onDice` receives each dice term's\n    notation, per-die detail, and total during evaluation.\n- **Deck display blocks.** A ```` ```randomness ```` codeblock whose\n  whole body is `deck:Name` renders the deck's last-drawn card at full\n  card size with a 🎴 Draw button and remaining count — the big-card\n  companion to the compact inline span. Rendering never draws.\n- **Card copy buttons.** Hovering a drawn card (Decks tab or deck\n  block) shows portrait-style icon buttons: copy the card image as an\n  `![[embed]]`, copy a ready-to-paste deck block, copy the card as\n  text, or copy the inline `deck:` span.\n- **Weather example deck.** Ten illustrated cards for day-by-day\n  weather: upright passes by nightfall, reversed settles in until the\n  next card (reversal chance preset to 40%). Downloadable from\n  settings alongside the playing cards and tarot decks, which now\n  share one compact \"Example decks\" row.\n\n### Fixed\n- **Initiative Tracker / Fantasy Statblocks encounter counts.**\n  `encounter: 1d6: [[Monster]]` no longer collapses to a flat 1 when\n  Dice Roller is disabled mid-session: the `window.DiceRoller` shim\n  now takes over live when Dice Roller unloads (and when the compat\n  toggle flips), and its rollers gained the `isStatic` /\n  `containerEl` surface the encounter line renders — including\n  click-to-re-roll counts.\n- **Decks tab quality of life.** Decks collapse to their title row\n  (click the title; persisted, with Collapse all/Expand all), the tab\n  no longer resets its scroll position on every draw, and drawn cards\n  no longer flash their text while the image loads.\n",
-      "downloadCount": 201,
+      "downloadCount": 207,
       "draft": false,
       "name": "Randomness 1.6.0",
       "prerelease": false,
@@ -322,7 +352,7 @@
       "assets": [
         {
           "digest": "sha256:fc00274d2adfebdc2d8f5aa6bb38f1f8991d54192870eb30f917fe7e27420f82",
-          "downloadCount": 135,
+          "downloadCount": 139,
           "name": "fantasy-ink-parts-pack-v1.0.0.zip",
           "size": 6666019
         }
@@ -532,7 +562,7 @@
         },
         {
           "digest": "sha256:233bb850068052037b22e0da63a3643414344aa1a6579e7a88e22382073737b0",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 14783
         }
