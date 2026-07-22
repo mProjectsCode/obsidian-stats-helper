@@ -4,8 +4,8 @@
   "description": "Integrates with various LLMs to process notes, generate wiki-links, and create concept notes",
   "errors": [],
   "id": "notemd",
-  "lastChangedAt": "2026-07-21T02:01:26.979Z",
-  "lastFetchedAt": "2026-07-21T02:01:26.979Z",
+  "lastChangedAt": "2026-07-22T02:02:38.017Z",
+  "lastFetchedAt": "2026-07-22T02:02:38.017Z",
   "manifest": {
     "author": "jacob",
     "authorUrl": "https://github.com/Jacobinwwey",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "0.15.0",
     "name": "Notemd",
-    "version": "1.9.3"
+    "version": "1.9.4"
   },
   "name": "Notemd",
   "presentInCommunityList": true,
@@ -23,14 +23,50 @@
     {
       "assets": [
         {
+          "digest": "sha256:3d8b416c5e8fdf1847064c40b1d493590dad9918b9bcd774d903aed8682da69c",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 5529858
+        },
+        {
+          "digest": "sha256:4feb6f8ea7e7fc30a5242c65a8b97463a95094eb72eb11e769747731a97cf724",
+          "downloadCount": 14,
+          "name": "manifest.json",
+          "size": 582
+        },
+        {
+          "digest": "sha256:3a64d9ca81c3b37227b052d1efaaf800183a8183c3d7e57c24b9eb795389f039",
+          "downloadCount": 1,
+          "name": "README.md",
+          "size": 96218
+        },
+        {
+          "digest": "sha256:2b76ff18a6640fa32800bbf0a3007c4c61a414274c90084e74dda65a971bd0fd",
+          "downloadCount": 12,
+          "name": "styles.css",
+          "size": 65854
+        }
+      ],
+      "author": "Jacobinwwey",
+      "description": "# Notemd v1.9.4\n\n## Highlights\n\n- **Diagrams are now a source-aware, multi-format platform**: CircuitikZ, Draw.io, Drawnix, SVG, PNG, PDF, HTML, and editable artifacts have explicit source, render, preview, and export contracts.\n- **CircuitikZ now has an optional managed desktop runtime**: Notemd can discover trusted compilers or install a pinned, integrity-checked Tectonic environment outside the Vault, while dependency-free previews remain available.\n- **Diagram work is easier to find and manage**: Vault-persistent history adds search, filters, completion-time ordering, pagination, artifact actions, direct entry points, and an adaptive right-side drawer.\n- **Large settings surfaces are easier to navigate**: fuzzy search, stable favorites, and section navigation reduce setup friction without removing advanced controls.\n\n## Major Upgrades\n\n- Added constrained CircuitikZ generation contracts, circuit-family fixtures, topology validation, native compile diagnostics, repair briefs, and SVG/PNG geometry quality gates.\n- Added readable SVG, PNG, and PDF companions plus editable diagram export targets and an offline artifact CLI with BOM-safe input handling.\n- Added a managed CircuitikZ environment with ownership-scoped activation, secure download verification, install/repair/removal actions, compiler discovery, and native smoke tests.\n- Added Vault-scoped diagram history persistence, search, filtering, pagination, missing-artifact feedback, reopen/export actions, and command/sidebar access to the shared adaptive history view.\n- Added settings discovery with fuzzy matching, localized stable favorite identities, section navigation, and focused feedback for empty searches.\n- Added preflight handling for missing or non-empty batch target folders, including task-level confirmation and an opt-in policy to create missing folders automatically.\n- Completed published multilingual documentation routes and content parity, while keeping generated MDX synchronization limited to user-visible route or content changes.\n- Hardened Slidev standalone export across page boundaries, Mermaid fitting, MP4 frame ordering and clarity, and Windows environment probing.\n\n## Fixes And Robustness\n\n- Fixed the diagram history drawer scroll model so long histories remain vertically navigable inside the preview shell.\n- Improved CircuitikZ preview legibility, label placement, line weights, clipping detection, arrow alignment, and multi-format companion readability.\n- Fixed missing-history-artifact reporting and source-only artifact reopening instead of presenting silent or misleading preview states.\n- Fixed diagram artifact CLI handling for UTF-8 BOM inputs and npm argument rewriting on Windows.\n- Stripped NUL bytes from generated documentation pages and hardened GitHub Pages deployment retries.\n- Restored the README Star History and Friendly Links hierarchy.\n- Added explicit source/render-target routing so CircuitikZ no longer falls through an unrelated mind-map generation contract.\n- Fixed npm 10 clean-install reproducibility and made the CircuitikZ, CLI fallback, and website documentation contract tests portable across Windows and Linux release runners.\n\n## Comparative Summary\n\n- **Before**: CircuitikZ depended on an externally prepared LaTeX toolchain and failures were difficult to diagnose. **After**: users can keep dependency-free previews, select a trusted system compiler, or install a verified managed Tectonic runtime with native diagnostics.\n- **Before**: diagram sources and render types were easy to confuse, and source-only artifacts had limited export evidence. **After**: source, renderer, preview companion, and export target are explicit, with readable SVG/PNG/PDF and editable artifacts where supported.\n- **Before**: generated diagrams were primarily tied to the current preview session. **After**: history persists per Vault and is searchable, filterable, pageable, reopenable, and reachable from commands and the sidebar.\n- **Before**: a dense settings page required manual scanning. **After**: users can search approximately, favorite recurring settings, and jump between major sections.\n- **Before**: published documentation routes and Slidev/Page delivery had parity and convergence gaps. **After**: multilingual routes are complete and export/deployment workflows have explicit verification gates.\n\n## Verification\n\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.4`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `npm --prefix website run build` (all 34 published locales)\n- `npm --prefix website run audit:build`\n- `npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format html --html-mode standalone --output-subfolder export/release-1.9.4 --require-native-standalone --sample-slides all --no-screenshots --json` (36/36 slides passed with no overflow, unreadable content, or render errors)\n- `npm run verify:diagram-semantics -- --version 1.9.4 --commit HEAD --surfaces mermaid,json-canvas,vega-lite,editable-html-svg --output .cache/release-1.9.4-diagram-verification.md`\n- `npm run diagram:smoke-circuitikz -- --output-dir docs/export/release-1.9.4-circuitikz-smoke --compile-executable C:\\\\texlive\\\\2023\\\\bin\\\\windows\\\\pdflatex.exe --compile-arg -interaction=nonstopmode --compile-arg -halt-on-error --compile-arg -output-directory={outputDir} --compile-arg {tex} --expected-artifact {outputDir}/{jobName}.pdf` (6/6 fixtures compiled with zero errors or warnings)\n- `obsidian help`\n- The optional `obsidian-cli` wrapper is not installed on this Windows host; the unrelated npm package with that name was not substituted for it.\n- Real Obsidian reload and diagram preview/history acceptance: plugin `1.9.4` enabled, 34 Notemd commands registered, history drawer scrolled from 0 to 200 with `overflow-y: auto`, and no plugin error notices or error-level console messages.\n- `git diff --check`\n\n---\n\n# Notemd v1.9.4\n\n## 亮点\n\n- **图表现在是识别源类型的多格式平台**：CircuitikZ、Draw.io、Drawnix、SVG、PNG、PDF、HTML 与可编辑产物都具有明确的源、渲染、预览与导出契约。\n- **CircuitikZ 现在提供可选的桌面端托管运行时**：Notemd 可以发现可信编译器，或在 Vault 外安装固定版本且经过完整性校验的 Tectonic 环境，同时继续提供零依赖预览。\n- **图形工作更易查找和管理**：按 Vault 持久化的历史支持搜索、筛选、完成时间排序、分页、产物操作、直达入口与自适应右侧抽屉。\n- **复杂设置更易导航**：模糊搜索、稳定收藏与大项导览降低配置成本，同时保留高级控制项。\n\n## 主要升级\n\n- 新增受约束的 CircuitikZ 生成契约、电路族 fixture、拓扑校验、原生编译诊断、修复 brief，以及 SVG/PNG 几何质量门禁。\n- 新增清晰可读的 SVG、PNG、PDF companion、可编辑图表导出目标，以及支持 BOM 输入的离线 artifact CLI。\n- 新增 CircuitikZ 托管环境，包含 ownership-scoped 激活、安全下载校验、安装/修复/移除操作、编译器发现与原生 smoke test。\n- 新增按 Vault 保存的图形历史、搜索、筛选、分页、缺失产物反馈、重新打开/导出操作，以及从命令与侧边栏进入共享自适应历史视图的入口。\n- 新增设置模糊匹配、已本地化的稳定收藏标识、大项导览，以及搜索无结果时的明确反馈。\n- 新增批处理目标文件夹预检：缺失文件夹或非空文件夹会在任务级确认，并可选择以后自动创建缺失文件夹。\n- 补齐已发布的多语言文档路由与内容一致性，同时将生成式 MDX 同步限制在用户可见路由或内容确有变化的场景。\n- 加固 Slidev standalone 导出，包括跨页内容、Mermaid 自适应、MP4 帧顺序与清晰度，以及 Windows 环境检测。\n\n## 修复与鲁棒性\n\n- 修复图形历史抽屉的滚动模型，使长历史列表可在预览 shell 内正常上下滚动。\n- 改善 CircuitikZ 预览的可读性、标签布局、线宽、裁切检测、箭头对齐与多格式 companion 清晰度。\n- 修复历史产物缺失反馈与仅源文件产物的重新打开行为，避免静默或具有误导性的预览状态。\n- 修复 diagram artifact CLI 对 UTF-8 BOM 输入及 Windows npm 参数重写的处理。\n- 清理生成文档页面中的 NUL 字节，并增强 GitHub Pages 部署重试。\n- 恢复 README 中 Star History 与 Friendly Links 的正确层级。\n- 建立明确的源与 render target 路由，避免 CircuitikZ 错误落入无关的 mind-map 生成契约。\n- 修复 npm 10 冷安装的可复现性，并使 CircuitikZ、CLI fallback 与网站文档契约测试可在 Windows 和 Linux 发布 runner 上稳定执行。\n\n## 对比摘要\n\n- **改动前**：CircuitikZ 依赖用户自行准备 LaTeX 工具链，失败原因也难以诊断。**改动后**：用户可继续使用零依赖预览、选择可信系统编译器，或安装经过校验的托管 Tectonic，并获得原生诊断。\n- **改动前**：图表源类型与 render 类型容易混淆，仅源文件产物的导出证据有限。**改动后**：源、renderer、预览 companion 与导出目标均明确分离，并在支持时提供清晰的 SVG/PNG/PDF 与可编辑产物。\n- **改动前**：生成图形主要依附当前预览会话。**改动后**：历史按 Vault 持久化，可搜索、筛选、分页、重新打开，并可从命令与侧边栏直达。\n- **改动前**：设置页内容密集，只能手动逐项查找。**改动后**：用户可以模糊搜索、收藏常用设置，并在主要设置分区间快速跳转。\n- **改动前**：已发布文档路由以及 Slidev/Pages 交付存在一致性与收敛缺口。**改动后**：多语言路由完整，导出与部署流程也具有明确的验证门禁。\n\n## 验证\n\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.4`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `npm --prefix website run build`（全部 34 个已发布 locale）\n- `npm --prefix website run audit:build`\n- `npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format html --html-mode standalone --output-subfolder export/release-1.9.4 --require-native-standalone --sample-slides all --no-screenshots --json`（36/36 页通过，无溢出、不可读内容或渲染错误）\n- `npm run verify:diagram-semantics -- --version 1.9.4 --commit HEAD --surfaces mermaid,json-canvas,vega-lite,editable-html-svg --output .cache/release-1.9.4-diagram-verification.md`\n- `npm run diagram:smoke-circuitikz -- --output-dir docs/export/release-1.9.4-circuitikz-smoke --compile-executable C:\\\\texlive\\\\2023\\\\bin\\\\windows\\\\pdflatex.exe --compile-arg -interaction=nonstopmode --compile-arg -halt-on-error --compile-arg -output-directory={outputDir} --compile-arg {tex} --expected-artifact {outputDir}/{jobName}.pdf`（6/6 fixture 编译成功，0 error / 0 warning）\n- `obsidian help`\n- 本 Windows 主机未安装可选的 `obsidian-cli` wrapper；没有使用 npm 上同名但不兼容的包冒充该工具。\n- 在真实 Obsidian 中重载并验收：插件 `1.9.4` 已启用，34 个 Notemd 命令已注册，历史抽屉以 `overflow-y: auto` 从 0 滚动到 200，且没有插件错误提示或 error-level console 消息。\n- `git diff --check`\n",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "Notemd 1.9.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T14:07:17Z",
+      "tag": "1.9.4"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:52c9c7ef63dd6dab7120f611ce8ae8608f8d0eab3dcf66215d1f8a23184ef469",
-          "downloadCount": 363,
+          "downloadCount": 371,
           "name": "main.js",
           "size": 4596379
         },
         {
           "digest": "sha256:63719753819ee748d5f5acae3d8bd18bd77e9eb5987d6565a0304439085768dd",
-          "downloadCount": 402,
+          "downloadCount": 412,
           "name": "manifest.json",
           "size": 582
         },
@@ -42,14 +78,14 @@
         },
         {
           "digest": "sha256:7476d9f9fd383b97718b6c23f48aec9aaeb8c6d9cc2ba24a954a82c0db5fa612",
-          "downloadCount": 318,
+          "downloadCount": 325,
           "name": "styles.css",
           "size": 50919
         }
       ],
       "author": "Jacobinwwey",
       "description": "# Notemd v1.9.3\n\n## Highlights\n\n- **Slidev export is now a real multi-format workflow, not a demo-only path**: HTML, standalone HTML, PDF, PNG, and PPTX are verified through the same source-preparation and rendered-convergence pipeline.\n- **PPTX export now prioritizes visible native editability**: normal slide text, code text, and table-cell text are emitted as visible Office-native objects instead of transparent selectable overlays.\n- **The reported PPTX page 17-29 occlusion issue is fixed**: code-background rectangles and other native shapes are sorted below visible text, so the editable text remains visible in PowerPoint.\n\n## Major Upgrades\n\n- Added the Slidev export workflow with environment probing, local Slidev fork detection, full Slidev skill reference loading, source preparation, layout audit, and per-format output routing.\n- Added standalone HTML bundling with offline `file://` support, relative asset handling, Vue component transformation fixes, and maintainer acceptance evidence.\n- Added editable PPTX export with visible native text boxes, rich text runs, Office font policy reporting, paragraph spacing, code text extraction, hyperlink relationships, and native DrawingML tables.\n- Added PPTX report contracts for editable text coverage, table-cell rich text coverage, fallback-only element kinds, font portability, transparent overlay detection, and rendered-HTML visual reference checks.\n- Added layout-quality gates for overflowing content, tables, code fences, slot layouts, Mermaid source preservation, and rendered deck geometry.\n\n## Fixes And Robustness\n\n- Fixed the layer ordering bug that allowed code-background rectangles to sit above visible text in complex PPTX slides.\n- Removed the transparent-text fallback from the default visible-native PPTX route; editable text is now the displayed text.\n- Fixed table-cell rich text preservation and reporting so native table output can be verified independently from suppressed overlay text boxes.\n- Fixed table-owned decoration diagnostics so inline table decoration is reported as table-owned residue instead of an unsupported table root.\n- Hardened Slidev export verification so real `architecture.zh-CN.md` acceptance checks the local Slidev fork, full skill reference count, rendered visual gate, Mermaid source preservation, PPTX editability, and generated artifact ignore status.\n- Tightened release workflow contracts around numeric tags, required release assets, bilingual release notes, and reusable release helper scripts.\n\n## Comparative Summary\n\n- **Before**: the Slidev export buttons could produce HTML-like artifacts, but the workflow did not consistently prove environment readiness, full skill usage, standalone behavior, or PPTX quality.\n- **After**: the export path reports the installed tools, local Slidev fork, full skill root, skill reference count, output files, and PPTX quality metrics from the real vault source.\n- **Before**: PPTX editability was partly misleading because transparent text could be selectable while visible text remained image-owned.\n- **After**: visible slide text and table-cell text are emitted as native editable Office text; Mermaid/SVG geometry remains explicitly fallback-owned instead of being over-claimed.\n- **Before**: native code backgrounds could be written after text in PPTX XML, which made pages 17-29 visually hide text behind background rectangles.\n- **After**: background images, native shapes, native tables, and native text are sorted into deterministic layers, and the real deck XML gate shows zero code-background rectangles after text on pages 17-29.\n\n## Verification\n\n- `runuser -u jacob -- env HOME=/home/jacob PLAYWRIGHT_BROWSERS_PATH=/home/jacob/.cache/ms-playwright bash -lc 'cd /home/jacob/obsidian-NotEMD && npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format pptx --output-subfolder export/test-slidev-1.9.3-layer-release --sample-slides all --timeout-ms 600000 --no-screenshots --require-pptx-visual-match --json'`\n- PPTX XML inspection for slides 17-29:\n  - `totalCodeBackgroundAfterText = 0`\n  - `totalNativeShapeAfterText = 0`\n  - `totalTransparentishAlpha = 0`\n  - `totalTableOverlayText = 0`\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.3`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `obsidian help`\n- `obsidian-cli help`\n- `git diff --check`\n\n---\n\n# Notemd v1.9.3\n\n## 亮点\n\n- **Slidev 导出现在是可验收的多格式工作流，而不是演示路径**：HTML、standalone HTML、PDF、PNG 与 PPTX 都走同一套 source preparation 与 rendered convergence 管线。\n- **PPTX 导出现在优先保证可见原生可编辑性**：普通正文、代码文本与表格单元格文字会输出为可见的 Office 原生对象，而不是透明可选中 overlay。\n- **已修复第 17-29 页文字被遮挡的问题**：代码背景矩形与其他原生 shape 会被排序到可见文字下方，PowerPoint 中的可编辑文字保持可见。\n\n## 主要升级\n\n- 新增 Slidev 导出工作流，包含环境检测、本地 Slidev fork 识别、完整 Slidev skill reference 加载、源文件准备、布局审计与多格式输出路由。\n- 新增 standalone HTML bundle，支持离线 `file://`、相对资源处理、Vue component transformation 修复，并补充维护者验收证据。\n- 新增 editable PPTX 导出能力，包含可见原生文本框、rich text runs、Office 字体策略报告、段落间距、代码文本抽取、超链接关系与原生 DrawingML 表格。\n- 新增 PPTX 报告契约，覆盖可编辑文字、表格单元格 rich text、fallback-only 元素类型、字体可移植性、透明 overlay 检测与 rendered-HTML 视觉参考。\n- 新增布局质量门禁，覆盖内容溢出、表格、代码 fence、slot layout、Mermaid 源保留与渲染 deck 几何。\n\n## 修复与鲁棒性\n\n- 修复了代码背景矩形在复杂 PPTX 页面中可能位于可见文字上方的层级排序问题。\n- 从默认 visible-native PPTX 路径移除透明文字 fallback；可编辑文字现在就是实际显示的文字。\n- 修复表格单元格 rich text 的保留与报告，使 native table 输出不再依赖被 suppress 的 overlay 文本框来证明。\n- 修复 table-owned decoration 诊断：表格内部 inline 装饰现在报告为 table-owned residue，而不是 unsupported table root。\n- 加强 Slidev 导出验证：真实 `architecture.zh-CN.md` 验收会检查本地 Slidev fork、完整 skill reference 数量、渲染视觉门禁、Mermaid 源保留、PPTX 可编辑性与生成产物 ignore 状态。\n- 收紧发布流程契约：numeric tag、必需 release assets、中英双语 release notes 与复用发布脚本均有测试覆盖。\n\n## 对比摘要\n\n- **改动前**：Slidev export 按钮可以产出类 HTML 文件，但没有稳定证明环境可用性、完整 skill 使用、standalone 行为或 PPTX 质量。\n- **改动后**：导出路径会报告已安装工具、本地 Slidev fork、完整 skill root、skill reference 数量、输出文件与真实 vault 源文件的 PPTX 质量指标。\n- **改动前**：PPTX 可编辑性存在误导，透明文字可能可选中，但实际显示文字仍由图片层承担。\n- **改动后**：可见正文与表格单元格文字会输出为 Office 原生可编辑文字；Mermaid/SVG geometry 仍明确归属 fallback，不夸大为已完全原生可编辑。\n- **改动前**：PPTX XML 中原生代码背景可能写在文字之后，导致第 17-29 页文字被背景矩形遮挡。\n- **改动后**：background image、native shape、native table、native text 按确定性层级排序，真实 deck 的 XML gate 显示第 17-29 页没有任何 code background 位于文字之后。\n\n## 验证\n\n- `runuser -u jacob -- env HOME=/home/jacob PLAYWRIGHT_BROWSERS_PATH=/home/jacob/.cache/ms-playwright bash -lc 'cd /home/jacob/obsidian-NotEMD && npm run verify:slidev-export -- --vault docs --source architecture.zh-CN.md --format pptx --output-subfolder export/test-slidev-1.9.3-layer-release --sample-slides all --timeout-ms 600000 --no-screenshots --require-pptx-visual-match --json'`\n- 第 17-29 页 PPTX XML 检查：\n  - `totalCodeBackgroundAfterText = 0`\n  - `totalNativeShapeAfterText = 0`\n  - `totalTransparentishAlpha = 0`\n  - `totalTableOverlayText = 0`\n- `npm run chronicle:sync-repo-saga`\n- `npm run chronicle:update -- --tag 1.9.3`\n- `npm run build`\n- `npm test -- --runInBand`\n- `npm run audit:i18n-ui`\n- `npm run audit:render-host`\n- `obsidian help`\n- `obsidian-cli help`\n- `git diff --check`\n",
-      "downloadCount": 402,
+      "downloadCount": 412,
       "draft": false,
       "name": "Notemd 1.9.3",
       "prerelease": false,
@@ -444,7 +480,7 @@
         },
         {
           "digest": "sha256:aecadae08898c8621941ce8262648e17d2fba6ccd0ca980f6a286504a0ccc375",
-          "downloadCount": 406,
+          "downloadCount": 407,
           "name": "styles.css",
           "size": 20275
         }
