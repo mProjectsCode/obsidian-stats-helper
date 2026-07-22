@@ -4,8 +4,8 @@
   "description": "Edit images non-destructively: crop, rotate, flip, resize, and apply CSS filters live, without modifying the original file. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "live-image-editor",
-  "lastChangedAt": "2026-07-21T07:04:27.026Z",
-  "lastFetchedAt": "2026-07-21T07:04:27.026Z",
+  "lastChangedAt": "2026-07-22T07:01:27.003Z",
+  "lastFetchedAt": "2026-07-22T07:01:27.003Z",
   "manifest": {
     "author": "britz",
     "authorUrl": "https://github.com/Britz",
@@ -23,32 +23,32 @@
       "assets": [
         {
           "digest": "sha256:44c3733e352963eec815d441b32e886760b9f6cc00aa55894f93c289698aa5f7",
-          "downloadCount": 0,
+          "downloadCount": 2,
           "name": "lie-runtime.js",
           "size": 12867
         },
         {
           "digest": "sha256:c595b5cf027440571fc73105f0e29cf9f838a1c8a10931c15297c8ce5f761800",
-          "downloadCount": 104,
+          "downloadCount": 119,
           "name": "main.js",
           "size": 136631
         },
         {
           "digest": "sha256:3ab90b05aa611b47b4e4eece3f212e896a979e21a6d57552789484d44bf830c1",
-          "downloadCount": 106,
+          "downloadCount": 121,
           "name": "manifest.json",
           "size": 340
         },
         {
           "digest": "sha256:6e17c3dbf5db976e0c9b5d786542fbea7112c01628c2fb74fcba22c072254a8a",
-          "downloadCount": 104,
+          "downloadCount": 119,
           "name": "styles.css",
           "size": 50492
         }
       ],
       "author": "Britz",
       "description": "Fix standalone-runtime crash on foreign pages — runtime shims Obsidian's activeDocument/activeWindow (Bug 119)\n\n## [0.6.13] - 2026-07-15\n\nHotfix for the standalone runtime: `lie-runtime.js` crashed on every foreign page since 0.6.9 because the Change 40 sweep leaked the Obsidian-only `activeDocument` global into the shared core the runtime bundles. Verified: `npm test` 306 (incl. the new 3-case shim guard), `npm run build` green, built `lie-runtime.js` contains the shim.\n\n- **Bug 119 — Standalone runtime threw `ReferenceError: activeDocument is not defined` on every claimed image (broken since 0.6.9).** _Cause:_ Change 40's eslint-driven `document` → `activeDocument` sweep (0.6.9) deliberately skipped `runtime.ts` but converted the exact flagged positions in the SHARED core too — `ensureLayers` in [render-core.ts](src/render-core.ts) and `createCaptionEl`/`mountCaption` in [caption-dom.ts](src/caption-dom.ts) — which the runtime bundle also pulls in; off-Obsidian the `activeDocument` global does not exist, so the first hydrate crashed and no image rendered. No test covered the DOM path (the render-core unit test only asserts `CLAIM_SELECTOR`). _Fix:_ the runtime ENTRY ([runtime.ts](src/runtime.ts)) now SHIMS the Obsidian-only globals — `Object.assign(globalThis, { activeDocument: document, activeWindow: window })` at the top of `run()`, before the first hydrate. This is AD9's runtime-exception clause: off-Obsidian the runtime supplies the missing platform binding itself, exactly as it supplies its own inline-Markdown renderer. The shared core keeps referencing `activeDocument` unchanged, so both callers stay identical AND Feature 39's still-open `window` → `activeWindow` half is safe in the runtime too. A source-text guard [runtime-global-shim.test.ts](tests/unit/runtime-global-shim.test.ts) asserts the shim stays in the entry and ahead of hydrate. Pitfall recorded in `implementation-plan.md` (gated).",
-      "downloadCount": 106,
+      "downloadCount": 121,
       "draft": false,
       "name": "0.6.13",
       "prerelease": false,
