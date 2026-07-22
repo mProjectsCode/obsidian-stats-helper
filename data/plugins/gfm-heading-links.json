@@ -4,21 +4,94 @@
   "description": "Resolve GFM-style kebab-case heading links (e.g. #my-heading) at runtime — no export hacks, works in Live Preview and Reading view. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "gfm-heading-links",
-  "lastChangedAt": "2026-07-21T09:00:27.035Z",
-  "lastFetchedAt": "2026-07-21T09:00:27.035Z",
+  "lastChangedAt": "2026-07-22T09:05:27.025Z",
+  "lastFetchedAt": "2026-07-22T09:05:27.025Z",
   "manifest": {
     "author": "Lucas Galdino",
     "authorUrl": "https://github.com/lucasgaldinos",
     "description": "Resolve GFM-style kebab-case heading links (e.g. #my-heading) at runtime — no export hacks, works in Live Preview and Reading view.",
     "id": "gfm-heading-links",
     "isDesktopOnly": false,
-    "minAppVersion": "1.12.7",
+    "minAppVersion": "1.0.0",
     "name": "GFM Heading Links",
-    "version": "1.3.6"
+    "version": "1.3.8"
   },
   "name": "GFM Heading Links",
   "presentInCommunityList": true,
-  "releases": [],
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:d4e6c7e1325d3a1bf6fdbfaafe0da991d26dcc98114f2cdae8d3dad6092fad05",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 10886
+        },
+        {
+          "digest": "sha256:e3855092793f6e302b332fcc72a120aad5b1fa24c46526c79d4574e75a8830a3",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 372
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n## Fixed\n\n- **Community review: ESLint fatal error** — minAppVersion was '1.12' (invalid semver). Fixed to '1.0.0'.\n- **versions.json** — added missing entries for 1.3.7 and 1.3.8.\n- **Sentence case in settings UI** — fixed 5 obsidianmd/ui/sentence-case warnings.\n- **README overhaul** — badges, before/after table, Settings section, docs links, removed stale GFM collision limitation.\n- **.gitignore compliance** — untracked .agents/ and .github/instructions/ files.\n\n## Added\n\n- **ESLint config** (eslint.config.mjs) with eslint-plugin-obsidianmd\n- **npm run lint** script — catch review failures before submitting\n- **Pre-submission validation** section in README\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.3.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T17:04:08Z",
+      "tag": "1.3.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d1abd813e7bb656dc12a23df01fe03c21e019dc383592f81af9d33b13671857d",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 10886
+        },
+        {
+          "digest": "sha256:42ddd91668160f5401ebb31d181bf9cc4a2922630d987f0793f69e4a38972ff7",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 371
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "---\ntitle: \"Changelog\"\ntags: [changelog, gfm-heading-links, obsidian-plugin]\ndescription: \"Release history and notable changes for the GFM Heading Links Obsidian plugin\"\ndate_created: 2026-07-02\ndate_changed: 2026-07-18\nauthor: \"Lucas Galdino\"\n---\n\n# Changelog\n\nAll notable changes to the GFM Heading Links plugin are documented in this file.\n\nThe format is based on [Keep a Changelog][keepachangelog], and this project adheres to\n[Semantic Versioning][semver].\n\n[keepachangelog]: https://keepachangelog.com/en/1.1.0/\n[semver]: https://semver.org/spec/v2.0.0.html\n\n## [1.3.1][] — 2026-07-20\n\n> **Note:** This release consolidates the original v1.3.1 release infrastructure work and all\n> subsequent community review compliance fixes (previously spread across v1.3.2–1.3.6).\n> Those intermediate releases have been deleted — this is the definitive v1.3.1.\n\n### Added\n\n- **Release Infrastructure**: `LICENSE` (MIT), GitHub Actions release workflow\n  (`.github/workflows/release.yml`), branch strategy (`main`=production/DEBUG_ENABLED=false,\n  `dev`=development/DEBUG_ENABLED=true).\n- **CI Artifact Attestations** (`actions/attest@v4`): Supply-chain provenance for release\n  artifacts.\n- `author` and `authorUrl` populated in `manifest.json`.\n- `.gitignore` hardened: `data.json`, `*.png` exclusions, refined `.github/` and `.agents/`\n  patterns.\n- **Typed Internal APIs** (`src/vault-config.ts`): `getVaultConfig()` and `isWikilinksEnabled()`\n  helpers replace inline `(vault as any)` casts.\n- **Type-Safe Editor Suggest**: `SuggestionValue`, `EditorSuggestInstance`,\n  `SuggestionDropdownItem` interfaces and `unwrapDropdownItem()` type guard — all `any`\n  types eliminated from the suggest pipeline.\n\n### Changed\n\n- `package.json` version aligned with `manifest.json` (both `1.3.1`).\n- All documentation updated: `docs/plan/*`, `docs/research/architectural-history.md`,\n  `docs/architecture.md`, `README.md`.\n- Release links in `CHANGELOG.md` fixed to point to `lucasgaldinos/obsidian-gfm-headers`.\n- **Production console hygiene**: `console.log` → `console.debug` in gated debug system\n  (`src/debug.ts`). `console.debug` is suppressed by default in browser DevTools at the\n  default \"Info\" log level.\n- **Arrow functions for all monkeypatch assignments**: `workspace.openLinkText`,\n  `workspace.trigger`, and `suggest.selectSuggestion` all use arrow functions with\n  explicit `.call(workspace, ...)` rebinding.\n- **`.bind(workspace)` at method capture**: `originalOpenLinkText` and `originalTrigger`\n  are bound at capture time via `.bind(workspace)`, eliminating `this`-scoping warnings\n  from Obsidian's review linter.\n- **Safe array initialization**: `new Array<number>(n).fill(0)` replaces `new Array(n).fill(0)`\n  to avoid implicit `any[]` inference.\n- `window.setTimeout` / `window.clearTimeout` used instead of bare `setTimeout` /\n  `clearTimeout` for browser global compliance.\n- `loadData()` cast as `Partial<GfmSettings>` instead of `as any`.\n- `view.currentMode` cast as typed interface instead of `as any`.\n- `injectVirtualBlock` and `selectSuggestion` use typed `Pos` and `SuggestionValue` params.\n\n### Removed\n\n- Accidentally committed `image.png`, `image copy.png`, and `data.json`.\n- All `eslint-disable` and `@typescript-eslint/no-explicit-any` directive comments.\n- Unused `debugLog` / `DEBUG_ENABLED` import from `main.ts`.\n- Non-existent `styles.css` from CI release assets.\n\n### Fixed\n\n- **`this: void` linter warnings**: Original methods captured from `workspace` are now\n  bound via `.bind(workspace)` at capture time, preventing `this`-scoping errors when\n  the method is called detached from its object.\n- **Review linter compliance**: Addressed all warnings reported by Obsidian's automated\n  plugin review — no `any` types, no `console.log` in production builds, no directive\n  suppressions, no `function()` without `this: void`.\n\n## [1.3.0][] — 2026-07-17\n\n### Added\n\n- **Settings Tab**: Configurable prefix and suffix characters for autocompleted links (e.g., `§Heading¶`). Dual-API support: uses declarative `getSettingDefinitions()` on Obsidian 1.13.0+, falls back to `display()` on older versions.\n- **Wikilink Alias Auto-Injection**: When Obsidian is using wikilinks (`[[`), selecting a heading from autocomplete now automatically appends `|Original Heading` — producing `[[#gfm-slug|Original Heading]]` instead of bare `[[#gfm-slug]]`.\n- **Link Affixes**: User-configurable prefix/suffix applied to heading aliases during autocomplete.\n- `isGfmSlug()` shared guard predicate in `gfm-slugify.ts`.\n- `transformSuggestion()` pure pipeline extracting heading mutation logic from `selectSuggestion` god-function.\n- `decodeGfmSlug()` and `resolveTargetFile()` shared resolution helpers.\n- `injectVirtualBlock()` shared utility with cleanup callback and `VIRTUAL_BLOCK_CLEANUP_MS` constant.\n- `normalizeSlug()` in `src/link-parse.ts`.\n\n### Changed\n\n- `patch-workspace.ts` split by SRP into `patch-link-click.ts` (`applyClickPatch`, async) and `patch-link-hover.ts` (`applyHoverPatch`, sync).\n- `buildDocumentIndex()` replaced O(n²) nested loop with 2-pass O(n) stack-based algorithm.\n- `link-target.ts` renamed to `types.ts` — all 5 imports updated.\n- Variable renames for readability: `data` → `hoverEventPayload`, `value` → `suggestionValue`, `mutated` → `didModifySubpath`.\n- `resolveGfmTarget()` and `resolveGfmTargetSync()` unified to use shared `decodeGfmSlug()` + `resolveTargetFile()` helpers, reducing each from ~90 to ~15 lines.\n- Hover handler no longer uses `require(\"./document-index\")` inlining — delegates to `resolveGfmTargetSync()`.\n- Settings tab uses declarative `getSettingDefinitions()` API (Obsidian 1.13.0+) with `display()` fallback.\n- `minAppVersion` set to `1.12.7` for dual settings API support.\n- `DEBUG_ENABLED = true` on dev branch — set to `false` for production builds.\n\n### Fixed\n\n- **Inverted guard bug**: `isGfmSlug()` condition was inverted in `resolve-target.ts`, causing valid GFM slugs to pass through unresolved.\n- **Settings tab broken on Obsidian <1.13.0**: Declarative-only API caused empty settings pane. Fixed with dual-API support.\n- **Affixes applied to wrong field**: Affixes were appended to `suggestionValue.subpath` (the slug) instead of `suggestionValue.heading` (the alias).\n- **Wikilink alias not injected**: Multiple iterations required; finally resolved via `plugin.app.workspace.activeEditor?.editor` post-insertion modification.\n\n## [1.2.0][] — 2026-07-13\n\n### Added\n\n- **Document Index Architecture**: Lightweight background `Map<gfmSlug, AnchorTarget>` per file, separate from Obsidian's cache. Enables O(1) slug lookups with zero risk of cache contamination.\n- **Virtual Block Injection**: Temporarily injects `#^gfm-click-{slug}` blocks into `cache.blocks` to leverage Obsidian's native block-level scrolling and `.is-flashing` highlight — works correctly for duplicate headings.\n- **Autocomplete GFM Slug Output** (`EditorSuggest.selectSuggestion`): Selecting a heading from the `[[` dropdown now outputs the GFM slug (e.g., `[My Heading](file.md#my-heading)`) while preserving the original heading text as the alias.\n- **Duplicate Heading Resolution in Autocomplete**: Advanced dropdown occurrence-index matching correctly resolves which Nth duplicate was selected, producing the correct collision suffix (`-1`, `-2`, etc.).\n- **HTML Anchor Scanning** (`scanHtmlAnchors`): Parses `<a id=\"...\">` and `<a name=\"...\">` tags for target identification (click navigation in Reading mode).\n- **Structured Debug Logging** (`src/debug.ts`): 15 event types with `DEBUG_ENABLED` toggle for development instrumentation.\n- **Unit Tests** (Vitest, 17 tests): `gfmSlugify` (basic, Unicode, edge cases), `buildDocumentIndex` (collision suffixes, endLine), `resolveGfmTarget` (guard logic).\n\n### Changed\n\n- **Architectural Shift**: Abandoned the speculative `Heading#Heading` subpath navigation. Replaced with Document Index + Virtual Block Injection across all three monkeypatches (`openLinkText`, `trigger('hover-link')`, `EditorSuggest.selectSuggestion`).\n- **Same-file navigation**: Bypassed native resolution for same-file links to eliminate jump-to-top flicker.\n- **HTML in heading aliases**: Autocomplete now strips HTML tags from heading text (e.g., `## Title <a id=\"x\"></a>` → alias `Title`).\n\n### Fixed\n\n- **Hover Preview on duplicate headings**: Corrected `buildDocumentIndex(cache.headings)` → `buildDocumentIndex(cache)` — the former produced an empty index, causing all hover previews to fail.\n- **Alias loss in autocomplete**: Stopped mutating `value.heading` — only `value.subpath` is rewritten to the GFM slug.\n- **`.is-flashing` on duplicates**: Native block navigation handles section highlighting correctly, no longer highlights wrong heading.\n\n### Known Limitations\n\n- HTML anchor click navigation works only in Reading mode (Live Preview / Source mode under investigation — see Bug 10).\n- HTML anchor hover preview is not yet supported (hover interceptor only handles heading-type targets — see Bug 6).\n- GFM collision suffix uses last-write-wins (`Map.set()` overwrites). First-occurrence priority deferred to v2 (see Bug 8).\n- `DEBUG_ENABLED = true` on dev branch — set to `false` for production builds.\n\n## [1.1.0][] — 2026-07-03\n\n### Changed\n\n- **Architectural Overhaul:** Completely abandoned the fragile CodeMirror 6 `ViewPlugin` and DOM `MutationObserver` architecture. The plugin now globally monkeypatches Obsidian's core `Workspace` router (`workspace.openLinkText` and `workspace.trigger('hover-link')`).\n- **Fixed `Ctrl + Hover` (Page Preview):** Because the plugin now patches the event routing layer rather than aggressively swallowing DOM `mouseover` events, Obsidian's native modifier-key detection and delays work perfectly.\n- **Fixed Cross-File Links:** Addressed a critical bug where links pointing to other files (e.g., `[Link](other-file.md#gfm-slug)`) were ignored. The new router patch correctly separates the file path from the hash before attempting resolution.\n\n### Removed\n\n- Deleted `src/editing-mode.ts` (CM6 extensions were unnecessary).\n- Deleted `src/reading-mode.ts` (DOM Mutation Observers were unnecessary).\n- Deleted `src/hover-panel.ts` (Custom event propagation blocking was actively breaking native behavior).\n\n## [1.0.0][] — 2026-07-02\n\n### Refactored\n\n- **Monolith split into `src/` modules.** The 260-line `main.ts` was decomposed into three\n  focused source files under `src/`, leaving `main.ts` as a thin 13-line entry point:\n\n  | Module | Responsibility |\n  | --- | --- |\n  | `src/gfm-slugify.ts` | Pure utility functions — `gfmSlugify()` and `resolveGfmSlug()` |\n  | `src/reading-mode.ts` | Reading view — `registerMarkdownPostProcessor` + `MutationObserver` fallback |\n  | `src/editing-mode.ts` | Source mode & Live Preview — CM6 `ViewPlugin` with mousedown intercept |\n\n- **`tsconfig.json`** updated to include `src/**/*.ts` alongside the existing `main.ts` entry.\n\n> [!note]\n> No behavioral changes were introduced. The plugin logic is structurally identical to the\n> pre-refactor version. The reading-view path (post-processor + MutationObserver) is known to\n> work; the editing-mode path (CM6 ViewPlugin) was later replaced by the workspace-level\n> monkeypatch architecture in v1.1.0.\n\n### Changed\n\n- `resolveGfmSlug` now lives in `src/gfm-slugify.ts` and uses a mixed import\n  (`{ type Plugin, TFile }`) because `TFile` is checked via `instanceof` at runtime.\n- `registerReadingMode(plugin)` replaces the inline post-processor and observer setup.\n- `createEditingModeExtension(plugin)` replaces the inline `ViewPlugin.fromClass(...)` constructor.\n\n### Removed\n\n- No code was removed — all logic was relocated to the appropriate `src/` module.\n\n---\n\n## [0.1.0][] — 2026-07-01\n\n### Added\n\n- Initial plugin structure: `main.ts`, `manifest.json`, `package.json`, `tsconfig.json`,\n  `esbuild.config.mjs`, `versions.json`.\n- GFM-style heading slug resolution via `gfmSlugify()` and `resolveGfmSlug()`.\n- Reading-view link rewriting through `registerMarkdownPostProcessor`.\n- Reading-view fallback via `MutationObserver` for dynamically-added `.internal-link` elements.\n- Editing-mode (Source & Live Preview) link interception via a CM6 `ViewPlugin.fromClass`\n  extension that captures mousedown events.\n\n[1.3.1]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/1.3.1\n[1.3.0]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/1.3.0\n[1.2.0]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/1.2.0\n[1.1.0]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/1.1.0\n[1.0.0]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/1.0.0\n[0.1.0]: https://github.com/lucasgaldinos/obsidian-gfm-headers/releases/tag/0.1.0\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.3.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T14:54:36Z",
+      "tag": "1.3.7"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d1abd813e7bb656dc12a23df01fe03c21e019dc383592f81af9d33b13671857d",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 10886
+        },
+        {
+          "digest": "sha256:2331f6a1c4f7bdc0f3e655dd804bbdabf16288971334da35cee334696f8feb3e",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 373
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/lucasgaldinos/obsidian-gfm-headers/compare/v1.3.0...1.3.1",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "1.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-21T11:27:07Z",
+      "tag": "1.3.1"
+    }
+  ],
   "removedAt": null,
   "repo": "lucasgaldinos/obsidian-gfm-headers"
 }
