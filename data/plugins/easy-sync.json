@@ -4,8 +4,8 @@
   "description": "Two-way OneDrive sync for Obsidian, with conflict safeguards, mobile support, and optional settings/plugin sync. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "easy-sync",
-  "lastChangedAt": "2026-07-22T08:05:27.085Z",
-  "lastFetchedAt": "2026-07-21T09:00:27.035Z",
+  "lastChangedAt": "2026-07-23T09:02:27.025Z",
+  "lastFetchedAt": "2026-07-23T09:02:27.025Z",
   "manifest": {
     "author": "Jiao Yingxing",
     "authorUrl": "https://github.com/jiaoyingxing",
@@ -14,35 +14,95 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "EasySync",
-    "version": "1.0.3"
+    "version": "1.1.1"
   },
   "name": "EasySync",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
+          "digest": "sha256:8919ef3538b5630d1cc19d9881e25198716b872b3451bb8fdd64465d9c1a7b74",
+          "downloadCount": 46,
+          "name": "main.js",
+          "size": 613846
+        },
+        {
+          "digest": "sha256:8cab497175240bb79277e6db32f3657d49a34ed324aed6844f09f598a8a3273d",
+          "downloadCount": 48,
+          "name": "manifest.json",
+          "size": 321
+        },
+        {
+          "digest": "sha256:799ec6dbb60518aa23d5a45fe5db5cd56a711f67ab81e2dbc8a43ba670e04fdc",
+          "downloadCount": 46,
+          "name": "styles.css",
+          "size": 16649
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "- 左侧栏正在显示 EasySync 时，桌面端和移动端不再重复弹出同步过程与结果提示；切换到其他侧栏标签或收起侧栏后，正在运行的同步提示会恢复显示。\n\n- 同步提示的隐藏方式改为 Obsidian 认可的 CSS class，现有交互保持不变，并修正官方插件检查指出的问题。\n",
+      "downloadCount": 48,
+      "draft": false,
+      "name": "EasySync 1.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-22T06:49:48Z",
+      "tag": "1.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e94d88daf40fdd1d6ca95b099feac2d3776a5bdaa6495b3b235c221f785740a2",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 613723
+        },
+        {
+          "digest": "sha256:2bfcc4da4bcc19b0b0f0a0acb374376e2d5f0edb95a1899bbba8ffa9c129abda",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 321
+        },
+        {
+          "digest": "sha256:6e8f2368b1dd2856ad0af67c0bc3134c9b4e5d4e1da13c7f45b596b6c80d4a9c",
+          "downloadCount": 9,
+          "name": "styles.css",
+          "size": 16591
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "### 自动处理\n\n- 设置页新增独立的“自动处理”入口。“合并不重叠的文本修改”对新安装默认开启，只处理从同一可靠版本出发、修改区域互不重叠的普通文本；同一行、Obsidian 配置目录、缺少共同版本、换行或内容无法可靠判断时仍保留为冲突，由你决定。\n\n- “将远端删除同步到本地”默认关闭。关闭时可以逐项确认，也可以一次确认当前批次；明确开启后，只有通过现有范围和版本检查的远端删除才会自动应用到本地。\n\n### 同步状态与进度\n\n- 新增浮动同步提示。即使没有打开侧栏，也能看到同步开始、当前阶段、执行进度和最终结果；同一轮提示会原位更新，不会连续堆叠。移动端展开 EasySync 侧栏时会暂时隐藏重复提示，收起侧栏或切换到其他视图后，仍在进行的同步提示会恢复。\n\n- 同步进度和传输字节分别按实际数据计算。浮动提示会把当前文件的已传输字节计入整轮进度，侧栏则继续显示文件计数和当前文件字节；进度不会倒退，字节数也不会超过总量。远端检查等没有可靠总量的阶段只显示文字状态，不再使用误导性的进度条。\n\n### 冲突与待决策\n\n- 大文本冲突会直接定位并展示有界的精确差异，双端行号和增删行数按真实内容计算；同一行发生冲突时只标出相关区域，不再把整份文件全部着色。无法可靠逐行对齐时会给出明确摘要，不用不准确的整文件增删数代替。\n\n- 两端文件的原始字节完全一致时会直接收敛，不再要求手动选边。字节不同但文本看起来相同时仍保留为冲突，避免忽略编码或不可见字符差异。\n\n- 连续点击多个冲突或待决策操作时，它们会依次进入同一个串行批次。侧栏会累计显示已处理数量、总数、正在处理的文件以及每项成功或失败结果；最后一项处理完成后仍保留本次结果，不再直接变为空白页面。\n\n- 多个远端删除待确认项可以通过侧栏入口一次确认并加入处理队列。取消确认不会执行任何操作，确认后仍会在真正删除每个文件前分别检查同步范围和文件版本。\n\n- Obsidian 管理的 `app.json`、`appearance.json`、`hotkeys.json`、`core-plugins.json`、`community-plugins.json` 单边缺失时，会从仍然存在的一侧同步，不再直接作为删除处理；两端内容不同时仍交给用户决定。\n\n- 远端单独修改现有文件时，只要本地版本没有继续变化，就会按正常下载处理，不再误判成两端同时出现的新文件；本地确实发生变化时仍会保留为冲突。\n\n### 自动同步与传输\n\n- 本地变化现在能更快进入自动同步：开启自动同步后，检测到同步范围内的变化会等待约 7 秒；等待期间若又有变化则重新计时，随后发起一次正常同步，不必等到下一次定时检查。关闭自动同步会同时停止变化触发和定时检查；同步执行期间再次变化的文件会留到下一轮，其他文件继续处理。\n\n- 已建立的仓库会继续复用增量游标和远端目录信息，减少重复初始化和全量重建。桌面端会保守地并行下载小文件，超过 10 MiB 的文件会使用可续传的分片上传；移动端和大文件下载继续采用稳妥的串行传输边界。\n\n### 数据安全与升级\n\n- 上传、下载、删除和自动合并都会在写入前后复核本地与远端版本。应用关闭、请求中断或结果不明确时，下一轮会先核对实际结果，再决定继续、结算或转为冲突，不会盲目重复写入。\n\n- 远端状态和增量游标会绑定到当前 Microsoft 账号、OneDrive、仓库目录和 EasySync 文件根目录。账号或仓库范围变化、远端目录关系不完整时，当前轮次会停止并重新核对，不再根据旧路径继续执行。\n\n- 从 1.0.3 原位升级会保留现有登录、设置和本地同步数据；旧版待审计划不会在缺少当前版本授权时直接执行，需要重新同步确认。旧版明确关闭自动合并的选择也会继续沿用，不会因 1.1.0 的新安装默认值而被重新开启。\n\n### 登录\n\n- Microsoft 登录继续支持桌面端和移动端。桌面端会直接在系统默认浏览器打开 Microsoft 授权页，避免被 Obsidian 内置网页浏览器接管；移动端继续使用现有浏览器授权和回跳流程。\n\n### 诊断报告\n\n- 诊断报告新增同步阶段、登录取令牌、OneDrive 请求、文件传输、本地处理和自动处理结果摘要，便于区分网络等待、文件处理、安全延后与人工降级原因。",
+      "downloadCount": 10,
+      "draft": false,
+      "name": "EasySync 1.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-22T03:58:51Z",
+      "tag": "1.1.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:21a2542708155e39b38ff956a066d7f973c4a44af0a03741f18ac3589bc7f12d",
-          "downloadCount": 182,
+          "downloadCount": 213,
           "name": "main.js",
           "size": 361070
         },
         {
           "digest": "sha256:32510a6dd7a4ff27e37de652a0b3fb7605b49374129e487c10101fe742329558",
-          "downloadCount": 192,
+          "downloadCount": 225,
           "name": "manifest.json",
           "size": 321
         },
         {
           "digest": "sha256:7c573d68d866f2a6d13e9e12280b108712090560a1e07de062d6f3c77958d594",
-          "downloadCount": 181,
+          "downloadCount": 212,
           "name": "styles.css",
           "size": 14268
         }
       ],
       "author": "jiaoyingxing",
       "description": "- 冲突处理操作（保留本地、保留远端）有了可见进度，处理中的文件会出现在侧栏。\n\n- 多个冲突逐个排队处理，列表在处理期间保持完整。\n\n- `.obsidian` 下的 `app.json`、`appearance.json`、`hotkeys.json`、`core-plugins.json`、`community-plugins.json` 这五个配置文件被远端改动或删除时，以冲突形式呈交，避免静默覆盖。\n\n- 设置页的同步按钮和底部状态栏已重新接回运行态，同步中、处理中、已暂停之间的切换不会残留旧状态。\n\n- 设置页\"同步\"\"关于\"\"维护\"三分组标题间距对齐 Obsidian 原生间距。\n",
-      "downloadCount": 192,
+      "downloadCount": 225,
       "draft": false,
       "name": "EasySync 1.0.3",
       "prerelease": false,
@@ -53,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:429ec713add99ac8fdbcd9a6606cce21287ec19fd196e361c9e056a625fba5f0",
-          "downloadCount": 46,
+          "downloadCount": 47,
           "name": "main.js",
           "size": 353152
         },
         {
           "digest": "sha256:ba984bd1943c46e7a8f37f318aac0bdce5dd211823eca7bd1fbd5e709766bc6c",
-          "downloadCount": 53,
+          "downloadCount": 55,
           "name": "manifest.json",
           "size": 321
         },
         {
           "digest": "sha256:b740f74c7212cdb33d79285b8e0229479817401c1e03ad18a78ce8b0a5db2b8e",
-          "downloadCount": 45,
+          "downloadCount": 46,
           "name": "styles.css",
           "size": 17726
         }
       ],
       "author": "jiaoyingxing",
       "description": "- 首次使用的用户从任何入口点\"立即同步\"都会进入首次同步预览，不再误走普通同步而卡住。\r\n\r\n- 计划待审阅区新增独立的\"确认执行\"按钮，顶部按钮置灰提示。运行中暂停后切回已暂停状态，执行入口会正确恢复。\r\n\r\n- 同步过程中已完成文件列表不再出现文件名被裁空或显示异常。\r\n\r\n- 中英文 README 全面重写：加入使用教程、隐私独立章节和 OneDrive 回收站兜底说明。冲突处理标注了实际支持范围——md 等文本逐行 diff，PDF 和图片展示文件大小与时间、手动选边。",
-      "downloadCount": 53,
+      "downloadCount": 55,
       "draft": false,
       "name": "EasySync 1.0.2",
       "prerelease": false,
@@ -89,7 +149,7 @@
         },
         {
           "digest": "sha256:242f26ed36fe7bc1d08d4a9a71fb70679424deda2a1c4a8cbfd7997cad5c29b3",
-          "downloadCount": 118,
+          "downloadCount": 119,
           "name": "manifest.json",
           "size": 321
         },
@@ -102,7 +162,7 @@
       ],
       "author": "jiaoyingxing",
       "description": "Store refresh release for the latest mainline.",
-      "downloadCount": 118,
+      "downloadCount": 119,
       "draft": false,
       "name": "EasySync 1.0.1",
       "prerelease": false,
@@ -119,7 +179,7 @@
         },
         {
           "digest": "sha256:fc708c9e413d69a3bd36bc3227ec6919ef67a92dd15083571d266c9f45081579",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 321
         },
@@ -132,7 +192,7 @@
       ],
       "author": "jiaoyingxing",
       "description": "First public release for Obsidian Community Plugins review.\n\nEasySync is a two-way OneDrive sync plugin for Obsidian with conflict safeguards, mobile support, and optional settings/plugin sync.",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "EasySync 1.0.0",
       "prerelease": false,
@@ -140,6 +200,6 @@
       "tag": "1.0.0"
     }
   ],
-  "removedAt": "2026-07-22T08:05:27.085Z",
+  "removedAt": null,
   "repo": "jiaoyingxing/easy-sync"
 }
