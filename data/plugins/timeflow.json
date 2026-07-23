@@ -4,8 +4,8 @@
   "description": "Track flexible work hours and time off with built-in timer, visualizations, and statistics. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "timeflow",
-  "lastChangedAt": "2026-07-22T04:05:26.999Z",
-  "lastFetchedAt": "2026-07-22T04:05:26.999Z",
+  "lastChangedAt": "2026-07-23T04:01:27.024Z",
+  "lastFetchedAt": "2026-07-23T04:01:27.024Z",
   "manifest": {
     "author": "gaut3",
     "authorUrl": "https://github.com/gaut3",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:c3917cd3baf1868fea06df87ed022c8760e283788e17398d65d64287dd65431c",
-          "downloadCount": 29,
+          "downloadCount": 30,
           "name": "main.js",
           "size": 524875
         },
         {
           "digest": "sha256:55941c5730b7755d7c7aaa13c8356783705fcb9b54d6be32b1b0bf68716af9d6",
-          "downloadCount": 44,
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 288
         },
         {
           "digest": "sha256:0ad7c91e2c2445bcb2bbf7f9fe25f2df32a1540a1e16ec81df22f83245677d35",
-          "downloadCount": 28,
+          "downloadCount": 29,
           "name": "styles.css",
           "size": 119429
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nCalculation-correctness pass from a full code review. Focus: the time/balance math must be\nright under every workday/week configuration.\n\n> **Heads-up:** several balance-semantics fixes below (avspasering no longer double-charging,\n> lunch deducted once per day, alternating weeks honored, averages derived from your actual\n> work-days setting) will **legitimately change your historical flextime numbers**. This is\n> the numbers becoming correct, not data loss — no action needed.\n\n### Fixed\n- **Data corruption:** timestamps ending at exactly midnight are no longer rewritten to\n  08:00 on load (only legacy full-day entries with both start AND end at 00:00 are);\n  expanded (non-collapsed) Timekeep groups no longer drop their sub-entries' hours;\n  imports now store local-format timestamps (was UTC `Z`, which double-counted entries on\n  re-import and shifted displayed clock times); Timekeep imports with numeric epoch\n  timestamps no longer produce invalid `NaN` dates; the \"Log work\" calendar modal also\n  stored UTC — fixed.\n- **Balance/goal engine:** work + avspasering on the same day no longer double-charges the\n  balance (withdrawn hours now cover the goal gap); alternating weeks are now respected by\n  the daily goal (previously only calendar coloring honored them) and the week-parity no\n  longer breaks after 53-ISO-week years; lunch break is deducted once per **day** (was per\n  entry — split days lost 30 min per extra segment); a running timer now only defers\n  *today* from the balance (a forgotten timer no longer hides that whole past day's hours\n  and withdrawals); per-entry flextime on mixed work+studie/kurs days now sums to the same\n  delta as the balance; date-only strings are parsed as local dates (west-of-UTC timezones\n  previously had every date shifted one day — Mondays treated as Sunday); half-day markers\n  on no-hours-required types (e.g. `helligdag:half`) now yield a half-day goal; the\n  `annet:HH:MM-HH:MM:` planned-day format now parses correctly.\n- **Displays:** week-compliance dots and bar-chart targets now use the schedule-history-\n  and holiday-aware daily goal (historical weeks were graded against *current* settings);\n  the hero \"added today\" badge and the day drawer now use the same per-entry flextime sum\n  as history (avspasering/sick days no longer show misleading day balances); day drawer\n  time ranges are parsed, not sliced from raw strings; overtime-payout offers are based on\n  lunch-adjusted work hours (no more paying out overtime you never earned); a stale\n  running timer from another day no longer inflates \"today\"/\"this week\"; planned days\n  that are *today* show in the Upcoming list; dashboard refreshes no longer leak update\n  intervals (CPU grew with every timer start/stop).\n- **Migrations:** run independently (an earlier `||` chain ran at most one per restart);\n  the sick-day migration is now run-once and no longer reverts user-customized behaviors\n  on every load; import duplicate detection compares instants, not raw strings.\n- **Settings & export:** numeric settings accept a decimal comma (`37,5` is no longer\n  read as `37`); \"reset to default\" buttons work again (settings defaults were being\n  mutated by reference on load); editing your current schedule no longer overwrites a\n  schedule period you'd set up for a future date; two schedule periods can't share the\n  same start date; average-workload stats now derive expected work days from your actual\n  work-days setting instead of a fixed 5-day week (this can shift monthly/yearly averages\n  for non–5-day schedules); CSV export groups months by local date (entries near a month\n  boundary no longer land in the wrong month) and the in-view export's type breakdown now\n  lists custom absence types too; a running timer now refreshes every open dashboard, not\n  just the last one opened; stopping a work timer reports the lunch-adjusted duration.\n\n",
-      "downloadCount": 44,
+      "downloadCount": 46,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:1dae382204827fb1eb15e5ba3a3e3a26408c9a60b37c30fc1c920ec98ac563ab",
-          "downloadCount": 107,
+          "downloadCount": 108,
           "name": "manifest.json",
           "size": 288
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nTwo small fixes to the calendar day drawer, plus a few text-label fixes.\n\n### Fixed\n\n- **Add work time to a day you forgot to clock into** — opening a past day with no\n  entries only offered \"Add absence\", so a day you forgot to track could only be\n  fixed by hand-editing the data file. \"Edit time\" now shows an inline add-work form\n  (start/end time + Save, same as editing an existing entry).\n- **\"Done\" button is readable in edit mode** — the edit toggle's active state showed\n  accent-colored text on a near-background fill, so \"Done\" was nearly invisible on\n  some themes. The active button now fills with the accent color like other active\n  controls.\n- **Absence comment hints match the type again** — the example shown in the comment\n  box was stuck on the vacation one (\"e.g. Vacation in Spain\") for every absence\n  type; sick leave, welfare leave, courses, etc. now show their own example again.\n- **A couple of labels showed their internal name instead of text** — the \"Duration\"\n  label in the \"Other\" absence form and the \"leave empty for full day\" hint on sick\n  time rendered a raw key (e.g. `modals.duration`) instead of the translated label.\n  Both now display correctly in Norwegian and English.\n\n",
-      "downloadCount": 107,
+      "downloadCount": 108,
       "draft": false,
       "name": "2.0.6",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:c135c366a28f1b500bbbadc5a8aeebc17e02fc6012ad1f17819df55b3ae19512",
-          "downloadCount": 124,
+          "downloadCount": 125,
           "name": "manifest.json",
           "size": 288
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nA small fix to the weekly progress bar's label.\n\n### Fixed\n\n- **Weekly progress bar now shows your weekly goal** — the week bar filled toward\n  your weekly goal but was labelled with the weekly *compliance limit* (which\n  defaults to 40h for Norwegian labour law and is editable under Settings →\n  Compliance → \"Weekly hours limit\"). So a 26h15m weekly goal showed \"40h\" on the\n  bar, not matching its fill. The week bar now shows your goal, like the day bar\n  already did; the compliance limit still colors the bar orange/red when you cross\n  it. Reported by [@erkannt](https://github.com/erkannt) — Timeflow's first\n  community bug report. Thanks!\n\n",
-      "downloadCount": 124,
+      "downloadCount": 125,
       "draft": false,
       "name": "2.0.5",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:12c0c7b24d0c03dc6a3803cee6a43f11dbf0814f973ed3afc04b31f9863be595",
-          "downloadCount": 50,
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 288
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nA small follow-up to 2.0.3.\n\n### Fixed\n\n- **Hero progress bars update through the day** — the Today/Week bars (and the\n  compliance badge) include the running timer's accumulating hours, but only\n  refreshed when a timer started or stopped, so the \"day bar\" looked frozen\n  until a reload. They now refresh on the periodic tick.\n- **Calendar dates vertically centered** — day cells (both the wide grid and the\n  sidebar/phone view) pinned the date to the top; the day number now sits\n  centered in the cell with its colored bar anchored at the bottom.\n\n",
-      "downloadCount": 50,
+      "downloadCount": 51,
       "draft": false,
       "name": "2.0.4",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:bb939515ae4ef6b751f19c1ef02ef750ca0d6bc7929ca89afe2fe0b460013ae6",
-          "downloadCount": 28,
+          "downloadCount": 29,
           "name": "manifest.json",
           "size": 288
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nA small follow-up: CSS-compatibility and README image fixes.\n\n### Fixed\n\n- **Taller calendar days in the sidebar / on phone** — narrow-layout day cells\n  had no minimum height, so on a phone (where the columns are wide) they read as\n  flat, too-wide boxes. They now get the same ≥44px height as the wide layout.\n- **Heatmap CSS compatibility** — replaced the heatmap grid's `column-gap` with\n  the `gap` shorthand so it no longer trips the Obsidian CSS review's\n  \"multicolumn only partially supported\" warning (it was only grid spacing).\n- **README logos load on the Obsidian plugin page** — the header wordmark and\n  footer lockup used repo-relative paths that only resolve on GitHub; switched\n  to absolute image URLs (like the screenshots), so they render everywhere\n  instead of showing alt text.\n\n### Docs\n\n- Heatmap screenshot updated to the redesigned, combined light/dark view.\n\n",
-      "downloadCount": 28,
+      "downloadCount": 29,
       "draft": false,
       "name": "2.0.3",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:ebdca9547c5f680c521293b8a4cc48c5563ddbc9a6b19bc5b0ad0a60c58f7227",
-          "downloadCount": 32,
+          "downloadCount": 33,
           "name": "manifest.json",
           "size": 288
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\nUI polish and localization fixes from a design review, plus refreshed\nscreenshots. No change to the minimum Obsidian version (1.7.2).\n\n### Changed\n\n- **Heatmap redesigned** — the work-history heatmap is now a GitHub-style\n  contribution grid: weeks run as columns, weekdays (Mon–Sun) as rows, with\n  **month labels** across the top, **weekday anchors** down the left, and a\n  **color legend** that maps each color to its meaning, so it's readable without\n  hovering. It scales with the window width like the rest of the dashboard.\n- **Weekly-hours chart** — value labels are pinned on a single line above a\n  fixed-height bar track, instead of floating at each bar's top and grazing the\n  bars at inconsistent heights.\n- **Wide history \"Comment\" column** is hidden when nothing in the visible range\n  has a comment (it stays in inline-edit mode), instead of showing a full column\n  of \"-\".\n- **Even spacing between wide stats sections** — each section had more space below\n  it than above (a stacked margin + gap); top and bottom are now balanced.\n\n### Added\n\n- **Compliance-dot key** — a clickable \"?\" above the calendar's week-number\n  column opens a popover explaining the green / orange / red week-status dots\n  (on target / under / over); the same key is also in the status-bar info panel.\n- **Goal vs limit tooltips** — the daily \"goal\" and weekly \"limit\" stats now\n  carry a one-line tooltip clarifying daily target vs weekly ceiling.\n\n### Fixed\n\n- **English uses \"h\" for hours.** The hour unit now follows the interface\n  language (English → \"h\", Norwegian → \"t\") until you set it explicitly, so an\n  English dashboard no longer shows the Norwegian \"t\". Existing English setups\n  are corrected automatically on load, and a few spots that hard-coded \"t\" were\n  fixed to respect the setting.\n- **Pluralization.** A count of one no longer reads as plural — \"1 active timer\"\n  (not \"1 active timers\"), \"1 day\" (not \"1 days\"), in both languages, via a\n  shared `plural()` helper with per-language forms.\n\n### Docs\n\n- README screenshots refreshed: new combined light/dark home shots for the wide\n  and sidebar layouts, plus updated history and heatmap images.\n\n### Internal\n\n- The release workflow now pulls this changelog's matching `## [version]` section\n  into the GitHub release notes automatically, so releases and the changelog stay\n  in sync.\n\n",
-      "downloadCount": 32,
+      "downloadCount": 33,
       "draft": false,
       "name": "2.0.2",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:c67433841a1265d2e24edd0da6ef03555e5c39cd68a15ea308d990a065099455",
-          "downloadCount": 35,
+          "downloadCount": 36,
           "name": "manifest.json",
           "size": 288
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Maintenance release — clears the outstanding Obsidian community-plugin review\r\nrecommendations and a Dependabot security advisory. No user-facing changes; the\r\ndashboard, settings, and minimum Obsidian version (1.7.2) are unchanged.\r\n\r\n### Security\r\n\r\n- **esbuild upgraded to 0.28.1** (from 0.25.x) to resolve Dependabot advisory\r\n  GHSA-67mh-4wv8-2f99 (esbuild dev server). esbuild is a build-time dependency\r\n  only and was never shipped inside the plugin, but this clears the alert.\r\n\r\n### Internal\r\n\r\n- Replaced the deprecated `ButtonComponent.setWarning()` calls with a\r\n  version-safe equivalent (identical warning styling) — clears the deprecation\r\n  without raising the minimum Obsidian version.\r\n- Removed an unused import and cleaned up two unnecessary type assertions flagged\r\n  by the Obsidian community-plugin review.",
-      "downloadCount": 35,
+      "downloadCount": 36,
       "draft": false,
       "name": "2.0.1",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:06c525d328ae2e003f63c0dee0420a8f712d94010bd14adc3d722d1e0b78d515",
-          "downloadCount": 23,
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 288
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "A ground-up redesign of the dashboard. The old day / week / month / stats **card\r\ngrid** is gone; in its place is a single, calmer dashboard built around one\r\nquestion — *where's my flextime balance?* The same layout now adapts from a wide\r\ntwo-column view down to a narrow sidebar **without dropping any features**, and\r\nstructural colors come straight from Obsidian's own theme variables, so it looks\r\nat home in any light or dark theme.\r\n\r\n> **⚠️ Requires Obsidian 1.7.2 or newer.** The minimum supported version was\r\n> raised from `0.15.0` to `1.7.2`. If you're on an older Obsidian, update the app\r\n> before installing 2.0.0.\r\n\r\n### The redesigned dashboard\r\n\r\n- **Flextime balance hero** — your balance is now the centerpiece: a large,\r\n  color-coded number with a live clock, today's contribution, and Start/Stop\r\n  timer controls in one place (replaces the old summary cards and badge row).\r\n- **Weekly progress strip** — at-a-glance bars showing this week's hours against\r\n  your goal, colored by compliance status.\r\n- **Interactive bar calendar** — a month grid where each day carries a thin,\r\n  type-colored bar; **today** is outlined rather than filled, future days are\r\n  dimmed (planned absences stay visible), and week numbers + per-week compliance\r\n  dots are optional. Each compliance dot has a hover tooltip.\r\n- **Inline day drawer** — click any calendar day to open an in-place drawer to\r\n  view the day, add or edit work time, register an absence, or create a note —\r\n  no separate context-menu dialog.\r\n- **Statistics grid** — switch between month / year / total for hours logged,\r\n  daily and weekly averages, workload %, work days, and comp-time used.\r\n- **Trends** — \"vs last week / vs last month\" deltas with direction arrows.\r\n- **Weekly chart** — recent weeks at a glance.\r\n- **Upcoming planned days** — consecutive same-type days now collapse into clean\r\n  date-range rows (e.g. `6.–16. July · 8 days · Vacation`) instead of one row per\r\n  day.\r\n- **Leave tracking panel** — per-type usage against each yearly quota (days for\r\n  leave types, hours for comp time); quota-less types show the value with no bar.\r\n\r\n### Added\r\n\r\n- **Two-lane color system** — color now does one job at a time: your theme\r\n  **accent** drives chrome (Start button, today's outline) while a separate\r\n  **status palette** (green / amber / red) signals work-hour compliance, so a\r\n  normal state never looks like an alarm.\r\n- **Accessibility floor on bars** — progress/leave bars are at least 8px and\r\n  calendar bars at least 4px, and status is carried by fill *color*, not bar\r\n  height.\r\n- **Optional background override** — set a custom dashboard background per light\r\n  and dark theme (off by default; the only sanctioned theme override — everything\r\n  else defers to your theme).\r\n- **Sidebar / mobile parity** — the narrow layout keeps the full feature stack\r\n  (balance, calendar, leave tracking, history); nothing is dropped on mobile.\r\n- **\"See all / Show less\"** — long history and leave sections expand and collapse\r\n  in place instead of rebuilding the whole dashboard. Expanded history is now\r\n  grouped by month.\r\n- **Brand assets** — added a full set of Timeflow icon / wordmark / lockup logos\r\n  (SVG + PNG, in light/dark/black/white) under `brand/`.\r\n\r\n### Changed\r\n\r\n- **Minimum Obsidian version raised to 1.7.2** (was 0.15.0).\r\n- **Responsive layout reworked** — one layout that switches between wide\r\n  (two-column, with the stats grid, weekly chart, and bulk history editing) and\r\n  narrow/sidebar at 600px, instead of two divergent experiences.\r\n- **Calendar, history, leave, and stats moved onto theme variables** — structural\r\n  colors follow Obsidian's own light/dark variables, so any theme works with zero\r\n  setup; per-type colors stay fully customizable.\r\n- **Trend \"down\" is no longer alarm-red** — fewer hours isn't an error, so the\r\n  down-arrow uses a muted color; red is reserved for real threshold breaches.\r\n- **Zero values are muted** — empty comp-time and leave counts read as quiet\r\n  rather than using a behavior accent color.\r\n- **Documentation refreshed** — the README was rewritten around the new dashboard\r\n  (balance hero, progress strip, bar calendar, inline drawer, trends, upcoming\r\n  ranges, leave tracking) with new light/dark screenshots, and the color-coding\r\n  and requirements sections were corrected.\r\n\r\n### Fixed\r\n\r\n- **History dates** now format per locale everywhere; entries use type chips\r\n  tinted from the day type's color, with signed and color-coded flextime.\r\n- **Calendar compliance dots** are gated to finished workweeks only (no premature\r\n  \"incomplete week\" warnings).\r\n- **Filter chips, \"See all\" buttons, and other controls** were reworked to flat,\r\n  non-accent styling that matches the rest of the UI (they previously inherited\r\n  Obsidian's default button box and accent text).\r\n- **Quota-less leave rows** render value-only instead of an empty bar that read as\r\n  \"failed to load.\"\r\n- Addressed items from the Obsidian community-plugin review (unused imports,\r\n  redundant type assertions, and release-packaging fixes).\r\n\r\n### Removed\r\n\r\n- **The legacy v1.x \"cards\" UI** — the old day/week/month/stats card renderers,\r\n  badge row, and status bar were removed along with their hardcoded green/blue\r\n  gradient legend (replaced wholesale by the new dashboard).\r\n- **Decorative emoji in chrome** that shipped with the old card layer (your own\r\n  per-type icons are unaffected — those are your data).\r\n\r\n### Internal\r\n\r\n- Removed a large orphaned render layer left over from the redesign (~1,100 lines\r\n  of dead code), shrinking the bundle.\r\n- Release workflow now triggers on a plain `x.y.z` tag (no `v` prefix), so the\r\n  release tag matches `manifest.json` exactly as Obsidian requires.\r\n- i18n expanded with new strings and a date \"range\" format for the collapsed\r\n  upcoming rows. (Known gap: the settings tab is still largely English.)\r\n\r\n[2.0.0]: https://github.com/gaut3/timeflow/releases/tag/2.0.0",
-      "downloadCount": 23,
+      "downloadCount": 24,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:6897e0f7de4a17e27d1899c701b2de9d5f0418aec227b80c6f48cfb80aa38d6f",
-          "downloadCount": 326,
+          "downloadCount": 327,
           "name": "manifest.json",
           "size": 290
         },
@@ -282,7 +282,7 @@
       ],
       "author": "gaut3",
       "description": "### Fixes\r\n- Fixed comment popup showing time over threshold instead of time over daily goal when stopping a timer\r\n- Fixed sentence case for UI text (`Id` → `ID`, `m` → `min`)\r\n- Removed unnecessary type assertions in history table display code\r\n- Fixed half-day + avspasering on same date in holidays.md triggering a false duplicate warning and losing the half-day flag\r\n\r\n### Maintenance\r\n- Removed unused `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` devDependencies, eliminating 133 transitive packages and 4 Dependabot vulnerability alerts (flatted, minimatch, picomatch)",
-      "downloadCount": 326,
+      "downloadCount": 327,
       "draft": false,
       "name": "1.3.13",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:3b2c454dc2310d201e0c6d272626cb0e3a4194c698a6dad41fd39224856d4dba",
-          "downloadCount": 294,
+          "downloadCount": 295,
           "name": "manifest.json",
           "size": 290
         },
@@ -312,7 +312,7 @@
       ],
       "author": "gaut3",
       "description": "Fixes for the Obsidian review guidelines.",
-      "downloadCount": 294,
+      "downloadCount": 295,
       "draft": false,
       "name": "1.3.12",
       "prerelease": false,
