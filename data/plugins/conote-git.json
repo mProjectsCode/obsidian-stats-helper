@@ -4,8 +4,8 @@
   "description": "Sync individual vault subfolders with collaborators via GitHub — automatic push/pull, no manual commits, with side-by-side conflict resolution. Super simple, full data ownership, completely free. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "conote-git",
-  "lastChangedAt": "2026-07-22T07:01:27.003Z",
-  "lastFetchedAt": "2026-07-22T07:01:27.003Z",
+  "lastChangedAt": "2026-07-23T07:02:27.018Z",
+  "lastFetchedAt": "2026-07-23T07:02:27.018Z",
   "manifest": {
     "author": "Maximilian Witte",
     "authorUrl": "https://github.com/maximilianwitte",
@@ -14,11 +14,71 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "CoNote Git",
-    "version": "0.1.9"
+    "version": "0.1.11"
   },
   "name": "CoNote Git",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:bbd46dae048f2699f11e93dd198270940e676b6dc2a1be7069bc3b8f427c0a5b",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 362363
+        },
+        {
+          "digest": "sha256:3c4ee3098fc4cb65e603073750c4eae5619765620df9bbc017bdb9e9595e94a0",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 376
+        },
+        {
+          "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 5184
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Security fix + multi-folder collision warning\n\n### ⚠️ Security: \"entire vault\" sync could leak your GitHub token\nWhen syncing the entire vault, the plugin's own git data lives inside the same folder being tracked (`.obsidian/plugins/conote-git/repos/<id>/`). Pushes staged everything with no exclusions, so `.obsidian/` — including every plugin's `data.json`, and critically **this plugin's own stored GitHub token** — could get committed and pushed into the synced repo.\n\n**Fix:** the plugin now auto-maintains a `.gitignore` excluding the vault's config directory for whole-vault syncs (appending to your own `.gitignore` if you have one, never overwriting it). Applied on connect and on every push, so already-connected \"entire vault\" mappings self-heal automatically — no action needed beyond updating.\n\nThis also explains reports of \"entire vault\" sync degrading and eventually failing as folder count grew: the self-referential git data snowballed in size on every commit.\n\n**If you've used \"entire vault\" sync before this release:** treat your GitHub token as potentially exposed. Sign out and back in under CoNote Git settings to get a fresh token, revoke the old one at github.com/settings/applications, and check your repo's commit history for a leaked `data.json` — if found, it needs to be purged from git history, not just deleted in a new commit.\n\n### Multi-folder-to-one-repo collisions now blocked\nMapping two different local folders to the same GitHub repo silently collided their content at the repo root (each mapping treats its folder as the entire repo — there's no per-mapping subfolder namespacing). Settings now warns and blocks picking a repo that's already in use by another mapping.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.1.11",
+      "prerelease": false,
+      "publishedAt": "2026-07-22T14:31:36Z",
+      "tag": "0.1.11"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:ae6338e6422e995d656384a54fe11c13a83d9ae06a9230da6d6b327d00ba0a21",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 361628
+        },
+        {
+          "digest": "sha256:4aedcff2583ae7fd1e8039f2b6f91ee01903e3328e6483a19cef9b5b9af88198",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 376
+        },
+        {
+          "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 5184
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Bug fix: git repo corruption from concurrent sync operations\n\nFixes a bug that could corrupt a synced folder's local git data, surfacing as errors like:\n\n- `Could not find .obsidian/plugins/conote-git/repos/<id>/objects/xx/xxxxxxx...`\n- `The function requires a \"remote OR url\" parameter but none was provided.`\n\n**Cause:** isomorphic-git has no internal locking. A debounced push (fired after editing a note) could run at the same time as a poll-triggered pull for the same folder — two operations writing to the same local git data simultaneously. This can corrupt the object store (missing commit/blob objects) or the repo config. Reported on Windows, where concurrent writes to the same files are less forgiving than macOS/Linux, but the underlying race was cross-platform.\n\n**Fix:** all push/pull/conflict-resolve/init operations for a given synced folder are now strictly serialized through a per-folder queue — never run concurrently, no matter what triggered them.\n\n### If you're already seeing this error\nThis fix prevents new corruption but can't repair a folder that's already broken. To recover:\n1. Close Obsidian.\n2. Delete the folder `.obsidian/plugins/conote-git/repos/<the-mapping-id-from-your-error>/` — this only removes local git bookkeeping, **not** your actual notes.\n3. Reopen Obsidian → plugin settings → re-select the same local folder and repo for that mapping (or remove and re-add it) to trigger a fresh clone.\n4. If you made edits after the errors started that you're not sure made it to GitHub, back up that folder before step 2, just in case.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-22T09:40:59Z",
+      "tag": "0.1.10"
+    },
     {
       "assets": [
         {
