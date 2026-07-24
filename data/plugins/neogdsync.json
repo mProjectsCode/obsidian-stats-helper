@@ -4,8 +4,8 @@
   "description": "Lightweight Google Drive sync with path-based index, conflict detection, and Smart/Push/Pull modes. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "neogdsync",
-  "lastChangedAt": "2026-07-23T03:02:26.981Z",
-  "lastFetchedAt": "2026-07-23T03:02:26.981Z",
+  "lastChangedAt": "2026-07-24T03:04:27.577Z",
+  "lastFetchedAt": "2026-07-24T03:04:27.577Z",
   "manifest": {
     "author": "martinlegend",
     "authorUrl": "https://github.com/martinlegend",
@@ -27,26 +27,26 @@
       "assets": [
         {
           "digest": "sha256:5f501196d37b772913de206ce8ce60b4947756b067b5e6c4d2a2ac6ac8e02fcd",
-          "downloadCount": 77,
+          "downloadCount": 82,
           "name": "main.js",
           "size": 62358
         },
         {
           "digest": "sha256:44d78323f01a8d373452826523685b553dc2610e0803c7066509193aa3c2e449",
-          "downloadCount": 84,
+          "downloadCount": 96,
           "name": "manifest.json",
           "size": 451
         },
         {
           "digest": "sha256:fb76c46ce67ee9551d312091ae7ae54cace071b98b0d626172cf3b830e4c00bc",
-          "downloadCount": 76,
+          "downloadCount": 81,
           "name": "styles.css",
           "size": 388
         }
       ],
       "author": "martinlegend",
       "description": "Combines the v1.0.9 and v1.0.10 changes — no intermediate 1.0.9 release was cut, so this release folds both in.\n\n## v1.0.9 — data-loss and correctness fixes\n- Mid-sync edits are no longer dropped: event suppression now tracks the exact paths the sync wrote (`Syncer.syncWrites`) instead of a global flag that blocked all vault events, including new user edits made while a sync was running.\n- Same-folder renames now propagate to Drive (`files.rename`) — previously the old name was left on Drive, causing duplicate uploads after an index rebuild.\n- A `modify` op with no index entry (index lost/reset) now looks the file up on Drive by path (`findOnDrive`) before uploading, instead of always creating a duplicate.\n- Unified exclude logic between vault-event handlers and the sync engine (`src/exclude.ts`) — previously they disagreed, and excluded paths got stuck in the pending-ops counter forever.\n- Files first seen via \"unknown Drive changes\" (`syncedAt===0`) now go through conflict handling instead of silently overwriting the remote.\n- `index.db` is written via tmp-file + rename with recovery on load — a crash mid-save could previously reset the index silently, causing duplicate Drive files on the next push.\n- Multipart upload boundary is now randomized (was a fixed string that could collide with file content and corrupt the upload).\n- `authProxyUrl` setting actually takes effect now (was silently ignored); exclude patterns are editable in Settings (README already claimed this, but there was no UI).\n- Force Pull / Drive-change downloads now use the existing `concurrency` setting instead of running fully serial.\n- OAuth proxy (`oauth-proxy/worker.js`) escapes HTML in callback pages — `?error=` was previously reflected unescaped (XSS).\n- README corrected: refresh-token exchange does flow through the proxy (was incorrectly claiming it \"never leaves your device\").\n- Added `vitest` + unit tests covering exclusion matching, snapshot diffing, and index persistence/crash-recovery.\n\n## v1.0.10 — privacy fix\n- The Settings tab \"Refresh token\" field displayed the token in **plaintext**. This token grants full read/write/delete access to your Drive, so a screenshot or screen-share of the settings tab could leak it. Fixed: the field is now masked (`type = 'password'`) with a show/hide toggle.\n",
-      "downloadCount": 84,
+      "downloadCount": 96,
       "draft": false,
       "name": "1.0.10",
       "prerelease": false,
