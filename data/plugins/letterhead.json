@@ -4,8 +4,8 @@
   "description": "Generate professionally formatted business letters (DIN 5008 and modern) from note frontmatter and export them to PDF — via the print dialog on desktop, or the system share sheet on iPhone and iPad. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "letterhead",
-  "lastChangedAt": "2026-07-23T07:02:27.018Z",
-  "lastFetchedAt": "2026-07-23T07:02:27.018Z",
+  "lastChangedAt": "2026-07-24T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://jkaindl.de",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Letterhead",
-    "version": "1.5.0"
+    "version": "1.6.1"
   },
   "name": "Letterhead",
   "presentInCommunityList": true,
@@ -22,27 +22,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:16e2e604331314c2865e2d5aec3fc1bb83b6c10b0e59a11bc29ddbe0f3132a89",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 91478
+        },
+        {
+          "digest": "sha256:d6f6630bd40413d297231e040efad232efd792b155b2e770a3fb17c31b8cb72c",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 414
+        },
+        {
+          "digest": "sha256:7f319bc451beb9dff25a7cfc3a5bacf0eac6f6121bfb96c9b1b224d24e1df910",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 1840
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n- **Store-Warnung `obsidianmd/prefer-create-el` im Code aufgelöst statt abgeschaltet.** Der\n  frühere `eslint`-Override (`prefer-create-el: off`) ist entfernt; der Linter meldet jetzt\n  0 Warnungen. `core/image.ts` erzeugt das Raster-`<canvas>` nicht mehr selbst über\n  `activeDocument.createElement`, sondern bekommt es als Factory injiziert (`() => createEl('canvas')`)\n  — die reine Kernschicht bleibt so frei von Obsidian-Globals. Der Druck-`iframe` (`doPrint`) nutzt\n  `createEl`; die Vorschau-Paginierung erzeugt ihre Blätter mit `createDiv()` und übernimmt sie per\n  `doc.adoptNode()` in den iframe-Realm (Obsidians Helfer existieren dort nicht). Rein intern, kein\n  sichtbares Verhalten geändert (Desktop-Druck, Vektor-PDF und Vorschau verifiziert).",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "1.6.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-23T13:38:16Z",
+      "tag": "1.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:32cf1bf564481528026b8aeb447e4adcd04a1025cd10d2011ed8785cbce76f64",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 91522
+        },
+        {
+          "digest": "sha256:1d30fdb69c908f69ade57826e5cb90eeefe344359271ad900353b84dff857d70",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 414
+        },
+        {
+          "digest": "sha256:7f319bc451beb9dff25a7cfc3a5bacf0eac6f6121bfb96c9b1b224d24e1df910",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 1840
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Removed\n- **Einstellung „Mobiler Export\" entfernt.** Sie bot seit 1.4.0 nur noch eine einzige Option und\n  wurde von keinem Codepfad mehr gelesen — der HTML/Quick-Look-Weg war damals zugunsten des\n  Degradations-Modells abgeschafft worden, das Dropdown blieb als Attrappe stehen. Der\n  gespeicherte Schlüssel wird weiterhin akzeptiert, alte Konfigurationen laden also unverändert;\n  es ändert sich nichts am Verhalten, nur eine wirkungslose Zeile verschwindet aus den\n  Einstellungen.\n\n### Fixed\n- **Dokumentation beschrieb einen Exportweg, den es nicht mehr gibt.** README (beide Sprachen)\n  und das Tutorial führten weiterhin durch den alten iOS-Umweg (HTML-Datei → Quick Look →\n  Drucken → Vorschau aufziehen → sichern) und verwiesen auf die „Mobiler Export\"-Einstellung.\n  Seit 1.3.0 ist der mobile Export ein Tipp. Auch `AGENTS.md` und ein Kommentar in `core/model.ts`\n  behaupteten den wählbaren Fallback.\n- **Referenz-Doku um die 1.5.0-Einstellungen ergänzt:** Ausgabeziel, eigener Ordner und\n  Dateinamen-Schema samt Platzhalter-Tabelle fehlten in `docs/reference/settings.md` vollständig,\n  obwohl sie bestimmen, wohin die PDF geschrieben wird und wie sie heißt.\n\n### Changed\n- **Intern:** `core/body-ir.ts` nimmt das Briefmodell nicht mehr als `any`, sondern als\n  typisierte Consumer-Shape `LetterBodyModel` (Muster von `LetterHeadModel`). Damit fallen die\n  letzten 32 Lint-Warnungen des Repos weg, die im Community-Store-Review als Warnings auftauchten.\n  Keine Verhaltensänderung: alle drei Änderungen sind Typkonstrukte, der Build-Output ist bis auf\n  die Bezeichner-Vergabe des Minifiers identisch (Zahlen-Literale byte-gleich). Der Anlagen-Block\n  ist dabei erstmals von Tests abgedeckt (Singular/Plural-Label, Fallback, Position).\n- **Einstellungen-Tab auf die deklarative API (`getSettingDefinitions`) umgestellt.** Auf Obsidian\n  ab 1.13 rendern die Einstellungen im nativen Karten-Layout inklusive Einstellungs-Suche; auf\n  älteren Versionen greift unverändert der bisherige Aufbau (`display()`), der dieselben\n  Definitionen durchläuft — es gibt keine zweite Quelle. `minAppVersion` bleibt 1.8.7, Felder und\n  Verhalten sind identisch. Damit entfällt der letzte begründungslose Lint-Override des Repos.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.6.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-23T09:26:36Z",
+      "tag": "1.6.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c0ed648f0e358885bdc46ce7d9c91593802247eb4ba84be24aa80c9393b7ac4f",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "main.js",
           "size": 91213
         },
         {
           "digest": "sha256:f5556fcc8c94a2d7238c887e68180fc41cc97e8408a75c1413d508fa329cf288",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 414
         },
         {
           "digest": "sha256:d5b653ed402ab54f78b9ae4db133fa44bd4f94fa6407c063e8114d6d3ad32a95",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "styles.css",
           "size": 1557
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Ausgabeziel** (Einstellungen → Erweitert): Wohin die exportierte PDF geschrieben wird —\n  **neben die Notiz**, in **Obsidians Anhang-Ordner**, in einen **eigenen Ordner** oder gar nicht\n  speichern und **direkt teilen**. Bisher landete jeder Export im versteckten Zwischenordner und\n  wurde extern geöffnet; das ist jetzt eine Option von vieren statt der einzige Weg. Eine\n  vorhandene Datei wird nicht überschrieben, sondern um `\" (2)\"` ergänzt.\n- **Dateinamen-Schema** (Einstellungen → Erweitert): Wie die PDF heißt, ist konfigurierbar.\n  Platzhalter `{notiz}` `{datum}` `{datum_lang}` `{empfaenger}` `{betreff}` `{unserzeichen}`,\n  alles andere im Feld bleibt wörtlich stehen. `{datum}` liefert **YYYY-MM-DD**, damit Briefe im\n  Dateimanager chronologisch sortieren; `{datum_lang}` gibt das Datum so aus, wie es im Brief\n  steht. Neuinstallationen starten mit `{datum} {empfaenger}`.\n- **Der Druckdialog schlägt jetzt den Briefnamen vor.** Bisher bot er den Fenstertitel an — etwa\n  `Beispielbrief - MeinVault - Obsidian 1.13.2.pdf`. Er nutzt dasselbe Schema wie der PDF-Export.\n\n### Changed\n- Bestehende Installationen behalten ihr bisheriges Verhalten und müssen nichts umstellen:\n  Ausgabeziel steht bei ihnen auf „direkt teilen\", das Dateinamen-Schema auf `{notiz}`. Beides\n  lässt sich in den Einstellungen umstellen.",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,

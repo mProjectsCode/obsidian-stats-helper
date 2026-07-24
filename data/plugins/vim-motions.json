@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-23T07:02:27.018Z",
-  "lastFetchedAt": "2026-07-23T07:02:27.018Z",
+  "lastChangedAt": "2026-07-24T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Vim Motions",
-    "version": "0.79.0"
+    "version": "0.81.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:d1dcb8fe801a1792d3d56edf6f5e3c69332b0f7d4b85a66ff7c406aa3c5a37da",
-          "downloadCount": 31,
+          "digest": "sha256:93d8df511dfc97e55b6b2881d6bb2d451d64f6fff1060930e66375e0a7838960",
+          "downloadCount": 29,
           "name": "main.js",
-          "size": 1071780
+          "size": 1071964
         },
         {
-          "digest": "sha256:3e4c76a0444109ac2ccf2914d6ed747c50cdc64e6c0042ee0257f9962fed2a08",
-          "downloadCount": 31,
+          "digest": "sha256:cec975a869f4d67f111e72cca4831c81c3cb6c9733228e936ca971965a59bb71",
+          "downloadCount": 30,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 30,
+          "downloadCount": 28,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **EasyMotion capital letter search not working** — EasyMotion character search motions (`<leader><leader>s`, `<leader><leader>f`, etc.) failed when typing a capital letter (Shift+key) as the search character. The `waitForKey()` handler resolved on the `Shift` keydown event (before the actual character key arrived), causing the motion to silently abort. Fixed by adding a modifier-key guard matching the existing pattern in `waitForLabel()` — `e.key.length !== 1` keys are now suppressed and ignored, keeping the handler alive for the real character. ([#84](https://github.com/saberzero1/motions/issues/84))\r\n    - Plugin: `src/easymotion/keypress.ts` (`waitForKey` modifier-key guard)\r\n\r\n### Tests\r\n\r\n- 6 unit tests in `test/unit/easymotion-keypress.test.ts`: `waitForKey` resolves single character keys and Escape, ignores Shift/Control/Alt/Meta modifier-only keys\r\n- 1 e2e test in `test/specs/easymotion-comprehensive.e2e.ts`: EasyMotion bidirectional char search with capital letter (`Z`) input\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added capital letter fix to EasyMotion operator-pending section\r\n- `CONTRIBUTING.md`: Updated `keypress.ts` description with modifier-key guard\r\n- `docs/features/easymotion.md`: Added note about capital letter support in find motions\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.80.0...0.81.0",
+      "downloadCount": 30,
+      "draft": false,
+      "name": "0.81.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-23T22:00:37Z",
+      "tag": "0.81.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:67f04020229c7bb15940213195ddb72e11bbd64be3dd51c68f99f262d3e6af1e",
+          "downloadCount": 26,
+          "name": "main.js",
+          "size": 1071923
+        },
+        {
+          "digest": "sha256:adca577a737632580a13f9d6472ad0b527f95636cebe2c218f50f8c2e5be0900",
+          "downloadCount": 26,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 25,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **IME change detection limited to primary editor leaf** — IME composition tracking and input method switching now work across all editor views (split panes, Page Preview popovers, Canvas card editors). Previously, composition events and mode-change detection were wired to a single element/adapter obtained from `getActiveViewOfType(MarkdownView)`, so non-primary editors never received IME handling. Fixed with two new CM6 ViewPlugins registered via `registerEditorExtension()`: `CompositionTracker` tracks `compositionstart`/`compositionend` per-EditorView, and `ImModeWatcher` binds `adapter.on('vim-mode-change')` per-EditorView to detect insert mode transitions. The autocmd-based IM switch registrations (`InsertEnter`/`InsertLeave`/`CmdlineLeave`) are replaced by the per-view mechanism; Lua autocmd callbacks continue to fire for the primary leaf via AutocmdManager (unchanged contract). ([#83](https://github.com/saberzero1/motions/issues/83))\r\n    - Plugin: `src/im/composition-tracker.ts` (new), `src/im/im-mode-watcher.ts` (new), `src/im/im-switcher.ts` (refactored — removed single-element tracking, added `cleanupView()`), `src/main.ts` (registered extensions, removed autocmd-based IM registrations)\r\n\r\n### Tests\r\n\r\n- 15 unit tests in `test/unit/composition-tracker.test.ts`: per-view composing state, multi-tracker isolation, destroy cleanup, `onAllCompositionsEnd` callback lifecycle, unsubscribe\r\n- 14 unit tests in `test/unit/im-mode-watcher.test.ts`: lazy adapter binding, mode change detection (insert/leave/replace), adapter re-binding, cleanup, multiple views with unique IDs\r\n- 4 e2e tests in `test/specs/ime-composition-multiview.e2e.ts`: composition tracking on active/non-active editors, independent per-view tracking, insert mode detection on non-active editor\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Updated input method switching section with multi-view fix\r\n- `README.md`: Updated input method switching feature description with multi-view support\r\n- `CONTRIBUTING.md`: Added `composition-tracker.ts` and `im-mode-watcher.ts` to codebase structure\r\n- `AGENTS.md`: Updated Lua API description noting per-view IM switching\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.79.0...0.80.0",
+      "downloadCount": 26,
+      "draft": false,
+      "name": "0.80.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-23T11:23:47Z",
+      "tag": "0.80.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d1dcb8fe801a1792d3d56edf6f5e3c69332b0f7d4b85a66ff7c406aa3c5a37da",
+          "downloadCount": 44,
+          "name": "main.js",
+          "size": 1071780
+        },
+        {
+          "digest": "sha256:3e4c76a0444109ac2ccf2914d6ed747c50cdc64e6c0042ee0257f9962fed2a08",
+          "downloadCount": 44,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 42,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Added\r\n\r\n- **`vim.v` namespace — Neovim-compatible predefined variables** — read-only metatable proxy exposing `vim.v.count`, `vim.v.count1`, `vim.v.register`, `vim.v.operator` (Tier 1), `vim.v.searchforward` (read/write), `vim.v.insertmode`, `vim.v.numbermax`/`numbermin`/`numbersize`, `vim.v.true`/`false`/`null` (Tier 2), and `vim.v.foldstart`/`foldend`/`foldlevel`/`folddashes`, `vim.v.lnum`/`relnum`/`virtnum`, `vim.v.char`, `vim.v.hlsearch`, `vim.v.event` (Tier 3 — context-dependent). Context is set from `actionArgs` before each keymap callback invocation and cleared after. `vim.v.event` is populated during autocmd dispatch with the event data table. `vim.v.hlsearch` queries the fork's search overlay state via `getSearchState(cm).getOverlay()`.\r\n    - Plugin: `src/lua/api.ts` (`VimVContext`, `setVimVContext`, `clearVimVContext`, vim.v metatable, autocmd vim.v.event wiring), `src/lua/loader.ts` (`getVimApi`, `getSearchForward`, `setSearchForward`, `getHlSearch` callbacks), `src/types/vim-api.d.ts` (`ActionArgs` extended, `feedKeys` and `getOverlay` added to `VimApi`), `src/lua/engine.ts` (`EXPR_INSTRUCTION_LIMIT`)\r\n- **`{ expr = true }` keymap support** — `vim.keymap.set` now accepts `{ expr = true }` for function callbacks. The callback must return a string that is fed as keystrokes via the fork's new `feedKeys` API. Sync-only — async APIs cannot be used in expr callbacks. String expr (Vimscript evaluation) is not supported with a helpful error guiding users to the function form. Recursion guard (200 depth, matching Neovim) prevents infinite expr → feedKeys → expr loops.\r\n    - Fork: `~/Repos/codemirror-vim/src/vim.js` (`feedKeys` method on VimApi — delegates to `doKeyToKey` with noremap flag and recursion protection)\r\n    - Plugin: `src/lua/api.ts` (expr callback path with `lua_pcall(state, 0, 1, 0)`, return value capture, `feedKeys` invocation)\r\n\r\n### Tests\r\n\r\n- 55 unit tests in `test/unit/lua/vim-v.test.ts`: Tier 1 defaults and context (count, count1, register, operator), read-only enforcement, Tier 2 constants (numbermax/min/size, true/false/null), searchforward (callback read/write), insertmode, Tier 3 fold/statuscolumn/event/char variables, hlsearch callback (read from getHlSearch, fallback to context), vim.v.event in autocmd context (multi-field, nested data), expr mapping registration, unknown keys\r\n- 8 e2e tests in `test/specs/lua-vim-v.e2e.ts`: `vim.v.count` and `vim.v.count1` with and without typed counts, `vim.v.event` populated during InsertEnter/InsertLeave autocmds, `vim.v.hlsearch` returns 1 after `/` search and 0 after `:nohlsearch`\r\n- 7 e2e tests in `test/specs/lua-expr-mapping.e2e.ts`: expr returns executed keys, expr with count, nil/empty return, error handling, string expr error, special keys\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added expr mapping limitations (string expr, async expr, operator-pending, count forwarding) and vim.v limitations (async callback reliability, outside-callback behavior)\r\n- `docs/configuration/lua-config.md`: Added `vim.v` section with all variable tables, expr mapping examples, and updated `vim.keymap.set` options table with `expr` documentation\r\n- `README.md`: Updated Lua configuration feature description with `vim.v` and expr mappings\r\n- `CONTRIBUTING.md`: Updated `api.ts` description with vim.v namespace and expr mapping support\r\n- `AGENTS.md`: Updated codemirror-vim fork description with `feedKeys` API, updated Lua API list with `vim.v` (20 variables including event/hlsearch)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.78.0...0.79.0",
-      "downloadCount": 31,
+      "downloadCount": 44,
       "draft": false,
       "name": "0.79.0",
       "prerelease": false,
@@ -58,26 +118,26 @@
       "assets": [
         {
           "digest": "sha256:1f79fae9d1032e4657931b1ae33e3a02120f03fa092c91b44bf391b7a36124ea",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "main.js",
           "size": 1067186
         },
         {
           "digest": "sha256:e4ab8e2ba8c06b87b039da977e61e405419b3e323463d0e2ae69c209ee4c89f0",
-          "downloadCount": 18,
+          "downloadCount": 19,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Fold gutter click does not unfold (continued)** — the initial fix in 0.76.0 (correcting zero-width ranges in the plugin's own fold-column and statuscolumn gutters) was insufficient because those gutters are off by default — the reporter was clicking Obsidian's **native** fold gutter, which the plugin doesn't control. CM6's `foldState` requires an exact `{from, to}` match to remove a fold; a mismatched range is silently ignored. Fixed by adding `unfoldNormalizerExtender` in `fold-sync.ts` — a `transactionExtender` that detects mismatched `unfoldEffect` ranges and appends a corrective effect with the actual stored fold range. Works for all fold sources: Obsidian's native gutter, the plugin's custom gutters, and vim commands. ([#80](https://github.com/saberzero1/motions/issues/80))\r\n    - Plugin: `src/vim/fold-sync.ts` (`unfoldNormalizerExtender`)\r\n- **Insert-mode surround cursor position and undo** — `<C-G>s{char}` now inserts both the opening and closing delimiters immediately (matching vim-surround behavior) instead of deferring the close delimiter to `exitInsertMode`. Fixes: (1) cursor now lands on the last typed character after `Esc` (was on the closing delimiter), (2) undo is improved (was 3 steps: close, text, open — now 2 steps: text, delimiters), (3) dot-repeat degrades cleanly (replays only typed text, not garbled `()hello`). The `maybeReset` mechanism clears delimiter text from the insert-mode change stream so `lastInsertModeChanges.changes` contains only user-typed text. Known limitation: dot-repeat replays only the typed text, not the surrounding delimiters. Macro recording of insert-mode surround keys is also not supported (pre-existing fork limitation). ([#82](https://github.com/saberzero1/motions/issues/82))\r\n    - Fork: `~/Repos/codemirror-vim/src/vim.js` (`surroundInsert`, `surroundInsertNewline` refactored; `exitInsertMode` deferred-close block removed), `~/Repos/codemirror-vim/src/types.ts` (`surroundInsertClose` property removed)\r\n\r\n### Tests\r\n\r\n- 17 e2e tests in `test/specs/fold-unfold-normalizer.e2e.ts`: unfold normalizer for heading folds (exact-match, zero-width, wrong-to, line-boundary, vim zc/zo round-trip, zM/zR round-trip, no-op on non-folded line, multi-fold targeting), frontmatter folds in source mode (exact-match, zero-width, line-start mismatch, line-boundary, fold.from > line.from verification, vim zc/zo round-trip)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Updated fold gutter unfold fix with unfold normalizer extender description\r\n- `CONTRIBUTING.md`: Updated `fold-sync.ts` description with unfold normalizer\r\n- `docs/features/workspace-navigation.md`: Added unfold normalizer note to Folds section\r\n- `README.md`: Updated surround feature description with insert-mode cursor fix\r\n- `AGENTS.md`: Updated codemirror-vim fork description noting insert-mode surround refactor\r\n- `docs/features/surround.md`: Updated insert-mode cursor behavior description\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.77.0...0.78.0",
-      "downloadCount": 18,
+      "downloadCount": 19,
       "draft": false,
       "name": "0.78.0",
       "prerelease": false,

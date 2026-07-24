@@ -4,16 +4,17 @@
   "description": "Daily arXiv tracker that filters and summarizes papers via LLM into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "arxiv-daily",
-  "lastChangedAt": "2026-07-22T07:01:27.003Z",
-  "lastFetchedAt": "2026-07-22T07:01:27.003Z",
+  "lastChangedAt": "2026-07-24T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
   "manifest": {
     "author": "Da-Chuan Tian",
+    "authorUrl": "https://github.com/tdccccc/arxiv-daily",
     "description": "Daily arXiv paper tracker: LLM-filtered summaries, topic-organized daily reports, Dashboard with calendar/search/filters, PDF notes, and CLI support. Full scheduler with catch-up for missed days.",
     "id": "arxiv-daily",
     "isDesktopOnly": true,
     "minAppVersion": "1.4.0",
     "name": "arXiv Daily",
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "name": "arXiv Daily",
   "presentInCommunityList": true,
@@ -21,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:313de4a5e91e1412b927e5d5a68503f32fae8e77ba4a7a31adbd6f25249143ab",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 375137
+        },
+        {
+          "digest": "sha256:374b8a21aa439125fc16c8bfbafe32cfbf49b8b0f23abaaf667a6c6b5a6e7936",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 428
+        },
+        {
+          "digest": "sha256:70bf5a15d85f766fba07cb888afb7251f0211f1088f91f3c7dec7df86e88a51c",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 28263
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Overview\n\narXiv Daily 0.3.2 rebuilds daily summarization around a sequential, per-paper pipeline with resilient fallback recovery, and makes scientific formulas more reliable in Obsidian. Daily reports stay consistent and rerunnable, MathJax-friendly Markdown is preserved end-to-end, and prompts plus a thin acceptance net guide models toward renderable `$...$` math. This release also adds low-friction in-plugin feedback links and keeps support for Obsidian 1.4.0.\n\n## Highlights\n\n- **Sequential per-paper daily summaries.** Each selected paper is summarized through a strict JSON contract at concurrency one, then assembled into the daily report deterministically. Completeness no longer depends on a multi-paper free-form Markdown reply that could omit papers.\n- **Resilient per-paper fallback.** Validation failures and exhausted transport retries no longer collapse the whole day. Typed validation retries (up to three attempts), rescue assembly, and deterministic emergency assembly keep neighboring papers while recovering the failing entry.\n- **Scientific math that renders in Obsidian.** Bilingual prompts use short rules and concrete good/bad examples so the model emits Obsidian inline `$...$` on the first pass. A thin script acceptance net keeps valid `$...$` byte-stable, converts only unambiguous `\\(...\\)` / simple `\\[...\\]` delimiters, and rejects unsafe math into the existing retry/fallback path instead of guessing repairs.\n- **Consistent, rerunnable daily reports.** Rendered paper counts are derived from the report itself, missing eligible reports can be rerun, and Dashboard date controls remain reliable after deletes and completed runs.\n- **Low-friction feedback.** Settings and Dashboard link to GitHub Issues. Bug reports open a blank issue with only the plugin version prefilled; feature requests open a blank issue. No heavy form is forced.\n- **Community Plugin metadata.** Manifests include `authorUrl` pointing at the public repository for the Community directory and About surfaces.\n\n## Daily summarization\n\n- Replaces the multi-paper free-form daily summary prompt with per-paper structured fields: `coreProblem`, `keyMethod`, `mainResult`, `whyRelevant`, and `limitations`, plus a stable paper `id`.\n- Assembles topic sections and paper blocks in deterministic order from accepted structured results (and trusted fallbacks), so report shape does not depend on model-authored Markdown scaffolding.\n- Uses bilingual system prompts and language-matched injection guards for English and Chinese summary paths.\n- Surfaces progress for summarize-daily stages from `1/N` through `N/N` during sequential generation.\n- Distinguishes validation failures from transport exhaustion and permanent provider/configuration errors so recovery stays typed and per-paper.\n\n## Fallback and recovery\n\n- On invalid JSON, schema, empty fields, or invalid scientific math, retries the same paper with short trusted correction guidance (no untrusted model-text replay).\n- After validation is exhausted, falls back for that paper only (for example to a trusted original abstract path) while keeping successful neighbors.\n- On exhausted transient LLM transport, returns a transport-exhausted fallback for that paper instead of failing the whole run.\n- Rescue and emergency assembly paths produce a usable daily report when structured generation cannot fully complete.\n- Trusted report rendering and parser safeguards are centralized so fallback and rescue content stay safe for Markdown persistence and later re-parse.\n\n## Scientific Markdown and math\n\n- Hardens daily-report Markdown emission so scientific and user-authored inline math remain readable MathJax input rather than being corrupted by over-escaping.\n- Validates structured semantic fields with a conservative single-line math contract:\n  - Accept valid `$...$` unchanged.\n  - Rewrite only explicitly delimited `\\(...\\)` and simple one-line `\\[...\\]` to `$...$`.\n  - Reject bare TeX, display math, multiline fields, unbalanced grouping, and raw-HTML-shaped angle brackets inside math (for example `$<z>$`) that would be treated as HTML tags.\n- Prompts require `\\langle ... \\rangle` (or `\\left< ... \\right>`) for ensemble averages / expectations, while ordinary comparisons such as `$z<0.5$` remain fine.\n- Detail-note prompts align on supported delimiters (`$...$` / `$$...$$`) and the same angle-bracket guidance; daily semantic fields remain inline-only.\n- Over-rejection of ambiguous prose is preferred to silent mis-rewrite; rejected papers use the existing per-paper retry/fallback boundary.\n\n## Dashboard and reliability\n\n- Daily report paper counts used for consistency checks come from rendered paper blocks, not optimistic model claims.\n- Eligible missing daily reports can be regenerated; completed-but-deleted calendar dates remain interactive when appropriate.\n- Date-picker and Dashboard run-for-date flows are more reliable, including post-run refresh behavior.\n- History sync and selection markers stay consistent with scientific Markdown and structured summary recovery from daily files.\n- Detached Dashboard and Settings feedback actions open external URLs through the existing resource opener (pop-out-window safe).\n\n## Feedback and Obsidian compatibility\n\n- Settings → **Help & feedback** and Dashboard → **More** provide:\n  - Report a bug\n  - Request a feature\n  - Documentation\n  - Repository\n- Bug links prefill only `- arXiv Daily: <version>`; feature links open a blank issue for maximum freedom.\n- GitHub blank issues remain enabled; structured issue questionnaires are not forced from the plugin.\n- Root and plugin `manifest.json` stay identical and include `authorUrl`: `https://github.com/tdccccc/arxiv-daily`.\n- Minimum supported Obsidian version remains **1.4.0**.\n- Official `eslint-plugin-obsidianmd` warnings were reduced (prefer-create-el auto-fixes and a tighter local warning budget). Settings still use the classic `PluginSettingTab.display` API for 1.4.0 compatibility; migration to `getSettingDefinitions` is intentionally deferred.\n\n## Data compatibility\n\n- Existing daily reports, detail notes, command IDs, output paths, and Paper Index files remain readable.\n- No manual data migration is required.\n- Structured daily fields continue to project into the Paper Index when present; older entries without them remain valid.\n- Settings and run-state formats are unchanged for upgrade purposes.\n\n## Security and privacy\n\n- Feedback links open GitHub in the browser; the plugin does not transmit vault contents, API keys, or paper text to GitHub automatically.\n- LLM calls for daily/detail summarization and existing selector flows still send configured paper content to the user-chosen provider under the same assumptions as previous releases.\n- Saved API keys remain plaintext in Obsidian plugin `data.json` for compatibility; this release does not add keyring or encrypted secret storage.\n- Math and Markdown acceptance reject raw-HTML-shaped constructs that would break rendering; they do not introduce a new network surface.\n- The plugin does not send client-side telemetry.\n\n## Install\n\nDownload these three assets and copy them directly to:\n\n```text\n<your-vault>/.obsidian/plugins/arxiv-daily/\n```\n\n- `manifest.json`\n- `main.js`\n- `styles.css`\n\nRestart Obsidian, then enable **arXiv Daily** under **Settings → Community plugins**.\n\nIf you already use Community Plugins or BRAT, update to **0.3.2** and reload the plugin.\n\n## Breaking changes\n\nThere are no data-format or command-ID breaking changes. Existing users can upgrade in place.\n\nBehavioral notes (not schema breaks):\n\n- Daily summarization is sequential per paper rather than one multi-paper free-form completion; runtime characteristics and partial-failure behavior therefore differ from 0.3.1.\n- Daily semantic fields expect Obsidian inline `$...$` math; unsupported delimiters and bare TeX are corrected via retry or per-paper fallback instead of being left unrenderable.\n- As always, keep a Vault backup before upgrading community plugins.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "arXiv Daily 0.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-23T13:37:22Z",
+      "tag": "0.3.2"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:a997173e20b74b7053085245b5b74a52d37457c1b7f4bb098bdd6cee00115e0d",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "main.js",
           "size": 344956
         },
         {
           "digest": "sha256:6e86c9b256851abf1479fbafb2ba8987dd6c6e1ff3e4c21a3372c5d335688c04",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 371
         },
         {
           "digest": "sha256:70bf5a15d85f766fba07cb888afb7251f0211f1088f91f3c7dec7df86e88a51c",
-          "downloadCount": 14,
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 28263
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Overview\n\narXiv Daily 0.3.1 improves how papers are ranked for local discovery and how the pipeline decides which papers deserve standalone deep-dive notes. It also fixes detail-note deletion and strengthens Obsidian Community Directory compatibility while retaining support for Obsidian 1.4.0.\n\n## Highlights\n\n- Improves local Similar Papers ranking with abstract evidence, weighted concept coverage, multi-field bonuses, deterministic tie-breaking, and suppression of weak author-only matches.\n- Separates daily topic inclusion from standalone deep-dive selection. After full-text extraction, one independent LLM review scores eligible papers for centrality, novelty, evidence strength, and long-term value.\n- Adds one understandable **Automatic detail notes** setting with Fewer, Recommended, and More choices. Recommended is the default; existing advanced custom policies remain compatible.\n- Adds guided Settings onboarding for Connect AI, paper sources, research interests, and the first report. Progress is tracked through the first completed run; successful valid setups collapse to a compact latest-report summary, while invalid configuration restores the full guide. Dashboard missing-configuration copy points back to Settings rather than duplicating the wizard.\n- Fixes generated detail-note deletion for current `arxiv_id:` and legacy `arxiv:` metadata, rejects conflicting metadata, and immediately reconciles Dashboard and Paper Index state.\n- Prevents failed detail generation from creating dangling daily-report links or false detail state.\n- Adds abstract persistence and deterministic recovery of structured paper summaries from historical daily reports.\n\n## Dashboard and reliability\n\n- Similar Papers now shows topic/category, publication date, and available daily/detail resources, with unavailable actions disabled.\n- Dashboard history invalidation tracks both daily reports and managed paper notes, so external paper-note creation, deletion, and rename operations are reflected without stale cache state.\n- Existing canonical detail notes are detected and reconciled before automatic selection; they do not consume the daily soft limit.\n- Detached Dashboard, command, and Settings actions now report failures instead of silently dropping rejected promises.\n- API-key replacement and clearing restore the previous key and redaction state if settings persistence fails.\n\n## Obsidian compatibility\n\n- Minimum supported Obsidian version remains 1.4.0.\n- Dashboard leaf activation and Settings help text no longer depend on APIs introduced after Obsidian 1.4.0.\n- Detail deletion uses the user's configured trash behavior where `FileManager.trashFile` is available. On older supported Obsidian versions it uses the non-destructive legacy trash API, preferring system trash with Obsidian's local `.trash` fallback.\n- URL opening, clipboard access, Dashboard controls, status panels, and timers now respect their owning Obsidian window, including pop-out windows.\n- Custom Vault configuration directories are respected instead of assuming `.obsidian`.\n- Official `eslint-plugin-obsidianmd` checks now run locally, on pull requests, and in release verification.\n\n## Data compatibility\n\n- The Paper Index schema is now version 3 and can persist an optional abstract.\n- Existing Paper Index schema 1 and schema 2 files remain readable.\n- Existing settings are migrated in place with the Balanced deep-dive policy as the default.\n- Existing daily reports, detail notes, command IDs, and output paths remain compatible; no manual data migration is required.\n\n## Security and privacy\n\n- Similar Papers remains fully local and deterministic. It does not use embeddings, a vector database, an additional LLM call, or a network request.\n- Automatic deep-dive selection adds one LLM scoring call after full-text extraction for eligible papers. Full-text candidate content is therefore sent to the configured LLM provider under the same privacy assumptions as summary generation.\n- Saved plugin API keys remain plaintext in Obsidian's local plugin `data.json`; this release does not claim encrypted or keyring-backed storage.\n- Generated-file deletion remains confined to validated canonical Vault paths and verifies matching generated metadata before moving a file to trash.\n- The plugin does not send client-side telemetry.\n\n## Install\n\nDownload these three assets and copy them directly to:\n\n```text\n<your-vault>/.obsidian/plugins/arxiv-daily/\n```\n\n- `manifest.json`\n- `main.js`\n- `styles.css`\n\nRestart Obsidian, then enable **arXiv Daily** under **Settings → Community plugins**.\n\n## Breaking changes\n\nThere are no data-format or command-ID breaking changes. Existing users can upgrade in place. As always, keep a Vault backup before upgrading community plugins.\n",
-      "downloadCount": 19,
+      "downloadCount": 20,
       "draft": false,
       "name": "arXiv Daily 0.3.1",
       "prerelease": false,

@@ -4,8 +4,8 @@
   "description": "Sync your Obsidian vault with OneDrive Personal/Consumer - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "onedrive-sync",
-  "lastChangedAt": "2026-07-23T07:02:27.018Z",
-  "lastFetchedAt": "2026-07-23T07:02:27.018Z",
+  "lastChangedAt": "2026-07-24T07:02:26.999Z",
+  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
   "manifest": {
     "author": "Jeff Steinbok",
     "authorUrl": "https://github.com/jeffsteinbok",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.0",
     "name": "OneDrive Sync",
-    "version": "1.5.1"
+    "version": "1.5.2"
   },
   "name": "OneDrive Sync",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:583a698cb52a9e0f09011f83ed0959a1da5417db5eaff45f4329929104762bc4",
-          "downloadCount": 298,
+          "digest": "sha256:0ca4e8b50e2e86d5775c8b7924dbfa46fa680fd4a44f9ad9ea73438e30c7a749",
+          "downloadCount": 6,
           "name": "main.js",
-          "size": 401904
+          "size": 404624
         },
         {
-          "digest": "sha256:2505904e020c523cffdd6756ddc8fe60bfab998c4a404bab7fe39077caddd5f2",
-          "downloadCount": 301,
+          "digest": "sha256:d5f4754632172285a92155e3fdabf4fbf86cf64b139d86f5592e2e139801c51a",
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 271
         },
         {
           "digest": "sha256:5a38ef3bbb974ecc2ad45ca01cff7dfb5fd3ba805e3b9fdf482768a6f8c2418b",
-          "downloadCount": 295,
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 11138
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\r\n* Add bug-fix postmortem skill (5 Whys + hardening) and auto-trigger workflow by @JeffSteinbok in https://github.com/JeffSteinbok/obsidian-onedrive/pull/105\r\n* Prevent first-sync reuploads for remote-existing files in app-folder sync by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/104\r\n* Postmortem hardening for PR #98 sync failure progress callback by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/111\r\n* postmortem(#100): harden EventManager — pass syncOnFileChange via constructor by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/109\r\n* Postmortem hardening: document EventManager first-sync gap + sibling-case tests (PR #104 follow-up) by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/107\r\n* Normalize HTTP 423 status handling for retry/defer sync paths by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/113\r\n* Stamp new daily debug logs with version and config by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/117\r\n\r\n\r\n**Full Changelog**: https://github.com/JeffSteinbok/obsidian-onedrive/compare/1.5.1...1.5.2",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.5.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-24T05:57:55Z",
+      "tag": "1.5.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:583a698cb52a9e0f09011f83ed0959a1da5417db5eaff45f4329929104762bc4",
+          "downloadCount": 436,
+          "name": "main.js",
+          "size": 401904
+        },
+        {
+          "digest": "sha256:2505904e020c523cffdd6756ddc8fe60bfab998c4a404bab7fe39077caddd5f2",
+          "downloadCount": 443,
+          "name": "manifest.json",
+          "size": 271
+        },
+        {
+          "digest": "sha256:5a38ef3bbb974ecc2ad45ca01cff7dfb5fd3ba805e3b9fdf482768a6f8c2418b",
+          "downloadCount": 433,
           "name": "styles.css",
           "size": 11138
         }
       ],
       "author": "github-actions[bot]",
       "description": "## ⚠️ Upgrade note — a one-time resync may occur (App Folder + vault subfolder)\r\n\r\nThis release fixes a bug (#97) where, in **App Folder** access mode with a **vault subfolder** configured, the sync could pull in files from *other* vaults stored in the same App Folder and nest them into your vault.\r\n\r\nBecause the old sync cursor (delta token) was built with the buggy, un-scoped query, **the plugin will discard that cursor once on your first sync after upgrading** and rebuild a correctly-scoped one. When this happens you'll see a log line like:\r\n\r\n> Retiring legacy unscoped app-folder delta cursor (issue #97); next sync will rebuild a subfolder-scoped cursor.\r\n\r\nWhat to expect:\r\n- **A single, one-time full re-scan** of your remote vault on the next sync. It may take longer than usual and touch more files, but it is expected and safe — no data is lost and your tracked file state is preserved.\r\n- This only affects users on **App Folder mode with a vault subfolder**. Full-access, shared-drive, and app-folder-at-root users are unaffected and will *not* resync.\r\n\r\nIf you were already affected by #97 and have stray `Applications/…` folders duplicated inside your vault, those are pre-existing local copies — this fix stops new ones from being created, but you'll need to delete the existing junk folders manually.\r\n\r\n## What's Changed\r\n* Ignore Office and OS temp files by default by @JeffSteinbok in https://github.com/JeffSteinbok/obsidian-onedrive/pull/92\r\n* feat: add opt-in bookmark sync for .obsidian/bookmarks.json by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/88\r\n* Handle locked-file sync failures resiliently by @JeffSteinbok in https://github.com/JeffSteinbok/obsidian-onedrive/pull/93\r\n* Address Obsidian plugin review warnings across settings, UI helpers, and logging by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/94\r\n* Resolve Obsidian compatibility lint violations in UI components by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/96\r\n* Fix release workflow lint failure in sync engine callback by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/98\r\n* fix: apply syncOnFileChange setting on plugin load to prevent unexpected auto-syncs by @JeffSteinbok with @Copilot in https://github.com/JeffSteinbok/obsidian-onedrive/pull/100\r\n* Fix #97: scope app-folder delta to vault subfolder by @JeffSteinbok in https://github.com/JeffSteinbok/obsidian-onedrive/pull/101\r\n* Fix #97 follow-up: first-sync 404 regression + reconcile cursor flag by @JeffSteinbok in https://github.com/JeffSteinbok/obsidian-onedrive/pull/102\r\n\r\n\r\n**Full Changelog**: https://github.com/JeffSteinbok/obsidian-onedrive/compare/1.4.8...1.5.1\r\n\r\n",
-      "downloadCount": 301,
+      "downloadCount": 443,
       "draft": false,
       "name": "1.5.1",
       "prerelease": false,
