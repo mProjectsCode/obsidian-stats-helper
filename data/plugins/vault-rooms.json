@@ -4,8 +4,8 @@
   "description": "Share vault folders with trusted people on your LAN in real time - invite links, per-folder access control, and live sync. No cloud, no separate server required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-rooms",
-  "lastChangedAt": "2026-07-21T09:00:27.035Z",
-  "lastFetchedAt": "2026-07-21T09:00:27.035Z",
+  "lastChangedAt": "2026-07-24T09:01:27.010Z",
+  "lastFetchedAt": "2026-07-24T09:01:27.010Z",
   "manifest": {
     "author": "DNDark",
     "authorUrl": "https://github.com/DNDark12",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:fec6cb74a39264c50ed8161e3d02e0db0cb1ef6217650421d4c05aa0a10d2561",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "main.js",
           "size": 1524511
         },
         {
           "digest": "sha256:8b83851e6db91526cad51c195f74b0c3dc944480a17387fdbecb1e8e115cc2cd",
-          "downloadCount": 15,
+          "downloadCount": 18,
           "name": "manifest.json",
           "size": 421
         },
         {
           "digest": "sha256:5ffe0f8b270eaefb60b8dc7eb7ba33c5f6fcc46094e94efcfaec390d608276b7",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 5958
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Vault Rooms 0.2.1\r\n\r\nPinned TLS/WSS for the embedded and standalone relay, safe in-place upgrades from any v0.1 database shape, and a raft of sync-reliability and Obsidian review fixes.\r\n\r\n## Added\r\n\r\n- **Pinned TLS/WSS.** New embedded servers self-manage a private CA + leaf certificate and listen HTTPS/WSS only; invites carry the server's identity (SPKI pin) so a client verifies the server before ever sending credentials. The standalone relay supports pinned or OS-trusted TLS via `TLS_MODE`.\r\n- **Identity rotation.** Signed, replay-protected rotation records let an owner rotate the server's TLS identity without breaking already-paired clients. A client that can't verify the rotation chain shows a blocking \"pin mismatch\" and never sends credentials over an unverified connection.\r\n- **Legacy plaintext migration.** Existing v0.1 installs get an owner-controlled upgrade path (normal or strict mode) to pinned TLS, with a dual-stack transition window before the plaintext listener is closed for good.\r\n- **LAN share reachability.** The panel automatically probes the advertised LAN URL after every start/migrate/rotate and blocks creating invites when it's unreachable, instead of only warning after the fact.\r\n\r\n## Changed\r\n\r\n- v0.1 database upgrades are more robust: a shares-only legacy schema (no `rooms` table) now migrates instead of failing outright, and the one-time backup (`relay.sqlite.bak-v1`) is written atomically and tolerates a corrupted/foreign file at that path instead of permanently blocking startup.\r\n- REST file writes/deletes now enforce the same `sync:push` permission the WebSocket path already required, closing a gap where the two transports could disagree on an ACL deny.\r\n\r\n## Fixed\r\n\r\n- Live sync could silently stop delivering updates for a room if the connection dropped between subscribing and receiving its first snapshot - subscriptions now persist across reconnects instead of being dropped.\r\n- A token-rotation race during plaintext-to-TLS migration could make the client think its access was revoked and abandon the migrated connection.\r\n- A slow or failed pinned-transport retry could leave two live sockets on the same connection, causing duplicate applies of remote changes.\r\n- One file failing to read during snapshot reconciliation no longer aborts reconciliation of every other file in that snapshot.\r\n- An unauthenticated WebSocket connection could hold a connection slot indefinitely; the relay now times it out after 10 seconds.\r\n- Obsidian community review findings resolved: `createDiv()`/`createSpan()` used instead of `createEl(\"div\"/\"span\")`, and the standalone CLI's startup banner (bound URLs, TLS identity, bootstrap PIN) no longer goes through `console.log`.\r\n\r\n---\r\n",
-      "downloadCount": 15,
+      "downloadCount": 18,
       "draft": false,
       "name": "0.2.1",
       "prerelease": false,
