@@ -4,8 +4,8 @@
   "description": "Sync your Granola AI meeting notes to your vault with customizable settings. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "granola-sync-plus",
-  "lastChangedAt": "2026-07-23T04:01:27.024Z",
-  "lastFetchedAt": "2026-07-23T04:01:27.024Z",
+  "lastChangedAt": "2026-07-24T04:02:28.508Z",
+  "lastFetchedAt": "2026-07-24T04:02:28.508Z",
   "manifest": {
     "author": "Danny McClelland",
     "authorUrl": "https://github.com/dannymcc/",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:433e6373d9ca71a1ade753e2850a6eacf6be4c5298ac025d4fa0b5023c423fb5",
-          "downloadCount": 16,
+          "downloadCount": 50,
           "name": "main.js",
           "size": 125410
         },
         {
           "digest": "sha256:2390b44756d0cfdca4e252af8da8b598cfb520804eccc64499bb955f95e25d32",
-          "downloadCount": 21,
+          "downloadCount": 81,
           "name": "manifest.json",
           "size": 361
         },
         {
           "digest": "sha256:e8aa19eaa857d9b98c67d05485e752a587f1c88d75204bfced215a00e30a04cf",
-          "downloadCount": 15,
+          "downloadCount": 49,
           "name": "styles.css",
           "size": 1070
         }
       ],
       "author": "github-actions[bot]",
       "description": "## 🚀 Granola Sync Plus 1.12.0\n\n\n### Added\n- **🔑 Official Granola API support**: New \"Official API key\" authentication method using the official Granola API (https://docs.granola.ai). Granola 7.427+ moved its local encryption key into a Keychain item only Granola's own signed app can read, closing off the local-token path entirely ([#66](https://github.com/dannymcc/Granola-to-Obsidian/issues/66)). API mode restores sync for users on Granola Business/Enterprise plans, who can create an API key in Granola. Local-app auth remains the default; nothing changes for existing setups.\n  - Syncs the AI summary (`summary_markdown`, used directly - no ProseMirror conversion), attendees, folder membership, calendar event data, canonical `web_url`, and (optionally) the transcript, which the API returns inline with the note detail.\n  - Incremental sync: after the first full sync, only notes updated since the last sync are fetched (`updated_after`), keeping auto-sync fast despite per-note detail requests. A \"Reset API sync state\" button forces a full re-fetch.\n  - Rate-limit aware: detail fetches are throttled to ~4 req/s (under the API's 5 req/s sustained limit) and 429 responses are retried with backoff.\n  - Transcript speaker names from the API (identified names or diarization labels) are shown as-is; local-mode \"Me\"/\"Them\" labels are unchanged.\n\n### Limitations of API mode (upstream API constraints)\n- Typed \"My Notes\" are not exposed by the official API; only the AI summary and transcript are available. The \"Include My Notes\" setting has no effect in API mode.\n- Notes without a generated AI summary are not returned by the API at all.\n- Personal API keys see your own notes; workspace keys only see workspace-public notes. Use a personal key.\n- The API has no folder-listing endpoint; folder tags and folder-based paths are built from each synced note's `folder_membership`, so the folder filter list in settings only shows folders seen in previously synced notes.\n\n### Changed\n- **🔐 API key stored in the macOS Keychain instead of plaintext data.json**: `data.json` lives inside the vault, so a plaintext key travels with vault sync and backups. On macOS the key is now written to a Keychain item (`granola-sync-plus` / `granola-api-key`) via the `security` CLI the plugin already uses, and only a flag is persisted in settings. Existing plaintext keys are migrated automatically on plugin load and scrubbed from `data.json`. If the Keychain write fails, the plugin falls back to plaintext storage rather than losing the key. Windows keeps plaintext storage (noted in the setting description).\n\n### Fixed\n- **📝 My Notes now sync for manually-created notes**: Notes created without a recording (Quick Notes, or typed-only notes) store their content in a top-level `doc.notes` field, which the extractor never inspected — the synced file ended up with an empty body. `extractPanelContent` now falls back to `doc.notes` for the `my_notes` panel type, mirroring the existing `doc.content` fallback. First spotted by [@scottxp](https://github.com/scottxp) in [#33](https://github.com/dannymcc/Granola-to-Obsidian/issues/33); fixed by [@anuvgupta](https://github.com/anuvgupta) ([#62](https://github.com/dannymcc/Granola-to-Obsidian/issues/62), [#63](https://github.com/dannymcc/Granola-to-Obsidian/pull/63)).\n\n### Credits\n- Thanks to [@shirgoldbird](https://github.com/shirgoldbird) for building the official-API auth mode ([#67](https://github.com/dannymcc/Granola-to-Obsidian/pull/67)) and verifying it end-to-end against a real Business workspace, and to [@anuvgupta](https://github.com/anuvgupta) for the My Notes fallback fix ([#63](https://github.com/dannymcc/Granola-to-Obsidian/pull/63)).\n\n---\n\n### 📦 Installation\n\n1. Download `main.js`, `manifest.json`, and `styles.css` below\n2. Create folder `.obsidian/plugins/granola-sync-plus/` in your vault\n3. Place all three files in the folder\n4. Enable the plugin in Obsidian Settings → Community Plugins\n\nBuilds are signed with [GitHub artifact attestations](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds). Verify with `gh attestation verify main.js --repo dannymcc/Granola-to-Obsidian`.",
-      "downloadCount": 21,
+      "downloadCount": 81,
       "draft": false,
       "name": "Granola Sync Plus 1.12.0",
       "prerelease": false,
