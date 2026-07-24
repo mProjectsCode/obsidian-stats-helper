@@ -4,8 +4,8 @@
   "description": "Expose dataview/Tasks rendering results via REST API and MCP Server. Let AI tools access your vault's rendered content programmatically. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "render-api",
-  "lastChangedAt": "2026-07-22T08:05:27.085Z",
-  "lastFetchedAt": "2026-07-22T08:05:27.085Z",
+  "lastChangedAt": "2026-07-24T08:00:27.036Z",
+  "lastFetchedAt": "2026-07-24T08:00:27.036Z",
   "manifest": {
     "author": "caesarloo",
     "authorUrl": "https://github.com/caesarloo",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:2a59fbc0624f2ae1e8e793db9b3b5369f5c12d6bc823332e076051c22cdd71d3",
-          "downloadCount": 61,
+          "downloadCount": 65,
           "name": "main.js",
           "size": 110878
         },
         {
           "digest": "sha256:67eb65bae15a5a51b637a30d380d443c304773b37be2e71f7fc146a8834535f3",
-          "downloadCount": 59,
+          "downloadCount": 65,
           "name": "manifest.json",
           "size": 363
         },
         {
           "digest": "sha256:68f2a31f89624bfe2542efe0e2bd6480820ed2b0a1d4c32998b30ce3ea1e33bb",
-          "downloadCount": 56,
+          "downloadCount": 60,
           "name": "styles.css",
           "size": 1247
         }
       ],
       "author": "github-actions[bot]",
       "description": "# v0.2.5 Release Notes\n\n## Changes\n\n### Review compliance fix\n- Remove `document` fallback in `detectLanguage()` to eliminate `obsidianmd/no-document` warning from community review\n\n### UI polish\n- Remove \"Clear\" button from API Key setting (user can clear the input field manually)\n- Split API Key setting into two rows with descriptions:\n  - Row 1: **API Key** + text input — \"Leave empty for no auth\"\n  - Row 2: **Auto Generate Key** + \"Generate\" button — \"Generate a random 64-character hex key and fill it in\"\n\n### i18n\n- Add `setting.apiKey.autoGenerate` label key\n- Add `setting.apiKey.generate.desc` description key\n\n## Commits\n- `56c62c0` Fix: remove document fallback in detectLanguage for review compliance\n- `c181499` Remove \"Clear\" button from API Key setting in settings page\n- `b192d43` Split API Key into two rows with descriptions\n",
-      "downloadCount": 59,
+      "downloadCount": 65,
       "draft": false,
       "name": "Render API v0.2.5",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:867d2a7bfcbc3a3420e956ff81fa1be13d7c7d69dce7f410836e586228cbc84a",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 363
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## v0.2.4\n\n### 代码审核修复\n- `src/i18n.ts` — `globalThis.activeDocument` 弹出窗口兼容\n- `src/services/apiService.ts` — 空catch注释、`window.setTimeout`、移除多余断言\n- `src/views/RenderApiSettingTab.ts` — `vault.configDir` 适配自定义配置目录\n\n### Bug 修复\n- **Stdio 自动检测** — `checkPort()` 加入 API Key 头，开启认证后正常检测\n- **Stdio 退出时序** — pending 请求跟踪，异步响应完成后再退出\n\n### CI 质量\n- ESLint 0 errors, Unit Tests 72/72, CI 全流程通过\n- REST + URL MCP + Stdio MCP + 图片内联 全部回归测试通过\n",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "Render API v0.2.4",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:906dd4af04a9f1da57655b200c949a4d12bb59c2e270f45f311478798be06aea",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 363
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Render API v0.2.3\n\n## What's Changed\n\n### Settings Page Redesign\n- Settings reorganized into functional groups: **Language → Server → Rendering → MCP → Debug → Available Tools**\n- **Available Tools** list is now dynamic — reload_plugin and settings entries appear/disappear based on their debug toggles\n- Default values shown inline when a setting differs from default (e.g. `(默认: 27123)`)\n- Removed dead settings: `enableDataview`, `enableMarkdownRender`, `corsOrigin`\n\n### Security Toggles\n- **New `enableSettingsEndpoint` setting** (default: off) — controls the `POST /settings` REST endpoint. When disabled, returns 403.\n- **`enableMcpReloadPlugin`** now gates **both** the MCP `reload_plugin` tool (hidden from `tools/list`) and the REST `/reload` endpoint (returns 403).\n- Both toggles can only be re-enabled from the Obsidian settings UI — remote bypass is blocked.\n\n### Stdio Mode Auth\n- `mcp-server.js` now reads `RENDER_API_KEY` from the environment and includes it as `X-API-Key` on every HTTP request.\n- Settings page auto-generates `env.RENDER_API_KEY` in the stdio config snippet.\n\n### Bug Fixes\n- **`adapter.basePath` crash**: Obsidian's `.basePath` getter calls `getFullPath(undefined)` internally → `path.join(undefined)` throws. Replaced `adapter.basePath` with `adapter.getBasePath?.()` throughout.\n- **`inlineImages` adapter fallback**: `adapter.readBinary(filePath)` with vault-relative paths caused `path` module errors. Removed the broken fallback — files not found via vault API are now skipped cleanly.\n- **Obsidian console `ERR_FILE_NOT_FOUND`**: `preprocessWikiEmbeds` now generates `file:///` absolute paths instead of `app://` URLs where possible, reducing console noise.\n\n### i18n\n- Full Chinese translations for all new settings (reload_plugin, settings endpoint, tool descriptions).\n- Setting descriptions use \"跟随Obsidian\"/\"Follow Obsidian\" for language default hint.\n\n## Files\n\n- `main.js` — plugin code (includes embedded MCP server)\n- `manifest.json` — plugin metadata\n- `styles.css` — plugin styles\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "Render API v0.2.3",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:3c6588cb19b2845a68713c9829d69b2adec9a38b859fee69173fe299c4b6adf4",
-          "downloadCount": 26,
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 353
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Render API v0.2.2\n\n## What's Changed\n\n### Image Inlining (Major)\n\n- **Wiki embed images** (`![[path/to/image.png]]`) are now automatically read from the vault, converted to base64 data URIs, and embedded inline in the rendered HTML. Previously these produced `app://obsidian.md/...` URLs that could not be resolved outside of Obsidian, or caused internal rendering errors with Chinese-language file paths.\n- **Markdown image syntax** (`![alt](path)`) also gains data-URI inlining via the post-processing pipeline.\n- **`render_markdown`** now accepts an optional `sourcePath` parameter, allowing relative attachment paths to be resolved correctly.\n\n### Other Fixes\n\n- ESLint warnings: `requestAnimationFrame` → `window.requestAnimationFrame`, explicit regex callback types.\n- README updated with explanations for the 3 community-marketplace review warnings (identity info, filesystem access, clipboard).\n\n## Files\n\n- `main.js` — plugin code (includes embedded MCP server)\n- `manifest.json` — plugin metadata\n- `styles.css` — plugin styles\n",
-      "downloadCount": 26,
+      "downloadCount": 27,
       "draft": false,
       "name": "Render API v0.2.2",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:a3f973385a31031bfcf6ff35428881d047bc0ebffb8366cad4c8a54b4529de60",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 353
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.2.1 Release Notes\n\n## Bug Fixes\n\n- **Hermes Streamable HTTP compatibility** — Added `POST /mcp` route for direct JSON-RPC handling (Hermes sends POST directly, unlike the old GET+POST SSE pattern). Fixes 404 error when using `url:` mode with Hermes Agent.\n\n## Settings UI Improvements\n\n- **Transport options merged** — Simplified to two clear choices: Stdio (subprocess) and URL (Streamable HTTP). The same URL endpoint supports both SSE and Streamable HTTP protocols automatically.\n- **Actual vault path** — Stdio config now shows the real path instead of `<.obsidian>` placeholder.\n- **Agent selector** — Dropdown to choose Hermes Agent or Claude Desktop config, with one-click copy.\n- **Environment selector** — Choose Windows or WSL runtime. WSL mode auto-detects gateway IP via `os.networkInterfaces()` with a \"Detect\" button.\n- **Stdio config includes `--port`** — Ensures mcp-server.js connects to the correct HTTP server port.\n- **Config code blocks now have a border** — Visually distinct from other settings.\n- **Dropdown no longer scrolls to top** — Scroll position is preserved on re-render.\n",
-      "downloadCount": 24,
+      "downloadCount": 25,
       "draft": false,
       "name": "Render API v0.2.1",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:c1fc0d24ba5dec7e4a42cb9b0cd5a3619d367b5321d1e5171aa85c44917de916",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 353
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.2.0 Release Notes\n\n## New Features\n\n- **SSE/URL MCP transport mode** — Optional SSE-based MCP transport (default: stdio). Configure via plugin settings → MCP Transport. Hermes config simplifies to `url: http://localhost:27123/mcp` with no separate `mcp-server.js` process.\n- **Shared MCP protocol logic** — MCP protocol handling extracted to `mcpProtocol.ts`, shared between stdio and SSE modes.\n\n## Bug Fixes\n\n- **mcp-server.js parameter parsing** — Fixed `--port` missing bug where `args.indexOf(\"--port\")` returned -1, causing `args[0]` to be parsed as port (NaN). Now checks index first, defaults to 27123.\n- **WSL gateway IP auto-discovery** — `resolveWSLHosts()` now dynamically reads `/proc/net/route` to detect the default gateway instead of relying on a hardcoded list of `172.17.*.*` IPs. Falls back to the hardcoded list on failure.\n- **render_file Chinese path** — Chinese-character file paths now render correctly (confirmed working with multiple test files).\n\n## Infrastructure\n\n- ESLint: replaced `require(\"node:fs\")` with top-level `import * as fs` to fix eslint `no-require-imports` violation.\n",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "Render API v0.2.0",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:37e195ac275619d0b60c5375cf214985e6892b601e66a83569ea707a77caeff2",
-          "downloadCount": 16,
+          "downloadCount": 17,
           "name": "manifest.json",
           "size": 354
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.1.21 Release Notes\n\n## Changes\n\n- **minAppVersion 降回 1.7.2** — 所有版本的最低 Obsidian 版本统一为 1.7.2（与 v0.1.3 和 Vault SVN 一致）。`SettingDefinitionItem` 改为 `import type` 消除运行时依赖，`getSettingDefinitions()` 在 <1.13.0 版本中不会被调用（回退到 `display()`）。\n",
-      "downloadCount": 16,
+      "downloadCount": 17,
       "draft": false,
       "name": "Render API v0.1.21",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:6fd81c0a8c1bf17a2874372fdbcf9efa016e5f47431737d22c8f4dfb27e85f77",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 355
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.1.20 Release Notes\n\n## Chores\n\n- Release 产物精简为 Obsidian 三件套：`main.js`、`manifest.json`、`styles.css`（参考 Vault SVN 方式）\n- `versions.json` 保留在仓库根目录，不包含在 Release 中\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "Render API v0.1.20",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:3c5e2e3001087eb3d26a2547826919d3bbbb588b5cb6788511ee9b3af6ac5ad4",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 355
         },
@@ -288,7 +288,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.1.19 Release Notes\n\n## Fixes\n\n- **Restored `versions.json`** — Required by the Obsidian community plugin marketplace to determine version compatibility. Without it, users see \"No appropriate version found.\" when installing.\n",
-      "downloadCount": 0,
+      "downloadCount": 1,
       "draft": false,
       "name": "Render API v0.1.19",
       "prerelease": false,
@@ -305,7 +305,7 @@
         },
         {
           "digest": "sha256:f29837252368756beadee901bfcebbf4b315c2bdc1ad9946300100d1c8df5ae6",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 355
         },
@@ -318,7 +318,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# v0.1.18 Release Notes\n\n## Chores\n\n- **Removed `versions.json`** — Deleted from repo, removed from Release artifacts. Release now only contains Obsidian's required three files: `main.js`, `manifest.json`, `styles.css`.\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "Render API v0.1.18",
       "prerelease": false,
