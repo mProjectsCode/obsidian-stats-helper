@@ -4,8 +4,8 @@
   "description": "Transform your vault into a powerful book planning and writing tool. Corkboard, KanbanBoard view, timeline, plotlines,character tracking, and more. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "storyline",
-  "lastChangedAt": "2026-07-24T05:05:26.986Z",
-  "lastFetchedAt": "2026-07-24T05:05:26.986Z",
+  "lastChangedAt": "2026-07-25T05:01:27.024Z",
+  "lastFetchedAt": "2026-07-25T05:01:27.024Z",
   "manifest": {
     "author": "Jan Sandström",
     "authorUrl": "https://github.com/PixeroJan",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "StoryLine",
-    "version": "1.10.48"
+    "version": "1.10.50"
   },
   "name": "StoryLine",
   "presentInCommunityList": true,
@@ -23,27 +23,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:483e12ea7e3f0c406c9907e33d9fc148723c6ed23bcb0bd8482e905d10ae2aab",
+          "downloadCount": 201,
+          "name": "main.js",
+          "size": 2916452
+        },
+        {
+          "digest": "sha256:111cfe2696291c1cc9fb688564faf5036dbc6ec76131dd4a90931028a098f5a7",
+          "downloadCount": 210,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:1ba8b9b9a2c6ab6256d22b89eddbd7d26db812ede457222436af1f9275559da2",
+          "downloadCount": 197,
+          "name": "styles.css",
+          "size": 315142
+        }
+      ],
+      "author": "PixeroJan",
+      "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.50\r\n\r\n### Bug Fixes\r\n\r\n- **Linking & Matching fields now persist for Characters and Locations** *([#228](https://github.com/PixeroJan/obsidian-storyline/issues/228))* — The **Case-sensitive matching** toggle and **Exclude terms** field in the Linking & Matching section were written to the markdown files but reverted to their defaults (unchecked / empty) on reload. The Character and Location parsers built their in-memory objects field-by-field and omitted the three linking fields (`entryType`, `caseSensitive`, `excludeTerms`), so the values were dropped on read-back even though they were still in the frontmatter. The parsers now read these fields back (with `caseSensitive` coerced to a boolean), so the toggle and exclude terms survive a reload round-trip. Codex entries were unaffected — their parser uses a generic field-key loop that already included the linking keys.",
+      "downloadCount": 210,
+      "draft": false,
+      "name": "1.10.50",
+      "prerelease": false,
+      "publishedAt": "2026-07-24T14:19:49Z",
+      "tag": "1.10.50"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f3a0dc9545032ab9fe7c21647334c596a2b6650b01dd48d53a4a9ca17af0ef02",
+          "downloadCount": 82,
+          "name": "main.js",
+          "size": 2916002
+        },
+        {
+          "digest": "sha256:8ccb8a1d080bba1c7b37eef2ce1198023c73cd4a31e0221ad9b24db054d7d11e",
+          "downloadCount": 85,
+          "name": "manifest.json",
+          "size": 449
+        },
+        {
+          "digest": "sha256:1ba8b9b9a2c6ab6256d22b89eddbd7d26db812ede457222436af1f9275559da2",
+          "downloadCount": 80,
+          "name": "styles.css",
+          "size": 315142
+        }
+      ],
+      "author": "PixeroJan",
+      "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.49\r\n\r\n### Bug Fixes\r\n\r\n- **Case-sensitive matching now works correctly for Characters and Locations** *([#228](https://github.com/PixeroJan/obsidian-storyline/issues/228))* — The Linking & Matching section's **Case-sensitive matching** toggle was exactly backwards: it matched the *lowercased* name instead of the *original-cased* name. A character named \"Dust\" with case-sensitive matching enabled would match the common word \"dust\" (lowercase) but *not* \"Dust\" (the actual character name) — tagging the character in every chapter with the word \"dust\" and missing chapters where \"Dust\" was actually written. The scanner now keeps a map of original-cased names and tests those when case-sensitive matching is on, so \"Dust\" matches \"Dust\" and \"dust\" does not.\r\n\r\n- **Auto first-name aliasing no longer fires for titles and descriptive phrases** *([#228](https://github.com/PixeroJan/obsidian-storyline/issues/228))* — The scanner automatically treats the first word of a character's name as an alias (e.g. \"Anna\" for \"Anna Svensson\"). This caused false positives for titles and descriptive phrases: a character named \"Lady of Dreams\" would auto-alias \"Lady\", tagging the character in every scene containing \"Lady Margaret\", \"Lady Smith\", or any \"Lady [anything]\". The auto-alias is now skipped when the first word is a common title (Lady, Lord, Sir, Dame, Captain, King, Queen, Doctor, Saint, etc.) or when the second word is a connector (of, the, de, von, van, etc.). \"Lady of Dreams\" now only matches the full phrase.\r\n\r\n- **Exclude terms are now contextual, not whole-scene** *([#228](https://github.com/PixeroJan/obsidian-storyline/issues/228))* — The **Exclude terms** field previously checked whether the exclude term appeared *anywhere in the entire scene*. A single \"Lady Margaret\" anywhere would suppress all matches for \"Lady of Dreams\" — even legitimate mentions elsewhere in the same scene. The scanner now collects all match positions and checks exclude terms *per match*: a match is suppressed only if an exclude term overlaps or is adjacent to that specific match. If at least one match in the scene is clean, the entity is still tagged.\r\n\r\n- **Hidden categories now work like hidden fields** — Hiding a category previously left its header (title + eye button) visible in the normal flow, making it look identical to a collapsed section. Hidden categories are now skipped entirely in the render loop and collected into a collapsible **\"Show N hidden categories\"** toggle at the bottom of the form — exactly mirroring how hidden fields work. When collapsed, no trace of the hidden categories is visible. Applies to Character, Codex, and Location views.\r\n\r\n### New Features\r\n\r\n- **Per-project isolation of custom sections, codex categories & location types** *([#236](https://github.com/PixeroJan/obsidian-storyline/issues/236))* — Custom sections (character, location, codex), codex category definitions, enabled codex categories, and custom location types were previously stored vault-wide in `data.json`, so they leaked across unrelated writing projects. A user writing an urban fantasy story who added a \"Magic\" custom section to character sheets would see that section in every other project too. These settings now live in a per-project `System/custom-sections.json` file, following the same pattern as the existing per-project storage (`plotlines.json`, `characters.json`, etc.). Existing users' settings are migrated transparently on first load.\r\n\r\n- **Shift dates for multiple scenes in Timeline view** *([#237](https://github.com/PixeroJan/obsidian-storyline/issues/237))* — Timeline view now supports multi-selection (ctrl/cmd-click) and a **\"Shift dates\"** action in the right-click menu. A modal offers two modes: **\"Start on a new date\"** (set a new date/time for the earliest selected scene; the delta is applied to all others, preserving gaps) or **\"Move by a set amount\"** (shift all selected scenes by a signed number of days/weeks/hours/minutes). A live preview shows each scene's current → new date/time before applying. Only `storyDate` and `storyTime` are written; sequence, act, chapter, and chronological order are untouched. All writes go through the normal scene update path (individually undoable).\r\n",
+      "downloadCount": 85,
+      "draft": false,
+      "name": "1.10.49",
+      "prerelease": false,
+      "publishedAt": "2026-07-24T08:57:31Z",
+      "tag": "1.10.49"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:5dbf4f90faf3cb421255ed42bece5e5e628325011b59c57609b9727f10cff041",
-          "downloadCount": 247,
+          "downloadCount": 290,
           "name": "main.js",
           "size": 2894566
         },
         {
           "digest": "sha256:02f21e94be1bb4a9f201c813a3c6e8c277e8058fede7fd39c57bbd4d515183b7",
-          "downloadCount": 261,
+          "downloadCount": 310,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:151f949b123b1999425b426c83f5233a738da084c6fcad72840fed2574edb1d1",
-          "downloadCount": 243,
+          "downloadCount": 286,
           "name": "styles.css",
           "size": 313057
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.48\r\n\r\n### Bug Fixes\r\n\r\n- **Core Properties sidebar no longer blank when StoryLine is enabled** *([#232](https://github.com/PixeroJan/obsidian-storyline/issues/232), [#230](https://github.com/PixeroJan/obsidian-storyline/discussions/230))* — When the \"Hide frontmatter\" setting was on, Obsidian's built-in **Properties** sidebar pane went completely blank for any file inside the StoryLine root (and stayed blank after creating a Series). The per-leaf `sl-hide-frontmatter` class was being applied to *any* leaf whose `view.file` pointed at a StoryLine file — but Obsidian's core Properties pane also tracks the active file via `view.file`, so it got tagged and its `.metadata-container` was hidden by CSS. The class is now applied only to markdown editor leaves (`viewType === 'markdown'`); StoryLine's own custom views remain covered by the body-level class and the `[data-type^=\"story-line-\"]` CSS rule.\r\n\r\n- **Timeline no longer reports false \"31-day gap\" / out-of-order warnings** *([#233](https://github.com/PixeroJan/obsidian-storyline/discussions/233))* — Scenes labelled with ordinal day markers like \"Day 1\" and \"Day 2\" triggered spurious \"31-day gap without a timeskip marker\" warnings and false out-of-order errors. V8's `Date.parse(\"Day 1\")` returns `2000-12-31` and `Date.parse(\"Day 2\")` returns `2001-01-31` — a 31-day gap — and the fallback `Date.parse()` in `Validator.parseStoryDate()` accepted these as real calendar dates. `parseStoryDate()` now only calls `Date.parse()` for strings that match real calendar-date patterns (ISO `YYYY-MM-DD`, numeric `YYYY/MM/DD`, or month-name formats); ordinal markers return `null` and are skipped. `checkDateOrderForGroup()` also stopped using naive string comparison (where `\"Day 10\" < \"Day 2\"` is `true`) and now compares parsed dates when possible.\r\n\r\n- **Plotline colour picker no longer closes on every input** *([#234](https://github.com/PixeroJan/obsidian-storyline/issues/234))* — Typing a single digit into the RGB boxes or dragging the visual colour picker immediately closed the plotline colour customiser, making it nearly impossible to enter a precise colour. The `input` event handler called `this.refresh()`, which re-rendered the entire view and destroyed the colour input mid-edit. The `input` event now only persists the value without re-rendering; the `change` event (fired when the picker is dismissed/committed) triggers the full refresh.\r\n\r\n- **Hidden fields and categories now reachable on mobile** *(Reddit request #4)* — The per-field hide/move buttons and the new hide-category button use `opacity: 0` + `:hover` to stay out of the way on desktop. Touch devices have no hover, so the buttons were invisible and unreachable — users couldn't hide fields, and hidden fields appeared because the toggle was inaccessible. These buttons are now always visible at reduced opacity on mobile (`.sl-mobile`).\r\n\r\n### New Features\r\n\r\n- **Custom fields can be used as the character card tagline** *(Reddit request #1)* — The tagline dropdown on the character sheet now lists universal (custom) fields alongside the built-in fields, so you can pick any custom field as the snippet shown on character cards. Custom-field tagline keys are stored with an `uf:` prefix to avoid colliding with built-in field keys, and card rendering resolves them via `char.universalFields`.\r\n\r\n- **Custom relations can be assigned to an existing category** *(Reddit request #2)* — When defining a custom relation type (e.g. \"mate\"), a category dropdown now appears next to the type input, letting you assign it to any existing category (e.g. \"romantic\") so the Character Map view groups and colours it correctly. Previously every custom relation was forced into the generic \"custom\" bucket. The Relationship Map automatically renders the edge using the chosen category's base type via `RELATION_BASE_TYPE_BY_CATEGORY`.\r\n\r\n- **Hide entire categories at once** *(Reddit request #3)* — A new eye/eye-off button on each section header in the Character, Codex, and Location views lets you hide a whole category in one click, instead of hiding each field individually. Hidden categories show only their header (with the eye button) so you can un-hide them later. The setting is stored in a new `hiddenCategories: Record<string, string[]>` field and round-trips through `data.json`.",
-      "downloadCount": 261,
+      "downloadCount": 310,
       "draft": false,
       "name": "1.10.48",
       "prerelease": false,
@@ -54,26 +114,26 @@
       "assets": [
         {
           "digest": "sha256:0b06f1918d4ac94a410919ff8d501a29387c3a19d8782b38dac5f78c091495b2",
-          "downloadCount": 1125,
+          "downloadCount": 1126,
           "name": "main.js",
           "size": 2891296
         },
         {
           "digest": "sha256:138c0f58cd8b6b13d7446c56f6ebfc74050ae059cbbb20c3c15c9a778748f749",
-          "downloadCount": 1272,
+          "downloadCount": 1273,
           "name": "manifest.json",
           "size": 449
         },
         {
           "digest": "sha256:7b4fa95b1954f30f9a69dad95125f3e00a4b2c1524d6def7f3b27576ed07922a",
-          "downloadCount": 1115,
+          "downloadCount": 1116,
           "name": "styles.css",
           "size": 311207
         }
       ],
       "author": "PixeroJan",
       "description": "# StoryLine — Changelog\r\n\r\n## Support StoryLine\r\n\r\nIf StoryLine helps your writing, please consider buying me a coffee. Donations keep the plugin actively maintained.\r\n\r\n[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=A2N2LE7EUBL3A)\r\n\r\n## Version 1.10.47\r\n\r\n### Bug Fixes\r\n\r\n- **Mobile: Codex/Character/Location detail forms no longer blank out when editing** — on iOS/iPadOS, tapping a field near the bottom of a Codex (Locations/Items), Character, or Location detail form could make the whole content area blank out when the soft keyboard appeared. The root cause was conflicting CSS that set the view containers to `100dvh` and then back to `100%`, causing layout thrash when the keyboard changed the dynamic viewport height. The `100dvh` sizing is now applied only to the inspector bottom-sheet panels; the view containers always stay at `100%` of their leaf so their flex children (toolbar + scroll area) keep their pinned toolbar. The detail content areas also now explicitly use `flex: 1 1 auto; min-height: 0; overflow-y: auto` so only the content scrolls, not the toolbar. *(Issue #190)*\r\n\r\n- **Mobile: toolbar stays pinned to the top while scrolling** — a strip of scrolling content could appear above the sticky toolbar on mobile because the `::before` overlay that covers the gap above the toolbar was only 24px tall (sufficient on desktop, too short for iOS WebKit's visual-viewport offset behaviour). The overlay is now 60px on mobile, and the toolbar's z-index is raised so it stays painted above form fields. *(Issue #190)*\r\n\r\n- **Mobile: corkboard note editing no longer pushes content under the toolbar depending on zoom** — `panCorkboardToRevealNote()` used a fixed 45%-of-viewport heuristic to reserve space for the keyboard, which over-scrolled when zoomed in (card larger than the safe zone) and under-scrolled when zoomed out, pushing the note under the toolbar. It now uses the actual keyboard height from the Visual Viewport API (`window.visualViewport`) so the note lands in the true visible region regardless of zoom level. *(Issue #190)*",
-      "downloadCount": 1272,
+      "downloadCount": 1273,
       "draft": false,
       "name": "1.10.47",
       "prerelease": false,
@@ -636,7 +696,7 @@
         },
         {
           "digest": "sha256:301480bce284a3755ae83a80064466c41145d462b2d4d02bc8a3fc008bd9c9dd",
-          "downloadCount": 136,
+          "downloadCount": 137,
           "name": "styles.css",
           "size": 294429
         }
@@ -2916,7 +2976,7 @@
         },
         {
           "digest": "sha256:631020e9b4390ac111c9a04adc33093ce38e92be196995c8e3b4e094d694d9f7",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "Sample.Project.zip",
           "size": 40073
         },
@@ -2940,7 +3000,7 @@
       "assets": [
         {
           "digest": "sha256:50cbf152fdbf7c824ee898a22edbd0f185b02102d5735eb11becdf8c0f07be01",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "HELP.md",
           "size": 43227
         },
@@ -3042,7 +3102,7 @@
       "assets": [
         {
           "digest": "sha256:64713685204a4de3373ca1a6286a8724ffb62f4ca992b703fb92fda8524e5f69",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "HELP.md",
           "size": 41748
         },
@@ -3162,7 +3222,7 @@
         },
         {
           "digest": "sha256:0af9160f4939031d5d28f1937bee8d075d226c6111e6418e2ab3991038053fae",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 129084
         }
