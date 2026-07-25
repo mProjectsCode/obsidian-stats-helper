@@ -4,8 +4,8 @@
   "description": "Graph functions, systems, derivatives and integrals in interactive blocks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lmath",
-  "lastChangedAt": "2026-07-24T09:01:27.010Z",
-  "lastFetchedAt": "2026-07-24T09:01:27.010Z",
+  "lastChangedAt": "2026-07-25T09:04:27.013Z",
+  "lastFetchedAt": "2026-07-25T09:04:27.013Z",
   "manifest": {
     "author": "Lenin",
     "authorUrl": "https://github.com/LubrieDev",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:306cdcde9668760172fa9c38bfc956894d8a5bd3c3c5dc03889d6b92ec4c0378",
-          "downloadCount": 16,
+          "downloadCount": 21,
           "name": "main.js",
           "size": 2442616
         },
         {
           "digest": "sha256:2ad7210a3b514637cc31f92f9283116084fda546fc1d64a70c6af419037ff6a1",
-          "downloadCount": 17,
+          "downloadCount": 22,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:01cb6513d954a2f803d19f6586fe1fe2e502943c7bc100f329f08e12724d1970",
-          "downloadCount": 16,
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 4049
         }
       ],
       "author": "LubrieDev",
       "description": "# 1.2.8\r\n\r\n## Graph controls: an icon set, one tooltip per control, and a crosshair that survives panning `sin(1/x)`\r\n\r\nMost of this release is cosmetic — a real icon set for the plane's controls, a\r\nsingle tooltip per control instead of two, zoom buttons that repeat while held,\r\nand the removal of a decorative marker — and it carries two bug fixes: curves\r\nnow close against the edge of their domain instead of stopping short of it, and\r\nthe crosshair on `sin(1/x)` no longer goes dark after you pan the view.\r\n\r\n- **Curves stopped short of the edge of their domain, leaving a visible gap\r\n  there.** Reported on the system `y = ±⁴√(1−x⁴)` — the squircle `x⁴+y⁴=1` —\r\n  which at high zoom showed a hole at (±1, 0) with the stroke cut in two, so the\r\n  near-vertical tip read as a dashed asymptote rather than a curve. Where a curve\r\n  meets the end of its domain with a *vertical tangent*, the value falls off as a\r\n  root of the distance to the edge: for `⁴√(1−x⁴)` it is `y ≈ (4ε)^(1/4)`, which\r\n  descends so slowly that after the sampler's `PROF_MAX` refinement steps y is\r\n  still ≈7·10⁻³ — tens of pixels once you zoom in — and the branch simply ended\r\n  there. It closed only by luck, when the edge happened to land exactly on the\r\n  sampling grid, which is why the gap appeared at some zoom levels and not\r\n  others, and why it was never a regression: the defect had been latent since\r\n  long before 1.2.6. The sampler already located the edge to machine precision —\r\n  it bisects 40 times to decide whether the discontinuity is a pole — but threw\r\n  that point away instead of drawing it. It is now emitted, attached to the\r\n  finite end and inside the same segment, so the polyline reaches the edge: the\r\n  gap goes from 6.6·10⁻³ (2.5·10⁻² during a gesture) to zero, both passes agree,\r\n  and it stays under a pixel at any zoom. This applies to every explicit curve\r\n  that touches a domain boundary — `√x`, half-parabolas, and the rest — all of\r\n  which had the same gap, just smaller than the fourth root made it.\r\n\r\n- **The crosshair on `sin(1/x)` stopped appearing after a pan — a regression\r\n  from 1.2.6, unnoticed until now and fixed here.** 1.2.6 began drawing\r\n  stretches that oscillate faster than one pixel as a min/max envelope band,\r\n  marked `CalidadRama: \"incierta\"` and carrying no `parametro`, since a band is\r\n  not a curve you can walk along. The walkability test that gates the crosshair,\r\n  `curvaRecorrible`, rejects any branch without a `parametro` — its purpose is to\r\n  catch curves that fold back in x and are therefore multivalued. A band trips\r\n  that test even though it is not a fold, so the presence of a single band\r\n  disabled the crosshair for the *whole* curve. It surfaced on `sin(1/x)`\r\n  specifically, and only after panning: the band near x=0 forms or not depending\r\n  on how the sampling grid lands on the pixels, which shifts as the view moves,\r\n  so a settled default view resolved cleanly while a panned one did not — and a\r\n  wheel zoom, which resolves the oscillation as it magnifies, never triggered it\r\n  either. The test now excludes `\"incierta\"` bands from its judgement, exactly as\r\n  the crosshair's own `yEnRamas` already skips them: the crosshair works over the\r\n  rest of the curve and is simply not drawn over the band itself, where there is\r\n  no single y to report. Before 1.2.6 the curve was traced as ordinary branches\r\n  throughout and was always walkable, so this restores the earlier behavior.\r\n\r\n- **The plane's controls now use a real icon set.** Home, zoom-in, zoom-out,\r\n  trace, info and the options menu were text glyphs and emoji (🏠, +, −, ⌖, ⓘ,\r\n  ☰), and the pointer over the plane was a hand-drawn cross. All are now Material\r\n  Symbols, drawn as inline SVG through Obsidian's DOM API rather than\r\n  `innerHTML`, and filled with `currentColor` so each icon inherits its button's\r\n  colour and follows the active/inactive highlight unchanged. The pointer icon is\r\n  drawn on the canvas as a `Path2D`, built lazily so it costs nothing in the Node\r\n  test bundle, which never paints.\r\n\r\n- **The zoom buttons repeat while held.** Pressing + or − zoomed a single notch\r\n  and had to be clicked again for every further step. They now keep zooming for\r\n  as long as the button is held, at a steady cadence, reusing the same centred,\r\n  smoothed zoom a single press already used — so holding reads as one continuous\r\n  zoom rather than a stack of steps. A quick tap still does exactly one notch.\r\n\r\n- **One tooltip per control, above it rather than below.** The options button\r\n  carried both a `title` attribute and an `aria-label`, so hovering it produced\r\n  two tooltips at once — the browser's native one and Obsidian's. Every control\r\n  now uses Obsidian's `setTooltip` with top placement and no `title`, so there is\r\n  a single dark tooltip, positioned above the control where the pointer does not\r\n  cover it.\r\n\r\n- **The experimental-engine ⚙ marker is gone.** The small gear in the top-right\r\n  corner of the plane was a decorative label; it has been removed along with its\r\n  now-unused translation strings, and the zoom buttons moved up to take its\r\n  place.\r\n\r\nBoth suites pass unchanged — 345 tests in the main suite and 12 in the zoom\r\nsuite.\r\n",
-      "downloadCount": 17,
+      "downloadCount": 22,
       "draft": false,
       "name": "1.2.8",
       "prerelease": false,
