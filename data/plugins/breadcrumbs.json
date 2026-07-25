@@ -4,8 +4,8 @@
   "description": "Visualise the hierarchy of your vault using a breadcrumb trail or matrix view.",
   "errors": [],
   "id": "breadcrumbs",
-  "lastChangedAt": "2026-07-24T22:00:27.057Z",
-  "lastFetchedAt": "2026-07-24T22:00:27.057Z",
+  "lastChangedAt": "2026-07-25T22:03:27.009Z",
+  "lastFetchedAt": "2026-07-25T22:03:27.009Z",
   "manifest": {
     "author": "MichaelPPorter",
     "authorUrl": "https://github.com/michaelpporter",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Breadcrumbs",
-    "version": "4.21.1"
+    "version": "4.21.3"
   },
   "name": "Breadcrumbs",
   "presentInCommunityList": true,
@@ -27,8 +27,140 @@
     {
       "assets": [
         {
+          "digest": "sha256:78ded665206ca6689ff8e1502096ce71c55b8bbdbc1186a7ac78d4db1f75b014",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 1910975
+        },
+        {
+          "digest": "sha256:33ded3a0ae613e4e13884fdb9009f778772fb47890809e06c3d3a523426efac4",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:ab577f9c42137ad53b57531af76a001bc014b1490b7b5c85f02d2a55cb17089c",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 7968
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A maintenance release. Nothing about how Breadcrumbs builds or renders your graph changes — the work was in the plugin's own lint setup, which the Obsidian community directory scans on every release.\n\n## Changed\n\n- **Sentence-case copy in the date-note setup modal** — the heading now reads \"Set up date notes\", and \"etc.\" was reworded to \"and so on\", matching Obsidian's UI text conventions. This is the only user-visible change in the release.\n\n## Build\n\n- **The community directory's plugin scan passes again** — `eslint-plugin-obsidianmd` added rules that forbid undescribed `eslint-disable` comments, require a matching `eslint-enable` for file-level ones, and ban suppressing certain rules inline at all, among them `no-explicit-any` and `no-deprecated`. Every remaining suppression now carries a written reason. The ones that couldn't stay inline were either fixed properly or scoped in `eslint.config.mjs`, where an exemption is reviewable instead of scattered through the source.\n\n- **Removed the `any` types behind three of those suppressions** rather than silencing them — the codeblock field check compares against a widened `string[]`, the settings tab types its Svelte sub-pages properly (which also cleared an unchecked `mount()` call), and the logger takes `unknown[]`.\n\n- **The generated WASM bindings no longer contain `any`** — the post-build step rewrites it to `unknown`. Every call site already casts the result, so nothing downstream changes, and `wasm/pkg` stays clean when it is regenerated.\n\n- **Codeblock options are built with Zod's `prefault` instead of `default`** — `default` short-circuits parsing, so a fully absent options object would have yielded a bare `{}` with none of the per-field defaults applied. That path is unreachable today, so there is no behaviour change, but the schema no longer needs a cast to typecheck and a test now pins the semantics.\n\n- **The sentence-case check knows `ISO` and `US` are acronyms** and that day names are proper nouns, so it stops rewriting correct copy while still catching real title-case slips.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.21.2...4.21.3\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "4.21.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T21:17:09Z",
+      "tag": "4.21.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6e1c4a9fe73b94beaf77ac1c3f656c51acf02215a9e83888baa5db0cac4cc23b",
+          "downloadCount": 21,
+          "name": "main.js",
+          "size": 1910979
+        },
+        {
+          "digest": "sha256:63121a5552a9f38f5b1b3ca35e85afaaf3f7537d85a3719b814dae87b188d227",
+          "downloadCount": 37,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:ab577f9c42137ad53b57531af76a001bc014b1490b7b5c85f02d2a55cb17089c",
+          "downloadCount": 18,
+          "name": "styles.css",
+          "size": 7968
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Fixed\n\n- **Inline Dataview fields no longer claim links outside them** — `(down:: [[y]]) [[x]]` in `x.md` made **both** `[[y]]` and `[[x]]` `down` children, including a self-loop from the note to itself. Bracketed fields now end at their closing bracket, matching Dataview, so only `[[y]]` becomes an edge and links elsewhere on the line stay ordinary prose. Multiple fields on one line (`(up:: [[p]]) (down:: [[c]])`) are parsed separately now. Bare line-level fields (`down:: [[y]], [[x]]`) are unchanged — their value is still the rest of the line. (#731)\n\n- **Links with a block or heading reference now point at the note itself** — `down:: [[2#^71f2d9]]` in `1.md` created an edge to a phantom `2#^71f2d9.md` node, so `1.md`'s tree looked right while `2.md` never showed `1.md` as its parent. The reference is stripped before resolving, for frontmatter and inline fields alike and in list notes, whatever folders the notes live in. A reference-only link (`[[#^71f2d9]]`, pointing inside the same note) creates no edge. (#734)\n\n- **Restored missing spacing across the plugin** — a stylesheet misconfiguration meant 39 spacing, sizing and positioning classes, used in 15 files, were silently dropped at build time. Expect slightly roomier spacing in the settings tab and the side views, and correctly positioned floating buttons in codeblocks. Nothing about Obsidian's own styling changes.\n\n- **Codeblock copy buttons sit in the right corner** — the tree codeblock's copy button was rendering on top of the first row's collapse arrow; it now floats in the top-right. The mermaid and markmap copy buttons were aligned to match, so all three codeblock types agree. The markmap zoom/fit toolbar stays in the bottom-right. (#736)\n\n## Security\n\n- Pinned four transitive dependencies to clear high advisories: `linkify-it`, `postcss`, `brace-expansion` and `fast-uri`. Only `linkify-it` ships inside the plugin bundle, and the reported issue was never reachable — markmap builds its markdown parser with link auto-detection turned off. The other three are build-time only. No runtime exposure in any case.\n\n## Build\n\n- TypeScript pinned to 6.x. A dependency bump had moved it to 7, which removed a compiler option the project relies on and broke `svelte-check`, failing every CI run. The config now uses the forward-compatible form, so the pin can be lifted once the Svelte and ESLint toolchains support TypeScript 7.\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.21.1...4.21.2\n",
+      "downloadCount": 37,
+      "draft": false,
+      "name": "4.21.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T17:21:41Z",
+      "tag": "4.21.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cd28995bb8fd7ae3904f93af1dbfd1913efa6c11c741be4db6b6ca5b86fd8d92",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 1892204
+        },
+        {
+          "digest": "sha256:8e4ee87280723ede9d3fe2f92337c0889ad29e654900e87dc5402cbb3e1d0eda",
+          "downloadCount": 0,
+          "name": "manifest-beta.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:8e4ee87280723ede9d3fe2f92337c0889ad29e654900e87dc5402cbb3e1d0eda",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 478
+        },
+        {
+          "digest": "sha256:b214c4360e3b931394f658a266bfd44951bdfc598db9ec6223fbb7f2479758d8",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 7848
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": null,
+      "downloadCount": 1,
+      "draft": false,
+      "name": "4.14.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T21:56:23Z",
+      "tag": "4.14.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:cd28995bb8fd7ae3904f93af1dbfd1913efa6c11c741be4db6b6ca5b86fd8d92",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 1892204
+        },
+        {
+          "digest": "sha256:b9123c38a8f58ddab437831c9c84a055951b0ab7e8a5799d99b36597826b0e41",
+          "downloadCount": 1,
+          "name": "manifest-beta.json",
+          "size": 498
+        },
+        {
+          "digest": "sha256:b1482c2646b96bf23c4f9b1ef514513263982b15fc50c1df16ef9d2571deec9e",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 486
+        },
+        {
+          "digest": "sha256:b214c4360e3b931394f658a266bfd44951bdfc598db9ec6223fbb7f2479758d8",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 7848
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Prerelease for the Obsidian 1.12 line.** Requires Obsidian 1.12.3+. Install via [BRAT](https://github.com/TfTHacker/obsidian42-brat) — this build is not offered in the community plugin browser and will not replace your installed 4.14.3.\n\nCarries the three fixes released on the 1.13 line as 4.21.2, backported to the 1.12 maintenance branch. Feedback welcome before this becomes a stable 4.14.4.\n\n## What to test\n\n- **Inline Dataview fields no longer claim links outside them** ([#731](https://github.com/michaelpporter/breadcrumbs/issues/731)) — `(down:: [[y]]) [[x]]` in `x.md` used to make **both** `[[y]]` and `[[x]]` `down` children, including a self-loop from the note to itself. Only `[[y]]` should become an edge now; `[[x]]` is ordinary prose. Bare fields (`down:: [[y]], [[x]]`) are unchanged — their value is still the rest of the line, so both are children there.\n\n- **Links with a block or heading reference point at the note itself** ([#734](https://github.com/michaelpporter/breadcrumbs/issues/734)) — `down:: [[2#^71f2d9]]` in `1.md` used to create an edge to a phantom node, so `1.md`'s tree looked right while `2.md` never showed `1.md` as its parent. Check both directions, and across folders.\n\n- **Codeblock copy buttons** ([#736](https://github.com/michaelpporter/breadcrumbs/issues/736)) — the tree codeblock's copy button was rendering on top of the first row's collapse arrow. All three codeblock types (tree, mermaid, markmap) should now show it in the top-right.\n\n- **Spacing throughout the plugin** — a stylesheet misconfiguration meant 39 spacing, sizing and positioning classes across 15 files were being dropped at build time. The settings tab and side views should look slightly roomier. **This is the change most worth a careful look**, since no automated test can cover it and it touches the whole UI.\n\n## Reporting\n\nPlease note your exact Obsidian version. If something looks wrong, a screenshot of the settings tab or the affected view is the most useful thing you can attach.\n\nUsers on stable 4.14.3 are unaffected by this release.\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "4.14.4-beta.1",
+      "prerelease": true,
+      "publishedAt": "2026-07-25T21:38:39Z",
+      "tag": "4.14.4-beta.1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:290a5b8a1263472e6fdc6ddeac52fb0c6fc08a6f05364ed9ce21e6315685f457",
-          "downloadCount": 4406,
+          "downloadCount": 4568,
           "name": "main.js",
           "size": 1891691
         },
@@ -40,20 +172,20 @@
         },
         {
           "digest": "sha256:e47293d8e8559078867c61aa70fcaee98c1d8d11457bb70e2b2bc46de14cb01e",
-          "downloadCount": 4488,
+          "downloadCount": 4650,
           "name": "manifest.json",
           "size": 479
         },
         {
           "digest": "sha256:201903c4455a6b82ca2041c891bf785aaf8a5b2eebd5b71b470310f5c77b4212",
-          "downloadCount": 4386,
+          "downloadCount": 4545,
           "name": "styles.css",
           "size": 4820
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\n\n* **typed_link (1.12-compat)** — inline Dataview properties are recognized again for users still on Obsidian < 1.13: paren/bracket wrappers (`(down:: [[Note]])`, `[down:: [[Note]]]`), blockquoted fields (`> [up:: [[Note]]]`), and wrapped fields appearing mid-sentence rather than only at the start of a line (`... is a child of (up:: [[Note]])`). Promotes the 4.14.3-beta.1/beta.2 backport to stable (#724).\n\n**Full Changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.14.2...4.14.3",
-      "downloadCount": 4488,
+      "downloadCount": 4650,
       "draft": false,
       "name": "4.14.3",
       "prerelease": false,
@@ -100,26 +232,26 @@
       "assets": [
         {
           "digest": "sha256:231f3364a23fda204e8dcaa820a615111a791a936f38a6a2791e2a47f2806ea2",
-          "downloadCount": 725,
+          "downloadCount": 740,
           "name": "main.js",
           "size": 1910280
         },
         {
           "digest": "sha256:0db85690e34a7c69257355c37acb50e85240c59f2c7455cd2960b8e249b95a73",
-          "downloadCount": 3693,
+          "downloadCount": 3801,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:6e0e036d3e27c7528dba22433d579d995f1701c6c3e2ed2dc35da1ee844451f6",
-          "downloadCount": 690,
+          "downloadCount": 704,
           "name": "styles.css",
           "size": 5224
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- **Markmap toolbar** — `type: markmap` codeblocks now show a zoom/fit toolbar over the mind map, so you can zoom in, zoom out, and re-fit the whole tree without scrolling or reaching for keyboard shortcuts.\n\n## Build\n\n- Bumped JS dependencies (9 updates).\n\n**Full changelog**: https://github.com/michaelpporter/breadcrumbs/compare/4.21.0...4.21.1\n",
-      "downloadCount": 3693,
+      "downloadCount": 3801,
       "draft": false,
       "name": "4.21.1",
       "prerelease": false,
@@ -232,7 +364,7 @@
         },
         {
           "digest": "sha256:646567ddd2ebdaabb597418d669c975190d706b91b5e1154e719499095084988",
-          "downloadCount": 505,
+          "downloadCount": 506,
           "name": "manifest.json",
           "size": 478
         },
@@ -245,7 +377,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Security\n\n* Pinned `undici` to `>=6.27.0` to clear an advisory flagged by the Obsidian community scanner. It was pulled in transitively (`markmap-lib` → `markmap-html-parser` → `cheerio` → `undici@6.26.0`) and is tree-shaken out of the shipped `main.js`, so there was no runtime exposure — but the lockfile reference still had to be moved out of the vulnerable range.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.19.3...4.19.4\n",
-      "downloadCount": 505,
+      "downloadCount": 506,
       "draft": false,
       "name": "4.19.4",
       "prerelease": false,
@@ -442,7 +574,7 @@
         },
         {
           "digest": "sha256:b8aa748ba6ce056b3182a280a3172622d7d59aa9e27d6ddc80f21dbba5ba84e6",
-          "downloadCount": 828,
+          "downloadCount": 829,
           "name": "manifest.json",
           "size": 478
         },
@@ -455,7 +587,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Features\n\n- New per-edge-field **Hide in views** toggle (Settings → Edge fields). A field marked hidden stays in its groups, codeblocks, and the graph, but is no longer rendered in the Matrix and Tree side views — handy for structural fields you don't want cluttering the panels (#132).\n\n## Fixed\n\n- Removing an edge field now also drops any transitive implied-relation rules that referenced it and clears edge-source default-field settings that pointed at it. Previously those references dangled, and a stale reverse-edge rule could surface a phantom field in the views.\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.16.1...4.17.0",
-      "downloadCount": 828,
+      "downloadCount": 829,
       "draft": false,
       "name": "4.17.0",
       "prerelease": false,
@@ -526,26 +658,26 @@
       "assets": [
         {
           "digest": "sha256:433d473cf37230842243c47a6c07b940d68d245f5e7b75cca603ea54d58595cb",
-          "downloadCount": 175,
+          "downloadCount": 176,
           "name": "main.js",
           "size": 1890802
         },
         {
           "digest": "sha256:6003e9b7b61c00b0a2342f850aa9b838812b18d2eef81bbb8e860fd0721dac7d",
-          "downloadCount": 552,
+          "downloadCount": 554,
           "name": "manifest.json",
           "size": 478
         },
         {
           "digest": "sha256:201903c4455a6b82ca2041c891bf785aaf8a5b2eebd5b71b470310f5c77b4212",
-          "downloadCount": 170,
+          "downloadCount": 171,
           "name": "styles.css",
           "size": 4820
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Fixed\n\n- Settings sub-pages (Edge fields, Tag notes, and every other section) rendered blank — title only, no controls — on Obsidian 1.13.1. Each sub-page now renders through the documented `SettingPage` page factory instead of the previous workaround (#713).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.15.1...4.15.2",
-      "downloadCount": 552,
+      "downloadCount": 554,
       "draft": false,
       "name": "4.15.2",
       "prerelease": false,
@@ -616,26 +748,26 @@
       "assets": [
         {
           "digest": "sha256:e79d923ca0b4b1c952d9d030937a48b2695c9f84aa65272f5e2a6d34cbf141ea",
-          "downloadCount": 6999,
+          "downloadCount": 7008,
           "name": "main.js",
           "size": 1891540
         },
         {
           "digest": "sha256:307e8844e9084e7fa35f55919aadc799ba6b993da0c023439e8a71188a2330a2",
-          "downloadCount": 7293,
+          "downloadCount": 7303,
           "name": "manifest.json",
           "size": 479
         },
         {
           "digest": "sha256:201903c4455a6b82ca2041c891bf785aaf8a5b2eebd5b71b470310f5c77b4212",
-          "downloadCount": 6963,
+          "downloadCount": 6972,
           "name": "styles.css",
           "size": 4820
         }
       ],
       "author": "github-actions[bot]",
       "description": "Internal maintenance release — no user-facing behavior changes.\n\n### Performance\n\n- Debounce side/page view setting writes (Tree View, Matrix, Trail View) so rapid control changes coalesce into a single save instead of hitting disk on every change.\n- Index date-note period lookups with a basename map, replacing nested linear scans (O(n·m) → O(n)) during graph rebuilds.\n- Debounce the opt-in \"rebuild graph on layout change\" trigger so it no longer rebuilds on every editor cursor move or scroll.\n\n### Refactors\n\n- Extract a shared `validate_edge_field` helper used across all explicit edge builders.\n- Replace untyped `any` casts on Obsidian/Dataview internals with typed shapes.\n- Remove dead code, including the unused Dataview file-source path. No effect on the `dataview-from` codeblock feature.\n\n### Tests\n\n- Add unit tests for the date, list, folder, dataview, and traverse note builders.\n\n### Chores\n\n- Address Obsidian community plugin scorecard lint findings, including scoping the lint-suppression header in the generated WASM type declarations.\n- Update funding links (GitHub Sponsors, Buy Me a Coffee).\n\n**Full changelog:** https://github.com/michaelpporter/breadcrumbs/compare/4.14.1...4.14.2\n",
-      "downloadCount": 7293,
+      "downloadCount": 7303,
       "draft": false,
       "name": "4.14.2",
       "prerelease": false,
@@ -754,7 +886,7 @@
         },
         {
           "digest": "sha256:e25a36bdc7f1293a799dc61afc85d7b9acd1ad3b8666f7488e5c18cf14dc8d8b",
-          "downloadCount": 24,
+          "downloadCount": 25,
           "name": "styles.css",
           "size": 4532
         }
