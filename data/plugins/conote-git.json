@@ -4,8 +4,8 @@
   "description": "Sync individual vault subfolders with collaborators via GitHub — automatic push/pull, no manual commits, with side-by-side conflict resolution. Super simple, full data ownership, completely free. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "conote-git",
-  "lastChangedAt": "2026-07-24T07:02:26.999Z",
-  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
+  "lastChangedAt": "2026-07-25T07:02:27.021Z",
+  "lastFetchedAt": "2026-07-25T07:02:27.021Z",
   "manifest": {
     "author": "Maximilian Witte",
     "authorUrl": "https://github.com/maximilianwitte",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:bbd46dae048f2699f11e93dd198270940e676b6dc2a1be7069bc3b8f427c0a5b",
-          "downloadCount": 9,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 362363
         },
         {
           "digest": "sha256:3c4ee3098fc4cb65e603073750c4eae5619765620df9bbc017bdb9e9595e94a0",
-          "downloadCount": 9,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 376
         },
         {
           "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
-          "downloadCount": 8,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 5184
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Security fix + multi-folder collision warning\n\n### ⚠️ Security: \"entire vault\" sync could leak your GitHub token\nWhen syncing the entire vault, the plugin's own git data lives inside the same folder being tracked (`.obsidian/plugins/conote-git/repos/<id>/`). Pushes staged everything with no exclusions, so `.obsidian/` — including every plugin's `data.json`, and critically **this plugin's own stored GitHub token** — could get committed and pushed into the synced repo.\n\n**Fix:** the plugin now auto-maintains a `.gitignore` excluding the vault's config directory for whole-vault syncs (appending to your own `.gitignore` if you have one, never overwriting it). Applied on connect and on every push, so already-connected \"entire vault\" mappings self-heal automatically — no action needed beyond updating.\n\nThis also explains reports of \"entire vault\" sync degrading and eventually failing as folder count grew: the self-referential git data snowballed in size on every commit.\n\n**If you've used \"entire vault\" sync before this release:** treat your GitHub token as potentially exposed. Sign out and back in under CoNote Git settings to get a fresh token, revoke the old one at github.com/settings/applications, and check your repo's commit history for a leaked `data.json` — if found, it needs to be purged from git history, not just deleted in a new commit.\n\n### Multi-folder-to-one-repo collisions now blocked\nMapping two different local folders to the same GitHub repo silently collided their content at the repo root (each mapping treats its folder as the entire repo — there's no per-mapping subfolder namespacing). Settings now warns and blocks picking a repo that's already in use by another mapping.",
-      "downloadCount": 9,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.1.11",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:ae6338e6422e995d656384a54fe11c13a83d9ae06a9230da6d6b327d00ba0a21",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 361628
         },
         {
           "digest": "sha256:4aedcff2583ae7fd1e8039f2b6f91ee01903e3328e6483a19cef9b5b9af88198",
-          "downloadCount": 6,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 376
         },
         {
           "digest": "sha256:6c87259ad4f978a9926df8cc4504e44e6b14db577d2fa09a5617da6a1c881191",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 5184
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Bug fix: git repo corruption from concurrent sync operations\n\nFixes a bug that could corrupt a synced folder's local git data, surfacing as errors like:\n\n- `Could not find .obsidian/plugins/conote-git/repos/<id>/objects/xx/xxxxxxx...`\n- `The function requires a \"remote OR url\" parameter but none was provided.`\n\n**Cause:** isomorphic-git has no internal locking. A debounced push (fired after editing a note) could run at the same time as a poll-triggered pull for the same folder — two operations writing to the same local git data simultaneously. This can corrupt the object store (missing commit/blob objects) or the repo config. Reported on Windows, where concurrent writes to the same files are less forgiving than macOS/Linux, but the underlying race was cross-platform.\n\n**Fix:** all push/pull/conflict-resolve/init operations for a given synced folder are now strictly serialized through a per-folder queue — never run concurrently, no matter what triggered them.\n\n### If you're already seeing this error\nThis fix prevents new corruption but can't repair a folder that's already broken. To recover:\n1. Close Obsidian.\n2. Delete the folder `.obsidian/plugins/conote-git/repos/<the-mapping-id-from-your-error>/` — this only removes local git bookkeeping, **not** your actual notes.\n3. Reopen Obsidian → plugin settings → re-select the same local folder and repo for that mapping (or remove and re-add it) to trigger a fresh clone.\n4. If you made edits after the errors started that you're not sure made it to GitHub, back up that folder before step 2, just in case.",
-      "downloadCount": 6,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.1.10",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:4438ef03686eed34ebd388368e1586bebec3b3fa04cf8bb740cf8c0d0b1d7f56",
-          "downloadCount": 36,
+          "downloadCount": 37,
           "name": "manifest.json",
           "size": 375
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\n### Smarter auto-pull\nThe plugin no longer pulls from GitHub on every poll tick regardless of what you're doing. It now only auto-pulls when the note you currently have open lives inside one of your synced folders (or the entire vault, if that's what you sync). No more background GitHub traffic for folders you're not even looking at.\n\nAs a bonus, pulling now also happens immediately the moment you open a note inside a synced folder, instead of waiting for the next scheduled poll — so switching into a synced folder gets you fresh content right away.\n\n\"Sync now\" and the one-time pull on startup are unchanged — both still cover every synced folder, since those are explicit, deliberate actions rather than the background poll.\n\nNo changes to push behavior — edits still auto-commit and push after inactivity as before.",
-      "downloadCount": 36,
+      "downloadCount": 37,
       "draft": false,
       "name": "0.1.9",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:96c06f26cbad5c207541467c90071d02535f5ff19e4a5405876be92cd546e0db",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 375
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\nFixes the 73 `no-unsafe-*` ESLint warnings from Obsidian's automated review (previously showing under `src/core/gitBackend.ts`, `sync.ts`, `syncState.ts`, and `main.ts`).\n\n**Root cause:** the reviewer's type-checking environment doesn't resolve ambient Node.js types, so raw `fs`/`path`/`crypto` calls type as `any` and cascade into every downstream usage — even though `isomorphic-git`'s own types resolve fine there. (An earlier attempt in 0.1.7 to fix this via `package.json` dependency placement turned out to be a no-op; this release addresses the actual cause.)\n\n**Fix:** added `src/core/nodeApi.ts`, a small facade with explicit hand-written interfaces for exactly the Node functions this plugin uses, cast through `unknown` so the `any`-ness can't propagate regardless of what ambient types are available wherever the code is checked. `isomorphic-git` calls get their own typed view (`gitFs`) since they need the full fs surface.\n\nNo functional changes — this is purely a type-safety / review-compliance release.",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "0.1.8",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:112c1c609c822e7c88f906853ea81cc4b288238b6679d70802e021ddd4812ccc",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 375
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\nAddresses feedback from the Obsidian plugin review:\n\n- Moved `@types/node` to `dependencies` — fixes a cascade of `no-unsafe-*` lint warnings caused by `fs`, `path`, and `crypto` (Node built-ins) resolving as untyped in the review's build environment. Type-only change, no runtime effect.\n- Switched `document` to `activeDocument` in the folder-badge cleanup code, for popout-window compatibility.\n- Release workflow now attaches build provenance attestations (Sigstore/OIDC) to `main.js`, `manifest.json`, and `styles.css`, so anyone can cryptographically verify these assets were built from this repository:\n  ```\n  gh attestation verify main.js --repo Maximilianwte/Obsidian_CoNote_Git\n  ```\n\nNo functional changes to sync behavior — this release is purely about code-quality and supply-chain review feedback.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.7",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:b0049138ebce21c6d9bf4bb59260dd40ff28574906e6b5c2f9f5f704bca5234e",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 375
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\n### Fixed: collaborators' pushes could silently get stuck\nPreviously, if your push was rejected because someone else pushed first, the plugin would pull and merge — but never actually retry the push. Your commit stayed local until you happened to edit the file again. Now it automatically retries the push right after merging, so your changes reach GitHub without any extra action.\n\n### Fixed: deleted/renamed notes weren't syncing\nDeleting or renaming a file in a synced folder wasn't being staged for commit, so deletions never propagated to collaborators. Deletions are now staged correctly.\n\n### Smarter handling of protected branches\nIf a repo has branch protection (\"require a pull request before merging\"), direct pushes are rejected by GitHub. The plugin now recognizes this specific case and shows one clear, non-spammy notice explaining the problem — your notes are never lost, they stay committed locally and sync automatically the moment the protection is lifted or write access is fixed.\n\n### Simplified settings\n- Removed the \"Label\" field — folder names are used automatically.\n- Removed the manual \"Clone / init\" button — syncing now starts automatically as soon as you pick a folder and a repo.\n- Clearer copy throughout (\"sign in with GitHub\", explains that collaborators are invited via GitHub's own Collaborators settings).\n\n### Other fixes\n- Vault-root sync mappings are now stored and matched consistently, fixing a bug where edits in a whole-vault sync weren't detected.\n- Faster default sync timing: push after 5s of inactivity (was 10s), pull every 15s (was 30s).\n\n## Upgrade notes\nAll collaborators should update to 0.1.6 — the retry-after-pull fix requires the new version on the machine that's pushing.",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:efdfa5fc84177e0afcbda8a5248c3cd1d55d147ac1429dc768d792d500e87527",
-          "downloadCount": 61,
+          "downloadCount": 62,
           "name": "manifest.json",
           "size": 375
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## What's new\n\n### Sync your entire vault\nThe folder picker now shows your vault name at the top of the list, letting you back up or share the whole vault as a single GitHub repo — not just subfolders.\n\n### Globe badge repositioned\nThe 🌐 badge on synced folders has moved from the left of the folder name to the right side of the title bar, vertically centered — matching the style used by plugins like Relay for folder indicators.\n\n## Full changelog\n- Vault root selectable in folder picker modal (`\"\"` path, displayed as `VaultName (entire vault)`)\n- Badge now appended to `.nav-folder-title` flex row with `margin-left: auto` for right-aligned, vertically centered positioning\n- Vault root folder correctly decorated with globe badge in the file explorer",
-      "downloadCount": 61,
+      "downloadCount": 62,
       "draft": false,
       "name": "0.1.5",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:b54f046eb8730b6299a7c5e54a6026c7a76ee1131a2ca0daeed0f1cd66092442",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 375
         },
@@ -252,7 +252,7 @@
       ],
       "author": "Maximilianwte",
       "description": "## CoNote Git 0.1.4\n\nSync individual Obsidian vault subfolders with collaborators via GitHub — automatically, with no manual commits.\n\n### What's new\n- 🌐 Synced folders now show a globe icon in the file explorer (grayscale, unobtrusive)\n- Globe badge updates live when mappings are added or removed in settings\n- Badge is cleaned up cleanly when the plugin is disabled\n\n### Full feature set\n- **One-click GitHub sign-in** via OAuth device flow — no personal access token needed\n- **Per-subfolder sync** — each shared folder maps to its own independent GitHub repo; the rest of your vault is untouched\n- **Automatic push/pull** — commits and pushes after 10s inactivity, pulls every 30s\n- **Side-by-side conflict resolution** — no raw conflict markers ever appear in your notes\n- **Folder & repo pickers** — browse vault folders and GitHub repos directly from settings\n- **No git binary required** — uses isomorphic-git, runs entirely inside Obsidian\n\n### Privacy & ownership\nYour notes go directly from your vault to a GitHub repo you control. No servers, no subscriptions, no third-party accounts beyond GitHub.",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "0.1.4",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:bbd101053d7b6c239b2b6f53eff1fc36f0c56811d5da30a042c2ba78a19c0ec4",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 375
         },
@@ -282,7 +282,7 @@
       ],
       "author": "Maximilianwte",
       "description": "## CoNote Git 0.1.3\n\nSync individual Obsidian vault subfolders with collaborators via GitHub — automatically, with no manual commits.\n\n### What's new in this release\n- GitHub OAuth sign-in via device flow (no personal access token needed)\n- Vault folder browser and GitHub repo picker in settings\n- Side-by-side conflict resolution modal\n- Auto-push after 10s inactivity, auto-pull every 30s\n\n### Changes since 0.1.2\n- Fix ArrayBuffer conversion without type assertion\n- Address Obsidian plugin review feedback (API usage, CSS, async handlers)\n- Use vault.configDir instead of hardcoded .obsidian path\n- Replace builtin-modules dependency with Node built-ins",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.1.3",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:3ba53602c19b38ec0893db7d382d015029c9ea3ff59a7149ee23575943cf3a0e",
-          "downloadCount": 0,
+          "downloadCount": 1,
           "name": "manifest.json",
           "size": 375
         },
@@ -312,7 +312,7 @@
       ],
       "author": "Maximilianwte",
       "description": "Fix Obsidian plugin review issues: use vault.configDir, remove !important from CSS, fix async event handlers, replace builtin-modules with Node builtins, fix ArrayBuffer conversion.",
-      "downloadCount": 0,
+      "downloadCount": 1,
       "draft": false,
       "name": "0.1.2",
       "prerelease": false,

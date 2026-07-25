@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-24T07:02:26.999Z",
-  "lastFetchedAt": "2026-07-24T07:02:26.999Z",
+  "lastChangedAt": "2026-07-25T07:02:27.021Z",
+  "lastFetchedAt": "2026-07-25T07:02:27.021Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Vim Motions",
-    "version": "0.81.0"
+    "version": "0.82.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:93d8df511dfc97e55b6b2881d6bb2d451d64f6fff1060930e66375e0a7838960",
-          "downloadCount": 29,
+          "digest": "sha256:cf1762137f1f9cc7223e8c4724cc3a0d06301e2db841c1097c1bbb1734c528e1",
+          "downloadCount": 35,
           "name": "main.js",
-          "size": 1071964
+          "size": 1072236
         },
         {
-          "digest": "sha256:cec975a869f4d67f111e72cca4831c81c3cb6c9733228e936ca971965a59bb71",
-          "downloadCount": 30,
+          "digest": "sha256:4de88ad2817ba7d4acef91fcbbd60f4c5462cb6af852bdeb23d55bfdedac77ee",
+          "downloadCount": 40,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 28,
+          "downloadCount": 34,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Animated cursor does not animate for count-prefixed and multi-key motions** — movements like `4j` (count-prefixed) and `g$` (multi-key) caused the cursor to teleport instead of animating. The `resolveVimMode()` method in the animated cursor controller used `vim.status` (the chord display string) to detect operator-pending mode. Since `vim.status` is set on every keystroke (e.g., `\"4\"` when typing a count digit, `\"g\"` when typing a prefix key), any multi-keystroke motion triggered a false mode change to operator-pending — which has a different cursor shape (underline vs block). Each shape change called `snap()`, bypassing the animation entirely. Fixed by removing `vim.status` from the operator-pending detection — only `inputState.operator` (set when an actual operator like `d`/`c`/`y` is registered) now gates the operator-pending mode. ([#86](https://github.com/saberzero1/motions/issues/86))\r\n    - Plugin: `src/vim/animated-cursor/controller.ts` (`resolveVimMode` — removed `vim.status` check)\r\n- **Hint mode does not navigate wikilinks or markdown links in Live Preview** — typing the hint label for a wikilink (`[[Target]]`) or markdown link (`[text](Target)`) in the editor did nothing. The `.cm-underline` spans rendered by Live Preview are `<span>` elements without `href` or `data-href` attributes — `classifyTarget` correctly identified them as links but extracted `href: undefined`, causing `hintActivate` to fall through to the generic click handler (which does nothing useful on CM6 spans). Fixed by adding `resolveCmUnderlineHref()` which uses the CM6 `EditorView.posAtDOM()` API to convert the DOM element to a document offset, then calls the existing `findLinkAtCursor()` regex from `goto-definition.ts` to extract the link target from the raw markdown text. Works for wikilinks (including aliased and heading links), markdown links (internal and external), and bare URLs. Reading view and frontmatter property links were unaffected (they use `<a>` elements with proper `href`/`data-href` attributes). ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (`getEditorViewFromElement`, `resolveCmUnderlineHref`, updated `classifyTarget` link branch)\r\n- **Input method not restored after manual IME switch during insert mode** — when a user manually switched input methods while in insert mode (e.g., from Vietnamese to English via OS keyboard shortcut), pressing `Esc` then `i` reset the IME to the original input method instead of preserving the manually chosen one. The `save()` method in `ImSwitcher` cached the stale `lastKnownIm` value (set by the plugin's last `set()` call) before querying the OS for the actual current IME. The async OS query updated `lastKnownIm` but never wrote back to `savedImByLeaf`, so `restore()` always read the stale value. Fixed by making `save()` async — it now queries the OS for the real IME state first, then caches the result in both `lastKnownIm` and `savedImByLeaf`. `onInsertLeave()` awaits the save before switching to the normal-mode default IME. Falls back to `lastKnownIm` when the OS query fails (e.g., binary timeout). ([#83](https://github.com/saberzero1/motions/issues/83))\r\n    - Plugin: `src/im/im-switcher.ts` (`save()` async with OS query, `onInsertLeave()` awaits save, `debouncedSwitch`/`pendingSwitch` accept async callbacks), `src/lua/api.ts` (`imSave` type updated), `src/lua/loader.ts` (fire-and-forget async save), `src/lua/obsidian-api.ts` (void floating promise)\r\n\r\n### Tests\r\n\r\n- 10 e2e tests in `test/specs/hint-mode-links.e2e.ts`: wikilink/markdown-link/bare-URL href resolution from `.cm-underline` spans, wikilink navigation (plain and aliased), markdown link navigation, inline wikilink navigation, reading view regression, frontmatter property link regression, external link safety\r\n- Updated 10 unit tests in `test/unit/im-switcher.test.ts`: `save()` tests now verify OS query behavior (mock `executeImGet` return value instead of manually setting `lastKnownIm`), async settle via `vi.advanceTimersByTimeAsync(0)`, new test for fallback when OS query returns null\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added animated cursor multi-key motion fix; added hint mode link navigation fix to hint mode actions section\r\n- `CONTRIBUTING.md`: Updated `hint-mode.ts` description with link resolution via `posAtDOM`\r\n- `docs/features/hint-mode.md`: Updated internal link handling section with Live Preview resolution details\r\n- `KNOWN_LIMITATIONS.md`: Updated input method switching section with manual IME switch fix\r\n- `CONTRIBUTING.md`: Updated `im-switcher.ts` description\r\n- `AGENTS.md`: No changes needed (existing description already covers per-view IM switching)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.81.0...0.82.0",
+      "downloadCount": 40,
+      "draft": false,
+      "name": "0.82.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-24T18:05:57Z",
+      "tag": "0.82.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:93d8df511dfc97e55b6b2881d6bb2d451d64f6fff1060930e66375e0a7838960",
+          "downloadCount": 56,
+          "name": "main.js",
+          "size": 1071964
+        },
+        {
+          "digest": "sha256:cec975a869f4d67f111e72cca4831c81c3cb6c9733228e936ca971965a59bb71",
+          "downloadCount": 57,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 55,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **EasyMotion capital letter search not working** — EasyMotion character search motions (`<leader><leader>s`, `<leader><leader>f`, etc.) failed when typing a capital letter (Shift+key) as the search character. The `waitForKey()` handler resolved on the `Shift` keydown event (before the actual character key arrived), causing the motion to silently abort. Fixed by adding a modifier-key guard matching the existing pattern in `waitForLabel()` — `e.key.length !== 1` keys are now suppressed and ignored, keeping the handler alive for the real character. ([#84](https://github.com/saberzero1/motions/issues/84))\r\n    - Plugin: `src/easymotion/keypress.ts` (`waitForKey` modifier-key guard)\r\n\r\n### Tests\r\n\r\n- 6 unit tests in `test/unit/easymotion-keypress.test.ts`: `waitForKey` resolves single character keys and Escape, ignores Shift/Control/Alt/Meta modifier-only keys\r\n- 1 e2e test in `test/specs/easymotion-comprehensive.e2e.ts`: EasyMotion bidirectional char search with capital letter (`Z`) input\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added capital letter fix to EasyMotion operator-pending section\r\n- `CONTRIBUTING.md`: Updated `keypress.ts` description with modifier-key guard\r\n- `docs/features/easymotion.md`: Added note about capital letter support in find motions\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.80.0...0.81.0",
-      "downloadCount": 30,
+      "downloadCount": 57,
       "draft": false,
       "name": "0.81.0",
       "prerelease": false,
@@ -58,26 +88,26 @@
       "assets": [
         {
           "digest": "sha256:67f04020229c7bb15940213195ddb72e11bbd64be3dd51c68f99f262d3e6af1e",
-          "downloadCount": 26,
+          "downloadCount": 28,
           "name": "main.js",
           "size": 1071923
         },
         {
           "digest": "sha256:adca577a737632580a13f9d6472ad0b527f95636cebe2c218f50f8c2e5be0900",
-          "downloadCount": 26,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 25,
+          "downloadCount": 27,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **IME change detection limited to primary editor leaf** — IME composition tracking and input method switching now work across all editor views (split panes, Page Preview popovers, Canvas card editors). Previously, composition events and mode-change detection were wired to a single element/adapter obtained from `getActiveViewOfType(MarkdownView)`, so non-primary editors never received IME handling. Fixed with two new CM6 ViewPlugins registered via `registerEditorExtension()`: `CompositionTracker` tracks `compositionstart`/`compositionend` per-EditorView, and `ImModeWatcher` binds `adapter.on('vim-mode-change')` per-EditorView to detect insert mode transitions. The autocmd-based IM switch registrations (`InsertEnter`/`InsertLeave`/`CmdlineLeave`) are replaced by the per-view mechanism; Lua autocmd callbacks continue to fire for the primary leaf via AutocmdManager (unchanged contract). ([#83](https://github.com/saberzero1/motions/issues/83))\r\n    - Plugin: `src/im/composition-tracker.ts` (new), `src/im/im-mode-watcher.ts` (new), `src/im/im-switcher.ts` (refactored — removed single-element tracking, added `cleanupView()`), `src/main.ts` (registered extensions, removed autocmd-based IM registrations)\r\n\r\n### Tests\r\n\r\n- 15 unit tests in `test/unit/composition-tracker.test.ts`: per-view composing state, multi-tracker isolation, destroy cleanup, `onAllCompositionsEnd` callback lifecycle, unsubscribe\r\n- 14 unit tests in `test/unit/im-mode-watcher.test.ts`: lazy adapter binding, mode change detection (insert/leave/replace), adapter re-binding, cleanup, multiple views with unique IDs\r\n- 4 e2e tests in `test/specs/ime-composition-multiview.e2e.ts`: composition tracking on active/non-active editors, independent per-view tracking, insert mode detection on non-active editor\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Updated input method switching section with multi-view fix\r\n- `README.md`: Updated input method switching feature description with multi-view support\r\n- `CONTRIBUTING.md`: Added `composition-tracker.ts` and `im-mode-watcher.ts` to codebase structure\r\n- `AGENTS.md`: Updated Lua API description noting per-view IM switching\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.79.0...0.80.0",
-      "downloadCount": 26,
+      "downloadCount": 28,
       "draft": false,
       "name": "0.80.0",
       "prerelease": false,
