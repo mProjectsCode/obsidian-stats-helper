@@ -4,8 +4,8 @@
   "description": "Integration with Amazing Marvin (unofficial). Supports exporting AM tasks/projects, creating new tasks and completing tasks.",
   "errors": [],
   "id": "cloudatlas-o-am",
-  "lastChangedAt": "2026-07-25T00:00:26.986Z",
-  "lastFetchedAt": "2026-07-25T00:00:26.986Z",
+  "lastChangedAt": "2026-07-26T00:00:27.007Z",
+  "lastFetchedAt": "2026-07-26T00:00:27.007Z",
   "manifest": {
     "author": "Open Horizon Labs",
     "authorUrl": "https://openhorizonlabs.ai/",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:ad877b510ed805790f23576525483830ff85cbaa74482b6e60d1a59671130b26",
-          "downloadCount": 0,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 98991
         },
         {
           "digest": "sha256:4280861cb4cdbaf49a916b8e00c7205224f184a02018a6ea85421e3d4a2b1310",
-          "downloadCount": 1,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 274
         },
         {
           "digest": "sha256:199100f91bb5ed83d3d9d98065a1e61ee111dc28f5aac97c9f257d01a7814686",
-          "downloadCount": 0,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 237
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's in this beta\n\nOpt-in incremental Amazing Marvin sync — an alternative to the REST importer\nthat reads Marvin's CouchDB `_changes` feed instead of repeatedly rebuilding\nthe whole imported tree. Off by default; the existing REST importer remains\nthe default and fallback either way.\n\n- **Obsidian plugin:** a new \"Experimental incremental sync\" section in\n  settings. Enabling it hydrates a local cache from Amazing Marvin's\n  database, then keeps it current via the changes feed, updating only the\n  notes that actually changed instead of rebuilding everything.\n- **MCP server:** `marvin_categories`/`marvin_children` can read the same\n  cache the plugin maintains, avoiding a REST round trip when it's fresh.\n  Opt-in and separate from the plugin toggle — set an environment variable,\n  no new credentials needed.\n\n**Fixed since 0.11.0-beta1:** the database credential fields now match\nAmazing Marvin's own API settings page exactly — server, database name,\nuser, password as four separate fields, instead of one hand-assembled URI.\nDirect copy-paste now, reported by a beta1 tester within minutes of trying\nit.\n\n**Known limitation:** the plugin side has not yet been run inside a real\nObsidian vault by anyone other than beta testers reading this. It's been\nverified end-to-end against a real local CouchDB instance and a real Marvin\ndatabase export, and every module has unit tests, but the actual \"does it\nrender notes correctly in your vault\" step still needs real testers. That's\nwhat this beta is for.\n\n## How to test\n\n### Obsidian plugin\n\n1. In Amazing Marvin, go to the API settings page and find the **database**\n   server, database name, user, and password (a different credential from\n   the plugin's existing limited API token — these grant full database read\n   access, so treat them accordingly).\n2. In Obsidian, open the plugin settings and find \"Experimental incremental\n   sync.\" Enable it and copy each of those four fields into the matching\n   field in settings — same server/database/user/password layout as\n   Amazing Marvin's own page.\n3. Click \"Sync now.\" Confirm the resulting category/task notes match what\n   the regular \"Import categories and tasks\" command produces.\n4. In Marvin (web, mobile, or desktop), create, rename, move, complete, and\n   delete a task or category. Confirm each change lands in the vault after\n   a sync (automatic — on window focus, roughly once a minute, and on\n   network reconnect — or manual, via the \"Sync now\" button or the \"Sync\n   Amazing Marvin now (incremental)\" command).\n5. Try \"Reset cache\" in settings, then sync again — confirm it re-hydrates\n   cleanly instead of erroring.\n6. Disable incremental sync and confirm the regular REST importer still\n   works exactly as before.\n\n### MCP server (for agent use)\n\n1. Get the plugin's cache file path: it's\n   `<vault>/.obsidian/plugins/<plugin-id>/marvin-incremental-cache-v1.json`\n   once incremental sync has run at least once.\n2. Set `AMAZING_MARVIN_INCREMENTAL_CACHE_PATH` to that path in whatever\n   launches the MCP server for your agent (alongside the existing\n   `AMAZING_MARVIN_API_TOKEN`) — no new credentials needed here, this is a\n   read-only reader of the plugin's own cache file.\n3. Restart the MCP server/agent session so it picks up the new environment\n   variable.\n4. Ask your agent to call `marvin_categories` or `marvin_children` and\n   check the response — cache hits report `\"freshness\": \"cached\"` and\n   `\"origin\": \"local\"`; a REST fallback (empty/missing/stale cache) reports\n   `\"freshness\": \"fresh\"` and `\"origin\": \"public\"` as before.\n5. Everything else (`marvin_today`, `marvin_due`, `marvin_create_task`,\n   etc.) is unaffected — only the two read tools above ever consult the\n   cache, and only if you set the path.\n\n## Feedback\n\nPlease leave test results, questions, or anything that looks wrong on\n[issue #55](https://github.com/open-horizon-labs/obsidian-am/issues/55) —\nthat's the tracking issue this beta implements. For anything that looks\nlike a distinct bug rather than feedback on this feature specifically,\nopen a new issue instead.\n",
-      "downloadCount": 1,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.11.0-beta2",
       "prerelease": true,
@@ -83,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:8479fb1ebb4c2f3ca579f98b27f3926d4777541836fdbed55a4c62258214209a",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "main.js",
           "size": 75795
         },
         {
           "digest": "sha256:d6fa9b6a4e49d34a65d2d94af574fc330d76d15931c21bc0b37001e076ac5cd0",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 280
         },
         {
           "digest": "sha256:199100f91bb5ed83d3d9d98065a1e61ee111dc28f5aac97c9f257d01a7814686",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 237
         }
       ],
       "author": "github-actions[bot]",
       "description": "0.10.1 makes the 0.10 workflow easier to install and trust, while hardening\nthe plugin for Obsidian's multi-window runtime. It also makes every release\nbuild reproducible from the committed lockfile.\n\n## What changed\n\n- Corrected plugin identity, installation paths, command names, and trust\n  boundaries in the public documentation and manifest metadata.\n- Switched UI work to Obsidian's active window and document APIs, improving\n  compatibility with pop-out windows.\n- Made asynchronous command boundaries explicit so failures are handled\n  predictably.\n- Added clean-install CI for typechecking, all 79 tests, and both plugin and\n  MCP builds.\n- Reduced release downloads to the three supported Obsidian plugin files:\n  `main.js`, `manifest.json`, and `styles.css`.\n\nRequires Obsidian 1.12.7 or later.\n",
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.10.1",
       "prerelease": false,
