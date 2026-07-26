@@ -4,8 +4,8 @@
   "description": "Graph functions, systems, derivatives and integrals in interactive blocks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lmath",
-  "lastChangedAt": "2026-07-25T09:04:27.013Z",
-  "lastFetchedAt": "2026-07-25T09:04:27.013Z",
+  "lastChangedAt": "2026-07-26T09:04:27.001Z",
+  "lastFetchedAt": "2026-07-26T09:04:27.001Z",
   "manifest": {
     "author": "Lenin",
     "authorUrl": "https://github.com/LubrieDev",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "LMath",
-    "version": "1.2.8"
+    "version": "1.2.9"
   },
   "name": "LMath",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:20c4e794e4487afe54b12d214b7b12af5611b1045a01cfcc02bb2128909ab9b5",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 2449367
+        },
+        {
+          "digest": "sha256:d29cfb8d1418a3d19a7f1a5fd570b5721b276f245bcb5ddedd09e851fd0e8ff1",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 278
+        },
+        {
+          "digest": "sha256:f72ad0fd0212410e111f4930c002134e66f74153a01c6e3d152e5c82aceb3b2e",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 7508
+        }
+      ],
+      "author": "LubrieDev",
+      "description": "# 1.2.9\r\n\r\n## A block that froze Obsidian past restarting it, and a plugin that finally has a light theme\r\n\r\nOne serious bug fix, one long-standing design gap, and two smaller fixes. The\r\nserious one is a graph that could lock the app hard enough to survive quitting\r\nit: reopening the note re-rendered the block and froze it again, so the only way\r\nout was to delete the block with an external editor. The design gap is the light\r\ntheme: until now the block was a dark island on a white page, with a formula that\r\nwas nearly invisible in it.\r\n\r\n- **A block containing `tan(e^x)` froze Obsidian, and reopening the app froze it\r\n  again.** This bug was found during testing on a Redmagic 11S Pro and later\r\n  reproduced on Windows. The cause is arithmetic, not hardware: the plane's very\r\n  first paint runs the *final*, highest-quality pass, and on this function that\r\n  pass generated pathological amounts of work and memory, making the issue\r\n  algorithmic rather than hardware-dependent, regardless of the device's\r\n  performance. Two independent defects met on this one expression. First, the\r\n  explicit sampler had no bound on how much geometry it could produce:\r\n  `tan(e^x)` oscillates at a local frequency of `e^x/π` — about **1.5·10⁷\r\n  oscillations per pixel** at the right edge of the default view — and the\r\n  sampler kept subdividing, ending with **1,084,444 branches and 21,460,279\r\n  vertices after 30.3 seconds and 1.14 GB of heap**. That case is deliberately\r\n  not covered by the high-frequency envelope added in 1.2.6, whose\r\n  **boundedness** test rejects it on purpose: an unbounded function has no band\r\n  to draw, it has asymptotes, and it was handed back to the sampler with no\r\n  limit at all. Second, the deduplication of notable points was quadratic, so on\r\n  that geometry it never finished: over **9 minutes** and still running when it\r\n  was killed, all of it wasted, since a category with more than 30 points is\r\n  discarded whole.\r\n\r\n  The sampler now **enforces** a refinement budget tied to *resolution* —\r\n  **2048 vertices per pixel column**, so a phone screen protects itself\r\n  proportionally — and when it runs out the trace does not stop: it stops\r\n  *subdividing* and continues at the base sampling density, which is already\r\n  bounded, so the curve is still drawn end to end without the sub-pixel detail\r\n  that resolves nothing at that scale. The deduplication now indexes points in a\r\n  grid whose cell equals the tolerance, making it linear while returning exactly\r\n  what the exhaustive scan returned. The first render of `tan(e^x)` goes from\r\n  **30 s, 1.14 GB and a pass that never finished** to **705 ms and 112 MB**\r\n  (**378 ms** on a phone-sized canvas).\r\n\r\n  Nothing else changes: the budget was calibrated against the existing\r\n  repertoire. The most expensive legitimate case, `tan(x²)` at ±300, uses\r\n  **699 vertices per pixel column**, leaving roughly a threefold safety margin,\r\n  and **240 of 240 traced cases** (20 expressions × 6 zoom levels × both\r\n  passes) come out **bit-identical** to 1.2.8, vertex for vertex, with\r\n  identical notable points. Where the drawing does change is inside the\r\n  pathological stretch itself: past **x ≈ 10.3** the old picture was a saturated\r\n  black rectangle, every pixel of every column painted, and it is now a lighter\r\n  haze over the same region, without a single pixel drawn that was not drawn\r\n  before. **What is lost there is the density of an aliasing smear, not the\r\n  curve itself.**\r\n\r\n- **The plugin follows your theme, and the formula is legible in a light one.**\r\n  The block painted itself `#1e1e1e` and never set a text colour, so the formula\r\n  inherited `--text-normal` from the theme: in a dark theme that happens to be\r\n  light text on a dark panel and it worked by accident, and in a light theme it\r\n  was near-black text on a near-black panel — around **2:1** of contrast, where\r\n  4.5:1 is the minimum for legible text. That part was a defect, not a\r\n  preference.\r\n\r\n  The fix splits colour in two along the line that matters. The **frame** —\r\n  container, formula panel, buttons, menus, borders — no longer has a colour of\r\n  its own: it derives from Obsidian's own variables (`--background-primary`,\r\n  `--background-secondary`, `--text-normal`, `--background-modifier-border`,\r\n  `--shadow-s`), so the block is made of the same material as the note and works\r\n  with any theme, including community ones, with nothing for us to maintain. The\r\n  **plot's ink** — grid, axes, labels, curves, markers — keeps a palette of its\r\n  own in two hand-tuned versions, because a graph needs *guaranteed* contrast\r\n  between its layers and no theme variable promises that. The only thing the\r\n  theme is asked is whether it is light or dark.\r\n\r\n  The light palette is not the dark one inverted. On white the blue `#4f9eff`\r\n  washes out and drops to `#2f6df6`; the grid goes from light grey at 12 % to\r\n  black at 10 %; the axes gain weight, because a faint grey disappears against\r\n  white; and the white halo behind each marker — which separates it from the\r\n  curve on a dark ground — turns dark, since on white a white halo separates\r\n  nothing. Every layer was measured against its own background: axis labels sit\r\n  at 5.03:1 in dark and 5.67:1 in light, and the six curve colours at 5.50–9.30\r\n  and 4.38–5.78 respectively. The six hues are the same in both themes — they are\r\n  the plugin's identity — only darkened for a light ground.\r\n\r\n  Switching theme now recolours an open block in place. Curve colours are\r\n  declared by *role* (which equation they belong to) and resolved against the\r\n  active palette when painting rather than when the scene is built, so a theme\r\n  change is a repaint: your zoom and panning survive it.\r\n\r\n- **The same function no longer renders two different ways depending on how you\r\n  typed it.** Fractional powers were already drawn as radicals — `x^{1/2}` as\r\n  `√x`, `x^{2/3}` as `∛(x²)` — but that rewrite only recognised an exponent\r\n  written as a quotient of literal integers, so `x^{0.5}` came out as\r\n  `x^{1/2}` in fraction form and `x^{0.5φ}` as `x^{φ/2}`. The decimal becomes a\r\n  fraction *after* the step that does the rewriting, and `φ` is not a digit.\r\n  The decision now happens in the LaTeX writer, where every form passes through:\r\n  `x^{0.5}` and `x^{1/2}` both render `√x`, `x^{1.5}` matches `x^{3/2}`, and\r\n  `x^{0.5φ}` renders `√(x^φ)`. Exponents with a free variable keep their\r\n  exponential form (`e^{x/2}` is not a root), and so do negative ones.\r\n\r\n- **The options button now closes the menu it opens.** The ☰ icon stayed the\r\n  same whether the transformations menu was open or closed, so the button gave\r\n  no sign of what pressing it would do. It now turns into ✕ while the menu is\r\n  open, with its tooltip changing to match, and back to ☰ when it closes,\r\n  including when the menu closes by clicking outside it or by applying one of\r\n  its options. The three blocks that have this menu (`obs-graph` /\r\n  `obs-system`, `obs-derivate` and `obs-integral`) all follow the same rule,\r\n  each keeping its own description of what the menu contains.\r\n\r\nBoth suites pass unchanged: **345 tests** in the main suite and **12 tests** in\r\nthe zoom suite.",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.2.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T22:10:27Z",
+      "tag": "1.2.9"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:306cdcde9668760172fa9c38bfc956894d8a5bd3c3c5dc03889d6b92ec4c0378",
-          "downloadCount": 21,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 2442616
         },
         {
           "digest": "sha256:2ad7210a3b514637cc31f92f9283116084fda546fc1d64a70c6af419037ff6a1",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:01cb6513d954a2f803d19f6586fe1fe2e502943c7bc100f329f08e12724d1970",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 4049
         }
       ],
       "author": "LubrieDev",
       "description": "# 1.2.8\r\n\r\n## Graph controls: an icon set, one tooltip per control, and a crosshair that survives panning `sin(1/x)`\r\n\r\nMost of this release is cosmetic — a real icon set for the plane's controls, a\r\nsingle tooltip per control instead of two, zoom buttons that repeat while held,\r\nand the removal of a decorative marker — and it carries two bug fixes: curves\r\nnow close against the edge of their domain instead of stopping short of it, and\r\nthe crosshair on `sin(1/x)` no longer goes dark after you pan the view.\r\n\r\n- **Curves stopped short of the edge of their domain, leaving a visible gap\r\n  there.** Reported on the system `y = ±⁴√(1−x⁴)` — the squircle `x⁴+y⁴=1` —\r\n  which at high zoom showed a hole at (±1, 0) with the stroke cut in two, so the\r\n  near-vertical tip read as a dashed asymptote rather than a curve. Where a curve\r\n  meets the end of its domain with a *vertical tangent*, the value falls off as a\r\n  root of the distance to the edge: for `⁴√(1−x⁴)` it is `y ≈ (4ε)^(1/4)`, which\r\n  descends so slowly that after the sampler's `PROF_MAX` refinement steps y is\r\n  still ≈7·10⁻³ — tens of pixels once you zoom in — and the branch simply ended\r\n  there. It closed only by luck, when the edge happened to land exactly on the\r\n  sampling grid, which is why the gap appeared at some zoom levels and not\r\n  others, and why it was never a regression: the defect had been latent since\r\n  long before 1.2.6. The sampler already located the edge to machine precision —\r\n  it bisects 40 times to decide whether the discontinuity is a pole — but threw\r\n  that point away instead of drawing it. It is now emitted, attached to the\r\n  finite end and inside the same segment, so the polyline reaches the edge: the\r\n  gap goes from 6.6·10⁻³ (2.5·10⁻² during a gesture) to zero, both passes agree,\r\n  and it stays under a pixel at any zoom. This applies to every explicit curve\r\n  that touches a domain boundary — `√x`, half-parabolas, and the rest — all of\r\n  which had the same gap, just smaller than the fourth root made it.\r\n\r\n- **The crosshair on `sin(1/x)` stopped appearing after a pan — a regression\r\n  from 1.2.6, unnoticed until now and fixed here.** 1.2.6 began drawing\r\n  stretches that oscillate faster than one pixel as a min/max envelope band,\r\n  marked `CalidadRama: \"incierta\"` and carrying no `parametro`, since a band is\r\n  not a curve you can walk along. The walkability test that gates the crosshair,\r\n  `curvaRecorrible`, rejects any branch without a `parametro` — its purpose is to\r\n  catch curves that fold back in x and are therefore multivalued. A band trips\r\n  that test even though it is not a fold, so the presence of a single band\r\n  disabled the crosshair for the *whole* curve. It surfaced on `sin(1/x)`\r\n  specifically, and only after panning: the band near x=0 forms or not depending\r\n  on how the sampling grid lands on the pixels, which shifts as the view moves,\r\n  so a settled default view resolved cleanly while a panned one did not — and a\r\n  wheel zoom, which resolves the oscillation as it magnifies, never triggered it\r\n  either. The test now excludes `\"incierta\"` bands from its judgement, exactly as\r\n  the crosshair's own `yEnRamas` already skips them: the crosshair works over the\r\n  rest of the curve and is simply not drawn over the band itself, where there is\r\n  no single y to report. Before 1.2.6 the curve was traced as ordinary branches\r\n  throughout and was always walkable, so this restores the earlier behavior.\r\n\r\n- **The plane's controls now use a real icon set.** Home, zoom-in, zoom-out,\r\n  trace, info and the options menu were text glyphs and emoji (🏠, +, −, ⌖, ⓘ,\r\n  ☰), and the pointer over the plane was a hand-drawn cross. All are now Material\r\n  Symbols, drawn as inline SVG through Obsidian's DOM API rather than\r\n  `innerHTML`, and filled with `currentColor` so each icon inherits its button's\r\n  colour and follows the active/inactive highlight unchanged. The pointer icon is\r\n  drawn on the canvas as a `Path2D`, built lazily so it costs nothing in the Node\r\n  test bundle, which never paints.\r\n\r\n- **The zoom buttons repeat while held.** Pressing + or − zoomed a single notch\r\n  and had to be clicked again for every further step. They now keep zooming for\r\n  as long as the button is held, at a steady cadence, reusing the same centred,\r\n  smoothed zoom a single press already used — so holding reads as one continuous\r\n  zoom rather than a stack of steps. A quick tap still does exactly one notch.\r\n\r\n- **One tooltip per control, above it rather than below.** The options button\r\n  carried both a `title` attribute and an `aria-label`, so hovering it produced\r\n  two tooltips at once — the browser's native one and Obsidian's. Every control\r\n  now uses Obsidian's `setTooltip` with top placement and no `title`, so there is\r\n  a single dark tooltip, positioned above the control where the pointer does not\r\n  cover it.\r\n\r\n- **The experimental-engine ⚙ marker is gone.** The small gear in the top-right\r\n  corner of the plane was a decorative label; it has been removed along with its\r\n  now-unused translation strings, and the zoom buttons moved up to take its\r\n  place.\r\n\r\nBoth suites pass unchanged — 345 tests in the main suite and 12 in the zoom\r\nsuite.\r\n",
-      "downloadCount": 22,
+      "downloadCount": 23,
       "draft": false,
       "name": "1.2.8",
       "prerelease": false,
