@@ -4,8 +4,8 @@
   "description": "Generate professionally formatted business letters (DIN 5008 and modern) from note frontmatter and export them to PDF — via the print dialog on desktop, or the system share sheet on iPhone and iPad. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "letterhead",
-  "lastChangedAt": "2026-07-25T07:02:27.021Z",
-  "lastFetchedAt": "2026-07-25T07:02:27.021Z",
+  "lastChangedAt": "2026-07-26T07:05:27.018Z",
+  "lastFetchedAt": "2026-07-26T07:05:27.018Z",
   "manifest": {
     "author": "Johannes Kaindl",
     "authorUrl": "https://jkaindl.de",
@@ -14,11 +14,41 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Letterhead",
-    "version": "1.6.1"
+    "version": "1.6.2"
   },
   "name": "Letterhead",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:06c3442d2914c15bd38399f3ac08d4972a5a79baddf2384edb103cb0c769e3b6",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 91501
+        },
+        {
+          "digest": "sha256:c9baac22321ff4ea995e8644639d8c20b4d561af50116bab9275bcc8e1957ae6",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 414
+        },
+        {
+          "digest": "sha256:7f319bc451beb9dff25a7cfc3a5bacf0eac6f6121bfb96c9b1b224d24e1df910",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 1840
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n- **Eingebettete Bilder erschienen auf iOS nicht im Vektor-PDF.** Obsidians iOS-App (Capacitor)\n  liefert für eingebettete Bild-Elemente `src=\"capacitor://localhost/_capacitor_file_/…\"` statt\n  `app://` wie auf Desktop. Die Bild-Erkennung kannte dieses Schema nicht und behandelte den vollen\n  Capacitor-URL fälschlich als vault-relativen Wikilink — dessen Auflösung scheiterte, das Bild\n  wurde nie gerastert und erschien im PDF nur als Platzhaltertext. Betraf jedes eingebettete\n  Bildformat auf iOS/iPadOS, nicht nur SVG. Auf iPhone verifiziert.\n- **Phantom-Ordner bei jedem Export in den Vault-Root.** Beim Export-Ziel „Custom-Ordner\" mit\n  Vault-Root (`/`) oder direkt neben der Notiz im Root berechnete die Verzeichnis-Ermittlung beim\n  Schreiben der PDF einen um ein Zeichen verkürzten Ordnernamen und legte ihn als leeres\n  Verzeichnis an. Betraf jeden Export ohne Unterordner im Zielpfad. Auf iPhone verifiziert.",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "1.6.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T08:33:45Z",
+      "tag": "1.6.2"
+    },
     {
       "assets": [
         {
@@ -53,26 +83,26 @@
       "assets": [
         {
           "digest": "sha256:32cf1bf564481528026b8aeb447e4adcd04a1025cd10d2011ed8785cbce76f64",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 91522
         },
         {
           "digest": "sha256:1d30fdb69c908f69ade57826e5cb90eeefe344359271ad900353b84dff857d70",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 414
         },
         {
           "digest": "sha256:7f319bc451beb9dff25a7cfc3a5bacf0eac6f6121bfb96c9b1b224d24e1df910",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 1840
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Removed\n- **Einstellung „Mobiler Export\" entfernt.** Sie bot seit 1.4.0 nur noch eine einzige Option und\n  wurde von keinem Codepfad mehr gelesen — der HTML/Quick-Look-Weg war damals zugunsten des\n  Degradations-Modells abgeschafft worden, das Dropdown blieb als Attrappe stehen. Der\n  gespeicherte Schlüssel wird weiterhin akzeptiert, alte Konfigurationen laden also unverändert;\n  es ändert sich nichts am Verhalten, nur eine wirkungslose Zeile verschwindet aus den\n  Einstellungen.\n\n### Fixed\n- **Dokumentation beschrieb einen Exportweg, den es nicht mehr gibt.** README (beide Sprachen)\n  und das Tutorial führten weiterhin durch den alten iOS-Umweg (HTML-Datei → Quick Look →\n  Drucken → Vorschau aufziehen → sichern) und verwiesen auf die „Mobiler Export\"-Einstellung.\n  Seit 1.3.0 ist der mobile Export ein Tipp. Auch `AGENTS.md` und ein Kommentar in `core/model.ts`\n  behaupteten den wählbaren Fallback.\n- **Referenz-Doku um die 1.5.0-Einstellungen ergänzt:** Ausgabeziel, eigener Ordner und\n  Dateinamen-Schema samt Platzhalter-Tabelle fehlten in `docs/reference/settings.md` vollständig,\n  obwohl sie bestimmen, wohin die PDF geschrieben wird und wie sie heißt.\n\n### Changed\n- **Intern:** `core/body-ir.ts` nimmt das Briefmodell nicht mehr als `any`, sondern als\n  typisierte Consumer-Shape `LetterBodyModel` (Muster von `LetterHeadModel`). Damit fallen die\n  letzten 32 Lint-Warnungen des Repos weg, die im Community-Store-Review als Warnings auftauchten.\n  Keine Verhaltensänderung: alle drei Änderungen sind Typkonstrukte, der Build-Output ist bis auf\n  die Bezeichner-Vergabe des Minifiers identisch (Zahlen-Literale byte-gleich). Der Anlagen-Block\n  ist dabei erstmals von Tests abgedeckt (Singular/Plural-Label, Fallback, Position).\n- **Einstellungen-Tab auf die deklarative API (`getSettingDefinitions`) umgestellt.** Auf Obsidian\n  ab 1.13 rendern die Einstellungen im nativen Karten-Layout inklusive Einstellungs-Suche; auf\n  älteren Versionen greift unverändert der bisherige Aufbau (`display()`), der dieselben\n  Definitionen durchläuft — es gibt keine zweite Quelle. `minAppVersion` bleibt 1.8.7, Felder und\n  Verhalten sind identisch. Damit entfällt der letzte begründungslose Lint-Override des Repos.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
