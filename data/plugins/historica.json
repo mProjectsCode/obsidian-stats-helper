@@ -4,21 +4,81 @@
   "description": "Intelligently generates timeline from your content",
   "errors": [],
   "id": "historica",
-  "lastChangedAt": "2026-07-26T00:00:27.007Z",
-  "lastFetchedAt": "2026-07-26T00:00:27.007Z",
+  "lastChangedAt": "2026-07-27T00:01:27.020Z",
+  "lastFetchedAt": "2026-07-27T00:01:27.020Z",
   "manifest": {
     "author": "Nhan Nguyen",
     "authorUrl": "https://github.com/nhannht",
     "description": "Your writing already contains a timeline. Historica finds it — NLP-powered date extraction from any note.",
     "id": "historica",
     "isDesktopOnly": true,
-    "minAppVersion": "0.2.4",
+    "minAppVersion": "1.13.0",
     "name": "historica",
-    "version": "0.4.2"
+    "version": "0.4.4"
   },
   "name": "historica",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:1cecc4eb3263e83c5c6665977a17e87ba9522ede41419c227cca0ec24b3c0b59",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 1223681
+        },
+        {
+          "digest": "sha256:465cd1ecabcd41e07359b29d1187bc57858032a6c09cc3442ab4a6e076036060",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 315
+        },
+        {
+          "digest": "sha256:a5cbb1d4e75f5b790277b56bafa59879fae4c828a87572b11204ca82cd9ec849",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 24651
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Historica 0.4.4\n\n**This release requires Obsidian 1.13.0.** If you are on an older version, Obsidian will keep offering you 0.4.3, which is unaffected and needs only 1.7.2. Nothing is stranded.\n\n### Changed\n- **Settings are searchable.** The settings tab is now declared rather than hand-rendered, which is what lets Obsidian's settings search find \"Date display format\", \"Parsing language\" and \"Data directory\" instead of them being invisible to it. That API arrived in 1.13.0, and supporting both it and the old rendering path would have meant two descriptions of the same three settings kept in step by hand, so the floor moved instead.\n- A blank date format or data directory is now refused with a message under the field. Before, a blank value was quietly swapped for the default, so the field looked empty while dates rendered in a format you had not chosen.\n\n### Removed\n- `bun run doc:code` and TypeDoc. It had been broken for some time - `typedoc-plugin-inline-sources` requires TypeDoc 0.28.x and the project pinned 0.27.9, so it crashed before writing anything - and it generated API documentation nobody read. The plugin and the marketing site are the two things this project ships.\n- `postcss.config.js` and `tailwind.config.js`, both dead. Tailwind v4 does not read either without an `@config` directive, which this project does not have. Verified by rebuilding with each removed: `styles.css` came out byte-identical. Worth knowing if you ever read those files and believed them: `important: true` and the scoped preflight they configured were never in effect.\n- The eight packages that existed only to serve those two files and TypeDoc: postcss, autoprefixer, tailwindcss-scoped-preflight, @tailwindcss/typography, typedoc and its three plugins.\n- Two exported helpers in `utils.ts` with no callers, `GetAllDirInVault` and `GetAllHistoricaDataFile`.\n\n### Fixed\n- Dependency advisories are down from 13 to 1. Six had a fix available inside the same major version, so pinning them cost nothing: js-yaml, fast-uri, shell-quote (the one rated critical), markdown-it, linkify-it and postcss. None of these ever shipped to users - they are build and lint tooling - but they were noise hiding anything real.\n- The last one, in brace-expansion, is left deliberately. Its fix only exists in a major version that changed the module's export shape, which breaks every consumer that calls it as a function, including ESLint. Pinning it makes the audit report zero and the toolchain throw. It is a denial of service reachable only by feeding a hostile glob pattern to your own linter.\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.4.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T14:45:31Z",
+      "tag": "0.4.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9d3245bc7a0b7d84c154da5814d3a8a2dba30ac8466158d2efe02dd7feb90352",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 1224121
+        },
+        {
+          "digest": "sha256:c242920ae1bb37141623c101390b9615a937b0e540ec2fdbb03a86c15ba7d93a",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 314
+        },
+        {
+          "digest": "sha256:a5cbb1d4e75f5b790277b56bafa59879fae4c828a87572b11204ca82cd9ec849",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 24651
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Historica 0.4.3\n\nA maintenance release. Nothing changes in how the plugin behaves; what changed is what ships inside it. `main.js` is 192 KB smaller and `styles.css` is 37 KB smaller, and neither carries a React runtime, a dead editor library, or a marketing site's stylesheet any more.\n\n### Fixed\n- **Older Obsidian versions were offered a build they cannot run.** `versions.json` claimed 0.4.0 and 0.4.2 needed app version 0.2.4, and listed a 1.0.0 release that has never existed. The plugin actually needs 1.7.2. An app on an older version would either be sent after a download that is not there, or handed a build that fails to load. Every entry now states the version it really needs.\n- The data-directory setting description and the block ID comment written into your notes both contained an em dash. The block ID line is rewritten on every save, so that character was landing in vault files.\n- The source-file pill can be restyled by a theme or a CSS snippet now. Its look was set inline on the element, which overrides any stylesheet, and its hover state needed `!important` to get around that. Both are ordinary CSS rules now, and `styles.css` no longer contains `!important` anywhere.\n\n### Changed\n- **The plugin renders with Preact instead of React.** Same components, same behaviour; Preact is the smaller implementation of the same API, and it does not carry React's script-preloading machinery. That machinery was dead code the plugin never called, but it was still in every download, and it was the one hard error on the plugin directory's automated review. `main.js` drops from 1,420,949 to 1,224,121 bytes.\n- **The Quill editor stylesheet is no longer a dependency.** The plugin stopped mounting that editor a while ago but still pulled the whole package in for its CSS, of which it used less than half. The rules that render existing entry content are now included directly, with Quill's licence notice. A package with an open security advisory leaves the tree.\n- **`styles.css` no longer contains the marketing site's CSS.** Tailwind scans the project for class names, and the site used to live in this repository, so its utility classes were being generated into the plugin's stylesheet. Between that and the Quill change, `styles.css` drops from 62,844 to 24,651 bytes.\n- Twenty-one packages nothing imported are gone: ten Radix UI components left over from before the UI was rewritten, the shadcn CLI, the Jest test stack the project replaced with bun's runner, and an SVG build plugin with no SVG to transform. Most of the advisories the directory review reported came through these.\n\n### Internal\n- Released assets now carry GitHub build provenance attestations, so anyone can verify a download was built from this repository: `gh attestation verify main.js --repo nhannht/obsidian-historica`.\n- The marketing site moved to its own repository. The plugin directory scans a plugin repo whole and lints every file as plugin source, so a Vite app that ships nothing to the plugin was producing most of the review's warnings.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.4.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T14:10:12Z",
+      "tag": "0.4.3"
+    },
     {
       "assets": [
         {
@@ -29,13 +89,13 @@
         },
         {
           "digest": "sha256:704dcb65b34b200816bc15163d9741c706904c0c0632713c868c0afffa00a27b",
-          "downloadCount": 3,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 1418893
         },
         {
           "digest": "sha256:0797865b9f7429d8c07e272ae50c96b75a57f4163792c07d1dc6a16e5eff5205",
-          "downloadCount": 2,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 313
         },
@@ -47,14 +107,14 @@
         },
         {
           "digest": "sha256:d4cf0e182ce722385d21b31ba00a05bf670a4335af407dd65f5d1439daa782c7",
-          "downloadCount": 2,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 61895
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Historica 0.4.2\n\n0.4.1 was tagged but never released. Its build failed, so no release was\never published and this version carries its changes as well.\n\n### Fixed\n- **Releases publish again.** Two separate defects broke the 0.4.1 tag. The build installed `canvas`, an unused dependency with no prebuilt binary for the pinned Node version, so every run died in a native compile that needs libraries the CI image does not carry. And the workflow created each release as a draft, which no Obsidian client can see. Both are fixed, and the workflow now refuses to publish when the pushed tag disagrees with `manifest.json`.\n\n### Changed\n- **The plugin now carries the Historica brand mark.** Both ribbon buttons and all three view tabs (Timeline Sidebar, Global Timeline, Design Gallery) use the same mark as the website favicon, replacing the stock `calendar-clock`, `globe`, and `palette` icons.\n- The mark is drawn in the theme's own text color rather than fixed colors, so it tracks light and dark themes and picks up hover and active states like every other icon in the ribbon. Its orange accent follows the `anchor` design token, which resolves to Orange 4 on light themes and Dark/Orange 6 on dark.\n\n### Internal\n- The brand mark is added to the Sketch design file as a reusable symbol, alongside dark and light renders and a size ramp, so the icon has one documented source instead of living only in code.\n",
-      "downloadCount": 2,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.4.2",
       "prerelease": false,
@@ -77,7 +137,7 @@
         },
         {
           "digest": "sha256:1ffc2a6fe5ab7ac6f8b84a492305c64c370f80bd5ddc0361c679e5219a0a356a",
-          "downloadCount": 134,
+          "downloadCount": 135,
           "name": "manifest.json",
           "size": 313
         },
@@ -96,7 +156,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## Historica 0.4.0\n\n### Added\n- **Per-entry metadata is now persisted.** Significance, annotation notes, date precision, and the manual / dismissed flags you set on a timeline entry are saved to the entry's HMD file and restored on reload.\n\n### Changed\n- **Refreshed visual design.** The entire UI now renders through the Int design-token system (the IntelliJ \"New UI\" palette), giving consistent light and dark theming across chips, badges, the annotation block, toolbar, menus, minimap, and all state views.\n- **Annotations** render as an accent-tinted box instead of an amber left-border.\n- **Typography** moved to Inter for UI text and JetBrains Mono for dates and code, with graceful fallbacks when those fonts are not installed.\n\n### Fixed\n- Hardcoded color leaks that ignored the theme: the annotation amber accent and the minimap white grips now follow the active theme.\n- Invalid hand-edited `precision` values in HMD files are ignored on read instead of being stored.\n\n### Internal\n- Removed the unused shadcn token layer.\n- Documented the HMD storage format (spec 1.1) and refreshed the README.\n",
-      "downloadCount": 134,
+      "downloadCount": 135,
       "draft": false,
       "name": "0.4.0",
       "prerelease": false,
@@ -116,7 +176,7 @@
           "size": 3196028
         },
         {
-          "downloadCount": 1048,
+          "downloadCount": 1049,
           "name": "manifest.json",
           "size": 273
         },
@@ -133,7 +193,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.6] - 2024-11-21\r\n\r\n### 🚀 Features\r\n> [!note]\r\n> - Turn off mobile support.\r\n\r\n\r\n### 🐛 Bug Fixes\r\n> [!note]\r\n> - Isolate tailwind in react component. Ensure it will not conflict in global obsidian style\r\n\r\n\r\n### 📚 Documentation\r\n> [!note]\r\n> - Update document\r\n> - Update document\r\n> - Update document\r\n> - Update document\r\n> - Update document\r\n> - Update document\r\n> - Update document\r\n> - Move the entire documents dir to the  repo itself => Manage document easier\r\n\r\n\r\n### Build\r\n> [!note]\r\n> - Up to 0.3.6\r\n\r\n<!-- generated by git-cliff -->\r\n",
-      "downloadCount": 1048,
+      "downloadCount": 1049,
       "draft": false,
       "name": "0.3.6",
       "prerelease": false,
@@ -153,7 +213,7 @@
           "size": 3306812
         },
         {
-          "downloadCount": 223,
+          "downloadCount": 224,
           "name": "manifest.json",
           "size": 274
         },
@@ -170,7 +230,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.5] - 2024-10-27\r\n\r\n### 🚀 Features\r\n> [!note]\r\n> - Improve the editor, feature to edit header and footer\r\n> - Add feature to export as json or markdown. Improve header and footer editor.\r\n\r\n<!-- generated by git-cliff -->\r\n",
-      "downloadCount": 223,
+      "downloadCount": 224,
       "draft": false,
       "name": "0.3.5",
       "prerelease": false,
@@ -190,7 +250,7 @@
           "size": 3299192
         },
         {
-          "downloadCount": 73,
+          "downloadCount": 74,
           "name": "manifest.json",
           "size": 274
         },
@@ -207,7 +267,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.4] - 2024-10-25\r\n\r\n### 🚀 Features\r\n> [!note]\r\n> - I love README.md\r\n> - Well well well, I will take a break from this sh*t, this can consider work in the fundamental level now\r\n\r\n<!-- generated by git-cliff -->\r\n",
-      "downloadCount": 73,
+      "downloadCount": 74,
       "draft": false,
       "name": "0.3.4",
       "prerelease": false,
@@ -227,7 +287,7 @@
           "size": 3284656
         },
         {
-          "downloadCount": 31,
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 274
         },
@@ -244,7 +304,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.3] - 2024-10-24\r\n\r\n### 🚀 Features\r\n> [!note]\r\n> - Improve somethings but I forget what I just did. Anyway go to version 0.3.3\r\n\r\n<!-- generated by git-cliff -->\r\n",
-      "downloadCount": 31,
+      "downloadCount": 32,
       "draft": false,
       "name": "0.3.3",
       "prerelease": false,
@@ -264,7 +324,7 @@
           "size": 3139679
         },
         {
-          "downloadCount": 31,
+          "downloadCount": 32,
           "name": "manifest.json",
           "size": 274
         },
@@ -281,7 +341,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.2] - 2024-10-24\r\n\r\n### 🚀 Features\r\n> [!note]\r\n> - Update web document\r\n> - Pink always funny\r\n> - Ability to parse another file or import exist timeline\r\n> - Rewrite image preview when choose attachments\r\n> - Now auto save when Historica block have any id other than \"-1\"\r\n> - Go to version 0.3.2\r\n\r\n\r\n### 🐛 Bug Fixes\r\n> [!note]\r\n> - Single plot editor ux\r\n\r\n\r\n\r\n<!-- generated by git-cliff -->\r\n",
-      "downloadCount": 31,
+      "downloadCount": 32,
       "draft": false,
       "name": "0.3.2",
       "prerelease": false,
@@ -301,7 +361,7 @@
           "size": 3114757
         },
         {
-          "downloadCount": 55,
+          "downloadCount": 56,
           "name": "manifest.json",
           "size": 274
         },
@@ -318,7 +378,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "# Release note\r\n\r\n## [0.3.1] - 2024-10-22\r\n\r\n\r\n\r\n",
-      "downloadCount": 55,
+      "downloadCount": 56,
       "draft": false,
       "name": "0.3.1",
       "prerelease": false,
