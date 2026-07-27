@@ -4,8 +4,8 @@
   "description": "Share vault folders with trusted people on your LAN in real time - invite links, per-folder access control, and live sync. No cloud, no separate server required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-rooms",
-  "lastChangedAt": "2026-07-26T09:04:27.001Z",
-  "lastFetchedAt": "2026-07-26T09:04:27.001Z",
+  "lastChangedAt": "2026-07-27T09:04:27.161Z",
+  "lastFetchedAt": "2026-07-27T09:04:27.161Z",
   "manifest": {
     "author": "DNDark",
     "authorUrl": "https://github.com/DNDark12",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.12.7",
     "name": "Vault Rooms",
-    "version": "0.2.1"
+    "version": "0.2.2"
   },
   "name": "Vault Rooms",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:6bdd0c412ace83c9f96158b05879d490f68648f44dcb6d5d52c54252bacced10",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 1675389
+        },
+        {
+          "digest": "sha256:c3756dd30142ce787fc2c177f19a75b35451e52cf1cbff74514c84a061502bfd",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 421
+        },
+        {
+          "digest": "sha256:ae35732109a442c7df78d93c7abbf447fd5f5799235aa385ce33d4c70ebfe273",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 6793
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Live editing (CRDT sync) has been through extended two-device testing on a real LAN. That run found a\r\nnumber of real defects that no automated test had caught; this release fixes all of them. If you use live\r\nediting, upgrade both devices before using it again.\r\n\r\n### Fixed — data loss and corruption\r\n\r\n- A note open in an editor could have its unsaved text **deleted for everyone** when the sync handshake\r\n  ran. An open editor is now the source of truth for its own note: its on-disk copy is never reconciled\r\n  back while it's open, because Obsidian's autosave is allowed to lag behind what you typed.\r\n- Note content **duplicated itself on every unmount/remount**, compounding each cycle. A document is now\r\n  only seeded from your local copy when the server confirms it genuinely created it.\r\n- Unmounting a room left it subscribed, its editors still attached, and its retired document still\r\n  sending updates — which produced a self-sustaining update loop between two devices. Unmounting is now a\r\n  single atomic teardown.\r\n- A CRDT note could become **permanently undeletable**, failing with \"the file changed on the server\r\n  before your edit was applied\" on every attempt.\r\n- Renaming a note could fork it into two files, or trigger a runaway rename loop that generated dozens of\r\n  files with stacking names.\r\n- Renaming a note onto a name that had merely been deleted failed with an opaque error.\r\n\r\n### Fixed — sync that silently didn't happen\r\n\r\n- A newly created note is now announced immediately. Previously a note you created but hadn't typed in was\r\n  invisible to everyone else until they reconnected.\r\n- Edits no longer take ~3 seconds to appear. Live updates were being dropped by any device that didn't\r\n  happen to have the note open, leaving it to wait for a slower fallback.\r\n- After restarting the host, both vaults now agree on the file list without anyone having to open a file\r\n  first.\r\n- Edits are no longer stranded when the server reports it has no document at that path; the client\r\n  re-establishes it and keeps your text.\r\n\r\n### Changed\r\n\r\n- **Two people creating a note at the same time now get two notes.** Every new Obsidian note starts with\r\n  the same default name, so the first to reach the relay keeps it and the other is filed under a name\r\n  including its creator, with a notice explaining why. Their text is never merged together.\r\n- **A name you type is never rewritten.** Renaming onto a name a teammate already used is refused with a\r\n  notice so you can pick another.\r\n- The **\"Live editing (CRDT sync)\"** toggle now applies immediately. It previously only took effect if you\r\n  also pressed \"Save room settings\", so it could silently revert — which looked exactly like live editing\r\n  being broken.\r\n\r\n### Added\r\n\r\n- Command: **\"Vault Rooms: Diagnose live editing (CRDT) for the active note\"** — reports which link in the\r\n  live-editing chain is missing (room, its setting, push permission, editor binding, session) instead of\r\n  leaving you to guess.\r\n\r\n### Upgrade notes\r\n\r\n- Copy `main.js`, `manifest.json`, and `styles.css` to **both** devices and fully restart Obsidian; the\r\n  embedded relay holds state, so reloading the plugin alone isn't enough.\r\n- Content that was already duplicated, or stray files created by the old rename bug, are real data on the\r\n  server — this release stops producing them but does not clean them up. Delete them while connected so\r\n  the deletion propagates.\r\n- Live editing remains **off by default, per room**.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.2.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-27T08:36:43Z",
+      "tag": "0.2.2"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:fec6cb74a39264c50ed8161e3d02e0db0cb1ef6217650421d4c05aa0a10d2561",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "main.js",
           "size": 1524511
         },
         {
           "digest": "sha256:8b83851e6db91526cad51c195f74b0c3dc944480a17387fdbecb1e8e115cc2cd",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 421
         },
         {
           "digest": "sha256:5ffe0f8b270eaefb60b8dc7eb7ba33c5f6fcc46094e94efcfaec390d608276b7",
-          "downloadCount": 19,
+          "downloadCount": 20,
           "name": "styles.css",
           "size": 5958
         }
       ],
       "author": "github-actions[bot]",
       "description": "# Vault Rooms 0.2.1\r\n\r\nPinned TLS/WSS for the embedded and standalone relay, safe in-place upgrades from any v0.1 database shape, and a raft of sync-reliability and Obsidian review fixes.\r\n\r\n## Added\r\n\r\n- **Pinned TLS/WSS.** New embedded servers self-manage a private CA + leaf certificate and listen HTTPS/WSS only; invites carry the server's identity (SPKI pin) so a client verifies the server before ever sending credentials. The standalone relay supports pinned or OS-trusted TLS via `TLS_MODE`.\r\n- **Identity rotation.** Signed, replay-protected rotation records let an owner rotate the server's TLS identity without breaking already-paired clients. A client that can't verify the rotation chain shows a blocking \"pin mismatch\" and never sends credentials over an unverified connection.\r\n- **Legacy plaintext migration.** Existing v0.1 installs get an owner-controlled upgrade path (normal or strict mode) to pinned TLS, with a dual-stack transition window before the plaintext listener is closed for good.\r\n- **LAN share reachability.** The panel automatically probes the advertised LAN URL after every start/migrate/rotate and blocks creating invites when it's unreachable, instead of only warning after the fact.\r\n\r\n## Changed\r\n\r\n- v0.1 database upgrades are more robust: a shares-only legacy schema (no `rooms` table) now migrates instead of failing outright, and the one-time backup (`relay.sqlite.bak-v1`) is written atomically and tolerates a corrupted/foreign file at that path instead of permanently blocking startup.\r\n- REST file writes/deletes now enforce the same `sync:push` permission the WebSocket path already required, closing a gap where the two transports could disagree on an ACL deny.\r\n\r\n## Fixed\r\n\r\n- Live sync could silently stop delivering updates for a room if the connection dropped between subscribing and receiving its first snapshot - subscriptions now persist across reconnects instead of being dropped.\r\n- A token-rotation race during plaintext-to-TLS migration could make the client think its access was revoked and abandon the migrated connection.\r\n- A slow or failed pinned-transport retry could leave two live sockets on the same connection, causing duplicate applies of remote changes.\r\n- One file failing to read during snapshot reconciliation no longer aborts reconciliation of every other file in that snapshot.\r\n- An unauthenticated WebSocket connection could hold a connection slot indefinitely; the relay now times it out after 10 seconds.\r\n- Obsidian community review findings resolved: `createDiv()`/`createSpan()` used instead of `createEl(\"div\"/\"span\")`, and the standalone CLI's startup banner (bound URLs, TLS identity, bootstrap PIN) no longer goes through `console.log`.\r\n\r\n---\r\n",
-      "downloadCount": 22,
+      "downloadCount": 23,
       "draft": false,
       "name": "0.2.1",
       "prerelease": false,
