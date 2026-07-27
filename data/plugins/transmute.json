@@ -1,0 +1,85 @@
+{
+  "author": "Johannes Kaindl",
+  "defaultBranch": "main",
+  "description": "Search and replace by intent — a local LLM writes the regex, you review every match before it runs. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "transmute",
+  "lastChangedAt": "2026-07-27T10:01:27.010Z",
+  "lastFetchedAt": "2026-07-27T10:01:27.010Z",
+  "manifest": {
+    "author": "Johannes Kaindl",
+    "authorUrl": "https://github.com/johannes-kaindl",
+    "description": "Search and replace by intent — a local LLM writes the regex, you review every match before it runs.",
+    "id": "transmute",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.8.7",
+    "name": "Transmute",
+    "version": "0.2.0"
+  },
+  "name": "Transmute",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:cb06c16f11faa9eb18ad053a3f27e06a19de60cd7d6a04d8d23bd3e7f48463de",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 41094
+        },
+        {
+          "digest": "sha256:0c4fc956000d34529794903424a0dda39bebab530f967d5b8339d46f48a70b18",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 329
+        },
+        {
+          "digest": "sha256:04c4679a80bd289e4eb3a1cda8833e3f2767fd2a24eb5a7d401199a3b851dc25",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 5895
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **A history of refinements, with a way back.** Refining is trial and error, and the\n  third attempt can be worse than the first — until now the first was gone. Every round\n  is kept; from the second one on the panel lists them with their instruction and match\n  count under a \"History\" label, and one click goes back to any of them. Refining from an earlier version builds\n  on *that* version, and the later ones stay. Data model adopted from `image-to-markdown`.\n- **Model picker and thinking toggle in the panel.** Both also live in the settings, but\n  noticing mid-try that another model fits better should not cost two dialogs. A model\n  the endpoint no longer offers is reported rather than silently swapped, and a model that\n  always thinks (gpt-oss, harmony) shows a locked toggle instead of pretending.\n- **A \"discard\" button** to start a transmutation over.\n- **A rule now sticks to the note it was created on.** Preview pins that note; refining\n  and applying go to it regardless of which tab has focus, and the panel names the note\n  it is working on. Previously every step looked at whatever note was active, so\n  switching tabs mid-round produced a warning about a question that was already settled.\n- **Applying is refused if the note changed since the preview.** Matches carry offsets\n  into the text as it was read; after an edit those same offsets point at different text,\n  and applying would silently replace the wrong spans. This was reachable before — the\n  pinning work exposed it. The note is now checked against the previewed snapshot first.\n- Optional **\"replace with\"** field for the target pattern, enabled by a setting and off\n  by default. Many instructions have no target pattern at all (\"strip trailing\n  whitespace\", \"make headings one level deeper\"), so a mandatory second field would be in\n  the way — but if you think in classic find/replace terms, you can switch it on. When\n  filled it goes into the prompt as its own line; blank or whitespace-only is omitted\n  rather than sent as an empty target.\n\n- The waiting state now **spins and says what is happening** — that the model is writing\n  the pattern, and that nothing in the note changes before Apply. A static line gave no\n  way to tell \"still working\" from \"crashed\". The spin is dropped under\n  `prefers-reduced-motion`. There is only that one sentence: a second line next to the\n  spinner (\"Asking the model…\") said what the spinner already says.\n- The **replacement pattern** is now shown next to the search pattern. Previously the\n  panel showed only what was matched, never what it would be turned into — which is half\n  the rule, and the half you need to judge whether it is right.\n\n### Fixed\n\n- **Two matches in one line looked like one match shown twice.** Each match row printed\n  the whole line, before and after — so two dates in a sentence produced four nearly\n  identical lines. The context around a match is now clipped to 30 characters per side,\n  which also keeps long lines from overflowing the panel.\n- **The displayed pattern was not the pattern that ran.** `g` is always forced (a rule\n  without it would replace only the first match), but the panel showed the model's raw\n  flags — so `/#alt/i` was displayed while `/#alt/gi` was executed. Anyone copying the\n  pattern out or learning from it got a different rule than the one they saw. The flags\n  are now normalised exactly as `RegExp` reports them.\n- **\"No matches\" blamed the instruction.** The old wording (\"try refining the instruction\")\n  claimed a cause it cannot know: the far more common reason is that the text no longer\n  contains what is being searched for — for instance because the rule was already applied.\n  The message now states the fact and names both possibilities.\n- **Selecting text and running a rule reported \"nothing selected\".** In reading view there\n  is no editor selection at all — a highlight there is a plain browser selection the editor\n  never sees. Reading view is now its own, specific message (\"switch the note to editing\n  view\") instead of a misleading one. The same cause made whole-note runs find nothing in\n  reading view.\n- **Undo took two presses.** Applying replaced the entire document with the new text. It now\n  writes one editor transaction containing one change per selected match: a single undo\n  step, untouched text left untouched, cursor and scroll position preserved.\n- **Every action failed with \"open a note first\" while a note was open.** The panel looked\n  up the note with `getActiveViewOfType`, but clicking into the sidebar makes the panel\n  itself the active view — so there was no \"active\" note to find. It now asks the main\n  area (`getMostRecentLeaf(rootSplit)`), which ignores the sidebars. Covered by a\n  regression test.\n\n### Changed\n\n- The primary button is now **Preview** instead of **Generate** — it produces a preview;\n  the separate Apply button is what actually changes the note.\n- Panel layout: dropped the redundant heading (the tab already carries the title), added\n  padding, equal-width scope buttons, and the pattern is set off on its own surface.",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T12:30:59Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2b0650d7598e160ebbb933bd2fe313c6682eb6ca7865aa4d460d650170d97524",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 32459
+        },
+        {
+          "digest": "sha256:54fc1d0266358f8f0d4f245961e95ba9f1996588884c39648f69b03e0baeefb4",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 329
+        },
+        {
+          "digest": "sha256:808313248d5f363530355c0a2a667cd27d0a1438802e19980e26ff14f1a761df",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 3020
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- Release pipeline: `npm run gate` now also builds `main.js`. The vendored release\n  workflow attests and uploads the bundle but never builds it itself — it relies on the\n  gate having produced it. Without that step the first release cut a tag whose GitHub\n  release was never created.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-25T12:48:41Z",
+      "tag": "0.1.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "johannes-kaindl/obsidian-transmute"
+}

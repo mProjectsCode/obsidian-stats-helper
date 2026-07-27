@@ -1,0 +1,174 @@
+{
+  "author": "Jiao Yingxing",
+  "defaultBranch": "main",
+  "description": "An Obsidian AI chat plugin built to feel smooth, natural, mobile-friendly, and easy to keep using. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "sidet",
+  "lastChangedAt": "2026-07-27T10:01:27.010Z",
+  "lastFetchedAt": "2026-07-27T10:01:27.010Z",
+  "manifest": {
+    "author": "Jiao Yingxing",
+    "description": "An AI chat plugin built to feel smooth, natural, mobile-friendly, and easy to keep using.",
+    "id": "sidet",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.11.4",
+    "name": "Sidet",
+    "version": "0.3.0"
+  },
+  "name": "Sidet",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:507c937244cda4cb1c0b99b7c9559ad2723f9044ff17de4a66e9694186798fc8",
+          "downloadCount": 14,
+          "name": "main.js",
+          "size": 1173228
+        },
+        {
+          "digest": "sha256:c4fd43612e1b9dfdcb205a343e9e549169a1ff442e04d1aee7ff39a18fb7dc5f",
+          "downloadCount": 20,
+          "name": "manifest.json",
+          "size": 255
+        },
+        {
+          "digest": "sha256:313a3b425bb854073be4164bce8ca0203b4d15fa46a7d8ab6e160cd23f8ac56f",
+          "downloadCount": 13,
+          "name": "styles.css",
+          "size": 59291
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "## 移动端输入\n\n- 重做 iPhone 和 Android 的输入框键盘联动。聚焦时，输入框会随软键盘上升并保持 `8px` 间距；收起键盘后，输入框会直接回到底部工具栏上方，不再额外跳动或重新定位。移动过程中继续使用同一个输入框，保留当前草稿、光标和附件状态。\n- 修复 iPhone 上输入框偶发停在过高位置、在键盘升起途中短暂消失，以及光标在移动过程中脱离输入框的问题；同时修复 Android 聚焦后整个输入框消失的问题。\n- 扩大输入框的真实触摸区域，使可见表面的上下边缘也能稳定触发；同时改善刚失焦回落时再次点按的响应，并保留长按、滑动和文本选择的原生行为。\n- 调整输入框与宿主界面的层级关系：侧栏出现时会直接覆盖输入框，`+` 与模型菜单仍显示在输入框上方并可正常操作。\n- 重新调整移动端外观：浅色模式使用更均匀的浮动阴影；深色模式让可输入区与外框保持同一表面颜色，避免灰框、双色和阴影缺失。\n\n## 问题诊断\n\n- 新增命令面板命令“复制 iPhone 键盘相位诊断”和“清空 iPhone 键盘相位诊断”，用于在问题复现时导出最近两个有效聚焦周期的有界几何信息；报告不包含输入内容。\n\n### English Summary\n\nSidet 0.3.0 rebuilds how the mobile input box follows the software keyboard on iPhone and Android while preserving the current draft, caret, and attachments. It fixes iPhone high-position, temporary disappearance, and caret glitches; the Android focus disappearance; blur-time repositioning; narrow touch targets; sidebar and floating-menu layering; and inconsistent light and dark surfaces. This release also adds bounded commands to copy or clear iPhone keyboard-phase diagnostics without including message content.",
+      "downloadCount": 20,
+      "draft": false,
+      "name": "Sidet 0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T15:55:50Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:184ea17fc92bec37abc80bfe9e90c192382b4c2ba3107b6d8d6a4b55c504359c",
+          "downloadCount": 55,
+          "name": "main.js",
+          "size": 1160775
+        },
+        {
+          "digest": "sha256:01a143a6a5083e0510259acf60ca0f9c073641494ea51800634c188fe4a55edd",
+          "downloadCount": 724,
+          "name": "manifest.json",
+          "size": 264
+        },
+        {
+          "digest": "sha256:186ee76583e1f5c196a1dafbd93abef02c62bca5a68c5c8d6c257914e5fd347e",
+          "downloadCount": 50,
+          "name": "styles.css",
+          "size": 59611
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "2026-06-08\n\n### This Release\n\n相对 `0.2.0`，`0.2.1` 是一版收口修复，重点只放在移动端启动稳定性。\n\n这次主要处理的是 iPhone 上通过 BRAT 安装或重装后，插件可能直接加载失败的问题。现在 API Key 的旧数据迁移不会再阻断插件启动；即使当前设备的安全存储能力不可用或未就绪，Sidet 也会先正常加载。\n\n### Highlights\n\n- 📱 修复 iPhone 上安装后插件加载失败\n  - 旧 API Key 迁移不再在启动阶段把插件直接拉崩\n  - `secretStorage` 不可用、未就绪或读写异常时，会跳过阻断性流程\n\n- 🛡️ 收紧安全存储兼容兜底\n  - 读取、写入、迁移都改成 best-effort\n  - 不再因为单次 secret 读写异常导致整条启动链失败\n  - 设备不支持安全存储时，会给出保存失败提示，而不是静默崩溃\n\n- ✅ 增加逻辑回归保护\n  - 新增 secret storage 逻辑测试\n  - 覆盖缺失存储、异常存储和正常存储三种情况\n\n### Notes\n\n- Release 附件仍为 `main.js`、`manifest.json`、`styles.css`\n- 最低 Obsidian 版本仍为 `1.11.4`\r\n",
+      "downloadCount": 724,
+      "draft": false,
+      "name": "Sidet 0.2.1 - 修复 iPhone 加载失败",
+      "prerelease": false,
+      "publishedAt": "2026-06-08T06:09:57Z",
+      "tag": "0.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:dbaf1c07b3fa73a4f593732e31923ddfb82df2c8dd1ca41348047e9b7a8dc2a0",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 1160032
+        },
+        {
+          "digest": "sha256:1af057ca5fc6e376b78c51508bbafff93fb012ed4638fdc11d60a156c11e0d19",
+          "downloadCount": 13,
+          "name": "manifest.json",
+          "size": 264
+        },
+        {
+          "digest": "sha256:186ee76583e1f5c196a1dafbd93abef02c62bca5a68c5c8d6c257914e5fd347e",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 59611
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "2026-06-07\n\n### This Release\n\n相对 `0.1.0`，`0.2.0` 这次带来的不是零散的小修小补，而是几条新的使用能力。\n\n现在你可以把模型保存成独立项，按对话切换；也可以在知识库模式下直接做本地检索，或者手动打开联网搜索；旧对话还能归档、恢复和管理。除此之外，这一版也补上了 URL 启动入口，以及一轮桌面和移动端的交互整理。\n\n### Highlights\n\n- 🤖 新增“已保存模型项”\n  - 模型现在可以单独新增、编辑、删除和设为默认\n  - 每条对话会保存自己的模型选择，新对话继承默认模型\n  - API Key 按模型项单独绑定，深度思考也可以保存进模型项本身\n\n- 📚 新增知识库本地检索\n  - 知识库现在可以作为持续选中的对话状态使用\n  - 选中知识库后，发送消息会直接走本地关键词检索，不依赖 API Key\n  - 结果会带命中片段，范围只限制在当前选中的知识库\n\n- 🌐 新增联网搜索模式\n  - 现在可以手动打开联网搜索，再围绕当前问题去查网页内容\n  - 搜索会聚合多个搜索源，并按需抓取网页正文后再整理回答\n  - 搜索结果也可以直接带回当前对话继续聊\n\n- 🗂️ 新增对话归档\n  - 对话菜单现在支持归档\n  - 已归档对话默认从主列表隐藏，但还能恢复或删除\n  - 归档对话会进入只读状态，避免误发消息或误改最近一条\n\n- 🔗 新增 URL 启动入口\n  - 设置页现在可以配置一组 URL 启动槽位\n  - 可以复制 `obsidian://` 链接，直接触发预设命令\n  - 这让一些常用动作更容易从主页之外被快速调用\n\n- 📱 桌面和移动端交互也做了一轮整理\n  - 发送后的回到底部、编辑重发、展开输入、移动端保焦和滚动恢复都做了修整\n  - 归档管理弹框也补了标题搜索，并把信息收得更干净\n\n### Notes\n\n- 安装方式不变，仍建议通过 BRAT 安装\n- Release 附件仍为 `main.js`、`manifest.json`、`styles.css`\n- 最低 Obsidian 版本仍为 `1.11.4`\r\n",
+      "downloadCount": 13,
+      "draft": false,
+      "name": "Sidet 0.2.0 - 知识库检索、联网搜索和对话归档",
+      "prerelease": false,
+      "publishedAt": "2026-06-07T14:21:40Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:382c657d2bbf3c1ba3aab6e02fec7a4ccfac75e012713b2fd9622e23ba5c1294",
+          "downloadCount": 14,
+          "name": "main.js",
+          "size": 1067856
+        },
+        {
+          "digest": "sha256:151c2d9ec858ee4aa552d7c805a2a88a518777ade12ff83a9f43bca662fba368",
+          "downloadCount": 92,
+          "name": "manifest.json",
+          "size": 264
+        },
+        {
+          "digest": "sha256:d4f4911ce8368038a72452b11c4043b91cd4296517871c080f740da473fc365c",
+          "downloadCount": 15,
+          "name": "styles.css",
+          "size": 52433
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "# Sidet 0.1.0\n\n这是 Sidet 的首次公开发布。\n\nSidet 是一个放在 Obsidian 主工作区里的 AI 对话插件。  \n你可以在主视图里直接和 AI 对话，用侧栏管理会话，也可以把对话结果整理回笔记和知识库。\n\n## 💬 在主视图与 AI 对话\n\n- 对话在主工作区进行\n- 侧栏专门用来管理所有会话\n- 支持文件夹整理、搜索、置顶\n- 对话历史会保留，方便回看\n- 当前对话支持导出\n\n## 📄 引用内容，直接接着聊\n\n现在可以把这些内容直接带进对话：\n\n- 当前笔记\n- 当前选区\n- 相关笔记\n- 文件夹摘要\n- 网页链接\n- 图片\n\n你可以围绕眼前的材料直接提问，也可以让 AI 帮你整理。\n\n## 🏠 有一个专用主页\n\n- 新建标签页可以直接打开 Sidet 主页\n- 常用命令可以固定到主页\n- 常做的动作可以直接进入\n\n## ✍️ 把 AI 的结果写回笔记，但会先给你确认\n\n支持这些写回方式：\n\n- 新建一篇笔记\n- 追加到现有笔记\n- 改写目标笔记\n\n真正写入前都会先给你预览。  \n你确认以后，它才会执行。\n\n## 📚 对话结果可以顺手整理进知识库\n\n支持这些整理方式：\n\n- 将当前对话整理到知识库\n- 将当前笔记整理到知识库\n- 为文件夹生成 `Index.md`\n- 用 `Index.md` 作为这个主题的入口\n\n这样可以把有价值的内容直接从对话里沉淀下来。\n\n## 📱 手机上也能继续用\n\n这一版包含了移动端的使用支持，重点放在这些部分：\n\n- 输入\n- 菜单\n- 滚动\n- 对话继续衔接的过程\n\n目标是在手机上也能继续对话和记录，而不是简单把电脑界面缩小。\n\n## 📖 文档与安装说明\n\n这次一起更新了 README，内容主要围绕实际使用方式展开。  \n安装方式也已经写清楚：\n\n- 可以通过 GitHub Releases 安装\n- 可以通过 BRAT 试用\n- 目前不能在 Community Plugins 里直接搜索安装\n\n## 📦 安装文件\n\n手动安装时，请下载并放入：\n\n- `main.js`\n- `manifest.json`\n- `styles.css`\n\n目录位置：\n\n`.obsidian/plugins/sidet/`\n\n## ℹ️ 版本信息\n\n- Version: `0.1.0`\n- Min Obsidian version: `1.11.4`\n",
+      "downloadCount": 92,
+      "draft": false,
+      "name": "Sidet 0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-05-21T05:14:36Z",
+      "tag": "0.1.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c4e997a332de61bf46c7b4b3e8cc33569981d314177b7cb91aa15a0f933b2f8f",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 986304
+        },
+        {
+          "digest": "sha256:421b055462c5ba4c594870d08adb055c5c5d3b84fab621f580883ec2d2058c13",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 274
+        },
+        {
+          "digest": "sha256:06d974436ab7a901e2f68dc2b2d00fbd0867bdc5489f8538f0410d753b7e9d97",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 48508
+        }
+      ],
+      "author": "jiaoyingxing",
+      "description": "# Sidet 0.0.1\n\nThe first public artifact release of Sidet.\n\nSidet is an easy-to-use AI chat plugin for Obsidian. It keeps conversation browsing on the side, the current chat in focus, and useful notes, web pages, and images easier to bring into the same flow.\n\n## What this public build already covers\n\n- side browsing with a focused main chat\n- a home page that can work as your quick launcher\n- Markdown note quoting\n- web page quoting with preview before sending\n- image context input\n- export for the current conversation\n- a confirm-first path for organizing useful results into your knowledge flow\n\n## Knowledge flow in this version\n\nThis build already includes the first lightweight structure around `Sidet/Wiki`, with:\n\n- `knowledge-card`\n- `concept-page`\n- `supporting-note`\n- `Index.md`\n\nThe goal is to keep useful knowledge easier to revisit, connect, and continue, without turning the plugin into a heavy system.\n\n## Home shortcuts and Sidet commands\n\nThese are not the same thing:\n\n- Home shortcuts: the Sidet home page can pin up to 8 selected Obsidian commands\n- Sidet commands: the plugin also ships its own command set\n\nHome shortcuts come from a filtered command pool. They can include suitable Sidet commands, suitable commands from other plugins, and some built-in Obsidian actions.\n\n## Install\n\nDownload the release assets and place these files in:\n\n```text\n.obsidian/plugins/sidet/\n```\n\nRequired files:\n\n- `main.js`\n- `manifest.json`\n- `styles.css`\n\n## Notes\n\nThis public repository ships release artifacts only. Source code is not included in this repository.\r\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "Sidet 0.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-05-14T15:39:41Z",
+      "tag": "0.0.1"
+    }
+  ],
+  "removedAt": null,
+  "repo": "jiaoyingxing/sidet"
+}
