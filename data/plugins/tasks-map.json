@@ -4,8 +4,8 @@
   "description": "A visual graph view of your tasks.",
   "errors": [],
   "id": "tasks-map",
-  "lastChangedAt": "2026-07-26T02:04:27.049Z",
-  "lastFetchedAt": "2026-07-26T02:04:27.049Z",
+  "lastChangedAt": "2026-07-27T02:04:27.067Z",
+  "lastFetchedAt": "2026-07-27T02:04:27.067Z",
   "manifest": {
     "author": "NicoKNL",
     "authorUrl": "https://github.com/NicoKNL",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.0",
     "name": "Tasks Map",
-    "version": "0.34.0"
+    "version": "0.36.1"
   },
   "name": "Tasks Map",
   "presentInCommunityList": true,
@@ -22,27 +22,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:c237f9639d8fd43fe11c20350e1cc44276d7d8f2be31c5da928b41ec13d7ce32",
-          "downloadCount": 262,
+          "digest": "sha256:23046033c01d6ccc8ad78e49a0f963ccc20270f6ff7d7b069d6e0165602ac471",
+          "downloadCount": 40,
           "name": "main.js",
-          "size": 590873
+          "size": 595471
         },
         {
-          "digest": "sha256:9cbc751bf751c84daaa7e5b2c9706b95eb20be33906921ba90f4fa685b6ce7bc",
-          "downloadCount": 264,
+          "digest": "sha256:a35e7189d959aabd7fdf355467b990d9b4c1e1984a5c18989017468d77f9fa6f",
+          "downloadCount": 40,
+          "name": "manifest.json",
+          "size": 255
+        },
+        {
+          "digest": "sha256:5f20e8c87541b61911bc486080ff92387223ade3a31b64a0b5f63fe88a5129c9",
+          "downloadCount": 39,
+          "name": "styles.css",
+          "size": 46067
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## refactor: remove all @typescript-eslint/no-explicit-any disables\n\n## Why\n\nThe Obsidian plugin reviewer flags `// eslint-disable ... no-explicit-any` comments as a quality/risk signal — a suppressed lint rule reads as \"hiding a problem,\" which was marking the plugin as low quality. This removes every such disable in `src/` by giving the values real types instead of suppressing the rule.\n\n## What\n\n- **New `src/types/obsidian-internals.ts`** — typed interfaces for the undocumented `app.plugins` registry (deliberately omitted from Obsidian's public `App` type) and the slice of the Dataview API we read. Access now goes through `app as AppWithPlugins` instead of `app as any`.\n- **`src/lib/utils.ts`** — retyped function params to `App` / `TFile` / `CachedMetadata` / `FrontMatterCache` / `TAbstractFile` / `unknown`; `.find()` now infers `TFile` from `getMarkdownFiles()`.\n- **`src/views/TaskMapGraphView.tsx`** — the ReactFlow handlers use their exported types (`EdgeMouseHandler`, `OnConnect`, `OnConnectStart` via `useCallback<T>`); the custom `dataview:index-ready` event is registered by upcasting `app.metadataCache` to the `Events` base class (whose `on(name: string, …)` accepts custom event names — no cast needed).\n- **`src/components/tag-input.tsx`** — the react-select ref uses the exported `SelectInstance<TagOption>` type.\n\n## Verification\n\n- `tsc -noEmit` (build typecheck): passes\n- `npm run lint`: 0 errors\n- `jest`: 304 tests pass\n- `grep -rn no-explicit-any src/`: none remaining\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 40,
+      "draft": false,
+      "name": "0.36.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T10:51:15Z",
+      "tag": "0.36.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e8d38d86b72cae609788d1ff83a769f8477dea342030fc43557ada10997d1316",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 595427
+        },
+        {
+          "digest": "sha256:cc9f31227d58004629ef355094b682d69481a7b3464d323cddceaf42afad5a49",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 255
+        },
+        {
+          "digest": "sha256:5f20e8c87541b61911bc486080ff92387223ade3a31b64a0b5f63fe88a5129c9",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 46067
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## feat: insert a task between two connected tasks from the edge popover\n\n> ⚠️ **Stacked on #551** (`feat/optimistic-canvas-editing`). This PR targets that branch, not `main` — review/merge #551 first, then this will retarget to `main`. The diff shown here is only the insert-task delta.\n\n## What\n\nAdds an **\"Insert task\"** button next to \"Delete edge\" in the edge popover. For an edge between two **Dataview** tasks it:\n\n1. Opens the Tasks plugin creation modal.\n2. Writes the new task and gives it an ID.\n3. Rewires `source → new → target`, removing the old `source → target` link.\n4. Updates canvas state optimistically (reusing the helpers from #551), so the inserted node and rewired edges appear without a reload.\n\nIf the vault operations fail partway, it **rolls back** the writes. Edges between non-Dataview tasks show an explanatory notice instead.\n\n## Why\n\nA common graph edit — splicing a step into an existing dependency chain — currently requires manual creation + rewiring. Relates to #82 (create tasks on edge drag), in the same \"create tasks from edge interactions\" space.\n\n## Scope & test\n\n`delete-edge-button.tsx` (new button), `TaskMapGraphView.tsx` (`onInsertTaskBetweenSelectedEdge`), i18n (`edge_actions` + insert error, en/nl/zh-CN), CSS. `npm run build`, `jest` (299 passing), `eslint` (0 errors), `stylelint`, `prettier` all pass.\n\n---\n\n🧩 Split out of #535 (part 5 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.36.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T09:47:53Z",
+      "tag": "0.36.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:736473255e38fefaf4b5311089b363381a159db1f70f746a037b2daee20cc5d0",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 593524
+        },
+        {
+          "digest": "sha256:2bfa244927bfa5ca7ed18c65c0af1c95974ba3e222a997010c787a2f992bd56c",
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 255
         },
         {
           "digest": "sha256:767bff0e6a0ab2a0f42df955f914e55f1dd89a49603caa6e7793a211d096b7b2",
-          "downloadCount": 260,
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 45818
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## feat: edit tasks in place and update the canvas without a full reload\n\n## What\n\nTwo connected improvements to how task/edge mutations reflect on the canvas:\n\n**1. Edit tasks in place**\n- New `editTaskWithTasksModal(task, app)` helper opens the Tasks plugin editor for a task. It's now shared by the task menu's edit action **and** a new **double-click-to-edit** gesture on a node.\n- Tags are stripped before handing the line to the Tasks editor and restored afterward (`stripTaskLineTags` / `restoreTaskLineTags`) so the Tasks modal doesn't choke on / drop them.\n\n**2. Optimistic canvas state (no full reload on mutate)**\n- Task create/edit and edge add/delete now update local state directly — `newlyCreatedTaskIds`, `handleTaskCreated`, `handleTaskEdited`, `updateTaskIncomingLinks` — instead of calling the full `reloadTasks`.\n- `TaskNode` re-syncs its local status/starred/tags from props via a `useEffect` so optimistic edits render immediately.\n- `onConnect` dedupes against existing incoming links before creating an edge.\n\n## Why\n\nAdding a task or editing an edge used to reload the whole graph, which **dropped existing edges and reset the layout** — that's #487. Keeping state local also removes the class of stale-match failures behind #165.\n\n## Fixes / relates\n\n- Fixes #487\n- Complements #165 (pairs well with the sign-matching fix in the robust-task-line-matching PR)\n\n## Scope & test\n\n`utils.ts` (edit helper + tag round-trip + `createNodesFromTasks` callbacks), `TaskMapGraphView.tsx` (optimistic state), `TaskNode` / `TaskMenu` wiring, types, and tests. `npm run build`, `jest` (299 passing), `eslint` (0 errors), `prettier` all pass.\n\n> Touch-points with sibling PRs (all trivial merges):\n> - Adds `onDoubleClick` to the `TaskNode` root element; the task-date-bar PR adds a `className` to the same element.\n> - Adds `setNewlyCreatedTaskIds(new Set())` to `reloadTasks`; the preserve-viewport PR refactors the same function.\n\n---\n\n🧩 Split out of #535 (part 4 of 5). The insert-task-between-edges feature (part 5) is stacked on top of this branch.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.35.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T09:32:59Z",
+      "tag": "0.35.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c237f9639d8fd43fe11c20350e1cc44276d7d8f2be31c5da928b41ec13d7ce32",
+          "downloadCount": 270,
+          "name": "main.js",
+          "size": 590873
+        },
+        {
+          "digest": "sha256:9cbc751bf751c84daaa7e5b2c9706b95eb20be33906921ba90f4fa685b6ce7bc",
+          "downloadCount": 272,
+          "name": "manifest.json",
+          "size": 255
+        },
+        {
+          "digest": "sha256:767bff0e6a0ab2a0f42df955f914e55f1dd89a49603caa6e7793a211d096b7b2",
+          "downloadCount": 268,
           "name": "styles.css",
           "size": 45818
         }
       ],
       "author": "github-actions[bot]",
       "description": "## feat: show task date pills above the selected node\n\n## What\n\nWhen a node is selected, show a small bar of date \"pills\" above it — due 📅, scheduled ⏳, start 🛫, created ➕, done ✅, canceled ❌ — for whichever dates the task defines.\n\n- New `getTaskDateProperties(taskText)` util parses dates from **emoji**, **Dataview** (`[due:: ...]`, `[[due::...]]`, `(due::...)`), and **plain-text** (`due:...`) formats.\n- `TaskNode` renders the pills (only while `selected`), with `pointer-events: none` so they never intercept clicks.\n- Strings added for en / nl / zh-CN.\n- Unit tests cover emoji, Dataview, and text extraction plus the empty case.\n\n## Why\n\nSurfaces task scheduling info directly on the canvas. Adjacent to #206 (display task time on the map) — this is the read-only display half.\n\n## Scope\n\n`getTaskDateProperties` + `TaskNode` presentation + i18n + CSS + tests. `npm run build`, `jest` (100 passing), `eslint`, `stylelint`, and `prettier` all pass.\n\n> Note: touches the `TaskNode` root element (adds `className=\"tasks-map-task-node-root\"`). PR for the optimistic-editing work (part 4) adds an `onDoubleClick` to the same element — trivial merge either way.\n\n---\n\n🧩 Split out of #535 (part 3 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 264,
+      "downloadCount": 272,
       "draft": false,
       "name": "0.34.0",
       "prerelease": false,
