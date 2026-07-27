@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-26T07:05:27.018Z",
-  "lastFetchedAt": "2026-07-26T07:05:27.018Z",
+  "lastChangedAt": "2026-07-27T07:04:27.012Z",
+  "lastFetchedAt": "2026-07-27T07:04:27.012Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.33.0"
+    "version": "0.36.0"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,27 +22,207 @@
     {
       "assets": [
         {
-          "digest": "sha256:f8cbbf244b7f069513fc3e445b1e7434f3514409d4823610a29fe9edc5d492a0",
-          "downloadCount": 9,
+          "digest": "sha256:db35e260bb1830b168c3f29d11e6fa67572e95af58f8460866a1d97c4c269ce8",
+          "downloadCount": 11,
           "name": "main.js",
-          "size": 208990
+          "size": 233709
         },
         {
-          "digest": "sha256:62f174ebfc83b0b690dc525935ca2bd88f6eb9af669bf5b60a003e34706c041d",
-          "downloadCount": 9,
+          "digest": "sha256:66c3b4290a143c147d69eb9b7804b5402cffe64bc6ea03195e1b76942b77baf7",
+          "downloadCount": 11,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:eae4be024137078b69980970790317057c3643da6f52076f6587ea0f359e57f2",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 17646
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **Email sign-ins now keep themselves signed in for about 30 days.** Plaud sessions last 24 hours, so the plugin has been asking you to reconnect every day. If you signed in with the **Sign in with email** window, it now renews that session quietly in the background before it lapses, and imports and auto-sync keep running without you doing anything. After about 30 days Plaud requires a real sign-in again, and you get the usual reconnect prompt. This has a limit worth knowing: renewal works only for the email window, because that is the only sign-in the plugin can renew on your behalf. Google and Apple sign-ins finish in your web browser, and the bookmark runs there too, so neither leaves the plugin anything to renew with. Those sessions keep working exactly as before and ask you to reconnect when they lapse. Settings now says which of the two your session is, under the connection status.\n- **If a renewal fails, the plugin says so instead of failing quietly.** It stops, shows the reconnect prompt, and does not keep hammering Plaud, which has an hourly limit on sign-in attempts. Turning on debug logging adds a **Debug: refresh the session now** command so a failure can be captured for a bug report.\n\n### Fixed\n\n- **The sign-in window no longer gets stuck when your browser storage holds several old sign-in values.** It gathers a handful of possible credentials and tries each against Plaud, but it was counting anything that merely looked like a credential toward that handful. Expired leftovers and the companion value Plaud stores beside your real session could use up every slot before it reached the one that works, leaving the window open forever after a successful login. It now ignores values it can already tell are unusable, so the slots go to real candidates. This also means one less rejected call to Plaud each time you sign in.\n- **A failed sign-in no longer leaves the plugin pointed at the wrong Plaud region.** If the window discovered your account was on a different regional server and the sign-in then failed to save, the plugin kept the new server address next to your old credential, which could send a working token to a server that would reject it. The address is now saved only together with a credential that was actually stored.\n\n",
+      "downloadCount": 11,
+      "draft": false,
+      "name": "0.36.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T23:22:20Z",
+      "tag": "0.36.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3e493a0469b4e27d02909e227b7e086eae06f0ea16d19907f6427f58c0f9a64c",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 222313
+        },
+        {
+          "digest": "sha256:5a6adecf86c702f0c280832743e9dca49dd20707eb401f0b6ff26647f3ec2cbd",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 8,
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **\"Sign in with email\" captures your session again.** The sign-in window looked for your session in one fixed place, and Plaud's web app stopped putting it there: it now nests the credential inside a larger block of data. The window would open, you would log in successfully, and nothing would happen, because it never found anything to capture. It now looks inside stored data structures the same way the browser bookmark does, and confirms the credential with Plaud before saving it, so the token that gets stored is the one that actually works. This affects both email and Google/Apple accounts, which Plaud moved to the same session model.\n\n### Changed\n\n- **Sessions now last about 24 hours on every account.** This is Plaud's change, not the plugin's: the long-lived session that used to last months is no longer issued to anyone, on any sign-in method. The plugin shows your real expiry in settings and warns before it lapses with a one-click reconnect. Nothing the plugin can do restores the longer session.\n\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.35.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T19:49:34Z",
+      "tag": "0.35.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:928e03de20f4e65aa62c207d46b7e9ad1b208fb0a013b646d69e0d34995029d0",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 218471
+        },
+        {
+          "digest": "sha256:455cecc369dd9c64341a1a4dd1d4fb6f05f1046e63eb3e1c94f08d0a393def67",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **The bookmark now works when you have more than one vault open.** Obsidian hands a link like this one to whichever vault window is focused, so if that was not the vault running Plaud Importer you got \"Unrecognized URI action\" and nothing else. The bookmark is now built for the vault you set it up in and says so on the setup page, so it reaches that vault whatever else has focus. If you use the plugin in more than one vault, run **Set up bookmark** in each and keep a bookmark per vault.\n\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.35.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T18:19:58Z",
+      "tag": "0.35.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:65dc7f3276e55b3219ea520fd020a3b2311460c4b74c0f1321e8fb69508dc702",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 217953
+        },
+        {
+          "digest": "sha256:ce09f23de53fa6463e103bfd8e373b33005733cb946419521f44edd236c30318",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **The browser bookmark now finds your sign-in on Google and Apple accounts, where 0.35.0 found nothing.** On those accounts Plaud stores no plain sign-in token at all: the live credential sits nested inside a larger block of data, alongside a second token that the server rejects and a profile record holding your name and email. 0.35.0 only looked at whole stored values, so it saw none of them and told you to sign in when you already were. The bookmark now looks inside stored data structures too, and still picks by asking Plaud which credential actually works, so the reject-on-use token and the profile record are never chosen. Verified end to end against a real Apple sign-in.\n- **A failed capture is no longer a dead end.** When the bookmark finds nothing it used to stop at a message with no way forward, which was worse than the version before it. It now always hands back something: either your sign-in, or a short diagnostic line you can send on. That line contains no token and no personal details.\n\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.35.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T17:37:51Z",
+      "tag": "0.35.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f9ba33e7161e5f456d78c885cec24dd9115206a9e40335eb7e97a1fb32668a31",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 217017
+        },
+        {
+          "digest": "sha256:743486448d576fe95e2a7c2b6675543e70d29fdc299077103f9aa4514af57671",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Changed\n\n- **Reconnecting through the browser is now one click, and it works on accounts where it used to capture nothing.** The Plaud → Obsidian bookmark sends your token straight to Obsidian over an `obsidian://` link instead of showing a box for you to copy and paste, and it no longer reads a single fixed storage key. It collects every value in the Plaud web app's own storage that decodes as a live session token, and the plugin tries each one against Plaud and keeps the first that actually works. Issue #78 turned up two account shapes this fixes: one where the usual key holds a 24-hour token, and one (reported by rogerfsh) where that key is missing entirely, the only live credential sits under a workspace-specific key, and the long-lived token that does exist has been revoked server-side. Selection is by what Plaud accepts, never by which token claims to live longest, because the revoked one claims the longest life.\n\n  **You must replace your bookmark.** Open the plugin settings, click **Set up bookmark**, and drag the new **Plaud → Obsidian (v2)** button over your old one. The old bookmark keeps working the old way (copy and paste) but cannot do any of the above.\n\n  If Obsidian does not open when you click the bookmark, it falls back to a copy-and-paste box as before, and **Paste token from clipboard** still works. The fallback now hands over the same set of candidates rather than just the first one, so pasting picks the working sign-in exactly like the link does. If Plaud cannot be reached while several candidates are in play, nothing is saved rather than guessing wrong; with a single one it is saved unverified, as before.\n\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "0.35.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T13:14:20Z",
+      "tag": "0.35.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:943184ccd01b7159eb527e1cbfd0088f0a70fd21d5d9bd835a740ca2bf2d3e6e",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 211518
+        },
+        {
+          "digest": "sha256:93c9ab358ecbd15b6d450a59483b6f64e12c7893d8f824d8d8ee8e23c1f92471",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 17254
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Added\n\n- **The plugin now warns you before your session expires.** A sticky notice with a one-click Reconnect action appears ahead of expiry: 2 hours ahead for short sessions (the 24-hour tokens some accounts get, issue #78) and 7 days ahead for long ones. The warning fires once per sign-in, works whether or not automatic sync is enabled, and reschedules itself whenever the stored credential changes.\n\n### Changed\n\n- **Auth-error screens now lead with the sign-in that works for your account.** For browser/bookmarklet (Google and Apple) accounts, the import dialog's sign-in section opens with the browser flow expanded and primary, instead of pushing the embedded email window that those accounts cannot complete. The \"Plaud rejected your token\" message no longer points at re-entering the token in settings, which was the wrong remedy for browser-flow accounts.\n\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.34.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-26T12:14:40Z",
+      "tag": "0.34.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f8cbbf244b7f069513fc3e445b1e7434f3514409d4823610a29fe9edc5d492a0",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 208990
+        },
+        {
+          "digest": "sha256:62f174ebfc83b0b690dc525935ca2bd88f6eb9af669bf5b60a003e34706c041d",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n\n- **The plugin now measures your session's real lifetime instead of promising a year.** Issue #78 showed that Plaud sets session length per account: the long-lived (~300 day) token is real and confirmed on US accounts, but at least one APSE1 account gets a 24-hour token under the same key. The settings status line now shows your actual expiry and issued lifetime (for example \"About 18 hours left (issued for 24 hours)\"), Test connection reports the same, and signing in with a short-lived session shows a one-time heads-up so the later expiry is not a surprise. All \"about a year\" wording in the app and README is corrected: session length is set by Plaud and varies by account.\n\n### Added\n\n- **New command: \"Debug: copy session status to clipboard\".** Copies a privacy-safe block (plugin version, API region, sign-in method, and a redacted token summary containing no token value and no identity claims) designed to be pasted directly into a GitHub issue. Reporting a session problem like #78 becomes a paste instead of hand-decoding JWTs.\n\n",
-      "downloadCount": 9,
+      "downloadCount": 12,
       "draft": false,
       "name": "0.33.0",
       "prerelease": false,
@@ -53,26 +233,26 @@
       "assets": [
         {
           "digest": "sha256:6c75f536f99a6683e48781e8c5cba7ca8b5fef2f85e311a8af099d472c162050",
-          "downloadCount": 94,
+          "downloadCount": 95,
           "name": "main.js",
           "size": 206215
         },
         {
           "digest": "sha256:46abf51335d2856934768e76fc816a51f763794f8fbc284f7e6de33a25b5a665",
-          "downloadCount": 97,
+          "downloadCount": 98,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:2aaf2045829d6a2851a856cd5570b340fee0f5edb0a58cd73a1b3be32b8bf98a",
-          "downloadCount": 93,
+          "downloadCount": 94,
           "name": "styles.css",
           "size": 17254
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Sending the token back through the bookmarklet link now finishes the reconnect properly.** During a browser reconnect, returning your token via the bookmarklet's send-to-Obsidian link stored it but left the job half done: paused background sync stayed paused until its next check, any retried action never ran, and the reconnect window stayed open. The link now completes the reconnect exactly like the Paste token button: sync resumes immediately, the retried action runs, and the window closes on its own. A token sent by link outside of a reconnect also resumes paused sync now.\n\n",
-      "downloadCount": 97,
+      "downloadCount": 98,
       "draft": false,
       "name": "0.32.1",
       "prerelease": false,

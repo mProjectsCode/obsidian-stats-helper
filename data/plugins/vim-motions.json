@@ -4,8 +4,8 @@
   "description": "Enhances Obsidian's Vim mode with Markdown-aware text objects, structural navigation, workspace keyboard control, and a polished Neovim-native experience. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-26T07:05:27.018Z",
-  "lastFetchedAt": "2026-07-26T07:05:27.018Z",
+  "lastChangedAt": "2026-07-27T07:04:27.012Z",
+  "lastFetchedAt": "2026-07-27T07:04:27.012Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -28,26 +28,26 @@
       "assets": [
         {
           "digest": "sha256:d21ebb90331af42d9e169a0e2666d79f04a842a3297466e4095b38d0cc14d798",
-          "downloadCount": 19,
+          "downloadCount": 65,
           "name": "main.js",
           "size": 1074428
         },
         {
           "digest": "sha256:958ef8fe974a805df8b301c57164e44eeab3e21c28071e50392475b0352ac071",
-          "downloadCount": 19,
+          "downloadCount": 66,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 18,
+          "downloadCount": 64,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Hint mode labels missing on wikilinks and markdown links when cursor is on the same line** — in Live Preview, wikilinks on the cursor's line render as `.cm-hmd-internal-link` spans (not `.cm-underline`), and markdown links render as `.cm-link`/`.cm-url` spans. These were not in `TARGET_SELECTOR`, so no hint labels appeared. In Source mode, wikilinks always render as `.cm-hmd-internal-link` and were similarly missed. Fixed by adding `.cm-hmd-internal-link`, `.cm-link`, and `.cm-url` to `OBSIDIAN_SELECTORS` and extending `classifyTarget()` to resolve links from these elements via the existing `resolveCmUnderlineHref()` pipeline. Deduplication filters prevent multiple hints per link: aliased wikilink sub-spans, nested `.cm-underline` inside `.cm-hmd-internal-link`, formatting bracket spans, and markdown link URL spans when a text span exists. ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (added selectors, extended `classifyTarget`, deduplication filters in `createHintAction`)\r\n- **Hint mode link resolution fails in Obsidian runtime** — `getEditorViewFromElement()` used the DOM `.cmView.view` property to access the CM6 EditorView, but this property is not accessible in Obsidian's runtime environment (only works in the WDIO test context). All resolved links returned `href: undefined`, causing hint labels to appear but do nothing when activated. Fixed by falling back to the `MarkdownView.editor.cm` path (the same accessor used by the rest of the codebase via `getEditorView()` in `src/util/editor.ts`). ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (`getEditorViewFromElement` fallback via `app.workspace.getActiveViewOfType(MarkdownView)`)\r\n- **Hint mode does not open external URLs from editor links** — when `resolveCmUnderlineHref()` resolved an external URL (e.g., `https://example.com`), `hintActivate()` fell through to the generic click handler because the `isInternalLink` check excluded URLs starting with `http://` or `https://`. The generic click handler dispatches pointer/click events on `<span>` elements, which have no click handler and produce no effect. Fixed by adding an explicit `window.open(linkHref)` path for external URLs. ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (`hintActivate` external URL branch)\r\n\r\n### Tests\r\n\r\n- 9 new e2e tests in `test/specs/hint-mode-links.e2e.ts`: Source mode navigation (plain, aliased, inline wikilinks), cursor-on-line Live Preview navigation, multiple wikilinks on same line, aliased wikilink deduplication, `yf` yank on wikilink, `F` open-in-new-tab on wikilink, embed wikilink hint visibility\r\n- Mode-switching helpers (`ensureLivePreview`, `ensureSourceMode`, `isLivePreview`, `isSourceMode`) extracted to `test/helpers.ts`\r\n- Spike test `test/specs/spikes/spike-hint-wikilink-issue85.e2e.ts`: 17 diagnostic tests probing DOM element discovery, `posAtDOM` mapping accuracy, `findLinkAtCursor` resolution, and end-to-end hint activation across Live Preview, Source mode, and Reading view\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Updated hint mode target classification with `.cm-hmd-internal-link`, `.cm-link`, `.cm-url` selectors, deduplication filter descriptions, EditorView fallback, and external URL handling\r\n- `CONTRIBUTING.md`: Updated `hint-mode.ts` description with cursor-on-line and Source mode link resolution, EditorView MarkdownView fallback, external URL handling\r\n- `docs/features/hint-mode.md`: Updated link handling section with Source mode support, cursor-on-line behavior, and external URL opening\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.83.0...0.84.0",
-      "downloadCount": 19,
+      "downloadCount": 66,
       "draft": false,
       "name": "0.84.0",
       "prerelease": false,
@@ -58,26 +58,26 @@
       "assets": [
         {
           "digest": "sha256:145ebbab8d58ff5c673199976517e46caaead9dcb72214c195d1f1decd0cdbc7",
-          "downloadCount": 18,
+          "downloadCount": 20,
           "name": "main.js",
           "size": 1074127
         },
         {
           "digest": "sha256:5ba5a6e731a1a3abcef3d2b9fde94cf2b690ea2b0695f0478487647a6ceace58",
-          "downloadCount": 18,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 17,
+          "downloadCount": 19,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Autocmd mode events only fire in the active editor leaf** — `InsertEnter`, `InsertLeave`, and `ModeChanged` autocmd events now fire per-view across all editors (split panes, popover hover-preview editors, canvas card text inputs) when using the bundled vim fork. Previously, these events only fired for the active workspace leaf because the `AutocmdManager` bound to a single adapter via `onActiveLeafChange()`. Non-leaf editors (popovers, canvas cards) never triggered `active-leaf-change`, so autocmd callbacks for mode events never executed in these contexts. Fixed by adding `AutocmdModeWatcher`, a CM6 `ViewPlugin` that hooks `vim-mode-change` per-EditorView and fires mode events through `AutocmdManager.fire()`. The ViewPlugin is registered via `registerEditorExtension()` and automatically applies to all editors. The single-adapter mode-change binding in `bindAdapter()` and `activate()` is gated by a `useViewPlugin` flag — when the ViewPlugin is active (bundled vim mode), the legacy binding is skipped. Built-in vim mode retains the existing active-leaf-only behavior. Other adapter-dependent events (`TextYankPost`, `CursorMoved`, `CursorHold`, `CmdlineEnter`, `CmdlineLeave`) remain active-leaf-only for v1. ([#88](https://github.com/saberzero1/motions/issues/88))\r\n    - Plugin: `src/vim/autocmd-mode-watcher.ts` (new — `AutocmdModeWatcher` ViewPlugin, `setAutocmdModeCallbacks`/`clearAutocmdModeCallbacks`), `src/lua/autocmd.ts` (`useViewPlugin` flag, `setUseViewPlugin()`, `handleModeChangeFromView()`, guarded `onModeChange` in `activate()` and `bindAdapter()`), `src/main.ts` (extension registration, callback wiring in `loadLuaConfigInternal`, cleanup in `onunload`)\r\n- **Hint mode labels missing on wikilinks and markdown links when cursor is on the same line** — in Live Preview, wikilinks on the cursor's line render as `.cm-hmd-internal-link` spans (not `.cm-underline`), and markdown links render as `.cm-link`/`.cm-url` spans. These were not in `TARGET_SELECTOR`, so no hint labels appeared. In Source mode, wikilinks always render as `.cm-hmd-internal-link` and were similarly missed. Fixed by adding `.cm-hmd-internal-link`, `.cm-link`, and `.cm-url` to `OBSIDIAN_SELECTORS` and extending `classifyTarget()` to resolve links from these elements via the existing `resolveCmUnderlineHref()` pipeline. Deduplication filters prevent multiple hints per link: aliased wikilink sub-spans, nested `.cm-underline` inside `.cm-hmd-internal-link`, formatting bracket spans, and markdown link URL spans when a text span exists. ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (added selectors, extended `classifyTarget`, deduplication filters in `createHintAction`)\r\n\r\n### Tests\r\n\r\n- 3 new unit tests in `test/unit/lua/autocmd.test.ts`: `handleModeChangeFromView` fires events, `bindAdapter` skips mode-change when `useViewPlugin` is true, `activate` skips `onModeChange` when `useViewPlugin` is true\r\n- 7 unit tests in `test/unit/vim/autocmd-mode-watcher.test.ts`: callback set/clear/overwrite, extension creation, mode payload forwarding, cleanup after clear\r\n- 4 e2e tests in `test/specs/lua-autocmd-perview.e2e.ts`: InsertEnter fires exactly once in active leaf (no double-firing), InsertEnter fires in non-active split via `Vim.handleKey`, ModeChanged fires in non-active split with correct pattern, InsertLeave fires in non-active split\r\n- Spike tests: `test/specs/spikes/spike-autocmd-multiview.e2e.ts` (13 tests — multi-view event discovery), `test/specs/spikes/spike-autocmd-popover-timing.e2e.ts` (12 tests — popover/timing analysis)\r\n- 9 new e2e tests in `test/specs/hint-mode-links.e2e.ts`: Source mode navigation (plain, aliased, inline wikilinks), cursor-on-line Live Preview navigation, multiple wikilinks on same line, aliased wikilink deduplication, `yf` yank on wikilink, `F` open-in-new-tab on wikilink, embed wikilink hint visibility\r\n- Mode-switching helpers (`ensureLivePreview`, `ensureSourceMode`, `isLivePreview`, `isSourceMode`) extracted to `test/helpers.ts`\r\n- Spike test `test/specs/spikes/spike-hint-wikilink-issue85.e2e.ts`: 17 diagnostic tests probing DOM element discovery, `posAtDOM` mapping accuracy, `findLinkAtCursor` resolution, and end-to-end hint activation across Live Preview, Source mode, and Reading view\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added per-view mode events section documenting which events fire per-view, which remain active-leaf-only, `getModeState()` semantics, and `vim.obsidian.mode()` behavior; updated hint mode target classification with `.cm-hmd-internal-link`, `.cm-link`, `.cm-url` selectors and deduplication filter descriptions\r\n- `docs/configuration/lua-config.md`: Added per-view callout to autocommands section, marked `InsertEnter`/`InsertLeave`/`ModeChanged` as \"(per-view)\" in events table\r\n- `docs/features/hint-mode.md`: Updated internal link handling section with Source mode support and cursor-on-line behavior\r\n- `CONTRIBUTING.md`: Added `autocmd-mode-watcher.ts` to codebase structure; updated `hint-mode.ts` description with cursor-on-line and Source mode link resolution\r\n- `AGENTS.md`: Updated Lua API description noting per-view autocmd mode events\r\n- `README.md`: Updated Lua configuration feature description with per-view mode events\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.82.0...0.83.0",
-      "downloadCount": 18,
+      "downloadCount": 20,
       "draft": false,
       "name": "0.83.0",
       "prerelease": false,
@@ -88,26 +88,26 @@
       "assets": [
         {
           "digest": "sha256:cf1762137f1f9cc7223e8c4724cc3a0d06301e2db841c1097c1bbb1734c528e1",
-          "downloadCount": 48,
+          "downloadCount": 49,
           "name": "main.js",
           "size": 1072236
         },
         {
           "digest": "sha256:4de88ad2817ba7d4acef91fcbbd60f4c5462cb6af852bdeb23d55bfdedac77ee",
-          "downloadCount": 53,
+          "downloadCount": 54,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 47,
+          "downloadCount": 48,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Animated cursor does not animate for count-prefixed and multi-key motions** — movements like `4j` (count-prefixed) and `g$` (multi-key) caused the cursor to teleport instead of animating. The `resolveVimMode()` method in the animated cursor controller used `vim.status` (the chord display string) to detect operator-pending mode. Since `vim.status` is set on every keystroke (e.g., `\"4\"` when typing a count digit, `\"g\"` when typing a prefix key), any multi-keystroke motion triggered a false mode change to operator-pending — which has a different cursor shape (underline vs block). Each shape change called `snap()`, bypassing the animation entirely. Fixed by removing `vim.status` from the operator-pending detection — only `inputState.operator` (set when an actual operator like `d`/`c`/`y` is registered) now gates the operator-pending mode. ([#86](https://github.com/saberzero1/motions/issues/86))\r\n    - Plugin: `src/vim/animated-cursor/controller.ts` (`resolveVimMode` — removed `vim.status` check)\r\n- **Hint mode does not navigate wikilinks or markdown links in Live Preview** — typing the hint label for a wikilink (`[[Target]]`) or markdown link (`[text](Target)`) in the editor did nothing. The `.cm-underline` spans rendered by Live Preview are `<span>` elements without `href` or `data-href` attributes — `classifyTarget` correctly identified them as links but extracted `href: undefined`, causing `hintActivate` to fall through to the generic click handler (which does nothing useful on CM6 spans). Fixed by adding `resolveCmUnderlineHref()` which uses the CM6 `EditorView.posAtDOM()` API to convert the DOM element to a document offset, then calls the existing `findLinkAtCursor()` regex from `goto-definition.ts` to extract the link target from the raw markdown text. Works for wikilinks (including aliased and heading links), markdown links (internal and external), and bare URLs. Reading view and frontmatter property links were unaffected (they use `<a>` elements with proper `href`/`data-href` attributes). ([#85](https://github.com/saberzero1/motions/issues/85))\r\n    - Plugin: `src/ui/hint-mode.ts` (`getEditorViewFromElement`, `resolveCmUnderlineHref`, updated `classifyTarget` link branch)\r\n- **Input method not restored after manual IME switch during insert mode** — when a user manually switched input methods while in insert mode (e.g., from Vietnamese to English via OS keyboard shortcut), pressing `Esc` then `i` reset the IME to the original input method instead of preserving the manually chosen one. The `save()` method in `ImSwitcher` cached the stale `lastKnownIm` value (set by the plugin's last `set()` call) before querying the OS for the actual current IME. The async OS query updated `lastKnownIm` but never wrote back to `savedImByLeaf`, so `restore()` always read the stale value. Fixed by making `save()` async — it now queries the OS for the real IME state first, then caches the result in both `lastKnownIm` and `savedImByLeaf`. `onInsertLeave()` awaits the save before switching to the normal-mode default IME. Falls back to `lastKnownIm` when the OS query fails (e.g., binary timeout). ([#83](https://github.com/saberzero1/motions/issues/83))\r\n    - Plugin: `src/im/im-switcher.ts` (`save()` async with OS query, `onInsertLeave()` awaits save, `debouncedSwitch`/`pendingSwitch` accept async callbacks), `src/lua/api.ts` (`imSave` type updated), `src/lua/loader.ts` (fire-and-forget async save), `src/lua/obsidian-api.ts` (void floating promise)\r\n\r\n### Tests\r\n\r\n- 10 e2e tests in `test/specs/hint-mode-links.e2e.ts`: wikilink/markdown-link/bare-URL href resolution from `.cm-underline` spans, wikilink navigation (plain and aliased), markdown link navigation, inline wikilink navigation, reading view regression, frontmatter property link regression, external link safety\r\n- Updated 10 unit tests in `test/unit/im-switcher.test.ts`: `save()` tests now verify OS query behavior (mock `executeImGet` return value instead of manually setting `lastKnownIm`), async settle via `vi.advanceTimersByTimeAsync(0)`, new test for fallback when OS query returns null\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added animated cursor multi-key motion fix; added hint mode link navigation fix to hint mode actions section\r\n- `CONTRIBUTING.md`: Updated `hint-mode.ts` description with link resolution via `posAtDOM`\r\n- `docs/features/hint-mode.md`: Updated internal link handling section with Live Preview resolution details\r\n- `KNOWN_LIMITATIONS.md`: Updated input method switching section with manual IME switch fix\r\n- `CONTRIBUTING.md`: Updated `im-switcher.ts` description\r\n- `AGENTS.md`: No changes needed (existing description already covers per-view IM switching)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.81.0...0.82.0",
-      "downloadCount": 53,
+      "downloadCount": 54,
       "draft": false,
       "name": "0.82.0",
       "prerelease": false,
