@@ -4,8 +4,8 @@
   "description": "Add events from calendar ics on the web to daily notes on demand. Includes vdir support. Daily Planner, Templater and Dataview friendly.",
   "errors": [],
   "id": "ics",
-  "lastChangedAt": "2026-07-26T23:05:27.078Z",
-  "lastFetchedAt": "2026-07-26T23:05:27.078Z",
+  "lastChangedAt": "2026-07-27T23:05:27.004Z",
+  "lastFetchedAt": "2026-07-27T23:05:27.004Z",
   "manifest": {
     "author": "Open Horizon Labs",
     "authorUrl": "https://openhorizonlabs.ai/",
@@ -22,27 +22,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:bfdbee3d5a861c402536e4c240d44adebbb1bfc236239ec88b90af4558e6db97",
+          "digest": "sha256:68985416e9866d7a3ac033e626dbec259c175bd91f01cf958ad8d08950595b46",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 1081678
+        },
+        {
+          "digest": "sha256:9c308870288c8ca2eb083965641e542f04f04468ad93ad4982217305a4fd0c99",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 391
+        },
+        {
+          "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 3503
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Housekeeping on top of beta1: settings labels now follow Obsidian's capitalisation guidelines, and the project finally runs tests and lint on every change**\n\nNo functional change to how events are read or imported — if you're testing beta1's multi-day fixes, everything there behaves the same.\n\n- **Settings text is now sentence case throughout**, per the [Obsidian guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines): \"Show Ongoing\" → \"Show ongoing\", \"Output Format\" → \"Output format\", \"Calendar Owner Email (Optional)\" → \"Calendar owner email (optional)\", and around 25 more. Purely cosmetic, but it's what you'll notice.\n- **Fixed a latent bug in the settings dialogs' validation guards.** Obsidian's UI components expose a `then()` method for chaining, which made every `if (field)` check in the calendar and pattern dialogs ambiguous to the type checker. Now compared explicitly. No behaviour change observed, but the guards were one refactor away from misfiring.\n- **Cut the dev-dependency vulnerability count** (29 → 25 npm audit findings) by updating the packages responsible rather than force-pinning a transitive one, which broke the toolchain when it was tried previously. None of this ever shipped in the plugin — `npm audit --omit=dev` reports 0.\n\nUnder the hood, and the reason for the rest of this release: **there was no CI on pull requests at all**. Tests, build, and lint now run on every change, lint is clean and gated, and a check fails the build if the plugin's minimum Obsidian version rises past a deprecation we're currently exempted from — so it can't be quietly forgotten.\n\nRequires Obsidian 1.12.7 or later.\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.14.4-beta2",
+      "prerelease": true,
+      "publishedAt": "2026-07-27T20:39:46Z",
+      "tag": "1.14.4-beta2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d98f2f0287a68f0e295f0a1fa8faab461b3fe0899483de54c2a53062b94be19e",
           "downloadCount": 6,
+          "name": "main.js",
+          "size": 1081551
+        },
+        {
+          "digest": "sha256:8038982f132525f9b9dd28e58e09829cc90a0d72e403d827ccf6a607951d6aaf",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 391
+        },
+        {
+          "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 3503
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Multi-day events now work the way people expect: shown on every day they cover, with their real start and end available to templates**\n\nTwo things made a six-week holiday look like a one-day event. **Show ongoing** — the setting that puts a multi-day event on each day it spans — was off by default, so unless you'd found that toggle, long events appeared only on their start day. And for anyone writing their own dataviewjs or Templater snippets, the event object only offered `time` and `endTime`, which are clock times: an all-day event running Aug 3 → Sep 14 was indistinguishable from a zero-length event (both `00:00` / `00:00`), with no way to recover the end date.\n\n- **\"Show ongoing\" is now on by default** for newly added calendars. Existing calendars are untouched — there's no migration, so nothing in your current daily notes changes. If your multi-day events still only appear on their start day, switch it on for that calendar in settings.\n- **Four new fields on the event object**, so the full extent of any event is available:\n  - `startDateTime` / `endDateTime` — full ISO 8601 with UTC offset, e.g. `2026-08-03T00:00:00+02:00`\n  - `endUtime` — Unix timestamp for the end, mirroring the existing `utime`\n  - `allDay` — `true` for all-day (`VALUE=DATE`) events\n- **Nothing existing changed.** `time`, `endTime`, `utime` and the imported markdown output are all byte-identical, so current templates keep working untouched.\n- **Fixed calendar settings dialogs leaking toggles between calendars.** The dialog edited its format settings in place instead of on a copy, so adding a calendar could quietly change the defaults used by every calendar you added afterwards — even if you cancelled the dialog — and editing a calendar applied your toggles before you pressed Save.\n- **Fixed the Full Calendar example in the README**, which rebuilt each event's end from the `endTime` clock string and so collapsed every multi-day event onto its start day. If you copied that snippet, this is likely why long events looked like single-day events in your calendar view — it now uses `endUtime` and passes `allDay` through.\n- **Added a \"Multi-day events\" section to the README** showing how to render a date range, including the one detail that trips people up: for all-day events DTEND is exclusive, so an event through Sep 14 has an `endDateTime` of Sep 15 00:00.\n\n**This release requires Obsidian 1.12.7 or later.**\n\nRefs #198\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.14.4-beta1",
+      "prerelease": true,
+      "publishedAt": "2026-07-27T14:30:33Z",
+      "tag": "1.14.4-beta1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bfdbee3d5a861c402536e4c240d44adebbb1bfc236239ec88b90af4558e6db97",
+          "downloadCount": 148,
           "name": "main.js",
           "size": 1081415
         },
         {
           "digest": "sha256:1e6f55e6fd78838b19c703a1b733de696a0d89bac868f3c1caa4c48b4cd94b04",
-          "downloadCount": 6,
+          "downloadCount": 148,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 5,
+          "downloadCount": 146,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Fixes calendar settings that could silently fail or silently lose data**\n\n- Blank or malformed Calendar URLs are now rejected when you save, with a clear inline message — previously the calendar would save successfully and only fail later, during import\n- Calendar Name is now validated too: it's used internally to identify each calendar, so a blank or duplicate name used to silently overwrite another calendar's entire saved configuration with **no warning**. This is now blocked with an inline error.\n- Deleting a calendar now asks for confirmation first\n- The \"Add Pattern\" and \"Add Field Section\" dialogs (Field Extraction settings) no longer silently do nothing when a required field is empty — errors are shown inline, same as everywhere else\n- The Priority field in extraction patterns now rejects non-numeric input with a message instead of silently ignoring it\n- Clicking Save with an unresolved error now shows a notice and scrolls you to the problem field, instead of appearing to do nothing\n- General visual cleanup across the Calendars/Field Extraction settings: consistent section spacing and corrected heading alignment\n",
-      "downloadCount": 6,
+      "downloadCount": 148,
       "draft": false,
       "name": "1.14.3",
       "prerelease": false,
@@ -53,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:bfdbee3d5a861c402536e4c240d44adebbb1bfc236239ec88b90af4558e6db97",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 1081415
         },
         {
           "digest": "sha256:dfe782ea69191f41f4b40a3acb059ba1107b2c7e4b935a354bd4a10b49630721",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 391
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta6",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.14.2-beta6",
       "prerelease": true,
@@ -263,26 +323,26 @@
       "assets": [
         {
           "digest": "sha256:31aad0bc6aaaaa35f4cf009ef6a58af5f901ed39ca468fbce495f92f67c52519",
-          "downloadCount": 12,
+          "downloadCount": 15,
           "name": "main.js",
           "size": 1079162
         },
         {
           "digest": "sha256:c5f1c358ce28a7da317fce654d64e23786464c1890f28d344fb4ef8fad5fcdd6",
-          "downloadCount": 12,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:c042ef7ee84df6848b5d76cd4f239c9ad16a52980744da883a82480a8542760f",
-          "downloadCount": 11,
+          "downloadCount": 14,
           "name": "styles.css",
           "size": 2766
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Fixes calendar import crashes and a recurring-event bug; adds template fields**\n\n- Yahoo and Microsoft 365 calendar exports no longer crash on import\n- Recurring events no longer silently drop their final occurrence when it lands exactly on the series' end date\n- Event text fields with extra parameters (e.g. a `SUMMARY` with a `LANGUAGE` tag) no longer render as `[object Object]`\n- `uid` and `url` are now available on events for use in templates\n\n**Known limitation:** This release has been tested on desktop (macOS), with Google Calendar and direct Office 365 ICS feeds. **iOS 15/16 compatibility has not been verified** — an underlying library upgrade in this release uses modern JS engine features that may not work on WebKit older than Safari 17. If you're on iOS 15/16, please report back before relying on this update.\n\n*Under the hood:*\n- Upgraded node-ical (0.20.1 → 0.27.1), resolving the last outstanding moderate security advisory and improving type safety throughout event parsing\n- Replaced native `confirm()`/`alert()` dialogs and raw `innerHTML` usage with Obsidian-native equivalents, for plugin-review compliance\n- Bumped remaining low-risk dependencies\n- Expanded regression test coverage (Yahoo/O365 fixtures, all-day and floating-time recurring events)\n",
-      "downloadCount": 12,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.14.0",
       "prerelease": false,
@@ -293,26 +353,26 @@
       "assets": [
         {
           "digest": "sha256:31aad0bc6aaaaa35f4cf009ef6a58af5f901ed39ca468fbce495f92f67c52519",
-          "downloadCount": 7,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 1079162
         },
         {
           "digest": "sha256:4921be9ced85d813110a1db0970d8b495f33a8f48cee2ab536dc581b588a16b3",
-          "downloadCount": 12,
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 391
         },
         {
           "digest": "sha256:c042ef7ee84df6848b5d76cd4f239c9ad16a52980744da883a82480a8542760f",
-          "downloadCount": 7,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 2766
         }
       ],
       "author": "github-actions[bot]",
       "description": "Recurring event edge cases are more reliable, custom field extraction can now reach an event's UID and URL, and a security advisory in the calendar-parsing library is resolved. **This beta specifically needs testing on mobile** — see the note below.\n\n## What changed for you\n\n- **Recurring events landing exactly on their last occurrence now show up.** A biweekly (or any interval) series whose final occurrence falls exactly on its `UNTIL` date was being dropped; it's now included, per the ICS spec.\n- **`getEvents()` now exposes `uid` and `url`** directly on each event, so custom field extraction and Templater templates can use an event's calendar UID or ICS URL without hunting through `extractedFields`.\n- **Templater docs now show a date-range example** — `getEvents()` already accepted a range of dates at once, it just wasn't documented.\n- **Security fix:** upgraded the underlying calendar-parsing library, resolving a known vulnerability. As a side effect, this also fixes real, previously-reported recurrence and Microsoft 365 timezone bugs (still gathering confirmation on the timezone one — see below).\n- **Discard-changes prompts now use Obsidian's own dialog style** instead of the browser's native popup.\n\n## Please test on mobile if you can\n\nThis release upgrades a core dependency that internally requires a fairly modern JavaScript engine. Desktop Obsidian (and most current Android devices) should be unaffected, but **older iOS versions could hit a parsing error** where none existed before. If that happens, you'd see an \"Error processing calendar\" notice rather than a crash — but I'd like to know if it happens at all before this goes to a stable release. If you're on mobile, please try importing your calendars and let me know either way.\n\n## Also in this release\n\n- Custom field extraction can no longer misinterpret a location/description that carries ICS parameters (a rare but real edge case)\n- General internal type-safety and code-quality cleanup to align with Obsidian's plugin review guidelines (no user-visible change expected, but flagging in case anything looks different)\n\n## If you were affected by these issues, please confirm here:\n\n- #190 (recurring event dropped on its last occurrence)\n- #192 (Microsoft 365 timezone parsing error) — I don't have a repro file for the specific error still being reported; if this affects you, a sample (anonymized) `.ics` file would help a lot\n- #198 (multi-day events only showing on the first day) — the core bug was already fixed in 1.12.1; this beta doesn't change that further\n",
-      "downloadCount": 12,
+      "downloadCount": 15,
       "draft": false,
       "name": "1.13.0-beta1",
       "prerelease": true,
@@ -323,26 +383,26 @@
       "assets": [
         {
           "digest": "sha256:64ac2d2cc166d36ca61925ddb030c8f544d4c3741fcd840c50a1c37a5cd62fc5",
-          "downloadCount": 189,
+          "downloadCount": 196,
           "name": "main.js",
           "size": 972671
         },
         {
           "digest": "sha256:1b543724cf97b1dfb79a9b1fffdb343f7dd0e3859d47625760a5176d657106ed",
-          "downloadCount": 190,
+          "downloadCount": 197,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:c042ef7ee84df6848b5d76cd4f239c9ad16a52980744da883a82480a8542760f",
-          "downloadCount": 187,
+          "downloadCount": 194,
           "name": "styles.css",
           "size": 2766
         }
       ],
       "author": "github-actions[bot]",
       "description": "Multi-day and ongoing events now show up correctly on every day they span. This release also closes out a batch of Obsidian community plugin review findings and dependency security advisories.\r\n\r\n## What changed for you\r\n\r\n- **Multi-day/ongoing events fixed** — events spanning multiple days were sometimes skipping interior days or incorrectly appearing on a day they didn't reach. They now show up consistently across their actual span.\r\n- **Correct author listing** — the plugin now shows \"Open Horizon Labs\" (with a working link) instead of the outdated \"Cloud Atlas\" name and dead URL.\r\n- **Dependency security fixes** — resolved known ReDoS advisories in build tooling.\r\n\r\n## Under the hood\r\n\r\nAligned with Obsidian's community plugin review guidelines (DOM API usage, inline styles, release asset hygiene, moment import path) so future scans stay clean, and added `eslint-plugin-obsidianmd` to catch these locally going forward.\r\n",
-      "downloadCount": 190,
+      "downloadCount": 197,
       "draft": false,
       "name": "1.12.1",
       "prerelease": false,
