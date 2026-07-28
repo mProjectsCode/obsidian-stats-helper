@@ -4,17 +4,17 @@
   "description": "Organize concursos, ciclos, editais, materiais e sessões de estudo. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "leif",
-  "lastChangedAt": "2026-07-27T09:04:27.161Z",
-  "lastFetchedAt": "2026-07-27T09:04:27.161Z",
+  "lastChangedAt": "2026-07-28T09:04:27.028Z",
+  "lastFetchedAt": "2026-07-28T09:04:27.028Z",
   "manifest": {
     "author": "Luiz Gustavo",
     "authorUrl": "https://github.com/ttusk",
-    "description": "Organize concursos, ciclos, editais, materiais e sessões de estudo.",
+    "description": "Organize concursos, matérias, assuntos, recursos, sessões e mural de estudo.",
     "id": "leif",
     "isDesktopOnly": false,
     "minAppVersion": "1.5.7",
     "name": "Leif",
-    "version": "2.1.1"
+    "version": "3.0.1"
   },
   "name": "Leif",
   "presentInCommunityList": true,
@@ -22,8 +22,68 @@
     {
       "assets": [
         {
+          "digest": "sha256:673dc2fd2d9c46be9909fa22c3778b31fb0ce487dbae0023eedbeaf7018a03f6",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 151231
+        },
+        {
+          "digest": "sha256:2c7a1cf0abaa092deb89a242c5541eb400a033b4b5611e498a87e790fe48a92b",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 283
+        },
+        {
+          "digest": "sha256:9763b70808ee99815cce5fa0305c7c5fcf56f6473ba7b658b7c388dadc15cb5d",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 23095
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Leif 3.0.1\n\n## Corrigido\n\n- Mural em modo leitura agora descarrega o componente anterior do MarkdownRenderer antes de renderizar novamente, evitando assinaturas acumuladas entre atualizações.\n- Atualização de painéis abertos usa o tipo da LeifView diretamente antes de chamar render, mantendo o refresh compatível com a API do Obsidian.\n- Seletor de recuperação usa createDiv para respeitar as regras de revisão de plugins do Obsidian.\n\n## Internas\n\n- Ajustes de tipagem evitam interfaces vazias e casts opcionais desnecessários na migração de dados.\n- Mock de testes do Obsidian passa a cobrir createDiv.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "3.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T01:37:10Z",
+      "tag": "3.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e3e8afcb2e9cfb89e940bb333fa91a6a746e09844d6e5a5c53a34e815f9191e8",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 150439
+        },
+        {
+          "digest": "sha256:0698ab7de77b887d14df772195dace38802382c0791a0e9e0a7e5aefc71ec638",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 295
+        },
+        {
+          "digest": "sha256:9763b70808ee99815cce5fa0305c7c5fcf56f6473ba7b658b7c388dadc15cb5d",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 23095
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Leif 3.0\n\n## Markdown schema 2 como única autoridade de estudo\n\n- O Markdown legível (schema 2) passa a ser a única autoridade gravável de conteúdo de estudo; o data.json mantém apenas estado operacional (seleção ativa, reconhecimento do changelog, recibos de migração e recuperação).\n- Novas instalações e novos concursos já nascem diretamente em Markdown.\n- Concursos em JSON legado e em Markdown schema 1 migrados automaticamente na inicialização, por concurso, com backup imutável, leitura semântica e recibos started/migrated/failed.\n- Falha de migração isola o concurso afetado como somente leitura com diagnósticos em português; os demais concursos seguem funcionando.\n\n## Domínio simplificado\n\n- Recurso é a unidade de progresso do estudo, com meta opcional em paginas, questoes, aulas ou minutos, e pode cobrir zero, um ou vários assuntos.\n- Acesso é um link leve (URL ou arquivo do vault) pertencente a um Recurso, sem identidade de progresso.\n- Sessão de estudo agrupa um ou mais registros de estudo ordenados; salvar a sessão persiste registros e avanço do ciclo atomicamente.\n- O ciclo rotaciona matérias ativas e recomenda o primeiro recurso incompleto; assuntos não adicionam outro nível de ciclo.\n\n## Interface com padrões nativos do Obsidian\n\n- Hoje e Registros compartilham o mesmo texto simples Agora / Próxima / Motivo, sem o Fio do ciclo nem marcadores de linha do tempo.\n- Registros é uma lista agrupada por sessão, com ações de sessão em menu nativo do Obsidian e editor agregado que salva a sessão inteira de uma vez.\n- Matérias, Recursos, Assuntos e Mural reformulados como tabelas e listas legíveis com coluna Ações fixa e opaca, nomes que quebram apenas entre palavras e células numéricas e de status em uma linha.\n- Mural renderizado com MarkdownRenderer em modo leitura, com modo de edição explícito que só atualiza as notas e preserva o Markdown do usuário.\n\n## Sincronização de edições externas\n\n- Observador de eventos do vault em Leif/, com debounce, ignorando .staging/, .backups/ e Leif/diagnosticos.md, e supressão de eventos de escrita própria para evitar laços de feedback.\n- Sincronização na inicialização para edições feitas enquanto o Obsidian estava fechado.\n- Documentos filho válidos sem leif-id recebem um novo ID e são vinculados à região wikilink do pai na próxima sincronização.\n- Leif/diagnosticos.md reescrito com carimbo, código estável, severidade, caminho, explicação em português e reparo concreto; um diagnóstico limpo reescreve o relatório como sucesso.\n\n## Comandos e recuperação\n\n- Paleta de comandos final: Abrir painel, Abrir Hoje, Nova sessão de estudo, Registrar estudo recomendado, Avançar ciclo sem registrar, Validar Markdown, Validar e sincronizar Markdown, Abrir relatório de diagnósticos, Criar backup agora, Recuperar backup.\n- Backup manual em Leif/.backups/manual-<timestamp>/manifest.json e seletor de recuperação que restaura backups compatíveis em staging e nunca reativa JSON como autoridade gravável.\n- Sem caminho de reversão para JSON: nenhuma superfície de comando restaura a autoridade legada.\n\n## Documentação pública\n\n- docs/leif-markdown.md como referência autoritativa do schema 2.\n- docs/manual-editing.md com fluxos de criação, cópia, renomeação, reparenteamento, reordenação, exclusão e diagnóstico.\n- docs/migration-and-recovery.md com migração automática, falhas somente leitura, backups e política sem reversão para JSON.\n\n## Internas\n\n- Observador de eventos do Vault, sincronizador, projetor de schema 1, serviço de recuperação de backups, seletor de recuperação e paleta final de comandos cobertos por testes.\n- Versão mínima suportada mantida em Obsidian 1.5.7; plugin permanece mobile-safe.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "3.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T01:18:44Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:5ed4cb7b1fe0f7531a66ee0252d9bd8a75499ae3bdd98b1ad37ecf75f4bdb886",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "main.js",
           "size": 148568
         },
