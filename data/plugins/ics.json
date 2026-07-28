@@ -4,8 +4,8 @@
   "description": "Add events from calendar ics on the web to daily notes on demand. Includes vdir support. Daily Planner, Templater and Dataview friendly.",
   "errors": [],
   "id": "ics",
-  "lastChangedAt": "2026-07-27T23:05:27.004Z",
-  "lastFetchedAt": "2026-07-27T23:05:27.004Z",
+  "lastChangedAt": "2026-07-28T23:02:26.999Z",
+  "lastFetchedAt": "2026-07-28T23:02:26.999Z",
   "manifest": {
     "author": "Open Horizon Labs",
     "authorUrl": "https://openhorizonlabs.ai/",
@@ -22,27 +22,87 @@
     {
       "assets": [
         {
-          "digest": "sha256:68985416e9866d7a3ac033e626dbec259c175bd91f01cf958ad8d08950595b46",
-          "downloadCount": 3,
+          "digest": "sha256:662b75366be505af036de36d0a0cee28dc5b5ebb4f96b5458fbb88db9fb24171",
+          "downloadCount": 4,
           "name": "main.js",
-          "size": 1081678
+          "size": 1084036
         },
         {
-          "digest": "sha256:9c308870288c8ca2eb083965641e542f04f04468ad93ad4982217305a4fd0c99",
-          "downloadCount": 4,
+          "digest": "sha256:96964356d7253e232e3021fb59f7f093cc074b913f3c3ee1e5988499daff727d",
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 391
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 2,
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 3503
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's fixed\n\nThanks to @spi43984 for testing the previous beta and providing precise calendar examples.\n\n- **Distinct events are no longer lost during deduplication.** Occurrences are identified by UID, recurrence identity, start, and end, so separate events sharing a title and time remain separate.\n- **Broken all-day re-exports are restored.** Events re-exported as same-timezone `00:00:00` through `23:59:59` are treated as all-day ranges with the correct inclusive calendar dates and exclusive end date.\n- **Recurring and multi-day events now use one occurrence-selection pipeline.** This fixes several related cases:\n  - overnight and multi-day recurrences losing their duration or later days;\n  - all-day recurrences shifting dates in positive UTC offsets;\n  - `EXDATE` or overrides incorrectly removing every occurrence on a day;\n  - duplicate occurrence emission and sparse date queries returning intervening events;\n  - masters or detached overrides disappearing when no RRULE is present;\n  - parsed calendar data being mutated during filtering;\n  - DATE and DATE-TIME `RDATE` occurrences being omitted;\n  - spring-forward days being dropped from all-day spans.\n- **Missing metadata is deterministic.** Events without `CREATED` or `LAST-MODIFIED` no longer receive a new timestamp on every call.\n\n## Behavior change\n\nTimed recurring events are now assigned to the day on which they occur in the user's local timezone, consistently with one-off events and Daily Note queries. Previously, recurring events could use the organizer's calendar date instead.\n\n## Compatibility rule\n\nThe all-day recovery rule is intentionally narrow: start must be exactly `00:00:00`, end exactly `23:59:59`, and both values must declare the same timezone. Near-miss timed events and legitimate next-midnight 24-hour events remain timed.\n\n## Verification\n\n- 119 Jest tests passed, with 1 pre-existing skip.\n- 50 compiled-artifact contract tests passed.\n- 47 occurrence tests passed in each of 9 host timezones from UTC-11 through UTC+14.\n- The downloaded release assets passed the reported UID and Berlin all-day scenarios in Berlin, New York, and Kiritimati.\n\n## Known limitations\n\n- `RDATE` values using the `PERIOD` form are not expanded.\n- All-day compatibility inference is limited to the reported same-timezone `00:00:00` through `23:59:59` shape. Fractional-second values are invalid RFC 5545 DATE-TIME input; ambiguous next-midnight and `23:59:00` forms remain timed unless a concrete provider case establishes the intended semantics.\n\nInstall **1.14.4-beta4** through BRAT and please report any provider-specific recurrence or timezone cases you find.\n\nFull implementation and test details: [#254](https://github.com/open-horizon-labs/obsidian-ics/pull/254)\n\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "1.14.4-beta4",
+      "prerelease": true,
+      "publishedAt": "2026-07-28T19:25:52Z",
+      "tag": "1.14.4-beta4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6a21728e78e3dfa6a3c9e48c65d26b9425221f7483357902453d6c04d12a7c40",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 1081794
+        },
+        {
+          "digest": "sha256:d5bf3159487110dcc3faae925059f3f586f431c0f85e48485889cf3aaca3f152",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 391
+        },
+        {
+          "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 3503
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Automated beta release for version 1.14.4-beta3",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "1.14.4-beta3",
+      "prerelease": true,
+      "publishedAt": "2026-07-28T16:01:41Z",
+      "tag": "1.14.4-beta3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:68985416e9866d7a3ac033e626dbec259c175bd91f01cf958ad8d08950595b46",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1081678
+        },
+        {
+          "digest": "sha256:9c308870288c8ca2eb083965641e542f04f04468ad93ad4982217305a4fd0c99",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 391
+        },
+        {
+          "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Housekeeping on top of beta1: settings labels now follow Obsidian's capitalisation guidelines, and the project finally runs tests and lint on every change**\n\nNo functional change to how events are read or imported — if you're testing beta1's multi-day fixes, everything there behaves the same.\n\n- **Settings text is now sentence case throughout**, per the [Obsidian guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines): \"Show Ongoing\" → \"Show ongoing\", \"Output Format\" → \"Output format\", \"Calendar Owner Email (Optional)\" → \"Calendar owner email (optional)\", and around 25 more. Purely cosmetic, but it's what you'll notice.\n- **Fixed a latent bug in the settings dialogs' validation guards.** Obsidian's UI components expose a `then()` method for chaining, which made every `if (field)` check in the calendar and pattern dialogs ambiguous to the type checker. Now compared explicitly. No behaviour change observed, but the guards were one refactor away from misfiring.\n- **Cut the dev-dependency vulnerability count** (29 → 25 npm audit findings) by updating the packages responsible rather than force-pinning a transitive one, which broke the toolchain when it was tried previously. None of this ever shipped in the plugin — `npm audit --omit=dev` reports 0.\n\nUnder the hood, and the reason for the rest of this release: **there was no CI on pull requests at all**. Tests, build, and lint now run on every change, lint is clean and gated, and a check fails the build if the plugin's minimum Obsidian version rises past a deprecation we're currently exempted from — so it can't be quietly forgotten.\n\nRequires Obsidian 1.12.7 or later.\n",
-      "downloadCount": 4,
+      "downloadCount": 7,
       "draft": false,
       "name": "1.14.4-beta2",
       "prerelease": true,
@@ -53,13 +113,13 @@
       "assets": [
         {
           "digest": "sha256:d98f2f0287a68f0e295f0a1fa8faab461b3fe0899483de54c2a53062b94be19e",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "main.js",
           "size": 1081551
         },
         {
           "digest": "sha256:8038982f132525f9b9dd28e58e09829cc90a0d72e403d827ccf6a607951d6aaf",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 391
         },
@@ -72,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Multi-day events now work the way people expect: shown on every day they cover, with their real start and end available to templates**\n\nTwo things made a six-week holiday look like a one-day event. **Show ongoing** — the setting that puts a multi-day event on each day it spans — was off by default, so unless you'd found that toggle, long events appeared only on their start day. And for anyone writing their own dataviewjs or Templater snippets, the event object only offered `time` and `endTime`, which are clock times: an all-day event running Aug 3 → Sep 14 was indistinguishable from a zero-length event (both `00:00` / `00:00`), with no way to recover the end date.\n\n- **\"Show ongoing\" is now on by default** for newly added calendars. Existing calendars are untouched — there's no migration, so nothing in your current daily notes changes. If your multi-day events still only appear on their start day, switch it on for that calendar in settings.\n- **Four new fields on the event object**, so the full extent of any event is available:\n  - `startDateTime` / `endDateTime` — full ISO 8601 with UTC offset, e.g. `2026-08-03T00:00:00+02:00`\n  - `endUtime` — Unix timestamp for the end, mirroring the existing `utime`\n  - `allDay` — `true` for all-day (`VALUE=DATE`) events\n- **Nothing existing changed.** `time`, `endTime`, `utime` and the imported markdown output are all byte-identical, so current templates keep working untouched.\n- **Fixed calendar settings dialogs leaking toggles between calendars.** The dialog edited its format settings in place instead of on a copy, so adding a calendar could quietly change the defaults used by every calendar you added afterwards — even if you cancelled the dialog — and editing a calendar applied your toggles before you pressed Save.\n- **Fixed the Full Calendar example in the README**, which rebuilt each event's end from the `endTime` clock string and so collapsed every multi-day event onto its start day. If you copied that snippet, this is likely why long events looked like single-day events in your calendar view — it now uses `endUtime` and passes `allDay` through.\n- **Added a \"Multi-day events\" section to the README** showing how to render a date range, including the one detail that trips people up: for all-day events DTEND is exclusive, so an event through Sep 14 has an `endDateTime` of Sep 15 00:00.\n\n**This release requires Obsidian 1.12.7 or later.**\n\nRefs #198\n",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "1.14.4-beta1",
       "prerelease": true,
@@ -83,26 +143,26 @@
       "assets": [
         {
           "digest": "sha256:bfdbee3d5a861c402536e4c240d44adebbb1bfc236239ec88b90af4558e6db97",
-          "downloadCount": 148,
+          "downloadCount": 191,
           "name": "main.js",
           "size": 1081415
         },
         {
           "digest": "sha256:1e6f55e6fd78838b19c703a1b733de696a0d89bac868f3c1caa4c48b4cd94b04",
-          "downloadCount": 148,
+          "downloadCount": 190,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 146,
+          "downloadCount": 188,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Fixes calendar settings that could silently fail or silently lose data**\n\n- Blank or malformed Calendar URLs are now rejected when you save, with a clear inline message — previously the calendar would save successfully and only fail later, during import\n- Calendar Name is now validated too: it's used internally to identify each calendar, so a blank or duplicate name used to silently overwrite another calendar's entire saved configuration with **no warning**. This is now blocked with an inline error.\n- Deleting a calendar now asks for confirmation first\n- The \"Add Pattern\" and \"Add Field Section\" dialogs (Field Extraction settings) no longer silently do nothing when a required field is empty — errors are shown inline, same as everywhere else\n- The Priority field in extraction patterns now rejects non-numeric input with a message instead of silently ignoring it\n- Clicking Save with an unresolved error now shows a notice and scrolls you to the problem field, instead of appearing to do nothing\n- General visual cleanup across the Calendars/Field Extraction settings: consistent section spacing and corrected heading alignment\n",
-      "downloadCount": 148,
+      "downloadCount": 190,
       "draft": false,
       "name": "1.14.3",
       "prerelease": false,
@@ -119,7 +179,7 @@
         },
         {
           "digest": "sha256:dfe782ea69191f41f4b40a3acb059ba1107b2c7e4b935a354bd4a10b49630721",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 391
         },
@@ -132,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta6",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.14.2-beta6",
       "prerelease": true,
@@ -149,7 +209,7 @@
         },
         {
           "digest": "sha256:6b99286120322b3882031499a603294cde19ca22319def5a5584a763e1c0cddf",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 391
         },
@@ -162,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta5",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.14.2-beta5",
       "prerelease": true,
@@ -179,7 +239,7 @@
         },
         {
           "digest": "sha256:dffefa895996f40e4dbbde520b6b75b8036eb0ff88178e2b069bb1b56f90921d",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 391
         },
@@ -192,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta4",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.14.2-beta4",
       "prerelease": true,
@@ -209,7 +269,7 @@
         },
         {
           "digest": "sha256:cc4213b282c6d4d9c89d58a636323c0914c9c5b198fdf592455af269f8f4be0d",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 391
         },
@@ -222,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta3",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.14.2-beta3",
       "prerelease": true,
@@ -239,7 +299,7 @@
         },
         {
           "digest": "sha256:be28c6c805b53982de3752e6c12034b4ef847a092ff6c1e80966855fdba725ec",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 391
         },
@@ -252,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta2",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.14.2-beta2",
       "prerelease": true,
@@ -269,7 +329,7 @@
         },
         {
           "digest": "sha256:eb79649c4f49aa0ddee4834247c967ef5c778fb88a293bd4c5d34161eefe8232",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 391
         },
@@ -282,7 +342,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.2-beta1",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.14.2-beta1",
       "prerelease": true,
@@ -299,7 +359,7 @@
         },
         {
           "digest": "sha256:e946f5c867fc1bf669d9bc0bc71902ab36f84803de239ca392e2c0c39b2e65f2",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 391
         },
@@ -312,7 +372,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automated beta release for version 1.14.1-beta1",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.14.1-beta1",
       "prerelease": true,
