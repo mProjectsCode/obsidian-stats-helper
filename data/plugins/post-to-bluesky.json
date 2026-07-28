@@ -4,46 +4,106 @@
   "description": "Post selected text or entire note to Bluesky.",
   "errors": [],
   "id": "post-to-bluesky",
-  "lastChangedAt": "2026-07-26T22:01:27.020Z",
-  "lastFetchedAt": "2026-07-26T03:01:26.991Z",
+  "lastChangedAt": "2026-07-28T03:03:27.005Z",
+  "lastFetchedAt": "2026-07-28T03:03:27.005Z",
   "manifest": {
     "author": "RieTamura",
     "authorUrl": "https://github.com/RieTamura",
     "description": "Post selected text or entire note to Bluesky.",
     "fundingUrl": "https://github.com/sponsors/RieTamura",
     "id": "post-to-bluesky",
-    "isDesktopOnly": true,
+    "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Post To Bluesky",
-    "version": "0.1.6"
+    "version": "0.3.0"
   },
   "name": "Post To Bluesky",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:d83c102530dbcab0af91bf74dee09f34e69ed8cb7b7420901c613d354dbb9a95",
+          "digest": "sha256:a01aa18d9dc47518f94726a778b8ba65a9483a7c1fcdd8b34de367ec621bbb8e",
           "downloadCount": 4,
+          "name": "main.js",
+          "size": 45443
+        },
+        {
+          "digest": "sha256:10abbc3d684f30f8d861801910f653a5de6a2e7fb059e35e70da2bd471bb5b27",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:70f8723c53ac572c6fd21b00923c219933b467970ab2b44d222da7faf5c01e86",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 7338
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## 日本語\n\n### ノートの紐づけ機能を追加\n\n下書きノート・履歴ノートの frontmatter に、指定したノートへのリンクを自動で追加します。紐づけ先のバックリンク欄に投稿が集まるので、デイリーノートやMOCから当日の投稿をたどれるようになります。\n\n```yaml\n---\nposted_at: 2026-07-27T17:50:42\nurl: https://bsky.app/profile/xxx.bsky.social/post/3kabc...\nrelated: \"[[01_data/2026/07/2026-07-27]]\"   # 自動で追加される\n---\n```\n\n- 紐づけ先は**下書き用・履歴用で別々に指定**できます。空欄にすればその側は紐づけません\n- vault内ノートのサジェスト付き入力欄で選択できます\n- プロパティ名は設定で変更できます（既定: `related`）\n- 紐づけ先ノート自体は書き換えません。リンクは投稿側のノートにだけ書かれます\n- 既に同じプロパティに値が入っている場合は**上書きせず**、既存の値を残したまま追加します。同じリンクが既にあるときは何もしないので、再投稿しても重複しません\n\n### 日付変数に対応\n\n紐づけ先の欄には日付変数を書けます。書式は Obsidian のデイリーノート／テンプレートのコアプラグインと同じ記法です。\n\n```\n01_data/{{date:YYYY/MM/YYYY-MM-DD}}   →   related: \"[[01_data/2026/07/2026-07-27]]\"\n```\n\n| 変数 | 展開結果 |\n|------|----------|\n| `{{date}}` | `2026-07-27`（既定書式 `YYYY-MM-DD`） |\n| `{{date:YYYY/MM}}` | `2026/07` |\n| `{{time:HHmm}}` | `1750`（既定書式は `HH:mm`。パスに使う場合は `HHmm` を推奨） |\n\n1つの設定に複数の変数を書けます。展開の基準は投稿日時（`posted_at` と同じ時刻）です。\n\n紐づけ先のノートが存在しない場合の挙動は書き方によって変わります。**変数入り**なら未作成リンクとして書くので、その日のデイリーノートを後から作れば自動で繋がります。**固定パス**が実在しない場合はリンクを付けず通知のみ表示するので、紐づけ先をリネームした場合やパスの打ち間違いに気づけます。いずれの場合も投稿自体は成功として扱われます。\n\n### 設定項目を3件追加\n\n- **紐づけプロパティ名**（既定: `related`）\n- **下書きノートの紐づけ先**（既定: 空欄＝紐づけなし）\n- **履歴ノートの紐づけ先**（既定: 空欄＝紐づけなし）\n\n---\n\n## English\n\n### Added note linking\n\nA link to a note of your choice is added automatically to the frontmatter of draft and history notes. Posts then gather in the target note's backlinks, so you can browse a day's posts from a daily note or an MOC.\n\n```yaml\n---\nposted_at: 2026-07-27T17:50:42\nurl: https://bsky.app/profile/xxx.bsky.social/post/3kabc...\nrelated: \"[[01_data/2026/07/2026-07-27]]\"   # added automatically\n---\n```\n\n- Draft notes and history notes have **separate targets**. Leave one empty to disable it\n- Both are picked through an input with vault note suggestions\n- The property name is configurable (default: `related`)\n- The target note itself is never modified — the link is only written to the posting note\n- If the property already holds a value it is **not overwritten**; the new link is appended alongside the existing values. A link that is already there is left alone, so re-posting never creates duplicates\n\n### Date variables\n\nLink targets accept date variables, using the same syntax as the Daily notes and Templates core plugins.\n\n```\n01_data/{{date:YYYY/MM/YYYY-MM-DD}}   →   related: \"[[01_data/2026/07/2026-07-27]]\"\n```\n\n| Variable | Expands to |\n|----------|------------|\n| `{{date}}` | `2026-07-27` (default format `YYYY-MM-DD`) |\n| `{{date:YYYY/MM}}` | `2026/07` |\n| `{{time:HHmm}}` | `1750` (default format is `HH:mm`; prefer `HHmm` inside a path) |\n\nA single setting can contain several variables, and they expand against the posting time (the same instant as `posted_at`).\n\nBehaviour when the target note does not exist depends on how it is written. A target **with variables** is written as an unresolved link, so creating that daily note later connects it automatically. A **fixed path** that does not resolve adds no link and shows a notice instead, so a renamed target or a typo does not go unnoticed. Either way the post itself is still treated as successful.\n\n### 3 new settings\n\n- **Link property name** (default: `related`)\n- **Draft note link target** (default: empty — no link)\n- **History note link target** (default: empty — no link)\n\n---\n\n**Full changelog**: [日本語 README](https://github.com/RieTamura/Post-To-Bluesky/blob/master/README_JA.md#更新履歴) | [English README](https://github.com/RieTamura/Post-To-Bluesky/blob/master/README_EN.md#changelog)\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-27T10:22:19Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:f48af771e28e11b47628a7129a37c93e16b980f0f3776cbfa221a81924f6d6ae",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 40003
+        },
+        {
+          "digest": "sha256:7ca29e5c8b5774dd4c86d04a82562bc734080b33e996f6eede3fe1a825329908",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 320
+        },
+        {
+          "digest": "sha256:70f8723c53ac572c6fd21b00923c219933b467970ab2b44d222da7faf5c01e86",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 7338
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Post to Bluesky from notes, with post history, images & emoji.\nObsidianからBlueskyへ投稿できるプラグインです。下書きノート・投稿履歴・Images・Emoji対応。\n\n## ✨ New features / 新機能\n\n**📱 Mobile support / モバイル対応**\n- Works on the Obsidian app for iOS and Android (`isDesktopOnly: false`). Only the image attachment UI is hidden on mobile — every text posting feature works.\n- iOS / Android のObsidianアプリでも投稿できるようになりました。モバイルでは画像添付UIのみ非表示で、テキスト投稿の全機能が動作します。\n\n**📄 Post from draft notes / 下書きノートから投稿**\n- Notes with `type: bluesky-draft` in their frontmatter appear in a draft list, with a character-count badge (red past 300). Run **Post from draft notes** or use the ribbon icon.\n- On success the note itself is marked as posted: `bluesky_posted` (a checkbox), `posted_at` and `url` are added, and the draft value is removed so it drops out of the list.\n- frontmatter に `type: bluesky-draft` を書いたノートが下書き一覧に表示されます（文字数バッジ付き・300字超は赤色）。コマンド「Post from draft notes」またはリボンアイコンから開けます。\n- 投稿に成功すると、そのノートに `bluesky_posted`（チェックボックス）・`posted_at`・`url` が付き、下書き判定値が取り除かれて一覧から消えます。\n\n**📋 Automatic post history notes / 投稿履歴ノートの自動作成**\n- Off by default. When enabled, each post from the composer creates a note with the body, timestamp, post URL and tags. Hashtags in the body are moved into frontmatter `tags`.\n- The destination folder is chosen from a folder-suggest input, and is created automatically if it does not exist.\n- 既定はオフ。有効にすると、投稿モーダルからの投稿ごとに本文・日時・投稿URL・タグを持つノートが作られます。本文中のハッシュタグは frontmatter の `tags` に移されます。\n- 保存先はフォルダサジェスト付きの入力欄で選択でき、存在しないフォルダは自動作成されます。\n\n**⚙️ Four new settings / 設定項目を4件追加**\n- Draft property name / 下書きプロパティ名（既定: `type`）\n- Draft property value / 下書き判定値（既定: `bluesky-draft`）\n- Save post history / 投稿履歴を保存（既定: オフ）\n- History note folder / 履歴ノートの保存先（既定: `Bluesky Posts`）\n\n## 🐛 Fixes / 修正\n\n- Link previews were not refreshed while typing / 本文入力時にリンクプレビューが更新されない不具合\n- Posts containing a link with a thumbnail failed to send / サムネイル付きリンクを含む投稿が失敗する不具合\n- Re-login on expired auth, rate-limit retry and detailed API error messages were never reached / 認証切れの再ログイン・レート制限時の再試行・APIエラーの詳細表示が機能していない不具合\n- An incomplete URL typed into the body stopped the composer from picking up any further input / 入力途中の不完全なURLを含む本文で、それ以降の入力が反映されなくなる不具合\n\n## 📦 Install / インストール\n\nAvailable from **Settings → Community plugins → Browse**, or install manually by placing `main.js`, `manifest.json` and `styles.css` in `<your-vault>/.obsidian/plugins/post-to-bluesky/`.\n\n**設定 → コミュニティプラグイン → 閲覧** からインストールできます。手動の場合は `main.js`・`manifest.json`・`styles.css` を `<vault>/.obsidian/plugins/post-to-bluesky/` に配置してください。\n\nRequires Obsidian 1.8.7 or later. / Obsidian 1.8.7 以上が必要です。\n\n## 📖 Documentation / ドキュメント\n\n[日本語 README](https://github.com/RieTamura/Post-To-Bluesky/blob/master/README_JA.md) | [English README](https://github.com/RieTamura/Post-To-Bluesky/blob/master/README_EN.md)\n\n**Full changelog:** https://github.com/RieTamura/Post-To-Bluesky/compare/0.1.6...0.2.0\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-27T01:20:03Z",
+      "tag": "0.2.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d83c102530dbcab0af91bf74dee09f34e69ed8cb7b7420901c613d354dbb9a95",
+          "downloadCount": 6,
           "name": "main.js",
           "size": 29162
         },
         {
           "digest": "sha256:dff61e68c925152b4a54652b932050d72f4fd08e204194a21ecbc39271770c1c",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 319
         },
         {
           "digest": "sha256:6f753076079cb2e110b51aba907cb82c523c789cb24d90377b404df3f93e7d1f",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 6339
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's Changed\n\nMaintenance release addressing all warnings from the official plugin review scans. No functional changes to posting features.\n\n- Plugin settings now appear in Obsidian's settings search on Obsidian 1.13+ (adopted the declarative settings API, with fallback for older versions)\n- Timer functions now use `window.setTimeout`/`window.clearTimeout` per plugin guidelines\n- Replaced custom DOM helpers and `any` types flagged by the review\n- Removed `!important` from styles\n- Updated dev dependencies (eslint 10, latest Obsidian typings); zero npm audit findings\n- Release assets now include build provenance attestation\n- `minAppVersion` is now 1.8.7\n\n**Full Changelog**: https://github.com/RieTamura/Post-To-Bluesky/compare/0.1.5...0.1.6",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,
@@ -231,6 +291,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-26T22:01:27.020Z",
+  "removedAt": null,
   "repo": "rietamura/Post-To-Bluesky"
 }
