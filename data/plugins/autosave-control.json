@@ -4,8 +4,8 @@
   "description": "An Obsidian plugin for delaying or disabling automatic saves. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "autosave-control",
-  "lastChangedAt": "2026-07-27T06:00:27.003Z",
-  "lastFetchedAt": "2026-07-27T06:00:27.003Z",
+  "lastChangedAt": "2026-07-28T06:01:27.570Z",
+  "lastFetchedAt": "2026-07-28T06:01:27.570Z",
   "manifest": {
     "author": "Miha Smrekar",
     "authorUrl": "https://github.com/mihasm/",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:e835403c7a85a78bea33938723254d71238e7a4cc8c14c09723a771c27cc5dcd",
-          "downloadCount": 23,
+          "downloadCount": 51,
           "name": "main.js",
           "size": 50798
         },
         {
           "digest": "sha256:260807797633e2b858e5ebde0d30efa3421528b056bba7ffe76ff012f5ab3d6a",
-          "downloadCount": 26,
+          "downloadCount": 63,
           "name": "manifest.json",
           "size": 296
         },
         {
           "digest": "sha256:e216040cd9e22c70c39e472bf2f9ebc1f38c3a9ca9a5b7d42e52e9fd16fb6ab5",
-          "downloadCount": 22,
+          "downloadCount": 49,
           "name": "styles.css",
           "size": 1346
         }
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.19.\n\nRelease notes:\n-fix for #43 : another plugin rewriting a note directly on disk (Frontmatter Modified Date, Linter, Templater, sync clients, ...) could wipe out everything you had typed since the last save. Obsidian merges an on-disk change into an open editor only when it considers the note to have unsaved changes, and the flag it uses for that is set by the very save request this plugin holds back. So a note with pending edits looked already-saved to Obsidian: instead of merging, it silently replaced the editor's text with the version from disk, and the delayed autosave then wrote that stripped-down version back out. The plugin now keeps that flag truthful for every note it is holding, so Obsidian merges such a change exactly as it does without this plugin.\n-fix for #43 (second layer): the merge above is best-effort and can still drop an edit that lands in the same part of the note the other plugin rewrote, e.g. inside the frontmatter block. When another plugin uses Obsidian's read-modify-write API (the one processFrontMatter is built on), the plugin now writes the note's pending changes out first, so that plugin reads what you actually have on screen and there is nothing left to merge. This happens in Delayed Autosave mode only, one write earlier than the delay alone would have made; Autosave Disabled mode still never writes anything on your behalf and falls back to the merge.\n-fix: clicking out of the editor no longer postpones a pending save. Blurring the editor makes Obsidian ask for a save, and with the corrected flag above that request now reaches the plugin — it must not restart the countdown, since clicking away is not an edit. The delay stays \"time since your last actual edit\".\n-internal: added end-to-end regression tests for all three, each verified to fail without its fix — held edits surviving an external frontmatter rewrite in both save modes, the pre-flush handing the other plugin an up-to-date read, and a blur keeping the original save deadline.\n",
-      "downloadCount": 26,
+      "downloadCount": 63,
       "draft": false,
       "name": "1.0.19",
       "prerelease": false,
