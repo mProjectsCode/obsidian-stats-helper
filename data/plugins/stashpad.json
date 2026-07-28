@@ -4,8 +4,8 @@
   "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "stashpad",
-  "lastChangedAt": "2026-07-27T07:04:27.012Z",
-  "lastFetchedAt": "2026-07-27T07:04:27.012Z",
+  "lastChangedAt": "2026-07-28T07:04:27.060Z",
+  "lastFetchedAt": "2026-07-28T07:04:27.060Z",
   "manifest": {
     "author": "Human",
     "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Stashpad",
-    "version": "0.206.1"
+    "version": "0.208.5"
   },
   "name": "Stashpad",
   "presentInCommunityList": true,
@@ -21,8 +21,38 @@
     {
       "assets": [
         {
+          "digest": "sha256:b1a2320c7891caf9b6e29dc9a5645700e6cf471a5f8b6f17049e4776277cc0ac",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 970859
+        },
+        {
+          "digest": "sha256:5357134de39b2fb818a2f31e66fa1e445004916138399879d09f71fdf0418e04",
+          "downloadCount": 14,
+          "name": "manifest.json",
+          "size": 349
+        },
+        {
+          "digest": "sha256:46b38d3ac1401633ff57bd46546f25b26516bc08bb8109c7c7cfce34064cce6b",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 234012
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.208.5\n\nCovers everything since 0.206.1. The headline is the new-user experience: opening\nStashpad for the first time now asks before it writes anything, explains what a\nStashpad is, and can load example content so the idea lands immediately.\n\n## 0.207.0 — line numbers in the editor\n\n- Line-number gutter in the note editor, plus a logical line count in the stat\n  row. New setting \"Line numbers in the editor\" (on by default, desktop only).\n- Numbers stay aligned through soft wrapping. A textarea has no gutter and no way\n  to report where a line was drawn, so each number is positioned by measurement —\n  a hidden mirror with the textarea's exact width, font and padding renders every\n  logical line and each number takes that line's real height. A naive\n  one-row-per-line gutter desyncs the moment any line wraps, which in a note\n  editor is immediately.\n- Fixed during testing: the gutter had no definite height, so it stretched to fit\n  its own numbers — `scrollTop` pinned at 0 and a long note would have dragged the\n  modal taller. It now takes the textarea's `clientHeight`.\n\n## 0.207.1 — one canonical list of per-folder sidecar files\n\n- `STASHPAD_SIDECAR_FILES` in `types.ts` is now the single source of truth for the\n  dotfiles Stashpad keeps beside a folder's notes; `order-store`, `sort-store` and\n  `structure-snapshot` derive their filenames from it, so the documented list\n  cannot drift from what is actually written.\n- Enumerating them surfaced a fourth sidecar that no from-memory list had\n  included: `.stashpad-sort.json` (per-parent sort mode).\n- The interop documentation gains the sidecar table, per-file guidance for tools\n  converting a Stashpad folder, and a note that these files are written through\n  the adapter rather than the vault API.\n\n## 0.208.0 — first-run experience\n\n- **Welcome on first run.** Enabling Stashpad previously added ribbon icons and no\n  greeting, and the first click silently created a folder, a Home note and two\n  subfolders with no prompt. A welcome now appears first: it explains what\n  Stashpad is, takes a folder name (defaulting to `Stashpad`), and offers \"Set up\n  later\" (which writes nothing), \"Set up fresh\", or \"Set up with demo content\".\n- It appears only when there are **no** Stashpad folders yet and only until it has\n  been answered once, so existing vaults are never interrupted. Dismissing counts\n  as answering.\n- **Example content.** A 34-note demo tree — a trip, a reading list, recipes,\n  tasks with due dates — can be created from the welcome, from the command palette\n  (\"Create example content in a new Stashpad\"), or from the empty-state button.\n  They are ordinary notes with ordinary ids and filenames, editable and deletable\n  like any other.\n- **A real empty state.** An empty Stashpad root now explains what the pane is,\n  what the composer does, and offers buttons for example content and the\n  walkthrough. Drilling into a note with no children keeps the previous quiet\n  one-liner.\n- **Folder creation is announced.** Opening a view that creates a folder now says\n  so, naming the folder and noting the contents are ordinary markdown.\n- **Help & Getting started settings tab.** Explains what a Stashpad is, lists\n  features, lists every command with its default chord (generated from the command\n  table, so it cannot drift), states known limitations, and shows the version with\n  a link to the repository. The explanation of what a Stashpad is previously\n  existed only inside a search-scope setting and disappeared once a folder existed.\n- Folder names typed into the new field are rejected if they contain `.` or `..`\n  path segments; the same guard was added to the existing \"create a Stashpad\"\n  path, which had none.\n- Commands \"Getting started (welcome / setup)\" and \"Create example (demo) content\n  in a new Stashpad\" make onboarding reachable at any time.\n\n## 0.208.1 — first-run fixes\n\n- The empty state's \"Load example content\" now fills the folder being viewed\n  instead of creating a separate one and navigating away from it.\n- The demo folder's Home note is named to the same convention as every other Home\n  note, so a newly created demo folder no longer renames one of its own files the\n  first time it is opened.\n- Seeding never overwrites: a path that already exists is skipped and counted.\n\n## 0.208.2 — one rule for opening a Stashpad\n\n- The ribbon icon and the \"Open Stashpad in new tab\" command previously used\n  different folder-count rules, so with exactly one Stashpad the ribbon opened a\n  picker containing a single entry while the command opened the folder. Both now\n  follow one rule: no folders shows the welcome, one folder opens it directly, two\n  or more show the picker. Right-clicking the ribbon still always shows the picker.\n- The folder switcher ranks the folder you were last working in first.\n- The ribbon icon changes from a file-tree to stacked rectangles, which reads as a\n  pile of notes rather than a filesystem.\n\n## 0.208.3 — no more stray default folder\n\n- Opening a Stashpad no longer creates an empty `Stashpad/` folder alongside it.\n  View state arrives after a view opens, so for one moment the view resolved to\n  the default folder and created it before switching to the real one. Long-standing,\n  and newly conspicuous now that folder creation is announced.\n\n## 0.208.4 — clean titles\n\n- Breadcrumbs, the focused header, crumb tooltips and the tab title no longer show\n  raw Markdown syntax. A note beginning `**Atomic Habits** — James Clear` displayed\n  its asterisks, because titles come from the note's first heading or first body\n  line verbatim.\n- Emphasis, inline code, strikethrough, highlight, links, images, wikilinks\n  (showing the alias when present), leading block markers and backslash escapes are\n  all handled. Stripping is deliberately conservative, so `snake_case_name`,\n  `a_b_c`, `2 * 3 = 6` and a trailing `5 stars ***` are left alone.\n- Notes are unchanged on disk — this affects display only.\n\n## 0.208.5 — deep-link paste\n\n- The \"Open Stashpad link\" dialog reads the clipboard through Electron rather than\n  the browser clipboard API. The browser API rejects when its document is not\n  focused, so automatic pasting worked in some windows and silently never happened\n  in others — most visibly in secondary windows when several vaults were open.\n\n## Internal\n\n- Test tooling: a third isolated test vault for exercising the first-run path\n  (which needs a vault with no Stashpad folders), a slot table replacing hard-coded\n  pairs so an explicitly requested slot can never fall back to a different vault,\n  and a window-focus helper.\n- The in-app testing banner gains readable contrast and no longer dismisses itself\n  when clicked.\n- Branch changelogs, the editor input-parity notes and the interop document were\n  updated alongside the changes above.\n- A change dropping the folder panel's \"new folder\" button was reverted in the same\n  cycle — the button is unchanged from 0.206.1.\n- Release notes for 0.206.1 were rolled up after that release.",
+      "downloadCount": 14,
+      "draft": false,
+      "name": "0.208.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-27T12:02:48Z",
+      "tag": "0.208.5"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:6d190f014efc0c21d86f2bafb40de4c5908904e8e8bf60f076b06cc29bf49f60",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "main.js",
           "size": 950269
         },
@@ -262,26 +292,26 @@
       "assets": [
         {
           "digest": "sha256:3e0d1891a2dfc9f45dd1cd8916b6dfbec4ab148a4b50f82a7c8cb01a6de19124",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "main.js",
           "size": 936585
         },
         {
           "digest": "sha256:c84dede308c695f41943917ec47fcd83e8767eded8d467e8d8a7312511a3356c",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 349
         },
         {
           "digest": "sha256:6c31cccb6ce40402391e974ecf580ac64e9dff3139ec6e94b47629c055a1b678",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 229491
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.201.3\n\n- **Bracket healing is simpler and stricter:** ANY run of three or more `[` or\n  `]` collapses to a proper pair at note creation (nothing beyond `[[ ]]` is\n  ever intentional in Stashpad).\n- **Autopairing covers Markdown now, and its bracket bugs are fixed.**\n  - A third `[` no longer re-fires the pair (which used to leave three opens\n    and four closes) — it inserts plainly.\n  - Backspacing an opener whose closer sits right after the caret deletes\n    BOTH: `[[|]]` → Backspace → `[|]` → Backspace → gone.\n  - New pairs: `(` `)`, inline `` ` `` code, and the doubled markers —\n    `**bold**`, `~~strikethrough~~`, `==highlight==` — pair on the second\n    keystroke with the caret between; typing the closer steps over an\n    existing one. Single `*`/`~` never pair, so lists and italics type\n    normally. The setting is now \"Auto-pair Markdown syntax\".\n- **Mobile paperclip goes straight to the native attachment sheet** — no\n  dropzone modal detour on a phone (dropzones need drag-and-drop). Desktop\n  keeps the big dropzone.\n- **The cross-vault \"delete the cut originals?\" offer is dismiss-proof.**\n  It tended to arrive exactly as you clicked the source window to focus it —\n  and that click (or a stray Escape) dismissed it. It now closes only via its\n  two buttons.",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.201.3",
       "prerelease": false,

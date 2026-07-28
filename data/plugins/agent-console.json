@@ -4,8 +4,8 @@
   "description": "Finally put your second brain to work. Connect your vault to the best AI models and build alongside them – docs, slides, projects, even code. Each project leaves your notes richer for the next. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "agent-console",
-  "lastChangedAt": "2026-07-27T07:04:27.012Z",
-  "lastFetchedAt": "2026-07-27T07:04:27.012Z",
+  "lastChangedAt": "2026-07-28T07:04:27.060Z",
+  "lastFetchedAt": "2026-07-28T07:04:27.060Z",
   "manifest": {
     "author": "Vinod Panicker",
     "authorUrl": "https://github.com/donivatamazondotcom",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Agent Console",
-    "version": "2.1.0"
+    "version": "2.2.1"
   },
   "name": "Agent Console",
   "presentInCommunityList": true,
@@ -22,27 +22,87 @@
     {
       "assets": [
         {
+          "digest": "sha256:d106c5ed1b17dee7774f569568f116292aa6c40e7fbf5ce75223b6315105ce83",
+          "downloadCount": 9,
+          "name": "main.js",
+          "size": 1248245
+        },
+        {
+          "digest": "sha256:0f7ed1f428f6cafdc26fadf89e9c1ede51dcf1118b665f990d7b55484f954d16",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "digest": "sha256:948be232bd2510b0258b6ab4ee637f799e19ca8ae8b6758dfb415e8d5ebbd5fe",
+          "downloadCount": 8,
+          "name": "styles.css",
+          "size": 86111
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "A housekeeping release: the plugin no longer declares a dependency it never shipped, and the store’s automated review comes back clean on everything except one known item. No behavior changes.\n\n## What’s changed\n\n- **The plugin’s declared dependencies now match what it actually ships** – `sharp`, an image processor used only by the docs-screenshot tooling, was listed as a runtime dependency, so a security advisory against it was attributed to the plugin. The built plugin never contained a single line of it. It has moved to development-only dependencies and been updated past the advisory. (#255)\n- **Cleaner, faster styling for agent-offered choices** – the answer card shown after you click a choice now gets its alignment from a plain class instead of a selector that made the browser re-check a whole subtree on every change. Looks exactly the same, does less work. (#257)\n- **Groundwork so this does not recur** – a new check runs the store’s own review rules across the whole repository on every change, including the parts our previous check skipped, and fails if a new finding appears. The gap it closes is why the last release shipped with findings we could have caught first. (#259)\n\n## Internal changes\n\n- Narrowed a type annotation in the update scheduler so it names only the two browser APIs it uses, clearing a lint rule that matched the identifier in a type position where no runtime code is emitted. (#256)\n- Migrated the repo’s Node tooling to `node:timers/promises` and stream writes instead of global timers and `console`, clearing 29 review findings in code that never ships. Output is byte-identical. (#258)\n- Fixed a flaky scheduler test that asserted an ordering the platform does not guarantee; it now waits on actual delivery. (#260)\n\n## Known issues\n\n- The settings pane still uses the older settings API, so its entries do not appear in Obsidian’s settings search on 1.13.0 and later. Migrating to the declarative API is tracked for a future release.\n\n## Install\n\n**Settings → Community plugins → Browse → “Agent Console” → Install → Enable.** Existing users update via Settings → Community plugins → Check for updates.\n",
+      "downloadCount": 9,
+      "draft": false,
+      "name": "2.2.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T01:02:47Z",
+      "tag": "2.2.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:620cb987abaa1fc67f18bf3dab3a05f6bdeda559aa244ce02333a001a87d8254",
+          "downloadCount": 12,
+          "name": "main.js",
+          "size": 1247755
+        },
+        {
+          "digest": "sha256:0ddcc7f7eb0bcbc18b40df6abd4e9e5b98b3ac35a8974fab7fa01dabe56f7510",
+          "downloadCount": 12,
+          "name": "manifest.json",
+          "size": 425
+        },
+        {
+          "digest": "sha256:1b4413b11b189123835791b2e9d35b10b578f5f65920debc8b77a8e11da5d40b",
+          "downloadCount": 11,
+          "name": "styles.css",
+          "size": 85587
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Agent Console now speaks your language, signs you in to remote MCP servers, and lets agents offer you buttons to click.\n\n## What’s new\n\n- **Use Agent Console in your own language** – the interface now speaks Korean, Chinese (Simplified), and Japanese alongside English, following the language you set for Obsidian. Settings, notifications, dialogs, the chat panel, and command names all localize, and there’s a manual override under Appearance & notifications. A default-on **Reply in my language** switch also asks the agent to reply – and to name new tabs – in your language. (#239, #243, #246, #247, #248)\n- **Sign in to remote MCP servers** – when a connected service needs you to sign in, a prompt appears naming the server and exactly where the sign-in page leads. Nothing opens until you click. Before, an OAuth-gated remote server could load its tool list and then fail every tool call with no way to sign in. A new **Re-authenticate MCP servers** command lists anything waiting. (#224)\n- **Answer with one click** – when an agent offers you a choice, it can show buttons right in the reply. Click one and your pick is sent as an ordinary, visible message. Buttons are drawn by the plugin in your own theme, so agents can’t inject styling, links, or code. The setting now tells you what it costs in tokens. (#241, #249)\n- **Fresh chats connect immediately** – open a new tab, paste a prompt, and send it with no wake-up keystroke. Chats you’re deliberately starting connect right away, while restored tabs and history stay quiet until you interact, so a restart doesn’t fan out a pile of connections. (#244)\n\n## Bug fixes\n\n- **Notification clicks land on the right window and tab** – clicking a completion or permission notification sometimes foregrounded the wrong vault window. It now re-checks just after the click and lands on the window and tab that produced it. (#236)\n- **Permission prompts notify you when the window is hidden** – a permission request that arrived while Obsidian was in the background never produced a notification. It does now. (#234, #235)\n- **Stop no longer silences later permission prompts** – hitting Stop while a permission prompt was waiting left that session unable to notify for any later permission. (#237)\n- **Smoother streaming on long replies** – the chat no longer fights your scroll while an agent streams a long response. (#252)\n- **Your custom agents show up in the New chat picker** – a configured custom agent never appeared in the “New chat with an agent” picker. (#226)\n- **Tabs show busy status on the first send** – a tab’s busy indicator was dropped on its very first message. (#227)\n- **The composer is ready the moment you hit Send** – focus used to stay on the Send button until the whole reply finished streaming, so you couldn’t start typing the next message. (#228)\n- **Switching agents mid-connect keeps the right agent** – changing a brand-new tab’s agent while it was still connecting could leave it labelled as the new agent while talking to the old one. (#244)\n- **Buttons accept any option name** – some ordinary words used as button values were wrongly rejected, leaving the choices as a plain code block. (#254)\n- **Action cards line up with the reply** – the card shown after you click a choice now aligns with the message it belongs to, with readable spacing. (#245)\n\n## Contributors\n\nThanks to @fobban – a first-time contributor – for diagnosing and fixing the streaming scroll-fight (#252): a precise root-cause analysis of the mid-render height collapse that was feeding the auto-scroll pin, plus a minimal, atomic fix.\n\nThanks to Michaela Kim for the native-speaker review of the Korean translation (#253). Chinese and Japanese ship machine-translated – corrections are very welcome, see CONTRIBUTING.md.\n\n## Install\n\n**Settings → Community plugins → Browse → “Agent Console” → Install → Enable.** Existing users update via Settings → Community plugins → Check for updates.\n",
+      "downloadCount": 12,
+      "draft": false,
+      "name": "2.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-27T18:21:23Z",
+      "tag": "2.2.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:533ad2b724bf893952cc740cbd06119c4b643cea84f7088f8b72f1f95a11ad98",
-          "downloadCount": 206,
+          "downloadCount": 208,
           "name": "main.js",
           "size": 936730
         },
         {
           "digest": "sha256:07959a5f4d9851603f3768f2529f9c6503f9942c08576f170121213d0aef5c20",
-          "downloadCount": 247,
+          "downloadCount": 250,
           "name": "manifest.json",
           "size": 425
         },
         {
           "digest": "sha256:3a5f2724ace54daa4e606be63840e9150fc9ebd214cad51ac8c941228c67b3ae",
-          "downloadCount": 203,
+          "downloadCount": 205,
           "name": "styles.css",
           "size": 80991
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Agent Console v2.1.0 adds OpenCode as a built-in agent and lets you redirect an agent mid-reply with a single keypress.**\n\n## What's new\n\n- **Use OpenCode out of the box** – OpenCode joins Claude Code, Codex, Gemini CLI, and Kiro CLI as a built-in agent. Pick it from the agent list, no custom command setup. Want local models? Point OpenCode at ollama in its own config and everything stays offline. (#218)\n- **Redirect the agent the moment it goes sideways** – when a reply is heading the wrong way, one keypress stops it and sends your correction as the next prompt, without losing the conversation. (#213)\n- **Close every tab and land on a fresh start** – you can now close all your tabs, including the last one. Instead of a dead end you get a blank launcher, like a browser's new-tab page: type a prompt or fire a quick prompt to start a new chat, carrying any pinned notes in as context. (#221)\n- **Put your quick prompts in the order you want** – add an `order` property to a prompt note to control where its chip sits; lower numbers come first, and unordered prompts follow alphabetically. (#215)\n\n## Bug fixes\n\n- **Type agent arguments however feels natural** – the Arguments field now accepts a whole command on one line (e.g. `acp --agent my-agent`), not just one argument per line, so first-run setup no longer fails with an opaque connection error. (#212)\n- **Re-detect agents without restarting** – installed an agent after opening the plugin? The first-run screen has a Re-detect button so it shows up right away. (#214)\n- **The composer keeps your focus** – after you click Send or Stop, start a new chat, or fire a quick prompt, the cursor returns to the message box so your next keystroke lands where you expect. (#216, #211)\n- **Quick prompts show their real label on a cold start** – a quick prompt no longer briefly shows its filename and drops its emoji right after Obsidian starts. (#219)\n- **Cmd+W closes the right thing** – closing a pane no longer leaks through to the confirm-close guard. (#210)\n- **Completion clicks work from Notification Center** – clicking a finished-turn or permission notification reliably reopens the right chat, even after the system garbage-collects it. (#220)\n- **Popout windows behave** – the plugin now targets the active window's document, fixing focus and font handling when you pop the chat out into its own window. (#217)\n\n## Install\n\n**Settings → Community plugins → Browse → \"Agent Console\" → Install → Enable.** Existing users update via Settings → Community plugins → Check for updates.\n",
-      "downloadCount": 247,
+      "downloadCount": 250,
       "draft": false,
       "name": "2.1.0",
       "prerelease": false,
