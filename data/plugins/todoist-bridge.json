@@ -4,8 +4,8 @@
   "description": "Sync Todoist tasks with Obsidian Markdown tasks marked with #todoist. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "todoist-bridge",
-  "lastChangedAt": "2026-07-28T06:01:27.570Z",
-  "lastFetchedAt": "2026-07-28T06:01:27.570Z",
+  "lastChangedAt": "2026-07-29T06:04:27.023Z",
+  "lastFetchedAt": "2026-07-29T06:04:27.023Z",
   "manifest": {
     "author": "Rodrigo Farinha",
     "authorUrl": "https://rodrigolourencofarinha.github.io",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.12.7",
     "name": "Todoist Bridge",
-    "version": "2.0.2"
+    "version": "3.0.0"
   },
   "name": "Todoist Bridge",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:1a44ed59c85510e6abd2c8374f684485f907eccf470f4135eda876345458d9b2",
-          "downloadCount": 96,
+          "digest": "sha256:9649c5e256fc8f9b49795f590c1ff529d7432b96961004b6e3fe33e185721d6b",
+          "downloadCount": 1,
           "name": "main.js",
-          "size": 549517
+          "size": 660736
         },
         {
-          "digest": "sha256:519e0060af983872b1f1936d18362b8acf146d960577ea6f8c24ed9db8662940",
-          "downloadCount": 96,
+          "digest": "sha256:de1ffc05d938b16fc27c03a4252ac9a93d57c8b7fedb7f96105da09b11af3612",
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 298
         },
         {
           "digest": "sha256:71f665a8d16c102d760e51f00c367f9647c11e1cadaf02623fdd419b168155f6",
-          "downloadCount": 56,
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 38
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# Todoist Bridge 3.0.0\n\nTodoist Bridge 3.0.0 is a major reliability release. The familiar workflow remains the same—add `#todoist` to a Markdown checkbox task—but synchronization now has durable work tracking, incremental inbound cursors, recoverable state, and safer reconciliation.\n\nThe major version reflects a new persisted runtime-state architecture and an important rollback restriction, not a change that sends every Obsidian task to Todoist.\n\n## Before upgrading\n\nMake a full backup of your vault, including the hidden `.obsidian/plugins/todoist-bridge` directory.\n\nVersion 3.0.0 writes runtime-state schema v2. Do **not** downgrade to 2.0.2 while reusing state written by 3.0.0. The older release does not understand the new durable outbox, device cursors, reconciliation tombstones, or state layout.\n\nFor a safe rollback, disable the plugin and restore both the older plugin files and the complete matching pre-upgrade Todoist Bridge data/state. If you do not have that backup, preserve the files, export diagnostics, and request support instead of deleting state manually.\n\n## Reliability improvements\n\n- **Durable outbound work.** Local file changes enter a persisted outbox before Todoist side effects begin. Work is leased, acknowledged only after success, and retried with backoff after recoverable failures.\n- **Duplicate-resistant task creation.** New tasks receive a hidden stable pending operation marker before the Todoist request. A checkpointed remote ID lets retries finish the Markdown update without creating the task again.\n- **Incremental inbound synchronization.** Each configured device keeps its own opaque Todoist Sync API cursor. The cursor advances only after the batch has been applied, archived, and persisted.\n- **Single-flight scheduling.** Automatic, file-triggered, and manual sync requests coalesce so overlapping runs cannot race the same work.\n- **Recoverable runtime state.** State writes use verified temporary promotion and a verified `.bak` mirror. The bridge refuses to silently start empty when both copies are corrupt.\n- **Multi-device merge protection within active state.** Three-way state merges preserve acknowledgements and removals when a newer writer has updated the active state file. Separately created cloud-sync conflict copies are detected for diagnostics but are not merged automatically.\n- **Safer lifecycle reconciliation.** Explicit bridge records and tombstones help distinguish open, completed, deleted, detached, and temporarily unavailable tasks.\n- **Grace periods for file moves and removals.** Short delays allow Obsidian and vault-sync providers to finish rename/delete sequences before the bridge decides that a task disappeared.\n- **Uncapped event retention.** Processed lifecycle events are retained and archived in month-sharded JSONL files without a global count limit. Archive writes deduplicate stable event IDs and keep recoverable backups.\n- **Bounded archive updates.** After a one-time legacy backfill, normal sync archives only the current Todoist batch instead of rescanning the complete retained history on every run.\n- **Clear sync outcomes.** Manual sync reports success, partial, or failed. Work kept for retry is no longer presented as fully synchronized.\n\n## Additional safety fixes\n\n- Todoist titles containing JavaScript replacement metacharacters are now written literally, and line breaks are flattened so a remote title cannot split a Markdown task line.\n- Multiline Todoist comments are escaped and nested beneath the bridged task so they cannot inject new Markdown tasks, headings, or HTML.\n- Workspace listeners are removed with the plugin lifecycle instead of accumulating after reloads.\n- Equal-time lifecycle events use deterministic, locale-independent ordering.\n- The connection control now identifies its purpose, reports success or failure, and explains invalid sync intervals.\n- Release tests compare the focused reliability helpers with the actual implementations embedded in the shipped `main.js`.\n\n## Recovery and observability\n\nThe settings panel now exposes bridge health and pending outbound work. It also provides:\n\n- a non-mutating bridge audit;\n- a reviewed repair path;\n- sanitized diagnostics export;\n- verified cache rebuilding;\n- a user-triggered Todoist resource backup.\n\nAudit before repair or cache rebuilding. Diagnostics omit the API token, but reports can still contain identifiers, paths, counts, and settings; review them before sharing.\n\n## Safer credentials\n\nThe Todoist API token is selected from Obsidian SecretStorage rather than being intentionally stored in plugin `data.json`. A legacy token can be migrated when the installed Obsidian host supports SecretStorage.\n\nSecretStorage configuration is device-local. After upgrading or adding a device, open **Settings → Todoist Bridge**, select the token secret, use the send/connect button, choose the default project, and run **Sync now**.\n\n## Privacy and local data\n\nSynchronization requires a Todoist account and network access. The bridge sends Todoist the data needed for a bridged task: task content and state, ordinary task hashtags as labels, project and bridge/detached-label changes, and an `obsidian://` link containing the vault name and note path. New-task creation can also send parsed priority and a bridged parent-task relationship. Completing a task from Obsidian adds an ISO completion timestamp to the Todoist description and a completion comment; detaching can add an explanatory comment. The bridge reads Todoist tasks, projects, labels, comments/notes, and lifecycle activity needed for reconciliation. It does not send unrelated note bodies.\n\nRuntime state, event archives, completion logs, reports, and Todoist backups are stored locally and are not encrypted by the plugin. They can contain sensitive task metadata and may be copied by any service that synchronizes the vault or `.obsidian` directory. Event archives have no count limit and can grow over time.\n\nSee the [README](https://github.com/rodrigolourencofarinha/obsidian-todoist-bridge#network-and-data-disclosure) for the complete disclosure and file list.\n\n## Known limits\n\n- Due dates are not synchronized in either direction.\n- Obsidian must be open for synchronization to run; mobile background timers are best-effort.\n- Every device needs its own Todoist token selection and connection.\n- Ordinary note or plugin-state conflicts can still occur when multiple devices edit concurrently.\n- Detached tasks do not automatically reconnect.\n- Legacy numeric Todoist task IDs remain local-only because the current Todoist API does not support updating them.\n\n## Support and security\n\nReport reproducible bugs through [GitHub Issues](https://github.com/rodrigolourencofarinha/obsidian-todoist-bridge/issues). For suspected vulnerabilities, follow [SECURITY.md](https://github.com/rodrigolourencofarinha/obsidian-todoist-bridge/blob/main/SECURITY.md). Never publish an API token, private task content, raw state, or a Todoist backup.\n\n**Full changes:** [2.0.2...3.0.0](https://github.com/rodrigolourencofarinha/obsidian-todoist-bridge/compare/2.0.2...3.0.0)\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "Todoist Bridge 3.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T17:22:30Z",
+      "tag": "3.0.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1a44ed59c85510e6abd2c8374f684485f907eccf470f4135eda876345458d9b2",
+          "downloadCount": 97,
+          "name": "main.js",
+          "size": 549517
+        },
+        {
+          "digest": "sha256:519e0060af983872b1f1936d18362b8acf146d960577ea6f8c24ed9db8662940",
+          "downloadCount": 97,
+          "name": "manifest.json",
+          "size": 298
+        },
+        {
+          "digest": "sha256:71f665a8d16c102d760e51f00c367f9647c11e1cadaf02623fdd419b168155f6",
+          "downloadCount": 57,
           "name": "styles.css",
           "size": 38
         }
       ],
       "author": "github-actions[bot]",
       "description": "Todoist Bridge 2.0.2",
-      "downloadCount": 96,
+      "downloadCount": 97,
       "draft": false,
       "name": "2.0.2",
       "prerelease": false,

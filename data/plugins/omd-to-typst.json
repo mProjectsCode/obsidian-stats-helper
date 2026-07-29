@@ -4,8 +4,8 @@
   "description": "Export your notes to professional looking PDFs via Typst. Auto-adding a cover page, revision page, TOC and optional figure list. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "omd-to-typst",
-  "lastChangedAt": "2026-07-28T06:01:27.570Z",
-  "lastFetchedAt": "2026-07-28T06:01:27.570Z",
+  "lastChangedAt": "2026-07-29T06:04:27.023Z",
+  "lastFetchedAt": "2026-07-29T06:04:27.023Z",
   "manifest": {
     "author": "A.W. Alberts",
     "authorUrl": "https://github.com/tIsGoud",
@@ -23,13 +23,13 @@
       "assets": [
         {
           "digest": "sha256:96b581fd3c8a019becbf206c413a98b58a029343c707b9d0c74d09801487cbd6",
-          "downloadCount": 48,
+          "downloadCount": 50,
           "name": "main.js",
           "size": 1863488
         },
         {
           "digest": "sha256:258d55fb7669d1d0cb1631ab363f4e8c660407f34bee4bc5a80eb5dd07d969e9",
-          "downloadCount": 49,
+          "downloadCount": 52,
           "name": "manifest.json",
           "size": 316
         },
@@ -42,7 +42,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Built on the omd2typst 0.11.0 engine.\n\n- **Appendix headings.** Add `appendix-from: \"<chapter title>\"` to a note's\n  frontmatter to turn that chapter — and every chapter after it — into\n  appendices, numbered `Appendix A - <title>` with letter sub-numbering\n  (`A.1`, `A.1.1`). The prefix is localized: Bijlage (nl), Appendix (en),\n  Anhang (de), Apéndice (es), Appendice (fr). Supported by the bundled tig and\n  purple templates; other templates simply ignore the key.\n- **Each chapter starts on a new page** in the tig and purple templates\n  (appendices included).\n- **Table layout.** Cells are left-aligned (no longer stretched/justified) and\n  hyphenate, so a long word wraps within its column instead of overflowing into\n  the neighbouring one.\n- **Non-image embeds no longer break PDF export.** A `.pdf`, audio/video, or\n  note-transclusion embed now renders a visible \"not supported\" placeholder\n  instead of failing Typst compilation.\n\nInternal: removed the dormant pdf-wasm PDF-compiler tooling (PDF export uses a\nlocally-installed Typst binary) and bumped the engine submodule to\nomd2typst 0.11.0.\n",
-      "downloadCount": 49,
+      "downloadCount": 52,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:c8c8b05ca14fef2978e61f57187c947e5a0c90bfdf00508368a05c7b40dbdffe",
-          "downloadCount": 73,
+          "downloadCount": 74,
           "name": "manifest.json",
           "size": 317
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Exporting a note whose images used Obsidian's **\"Absolute path in vault\"**\nlink format (Settings → Files & links → New link format) failed with\n`error: file not found`. The image path — a vault-root path with no leading\nslash, e.g. `04-Personal/…/_assets/laptop.png` — was resolved relative to the\nnote's folder and ended up doubled (`…/input/04-Personal/…/input/_assets/…`).\n\nThe plugin now resolves **every** image reference the way Obsidian's own\npreview does and rewrites it to a vault-root-absolute path before export:\n\n- Markdown images (`![](…)`) and wikilink embeds (`![[…]]`) are both handled.\n- All of Obsidian's link formats work — relative, shortest path (bare\n  filename), and absolute-in-vault — as do `./`, `../`, and paths with spaces.\n- External URLs and already-absolute paths are left untouched.\n- Image syntax inside code blocks and inline code is **not** rewritten, so\n  documentation that shows `![](…)` as an example is preserved.\n\nOnly references that resolve to a real image file in the vault are rewritten;\nanything else is left exactly as written.\n\nSee ADR 0013. This closes the regression documented in ADR 0012.\n",
-      "downloadCount": 73,
+      "downloadCount": 74,
       "draft": false,
       "name": "0.8.38",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:984d63a0b0183fd709e0cce4e2ee51fbdf0420bdbbbe0216713ad0fd6952c751",
-          "downloadCount": 23,
+          "downloadCount": 24,
           "name": "manifest.json",
           "size": 317
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Mermaid labels that Obsidian wrapped across multiple lines used to render as\na single overflowing line in the PDF, because `<foreignObject>` HTML labels\nwrap via CSS in the browser but SVG `<text>` does not auto-wrap.\n\nThe plugin now emits one `<tspan>` per line inside the SVG `<text>`:\n\n- Explicit `<br>` in the mermaid source becomes a hard line break.\n- A single long line is auto-wrapped at word boundaries to fit the\n  foreignObject's width. The wrap point matches Obsidian's preview to about\n  ±1 word (character-width estimation is approximate).\n- The `<text>` output for single-line labels is unchanged.\n\nCommon HTML entities (`&lt;`, `&gt;`, `&quot;`, `&amp;`, `&#39;`, `&apos;`)\nare decoded before measuring wrap width so labels like `A &amp; B` count as\n5 visible characters, not 10.\n\nEmojis in mermaid labels remain stripped (unchanged from v0.8.36) —\nFontAwesome icons in mermaid labels are still unsupported.\n",
-      "downloadCount": 23,
+      "downloadCount": 24,
       "draft": false,
       "name": "0.8.37",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:10b0ec39c478571dae05074e151e57631423e6c54a5bc8f1affd4d2b3cbcacf7",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 317
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Bug fix — folder-relative image paths now resolve in PDF export\n\nNotes with folder-relative image references — e.g. `![](./_assets/foo.svg)`,\nwhich is what Obsidian's editor produces for images stored next to a note —\nno longer fail with `file not found` during PDF export.\n\nThe plugin used to write the transient `.typ` at the vault root before\ninvoking `typst compile`. Typst resolves relative image paths from the `.typ`\nfile's directory, so `./_assets/foo.svg` looked in `<vault>/_assets/foo.svg`\ninstead of alongside the note. The temp `.typ` is now written inside the\nnote's own folder, so folder-relative paths resolve as Obsidian previews them.\n\nVault-root-absolute paths (`/Attachments/foo.svg`) continue to work via\n`--root <vault>`. Unprefixed vault-root paths (`Attachments/foo.svg` meaning\n`<vault>/Attachments/foo.svg`) — which Obsidian's editor does not generate —\nneed a leading `/` after this change.\n\n### Change — emoji codepoints in mermaid labels are stripped\n\nresvg (the SVG renderer Typst uses to embed mermaid diagrams) can't render\ncolor-emoji glyphs cleanly: labels either show as tofu (`□`) or overflow the\nnode boundary that mermaid sized via browser-side measurement. The plugin\nnow removes emoji codepoints (Extended Pictographic, emoji modifiers, ZWJ,\nVS16) from mermaid labels before embedding, keeping the surrounding text.\nExample: `Foo 📊 Bar` → `Foo Bar`. Documented in the README.\n",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "0.8.36",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:7e238ffdadf97176f200c52d22accec202758e151361e46bd85c87e06d1d9cab",
-          "downloadCount": 111,
+          "downloadCount": 112,
           "name": "manifest.json",
           "size": 317
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Two consecutive figures (e.g. mermaid diagrams or images) and the text\nbetween them used to sit very tight against each other in the PDF. The\nbuilt-in template (bundled in the omd2typst WASM) and both shipped templates\n(`purple-template`, `tig-template`) now declare:\n\n```typst\n#show figure: set block(below: 1.5em)\n```\n\nThis adds 1.5em of vertical space *below* each figure block. The top of the\nblock is unchanged.\n\nBuilt on omd2typst v0.10.7 (core/wasm 0.5.4).\n\nUsers with custom templates can add the same `show` rule to their templates\nif they want matching behaviour.\n",
-      "downloadCount": 111,
+      "downloadCount": 112,
       "draft": false,
       "name": "0.8.35",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:b2977ccc56400e41b4bdfa57bfc73589b3ca27abc6cbbcf21585096d1df092fa",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 317
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "The flowchart node labels were still missing in v0.8.33 because mermaid v11's\n`flowchart-v2` renderer (used in Obsidian) emits node labels as `<foreignObject>`\ncontaining HTML *regardless of* the `htmlLabels: false` config — that setting\nonly affects edges. resvg (Typst's SVG renderer) ignores `<foreignObject>`, so\neven with v0.8.33 the boxes appeared empty.\n\nThis release adds a post-processing pass on the SVG returned by `mermaid.render`:\neach `<foreignObject>` is replaced with an SVG `<text>` element positioned at\nthe centre of the foreignObject's box. The inner HTML is stripped to plain text\n(so `<i class=\"fa fa-car\"></i> Car` becomes `Car`). Empty foreignObjects (e.g.\nplaceholder edge labels) are removed entirely.\n\nVerified end-to-end: `typst compile` now emits no `image contains foreign object`\nwarning, and all flowchart node text — `Christmas`, `Go shopping`, `Let me think`,\n`Laptop`, `iPhone`, `Car` — appears in the rendered PDF.\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.8.34",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:fbc0b14617fd7fc0d0cfb255315b710bc6127ac66ef21ea55f6e57488c5f7e9a",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 317
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Flowchart text labels were missing from exported PDFs because mermaid renders\nthem as `<foreignObject>` containing HTML — a format Typst's SVG renderer\n(`resvg`) cannot draw. Mermaid is now initialised with\n`flowchart: { htmlLabels: false }` so flowchart labels become plain SVG\n`<text>` elements, which Typst handles correctly.\n\nSide effect: Obsidian's editor preview also uses this setting until the app is\nrestarted, so flowchart labels in the preview will use SVG text (slightly\ndifferent wrapping behaviour) for the remainder of the session.\n\nDiagram types that already used SVG text (`gitGraph`, `mindmap`, `sequenceDiagram`,\netc.) are unaffected.\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "0.8.33",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:7b0599dc38851ef2b5c5c174417b415c76e612812db25891575d4842aabe04af",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 317
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Mermaid diagrams that declare a `title:` in their frontmatter now get a proper\nTypst figure caption underneath, which also appears in any auto-generated list\nof figures:\n\n```\n\\`\\`\\`mermaid\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.8.32",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:95e5a0736cba2574a708ce4d10f122b7f2ab4dd052f5521d1415b5b8068591b5",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 317
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Matches Obsidian's UI behaviour of auto-hiding columns whose cells are null\nacross every row. Previously the PDF showed e.g. a `published` column full of\nthe literal text \"null\" even though Obsidian didn't display it.\n\nImplementation: each cell is checked via `Value.isTruthy()` — a missing\nproperty (`getValue` returns null) and a `NullValue` (which would\n`toString()` to \"null\") are both treated as empty. Columns whose every cell\nends up empty are dropped before the Markdown table is emitted.\n",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.8.31",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:daa0db9342ca7f1f171a7dc56e10383506117d48bae5dd4c744a998f1ca01219",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 317
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "`obsidianmd/no-unsupported-api` can't be suppressed with `eslint-disable`\n(the review bot rejects it). The bases module now declares local structural\ninterfaces (`BasesViewConfigLike`, `BasesEntryLike`, …) instead of importing\nObsidian's typed Bases classes, so the linter no longer flags 1.10-era API\ncalls. Functionally identical to v0.8.29.\n\n`minAppVersion` stays at 1.7.2: users on older Obsidian can still install for\nmermaid / template-picker features; base embeds render the placeholder line\non those versions since the bases engine isn't present.\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.8.30",
       "prerelease": false,

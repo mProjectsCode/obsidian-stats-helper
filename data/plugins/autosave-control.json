@@ -4,8 +4,8 @@
   "description": "An Obsidian plugin for delaying or disabling automatic saves. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "autosave-control",
-  "lastChangedAt": "2026-07-28T06:01:27.570Z",
-  "lastFetchedAt": "2026-07-28T06:01:27.570Z",
+  "lastChangedAt": "2026-07-29T06:04:27.023Z",
+  "lastFetchedAt": "2026-07-29T06:04:27.023Z",
   "manifest": {
     "author": "Miha Smrekar",
     "authorUrl": "https://github.com/mihasm/",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:e835403c7a85a78bea33938723254d71238e7a4cc8c14c09723a771c27cc5dcd",
-          "downloadCount": 51,
+          "downloadCount": 71,
           "name": "main.js",
           "size": 50798
         },
         {
           "digest": "sha256:260807797633e2b858e5ebde0d30efa3421528b056bba7ffe76ff012f5ab3d6a",
-          "downloadCount": 63,
+          "downloadCount": 86,
           "name": "manifest.json",
           "size": 296
         },
         {
           "digest": "sha256:e216040cd9e22c70c39e472bf2f9ebc1f38c3a9ca9a5b7d42e52e9fd16fb6ab5",
-          "downloadCount": 49,
+          "downloadCount": 68,
           "name": "styles.css",
           "size": 1346
         }
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.19.\n\nRelease notes:\n-fix for #43 : another plugin rewriting a note directly on disk (Frontmatter Modified Date, Linter, Templater, sync clients, ...) could wipe out everything you had typed since the last save. Obsidian merges an on-disk change into an open editor only when it considers the note to have unsaved changes, and the flag it uses for that is set by the very save request this plugin holds back. So a note with pending edits looked already-saved to Obsidian: instead of merging, it silently replaced the editor's text with the version from disk, and the delayed autosave then wrote that stripped-down version back out. The plugin now keeps that flag truthful for every note it is holding, so Obsidian merges such a change exactly as it does without this plugin.\n-fix for #43 (second layer): the merge above is best-effort and can still drop an edit that lands in the same part of the note the other plugin rewrote, e.g. inside the frontmatter block. When another plugin uses Obsidian's read-modify-write API (the one processFrontMatter is built on), the plugin now writes the note's pending changes out first, so that plugin reads what you actually have on screen and there is nothing left to merge. This happens in Delayed Autosave mode only, one write earlier than the delay alone would have made; Autosave Disabled mode still never writes anything on your behalf and falls back to the merge.\n-fix: clicking out of the editor no longer postpones a pending save. Blurring the editor makes Obsidian ask for a save, and with the corrected flag above that request now reaches the plugin — it must not restart the countdown, since clicking away is not an edit. The delay stays \"time since your last actual edit\".\n-internal: added end-to-end regression tests for all three, each verified to fail without its fix — held edits surviving an external frontmatter rewrite in both save modes, the pre-flush handing the other plugin an up-to-date read, and a blur keeping the original save deadline.\n",
-      "downloadCount": 63,
+      "downloadCount": 86,
       "draft": false,
       "name": "1.0.19",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:e59c8a33e3885e819f7520b1ee77b3abf61c89266e1c9f7c36bbb11b676f835b",
-          "downloadCount": 578,
+          "downloadCount": 579,
           "name": "manifest.json",
           "size": 296
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.18.\n\nRelease notes:\n-fix for #41 : copy/cut-pasting content while navigating quickly between notes (mouse back/forward, file-tree clicks) could overwrite one note with another note's content, especially in large vaults or with plugins like Folder Note that slow note loading. During a same-tab switch there is a brief window where the editor already reports the new note but still holds the previous note's text; the plugin could snapshot that stale text as the new note's pending content and later save it over the note on disk. This was silent (non-empty) data loss that the issue #18 blank-overwrite guard did not catch. The plugin now refuses to snapshot a note's pending content from a view that is mid-switch, so a note can no longer be saved with a different note's content.\n-internal: added an end-to-end regression test that deterministically reproduces the cross-note overwrite (red without the fix, green with it), plus a probe confirming the mid-switch load window is reachable.",
-      "downloadCount": 578,
+      "downloadCount": 579,
       "draft": false,
       "name": "1.0.18",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:cf5f8ec2c45c75d24e9ffec98728a7c3104b8a9e0763787baadaf122635a5c73",
-          "downloadCount": 6,
+          "downloadCount": 7,
           "name": "manifest.json",
           "size": 296
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.17.\n\nRelease notes:\n-fix for #40 : clicking a \"Search in all files\" (Ctrl+Shift+F) result could jump to the match and then immediately snap back to your previous position. The plugin restores your cursor after a note opens, but didn't recognize a search-result jump as intentional navigation and overrode it. It now leaves search matches, heading/block links, and line/scroll targets alone.\n-internal: added an end-to-end regression test that reproduces the snap-back (red without the fix, green with it), plus a helper that opens a note the way a search-result click does.\n-docs (#38): noted that on mobile, force-killing Obsidian within a fraction of a second of editing can lose the last edit — a platform limitation the plugin can't fully prevent.",
-      "downloadCount": 6,
+      "downloadCount": 7,
       "draft": false,
       "name": "1.0.17",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:7d2c2faf70f1f82a0aabab56437611fbd885524cd12b6b2f93d1081a2eca076e",
-          "downloadCount": 75,
+          "downloadCount": 76,
           "name": "manifest.json",
           "size": 296
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.16.\r\n\r\nRelease notes:\r\n-fix for #38 : on iPhone/iPad, edits held in manual-save or delayed mode could be lost if you force-closed Obsidian from the app switcher. The plugin saved held edits when the app \"left the foreground\", but iOS only fires that signal when the app actually goes to the background — opening the app switcher merely makes the app inactive, and swiping the card away then kills the web view with no chance for any code to run (this is a platform limitation confirmed on WebKit; Obsidian core hit the same issue and fixed it the same way in mobile 1.5.9). The plugin now also flushes held edits the moment the app becomes inactive (when the app switcher opens), which is the last point at which code still runs — so your edit is written before you get the chance to swipe Obsidian away. Plainly swiping to another app already worked and still does.\r\n-internal: added an Android end-to-end regression test that the plugin loads on mobile, the Capacitor lifecycle bridge the fix relies on is present, and the flush listener registers on it. Also patched the WebDriver test toolchain so the end-to-end suite runs on Node 26.\r\n",
-      "downloadCount": 75,
+      "downloadCount": 76,
       "draft": false,
       "name": "1.0.16",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:8860a58337738b15a520add13f89a3a81ee6a5da13fb8010dcaf26f8da525d7f",
-          "downloadCount": 45,
+          "downloadCount": 46,
           "name": "manifest.json",
           "size": 296
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.15.\n\nRelease notes:\n-fix for #39 : notes could be silently cleared (replaced with an empty file) when Obsidian was still loading the vault or a background tab had not fully loaded. Such a view reports an empty editor, which the plugin then saved over your real note. Autosave now refuses to overwrite a note that still has content on disk with empty content unless you actually edited it, so a note you genuinely empty still saves, but a not-yet-loaded view can no longer wipe one. This also covers the blank-note data loss reported in #18.\n-internal: added an end-to-end regression test that reproduces the blank-on-load case (red without the fix, green with it), plus a helper to simulate a not-yet-loaded view.\n",
-      "downloadCount": 45,
+      "downloadCount": 46,
       "draft": false,
       "name": "1.0.15",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:faf09d7f5559430c809ebf7a5c63a85f920bd6fadde02ba474fb8b32573377a0",
-          "downloadCount": 300,
+          "downloadCount": 301,
           "name": "manifest.json",
           "size": 296
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.14.\r\n\r\nRelease notes:\r\n-fix for #36 : on iPhone/iPad the plugin showed \"Failed to load plugin\" and never started. It called an Electron-only API (require(\"electron\")) that throws on iOS instead of returning nothing, and the error stopped the plugin from loading. Electron access is now guarded so the plugin loads on iOS.\r\n-new (#36): mobile support — pending (held) edits are now saved when you leave/minimize the app, since mobile has no quit prompt like the desktop. In manual-save mode your edits are written when you run \"Save current file\" (e.g. from the mobile toolbar) or when you minimize the app, and at no other time; in delayed mode it behaves like desktop (saves shortly after you stop typing) and also flushes anything still pending on minimize.\r\n-internal: added Android end-to-end tests covering manual-mode hold and explicit save, delayed-mode explicit save, the autosave delay timer, and save-on-minimize.",
-      "downloadCount": 300,
+      "downloadCount": 301,
       "draft": false,
       "name": "1.0.14",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:bcbd62562ecb2a1dd2c5d29f0f0f68f1aeb8ff0ab48dd641260893d152900089",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 296
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.13.\r\n\r\nRelease notes:\r\n-new (#35): the unsaved-changes prompt shown when closing the window or quitting Obsidian (Cmd+Q) now lists which notes are still unsaved, so you can see exactly what you'd lose before discarding. The list is capped at 5 notes (then \"…and N more\") so it always fits the dialog.\r\n-new (#35): hovering the status-bar save indicator now shows the same list of notes with unsaved changes.\r\n-change (#32): in manual-save mode, switching notes within the same tab no longer prompts to discard. Your unsaved edits are kept in memory and restored into the editor when you switch back.\r\n-change (#32): in manual-save mode, closing a note tab no longer prompts to discard. Your unsaved edits are kept and restored when you reopen the note. The close/quit prompt above is now the single place that warns about unsaved work.\r\n-internal: updated end-to-end tests to match the new behavior.",
-      "downloadCount": 27,
+      "downloadCount": 28,
       "draft": false,
       "name": "1.0.13",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:2f3055fe8daa9408b6340cfe4cd3177e3100f07f5e3ea128493bb46544122af0",
-          "downloadCount": 225,
+          "downloadCount": 226,
           "name": "manifest.json",
           "size": 296
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.12.\n\nRelease notes:\n-fix for #28: with multiple vaults open in manual-save mode, quitting (Cmd+Q / menu Quit) now shows the unsaved-changes discard prompt on every vault separately, instead of only one.\n-fix for #28: the app now fully quits once you've answered the prompt in each vault; previously the windows would close but the app process could keep running.\n-fix: in manual-save mode, the macOS window titlebar ('Untitled — Obsidian') no longer briefly peeks through behind the close/discard dialog.\n-internal: removed !important from styles.css (required by the Obsidian community plugin reviewer) and added CSS linting; no visible change.",
-      "downloadCount": 225,
+      "downloadCount": 226,
       "draft": false,
       "name": "1.0.12",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:363b973051ce8e84ba05c2d1eb7dcb5fcb2e2d0fea1dc563d6fa81ee374afe97",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 296
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.11.\n\nRelease notes:\n-fix for #26: in manual-save mode, closing a window with the X button now shows the same discard confirm as Cmd+Q (OK = discard & close, Cancel = keep editing) instead of silently saving.\n-fix: after cancelling that prompt, pressing the X button again no longer closed the window silently without re-showing the prompt.\n-fix: the status indicator no longer flashed 'saved' while a note still had unwritten changes pending.",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "1.0.11",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:e6e89dac6e553a7a5d2bba54547d67fa9b3e4ae1b5aa1cb1cbc9035e7d7e7e59",
-          "downloadCount": 82,
+          "downloadCount": 83,
           "name": "manifest.json",
           "size": 296
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Automatically created release for tag 1.0.10.\r\n\r\nRelease notes:\r\n-fix for #29: Closing a single vault window no longer quits the whole app.",
-      "downloadCount": 82,
+      "downloadCount": 83,
       "draft": false,
       "name": "1.0.10",
       "prerelease": false,
