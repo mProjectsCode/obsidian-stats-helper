@@ -4,8 +4,8 @@
   "description": "Chat sidebar for any OpenAI-compatible API (DeepSeek, OpenRouter and more). Bring your own key. Reads and edits your notes, ranked vault search, web access, image tools, and persistent memory. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "real-chat",
-  "lastChangedAt": "2026-07-28T08:03:27.081Z",
-  "lastFetchedAt": "2026-07-28T08:03:27.081Z",
+  "lastChangedAt": "2026-07-29T08:04:27.036Z",
+  "lastFetchedAt": "2026-07-29T08:04:27.036Z",
   "manifest": {
     "author": "Chris Gage",
     "authorUrl": "https://github.com/saorgage",
@@ -27,26 +27,26 @@
       "assets": [
         {
           "digest": "sha256:1a900c071a073a666bd1541b379f8e5f95dcecff0bb77daa9260188b7c3e5f9a",
-          "downloadCount": 110,
+          "downloadCount": 111,
           "name": "main.js",
           "size": 137944
         },
         {
           "digest": "sha256:2d2deefdd0c0a4c1b1797d53550852649bd13220738c187d1638c0a84b49bb19",
-          "downloadCount": 112,
+          "downloadCount": 114,
           "name": "manifest.json",
           "size": 545
         },
         {
           "digest": "sha256:e3802b68b524ca2be5fc6f13fc110c1b7aaac1d80fb8d6c4f36c2993465afd8b",
-          "downloadCount": 106,
+          "downloadCount": 107,
           "name": "styles.css",
           "size": 13041
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n- **Mistral provider support** — Mistral Large, Small, Pixtral (vision-capable), and Codestral models. Configure your Mistral API key in Settings and select Mistral models per-session. Pixtral Large supports vision (image understanding).\n\n",
-      "downloadCount": 112,
+      "downloadCount": 114,
       "draft": false,
       "name": "1.2.0",
       "prerelease": false,
@@ -63,7 +63,7 @@
         },
         {
           "digest": "sha256:430cdc20e6a068ea82016aaeb1b455c42819a50814552c6896afafa7ce995081",
-          "downloadCount": 198,
+          "downloadCount": 199,
           "name": "manifest.json",
           "size": 537
         },
@@ -76,7 +76,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n- **Expanded character sanitisation to prevent intermittent \"400 — Invalid character\" errors.**\n  `stripLoneSurrogates` (renamed `sanitizeText`) now also strips C0/C1 control characters (except\n  `\\t`, `\\n`, `\\r`) and Unicode noncharacters (`U+FDD0`–`U+FDEF`, `U+FFFE`–`U+FFFF`) from every\n  outgoing message and search snippet. These additional character classes can appear in corrupted\n  clipboard data or damaged note content and, like lone surrogates, cause the API to reject the\n  entire request. The broader pass eliminates the occasional \"Real Chat error: 400\" popup during\n  normal chat.\n\n",
-      "downloadCount": 198,
+      "downloadCount": 199,
       "draft": false,
       "name": "1.1.3",
       "prerelease": false,
@@ -93,7 +93,7 @@
         },
         {
           "digest": "sha256:7c9e6acbaccddf9ee0e736bd5df1413437a664420ba70ddef7202f4eba084334",
-          "downloadCount": 64,
+          "downloadCount": 65,
           "name": "manifest.json",
           "size": 537
         },
@@ -106,7 +106,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n- **\"lone leading surrogate in hex escape\" (HTTP 400) could brick a chat session.** The ranked\n  vault-search snippet was sliced at fixed character offsets (`body.slice(at-60, at+120)`), which\n  could cut through a surrogate pair (e.g. an emoji in a note), leaving a half-character. That\n  broken snippet got saved into the session as a `tool` result, so every later message re-sent it\n  and the provider rejected the whole request. Two-part fix: the snippet is now surrogate-safe, and\n  a `stripLoneSurrogates` pass cleans every outgoing message (system/user/assistant/tool) at the\n  API boundary — so any corrupted text (truncated emoji, bad paste, a poisoned note) can no longer\n  400 the request. Valid emoji and characters are preserved.\n\n",
-      "downloadCount": 64,
+      "downloadCount": 65,
       "draft": false,
       "name": "1.1.1",
       "prerelease": false,
@@ -123,7 +123,7 @@
         },
         {
           "digest": "sha256:7b3a77abe01d51eebd49b4f829a4e66348b8eec6927ac9daf5f1acca3a08a124",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 551
         },
@@ -136,7 +136,7 @@
       ],
       "author": "saorgage",
       "description": "## Vision: see *and* act on an image in one turn\n\nWhen your chat model can't see an attached image (e.g. DeepSeek), the turn now routes through your configured **vision provider** (Gemini, etc.) running the **full tool loop** — so it can see the image *and* act on it in a single message.\n\n### Added\n- **`save_attached_image`** — saves the actual pasted/attached image bytes into your vault and returns a clickable `![[link]]`. So \"save this screenshot and tell me what it says\" works in one message.\n- Image turns now have the complete tool set (create/edit notes, search, etc.) driven by the vision model.\n\n### Fixed\n- **Images were unusable on follow-up turns** — the image was dropped after the first send, so follow-ups fell back to a model that can't see images and would claim no image was passed. Attached images are now **sticky**: the chip persists across turns; tap × to remove.\n- A stray `\"undefined\"` was injected into the message text whenever an image was attached.\n\nVerified end-to-end against Gemini 2.5 Flash (OpenAI-compatible): vision + tools + streaming + multi-step tool results all work together.",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "1.1.0",
       "prerelease": false,
@@ -153,7 +153,7 @@
         },
         {
           "digest": "sha256:e3a02d5eeeb43b1b1d84b66a3ab855a4f9f494c67a7b75acfc327567c130d4c1",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 537
         },
@@ -166,7 +166,7 @@
       ],
       "author": "saorgage",
       "description": "Add fundingUrl (GitHub Sponsors, Ko-fi) so the Support link appears on the plugin page in Obsidian.",
-      "downloadCount": 27,
+      "downloadCount": 28,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
@@ -183,7 +183,7 @@
         },
         {
           "digest": "sha256:fb8f11289280facea064f0670024b53af368ec41ba5ac71de06ef6f7cf92cd03",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 418
         },
@@ -196,7 +196,7 @@
       ],
       "author": "saorgage",
       "description": "Fix: cleared the CSS-lint warning by replacing the collapsed-reply mask with a gradient overlay (no css-masks). Added CHANGELOG.md.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -213,7 +213,7 @@
         },
         {
           "digest": "sha256:b8d781200657968bd32177afb5792ad6681df6ab250e24136b0226e11d5dd308",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 408
         },
@@ -226,7 +226,7 @@
       ],
       "author": "saorgage",
       "description": "Initial release of Real Chat. BYOK chat sidebar for any OpenAI-compatible API (DeepSeek, OpenRouter and more) with vault read/edit tools, ranked search, web access, image processing and persistent memory.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,

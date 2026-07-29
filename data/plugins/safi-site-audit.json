@@ -4,8 +4,8 @@
   "description": "Run website audits (SEO, content, links, images, security, crawlability and more) and save each one as a Markdown note. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "safi-site-audit",
-  "lastChangedAt": "2026-07-28T08:03:27.081Z",
-  "lastFetchedAt": "2026-07-28T08:03:27.081Z",
+  "lastChangedAt": "2026-07-29T08:04:27.036Z",
+  "lastFetchedAt": "2026-07-29T08:04:27.036Z",
   "manifest": {
     "author": "Abdulkader Safi",
     "authorUrl": "https://abdulkadersafi.com",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:6827e147df213a714bfe88ad048855136b406a79c1d6aa43abd8fa4bfe148540",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 994302
         },
         {
           "digest": "sha256:2b570e898b852c8e942877983940932055d634c3f5cf2fbbd1b021cca28a4339",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:0363c0e0ef433c7d3a9aafdd5c10cbd4bf7c42595221aab7070c88f8c99af8b1",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 22738
         }
       ],
       "author": "Abdulkader-Safi",
       "description": "A cleanup release. No behaviour changes, nothing new to learn: if you are on 0.6.0 everything works the same.\n\n## What this fixes\n\n**Obsidian's `app.css` was in the 0.6.0 source tarball.** While working on 0.6.0 I extracted Obsidian's own stylesheet to check a CSS specificity question, and it was written into the repository root and committed by accident. It was never part of the plugin, never loaded, and never shipped in the release assets (`main.js`, `manifest.json`, `styles.css` were always correct), but it did end up inside the tag.\n\nThat file is also the reason the community scorecard reported 185 CSS warnings. All of them, the 66 `!important` uses, the 14 `:has` selectors, the `webview` and `mjx-container` selectors, came from linting Obsidian's stylesheet rather than this plugin's. The plugin's own `styles.css` has none of them.\n\n**The last `!important` is gone.** The reduced-motion override was the one place in the stylesheet using it. It now names the elements that actually animate and matches the base rules' specificity, which is the approach the rest of the file already takes.\n\n**Added a contributing guide**, including a note about Obsidian styling bare `button` elements at specificity (0,1,1), which quietly beats any single-class rule. That one cost an afternoon during 0.6.0 and is worth writing down.\n\n## Upgrading\n\nNothing to do. Audits saved by 0.6.0 and by 0.5.x both open unchanged.\n",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.6.1",
       "prerelease": false,
@@ -54,26 +54,26 @@
       "assets": [
         {
           "digest": "sha256:6827e147df213a714bfe88ad048855136b406a79c1d6aa43abd8fa4bfe148540",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "main.js",
           "size": 994302
         },
         {
           "digest": "sha256:29a51ba6f3802661df893cdf51edfda8dfb94cd6821408231c01e50df225f78a",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 393
         },
         {
           "digest": "sha256:c4d0f468b05299acbb774234f962527b6bcd599a41cba486055235c9668c7291",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 22390
         }
       ],
       "author": "Abdulkader-Safi",
       "description": "Audits are now three files per site, the dashboard has been rebuilt, and the plugin runs on Safi Studio Scanner 1.0.2.\n\n## Opening an audit is fast again\n\nEvery audit used to be a single Markdown note with the whole report inlined as JSON at the bottom. On a 100-page crawl that is roughly 5MB of JSON inside an 852KB note, and Obsidian parsed all of it as note content every time you opened the file.\n\nEach run now writes three siblings into a folder named after the site:\n\n```\nSite Audits/\n  example.com/\n    2026-07-27-16-08.md      readable report, opens in Obsidian\n    2026-07-27-16-08.json    full report data, read only when you open that audit\n    2026-07-27-16-08.html    standalone report, opens in your browser\n```\n\nThe note is frontmatter and Markdown now. Audits saved by 0.5.x still open.\n\n## A rebuilt dashboard\n\n- The audit history moved to the sidebar, grouped by site, with the date and score on every run. The report gets the full width of a main tab.\n- One score block: the gauge, a proportional pass/warning/failure bar, and the four tallies.\n- Category scores on a fixed grid, so name, bar and number line up across every row and column.\n- Issues, Pages and Measurements as tabs.\n- Every issue now shows its fix. The scanner has always returned a `fix` string per rule; the old view discarded it.\n- Buttons for **Open note**, **HTML report** and **Run again**.\n\n## Live progress\n\nA crawl used to sit behind a spinner. Built on the scanner's new `auditStream()`, the run form now reports pages found while crawling, then pages audited and checks completed while checking, with the URL in flight underneath.\n\n## Measurements\n\nScanner 1.0.2 added a measurements channel: values and tables the audit collected per page, separate from pass/fail findings and excluded from scoring. There is a tab for them.\n\n## It follows your theme\n\nThe stylesheet has no colour literals and no font declarations. Colour, type and control sizing come from Obsidian's own variables, and buttons and dropdowns use Obsidian's own component classes, so the plugin looks like the rest of your app under whatever theme you have installed. The score gauge previously hardcoded three colours and ignored your theme entirely.\n\n## Under the hood\n\n- `safi-studio-scanner` now installs from npm (1.0.2) instead of a pinned GitHub tag.\n- The plugin registers two views, sharing one state object.\n- Self-checks cover report writing and the sidebar formatting helpers.\n",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.6.0",
       "prerelease": false,

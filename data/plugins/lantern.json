@@ -4,8 +4,8 @@
   "description": "Local semantic search and a grounded, cited chat agent for your vault — powered by a locally-installed qmd. Requires the qmd CLI. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lantern",
-  "lastChangedAt": "2026-07-28T08:03:27.081Z",
-  "lastFetchedAt": "2026-07-28T08:03:27.081Z",
+  "lastChangedAt": "2026-07-29T08:04:27.036Z",
+  "lastFetchedAt": "2026-07-29T08:04:27.036Z",
   "manifest": {
     "author": "Bartosz Porzezinski",
     "authorUrl": "https://github.com/jokerwashere",
@@ -30,7 +30,7 @@
         },
         {
           "digest": "sha256:b86e2ac4202c5f2146777a743f73c4a16bfc5bfb9f2234e48292cf18fcde445d",
-          "downloadCount": 25,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 399
         },
@@ -43,7 +43,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Patch: `read_reference` names a dead collection root instead of blaming the path.\n\n`search_references` reads from qmd's SQLite index; `read_reference` reads the file live from disk. When a reference collection's root moves — or its git worktree is pruned — the index keeps returning search hits from its cached snapshot, but every `read_reference` throws. The old error (\"check the path against search_references results\") sent the model looping over a path that was actually correct.\n\nFix: on a read failure, `read_reference` checks whether the collection root still exists. A gone root reports that the root is missing and the collection must be re-registered and re-embedded, and tells the model not to retry the path; a present root with an unreadable file reports a possibly-off path or a stale index. The model gets the real cause and stops looping.\n\nRequires the qmd CLI. Obsidian 1.7.2+.\n",
-      "downloadCount": 25,
+      "downloadCount": 26,
       "draft": false,
       "name": "1.6.4",
       "prerelease": false,
@@ -60,7 +60,7 @@
         },
         {
           "digest": "sha256:b9dfca7ccce2736a1ee75bdd17b5376d44ba9d19f15dfe1bd3fef20a4d75a47a",
-          "downloadCount": 20,
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 403
         },
@@ -73,7 +73,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Patch: type `moment` locally so the plugin audit stops flagging it.\n\nThe community-plugin audit lints **without installing dependencies**, so Obsidian's `moment` re-export (`export const moment: typeof import('moment')`) can't resolve — it becomes an error type that propagates through every date call, tripping `@typescript-eslint/no-unsafe-*` across the daily-note code. (The `moment` devDependency added in 1.6.1 couldn't help: the audit never runs `npm install`.)\n\nFix: `src/search/dailyNotes.ts` now casts Obsidian's `moment` to a narrow local `MomentFactory` / `MomentInstance` type, so the date code is type-safe whether or not the `moment` module resolves. Verified by reproducing the audit env (`mv node_modules/moment` away): the raw pattern fires all four warnings; the cast → 0. Removed the ineffective `moment` devDependency.\n\nTypes-only — `moment` still comes from Obsidian's bundle at runtime. `main.js` unchanged.",
-      "downloadCount": 20,
+      "downloadCount": 21,
       "draft": false,
       "name": "1.6.3",
       "prerelease": false,
@@ -90,7 +90,7 @@
         },
         {
           "digest": "sha256:461e3d666644afa8b6bac51b140ee14b4d0754ae908082270ca4ae0ffc1e3951",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 403
         },
@@ -103,7 +103,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Tooling patch — cut so the store re-validates.\n\nDeclares `moment` as a direct devDependency. Obsidian's `moment` re-export was only a *transitive* dep of obsidian, so a clean install typed it as `any` — tripping `@typescript-eslint/no-unsafe-*` across the daily-note code (`resolveDateWord` / `.format()` / `.clone()` / `.subtract()`). Pinning `moment@2.29.4` (Obsidian's own version) as a direct devDependency resolves the types.\n\nTypes-only: `moment` comes from the `obsidian` re-export and stays external, so `main.js` is byte-identical to 1.6.1. No behavior change — this release exists only to trigger store re-validation.",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.6.2",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:6dcc7d53570b717e0830bae4df6ff20ea0bc3cd9e4fc1574a4304ca32d9d0ed8",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
@@ -133,7 +133,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Patch: tool names now encode scope, so a small local model stops mis-routing reads.\n\n- **`read_file` → `read_vault`, `web_search` → `search_web`.** Every searcher is now `search_<scope>`; every reader names its scope. The old `search_vault` → `read_file` mismatch made models call the vault reader on `search_references` hits (reference-collection docs) → \"no file found\".\n- **`read_vault` misses now redirect** to `read_reference` when reference collections are enabled.\n- **Dispatch alias map** (`read_file` → `read_vault`, `web_search` → `search_web`) keeps stale saved prompt overrides routing — not exposed to the model.\n- Internals renamed to match (`searchWeb` / `searchPerplexity` / `searchExa` / …). Exa's `web_search_exa` MCP method left as-is (their contract).\n\nNo config or data changes. Obsidian 1.7.2+.",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.6.1",
       "prerelease": false,
@@ -150,7 +150,7 @@
         },
         {
           "digest": "sha256:ce943b6125ecb1e879c5a32311afb9cd330465eb5a1d5b349ceadfb151c304bc",
-          "downloadCount": 62,
+          "downloadCount": 63,
           "name": "manifest.json",
           "size": 403
         },
@@ -163,7 +163,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**llama.cpp server feature parity** — four recent llama-server capabilities, wired into the grounded chat agent.\n\n- **Parallel tool calls** — read-only tools requested in one turn run concurrently; a batch containing a write tool stays sequential. A `search_vault` + `search_references` + `read_file` turn is now one round trip, not three.\n- **Perf + cache readout** — the per-answer footer reports generation speed and KV prompt-cache reuse — `… · 41 tok/s · 1.2k cached` — read from `timings.predicted_per_second` and `usage.prompt_tokens_details.cached_tokens`.\n- **Answer now** — a persistent button that ends an over-thinking model's reasoning mid-stream (`reasoning_control` → `POST /v1/chat/completions/control`), then stops tool-calling and forces the answer. No-ops gracefully where the endpoint is absent.\n- **Cold-start awareness** — reads the router's `/v1/models` `status.value`; a sleeping/loading model shows \"Waking the model (cold start…)\" instead of a blank wait, and the settings model picker shows each model's load state.\n\nStill read-only out of the box. Needs the [qmd](https://github.com/tobi/qmd) CLI plus a local OpenAI-compatible LLM (llama-server / LM Studio). Obsidian 1.7.2+.",
-      "downloadCount": 62,
+      "downloadCount": 63,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
@@ -180,7 +180,7 @@
         },
         {
           "digest": "sha256:cc2ffb5542816d6d22b9845808102a1b56402079c38203cfb513ebb0bc5a0639",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 403
         },
@@ -193,7 +193,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.5.4",
       "prerelease": false,
@@ -210,7 +210,7 @@
         },
         {
           "digest": "sha256:cba8b77e395834b28bb187a9532247f5d6c23611f4c275654c45711e47a20575",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
@@ -223,7 +223,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.5.3",
       "prerelease": false,
@@ -240,7 +240,7 @@
         },
         {
           "digest": "sha256:22aea3f19d5096bc6b2d64d33cf6d16ddb4fc78f3d360096d492f671271b5ed8",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
@@ -253,7 +253,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.5.2",
       "prerelease": false,
@@ -270,7 +270,7 @@
         },
         {
           "digest": "sha256:3ab8a3694481cf2d896fcc2fabf26c94edbc5a7b703352abbf613733582e400b",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
@@ -283,7 +283,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.5.1",
       "prerelease": false,
@@ -300,7 +300,7 @@
         },
         {
           "digest": "sha256:0351f01a81c89c7cf441a29acb4af1ec89b8fe05bbd03e22ab33d46994238e4a",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 403
         },
@@ -313,7 +313,7 @@
       ],
       "author": "github-actions[bot]",
       "description": null,
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "1.5.0",
       "prerelease": false,
