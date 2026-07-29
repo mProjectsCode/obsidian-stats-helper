@@ -4,8 +4,8 @@
   "description": "A visual graph view of your tasks.",
   "errors": [],
   "id": "tasks-map",
-  "lastChangedAt": "2026-07-28T02:05:27.067Z",
-  "lastFetchedAt": "2026-07-28T02:05:27.067Z",
+  "lastChangedAt": "2026-07-29T02:05:27.022Z",
+  "lastFetchedAt": "2026-07-29T02:05:27.022Z",
   "manifest": {
     "author": "NicoKNL",
     "authorUrl": "https://github.com/NicoKNL",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:23046033c01d6ccc8ad78e49a0f963ccc20270f6ff7d7b069d6e0165602ac471",
-          "downloadCount": 96,
+          "downloadCount": 114,
           "name": "main.js",
           "size": 595471
         },
         {
           "digest": "sha256:a35e7189d959aabd7fdf355467b990d9b4c1e1984a5c18989017468d77f9fa6f",
-          "downloadCount": 96,
+          "downloadCount": 115,
           "name": "manifest.json",
           "size": 255
         },
         {
           "digest": "sha256:5f20e8c87541b61911bc486080ff92387223ade3a31b64a0b5f63fe88a5129c9",
-          "downloadCount": 93,
+          "downloadCount": 110,
           "name": "styles.css",
           "size": 46067
         }
       ],
       "author": "github-actions[bot]",
       "description": "## refactor: remove all @typescript-eslint/no-explicit-any disables\n\n## Why\n\nThe Obsidian plugin reviewer flags `// eslint-disable ... no-explicit-any` comments as a quality/risk signal — a suppressed lint rule reads as \"hiding a problem,\" which was marking the plugin as low quality. This removes every such disable in `src/` by giving the values real types instead of suppressing the rule.\n\n## What\n\n- **New `src/types/obsidian-internals.ts`** — typed interfaces for the undocumented `app.plugins` registry (deliberately omitted from Obsidian's public `App` type) and the slice of the Dataview API we read. Access now goes through `app as AppWithPlugins` instead of `app as any`.\n- **`src/lib/utils.ts`** — retyped function params to `App` / `TFile` / `CachedMetadata` / `FrontMatterCache` / `TAbstractFile` / `unknown`; `.find()` now infers `TFile` from `getMarkdownFiles()`.\n- **`src/views/TaskMapGraphView.tsx`** — the ReactFlow handlers use their exported types (`EdgeMouseHandler`, `OnConnect`, `OnConnectStart` via `useCallback<T>`); the custom `dataview:index-ready` event is registered by upcasting `app.metadataCache` to the `Events` base class (whose `on(name: string, …)` accepts custom event names — no cast needed).\n- **`src/components/tag-input.tsx`** — the react-select ref uses the exported `SelectInstance<TagOption>` type.\n\n## Verification\n\n- `tsc -noEmit` (build typecheck): passes\n- `npm run lint`: 0 errors\n- `jest`: 304 tests pass\n- `grep -rn no-explicit-any src/`: none remaining\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 96,
+      "downloadCount": 115,
       "draft": false,
       "name": "0.36.1",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:cc9f31227d58004629ef355094b682d69481a7b3464d323cddceaf42afad5a49",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 255
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## feat: insert a task between two connected tasks from the edge popover\n\n> ⚠️ **Stacked on #551** (`feat/optimistic-canvas-editing`). This PR targets that branch, not `main` — review/merge #551 first, then this will retarget to `main`. The diff shown here is only the insert-task delta.\n\n## What\n\nAdds an **\"Insert task\"** button next to \"Delete edge\" in the edge popover. For an edge between two **Dataview** tasks it:\n\n1. Opens the Tasks plugin creation modal.\n2. Writes the new task and gives it an ID.\n3. Rewires `source → new → target`, removing the old `source → target` link.\n4. Updates canvas state optimistically (reusing the helpers from #551), so the inserted node and rewired edges appear without a reload.\n\nIf the vault operations fail partway, it **rolls back** the writes. Edges between non-Dataview tasks show an explanatory notice instead.\n\n## Why\n\nA common graph edit — splicing a step into an existing dependency chain — currently requires manual creation + rewiring. Relates to #82 (create tasks on edge drag), in the same \"create tasks from edge interactions\" space.\n\n## Scope & test\n\n`delete-edge-button.tsx` (new button), `TaskMapGraphView.tsx` (`onInsertTaskBetweenSelectedEdge`), i18n (`edge_actions` + insert error, en/nl/zh-CN), CSS. `npm run build`, `jest` (299 passing), `eslint` (0 errors), `stylelint`, `prettier` all pass.\n\n---\n\n🧩 Split out of #535 (part 5 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 7,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.36.0",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:2bfa244927bfa5ca7ed18c65c0af1c95974ba3e222a997010c787a2f992bd56c",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 255
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## feat: edit tasks in place and update the canvas without a full reload\n\n## What\n\nTwo connected improvements to how task/edge mutations reflect on the canvas:\n\n**1. Edit tasks in place**\n- New `editTaskWithTasksModal(task, app)` helper opens the Tasks plugin editor for a task. It's now shared by the task menu's edit action **and** a new **double-click-to-edit** gesture on a node.\n- Tags are stripped before handing the line to the Tasks editor and restored afterward (`stripTaskLineTags` / `restoreTaskLineTags`) so the Tasks modal doesn't choke on / drop them.\n\n**2. Optimistic canvas state (no full reload on mutate)**\n- Task create/edit and edge add/delete now update local state directly — `newlyCreatedTaskIds`, `handleTaskCreated`, `handleTaskEdited`, `updateTaskIncomingLinks` — instead of calling the full `reloadTasks`.\n- `TaskNode` re-syncs its local status/starred/tags from props via a `useEffect` so optimistic edits render immediately.\n- `onConnect` dedupes against existing incoming links before creating an edge.\n\n## Why\n\nAdding a task or editing an edge used to reload the whole graph, which **dropped existing edges and reset the layout** — that's #487. Keeping state local also removes the class of stale-match failures behind #165.\n\n## Fixes / relates\n\n- Fixes #487\n- Complements #165 (pairs well with the sign-matching fix in the robust-task-line-matching PR)\n\n## Scope & test\n\n`utils.ts` (edit helper + tag round-trip + `createNodesFromTasks` callbacks), `TaskMapGraphView.tsx` (optimistic state), `TaskNode` / `TaskMenu` wiring, types, and tests. `npm run build`, `jest` (299 passing), `eslint` (0 errors), `prettier` all pass.\n\n> Touch-points with sibling PRs (all trivial merges):\n> - Adds `onDoubleClick` to the `TaskNode` root element; the task-date-bar PR adds a `className` to the same element.\n> - Adds `setNewlyCreatedTaskIds(new Set())` to `reloadTasks`; the preserve-viewport PR refactors the same function.\n\n---\n\n🧩 Split out of #535 (part 4 of 5). The insert-task-between-edges feature (part 5) is stacked on top of this branch.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.35.0",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:9cbc751bf751c84daaa7e5b2c9706b95eb20be33906921ba90f4fa685b6ce7bc",
-          "downloadCount": 273,
+          "downloadCount": 274,
           "name": "manifest.json",
           "size": 255
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## feat: show task date pills above the selected node\n\n## What\n\nWhen a node is selected, show a small bar of date \"pills\" above it — due 📅, scheduled ⏳, start 🛫, created ➕, done ✅, canceled ❌ — for whichever dates the task defines.\n\n- New `getTaskDateProperties(taskText)` util parses dates from **emoji**, **Dataview** (`[due:: ...]`, `[[due::...]]`, `(due::...)`), and **plain-text** (`due:...`) formats.\n- `TaskNode` renders the pills (only while `selected`), with `pointer-events: none` so they never intercept clicks.\n- Strings added for en / nl / zh-CN.\n- Unit tests cover emoji, Dataview, and text extraction plus the empty case.\n\n## Why\n\nSurfaces task scheduling info directly on the canvas. Adjacent to #206 (display task time on the map) — this is the read-only display half.\n\n## Scope\n\n`getTaskDateProperties` + `TaskNode` presentation + i18n + CSS + tests. `npm run build`, `jest` (100 passing), `eslint`, `stylelint`, and `prettier` all pass.\n\n> Note: touches the `TaskNode` root element (adds `className=\"tasks-map-task-node-root\"`). PR for the optimistic-editing work (part 4) adds an `onDoubleClick` to the same element — trivial merge either way.\n\n---\n\n🧩 Split out of #535 (part 3 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 273,
+      "downloadCount": 274,
       "draft": false,
       "name": "0.34.0",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:08f683cde5ff660772660808eb811c8f2dcd30b91ddf952d9f4e5bce71c1b05a",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 255
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## fix: preserve canvas viewport when reloading tasks\n\n## What\n\nThe manual reload path (sidebar reload button and the `reloadRef` handle) always ran a full fit-view, resetting the user's zoom and pan. This is jarring — especially right after an edge edit, where the focus jumps away from what you were working on.\n\n- `reloadTasks` now accepts a `{ preserveViewport }` option that sets `skipFitViewRef` before recomputing.\n- The user-facing reload is routed through a new `handleReloadTasks` that passes `preserveViewport: true`.\n- Internal/programmatic reloads keep their existing fit-view behaviour.\n\n## Why\n\nPart of #499 (more granular control over automatic camera movement) — specifically the \"don't recenter on reload\" friction point. Note this is only the reload path; the broader #499 asks (disable-recenter setting, re-center button, non-interactive-during-animation) are intentionally out of scope here.\n\n## Scope\n\nSingle-file change in `TaskMapGraphView.tsx`. `npm run build` passes; no new lint errors.\n\n---\n\n🧩 Split out of #535 (part 2 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "0.33.2",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:b970c24bf2332001d2d80786c70f8c90a3a459dea48362037ccf86c875ae538a",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 255
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## fix: robustly locate task lines when adding/removing dependency signs\n\n## What\n\nWhen adding or removing dependency signs, the task line was located with a plain `line.includes(task.text)` scan. If a task's `text` still carries stale metadata (e.g. a `[dependsOn:: a, b, c]` block with multiple hashes), that match can land on the wrong line — or fail entirely — silently dropping the edge operation.\n\nThis change:\n- Locates the line by **ID first** (falling back to text) when adding a sign.\n- For sign *removal*, adds `findTaskLineForSignRemoval`, which falls back to locating the line by the dependency **hash** itself (parsing `dependsOn` CSV blocks) when ID/text matching fails.\n- Adds a regression test covering consecutive hash removal from a stale multi-hash `dependsOn` block.\n\n## Why\n\nThis is the file-matching half of the class of bugs in #165, where a task can lose its ID and subsequent operations match the wrong line.\n\n## Scope\n\nPure `src/lib/utils.ts` + test change. No UI/React changes. `npm run build`, `jest`, and `eslint` all pass.\n\n---\n\n🧩 Split out of #535 (part 1 of 5).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.33.1",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:35f5d65ed8ff2777586115231380c8a1e5c8f69e8cae1be6027dcf7400163707",
-          "downloadCount": 876,
+          "downloadCount": 877,
           "name": "manifest.json",
           "size": 255
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## feat: additional embed controls\n\nThis pull request introduces a sidebar to the embedded task map view, adds new configuration options for controlling the display of the view panel and tag visibility, and ensures these options are properly handled throughout the codebase. It also includes tests for the new configuration options and updates the styling to support the new sidebar layout.\r\n\r\nCloses #500 ",
-      "downloadCount": 876,
+      "downloadCount": 877,
       "draft": false,
       "name": "0.33.0",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:8b7fb249f57ce6957732568c4a6d14bfa7e1ff3ee26ed73f34e3e2ac3a777fd3",
-          "downloadCount": 796,
+          "downloadCount": 797,
           "name": "manifest.json",
           "size": 255
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## fix: small fixes for dropping tasks on a project\n\nThis pull request improves how task node group assignments and drag-over highlights are handled in the `TaskMapGraphView` component. The changes ensure that parent group information is always accurate by referencing the current state of nodes, which addresses inconsistencies that can occur during drag events. Additionally, the logic now prevents redundant project assignments when dragging tasks.",
-      "downloadCount": 796,
+      "downloadCount": 797,
       "draft": false,
       "name": "0.32.7",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:6578adb306d236e39fd35a8bab6e33b6ef5b0fbf115cc01bafd0eb94776be5f6",
-          "downloadCount": 208,
+          "downloadCount": 209,
           "name": "manifest.json",
           "size": 255
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## fix(deps): update dependency lucide-react to v1.16.0\n\nThis PR contains the following updates:\n\n| Package | Type | Update | Change |\n|---|---|---|---|\n| [lucide-react](https://lucide.dev) ([source](https://redirect.github.com/lucide-icons/lucide/tree/HEAD/packages/lucide-react)) | dependencies | minor | [`1.14.0` -> `1.16.0`](https://renovatebot.com/diffs/npm/lucide-react/1.14.0/1.16.0) |\n\n---\n\n### Release Notes\n\n<details>\n<summary>lucide-icons/lucide (lucide-react)</summary>\n\n### [`v1.16.0`](https://redirect.github.com/lucide-icons/lucide/releases/tag/1.16.0): Version 1.16.0\n\n[Compare Source](https://redirect.github.com/lucide-icons/lucide/compare/1.15.0...1.16.0)\n\n#### What's Changed\n\n-   feat(icons): added `blender` icon by [@&#8203;rrod497](https://redirect.github.com/rrod497) in [https://github.com/lucide-icons/lucide/pull/3884](https://redirect.github.com/lucide-icons/lucide/pull/3884)\n\n**Full Changelog**: https://github.com/lucide-icons/lucide/compare/1.15.0...1.16.0\n\n### [`v1.15.0`](https://redirect.github.com/lucide-icons/lucide/releases/tag/1.15.0): Version 1.15.0\n\n[Compare Source](https://redirect.github.com/lucide-icons/lucide/compare/1.14.0...1.15.0)\n\n#### What's Changed\n\n-   fix: remove 'less' from brand stopwords by [@&#8203;jguddas](https://redirect.github.com/jguddas) in [https://github.com/lucide-icons/lucide/pull/4331](https://redirect.github.com/lucide-icons/lucide/pull/4331)\n-   fix([@&#8203;lucide/vue](https://redirect.github.com/lucide/vue)): Clone slots before passing to icon by [@&#8203;axtho](https://redirect.github.com/axtho) in [https://github.com/lucide-icons/lucide/pull/4339](https://redirect.github.com/lucide-icons/lucide/pull/4339)\n-   fix(icons): changed `text-cursor` icon by [@&#8203;jamiemlaw](https://redirect.github.com/jamiemlaw) in [https://github.com/lucide-icons/lucide/pull/4340](https://redirect.github.com/lucide-icons/lucide/pull/4340)\n-   fix(icons): changed `landmark` icon by [@&#8203;jamiemlaw](https://redirect.github.com/jamiemlaw) in [https://github.com/lucide-icons/lucide/pull/4334](https://redirect.github.com/lucide-icons/lucide/pull/4334)\n-   chore(deps-dev): bump nitropack from 2.13.1 to 2.13.4 by [@&#8203;dependabot](https://redirect.github.com/dependabot)\\[bot] in[https://github.com/lucide-icons/lucide/pull/4352](https://redirect.github.com/lucide-icons/lucide/pull/4352)2\n-   chore(deps-dev): bump simple-git from 3.33.0 to 3.36.0 by [@&#8203;dependabot](https://redirect.github.com/dependabot)\\[bot] in[https://github.com/lucide-icons/lucide/pull/4349](https://redirect.github.com/lucide-icons/lucide/pull/4349)9\n-   fix(icons): changed `candy-cane` icon by [@&#8203;jguddas](https://redirect.github.com/jguddas) in [https://github.com/lucide-icons/lucide/pull/4148](https://redirect.github.com/lucide-icons/lucide/pull/4148)\n-   fix(icons): changed `volleyball` icon by [@&#8203;jamiemlaw](https://redirect.github.com/jamiemlaw) in [https://github.com/lucide-icons/lucide/pull/4338](https://redirect.github.com/lucide-icons/lucide/pull/4338)\n-   fix(icons): changed `chart-no-axes-combined` icon by [@&#8203;jguddas](https://redirect.github.com/jguddas) in [https://github.com/lucide-icons/lucide/pull/3567](https://redirect.github.com/lucide-icons/lucide/pull/3567)\n-   feat(icon): added broccoli icon by [@&#8203;swastik7805](https://redirect.github.com/swastik7805) in [https://github.com/lucide-icons/lucide/pull/4263](https://redirect.github.com/lucide-icons/lucide/pull/4263)\n-   chore(site): Updates to site and updated carbon ads by [@&#8203;ericfennis](https://redirect.github.com/ericfennis) in [https://github.com/lucide-icons/lucide/pull/4359](https://redirect.github.com/lucide-icons/lucide/pull/4359)\n-   feat(icons): added sticky note variants by [@&#8203;Barakudum](https://redirect.github.com/Barakudum) in [https://github.com/lucide-icons/lucide/pull/4348](https://redirect.github.com/lucide-icons/lucide/pull/4348)\n-   chore(deps-dev): bump astro from 6.1.6 to 6.1.10 by [@&#8203;dependabot](https://redirect.github.com/dependabot)\\[bot] in[https://github.com/lucide-icons/lucide/pull/4361](https://redirect.github.com/lucide-icons/lucide/pull/4361)1\n\n#### New Contributors\n\n-   [@&#8203;axtho](https://redirect.github.com/axtho) made their first contribution in [https://github.com/lucide-icons/lucide/pull/4339](https://redirect.github.com/lucide-icons/lucide/pull/4339)\n-   [@&#8203;Barakudum](https://redirect.github.com/Barakudum) made their first contribution in [https://github.com/lucide-icons/lucide/pull/4348](https://redirect.github.com/lucide-icons/lucide/pull/4348)\n\n**Full Changelog**: https://github.com/lucide-icons/lucide/compare/1.14.0...1.15.0\n\n</details>\n\n---\n\n### Configuration\n\n📅 **Schedule**: Branch creation - At any time (no schedule defined), Automerge - At any time (no schedule defined).\n\n🚦 **Automerge**: Enabled.\n\n♻ **Rebasing**: Whenever PR is behind base branch, or you tick the rebase/retry checkbox.\n\n🔕 **Ignore**: Close this PR and you won't be reminded about this update again.\n\n---\n\n - [ ] <!-- rebase-check -->If you want to rebase/retry this PR, check this box\n\n---\n\nThis PR has been generated by [Renovate Bot](https://redirect.github.com/renovatebot/renovate).\n<!--renovate-debug:eyJjcmVhdGVkSW5WZXIiOiIzOS4yNDMuMCIsInVwZGF0ZWRJblZlciI6IjM5LjI0My4wIiwidGFyZ2V0QnJhbmNoIjoibWFpbiIsImxhYmVscyI6W119-->",
-      "downloadCount": 208,
+      "downloadCount": 209,
       "draft": false,
       "name": "0.32.6",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:54316293da9d5a63188a45560f5d46266588dee0993c27adc148d5015228194a",
-          "downloadCount": 80,
+          "downloadCount": 81,
           "name": "manifest.json",
           "size": 255
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## fix: fix various plugin warnings from the community page\n\nFix various warnings/issues as reported by Obsidian's plugin quality scanner to increase reported quality.",
-      "downloadCount": 80,
+      "downloadCount": 81,
       "draft": false,
       "name": "0.32.5",
       "prerelease": false,

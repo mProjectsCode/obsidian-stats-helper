@@ -4,8 +4,8 @@
   "description": "Sync notes bidirectionally between your vault and Airtable, SeaTable, or Supabase databases.",
   "errors": [],
   "id": "auto-note-importer",
-  "lastChangedAt": "2026-07-28T02:05:27.067Z",
-  "lastFetchedAt": "2026-07-28T02:05:27.067Z",
+  "lastChangedAt": "2026-07-29T02:05:27.022Z",
+  "lastFetchedAt": "2026-07-29T02:05:27.022Z",
   "manifest": {
     "author": "uppinote",
     "authorUrl": "https://github.com/uppinote20",
@@ -33,7 +33,7 @@
         },
         {
           "digest": "sha256:5ed8b726ac80b24f46b2469c4e3e4d0c4c319998c576b1b6657d174aecadc128",
-          "downloadCount": 237,
+          "downloadCount": 240,
           "name": "manifest.json",
           "size": 441
         },
@@ -46,7 +46,7 @@
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- Prevent frontmatter edits from overwriting structured remote fields (#108)\n  - Introduces `isPushable` to the `FieldTypeMapper` interface, stricter than `!isReadOnly`, to exclude object-shaped fields (Airtable `barcode`/collaborators, SeaTable `collaborator`/`geolocation`, Supabase `json`/`jsonb`) from push payloads\n  - Fixes a data-loss bug where a jsonb column with an empty frontmatter placeholder was overwritten with `null` on push\n  - Fail-closed for unknown types — unrecognized field types are treated as not pushable\n\n### Performance\n- Cache verification result on credential form to skip redundant `verifySetup` probe on Save (#112)\n  - A successful connection test sets a 60-second freshness fingerprint, allowing the next Save to skip the `verifySetup` network probe\n  - Fingerprint is invalidated on any field edit, probe failure, or `needsSetup` — a changed or bad credential can never ride a stale \"verified\" result past the save gate\n  - Primarily affects Supabase (the only provider that implements `verifySetup`)\n\n### Refactoring\n- Unify exhaustiveness guards behind a shared `assertNever` helper (#113)\n  - Adds `src/utils/assertNever` — enforces switch/if exhaustiveness at compile time (missing cases after union extension fail to compile) and throws at runtime\n  - Routes all five throwing exhaustiveness guards (sync mode/scope, conflict mode, setup-requirement kind, credential type) through the helper\n  - Upgrades `migration.ts`'s guard to a real `satisfies never` check that catches missing cases at compile time\n\n### Testing\n- Add cross-provider `FieldTypeMapper` parity contract tests (#111)\n  - Registry-driven test suite that validates all registered mappers satisfy shared invariants: `filenameSafe ⊆ subfolderSafe`, no subfolder-safe type maps to `attachment`/`link`/`unknown`, and prototype-chain names fail closed\n  - Automatically covers future providers the moment they register a mapper\n  - Sorts `FILENAME_SAFE_TYPES` in Airtable and SeaTable mappers for deterministic test output\n\n### Maintenance\n- Bump CI artifact and attest actions to Node 24 runtimes (#106)\n  - `actions/upload-artifact` v4.6.2 → v7.0.1 (Node 24)\n  - `actions/download-artifact` v4.3.0 → v8.0.1 (Node 24)\n  - `actions/attest-build-provenance` v2.4.0 → v4.1.0 (Node 24)\n  - Preemptive update ahead of GitHub's Node 20 runner removal on 2026-09-16\n- Upgrade TypeScript 4.7.4 → 5.9.3 and `@typescript-eslint` v5 → v8 (#109)\n  - Updates ESLint toolchain to `@typescript-eslint` v8 (ESLint 8 retained, no config churn)\n  - Replaces `const _exhaustive: never` workaround with idiomatic `satisfies never` (TS 4.9+)\n  - No runtime changes — compiler-only upgrade, emitted JS is identical\n",
-      "downloadCount": 237,
+      "downloadCount": 240,
       "draft": false,
       "name": "1.0.2",
       "prerelease": false,
@@ -63,7 +63,7 @@
         },
         {
           "digest": "sha256:ffb127baad330f53b4214c20cc189ad6111c4df4a0a079ebde75e39b6f27d288",
-          "downloadCount": 114,
+          "downloadCount": 115,
           "name": "manifest.json",
           "size": 441
         },
@@ -76,7 +76,7 @@
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### Bug Fixes\n- Fix SeaTable metadata cache robustness and migrate from native `fetch` to Obsidian `requestUrl` (#104)\n  - Recover response shape when older Obsidian builds reject on 4xx/5xx (mirrors `SupabaseMetadataCache`)\n  - Fix `dtable_server` gateway fallback to match `SeaTableClient` so settings UI no longer 404s\n  - Swallow `SyntaxError` from non-JSON proxy responses, surfacing them as friendly `HTTP {status}` errors\n  - Widen status check to full 2xx range, add `Accept: application/json` header, and fix race condition in `clearForCred` during in-flight requests\n- Fix CSS compatibility for Obsidian 1.4.5: replace `text-decoration-color` with `border-bottom`, remove `!important`, and raise `.ani-field-error` selector specificity (#104)\n- Fix SeaTable sync failures behind corporate proxies by accepting the full 2xx status range in all client methods (#105)\n  - `getBaseToken`, `fetchNotes`, `fetchRecord`, and `batchUpdate` now treat any 2xx response as success\n  - Mirrors the behavior already present in `SeaTableMetadataCache`\n\n### Maintenance\n- Harden release workflow with two-job split (`build` / `release`) and SLSA build-provenance attestation via `actions/attest-build-provenance` (#104)\n  - Postinstall scripts can no longer run in the same job as the OIDC signing identity\n  - Pin attestation action to SHA instead of mutable tag; include `manifest.json` as attestation subject\n- Update `manifest.json` `authorUrl` to profile URL and drop `builtin-modules` external dependency (#104)\n- Correct README \"Permissions & Disclosures\" section to match vault APIs actually used (#104)\n- Resolve 3 pre-existing ESLint warnings: narrow `as any` cast in `main.ts` and drop non-null assertions in `field-cache.ts` (#105)\n",
-      "downloadCount": 114,
+      "downloadCount": 115,
       "draft": false,
       "name": "1.0.1",
       "prerelease": false,
@@ -93,7 +93,7 @@
         },
         {
           "digest": "sha256:aa7a212775e007b59ee04fb737e2ae6169cead96af3ee9b7495dd0be3121556d",
-          "downloadCount": 27,
+          "downloadCount": 28,
           "name": "manifest.json",
           "size": 469
         },
@@ -106,7 +106,7 @@
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add per-config subfolder slash literal toggle (#97)\n  - New `subfolderTreatSlashAsLiteral` setting per config: when enabled, slash characters in subfolder field values are treated as literal (e.g. `AC/DC` → single folder `AC-DC`) instead of creating nested folders\n  - Default is `false`, preserving legacy behavior where `2024/Q1` creates a two-level folder hierarchy\n  - Toggle appears beneath every subfolder field picker across Airtable, SeaTable, and Supabase configurations\n  - Existing settings migrate automatically with `false` fallback — no behavior change for current users\n- Add `isSubfolderSafe` field filter and UI parity for subfolder dropdowns across all providers (#100)\n  - New `isSubfolderSafe` / `getSubfolderSafeTypes` methods on `FieldTypeMapper` exclude attachment, link, and object-shaped column types (collaborator, geolocation, barcode, etc.) from subfolder field pickers — fixes over-restrictive filtering for Airtable and under-restrictive filtering for SeaTable / Supabase\n  - Settings UI now surfaces stale stored subfolder/filename values that no longer match the active filter as a synthetic `(unsupported / hidden)` option, so users can re-select without silent data loss\n  - Runtime guard in `determineFolderPath` falls back to flat layout when a field value resolves to `[object Object]`, protecting legacy configs that predate this change\n\n### Maintenance\n- Fix release workflow trigger + bump GitHub Actions to v6 + add repo templates (#99)\n  - `release.yml` tag filter changed from `\"*\"` to `\"[0-9]*\"` to prevent sync tags from accidentally triggering the publish workflow\n  - `actions/checkout` and `actions/setup-node` updated from v3/v4 → v6; Node.js bumped from 18 → 20 (active LTS) across all workflows\n  - Added `CODEOWNERS`, `pull_request_template.md`, and issue templates (bug report, feature request)\n",
-      "downloadCount": 27,
+      "downloadCount": 28,
       "draft": false,
       "name": "1.0.0",
       "prerelease": false,
@@ -123,7 +123,7 @@
         },
         {
           "digest": "sha256:72bc14e1b4574440db18574769e44f6f124b6fc0c8a0373053b9afb7baafe51b",
-          "downloadCount": 26,
+          "downloadCount": 27,
           "name": "manifest.json",
           "size": 461
         },
@@ -136,7 +136,7 @@
       ],
       "author": "claude[bot]",
       "description": "## What's Changed\n\n### New Features\n- Add Supabase / PostgreSQL provider with full read, write, and bidirectional sync (#90)\n  - Connects via PostgREST (direct `requestUrl`, no `@supabase/supabase-js` dependency)\n  - OpenAPI introspection populates Schema/Table/View/Filename/Subfolder dropdowns in the settings UI, matching the SeaTable UX pattern\n  - Supports legacy `anon`/`service_role` JWTs and new `sb_publishable_…`/`sb_secret_…` keys; the credential form auto-detects the key kind and surfaces an RLS-impact hint\n  - Primary key is auto-detected from the OpenAPI spec and editable for views or composite-PK cases\n\n### Bug Fixes\n- Show inline RPC setup banner in the Supabase credential form when the required database function is missing (#92)\n  - Replaces the transient toast notice with a persistent inline banner that stays visible until the setup SQL is applied and verified\n  - Blocks credential save when a publishable key is used against a project missing the `ani_supabase_schema` RPC, preventing silent misconfiguration\n  - Save and Test buttons show loading state during the probe; changing any credential field auto-clears a stale banner\n\n### Documentation\n- Refresh README and CLAUDE.md for Supabase provider and inline RPC banner (#94)\n  - Adds Supabase to the provider list and connection card flow in README\n  - Corrects publishable-key section: banner location, button text (Verify), and save-blocked-until-verified guarantee\n  - Adds `SupabaseClient` to the Key Classes reference in CLAUDE.md\n",
-      "downloadCount": 26,
+      "downloadCount": 27,
       "draft": false,
       "name": "0.11.0",
       "prerelease": false,
