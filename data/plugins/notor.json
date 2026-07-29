@@ -4,8 +4,8 @@
   "description": "A transparent, extensible, autonomous-capable AI assistant for note taking and knowledge management. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "notor",
-  "lastChangedAt": "2026-07-28T03:03:27.005Z",
-  "lastFetchedAt": "2026-07-28T03:03:27.005Z",
+  "lastChangedAt": "2026-07-29T03:02:27.044Z",
+  "lastFetchedAt": "2026-07-29T03:02:27.044Z",
   "manifest": {
     "author": "Zach Mueller",
     "authorUrl": "https://github.com/zachmueller",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:431a53db4e0167e7670f68d8aacbcd98d0b18dae814bc077670190b8a8fe282d",
-          "downloadCount": 16,
+          "downloadCount": 18,
           "name": "main.js",
           "size": 6739030
         },
         {
           "digest": "sha256:85559d9a081cc304c50252064a4d8998b60a10cb54263efc7e04c6116ad8e6f8",
-          "downloadCount": 16,
+          "downloadCount": 20,
           "name": "manifest.json",
           "size": 305
         },
         {
           "digest": "sha256:d45134b083eb3b280d87e30f40e152e7a7e95e512b2762b9cdd1671e64b9f13e",
-          "downloadCount": 13,
+          "downloadCount": 15,
           "name": "styles.css",
           "size": 100576
         }
       ],
       "author": "github-actions[bot]",
       "description": "### New Models — AWS Bedrock\r\n- **Claude 5-series (Opus 5, Sonnet 5, Fable 5):** registered `us.`/`global.` Bedrock inference profiles and direct-API aliases with correct 200K base + 1M extended context (`context-1m-2025-08-07` beta), replacing the wrong 128K default-fallback window.\r\n- **Catalog-parity sweep:** registered 18 previously-missing chat profiles so every selectable model has an accurate context window and pricing (no more 128K/no-pricing fallback):\r\n  - **Anthropic:** Opus 4.7 (200K+1M), Opus 4.5 (200K+1M), Opus 4.1 (200K), Claude 3 Haiku, Claude 3 Sonnet.\r\n  - **Amazon:** Nova 2 Lite.\r\n  - **Meta:** Llama 3.1 / 3.2 / 3.3 (7 profiles, 128K).\r\n  - **Mistral:** Pixtral Large (128K).\r\n  - **Writer:** Palmyra X4 (128K) and X5 (1M).\r\n\r\n### Thinking / Reasoning\r\n- **5-series thinking correctly classified as adaptive/`effort`.** Verified by a live Bedrock probe: Opus 5, Sonnet 5, and Fable 5 reject the legacy `thinking.type=enabled` protocol and serve adaptive reasoning, so the plugin now offers thinking for them and sends the correct `output_config.effort` wire shape.\r\n- Thinking-capability detection continues to route through a single source of truth (`getThinkingCapability`), keeping the settings UI gate and the wire-payload decision always in agreement.",
-      "downloadCount": 16,
+      "downloadCount": 20,
       "draft": false,
       "name": "0.10.4",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:017bc57e0307976374790e2520d07ceb1bcd17982ac0310e34c1862646263b05",
-          "downloadCount": 120,
+          "downloadCount": 121,
           "name": "manifest.json",
           "size": 305
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **Spreadsheet tools** — Four new ExcelJS-backed built-in tools: `read_xlsx`, `write_xlsx`, `import_xlsx`, and `list_xlsx_sheets`. Read sheets as Markdown or JSON with sheet selection and size caps, write from Markdown tables or JSON, and import filesystem workbooks into vault notes. `exceljs` is now available to custom tools via `libs.exceljs`.\r\n- **Section-header references in chat** — After picking a note with `[[`, an Obsidian-style section picker opens so you can append a heading, producing `[[Note § Heading]]` attachments. Pasted `[[wikilinks]]` in chat text are auto-detected and spliced in as inline attachment tokens.\r\n- **Custom request parameters for local LLM providers** — Attach a free-form JSON object (e.g. Ollama `keep_alive`) to a local provider config; it merges into each chat-completions request. Includes inline validation that rejects malformed or non-object JSON.\r\n- **Interactive tools exempt from timeout auto-cancel** — Tools that await user input (e.g. `ask_user`) no longer get auto-cancelled by the execution timeout when a live chat channel is present. New `auto_skip_user_input_prompts` setting (default off) to opt back into auto-skipping stale prompts.\r\n\r\n### Reliability — Model Selection, Thinking & Bedrock\r\n- **Unified model/thinking state** across new chats, forks, and reopened conversations — `thinking_level` is now persisted on the conversation header and restored on fork/reopen, eliminating the \"screwy\" model selector divergence where surfaces could disagree.\r\n- **Single source of truth for thinking capability** — `getThinkingCapability` classifies each model identically across every code path; unknown/unsupported models correctly send no thinking payload.\r\n- **Bedrock data-retention error detection** — The Bedrock \"data retention mode\" error is now caught and surfaced with an actionable message naming the account-level fix. Provider errors are persisted into conversation history so failed chats are diagnosable on reload and render in replay and HTML/Markdown exports.\r\n\r\n### Bug Fixes\r\n- **Long-note-write recovery** — When a long write tool call is truncated, the target path is now recovered from the partial JSON and the error message includes skeleton-first steering (write skeleton → replace per section → update frontmatter). Partial content is never re-entered as a successful write.\r\n- **Tab completion in the note suggester** now selects the highlighted item (via Obsidian's own selection controller) instead of always resolving to the first item. Enter and mouse clicks finalize the plain `[[Note]]`; Tab opens the section picker.\r\n- **Note attachment display** — Removed `.md` from vault-note token/chip display; attachment content is stored as per-attachment snapshots (text for notes, content-hash re-resolve for vault media, base64 for external media) with metadata-aware token estimation.\r\n\r\n### Internal / Build\r\n- Hardened the esbuild script-injection strip against dependency drift (exact-pinned `docx`/`mammoth`, `overrides` for `jszip`/`immediate`/`setimmediate`/`lie`) with a dedicated test suite, and fixed residual blocking lint errors from the plugin-review pass.\r\n",
-      "downloadCount": 120,
+      "downloadCount": 121,
       "draft": false,
       "name": "0.10.3",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:09f86b5d87ffd3412dc121a3ffb978ddeac0b2ea01c617b8561cc32aefe63497",
-          "downloadCount": 108,
+          "downloadCount": 109,
           "name": "manifest.json",
           "size": 305
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\r\n- **Orchestration recovery:** Clicking **Dismiss** on the \"Orchestration '…' was interrupted. Resume it?\" notice now persists your decision. Previously Dismiss only closed the toast, so the same notices reappeared on every Obsidian restart/reload. Dismissing now marks the session as cancelled (a terminal state), so the load-time recovery scan no longer re-offers it.\r\n",
-      "downloadCount": 108,
+      "downloadCount": 109,
       "draft": false,
       "name": "0.10.2",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:146109a74477c373840c13d63877b41be5a80714cd866be1e97d54cc16ec241a",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 305
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### Bug Fixes\r\n- **Stop control for orchestration runs** — a run registry now tracks live runs, exposes a Stop button in the UI, aborts cleanly, and tears down on plugin unload.\r\n- **Code-step visibility** — code steps and their logs now surface in the Run tree, and an `orchestration.log` captures code-step output.\r\n- **Runtime API v1 handshake** — extensions can declare a minimum API version (`notor-min-api`) and read `utils.api.version` for forward-compatible behavior.\r\n- Fixed an inert Stop button on stale or background orchestration runs.\r\n- Honest stop reasons: stream errors now route to a dedicated failure channel, and errored/cancelled turns are reported accurately instead of as success.\r\n- Corrected wind-down, errored-turn, and child-cost accounting.\r\n- Made history and session writes atomic (remove-before-rename) to prevent corruption on overwrite.\r\n- `emit_event` is now classified as a read operation so it is no longer blocked in Plan mode.\r\n- Manual workflow chats now stay attached to the active conversation.\r\n- Child-flow ledger entries are matched by (step, flow, ordinal) for reliable recovery.\r\n\r\n### Reliability & Safety\r\n- Added a per-flow single-instance guard and a recovery liveness guard with offered resume and schedule-origin recovery.\r\n- Added execution timeouts for tools and automations via a shared `withTimeout`.\r\n- All six persisted formats now carry a `schema_version` stamp with append conversion.\r\n- Gated `utils.webview` on the webview tool being enabled; narrowed live-manager utils members to safer facades.\r\n\r\n### Internal / Architecture\r\n- Guided models to stage large tool-parameter payloads.\r\n- Decomposed `launch.ts` into focused responsibility modules behind a thin barrel; introduced `OrchestrationHost`; lazy-loaded orchestration layers.\r\n- Unified tool-policy evaluation into a single superset path (`evaluateToolPolicy`) and removed the legacy branch; threaded `policyCtx` through the run loop, sub-agents, and orchestration.\r\n- Extensive new test coverage (unit + live e2e) across all six architecture findings.\r\n",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "0.10.1",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:b1002046b41d31a8e6d8fb09c60e1a30c01bfe097b2c3e045d4a1b04d04ead3b",
-          "downloadCount": 76,
+          "downloadCount": 77,
           "name": "manifest.json",
           "size": 305
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n\r\n- **Orchestration engine.** Define multi-step flows that chain LLM turns, programmatic code steps, and nested sub-flows into automated, repeatable workflows. Highlights:\r\n  - Flow schema and core execution engine built on a generalized RunLoop substrate\r\n  - Session workspace, task tracking, crash recovery, and step edges\r\n  - Programmatic **code steps** for deterministic logic between LLM turns\r\n  - **Flow composition** — flows can invoke child flows via `run_flow`, with cascading guardrails and child-run metadata\r\n  - **Interactive pause** and step→workflow hand-off\r\n  - Per-turn progress **Notices** so long-running flows report status as they go\r\n  - **Direct scheduling** so flows can be launched on a schedule (and via hooks)\r\n  - Unified **run-tree view** with an inline peek card and typed activity entries\r\n  - New **orchestration-creator** persona plus reference example flows to get started\r\n- **Fork & re-run tool** conversation fork mode.\r\n- Added a toggle controlling whether orchestrations open their notes in the editor.\r\n",
-      "downloadCount": 76,
+      "downloadCount": 77,
       "draft": false,
       "name": "0.10.0",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:5985d23bcde8a89cda526a83acce3b1ac724100ea2288dde47f4ced90d3efb19",
-          "downloadCount": 25,
+          "downloadCount": 26,
           "name": "manifest.json",
           "size": 304
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **OS-level desktop notifications** for chat completion and input-required events\r\n- **`word_count` built-in tool** (optional) for counting words in notes\r\n- **`delete_note` built-in tool** (optional, disabled by default)\r\n- **Multi-select (checkbox) answers** in the `ask_user` tool, alongside the existing single-select\r\n- **Backlinks context** can now optionally be included in `read_note` results\r\n- **`conversationApi.current()`** — a parse-free metadata accessor for extensions\r\n\r\n### Workflows\r\n- Active-workflow **chip** with a one-click deactivate action\r\n- **Switch a workflow into the current conversation** without starting a new chat\r\n- Workflow tool configs now **persist across follow-up turns**\r\n- Workflow chip refreshes when a workflow spins up a new conversation\r\n- Stranded background workflows are now **cleared on system sleep/wake**\r\n\r\n### Tooling & Reliability\r\n- **Tiered resilient matching** for the replace tools, with clearer no-op-edit warnings and a configurable full-content-failure response\r\n- Renamed `replace_in_note`/`replace_in_file` params `search`/`replace` → `old_text`/`new_text`\r\n- Clear error surfaced for an invalid `execute_command` working directory\r\n- AI task list now **persists to the JSONL header** and survives reopening\r\n- Partial tool-call content is **preserved when a long write is cut off**\r\n\r\n### Bug Fixes\r\n- Fixed **Bedrock orphaned-`tool_result` error** via pair-aware truncation and wire repair\r\n- Fixed `replace_in_note` diff-approval crash and hang on malformed changes\r\n- Fixed the sleep auto-approve default via a shared mode-aware helper\r\n\r\n### UI Polish\r\n- Render **in-progress tool-call cards** during streaming\r\n- Task panel auto-scrolls to the next unchecked task\r\n- Show the model name in the collapsed model-selector dropdown\r\n- Highlight tool-search matches and tighten filtering\r\n- Refined `ask_user` selected-option highlighting with radio/checkbox glyphs; active/retained free-text answers are highlighted; option boxes grow vertically when text wraps; long answer chips wrap in the replay UI\r\n",
-      "downloadCount": 25,
+      "downloadCount": 26,
       "draft": false,
       "name": "0.9.0",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:973c244727e2018da7391c8534c451570902273678e266d7d2fb2fb902f7ee13",
-          "downloadCount": 229,
+          "downloadCount": 230,
           "name": "manifest.json",
           "size": 304
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **`ask_user` follow-up question tool** — a new interaction primitive lets tools ask the user clarifying questions mid-run, rendered as stacked options with an explicit Submit button.\r\n- **Configurable global defaults** — set a default persona and model preset applied to all new chats.\r\n- **Kagi web search provider** — added as a selectable web search option.\r\n- **Live thinking indicator** — shows an elapsed-time counter while the model reasons, including for Bedrock hidden/adaptive thinking.\r\n\r\n### Bedrock & Thinking\r\n- Restored visible streaming thinking for older models via a single thinking-mode classifier.\r\n- Fixed Opus 4.8 thinking config rejection on both Bedrock and the direct API; added adaptive + effort thinking support.\r\n- Transparent recovery from expired Bedrock credentials with clean messaging, and fixed a broken credential reset key.\r\n- Sanitize MCP tool schemas to Bedrock's JSON Schema draft 2020-12 subset (robust allowlist-based sanitizer).\r\n\r\n### Settings & UI\r\n- Added collapsible tool sub-groups with persisted state in settings.\r\n- Added output spillover toggle and threshold controls to the Tools settings UI.\r\n- Fixed the thinking dropdown not refreshing when the model preset is switched in the popover.\r\n\r\n### Bug Fixes & Polish\r\n- Auto-return note content on `replace_in_note` / `write_note` errors, rendered on failed tool-call cards.\r\n- Reverted the note→header wikilink autocomplete change.\r\n- Reorganized `extensions/` under a new `examples/` top-level directory.\r\n",
-      "downloadCount": 229,
+      "downloadCount": 230,
       "draft": false,
       "name": "0.8.0",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:f0158df78b3272c9a5e0d05c544a91879d9bcc540cd5c9a4e6484dd40e808e76",
-          "downloadCount": 161,
+          "downloadCount": 162,
           "name": "manifest.json",
           "size": 305
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **Templates integration** — `list_templates` and `apply_template` tools for Templater plugin interop (default disabled)\r\n- **Webview tool** — open and interact with web content via a webview scaffold (aka Obsidian's built-in browser)\r\n- **Output spillover** — long tool output automatically spills to temp files; configurable via `output_spillover_threshold` setting\r\n- **on_approval_required hook** — new hook event with Promise.race approval pattern for external approval workflows\r\n- **Backlinks & outlinks tools** — `get_backlinks` / `get_outlinks` tools with prompt enhancements to memory-search and memory-resolver\r\n- **Bases query rendering** — `read_rendered_note` extension now renders Bases queries\r\n- **Rendered Markdown preview** — toggle in diff view to preview rendered output\r\n\r\n### Bug Fixes\r\n- Fix task panel persisting across new conversation creation\r\n- Unify note path resolution in path constraint enforcement\r\n\r\n### Improvements\r\n- **Per-panel persona isolation** — persona state is now scoped per panel in multi-panel mode\r\n- **Stale tracker body hash** — bypass frontmatter-only changes for more accurate stale detection\r\n- General refactoring across the code base",
-      "downloadCount": 161,
+      "downloadCount": 162,
       "draft": false,
       "name": "0.7.10",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:d700659800b794a2450a34cc0aac76cbd92e33f6ad5b8f92b68c94de5c1818b8",
-          "downloadCount": 66,
+          "downloadCount": 67,
           "name": "manifest.json",
           "size": 304
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **Extended thinking support** — toggle thinking effort level per-preset with quick settings control\r\n- **Task tracking tool** — internal `update_tasks` tool for AI task tracking during conversations\r\n- **Command-pattern auto-approve** — granular approval rules for `execute_command`\r\n- **Community extensions gallery** — browse and install extension tools (e.g., Dataview `read_rendered_note`)\r\n- **Unicode fuzzy matching** — `replace_in_note` and `replace_in_file` handle Unicode normalization differences\r\n- **Multi-engine web search** — extracted as an extension tool; built-in search simplified to DDG-only\r\n- **Popover reference system** — inline superscript citations in assistant messages\r\n- **Plan mode annotations** — write tools show [Act mode only] suffix in system prompt\r\n- **Timestamp filtering** — `modified_after`/`modified_before` params for `search_vault` and `list_vault`\r\n- **Auto-context expansion** — includes non-markdown open file types\r\n- **Attachment rule triggers** — directory/tag rules now fire on attached notes, not just tool-accessed ones\r\n\r\n### Bug Fixes\r\n- Fix MCP tools not appearing in system prompt due to initialization race\r\n- Fix erroneous compaction triggering and token footer overcounting\r\n- Re-render approval buttons when switching back to conversation awaiting approval\r\n- Re-resolve note path after hook delay using live TFile reference\r\n\r\n### UI & Polish\r\n- Thinking blocks included in HTML export\r\n- Chevron indicator and scrollable height limit for task panel\r\n- Notice shown when duplicate images are skipped during docx import\r\n\r\n### Settings & Infrastructure\r\n- Rename workflow trigger \"scheduled\" → \"on-schedule\" with unified Automation settings UI\r\n- Auto-reconnect for MCP servers after system sleep/wake\r\n- `utils.notify()` convenience method for extension authors\r\n",
-      "downloadCount": 66,
+      "downloadCount": 67,
       "draft": false,
       "name": "0.7.9",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:474bcb022f60b80dc796eda3cfc73974c39d3f274b2ebdf29edee95db5fc867a",
-          "downloadCount": 50,
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 304
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "### New Features\r\n- **Auto-inject workflow frontmatter** — Automatically injects workflow-specific frontmatter when creating new notes that match a workflow\r\n- **Per-workflow model preset override** — Workflows can now specify a custom AI model preset\r\n- **Per-workflow conversation mode override** — Workflows can override the default conversation mode\r\n- **Per-hook execution delay with debounce semantics** — Workflow hooks support configurable execution delays with debounce behavior\r\n- **Background workflow independence** — Removed orchestrator dependency for background workflows, enabling standalone execution\r\n\r\n### Bug Fixes\r\n- Fix workflow not appearing in Settings UI immediately after creation\r\n- Fix case-insensitive directory handling for workflow discovery and creation\r\n- Migrate workflow identification from `notor-workflow` to `notor-type: workflow` frontmatter key\r\n",
-      "downloadCount": 50,
+      "downloadCount": 51,
       "draft": false,
       "name": "0.7.8",
       "prerelease": false,

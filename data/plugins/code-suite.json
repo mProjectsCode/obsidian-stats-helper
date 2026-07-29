@@ -4,8 +4,8 @@
   "description": "Execute code inside your notes: Shiki syntax highlighting with 65+ themes, live streaming output, inline Matplotlib and Plotly graphs, shared variables, and styled HTML and PDF export with outputs. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "code-suite",
-  "lastChangedAt": "2026-07-28T03:03:27.005Z",
-  "lastFetchedAt": "2026-07-28T03:03:27.005Z",
+  "lastChangedAt": "2026-07-29T03:02:27.044Z",
+  "lastFetchedAt": "2026-07-29T03:02:27.044Z",
   "manifest": {
     "author": "Felix Leopold",
     "authorUrl": "https://github.com/felixleopold",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:81e0727ff9f7ba630b0c3712e81d9014bf8c79b0a1819856394b6417d56324ee",
-          "downloadCount": 65,
+          "downloadCount": 72,
           "name": "main.js",
           "size": 4088629
         },
         {
           "digest": "sha256:5f12430d4906fb7968829ab567954937fed2e2617367a99ca6ed98920e1da8fc",
-          "downloadCount": 73,
+          "downloadCount": 82,
           "name": "manifest.json",
           "size": 422
         },
         {
           "digest": "sha256:0632a15a091eea9db84955ac06e2e711e3eaa0f0b2e8954e2a9aa5efeedf959d",
-          "downloadCount": 62,
+          "downloadCount": 69,
           "name": "styles.css",
           "size": 36044
         }
       ],
       "author": "github-actions[bot]",
       "description": "This release lets you choose which fenced-code languages CodeSuite leaves untouched, so Obsidian or another plugin can render them.\n\n## What's New\n\n- **Configurable code block passthrough languages** — add one fenced-code language per line under Settings → CodeSuite → Languages to let Obsidian or another plugin render those blocks in Live Preview and reading view ([#46](https://github.com/felixleopold/obsidian-code-suite/issues/46)).\n- **Better plugin compatibility by default** — `base`, `d2`, and `vid` now pass through for compatibility with Obsidian Bases, D2, and the Thumbnails plugin; built-in `mermaid`, `dataview`, `dataviewjs`, and `query` passthrough remains unchanged.\n\n## Upgrade Notes\n\n- No action needed. Remove a default entry from the new setting if you want CodeSuite to handle that language instead.\n",
-      "downloadCount": 73,
+      "downloadCount": 82,
       "draft": false,
       "name": "1.17.0",
       "prerelease": false,
@@ -59,7 +59,7 @@
         },
         {
           "digest": "sha256:d7c853699ac57678b8bd9cabfb3025a1f33eea32f057ac2eef9b91689cdc85b4",
-          "downloadCount": 314,
+          "downloadCount": 315,
           "name": "manifest.json",
           "size": 422
         },
@@ -72,7 +72,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Maintenance release: clears the remaining Obsidian plugin-reviewer warnings. No functional changes.\n\n## Bug Fixes\n\n- **Cleared the remaining `@typescript-eslint/no-unnecessary-type-assertion` warnings** from the plugin review ([#43](https://github.com/felixleopold/obsidian-code-suite/issues/43)). Four `window.setTimeout(...) as unknown as number` casts and a Shiki `loadTheme` cast were genuinely redundant and removed; the file-picker `File & { path }` cast became a type annotation; and the two `frontmatter as Record<string, unknown>` casts now route through a small `toRecord()` helper whose `unknown → Record` narrowing is valid in every type environment. Rounds out the type-safety cleanup started in 1.16.2.\n\n## Upgrade Notes\n\n- No action needed — internal type-safety changes only, no effect on behavior.\n",
-      "downloadCount": 314,
+      "downloadCount": 315,
       "draft": false,
       "name": "1.16.3",
       "prerelease": false,
@@ -89,7 +89,7 @@
         },
         {
           "digest": "sha256:35619ea671605a2630cf61613d28264143c634adb1ad2c78ec26b04da424e4ab",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 422
         },
@@ -102,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Maintenance release: type-safety cleanup for the Obsidian plugin reviewer. No functional changes.\n\n## Bug Fixes\n\n- **Cleared ~200 `@typescript-eslint/no-unsafe-*` warnings** from the plugin review ([#43](https://github.com/felixleopold/obsidian-code-suite/issues/43)). Node built-ins are reached through Electron's `window.require` bridge; the old `as typeof import(\"fs\")` casts resolved to `any` in any environment without `@types/node` (including the reviewer), which cascaded into unsafe-access warnings across `main.ts`, `executor.ts`, and `settings.ts`. A new `src/node-builtins.ts` provides hand-written, self-contained type definitions for exactly the `fs`/`path`/`os`/`child_process`/`process` surface we use, so the code stays fully typed regardless of `@types/node`.\n\n## Upgrade Notes\n\n- No action needed — this is an internal type-safety change with no effect on behavior.\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.16.2",
       "prerelease": false,
@@ -119,7 +119,7 @@
         },
         {
           "digest": "sha256:b4b71446e90c86f8076f3a5709971401942874e5720d80f08b2f8d7f3d9c8109",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 422
         },
@@ -132,7 +132,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Bash, zsh, and sh code blocks now run under WSL on Windows.\n\n## Bug Fixes\n\n- **WSL shells on Windows can now find the script** — the temp file was handed to WSL as a Windows path (`C:\\…\\code.sh`), which WSL can't resolve (backslashes are mangled and the file lives at `/mnt/c/…` in WSL's filesystem), so blocks failed with `No such file or directory` ([#42](https://github.com/felixleopold/obsidian-code-suite/issues/42)). The path is now translated to its `/mnt/c/…` form before it's passed to WSL bash/zsh/sh.\n\n## What's New\n\n- **WSL path translation** setting (Windows only, under Languages) — *Auto-detect* (default) applies the translation when the shell interpreter looks like WSL; force it *On* for a custom WSL setup, or *Off* if your `bash`/`zsh`/`sh` is Git Bash, Cygwin, or MSYS.\n\n## Upgrade Notes\n\n- No action needed. On WSL the fix applies automatically; the setting is only there if you need to override the detection.\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.16.1",
       "prerelease": false,
@@ -149,7 +149,7 @@
         },
         {
           "digest": "sha256:cd2bef9f7a6dbf749ae4c1b2128c0f370f9b76f55ee75d7bcd139d57cf91f4ce",
-          "downloadCount": 73,
+          "downloadCount": 74,
           "name": "manifest.json",
           "size": 422
         },
@@ -162,7 +162,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "HTML and PDF exports now reproduce Obsidian callouts and LaTeX math, and embedded html-block previews no longer clip in PDFs.\n\n## What's New\n\n- **Callouts in exports** — `.callout` blocks render in standalone HTML and PDF with their theme colours, icons, and any custom callout types, lifted from the live note so they track your active theme.\n- **LaTeX math in exports** — inline and block equations (MathJax) are fully typeset and self-contained in the exported file, including the shared SVG glyph cache so every reference resolves offline.\n\n## Bug Fixes\n\n- Embedded **html-block previews no longer collapse to a 60px sliver** in PDF export — the hidden print window keeps `requestAnimationFrame` firing (background throttling disabled) and waits for every preview iframe to report its final height before printing.\n- **Display equations no longer overflow or get clipped** — they render as a scaled, centred block instead of living in a scroll container that a PDF page can't scroll.\n\n## Upgrade Notes\n\n- No action needed. Re-export any note that uses callouts or math to pick up the richer output.\n",
-      "downloadCount": 73,
+      "downloadCount": 74,
       "draft": false,
       "name": "1.16.0",
       "prerelease": false,
@@ -179,7 +179,7 @@
         },
         {
           "digest": "sha256:b2b5a9709ee20861e4435518521cb07b805923bc5e3022f873288396230d11b9",
-          "downloadCount": 156,
+          "downloadCount": 157,
           "name": "manifest.json",
           "size": 422
         },
@@ -192,7 +192,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "A cleaner, tab-organized settings panel — every setting regrouped into five navigable sections.\r\n\r\n## What's New\r\n\r\n- **Tabbed settings** — the CodeSuite settings tab is now split into five sections — **Appearance**, **Execution**, **Languages**, **Files**, and **Advanced** — with a tab bar at the top instead of one long scroll ([#31](https://github.com/felixleopold/obsidian-code-suite/issues/31)).\r\n- **Built to Obsidian's settings style guide** — sentence-case headings, no redundant section labels, and a tab bar themed entirely with Obsidian's CSS variables so it matches every theme and wraps on mobile.\r\n- **\"Collapse code blocks by default\" moved to Appearance**, where it belongs — it controls inline code blocks, not embedded files.\r\n\r\n## Upgrade Notes\r\n\r\n- No action needed. Every setting keeps its current value and meaning — only the layout changed.\r\n- If a setting is hard to find, check its new tab: themes and code-block display → **Appearance**; run options, working directory, environment variables, and plots → **Execution**; interpreter paths and shell/PHP options → **Languages**; embedded and vault code files → **Files**; experimental features and baked-output sharing → **Advanced**.\r\n",
-      "downloadCount": 156,
+      "downloadCount": 157,
       "draft": false,
       "name": "1.15.0",
       "prerelease": false,
@@ -209,7 +209,7 @@
         },
         {
           "digest": "sha256:0d0ab9df3e37ae27cf13e7e159120258fb25b304d755d190f0c947011f851dc2",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 422
         },
@@ -222,7 +222,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Lint-compliance maintenance release — no functional or user-facing changes.\n\n## Maintenance\n\n- **Removed a CSS `!important`** — the rule that hides the unsupported `code_vars:` / `template_context:` property rows now wins by selector specificity (scoped under `.metadata-container`) instead of `!important`.\n- **Cleaned up the README** — removed leftover demo-GIF planning comments (`<!-- PLAN: … -->`) and the commented-out image placeholders that pointed at GIFs that were never produced.\n\n## Upgrade Notes\n\n- No action needed. Behavior is identical to 1.14.1.\n",
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.14.2",
       "prerelease": false,
@@ -239,7 +239,7 @@
         },
         {
           "digest": "sha256:b51b58e5aba62ace50824e541b08d1296f4bc9487c53dbb3da579ec1115fbef9",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 422
         },
@@ -252,7 +252,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Fixes the code-block Copy button so it no longer adds a trailing newline to the clipboard.\n\n## Bug Fixes\n\n- **Copy no longer appends a trailing newline** — clicking **Copy** on a code block now puts the code on the clipboard exactly as displayed, without the extra newline the fence carries. Pasting a single-line command into a terminal no longer auto-executes it, so you can preview or edit it first ([#37](https://github.com/felixleopold/obsidian-code-suite/issues/37)).\n\n## Upgrade Notes\n\n- No action needed. This affects only what the Copy pill writes to the clipboard; Run and execution behavior are unchanged.\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.14.1",
       "prerelease": false,
@@ -269,7 +269,7 @@
         },
         {
           "digest": "sha256:fce2f8e49a45bf9474aeb3e791b39fa3162be311b1001fdb39abb15e7bd923cb",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 422
         },
@@ -282,7 +282,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Makes the CodeSuite variables panel reliable and turns it on by default, so your `code_vars:` and `template_context:` values are visible in reading view out of the box.\n\n## What's New\n\n- **CodeSuite variables panel is on by default** — the read-only rendering of `code_vars:` / `template_context:` now shows automatically just below the Properties widget in reading view, with no setting to enable. Turn off **CodeSuite variables panel** in settings to just suppress Obsidian's \"unsupported property type\" warning and render nothing ([#34](https://github.com/felixleopold/obsidian-code-suite/issues/34)).\n\n## Bug Fixes\n\n- **The variables panel no longer flickers or vanishes on scroll** — it is now anchored inside the note header (next to Properties), the chrome Obsidian keeps pinned, instead of in the scrolled content Obsidian virtualizes and rebuilds. It stays put across scrolling and re-renders, and refreshes whenever the frontmatter changes.\n\n## Upgrade Notes\n\n- If you previously turned the panel off, that choice is preserved. Vaults that never touched the setting now show the panel by default.\n- The \"unsupported property type\" warning for these nested fields stays hidden either way; the setting only controls whether the value list is also shown.\n",
-      "downloadCount": 3,
+      "downloadCount": 4,
       "draft": false,
       "name": "1.14.0",
       "prerelease": false,
@@ -299,7 +299,7 @@
         },
         {
           "digest": "sha256:164a66f5532c456b398e7d27f1669eed4e0dfaca6ea34d91a56c3f5f546d3fe9",
-          "downloadCount": 43,
+          "downloadCount": 44,
           "name": "manifest.json",
           "size": 422
         },
@@ -312,7 +312,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Reading-view and export polish: collapsible code blocks everywhere, CodeSuite frontmatter that actually renders in preview, and html-block previews that survive HTML/PDF export — plus a notebook-correct fix for variables on block re-run.\n\n## What's New\n\n- **Every code block is collapsible** — fold or unfold any fenced block from its header in both reading view and Live Preview, not just html previews and embeds ([#32](https://github.com/felixleopold/obsidian-code-suite/issues/32)). The old \"Collapsible inline code blocks\" toggle is replaced by **Collapse code blocks by default**, which only chooses the initial state; per-block `collapsed` / `expanded` fence flags still win.\n- **Frontmatter variables render in preview** — a nested `code_vars:` / `template_context:` mapping used to trigger Obsidian's orange \"unsupported property type\" warning and collapse. CodeSuite now hides that broken row and renders the values in a small read-only panel just below the Properties widget ([#34](https://github.com/felixleopold/obsidian-code-suite/issues/34)).\n- **List form for `code_vars`** — write `code_vars` as a YAML list of `key = value` strings (`- threshold = 0.85`), parsed with the same grammar and `:type` hints as a `vars` block. A plain list renders natively in Obsidian, so use that form if you prefer native Properties rendering.\n- **HTML previews in exports** — a preview-mode `html` block now renders its document in HTML and PDF exports instead of exporting as a bare header ([#33](https://github.com/felixleopold/obsidian-code-suite/issues/33)).\n\n## Bug Fixes\n\n- **Variables persist across re-runs** — re-running a block fed its own previous output back into itself, so a block that read and transformed a cross-language variable (e.g. bash reading a Python int and multiplying it) compounded on every run. A block now sees the upstream value it originally consumed, matching notebook re-run semantics ([#36](https://github.com/felixleopold/obsidian-code-suite/issues/36)).\n- **No dead buttons in exports** — the output toolbar's buttons (copy, save image, …) appeared in static HTML/PDF exports but did nothing; they're now hidden, like the run pill and input bar ([#35](https://github.com/felixleopold/obsidian-code-suite/issues/35)).\n\n## Upgrade Notes\n\n- The **Collapsible inline code blocks** setting is gone. Every block is collapsible now; **Collapse code blocks by default** controls only whether blocks start folded. Existing settings load fine — the removed key is simply ignored.\n- The frontmatter panel renders the mapping form in place; if you'd rather Obsidian render `code_vars` natively, switch to the list form. Both forms seed variables identically.\n",
-      "downloadCount": 43,
+      "downloadCount": 44,
       "draft": false,
       "name": "1.13.0",
       "prerelease": false,
