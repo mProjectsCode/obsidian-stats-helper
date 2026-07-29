@@ -4,8 +4,8 @@
   "description": "Turn your notes into posts and pages for your Astro blog with automated content management features. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "astro-composer",
-  "lastChangedAt": "2026-07-28T05:01:28.733Z",
-  "lastFetchedAt": "2026-07-28T05:01:28.733Z",
+  "lastChangedAt": "2026-07-29T05:03:28.020Z",
+  "lastFetchedAt": "2026-07-29T05:03:28.020Z",
   "manifest": {
     "author": "David V. Kimball",
     "authorUrl": "https://davidvkimball.com",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:2758855a995166f7e4d56cd7cf75c9088877a625d6cf9faf55cac46ddc3c2b30",
-          "downloadCount": 329,
+          "downloadCount": 331,
           "name": "main.js",
           "size": 206899
         },
         {
           "digest": "sha256:efb4c15a0f3a04568ca70d4e070d4535de4ab4d7b19c104d92f426ea420b1995",
-          "downloadCount": 793,
+          "downloadCount": 799,
           "name": "manifest.json",
           "size": 376
         },
         {
           "digest": "sha256:a11786d38dfa5aa943c7e2883294c8acd99b0437990663be354cdcf711bee2b0",
-          "downloadCount": 288,
+          "downloadCount": 289,
           "name": "styles.css",
           "size": 8632
         }
       ],
       "author": "github-actions[bot]",
       "description": "Add Obsidian 1.13 declarative settings; fix multi-window real-time apply for ribbon and help-button\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.7...0.12.9",
-      "downloadCount": 793,
+      "downloadCount": 799,
       "draft": false,
       "name": "0.12.9",
       "prerelease": false,
@@ -60,7 +60,7 @@
         },
         {
           "digest": "sha256:b32cd30e009b57dd0cf941a8fad80d78cb5978e4e89c1c0d20d96673a0976204",
-          "downloadCount": 49,
+          "downloadCount": 50,
           "name": "manifest.json",
           "size": 375
         },
@@ -73,7 +73,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Pre-emptively suppress Obsidian's auto-rename modal on new note; bump to 0.12.7\n\nWhen both \"Show inline title\" and \"Show tab title bar\" are disabled in Appearance settings, Obsidian fires its own rename modal as soon as a new file gets focus, since the user otherwise has no way to see or edit the name. That modal collided with Astro Composer's TitleModal on the new-note flow.\n\nCreateEventService now installs a MutationObserver before the 100ms wait. Any `.modal-container` added during the suppression window that isn't our TitleModal (identified by the new `astro-composer-title-modal` marker class on modalEl) gets yanked from the DOM. MutationObserver callbacks run before the next render frame, so Obsidian's modal is removed pre-paint — no visible flash to the user.\n\nThe observer self-disconnects when it sees our TitleModal, with a 2s safety timer as a backstop and explicit dispose hooks on all early-return paths.\n\nCloses #9\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.6...0.12.7",
-      "downloadCount": 49,
+      "downloadCount": 50,
       "draft": false,
       "name": "0.12.7",
       "prerelease": false,
@@ -90,7 +90,7 @@
         },
         {
           "digest": "sha256:c102444411d704360c22a7152cf5bbfde265b1473232db13f869888bc4324537",
-          "downloadCount": 373,
+          "downloadCount": 374,
           "name": "manifest.json",
           "size": 375
         },
@@ -103,7 +103,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Drop the inline sourcemap from production builds for reproducibility\n\nAn inline sourcemap base64-embeds the build machine's absolute file\npaths into main.js, so a CI build and the Obsidian scorecard's\nreproducer produce byte-different output and the \"build verification\"\ncheck fails even from identical source.\n\nGate the sourcemap on build mode: production (pnpm build) now ships\n`sourcemap: false`, while the dev/watch build keeps `sourcemap:\n\"inline\"` for local debugging. Production main.js is now deterministic\ngiven the locked dependency tree, so the reproducer matches. Bonus:\nsmaller shipped main.js, no leaked build paths.\n\nBump to 0.12.6.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.5...0.12.6",
-      "downloadCount": 373,
+      "downloadCount": 374,
       "draft": false,
       "name": "0.12.6",
       "prerelease": false,
@@ -120,7 +120,7 @@
         },
         {
           "digest": "sha256:dca5898bf95935e40ee423008fb0dda709151ccdae7a4767a070aca0a15bd52f",
-          "downloadCount": 85,
+          "downloadCount": 86,
           "name": "manifest.json",
           "size": 375
         },
@@ -133,7 +133,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Replace :has() CSS and Node builtin imports for cleaner scorecard\n\n- Drop the 13 :has() selectors used for ribbon-menu icon hiding and the\n  help-button hide rule. The menu logic was already handled in TS via\n  MutationObserver + element.remove(); add an `astro-composer-hidden-menu-item`\n  marker class as a defense-in-depth fallback. The help button gets the same\n  treatment with an `astro-composer-original-help-button` marker class added\n  in syncHelpButton (after cloning) and stripped in restoreHelpButton.\n\n- Remove `require('os')` from getDefaultTerminalApp. The launch logic already\n  probes wt.exe via `where wt` and falls back to cmd.exe, so OS-version\n  detection is no longer needed.\n\n- Replace `require('path').resolve` with a local resolveFsPath helper that\n  handles absolute paths, `.`/`..` segments, and preserves separator style.\n\n- Replace `fs.existsSync` pre-checks with downstream error reporting. For\n  the terminal path the exec callbacks already surface failures; for the\n  config file shell.openPath returns the error message string directly.\n\n- Load `child_process` and `electron` through loadDesktopModule, with the\n  module names held in a constants object so the call sites contain no\n  literal `require(...)` matching the static-analysis patterns.\n\nBump to 0.12.5.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.4...0.12.5",
-      "downloadCount": 85,
+      "downloadCount": 86,
       "draft": false,
       "name": "0.12.5",
       "prerelease": false,
@@ -150,7 +150,7 @@
         },
         {
           "digest": "sha256:c3815834e6acce2552efbebf86cccd588b9a71683b5e898b2286ca13766737bc",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 375
         },
@@ -163,7 +163,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "Bump to 0.12.4 with CSS scorecard cleanup.\n\nEliminate all 40 !important declarations from styles.css by scoping\nplugin-specific selectors with chained class names (the doubled-class\ntrick) or with a body scope. The doubled-class chain raises specificity\nfrom a single-class 0,1,0 selector to 0,2,0, which is enough to beat\nObsidian's default .modal button rules (0,1,1) through cascade alone.\n\nRemove the redundant .modal:has(.astro-composer-title-input) mobile\npositioning block. The title modal TS already adds an\n.astro-composer-mobile-modal class to the modal element on mobile,\nwhich now drives positioning through a body-scoped chained-class\nselector. This drops one parent-matching selector with broad\ninvalidation cost.\n\nThe 13 remaining parent-matching selectors are scoped to the\nribbon-context-menu icon-hiding rules, which target menu items\ncontaining specific lucide icons toggled on by body classes from\nmain.ts. The pattern is intentional and contained: there is no\nattribute-selector alternative because Obsidian's menu items do not\nexpose stable identifiers, and the alternative of adding marker\nclasses via MutationObserver would add runtime complexity without a\nuser-visible improvement.\n\n---\n\n**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.3...0.12.4",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.12.4",
       "prerelease": false,
@@ -180,7 +180,7 @@
         },
         {
           "digest": "sha256:c918eb353a2680c0e96943dd66929e53fae81666bb92b535dd4c949f7cbbc88a",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 375
         },
@@ -193,7 +193,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/davidvkimball/obsidian-astro-composer/compare/0.12.2...0.12.3",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "0.12.3",
       "prerelease": false,
@@ -210,7 +210,7 @@
         },
         {
           "digest": "sha256:aca80a8a931aee68296be17fde6af24e608b47b499a416433f205ace6a7e8eb7",
-          "downloadCount": 521,
+          "downloadCount": 522,
           "name": "manifest.json",
           "size": 375
         },
@@ -223,7 +223,7 @@
       ],
       "author": "davidvkimball",
       "description": "Improved nested property support.",
-      "downloadCount": 521,
+      "downloadCount": 522,
       "draft": false,
       "name": "0.12.2",
       "prerelease": false,
@@ -240,7 +240,7 @@
         },
         {
           "digest": "sha256:2884d404a54d060a94d818b78a3b9c52237d05b0c27ff0fcab6f11cabf2b70e6",
-          "downloadCount": 207,
+          "downloadCount": 208,
           "name": "manifest.json",
           "size": 375
         },
@@ -253,7 +253,7 @@
       ],
       "author": "davidvkimball",
       "description": "## 0.12.1 - RTL / non-Latin titles\r\n\r\n- **Cause:** `toKebabCase` stripped all non-ASCII, so many RTL titles became empty; create/rename could target invalid paths (e.g. `.md`, empty folder segments).\r\n- **Fix:** Unicode-safe `toKebabCase` (invalid path chars + bidi controls removed; Windows reserved name guard). Empty slug falls back to `untitled`. Deterministic collision suffixes (`-2`, `-3`, …) for create/rename in file and folder modes.\r\n\r\nAddresses #8.",
-      "downloadCount": 207,
+      "downloadCount": 208,
       "draft": false,
       "name": "0.12.1",
       "prerelease": false,
@@ -270,7 +270,7 @@
         },
         {
           "digest": "sha256:d567fc83d1747197bdc9175db90f0e95477519b84a5ceb0d8bf7eef87701afdc",
-          "downloadCount": 746,
+          "downloadCount": 747,
           "name": "manifest.json",
           "size": 375
         },
@@ -283,7 +283,7 @@
       ],
       "author": "davidvkimball",
       "description": "Improve logic for determining new files for \"background\" git logic.",
-      "downloadCount": 746,
+      "downloadCount": 747,
       "draft": false,
       "name": "0.12.0",
       "prerelease": false,
@@ -300,7 +300,7 @@
         },
         {
           "digest": "sha256:5eaa3d112d010e36c9dc1915d53d0c80dcffd30b608d6a0642d882eb03a927c8",
-          "downloadCount": 113,
+          "downloadCount": 114,
           "name": "manifest.json",
           "size": 375
         },
@@ -313,7 +313,7 @@
       ],
       "author": "davidvkimball",
       "description": "Removed AI-sounding language.",
-      "downloadCount": 113,
+      "downloadCount": 114,
       "draft": false,
       "name": "0.11.9",
       "prerelease": false,

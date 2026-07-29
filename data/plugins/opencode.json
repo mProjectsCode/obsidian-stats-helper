@@ -4,8 +4,8 @@
   "description": "Use OpenCode CLI without leaving your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "opencode",
-  "lastChangedAt": "2026-07-28T05:01:28.733Z",
-  "lastFetchedAt": "2026-07-28T05:01:28.733Z",
+  "lastChangedAt": "2026-07-29T05:03:28.020Z",
+  "lastFetchedAt": "2026-07-29T05:03:28.020Z",
   "manifest": {
     "author": "krisspy",
     "description": "Launch OpenCode CLI terminal sessions and browse conversation history without leaving your vault.",
@@ -22,26 +22,26 @@
       "assets": [
         {
           "digest": "sha256:9e0c6f3ac7a41c5c24bc1b2d52f9d94c7f300fe2c7b69c2d4288dd42f4777cd0",
-          "downloadCount": 1045,
+          "downloadCount": 1100,
           "name": "main.js",
           "size": 764801
         },
         {
           "digest": "sha256:2825f6cfd09df45750718071040bc0237286a10b60591e199573f7ebaa0e8926",
-          "downloadCount": 1062,
+          "downloadCount": 1119,
           "name": "manifest.json",
           "size": 255
         },
         {
           "digest": "sha256:230a25cc9ba001eeeea74a47f9f0ea5c998d1faba40847db04518cedbb2d2c82",
-          "downloadCount": 1034,
+          "downloadCount": 1086,
           "name": "styles.css",
           "size": 9933
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Fixed\n\n- **Terminal restart race**: Kept a replacement PTY active when the previous process exits after a restart. ([#27](https://github.com/kriss-spy/obsidian-opencode/issues/27))\n- **File mentions leaking to external OpenCode sessions**: Limited editor lock-file discovery to the embedded OpenCode terminal so file mentions are not routed to unrelated CLI sessions. ([#28](https://github.com/kriss-spy/obsidian-opencode/issues/28))\n- **macOS IME composition interrupted in the terminal**: Allowed composition events to reach xterm.js instead of treating them as regular key input. ([#26](https://github.com/kriss-spy/obsidian-opencode/issues/26))\n\n**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.12...1.3.13",
-      "downloadCount": 1062,
+      "downloadCount": 1119,
       "draft": false,
       "name": "1.3.13",
       "prerelease": false,
@@ -58,7 +58,7 @@
         },
         {
           "digest": "sha256:f275c2602323bc1f28b160e87bb3fb245fb3e1b398779023a51592f383225cf8",
-          "downloadCount": 1488,
+          "downloadCount": 1489,
           "name": "manifest.json",
           "size": 254
         },
@@ -71,7 +71,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.11...1.3.12",
-      "downloadCount": 1488,
+      "downloadCount": 1489,
       "draft": false,
       "name": "1.3.12",
       "prerelease": false,
@@ -88,7 +88,7 @@
         },
         {
           "digest": "sha256:47ab39c9d0bdb08608c789be85ed84f602948ff520143584cd159bc79e508e8b",
-          "downloadCount": 447,
+          "downloadCount": 448,
           "name": "manifest.json",
           "size": 254
         },
@@ -101,7 +101,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.10...1.3.11",
-      "downloadCount": 447,
+      "downloadCount": 448,
       "draft": false,
       "name": "1.3.11",
       "prerelease": false,
@@ -118,7 +118,7 @@
         },
         {
           "digest": "sha256:f966d60611e3610d07f298e6fe2f3ca7fdf5bdf66d8409a89358fba785373573",
-          "downloadCount": 481,
+          "downloadCount": 482,
           "name": "manifest.json",
           "size": 254
         },
@@ -131,7 +131,7 @@
       ],
       "author": "kriss-spy",
       "description": "### Added\n\n- **PATH fallback for desktop-launched Electron** — Added PATH augmentation with common user-local binary directories (`~/.opencode/bin`, `~/.local/bin`, `~/bin`) so the Python PTY proxy can find the `opencode` CLI even when Obsidian is launched from the desktop/GNOME (where shell init files like `.bashrc`/`.zshrc` aren't read). Also resolves the executable absolute path when found. ([#24](https://github.com/kriss-spy/obsidian-opencode/issues/24))\n\n### Fixed\n\n- **Terminal not opening on Linux** — Fixed `FileNotFoundError` from `os.execvp` in the PTY proxy by ensuring the Python child process inherits an augmented `PATH` that includes common user-local binary directories. ([#24](https://github.com/kriss-spy/obsidian-opencode/issues/24))\n- **Shell injection in session export** — Validated `sessionId` format before shell interpolation in `exportSessionStreamed` to prevent shell injection via crafted session IDs.\n- **Unhandled promise rejections** — Added `void` prefix to all async command callbacks in `main.ts` (6 instances).\n- **Race condition in temp file cleanup** — Replaced direct `fs.unlinkSync` with guarded `safeUnlinkSync` in `exportSessionStreamed` to prevent crashes when `error` and `close` events fire in quick succession.\n- **Unhandled `ExportTooLargeError`** — Wrapped `exportSessionToNote` in a try-catch to prevent unhandled rejections when a session exceeds the export size limit.\n- **Stale editor server version** — Synced the `serverInfo.version` reported during WebSocket handshake from `\"1.1.1\"` to `\"1.3.10\"`.\n\n### Removed\n\n- **Dead code: `spawnTerminal`** from `opencode.ts` — Unused; PTY spawning is handled by `ptySession.ts`.\n- **Dead code: `consumeArgs`** from `sessionState.ts` — Replaced by direct field access in `opencodeTerminalView.ts`.\n- **Dead external: `node-pty`** from `esbuild.config.mjs` — Never imported; vestigial from an earlier approach.\n\n### Technical\n\n- 33 tests passing.\n- Production build verified in Electron Node.js context.\n\n**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.9...1.3.10",
-      "downloadCount": 481,
+      "downloadCount": 482,
       "draft": false,
       "name": "v1.3.10",
       "prerelease": false,
@@ -148,7 +148,7 @@
         },
         {
           "digest": "sha256:8485f2688ded4b83b8841d252cd1e46ded82515b1b57da8a068ed85312d5bd6a",
-          "downloadCount": 162,
+          "downloadCount": 163,
           "name": "manifest.json",
           "size": 253
         },
@@ -161,7 +161,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.8...1.3.9",
-      "downloadCount": 162,
+      "downloadCount": 163,
       "draft": false,
       "name": "1.3.9",
       "prerelease": false,
@@ -178,7 +178,7 @@
         },
         {
           "digest": "sha256:3698d2e340d8e0e3a7c24543a337e8e06fc2fe8f77212f087897d4866b1f0958",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 253
         },
@@ -191,7 +191,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.7...1.3.8",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "1.3.8",
       "prerelease": false,
@@ -208,7 +208,7 @@
         },
         {
           "digest": "sha256:2b9675cbd23cc5c8ba99adb0451694b0a24a40a1a96ae73584bb673874e650bf",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 253
         },
@@ -221,7 +221,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.6...1.3.7",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "1.3.7",
       "prerelease": false,
@@ -238,7 +238,7 @@
         },
         {
           "digest": "sha256:ce938b55ea25ddc2177005ab0e00466e7e4ad13c51b0112475e21a93a149d685",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 253
         },
@@ -251,7 +251,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.5...1.3.6\n\n**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.5...1.3.6",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "1.3.6",
       "prerelease": false,
@@ -268,7 +268,7 @@
         },
         {
           "digest": "sha256:007d6b37ef9b152d7c827094a59e1e3091bf22f4f5be0c220161f3e14b9bb6a7",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 253
         },
@@ -281,7 +281,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/commits/1.3.5",
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "1.3.5",
       "prerelease": false,
@@ -298,7 +298,7 @@
         },
         {
           "digest": "sha256:6ae9478d6b33243bd524d3fef381663972be7db46bca26aa27642a1b42ee352e",
-          "downloadCount": 2291,
+          "downloadCount": 2292,
           "name": "manifest.json",
           "size": 253
         },
@@ -311,7 +311,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/kriss-spy/obsidian-opencode/compare/1.3.3...1.3.4",
-      "downloadCount": 2291,
+      "downloadCount": 2292,
       "draft": false,
       "name": "1.3.4",
       "prerelease": false,

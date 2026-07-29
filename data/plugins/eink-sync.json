@@ -1,37 +1,67 @@
 {
   "author": "hwangso595",
   "defaultBranch": "main",
-  "description": "Local-first bridge between reMarkable tablet and Obsidian. Extract PDF highlights as markdown without cloud dependency. - This plugin has not been manually reviewed by Obsidian staff.",
+  "description": "Sync reMarkable documents, notebooks, and highlights over SFTP or Syncthing. No reMarkable Cloud required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "eink-sync",
-  "lastChangedAt": "2026-07-19T08:01:26.998Z",
-  "lastFetchedAt": "2026-07-19T05:03:26.973Z",
+  "lastChangedAt": "2026-07-29T05:03:28.020Z",
+  "lastFetchedAt": "2026-07-29T05:03:28.020Z",
   "manifest": {
     "author": "hwangso595",
     "authorUrl": "https://github.com/hwangso595",
-    "description": "Sync reMarkable tablet highlights to your vault as markdown notes. Local-first, no cloud.",
+    "description": "Sync reMarkable documents, notebooks, and highlights over SFTP or Syncthing. No reMarkable Cloud required.",
     "id": "eink-sync",
     "isDesktopOnly": true,
-    "minAppVersion": "1.5.0",
+    "minAppVersion": "1.7.2",
     "name": "E-Ink Sync",
-    "version": "0.3.0"
+    "version": "0.3.3"
   },
   "name": "E-Ink Sync",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:c7ba0eadd495393884b4ae93bbb6ebbe2075305353b35e53a75d77ea9bae326e",
-          "downloadCount": 2,
+          "digest": "sha256:ed526789bef0c60cb66ada2ea30b3de9aff81041a884883ba754d8823cab8a86",
+          "downloadCount": 6,
           "name": "main.js",
-          "size": 4079795
+          "size": 4122460
         },
         {
-          "digest": "sha256:d4df72856913a24830d0c2e3d5d5d869f641d02249b7bdee857a5cc51705ce27",
+          "digest": "sha256:5bfc31e95e03da32fe3fe98e2c3d9eca1e6ef1d996f2411ae688fea9be3301ca",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Update README for public release by @hwangso595 in https://github.com/hwangso595/eink-sync/pull/15\n* Update sync method documentation by @hwangso595 in https://github.com/hwangso595/eink-sync/pull/16\n* Release 0.3.3 with analyzer fixes and attested assets by @hwangso595 in https://github.com/hwangso595/eink-sync/pull/17\n\n\n**Full Changelog**: https://github.com/hwangso595/eink-sync/compare/0.3.2...0.3.3",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.3.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T23:29:16Z",
+      "tag": "0.3.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d8ef7afede36f27503ceec299c770e8600a594914554fe729f0c6a3ec23bc627",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 4118107
+        },
+        {
+          "digest": "sha256:ae916cda669426291a3aa26ec90fa797821eb7841ff2a469b2c5e8e6d8f66f1c",
           "downloadCount": 1,
           "name": "manifest.json",
-          "size": 307
+          "size": 324
         },
         {
           "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
@@ -41,8 +71,68 @@
         }
       ],
       "author": "hwangso595",
-      "description": "## Page templates now render on current firmware\n\nNotebook pages have been rendering on plain white for anyone on reMarkable firmware 3.x, and not because of a sync problem: the feature was written against the older device layout, where templates shipped as PNG art. Current firmware ships 65 `.template` files — declarative JSON with expression-driven layout — and no PNGs at all, so the fetch matched nothing and the renderer had nothing to draw.\n\nThis release interprets that format: a small expression language (arithmetic, comparisons, ternaries over `templateWidth`/`parentWidth`/`paperOrigin`), repeated groups (`down`/`up`/`right`/`infinite` and fixed counts), and `M`/`L`/`C`/`Z` paths, drawn with PyMuPDF so nothing new needs installing. Verified against all 65 stock templates on a device.\n\nScrolled notebook pages are taller than one screen, so templates are drawn once the final page height is known — the ruling continues to the bottom at its true spacing instead of stopping a screen down.\n\n`text` items (planner headings, day names) are not drawn: they need the device's own font to place correctly. Planner templates render their rules but not their words.\n\n## Fixes\n\n- **Disabling handwriting OCR now takes effect.** The render cache stored each page's OCR text and replayed it on cache hits regardless of the setting, so turning OCR off left the same callouts being rewritten into notes on every sync. Cached text is now withheld unless OCR is active (and kept, so re-enabling costs no re-run).\n- **OCR failures are retried instead of cached as final.** A Tesseract error or per-page timeout was indistinguishable from \"no text found\" and got cached as empty forever.\n- **`template_renderer.py` is now shipped.** It was missing from the runtime asset list, which would have broken page rendering with an `ImportError` inside a subprocess. A test now walks the real import graph and asserts the ship list covers it.\n- **The typecheck gate works again.** `virtual:extraction-assets` had no type declaration, so `tsc --noEmit` failed and 64 tests — covering the embedded-Python bundle that makes auto-updated installs work — never ran.\n\n## Upgrade notes\n\nExisting page images are not regenerated automatically: an unchanged page keeps its cached render. To pick up templates on pages you have already synced, run a full (non-incremental) extraction. Template art is fetched from the tablet over SFTP during sync, so the device needs to be reachable once.\n",
+      "description": "## Fixed\n\n- Removed the redundant word \"Obsidian\" from the plugin description to satisfy the Community Plugins manifest guidance.\n\nThis release contains the archive, deletion, privacy, and review fixes from 0.3.1 with the corrected manifest metadata.\n\n## Requirements\n\nObsidian 1.7.2 or newer.\n",
       "downloadCount": 1,
+      "draft": false,
+      "name": "0.3.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T20:19:09Z",
+      "tag": "0.3.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d8ef7afede36f27503ceec299c770e8600a594914554fe729f0c6a3ec23bc627",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 4118107
+        },
+        {
+          "digest": "sha256:012c63a450297b69e6aafb25e5115849cba5678729759c1503e848cfcc745f47",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 338
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "hwangso595",
+      "description": "## Highlights\n\n- Archive now verifies a complete local backup, keeps the document in Obsidian, and removes the tablet copy in both SFTP and Syncthing setups.\n- Delete now removes complete document data from the tablet in SFTP mode and cleans matching files from sync and archive folders.\n- Archived documents can be deleted directly from the library.\n- Device state now uses a random local installation ID instead of hostname or network-interface data.\n- The three Obsidian review blockers are fixed, persisted JSON is validated, and Syncthing requests use Obsidian's supported API.\n- The plugin description and permission documentation now state exactly what the plugin accesses and why.\n\n## Requirements\n\nObsidian 1.7.2 or newer.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.3.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T20:12:27Z",
+      "tag": "0.3.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c7ba0eadd495393884b4ae93bbb6ebbe2075305353b35e53a75d77ea9bae326e",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 4079795
+        },
+        {
+          "digest": "sha256:d4df72856913a24830d0c2e3d5d5d869f641d02249b7bdee857a5cc51705ce27",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 307
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "hwangso595",
+      "description": "## Page templates now render on current firmware\n\nNotebook pages have been rendering on plain white for anyone on reMarkable firmware 3.x, and not because of a sync problem: the feature was written against the older device layout, where templates shipped as PNG art. Current firmware ships 65 `.template` files — declarative JSON with expression-driven layout — and no PNGs at all, so the fetch matched nothing and the renderer had nothing to draw.\n\nThis release interprets that format: a small expression language (arithmetic, comparisons, ternaries over `templateWidth`/`parentWidth`/`paperOrigin`), repeated groups (`down`/`up`/`right`/`infinite` and fixed counts), and `M`/`L`/`C`/`Z` paths, drawn with PyMuPDF so nothing new needs installing. Verified against all 65 stock templates on a device.\n\nScrolled notebook pages are taller than one screen, so templates are drawn once the final page height is known — the ruling continues to the bottom at its true spacing instead of stopping a screen down.\n\n`text` items (planner headings, day names) are not drawn: they need the device's own font to place correctly. Planner templates render their rules but not their words.\n\n## Fixes\n\n- **Disabling handwriting OCR now takes effect.** The render cache stored each page's OCR text and replayed it on cache hits regardless of the setting, so turning OCR off left the same callouts being rewritten into notes on every sync. Cached text is now withheld unless OCR is active (and kept, so re-enabling costs no re-run).\n- **OCR failures are retried instead of cached as final.** A Tesseract error or per-page timeout was indistinguishable from \"no text found\" and got cached as empty forever.\n- **`template_renderer.py` is now shipped.** It was missing from the runtime asset list, which would have broken page rendering with an `ImportError` inside a subprocess. A test now walks the real import graph and asserts the ship list covers it.\n- **The typecheck gate works again.** `virtual:extraction-assets` had no type declaration, so `tsc --noEmit` failed and 64 tests — covering the embedded-Python bundle that makes auto-updated installs work — never ran.\n\n## Upgrade notes\n\nExisting page images are not regenerated automatically: an unchanged page keeps its cached render. To pick up templates on pages you have already synced, run a full (non-incremental) extraction. Template art is fetched from the tablet over SFTP during sync, so the device needs to be reachable once.\n",
+      "downloadCount": 2,
       "draft": false,
       "name": "0.3.0",
       "prerelease": false,
@@ -140,6 +230,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-19T08:01:26.998Z",
+  "removedAt": null,
   "repo": "hwangso595/eink-sync"
 }
