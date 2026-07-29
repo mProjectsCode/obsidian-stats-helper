@@ -4,8 +4,8 @@
   "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "stashpad",
-  "lastChangedAt": "2026-07-28T07:04:27.060Z",
-  "lastFetchedAt": "2026-07-28T07:04:27.060Z",
+  "lastChangedAt": "2026-07-29T07:04:27.031Z",
+  "lastFetchedAt": "2026-07-29T07:04:27.031Z",
   "manifest": {
     "author": "Human",
     "description": "A chat-style, nested-notes workspace: rapid capture, outliner navigation, fast search, tasks, and per-folder templates, with one-click Open Knowledge Format (OKF) export for LLMs and agents.",
@@ -13,7 +13,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.13.0",
     "name": "Stashpad",
-    "version": "0.208.5"
+    "version": "0.209.0"
   },
   "name": "Stashpad",
   "presentInCommunityList": true,
@@ -21,27 +21,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:b1a2320c7891caf9b6e29dc9a5645700e6cf471a5f8b6f17049e4776277cc0ac",
-          "downloadCount": 9,
+          "digest": "sha256:31eb3e17f5fdaba39885146ede05dd0074170b806669752c529226f322bb49cf",
+          "downloadCount": 1,
           "name": "main.js",
-          "size": 970859
+          "size": 971892
         },
         {
-          "digest": "sha256:5357134de39b2fb818a2f31e66fa1e445004916138399879d09f71fdf0418e04",
-          "downloadCount": 14,
+          "digest": "sha256:5a84987d81e9dce9a1c0ed74d8f7e504cf492f4e6efe5201704c444f0f5f2c6c",
+          "downloadCount": 0,
           "name": "manifest.json",
           "size": 349
         },
         {
           "digest": "sha256:46b38d3ac1401633ff57bd46546f25b26516bc08bb8109c7c7cfce34064cce6b",
-          "downloadCount": 8,
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 234012
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 0.209.0\n\n- **The link autocomplete understands aliases.** A note titled \"Architecture\n  Decision 7\" was unreachable by typing `ADR-7`, however its frontmatter was\n  set up. Obsidian's `aliases` are now indexed, with one suggestion per alias\n  so you can see which name matched — the alias as the label, the real filename\n  and path beneath, so two notes sharing an alias stay tellable apart. All the\n  shapes real vaults use are accepted (`aliases` or the older `alias`, as a\n  single value or a list).\n- **You can now type `[[Target|Alias]]`.** Pressing the pipe key used to kill\n  the suggestion list outright, since no filename contains one. The query now\n  splits at the first pipe — target before it, alias after — and inserting\n  keeps whichever alias you typed.\n- **Exports: an extra fallback when resolving an attachment's path**, covering\n  a file Obsidian hasn't finished indexing. Adding it surfaced a genuine defect\n  in both exporters, which could treat a *folder* as an attachment to read and\n  package; both now check properly first.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.209.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T05:58:25Z",
+      "tag": "0.209.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:b1a2320c7891caf9b6e29dc9a5645700e6cf471a5f8b6f17049e4776277cc0ac",
+          "downloadCount": 11,
+          "name": "main.js",
+          "size": 970859
+        },
+        {
+          "digest": "sha256:5357134de39b2fb818a2f31e66fa1e445004916138399879d09f71fdf0418e04",
+          "downloadCount": 20,
+          "name": "manifest.json",
+          "size": 349
+        },
+        {
+          "digest": "sha256:46b38d3ac1401633ff57bd46546f25b26516bc08bb8109c7c7cfce34064cce6b",
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 234012
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.208.5\n\nCovers everything since 0.206.1. The headline is the new-user experience: opening\nStashpad for the first time now asks before it writes anything, explains what a\nStashpad is, and can load example content so the idea lands immediately.\n\n## 0.207.0 — line numbers in the editor\n\n- Line-number gutter in the note editor, plus a logical line count in the stat\n  row. New setting \"Line numbers in the editor\" (on by default, desktop only).\n- Numbers stay aligned through soft wrapping. A textarea has no gutter and no way\n  to report where a line was drawn, so each number is positioned by measurement —\n  a hidden mirror with the textarea's exact width, font and padding renders every\n  logical line and each number takes that line's real height. A naive\n  one-row-per-line gutter desyncs the moment any line wraps, which in a note\n  editor is immediately.\n- Fixed during testing: the gutter had no definite height, so it stretched to fit\n  its own numbers — `scrollTop` pinned at 0 and a long note would have dragged the\n  modal taller. It now takes the textarea's `clientHeight`.\n\n## 0.207.1 — one canonical list of per-folder sidecar files\n\n- `STASHPAD_SIDECAR_FILES` in `types.ts` is now the single source of truth for the\n  dotfiles Stashpad keeps beside a folder's notes; `order-store`, `sort-store` and\n  `structure-snapshot` derive their filenames from it, so the documented list\n  cannot drift from what is actually written.\n- Enumerating them surfaced a fourth sidecar that no from-memory list had\n  included: `.stashpad-sort.json` (per-parent sort mode).\n- The interop documentation gains the sidecar table, per-file guidance for tools\n  converting a Stashpad folder, and a note that these files are written through\n  the adapter rather than the vault API.\n\n## 0.208.0 — first-run experience\n\n- **Welcome on first run.** Enabling Stashpad previously added ribbon icons and no\n  greeting, and the first click silently created a folder, a Home note and two\n  subfolders with no prompt. A welcome now appears first: it explains what\n  Stashpad is, takes a folder name (defaulting to `Stashpad`), and offers \"Set up\n  later\" (which writes nothing), \"Set up fresh\", or \"Set up with demo content\".\n- It appears only when there are **no** Stashpad folders yet and only until it has\n  been answered once, so existing vaults are never interrupted. Dismissing counts\n  as answering.\n- **Example content.** A 34-note demo tree — a trip, a reading list, recipes,\n  tasks with due dates — can be created from the welcome, from the command palette\n  (\"Create example content in a new Stashpad\"), or from the empty-state button.\n  They are ordinary notes with ordinary ids and filenames, editable and deletable\n  like any other.\n- **A real empty state.** An empty Stashpad root now explains what the pane is,\n  what the composer does, and offers buttons for example content and the\n  walkthrough. Drilling into a note with no children keeps the previous quiet\n  one-liner.\n- **Folder creation is announced.** Opening a view that creates a folder now says\n  so, naming the folder and noting the contents are ordinary markdown.\n- **Help & Getting started settings tab.** Explains what a Stashpad is, lists\n  features, lists every command with its default chord (generated from the command\n  table, so it cannot drift), states known limitations, and shows the version with\n  a link to the repository. The explanation of what a Stashpad is previously\n  existed only inside a search-scope setting and disappeared once a folder existed.\n- Folder names typed into the new field are rejected if they contain `.` or `..`\n  path segments; the same guard was added to the existing \"create a Stashpad\"\n  path, which had none.\n- Commands \"Getting started (welcome / setup)\" and \"Create example (demo) content\n  in a new Stashpad\" make onboarding reachable at any time.\n\n## 0.208.1 — first-run fixes\n\n- The empty state's \"Load example content\" now fills the folder being viewed\n  instead of creating a separate one and navigating away from it.\n- The demo folder's Home note is named to the same convention as every other Home\n  note, so a newly created demo folder no longer renames one of its own files the\n  first time it is opened.\n- Seeding never overwrites: a path that already exists is skipped and counted.\n\n## 0.208.2 — one rule for opening a Stashpad\n\n- The ribbon icon and the \"Open Stashpad in new tab\" command previously used\n  different folder-count rules, so with exactly one Stashpad the ribbon opened a\n  picker containing a single entry while the command opened the folder. Both now\n  follow one rule: no folders shows the welcome, one folder opens it directly, two\n  or more show the picker. Right-clicking the ribbon still always shows the picker.\n- The folder switcher ranks the folder you were last working in first.\n- The ribbon icon changes from a file-tree to stacked rectangles, which reads as a\n  pile of notes rather than a filesystem.\n\n## 0.208.3 — no more stray default folder\n\n- Opening a Stashpad no longer creates an empty `Stashpad/` folder alongside it.\n  View state arrives after a view opens, so for one moment the view resolved to\n  the default folder and created it before switching to the real one. Long-standing,\n  and newly conspicuous now that folder creation is announced.\n\n## 0.208.4 — clean titles\n\n- Breadcrumbs, the focused header, crumb tooltips and the tab title no longer show\n  raw Markdown syntax. A note beginning `**Atomic Habits** — James Clear` displayed\n  its asterisks, because titles come from the note's first heading or first body\n  line verbatim.\n- Emphasis, inline code, strikethrough, highlight, links, images, wikilinks\n  (showing the alias when present), leading block markers and backslash escapes are\n  all handled. Stripping is deliberately conservative, so `snake_case_name`,\n  `a_b_c`, `2 * 3 = 6` and a trailing `5 stars ***` are left alone.\n- Notes are unchanged on disk — this affects display only.\n\n## 0.208.5 — deep-link paste\n\n- The \"Open Stashpad link\" dialog reads the clipboard through Electron rather than\n  the browser clipboard API. The browser API rejects when its document is not\n  focused, so automatic pasting worked in some windows and silently never happened\n  in others — most visibly in secondary windows when several vaults were open.\n\n## Internal\n\n- Test tooling: a third isolated test vault for exercising the first-run path\n  (which needs a vault with no Stashpad folders), a slot table replacing hard-coded\n  pairs so an explicitly requested slot can never fall back to a different vault,\n  and a window-focus helper.\n- The in-app testing banner gains readable contrast and no longer dismisses itself\n  when clicked.\n- Branch changelogs, the editor input-parity notes and the interop document were\n  updated alongside the changes above.\n- A change dropping the folder panel's \"new folder\" button was reverted in the same\n  cycle — the button is unchanged from 0.206.1.\n- Release notes for 0.206.1 were rolled up after that release.",
-      "downloadCount": 14,
+      "downloadCount": 20,
       "draft": false,
       "name": "0.208.5",
       "prerelease": false,
@@ -262,26 +292,26 @@
       "assets": [
         {
           "digest": "sha256:933e1d680cb390b61808d064c814aecf1b2d83cd05f6b1bcac803c589547bbde",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "main.js",
           "size": 936669
         },
         {
           "digest": "sha256:781f32c2482ed27cfffa77f5d33b8bc5cb91cedea7f7688606ece15fb8e3aef6",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 349
         },
         {
           "digest": "sha256:26ff7e5b440d5c1c5021f5f756ff998ca7095d64a4a5cd9f7fc186b64137fca8",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "styles.css",
           "size": 229837
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 0.201.4\n\n- **The focused-note header shows the task checkbox.** Drilling into a task\n  hid its completion state — the header now renders the same toggleable\n  checkbox as a list row (in both the full header and the sticky mini header\n  that appears when you scroll), so a parent task can be checked off without\n  climbing back out.",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "0.201.4",
       "prerelease": false,
