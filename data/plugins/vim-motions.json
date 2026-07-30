@@ -4,8 +4,8 @@
   "description": "Full Neovim experience inside Obsidian with Lua scripting, Flash/EasyMotion jumps, Telescope-style picker, Oil explorer, snippets, surround, animated cursor, undo tree, and Markdown text objects. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vim-motions",
-  "lastChangedAt": "2026-07-29T07:04:27.031Z",
-  "lastFetchedAt": "2026-07-29T07:04:27.031Z",
+  "lastChangedAt": "2026-07-30T07:03:27.005Z",
+  "lastFetchedAt": "2026-07-30T07:03:27.005Z",
   "manifest": {
     "author": "Emile Bangma",
     "authorUrl": "https://github.com/saberzero1",
@@ -19,7 +19,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "Vim Motions",
-    "version": "0.86.0"
+    "version": "0.89.0"
   },
   "name": "Vim Motions",
   "presentInCommunityList": true,
@@ -27,27 +27,117 @@
     {
       "assets": [
         {
-          "digest": "sha256:1cc09ed0fca423ca7ac94c5e1ef3ae420f406905bc83c41c574ec2f7381353dd",
-          "downloadCount": 30,
+          "digest": "sha256:efdf9aefeb743a59ad6f9bc2d6676cc06c21dd4fd8ed6938da3833608591036f",
+          "downloadCount": 23,
           "name": "main.js",
-          "size": 1077852
+          "size": 1089464
         },
         {
-          "digest": "sha256:9ad57e97907df97a48934cc2c6f31fcfd6cc7ac665b5255c45aeae5a63bf488c",
-          "downloadCount": 30,
+          "digest": "sha256:379fcd5ef56d0efc0f43c34c8dffc12e8aa79f7eb3058bb8683a01294ab6e619",
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 29,
+          "downloadCount": 22,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Fixed\r\n\r\n- **Insert-mode surround dot-repeat** — `.` after `i<C-G>s{char}text<Esc>` now replays the full surround + typed text. Previously, dot-repeat replayed only the typed text without delimiters. The fork stores `_surroundInsertChar` and `_surroundInsertNewline` on `lastInsertModeChanges`. During replay, `replaySurroundAwareInsert` (inside `repeatLastEdit`) strips the delimiter entry from `changes[0]`, inserts `pair.open`, replays typed text via `repeatInsert`, then inserts `pair.close`. Wrapped in `cm.operation()` for undo atomicity. Counted dot-repeat (`2.`) repeats the text inside one set of delimiters. This exceeds both vim-surround and nvim-surround, where insert-mode surround dot-repeat is broken ([nvim-surround #301](https://github.com/kylechui/nvim-surround/issues/301)). ([#82](https://github.com/saberzero1/motions/issues/82))\r\n    - Fork: `~/Repos/codemirror-vim/src/vim.js` (`createInsertModeChanges`, `recordLastEdit`, `surroundInsert`, `surroundInsertNewline`, `replaySurroundAwareInsert` in `repeatLastEdit`, `onCursorActivity`), `~/Repos/codemirror-vim/src/types.ts` (`_surroundInsertChar`, `_surroundInsertNewline` fields)\r\n\r\n### Tests\r\n\r\n- 9 fork tests in `~/Repos/codemirror-vim/test/vim_test.js`: `dot_insert_surround_unspaced`, `dot_insert_surround_spaced`, `dot_insert_surround_quotes`, `dot_insert_surround_empty`, `dot_insert_surround_counted`, `dot_insert_surround_no_cross_session_leak`, `dot_insert_surround_no_leak_after_o`, `dot_insert_surround_before_text_lost`, `dot_insert_surround_alias_b`\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Marked insert-mode surround dot-repeat as fixed; separated macro recording limitation into own section\r\n- `README.md`: Updated surround feature description with insert-mode dot-repeat\r\n- `AGENTS.md`: Updated codemirror-vim fork description with insert-mode surround dot-repeat and test count (1870)\r\n- `DIFFERENCES.md` (fork): Updated insert-mode surround section with dot-repeat implementation details\r\n- `docs/features/surround.md`: Updated insert mode and dot-repeat sections with insert-mode dot-repeat behavior\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.88.0...0.89.0",
+      "downloadCount": 23,
+      "draft": false,
+      "name": "0.89.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T02:16:48Z",
+      "tag": "0.89.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:a3ae1a2b5803237d6be9f63e16f5229f470f790370ebae4ea2ef13a06344ea27",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 1088154
+        },
+        {
+          "digest": "sha256:56f850b77844ed6adafbed005bec6b549f76337ad3b1a45754f9d712309902be",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 7,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Yank-ring dot-repeat** — pressing `.` after paste cycling (`p` + `<C-p>`/`<C-n>`) now repeats the final cycled text instead of the original paste. On cycling exit, the final cycled content is written to the original paste register. The fork's `repeatLastEdit` re-reads the register at replay time. Follows [yanky.nvim](https://github.com/gbprod/yanky.nvim)'s `update_register_on_cycle` semantics. System clipboard registers (`\"+`/`\"*`) are excluded.\r\n    - Plugin: `src/vim/yank-ring.ts` (`originalPasteRegister` tracking, `getPasteRegisterName()`, register write in `cancel()`, `setVim()`)\r\n- **`undefineEx` fork API** — the codemirror-vim fork now exposes `Vim.undefineEx(name)` to remove ex commands registered via `defineEx`. Cleans both the `exCommands` function map and `commandMap_` prefix lookup. Returns `true` if the command existed, `false` otherwise.\r\n    - Fork: `~/Repos/codemirror-vim/src/vim.js` (`undefineEx` on `vimApi`)\r\n- **Exmap unregistration on vimrc soft-reload** — removing an `exmap` definition from the vimrc file now unregisters the old handler on save. Exmap names are tracked per vimrc load in `vimrcExmapNames` and cleaned via `undefineEx` before re-applying on soft-reload. Plugin-defined and fork built-in ex commands are unaffected.\r\n    - Plugin: `src/main.ts` (`vimrcExmapNames` Set, cleanup in `softReloadVimrc`), `src/vimrc/loader.ts` (`exmapNames` in `ApplyResult` and `VimrcLoadResult`), `src/types/vim-api.d.ts` (`undefineEx` type, `setText` on registers, `lastEditInputState` on `VimState`)\r\n\r\n### Tests\r\n\r\n- 3 fork tests in `~/Repos/codemirror-vim/test/vim_test.js`: `ex_undefineEx` (define → undefine → verify removed), `ex_undefineEx_nonexistent` (returns false), `ex_undefineEx_short_name` (short name prefix cleaned)\r\n- 3 e2e tests in `test/specs/yank-ring.e2e.ts`: dot-repeat after single cycle pastes cycled text, dot-repeat without cycling pastes original (regression), single cycle then dot-repeat pastes cycled text\r\n- 4 e2e tests in `test/specs/vimrc-exmap-reload.e2e.ts`: `vimrcExmapNames` field exists, `undefineEx` available on Vim API, returns false for nonexistent, defineEx + undefineEx round-trip with built-in survival\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Removed `:earlier`/`:later` and `:sign` from N/A table (contradicted implemented features); clarified flash dot-repeat as working correctly; updated exmap soft-reload to reflect unregistration support; updated yank-ring dot-repeat as fixed\r\n- `README.md`: Updated yank-ring feature description with dot-repeat\r\n- `AGENTS.md`: Updated codemirror-vim fork description with `undefineEx` API and test count\r\n- `docs/features/quality-of-life.md`: Updated yank-ring section with dot-repeat behavior\r\n- `docs/configuration/vimrc.md`: Updated soft-reload section — exmap removal now works\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.87.0...0.88.0",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "0.88.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T00:58:50Z",
+      "tag": "0.88.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:4086f85a2abe99eb34d62d86cb6aa6005e7f122dbcfd4cb96c663956078760ac",
+          "downloadCount": 23,
+          "name": "main.js",
+          "size": 1087146
+        },
+        {
+          "digest": "sha256:36e49ae41f69e74a1902bd8de2dbdbb58e681ece64db310b2a93cee38fcf20ab",
+          "downloadCount": 23,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 22,
+          "name": "styles.css",
+          "size": 40236
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n- **Hotkey conflict detection wizard** — on plugin load, detects when Obsidian's default hotkeys (Ctrl+W, Ctrl+D, Ctrl+F, Ctrl+B) conflict with workspace navigation keys. Shows a one-time Notice per plugin version with a \"Check hotkey conflicts\" button in **Settings → Vim Motions → Navigation** that lists each active conflict with step-by-step unbinding instructions. Skipped on mobile and when workspace nav is disabled.\r\n    - Plugin: `src/workspace/hotkey-conflicts.ts` (new — conflict detection via `hotkeys.json`, `VimInfoModal` display), `src/settings.ts` (`conflictNoticeDismissedVersion` setting, button in both declarative and imperative settings paths), `src/main.ts` (detection on `onLayoutReady`)\r\n- **Per-view `CursorMoved`/`TextYankPost`/`CursorHold`/`CmdlineEnter`/`CmdlineLeave` autocmd events** — extends the per-view autocmd pattern (already implemented for mode events via `AutocmdModeWatcher`) to 5 additional events. `CursorMoved` fires independently per view with position-change detection (only fires when cursor actually moved). `TextYankPost` fires from any view including popovers. `CursorHold` fires per-view with configurable delay. Built-in vim mode retains active-leaf-only behavior.\r\n    - Plugin: `src/vim/autocmd-event-watcher.ts` (new — `AutocmdEventWatcher` ViewPlugin), `src/lua/autocmd.ts` (`useEventViewPlugin` flag, per-view handler methods, gated legacy bindings), `src/main.ts` (extension registration, callback wiring, hold delay sync)\r\n- **Visual-mode paste cycling** — yank-ring paste cycling now works after visual-mode paste (`viw` + `p` + `<C-p>` to cycle). Detects visual paste via anchor/cursor position comparison at snapshot time. Computes paste range via doc-length arithmetic. Visual block paste is excluded. Normal-mode paste cycling is unaffected.\r\n    - Plugin: `src/vim/yank-ring.ts` (`snapshot()` helper, `posMin()`, visual paste detection in `onCommandDone`, `prevAnchor`/`prevDocLength`/`prevSelectionLength`/`prevVisualLine`/`prevVisualBlock` tracking)\r\n- **Console warning for unknown `set` options** — unknown `set` options in vimrc now produce a `console.warn` on first encounter per vimrc load. Options recognized by either the plugin (`KNOWN_SET_OPTIONS`) or CM Vim built-in options are not warned about. Deduplication prevents repeated warnings for the same option.\r\n    - Plugin: `src/vimrc/loader.ts` (`KNOWN_CM_VIM_OPTIONS` set, `warnedSetOptions` deduplication, `clearSetOptionWarnings()`)\r\n\r\n### Changed\r\n\r\n- **Flash count prefix now honored with labels** — `3f{char}` with 2+ matches now jumps directly to the 3rd match without showing the label overlay. When the count exceeds available matches, the last match is used (Neovim parity). `f{char}` without a count prefix still shows labels for 2+ matches. Works in operator-pending mode (`d3f{char}`) and with `t`/`T` till motions.\r\n    - Plugin: `src/flash/char-mode.ts` (count prefix check before label overlay)\r\n- **Flash dot-repeat clarified** — dot-repeat after `df{char}{label}` already works correctly. The fork stores the resolved position via `_asyncMotionTarget` and `repeatLastEdit` replays the operator to the same relative offset. The label UI does not re-appear (correct vim behavior). KNOWN_LIMITATIONS.md entry clarified.\r\n\r\n### Fixed\r\n\r\n- **Cursor focus lost when pressing Tab to navigate cells in Embedded table widget** — pressing `Tab` in insert mode inside an embedded table cell editor froze the editor. The cursor disappeared, vim mode got stuck in Insert mode, and `Escape` stopped working. Root cause: `exitCellEdit()` scheduled a 50ms `refreshAfterOp()` timer that was non-cancellable and had no state guard. When `Tab` called `exitCellEdit()` → `enterCellEdit()` synchronously, the deferred refresh fired while the new cell editor was active — removing its key handlers, potentially rebuilding the widget DOM (orphaning the editor), and leaving the controller in an inconsistent state (`cell-edit` state with `table-nav` handlers). Fixed with four layers of defense: (1) `refreshAfterOp()` now stores and deduplicates the timer ID in a `refreshTimer` member, cancelled in `exitTable()`, `enterCellEdit()`, and `destroy()`. (2) `doRefreshAfterOp()` guards against firing in `cell-edit` or `inactive` state. (3) `exitCellEdit()` accepts `{ skipRefresh: true }` — the Tab handler skips both `setActiveEditTableRange(null)` and `refreshAfterOp()` to prevent widget DOM rebuilds during cell-to-cell transitions. (4) `enterCellEdit()` cancels any pending refresh timer as belt-and-suspenders protection. Additionally, `Tab` at the last cell of the last row (or `Shift-Tab` at the first cell) now returns to table-nav mode instead of silently re-entering the same cell. ([#92](https://github.com/saberzero1/motions/issues/92))\r\n    - Plugin: `src/vim/table-nav-controller.ts` (`refreshTimer` member, `refreshAfterOp` timer storage/dedup, `doRefreshAfterOp` state guard, `exitCellEdit` `skipRefresh` param, `handleCellEditKey` rewrite with widget re-query and boundary handling, `enterCellEdit` timer cancel and `pendingD` cleanup)\r\n- **Visual mode highlighting in embedded table cell editors** — entering charwise visual mode (`v`) in an embedded table cell editor now shows selection highlighting. The cell editor's CM6 instance doesn't receive `.cm-focused`, which previously caused the browser to hide `::selection` highlights. Fixed by adding a `CSSStyleSheet` on `document.adoptedStyleSheets` that forces `::selection` visibility in `.cm-vimVisual:not(.cm-vimVisualLine)` scoped to `.vim-table-cell-editor`. Linewise visual mode (`V`) already worked via the fork's focus-independent `linewiseVisualHighlight` ViewPlugin. ([#19](https://github.com/saberzero1/motions/issues/19))\r\n    - Plugin: `src/vim/table-cell-editor.ts` (`visualSelectionSheet` via `adoptedStyleSheets`)\r\n- **Undo tree memory eviction on file close** — in-memory undo trees (`undoTreeMap`) are now evicted when all editors for a file are closed, preventing unbounded memory growth in long sessions. Dirty trees are persisted before eviction when `undoFile` is enabled. Persisted data on disk is not deleted — reopening a file restores from persistence or starts fresh.\r\n    - Plugin: `src/main.ts` (undo tree eviction in `active-leaf-change` handler)\r\n- **Undo tree stale-tree notification** — when `undoFile` is enabled and a file was modified outside Obsidian between sessions, an Obsidian Notice is now shown when the persisted undo tree's `docLength` doesn't match the current file size. Detection fires at most once per file per session. Legacy persisted trees without `docLength` gracefully skip the check.\r\n    - Plugin: `src/main.ts` (`activateUndoTreeForFile` — `docLength` comparison + Notice), `src/vim/undo-tree.ts` (`docLength` field on `SerializedUndoTree`)\r\n- **`vim.v.insertmode` now populated** — returns `'i'` for insert mode, `'r'` for replace mode (`R`), `'v'` for virtual replace mode (`gR`), and `''` in normal/visual modes. Available in keymap function callbacks via `getInsertModeChar()`. Autocmd callbacks default to `''` (no adapter context available).\r\n    - Plugin: `src/lua/api.ts` (`getInsertModeChar` helper, `insertmode` added to 5 `setVimVContext` callsites)\r\n\r\n### Tests\r\n\r\n- 2 unit tests in `test/unit/undo-tree.test.ts`: `docLength` round-trip preservation, legacy data without `docLength` graceful deserialization\r\n- 9 unit tests in `test/unit/lua/vim-v.test.ts`: `insertmode` `'r'`/`'v'` context values, 7 `getInsertModeChar` tests (null, normal, insert, replace, virtual replace, priority, missing state)\r\n- 2 unit tests in `test/unit/textarea-vim.test.ts`: `clearSetOptionWarnings` export and idempotency\r\n- 5 e2e tests in `test/specs/flash-char-mode.e2e.ts`: `3fa` direct jump, `5fa` clamp to last match, `2fa` direct jump, `d3fa` operator-pending, `1fa` single match\r\n- 8 unit tests in `test/unit/hotkey-conflicts.test.ts`: conflict array structure, detection logic (empty, full, partial, custom binding, unrelated keys)\r\n- 10 unit tests in `test/unit/vim/autocmd-event-watcher.test.ts`: callback wiring (set/clear/extension), CursorMoved detection (fires on move, skips unchanged, fires on each distinct move), CursorHold timer (fires after delay, resets on new move, custom delay), TextYankPost\r\n- 1 e2e test in `test/specs/yank-ring.e2e.ts`: normal-mode paste cycling regression after visual-paste changes\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Reorganized — moved 20 fixed top-level sections to new \"Resolved Issues\" section at bottom; updated flash count prefix, undo tree eviction, undo tree stale notification, visual mode cell editor, `vim.v.insertmode`, exmap soft-reload, unknown set option, flash dot-repeat, hotkey conflicts, per-view autocmd events, visual paste cycling, and SettingDefinitionList investigation entries\r\n- `docs/features/flash.md`: Added count prefix behavior and dot-repeat note\r\n- `docs/features/undo-tree.md`: Updated memory management and stale-tree notification\r\n- `docs/features/tables.md`: Updated visual mode highlighting fix in cell editors\r\n- `docs/features/quality-of-life.md`: Updated yank-ring with visual-mode paste cycling\r\n- `docs/configuration/lua-config.md`: Updated `vim.v.insertmode` from deferred to active, updated per-view autocmd event list\r\n- `docs/configuration/vimrc.md`: Added unknown set option warning behavior, updated exmap soft-reload\r\n- `docs/configuration/settings.md`: Added hotkey conflict detection button to workspace navigation settings\r\n- `docs/getting-started/recommended-setup.md`: Added hotkey conflict wizard note\r\n- `README.md`: Updated flash motions, workspace navigation, and Lua configuration feature descriptions\r\n- `AGENTS.md`: Updated autocmd event list with per-view CursorMoved/TextYankPost/CursorHold/CmdlineEnter/CmdlineLeave\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.86.0...0.87.0",
+      "downloadCount": 23,
+      "draft": false,
+      "name": "0.87.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T16:52:05Z",
+      "tag": "0.87.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1cc09ed0fca423ca7ac94c5e1ef3ae420f406905bc83c41c574ec2f7381353dd",
+          "downloadCount": 65,
+          "name": "main.js",
+          "size": 1077852
+        },
+        {
+          "digest": "sha256:9ad57e97907df97a48934cc2c6f31fcfd6cc7ac665b5255c45aeae5a63bf488c",
+          "downloadCount": 65,
+          "name": "manifest.json",
+          "size": 606
+        },
+        {
+          "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
+          "downloadCount": 64,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Which-key displays inaccurate count of group subcommands in \"all\" mode** — when `whichKeyMode` was set to \"All partial keys\" and the user pressed the leader key, the which-key popup showed wildly inflated `(+N)` group counts (e.g., `(+418)` instead of `(+21)`). The \"All partial keys\" code path (`showCompletions()`) queried `vim.getCompletions()` from the CM vim engine, which returns the entire `defaultKeymap` array — including built-in defaults, plugin-internal keymaps, and user-defined keymaps — instead of using only the `leaderBindings` registry (which contains only user-visible leader keymaps). The \"Leader key only\" mode (`showLeaderBindings()`) was unaffected because it already used `leaderBindings` directly. Fixed by adding an `isLeaderScope` branch in `showCompletions()` that mirrors `showLeaderBindings()` — building entries from `this.leaderBindings` filtered by the current prefix, with correct label/icon/color resolution and leader-style title formatting. Non-leader completions (`g`, `z`, `d`, etc.) continue using `vim.getCompletions()` as before. ([#91](https://github.com/saberzero1/motions/issues/91))\r\n    - Plugin: `src/ui/which-key.ts` (`showCompletions` — `isLeaderScope` branch, deferred `getCompletions` to non-leader `else` branch)\r\n- **Several `vim.opt` and vimrc `set` options produce \"unknown vim.opt option\" warning** — 12 plugin settings were documented but never registered in the Lua `vim.opt` proxy (`KNOWN_SET_OPTIONS`) or the vimrc `:set` pathway (`vim.defineOption`). Setting them via `vim.opt.yankring = true` or `set yankring` in vimrc logged a console warning and had no effect. Fixed by adding all 12 options to both registries. Options now work identically across Settings UI, vimrc, and Lua. ([#90](https://github.com/saberzero1/motions/issues/90))\r\n    - **Added to both `KNOWN_SET_OPTIONS` and `vim.defineOption`**: `yankring`, `yankhighlightmode`, `yankhighlightduration`, `undotree`, `undofile`, `undotreemaxnodes`, `foldawarenavigation`, `foldpersistence`, `harpoon`, `dial`\r\n    - **Added to `KNOWN_SET_OPTIONS` only** (already had `vim.defineOption`): `jumplist`, `jumplistsize`\r\n    - Plugin: `src/vimrc/loader.ts` (12 new `KNOWN_SET_OPTIONS` entries + `setJumpListEnabled`/`setJumpListSize` imports), `src/vim/options.ts` (10 new `vim.defineOption` calls + 2 new exported setters)\r\n\r\n### Tests\r\n\r\n- 1 e2e test in `test/specs/lua-space-leader.e2e.ts`: which-key group count in \"all\" mode with space leader stays bounded to actual leader bindings (not inflated by engine-internal keymaps)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added which-key inflated group count fix; added vim.opt/vimrc option parity fix\r\n- `docs/configuration/lua-config.md`: Added 8 missing options to vim.opt table (`harpoon`, `dial`, `jumplist`, `foldawarenavigation`, `foldpersistence`, `jumplistsize`, `yankhighlightduration`, `yankhighlightmode`)\r\n- `docs/configuration/vimrc.md`: Added 6 missing options to vimrc tables (`harpoon`, `dial`, `foldawarenavigation`, `foldpersistence`, `yankhighlightmode`, `yankhighlightduration`)\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.85.0...0.86.0",
-      "downloadCount": 30,
+      "downloadCount": 65,
       "draft": false,
       "name": "0.86.0",
       "prerelease": false,
@@ -58,26 +148,26 @@
       "assets": [
         {
           "digest": "sha256:c2120d49abab898a1cd4467de4aeeca69c7cf39927118f28286ee9feeeda0e7d",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "main.js",
           "size": 1074567
         },
         {
           "digest": "sha256:b0f8af216f293a8b036c9f9f2f88b6d673c56266fc2a5127b0c156cf7c786951",
-          "downloadCount": 15,
+          "downloadCount": 16,
           "name": "manifest.json",
           "size": 606
         },
         {
           "digest": "sha256:4040fa91fb7a507c78535dbe2dfea7b3c4beb1aeb2912a1bab7c071be36a4342",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "styles.css",
           "size": 40236
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n- **Scroll jumps to cursor when interacting with Meta Bind or other plugin fields in the properties panel** — the `propertiesFoldObserver` in `fold-sync.ts` watched `.metadata-container` for any `class` attribute mutation and unconditionally dispatched `EditorView.scrollIntoView(selection.main.head)`. Plugins like Meta Bind that render interactive inputs in the properties area trigger class mutations that are not fold toggles, causing the editor to scroll back to the last vim cursor position. Fixed by adding `attributeOldValue: true` to the `MutationObserver` config and comparing the old vs new `is-collapsed` class presence — the observer now only fires `scrollCursorIntoView()` when the fold state actually changes. No-op mutations (identical class string) and non-fold mutations (any class other than `is-collapsed`) are ignored. ([#89](https://github.com/saberzero1/motions/issues/89))\r\n    - Plugin: `src/vim/fold-sync.ts` (`propertiesFoldObserver` — `is-collapsed` filter, `attributeOldValue: true`)\r\n\r\n### Tests\r\n\r\n- 4 e2e tests in `test/specs/properties-fold-scroll.e2e.ts`: non-fold class mutation preserves scroll position, no-op class re-assignment preserves scroll position, fold toggle triggers scroll, unfold toggle triggers scroll\r\n- Spike test `test/specs/spikes/spike-metabind-scroll-issue89.e2e.ts`: 8 diagnostic tests confirming root cause (class mutation scroll jump, observer attribution, split-view behavior, class mutation audit)\r\n\r\n### Documentation\r\n\r\n- `CHANGELOG.md`\r\n- `KNOWN_LIMITATIONS.md`: Added properties fold observer scroll fix\r\n- `CONTRIBUTING.md`: Updated `fold-sync.ts` description with `is-collapsed` filter\r\n- `docs/features/workspace-navigation.md`: Updated fold scroll behavior note\r\n\r\n**Full Changelog**: https://github.com/saberzero1/motions/compare/0.84.0...0.85.0",
-      "downloadCount": 15,
+      "downloadCount": 16,
       "draft": false,
       "name": "0.85.0",
       "prerelease": false,
