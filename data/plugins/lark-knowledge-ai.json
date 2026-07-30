@@ -1,0 +1,235 @@
+{
+  "author": "7heozzz",
+  "defaultBranch": "main",
+  "description": "Ask AI questions about your vault in natural language. Semantic search over notes and PDFs, answers with clickable citations, running entirely on your own machine. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "lark-knowledge-ai",
+  "lastChangedAt": "2026-07-30T10:01:27.038Z",
+  "lastFetchedAt": "2026-07-30T10:01:27.038Z",
+  "manifest": {
+    "author": "theozhang",
+    "authorUrl": "https://github.com/iamtheozzz",
+    "description": "Ask questions about your vault in natural language. Semantic search over notes and PDFs, answers with clickable citations, running entirely on your own machine.",
+    "id": "lark-knowledge-ai",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.7.2",
+    "name": "Lark Knowledge AI",
+    "version": "0.1.6"
+  },
+  "name": "Lark Knowledge AI",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:44a657fb97c7dae4499c3147addf9adbfbfcf2295935d448450f2b376cb5b417",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 100086
+        },
+        {
+          "digest": "sha256:2f71967da0bf9aeb4f3c1ec2f3a3f40f47ef57af912e2d75a27ebf3cfb58fecf",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 修复：分类调用不稳定\n\n判断「问题是否关于用户本人」的那次分类调用用的是默认 `temperature: 0.3`，导致同一个问题多次跑出不同结果。\n\n实测「我最近在研究什么」在 0.3 下五次里有一次返回「否」，走错分支——收藏的书的正文被完整送进模型，于是出现「《某书》里提到你曾经……」这类把书作者的经历安到用户头上的回答。\n\n分类调用改为 `temperature: 0`，五次全部一致。`streamChat` 新增 `temperature` 选项。\n\n## 其他\n\n- 源码注释与提示词中的举例改为通用表述，不再出现具体书名和人名\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T16:47:59Z",
+      "tag": "0.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9ae6286c5da3e5f817c13812489de3f771e35dccda6791e2727dc1aec3e9acce",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 99983
+        },
+        {
+          "digest": "sha256:855bb878b89da9b2cb23aea1e5816c0011ccc63194a7038bf2705122bf19a535",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "修复 0.1.4 遗留的最后一个 Error。\n\n`setWarning()` 在 0.1.4 里被换成了 `setDestructive()`（前者已废弃），但 `setDestructive` 是 Obsidian **1.13.0** 才有的 API，而本插件声明的 `minAppVersion` 是 1.7.2，因此触发 `no-unsupported-api`。\n\n由于 1.13.0 尚未成为普遍可用的稳定版，这里改回 `setWarning()`——它虽被标记为废弃，但在 1.7.2 上可用，且只是一条 Recommendation 而非 Error。等 1.13 普及后再切换。\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T16:38:01Z",
+      "tag": "0.1.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0a56bf831512dfebfe9245fcfe979de46a804d417a1b041a4f2174c38a27cb21",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 99987
+        },
+        {
+          "digest": "sha256:c7d668495b0f2c2cad63eb1b2600f9e5a66396ad7f4e54bef9a196c4ec4a5b78",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "修复自动审核报出的 3 个 Error。\n\n## Errors\n\n- **内联样式** —— 输入框自增高改用 `setCssStyles()`，不再直接写 `.style.height`（`obsidianmd/no-static-styles-assignment`）\n- **组件生命周期** —— `MarkdownRenderer.render()` 不再把插件实例当宿主组件。插件实例活到卸载为止，每渲染一次答案就往上挂一批子组件、永不释放。现在每个会话持有自己的 `Component`，销毁时一起卸掉\n- **API 版本** —— `minAppVersion` 从 `1.5.0` 提到 `1.7.2`。延迟视图相关的 `leaf.isDeferred` / `loadIfDeferred()` 是 1.7.2 才有的\n\n## 顺带清理\n\n- `document.createElement` → Obsidian 的 `createEl`\n- `setWarning()` → `setDestructive()`\n- 移除已无必要的 `setDynamicTooltip()`\n- 删掉未使用的 import 和 catch 变量\n\n## 升级要求\n\n**本版起需要 Obsidian 1.7.2 或更高。**\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T16:27:02Z",
+      "tag": "0.1.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:1283a2f62d0df7e136cf6e23b904162f71d7547ab3ec59f2d2f4f2cc581de9b8",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 99970
+        },
+        {
+          "digest": "sha256:28e659ce2aa50b52a51ae0cb68b3de430e7018f922fec4d75b4f655662a11539",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 变更\n\n插件 id 从 `knowledge-ai` 改为 `lark-knowledge-ai`，与仓库名和显示名保持一致。\n\n## 从 0.1.2 及更早版本升级\n\nid 变化意味着 Obsidian 会把它当成一个**新插件**，安装目录也变了：\n\n```\n旧：<你的库>/.obsidian/plugins/knowledge-ai/\n新：<你的库>/.obsidian/plugins/lark-knowledge-ai/\n```\n\n**手动升级步骤**：\n\n1. 把旧目录里的 `data.json`（你的设置）复制到新目录\n2. 新目录里放入本次 Release 的 `main.js` / `manifest.json` / `styles.css`\n3. 在「设置 → 第三方插件」里停用并删除旧的，启用新的\n4. 旧目录可以删掉\n\n**已建好的索引不受影响**——索引存在库外的应用数据目录，与插件 id 无关，不需要重建。\n\n用 BRAT 安装的用户：移除旧条目后重新添加 `iamtheozzz/lark-knowledge-ai` 即可。\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.3",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T13:19:12Z",
+      "tag": "0.1.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3f3dc8a515861eb61fb421b7b7435c368e727a5fdd6883a8eba68980dc6d99a0",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 99940
+        },
+        {
+          "digest": "sha256:33d2b0277b01c3ccb5e3d9230667a1c5c97e40304e41951141461b8eaef5f5da",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 387
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 重命名\n\n插件显示名从 **Knowledge AI** 改为 **Lark Knowledge AI**。\n\n原因：Obsidian 社区插件目录要求插件名唯一，而「Knowledge AI」已被另一个插件（id `notebook-ai`）占用，提交时会报 manifest 校验失败。\n\n插件 id 仍是 `knowledge-ai`，**安装目录不变**（`.obsidian/plugins/knowledge-ai/`），从 0.1.1 升级不需要任何手动操作。\n\n## 其他\n\n- README 的「声明」章节移到文末\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.1.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T09:55:25Z",
+      "tag": "0.1.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:03420f11e96558edcfbbc2879412f775ee83622a5f7f9c387497dc1dbd624668",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 99930
+        },
+        {
+          "digest": "sha256:c1bfc3fbfb58dcc3305d507cca459f06df8781793ca522d494edb0dad8b5ebeb",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 382
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "按 Obsidian 官方[插件指南](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines)和[开发者政策](https://docs.obsidian.md/Developer+policies)做的合规调整。功能没有变化。\n\n## 变更\n\n- 移除默认快捷键（指南建议不要预设键位）。想要的话到「设置 → 快捷键」搜 `Knowledge AI` 自己绑\n- 用 `normalizePath()` 处理用户填写的索引路径\n- README 新增「声明」章节：网络使用（默认完全离线，唯一出网目标是本机回环地址）与库外文件访问的说明\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.1.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T09:27:14Z",
+      "tag": "0.1.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c74bda357df5405230784947de9881e5dc71ffcd615d297d7999171d606da6ff",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 99913
+        },
+        {
+          "digest": "sha256:09efe8ab6cee9b77050592cbb11fac55c3f381b83ab2061f76f6e1eb1c1007e7",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 382
+        },
+        {
+          "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 17865
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "首个公开版本。\n\n## 主要功能\n\n- **居中搜索框提问** —— `Cmd/Ctrl + Shift + K` 唤起，不必先打开侧栏\n- **混合检索** —— 语义 + 关键词并行，RRF 融合。语义检索对罕见专有名词是盲区，关键词那一路专治这个\n- **可点击的引用** —— 参考资料由程序按实际用到的材料生成，点击跳到笔记的行或 PDF 的页\n- **理解上下文** —— 「这篇论文讲了什么」自动限定当前文件，「这页」限定 PDF 当前页，「上周记了什么」按修改时间筛选\n- **三种形态** —— 居中弹窗 / 右侧面板 / 中间面板，对话可互相搬运\n- **选中改写** —— 六个预置指令，生成后显示行级 diff，确认才写回\n- **PDF 与图片** —— PDF 文字提取带缓存；可贴图提问；可选给图片生成描述让其可被检索\n- **全本机运行** —— 默认只连 localhost 的 Ollama，笔记内容不出本机\n\n## 安装\n\n需要 Obsidian 1.5.0+ 和 [Ollama](https://ollama.com)。完整步骤见 [README](https://github.com/iamtheozzz/obsidian-knowledge-ai#安装)。\n\n- **BRAT**：添加 `iamtheozzz/obsidian-knowledge-ai`\n- **手动**：下载下方三个文件到 `<你的库>/.obsidian/plugins/knowledge-ai/`\n\n## 已知限制\n\n- 仅支持桌面端（索引读写和流式请求用到 Node API）\n- 扫描版 PDF 需要 OCR，暂不支持\n- 视觉模型必须用 GGUF 版本 —— Ollama 的 MLX 后端目前收不到图片\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T08:31:39Z",
+      "tag": "0.1.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "iamtheozzz/lark-knowledge-ai"
+}
