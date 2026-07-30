@@ -4,8 +4,8 @@
   "description": "Give Claude Desktop and other AI assistants semantic access to your notes through a built-in Model Context Protocol (MCP) server. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "semantic-vault-mcp",
-  "lastChangedAt": "2026-07-29T05:03:28.020Z",
-  "lastFetchedAt": "2026-07-29T05:03:28.020Z",
+  "lastChangedAt": "2026-07-30T05:04:26.997Z",
+  "lastFetchedAt": "2026-07-30T05:04:26.997Z",
   "manifest": {
     "author": "Aaron Bockelie",
     "authorUrl": "https://github.com/aaronsb",
@@ -15,7 +15,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.6.6",
     "name": "Semantic Notes Vault MCP",
-    "version": "0.11.42"
+    "version": "0.12.2"
   },
   "name": "Semantic Notes Vault MCP",
   "presentInCommunityList": true,
@@ -23,39 +23,165 @@
     {
       "assets": [
         {
+          "digest": "sha256:eec8543400381f2148ffcab34dae4891c6c5f58a256ab4a6f00efe076d52fd0e",
+          "downloadCount": 20,
+          "name": "main.js",
+          "size": 4282181
+        },
+        {
+          "digest": "sha256:2fcf67bbb8816cbcd1e2a26546702ba57948be9fbd07c83e57cfbb89eec89e1e",
+          "downloadCount": 22,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:69024d796d3e2ccbfe02d521b92decca6578d9f335f4f185eda81e4cbfb0dbf3",
+          "downloadCount": 0,
+          "name": "obsidian-mcp-0.12.2.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:69024d796d3e2ccbfe02d521b92decca6578d9f335f4f185eda81e4cbfb0dbf3",
+          "downloadCount": 2,
+          "name": "obsidian-mcp.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:b2564311c81165b97cc816a8b5b1cd32699de314087e3fefdd1a8c4fbd0fbe1a",
+          "downloadCount": 18,
+          "name": "styles.css",
+          "size": 7447
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Semantic Notes Vault MCP 0.12.2\n\nHousekeeping on top of the 0.12.1 security release. No functional change to the\nplugin — every security fix described in 0.12.1 is unchanged.\n\n- Uses Obsidian's element helpers instead of `document.createElement` in the image\n  handler and the settings tab, clearing the warnings raised by Obsidian's plugin\n  review.\n- Development tooling now matches the version the review runs, so findings of this\n  kind surface locally before a release rather than after it.\n\nDependency scan: no vulnerable dependencies.\n\nOne review warning is knowingly left in place. The settings tab does not implement\n`getSettingDefinitions()`, so its settings will not appear in Obsidian's settings\nsearch on 1.13.0 and later. That API requires raising the minimum Obsidian version\nabove what this plugin currently supports, and a partial implementation would give\na settings search that finds some settings and silently misses the rest. Tracked at\nhttps://github.com/aaronsb/obsidian-mcp-plugin/issues/224\n\n### Claude Desktop (.mcpb connector)\nIf you connect Claude Desktop via the `.mcpb` bundle, re-import `obsidian-mcp.mcpb` from this release to update the connector — BRAT updates only the Obsidian plugin, not the Desktop bridge.\n\n### Installation via BRAT (Obsidian plugin)\n1. Install the BRAT plugin if you haven't already\n2. Command palette → \"BRAT: Add a beta plugin for testing\"\n3. Enter: `aaronsb/obsidian-mcp-plugin`\n4. Enable the plugin in Community Plugins\n\n## What's Changed\n* fix(lint): clear the prefer-create-el warnings, sync the lint plugin to the portal by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/281\n\n\n**Full Changelog**: https://github.com/aaronsb/obsidian-mcp-plugin/compare/0.12.1...0.12.2",
+      "downloadCount": 22,
+      "draft": false,
+      "name": "Semantic Notes Vault MCP 0.12.2",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T02:40:56Z",
+      "tag": "0.12.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:afe55902f7e39703ef64f0ae581277ad8e225e780228180c5c77db5856030c23",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 4282227
+        },
+        {
+          "digest": "sha256:d39300140bb4087be02c7c66e6da8142a51baac2ad4b7bfee184cb578ddc41d9",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:d1f39035599d7cfd722f2bccd4d1cc1372c7b50747a3f935f94cfaeb90081222",
+          "downloadCount": 0,
+          "name": "obsidian-mcp-0.12.1.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:d1f39035599d7cfd722f2bccd4d1cc1372c7b50747a3f935f94cfaeb90081222",
+          "downloadCount": 0,
+          "name": "obsidian-mcp.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:b2564311c81165b97cc816a8b5b1cd32699de314087e3fefdd1a8c4fbd0fbe1a",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 7447
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Semantic Notes Vault MCP 0.12.1\n\n## Security release\n\nThis release closes three ways a vault write could reach disk without passing through the plugin's security layer, and makes Read-only mode take effect immediately instead of at the next server start.\n\n**If you point an AI agent at a vault and rely on Read-only mode to contain it, please update.** Two of the three issues did not require Read-only mode to be enabled at all — they were reachable in the default configuration.\n\n### Writes could bypass the security layer\n\nVault writes are meant to funnel through a single gate that enforces Read-only mode and validates paths. Three paths reached the vault without it:\n\n- **`bases.create`** wrote via a direct vault call. With Read-only mode on it still created files, and a `../` path created files **outside the vault root**. It could not overwrite existing files, only create new ones.\n- **`vault.move`** and **`vault.rename`** relocated files using Obsidian's rename API directly, with the destination unvalidated. A `../` destination **moved files out of the vault entirely**. These worked in the **default configuration** — Read-only mode was not involved — and because they are moves, they *removed* data from the vault rather than merely writing to it.\n\nThe cause was a gap in the abstraction rather than a faulty check: the security layer had no move/rename method, so calling code reached around it to the raw Obsidian API. The fix adds the missing methods and routes every write through the existing gate. No second enforcement path was introduced — the two disagreeing paths were the underlying problem.\n\nAlso hardened, though not reachable from any tool today: the active-file write methods, `executeCommand` (the command palette contains destructive commands), and an empty-string path that skipped validation — which was allowing writes with an undefined path.\n\n### Read-only mode now applies immediately\n\nToggling Read-only mode only reconfigured the security layer at server start. In between, the toggle blocked `vault` writes but left `edit` writes working — while the confirmation message claimed all writes were blocked. Disabling it had the mirror-image problem: writes stayed blocked until a restart, including when the server had started with Read-only on.\n\nRead-only mode now takes effect the moment you toggle it, in both directions, which is what the switch appeared to promise.\n\n**Behaviour change:** Read-only mode no longer blocks opening a note in Obsidian. Opening a document changes nothing in the vault, so it is treated as a read. Running an Obsidian command by id remains blocked, since the command palette can delete and move files. The setting description has been corrected — it previously listed only \"create, update, delete, move, rename\", which both understated and mis-stated what the mode does.\n\n### Authentication hardening\n\nSupersedes the 0.12.0 prerelease, which contained an authentication regression\nintroduced while making this code testable: a Basic credential with no colon\nseparator was accepted where it had previously been rejected. It still required\nthe exact API key, so nothing could authenticate that could not already, but it\nwidened the accepted credential encodings. Fixed, and RFC 7617 requires the\ncolon in any case.\n\n\n- API key comparison is now constant-time. A plain `===` short-circuits on the first differing byte, which leaks a key prefix through response timing.\n- Basic auth no longer truncates a key containing a colon. Such a key was silently cut short at the first colon and a valid key rejected.\n- Security settings loaded from `data.json` are coerced to booleans. A hand-edited string value could render the Read-only toggle as ON while enforcement was off.\n\n### Tool visibility\n\nDisabling a whole operation in Tool visibility now takes effect on connections\nthat are already open. Previously it was applied only when a connection's tool\nlist was first built, so an existing MCP session kept access to an operation\nafter it was switched off, until the session expired or Obsidian restarted.\nDisabling an individual action already worked this way.\n\nIf you use the Tool visibility toggles to restrict what an agent can reach, note\nthis was the same \"setting looks applied but isn't\" problem as Read-only mode had.\n\n### Reliability of the security boundary\n\nSession creation now fails loudly rather than degrading silently if the security layer or plugin reference is ever missing, instead of serving a session with nothing between it and vault writes.\n\n### Dependencies\n\nAll runtime dependency advisories are cleared — `npm audit --omit=dev` reports zero. The bare `npm audit` count is larger, and that is expected: the remainder is a single denial-of-service advisory in a transitive package shared across the jest/eslint toolchain, fanned out across every dependent. It is development-only and does not reach the shipped bundle; clearing it would require moving dev dependencies across majors.\n\n### Testing\n\nRead-only enforcement is now covered by a matrix derived from the shipped tool schemas, so a newly added action fails the suite until it is explicitly classified as read or write — the gap that let these bypasses exist. Tool visibility and authentication, which previously had no tests, are now covered.\n\n### Reporting security issues\n\nGitHub private vulnerability reporting was not enabled on this repository, so the channel `SECURITY.md` pointed at returned a 404 and reporters had to fall back to email. **It is now enabled:** https://github.com/aaronsb/obsidian-mcp-plugin/security/advisories/new is the preferred route.\n\nThe `bases.create` bypass was reported privately by an external researcher following a source review and live probing. The `vault.move` / `vault.rename` escape was found while verifying that report.\n\n### Claude Desktop (.mcpb connector)\nIf you connect Claude Desktop via the `.mcpb` bundle, re-import `obsidian-mcp.mcpb` from this release to update the connector — BRAT updates only the Obsidian plugin, not the Desktop bridge.\n\n### Installation via BRAT (Obsidian plugin)\n1. Install the BRAT plugin if you haven't already\n2. Command palette → \"BRAT: Add a beta plugin for testing\"\n3. Enter: `aaronsb/obsidian-mcp-plugin`\n4. Enable the plugin in Community Plugins\n\n## What's Changed\n* fix(security): restore Basic auth parity, enforce operation-level visibility live by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/280\n\n\n**Full Changelog**: https://github.com/aaronsb/obsidian-mcp-plugin/compare/0.12.0...0.12.1",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "Semantic Notes Vault MCP 0.12.1",
+      "prerelease": true,
+      "publishedAt": "2026-07-30T02:19:42Z",
+      "tag": "0.12.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e630ab77bda7bb63e1e0007981c2bfc2fa6fd5b8ebf2e9deccf73ba3aa8af16f",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 4283072
+        },
+        {
+          "digest": "sha256:6cc94ee788de4743718b72bf35b1100ceb84ba07f4c988472d352f3097fde19d",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 441
+        },
+        {
+          "digest": "sha256:f093b4c6ca90efba5de9d0754299d237311e8873afeb3c05d7fd2e9bb4901e4b",
+          "downloadCount": 0,
+          "name": "obsidian-mcp-0.12.0.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:f093b4c6ca90efba5de9d0754299d237311e8873afeb3c05d7fd2e9bb4901e4b",
+          "downloadCount": 0,
+          "name": "obsidian-mcp.mcpb",
+          "size": 14241
+        },
+        {
+          "digest": "sha256:b2564311c81165b97cc816a8b5b1cd32699de314087e3fefdd1a8c4fbd0fbe1a",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 7447
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Semantic Notes Vault MCP 0.12.0\n\n## Security release\n\nThis release closes three ways a vault write could reach disk without passing through the plugin's security layer, and makes Read-only mode take effect immediately instead of at the next server start.\n\n**If you point an AI agent at a vault and rely on Read-only mode to contain it, please update.** Two of the three issues did not require Read-only mode to be enabled at all — they were reachable in the default configuration.\n\n### Writes could bypass the security layer\n\nVault writes are meant to funnel through a single gate that enforces Read-only mode and validates paths. Three paths reached the vault without it:\n\n- **`bases.create`** wrote via a direct vault call. With Read-only mode on it still created files, and a `../` path created files **outside the vault root**. It could not overwrite existing files, only create new ones.\n- **`vault.move`** and **`vault.rename`** relocated files using Obsidian's rename API directly, with the destination unvalidated. A `../` destination **moved files out of the vault entirely**. These worked in the **default configuration** — Read-only mode was not involved — and because they are moves, they *removed* data from the vault rather than merely writing to it.\n\nThe cause was a gap in the abstraction rather than a faulty check: the security layer had no move/rename method, so calling code reached around it to the raw Obsidian API. The fix adds the missing methods and routes every write through the existing gate. No second enforcement path was introduced — the two disagreeing paths were the underlying problem.\n\nAlso hardened, though not reachable from any tool today: the active-file write methods, `executeCommand` (the command palette contains destructive commands), and an empty-string path that skipped validation — which was allowing writes with an undefined path.\n\n### Read-only mode now applies immediately\n\nToggling Read-only mode only reconfigured the security layer at server start. In between, the toggle blocked `vault` writes but left `edit` writes working — while the confirmation message claimed all writes were blocked. Disabling it had the mirror-image problem: writes stayed blocked until a restart, including when the server had started with Read-only on.\n\nRead-only mode now takes effect the moment you toggle it, in both directions, which is what the switch appeared to promise.\n\n**Behaviour change:** Read-only mode no longer blocks opening a note in Obsidian. Opening a document changes nothing in the vault, so it is treated as a read. Running an Obsidian command by id remains blocked, since the command palette can delete and move files. The setting description has been corrected — it previously listed only \"create, update, delete, move, rename\", which both understated and mis-stated what the mode does.\n\n### Authentication hardening\n\n- API key comparison is now constant-time. A plain `===` short-circuits on the first differing byte, which leaks a key prefix through response timing.\n- Basic auth no longer truncates a key containing a colon. Such a key was silently cut short at the first colon and a valid key rejected.\n- Security settings loaded from `data.json` are coerced to booleans. A hand-edited string value could render the Read-only toggle as ON while enforcement was off.\n\n### Reliability of the security boundary\n\nSession creation now fails loudly rather than degrading silently if the security layer or plugin reference is ever missing, instead of serving a session with nothing between it and vault writes.\n\n### Dependencies\n\nAll runtime dependency advisories are cleared — `npm audit --omit=dev` reports zero. The bare `npm audit` count is larger, and that is expected: the remainder is a single denial-of-service advisory in a transitive package shared across the jest/eslint toolchain, fanned out across every dependent. It is development-only and does not reach the shipped bundle; clearing it would require moving dev dependencies across majors.\n\n### Testing\n\nRead-only enforcement is now covered by a matrix derived from the shipped tool schemas, so a newly added action fails the suite until it is explicitly classified as read or write — the gap that let these bypasses exist. Tool visibility and authentication, which previously had no tests, are now covered.\n\n### Reporting security issues\n\nGitHub private vulnerability reporting was not enabled on this repository, so the channel `SECURITY.md` pointed at returned a 404 and reporters had to fall back to email. **It is now enabled:** https://github.com/aaronsb/obsidian-mcp-plugin/security/advisories/new is the preferred route.\n\nThe `bases.create` bypass was reported privately by an external researcher following a source review and live probing. The `vault.move` / `vault.rename` escape was found while verifying that report.\n\n### Claude Desktop (.mcpb connector)\nIf you connect Claude Desktop via the `.mcpb` bundle, re-import `obsidian-mcp.mcpb` from this release to update the connector — BRAT updates only the Obsidian plugin, not the Desktop bridge.\n\n### Installation via BRAT (Obsidian plugin)\n1. Install the BRAT plugin if you haven't already\n2. Command palette → \"BRAT: Add a beta plugin for testing\"\n3. Enter: `aaronsb/obsidian-mcp-plugin`\n4. Enable the plugin in Community Plugins\n\n## What's Changed\n* fix(security): route every vault write through the security layer by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/276\n* fix(security): make read-only mode take effect immediately (ADR-108) by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/277\n* test(security): cover the two switches with no coverage, harden HTTP auth by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/278\n* fix(deps): clear all runtime advisories (lockfile only) by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/279\n\n\n**Full Changelog**: https://github.com/aaronsb/obsidian-mcp-plugin/compare/0.11.42...0.12.0",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Semantic Notes Vault MCP 0.12.0",
+      "prerelease": true,
+      "publishedAt": "2026-07-30T02:11:39Z",
+      "tag": "0.12.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:aca5b21983a04caddd390d06e6f3bee626476c2f3aeeafec6c5736f5927002fa",
-          "downloadCount": 1600,
+          "downloadCount": 1668,
           "name": "main.js",
           "size": 4236573
         },
         {
           "digest": "sha256:bdf5ee076f9aa1015a4295109946651513d78c0ff1cbf1d998bd5428a8f58d3c",
-          "downloadCount": 3240,
+          "downloadCount": 3444,
           "name": "manifest.json",
           "size": 442
         },
         {
           "digest": "sha256:0205f6cca118fc26770fade24a04da594fc204fccb6752242ade460056602ac4",
-          "downloadCount": 31,
+          "downloadCount": 33,
           "name": "obsidian-mcp-0.11.42.mcpb",
           "size": 14242
         },
         {
           "digest": "sha256:0205f6cca118fc26770fade24a04da594fc204fccb6752242ade460056602ac4",
-          "downloadCount": 519,
+          "downloadCount": 548,
           "name": "obsidian-mcp.mcpb",
           "size": 14242
         },
         {
           "digest": "sha256:b2564311c81165b97cc816a8b5b1cd32699de314087e3fefdd1a8c4fbd0fbe1a",
-          "downloadCount": 1569,
+          "downloadCount": 1637,
           "name": "styles.css",
           "size": 7447
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Semantic Notes Vault MCP 0.11.42\n\nRetrieval signal honesty — follow-up to 0.11.41.\n\nFixed:\n- Search score labels no longer assert a quality judgement the number cannot support. TF-IDF has no absolute scale, so the fixed bands ('Good' >=1.0, 'Low' >0) were misleading: where most notes share the query term the scores compress, and load-bearing notes were being labelled 'Low'. Scores now render bare and relative to the top hit ('0.36, 25% of top hit'), with an explicit caution not to prune on score.\n- The graph's blind spot is now documented, and it is the mirror of search's. Search misses notes written in different vocabulary; traversal only reaches what someone actually linked. They are complements, not substitutes: scan broadly to catch the unlinked, follow links to catch the differently-worded. The graph description now says so, and points at backlinks for finding what depends on a note.\n- The '_Summary view_' footer read as a truncation warning on tools whose job is faithful retrieval. Only metadata is abbreviated; genuine truncation already announces itself. The footer now names what it actually elides.\n- search-traverse is described with its cost (snippets per node, scoreThreshold pruning), not just its brevity.\n\n427 tests passing.\n\n### Claude Desktop (.mcpb connector)\nIf you connect Claude Desktop via the `.mcpb` bundle, re-import `obsidian-mcp.mcpb` from this release to update the connector — BRAT updates only the Obsidian plugin, not the Desktop bridge.\n\n### Installation via BRAT (Obsidian plugin)\n1. Install the BRAT plugin if you haven't already\n2. Command palette → \"BRAT: Add a beta plugin for testing\"\n3. Enter: `aaronsb/obsidian-mcp-plugin`\n4. Enable the plugin in Community Plugins\n\n## What's Changed\n* fix(retrieval): stop the score labels lying, and name both blind spots by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/266\n\n\n**Full Changelog**: https://github.com/aaronsb/obsidian-mcp-plugin/compare/0.11.41...0.11.42",
-      "downloadCount": 3240,
+      "downloadCount": 3444,
       "draft": false,
       "name": "Semantic Notes Vault MCP 0.11.42",
       "prerelease": false,
@@ -822,13 +948,13 @@
       "assets": [
         {
           "digest": "sha256:6d576f740b1f6739027dfb7ca59a80fa160b175cdeb51b5dba326897bc67be37",
-          "downloadCount": 20,
+          "downloadCount": 21,
           "name": "main.js",
           "size": 3802692
         },
         {
           "digest": "sha256:fc38283e306f91c9d6f57216ddb60eba0005f20b75ef64770f1c5750fa4b37cf",
-          "downloadCount": 22,
+          "downloadCount": 23,
           "name": "manifest.json",
           "size": 383
         },
@@ -846,14 +972,14 @@
         },
         {
           "digest": "sha256:8d4f0c0ee49a7bba33705534d1f020420eaad87d93e1ebbf23b9ada2e24ec6bf",
-          "downloadCount": 21,
+          "downloadCount": 22,
           "name": "styles.css",
           "size": 6282
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Semantic Notes Vault MCP 0.11.20\n\nBug fix: numeric pagination params were silently dropped at the router (page, pageSize, snippetLength). vault.list and vault.search pagination now actually paginate. Caught while live-verifying 0.11.19.\n\n### Installation via BRAT\n1. Install the BRAT plugin if you haven't already\n2. Command palette → \"BRAT: Add a beta plugin for testing\"\n3. Enter: `aaronsb/obsidian-mcp-plugin`\n4. Enable the plugin in Community Plugins\n\n## What's Changed\n* fix(router): Numeric pagination params silently dropped (parseInt(paramStr) → paramNum) by @aaronsb in https://github.com/aaronsb/obsidian-mcp-plugin/pull/159\n\n\n**Full Changelog**: https://github.com/aaronsb/obsidian-mcp-plugin/compare/0.11.19...0.11.20",
-      "downloadCount": 22,
+      "downloadCount": 23,
       "draft": false,
       "name": "Semantic Notes Vault MCP 0.11.20",
       "prerelease": false,

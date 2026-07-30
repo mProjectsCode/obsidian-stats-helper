@@ -4,8 +4,8 @@
   "description": "Sync reMarkable documents, notebooks, and highlights over SFTP or Syncthing. No reMarkable Cloud required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "eink-sync",
-  "lastChangedAt": "2026-07-29T05:03:28.020Z",
-  "lastFetchedAt": "2026-07-29T05:03:28.020Z",
+  "lastChangedAt": "2026-07-30T05:04:26.997Z",
+  "lastFetchedAt": "2026-07-30T05:04:26.997Z",
   "manifest": {
     "author": "hwangso595",
     "authorUrl": "https://github.com/hwangso595",
@@ -14,11 +14,71 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "E-Ink Sync",
-    "version": "0.3.3"
+    "version": "0.3.5"
   },
   "name": "E-Ink Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:43fcf2c5e6fca9ddccfcaa17565f4fd65caf62ebfc1a8deee41f64d51d236826",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 4214600
+        },
+        {
+          "digest": "sha256:07270b7e4e2a7ee84a79cd40bd70db40c8075cfdb77a4ccd4d67d11e350a5971",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Harden clean installs and improve settings by @hwangso595 in https://github.com/hwangso595/eink-sync/pull/19\n\n\n**Full Changelog**: https://github.com/hwangso595/eink-sync/compare/0.3.4...0.3.5",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.3.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T21:28:46Z",
+      "tag": "0.3.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:435a1174eae7e1eea7e7c785dc7047cdf79e7179870df98463fbe26f37ad0e23",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 4194863
+        },
+        {
+          "digest": "sha256:30e57ffe20495704b2e09651b92e5ea9eb384a81af4373c132341d45a42f6216",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 324
+        },
+        {
+          "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 14442
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## What's Changed\n* Fix tablet document workflows and highlight extraction by @hwangso595 in https://github.com/hwangso595/eink-sync/pull/18\n\n\n**Full Changelog**: https://github.com/hwangso595/eink-sync/compare/0.3.3...0.3.4",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.3.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T05:18:04Z",
+      "tag": "0.3.4"
+    },
     {
       "assets": [
         {
@@ -113,26 +173,26 @@
       "assets": [
         {
           "digest": "sha256:c7ba0eadd495393884b4ae93bbb6ebbe2075305353b35e53a75d77ea9bae326e",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 4079795
         },
         {
           "digest": "sha256:d4df72856913a24830d0c2e3d5d5d869f641d02249b7bdee857a5cc51705ce27",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "manifest.json",
           "size": 307
         },
         {
           "digest": "sha256:a43a64a01aa1a602ebe60c02dca5ce86063071c58f7968dd2fd26b7e476791c7",
-          "downloadCount": 2,
+          "downloadCount": 3,
           "name": "styles.css",
           "size": 14442
         }
       ],
       "author": "hwangso595",
       "description": "## Page templates now render on current firmware\n\nNotebook pages have been rendering on plain white for anyone on reMarkable firmware 3.x, and not because of a sync problem: the feature was written against the older device layout, where templates shipped as PNG art. Current firmware ships 65 `.template` files — declarative JSON with expression-driven layout — and no PNGs at all, so the fetch matched nothing and the renderer had nothing to draw.\n\nThis release interprets that format: a small expression language (arithmetic, comparisons, ternaries over `templateWidth`/`parentWidth`/`paperOrigin`), repeated groups (`down`/`up`/`right`/`infinite` and fixed counts), and `M`/`L`/`C`/`Z` paths, drawn with PyMuPDF so nothing new needs installing. Verified against all 65 stock templates on a device.\n\nScrolled notebook pages are taller than one screen, so templates are drawn once the final page height is known — the ruling continues to the bottom at its true spacing instead of stopping a screen down.\n\n`text` items (planner headings, day names) are not drawn: they need the device's own font to place correctly. Planner templates render their rules but not their words.\n\n## Fixes\n\n- **Disabling handwriting OCR now takes effect.** The render cache stored each page's OCR text and replayed it on cache hits regardless of the setting, so turning OCR off left the same callouts being rewritten into notes on every sync. Cached text is now withheld unless OCR is active (and kept, so re-enabling costs no re-run).\n- **OCR failures are retried instead of cached as final.** A Tesseract error or per-page timeout was indistinguishable from \"no text found\" and got cached as empty forever.\n- **`template_renderer.py` is now shipped.** It was missing from the runtime asset list, which would have broken page rendering with an `ImportError` inside a subprocess. A test now walks the real import graph and asserts the ship list covers it.\n- **The typecheck gate works again.** `virtual:extraction-assets` had no type declaration, so `tsc --noEmit` failed and 64 tests — covering the embedded-Python bundle that makes auto-updated installs work — never ran.\n\n## Upgrade notes\n\nExisting page images are not regenerated automatically: an unchanged page keeps its cached render. To pick up templates on pages you have already synced, run a full (non-incremental) extraction. Template art is fetched from the tablet over SFTP during sync, so the device needs to be reachable once.\n",
-      "downloadCount": 2,
+      "downloadCount": 3,
       "draft": false,
       "name": "0.3.0",
       "prerelease": false,
