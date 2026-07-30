@@ -4,8 +4,8 @@
   "description": "Log spending as tags in your daily notes, then turn them into pace-aware budget, holiday, and savings dashboards. Capture via Apple Shortcuts or a quick-add modal. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "finance-tracker",
-  "lastChangedAt": "2026-07-29T09:01:27.011Z",
-  "lastFetchedAt": "2026-07-29T09:01:27.011Z",
+  "lastChangedAt": "2026-07-30T09:02:27.068Z",
+  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
   "manifest": {
     "author": "Antoine Jhaddad",
     "authorUrl": "https://github.com/arangutambo",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.0.0",
     "name": "Finance Tracker",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "name": "Finance Tracker",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:e50194ac78bdc0e2bca1e4c806db80e6812ae47c2c53afa2ed936a652b8d8f4f",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 464916
+        },
+        {
+          "digest": "sha256:e76523915b814286e833147183fb3320bd4353bf90fdc1819b1bd544bb2c3614",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 448
+        },
+        {
+          "digest": "sha256:c851102cec11b910836a4a00f88e31f3a4de89b759a23ded5076dbedb03306c2",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 30573
+        }
+      ],
+      "author": "arangutambo",
+      "description": "**Run \"Repair daily note totals\" once after upgrading.**\n\n## Fixed: daily-note totals could be wrong\n\nThe running total written onto the `#log/spending` root line counted numbers appearing inside a transaction's own merchant or note child lines — so `Shell Coorparoo 1234` added 1234 to the total, and `7-Eleven` added 11.\n\nDashboards, budgets and every chart were always correct (they only parse tagged entry lines); the wrong number was the one written into the note. Totals now heal whenever a note is opened, and the new **Repair daily note totals** command fixes an entire backlog in one pass.\n\n## Runway replaces the bill reserve\n\nThe bill reserve was an envelope you funded and drew down. Runway is simpler: a **read-only figure** answering *\"how much do I need available to be safe for the next month?\"*, computed by walking your actual bill schedule.\n\n> **Keep $395.27 available for the next 1 month**\n> Recurring bills only, between today and 2026-08-29 · 11 bills due\n\nPick a period (1 week to 6 months) and whether usual spending counts, both in **Settings → Runway**. It shows the total, per-week and per-day breakdowns, and every bill making it up. No contributions, no balance, no bookkeeping.\n\nA $900 annual renewal is worth nothing to the figure while it is eleven months away, and worth all $900 the moment it enters the window — because that is the month you need the money.\n\nExisting `#log/income/billreserve` bullets are left alone and still count as transfers rather than income.\n\n## Bills that stop on their own\n\nGive a recurring bill an **End Date** or **Payments Left** and it retires itself — for fixed-term contracts and instalment plans. It moves to Archived labelled *ended 2027-03-01* or *all payments made* rather than *paused*, and **Restart** clears the terms.\n\n**Push a week** moves just the next due date, leaving the cadence alone.\n\n## Foreign currency in quick add\n\n```\n58 USD : 83.64 obsidian sync #subscriptions/yearly/obsidian-sync\n```\n\nRecords what you were charged and what it cost, with **no stored rate**. The code can go either side of the number and the separator is optional. The preview shows the implied rate so you can check you typed it right. Give only the foreign amount and it says so rather than guessing.\n\nQuick add also warns when the same amount and merchant is already logged that day, and there is now an **Add** button in the sidebar.\n\n## Also fixed\n\n- **The dashboard donut ignored your Default grouping setting** and always used full category paths. It also drew three concentric bands whenever any one category had a subcategory, so categories without one had their wedge repeated three times in the same colour. Now two bands, and the outer ring only appears over categories that actually split.\n- Settings migrations are gated on a stored `schemaVersion` instead of re-running on every load; orphaned keys from old schemas are pruned.\n\n## Clearer interface\n\n- **One filled action per row.** Log now is primary when a bill is actually due; everything else is a quiet outline. A row with six controls no longer reads as six equal choices.\n- **Amounts read like a receipt** — separated from the name and set larger.\n- **27 commands became 20.** Eight `Insert … block` commands became one picker that describes each block.\n- **Six settings sections instead of nine**, with folder paths, note filenames and the merchant map behind **Advanced** — plus a live status line reporting what the plugin can actually read from your vault, so a wrong folder says so instead of yielding an empty dashboard.\n- User-facing copy settles on **trip** over \"holiday\". Tags, frontmatter and block names are unchanged, so nothing in your vault needs editing.\n\n## Under the hood\n\n`finance-core.js` is now the single source of truth, and `scripts/mirror-core.js` generates main.js's `core` IIFE from it. `npm test` fails if the two diverge — the hand-maintained copy had quietly drifted in four places by 0.6.0, including a default that differed between the tested and the shipped code.\n\nRunway and forecast arithmetic works in integer cents. ~250 lines of dead code removed. Tests: **110**, up from 81, including a new `tests/integrity.test.js` covering write→read round trips and total-healing invariants — which is what caught the totals bug.\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T03:17:50Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:1a2ba92334f537d4e3e112b2afc513d9b8941844154311da0bff340af92c98dd",
-          "downloadCount": 3,
+          "downloadCount": 10,
           "name": "main.js",
           "size": 436203
         },
         {
           "digest": "sha256:846d1acfddde3af9fefa98d27d4469a3c4c70e82038fac409422853cc1b5975f",
-          "downloadCount": 4,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 448
         },
         {
           "digest": "sha256:0f78cc840c388890fce2b1121bc5addabb7a5cf1cfc67289d40a6d749e1ab458",
-          "downloadCount": 3,
+          "downloadCount": 10,
           "name": "styles.css",
           "size": 25065
         }
       ],
       "author": "arangutambo",
       "description": "## New\n\n- **Yearly & quarterly reviews** — **Insert yearly review** / **Insert quarterly review** compute the period's totals, best/worst month by spend, top spending categories, and a transfers summary once and insert the finished markdown at the cursor — a frozen snapshot, not a live recomputing block.\n- **Recurring bills log on the real date they're paid** — Log now and Skip cycle log on the date the action actually happened, not the historical due date, but the schedule stays anchored to its own cadence via a new **Next Due** registry override (advanced from the due date just fulfilled, not from today) — so a late payment never drifts every future due date out by the same amount. Next Due is also directly hand-editable, as a manual escape hatch.\n- **\"Recurring bills due\" sidebar card** — stays in the Daily Budget sidebar until each overdue/due bill is actually logged.\n- **Bill reserve per-cadence breakdown** — weekly bills get a per-week figure; monthly (and longer) cadences get both a per-week *and* a per-month figure, tracked separately, plus a per-quarter combined total.\n- **Variable bills** (utilities and the like) — mark a bill **Variable** and it projects monthly/yearly totals and the bill reserve off the average of its last six payments instead of just the last one; **Log now** on a variable bill prompts for the actual amount instead of repeating a fixed number that was never going to be right.\n- **Bill reserve contributions** — a shared envelope you can top up like a savings goal (**Contribute to bill reserve** command), with a \"Saved so far\" figure compared against what should already be set aside.\n\n80 tests passing (`npm test`).\n",
-      "downloadCount": 4,
+      "downloadCount": 11,
       "draft": false,
       "name": "0.6.0",
       "prerelease": false,

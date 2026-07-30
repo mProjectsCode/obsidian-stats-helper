@@ -4,8 +4,8 @@
   "description": "Graph functions, systems, derivatives and integrals in interactive blocks. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lmath",
-  "lastChangedAt": "2026-07-29T09:01:27.011Z",
-  "lastFetchedAt": "2026-07-29T09:01:27.011Z",
+  "lastChangedAt": "2026-07-30T09:02:27.068Z",
+  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
   "manifest": {
     "author": "Lenin",
     "authorUrl": "https://github.com/LubrieDev",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:fdf10a4d7cb7b8d0ba54816b3b574bc2d9abaecf4d30424512c740432b6f2b7b",
-          "downloadCount": 24,
+          "downloadCount": 30,
           "name": "main.js",
           "size": 2464885
         },
         {
           "digest": "sha256:c32674b336094f136f9e20a08ae550c6a3e9e15ca04e60254e7056f0c9ed7274",
-          "downloadCount": 24,
+          "downloadCount": 30,
           "name": "manifest.json",
           "size": 278
         },
         {
           "digest": "sha256:c36a96cf001c2de578e68c86d78c95efea795334df0f52505a14c9af56ed7d3d",
-          "downloadCount": 23,
+          "downloadCount": 29,
           "name": "styles.css",
           "size": 8345
         }
       ],
       "author": "LubrieDev",
       "description": "# 1.3.0\r\n\r\n## The block on a phone: the plane gets the whole width, the formula waits behind a button\r\n\r\nUntil now the block applied a desktop layout everywhere. The formula asks for half the\r\nwidth and the plane takes two thirds of what is left, which on a 412 px phone leaves a\r\nplane **214 px wide and 261 px tall** — a graph taller than it is wide, with a panel beside\r\nit whose lower half is empty. Nothing was broken; it was a proportion designed for a\r\nwindow that a phone does not have.\r\n\r\nThis release splits that decision in two, because **two different things were being\r\nconfused**: how much room there is, and how you are pointing. They now travel separately,\r\nand that is what lets the phone gain a usable plane **without changing anything in\r\nlandscape**, where a phone has ~700 px and the desktop layout already works.\r\n\r\n- **A narrow block is now just the plane, with the formula in a panel on top of it.**\r\n  Below **520 px of container width**, the formula panel leaves the flow and becomes a card\r\n  floating over the plane, opened and closed by a new **f(x)** button next to the ⓘ. The\r\n  plane goes from 214 × 261 to **321 × 264** on that same phone — **52 % more area**, and\r\n  landscape at last.\r\n\r\n  The threshold is not a round number picked by feel. In the side-by-side layout the plane\r\n  takes ⅔ of the block, so for it not to end up taller than wide you need ⅔·W ≥ 261, that\r\n  is W ≥ 392; at 520 the plane never drops below 4:3, which is the least a graph needs to\r\n  read as a graph. Being measured on the **container** and not on the device, a narrow side\r\n  pane on the desktop gets the same treatment — it has exactly the same problem.\r\n\r\n  The panel does **not** change parent when the threshold is crossed: it stays a sibling of\r\n  the plane and only its box is rewritten. So rotating the phone is one style write —\r\n  KaTeX is not re-rendered, and your zoom and panning survive the turn. Rotating with the\r\n  formula open closes it, so coming back to portrait starts closed rather than with a panel\r\n  nobody asked to open.\r\n\r\n  The card takes **180 of the 264 px** and rests 46 px above the bottom edge instead of\r\n  sitting on it: the ⓘ and the button that closes the formula live down there, and a panel\r\n  that covers its own close button is a trap. While it is open the **f(x) turns into ✕**,\r\n  the same rule the ☰ menu got in 1.2.8, and the zoom column steps aside — at that height\r\n  it would be underneath the card. That is the price of a large panel, and it is the right\r\n  one: with the formula in front of you, you are not navigating the graph. Tapping the\r\n  plane also closes it, but only a **clean tap** — under 8 px of travel and half a second —\r\n  because a drag to move the view ends up emitting a click just like a tap, and closing the\r\n  panel every time you moved the plane would make it unusable.\r\n\r\n- **One finger moves the plane on both axes; two fingers zoom.** Until now the only zoom on\r\n  a phone was the ± buttons, which are precisely the ones that step aside when the formula\r\n  is open. Panning was also fragile: a single stored position meant the second finger's\r\n  `pointerdown` overwrote the first one's, and the view jumped from one finger to the\r\n  other.\r\n\r\n  Pointers are now tracked **per id**. With one, the arithmetic is the same one as always,\r\n  so the desktop drag is unchanged. With two, the **midpoint drags** the view and the\r\n  **separation scales** it, anchored on that midpoint: pulling the fingers apart zooms in,\r\n  bringing them together zooms out, and the point of the world under your fingers stays\r\n  where it is. Lifting one finger no longer jumps, because the one that remains already has\r\n  a known position. `pointercancel` is finally handled — the system can take a finger away\r\n  at any moment (an incoming call, a gesture of its own), and that finger used to stay\r\n  \"down\" forever.\r\n\r\n  The wheel and the pinch now share the same anchored-scale routine, so there is **one\r\n  invariant to keep and one to test**. Two guards: below 24 px of separation the gesture\r\n  only pans (the ratio explodes, and divides by zero in the limit), and the scale per event\r\n  is capped at ×4.\r\n\r\n  This has a consequence worth knowing: a swipe that **starts on the plane** no longer\r\n  scrolls the note. `touch-action` is set on the canvas only, so swipes that start on the\r\n  margins, above, below, or on the formula panel — 180 of those 264 px when it is open —\r\n  still scroll normally.\r\n\r\n- **Nothing that needs a mouse pretends to work with a finger.** On touch there is no\r\n  hover, so the crosshair and the cursor cross had nothing to follow, and the rail is\r\n  driven with A/D and W/S on a keyboard that is not there. All three are now off, along\r\n  with the ⌖ button that opened a mode with no way to steer it, and the canvas no longer\r\n  hides the system cursor. Controls that stay grow from 22 to **30 px** — not the 44 that\r\n  the touch guidelines ask for, because four 44 px targets over a 321 px plane would take a\r\n  third of its height and bring back the problem we came to solve. The ⓘ popover now rises\r\n  with the chip row and is capped against the plane instead of against fixed numbers, and\r\n  the popover and the formula are mutually exclusive: opening one closes the other, since\r\n  on a phone they overlap almost completely.\r\n\r\n  **What is lost with this: on a phone there is now no way to read the coordinates of a\r\n  point.** The crosshair and the rail were the two ways to do it, and both were mouse and\r\n  keyboard. Nothing has replaced them yet; a tap that shows coordinates is the natural\r\n  candidate. A tablet with a Bluetooth keyboard also loses keyboard navigation — there is\r\n  no way to detect that keyboard until a key is pressed.\r\n\r\n- **A button to edit the block, because on mobile there is no `</>`.** Obsidian's button\r\n  for reaching the source of a rendered block appears on hover, so on a phone it never\r\n  does, and our canvas takes the taps. The block was left with no door to its own code.\r\n  There is now a ✎ chip in the top-left corner — away from the others on purpose: the ones\r\n  on the top right move the view, the ones at the bottom right open something inside the\r\n  block, and this one leaves the block. It takes the cursor to the **end** of the block's\r\n  body, not the start, because you press edit to carry on writing; if the note is in\r\n  reading mode it switches to editing first, and it scrolls the cursor into view, which on\r\n  a phone matters because the keyboard covers the lower half of the screen. It hides while\r\n  the formula panel is open, where it would only add noise.\r\n\r\n- **The block no longer flashes while it mounts.** The formula panel goes through\r\n  MarkdownRenderer, and that has to be awaited before the plane can be built. In that gap\r\n  the browser painted whatever was there — the block with its formula and **no graph at\r\n  all** — and then jumped to the finished block. On the desktop it lasted an instant; on a\r\n  phone, leaving the editor, it was plainly visible. The block now mounts hidden and is\r\n  revealed once the layout is decided, the canvas sized, and the geometry traced and\r\n  painted. It is hidden with `visibility` and not `display:none` on purpose: it has to keep\r\n  occupying its place and measuring for real, because the layout is decided from\r\n  `clientWidth` and the canvas is sized from its real box. There is a two-second safety net\r\n  so that a failure halfway can never leave a block invisible.\r\n\r\nThe graphing engine itself is untouched: no sampler, tracer or analysis code changed, and\r\nthe geometry of every existing case is the same as in 1.2.9. Both suites pass, now with\r\nnine new tests for the gestures — **354 tests** in the main suite and **12** in the zoom\r\nsuite. Those nine check the properties that are easy to break without noticing: that the\r\nworld point under the anchor does not move when pinching (with the anchor deliberately off\r\ncentre, where a wrong anchor would go unnoticed), that one pointer still pans exactly as\r\nbefore, that lifting a finger does not jump, and that a cancelled pointer stops counting.\r\n\r\nVerified on Android. **The behaviour on iOS has not been tested**, and neither has a\r\ntablet.\r\n",
-      "downloadCount": 24,
+      "downloadCount": 30,
       "draft": false,
       "name": "1.3.0",
       "prerelease": false,
@@ -383,26 +383,26 @@
       "assets": [
         {
           "digest": "sha256:2e7974fbb6785d83bf9acfd4cc858b75e947e9fca6c5f7a145c6986a0dd94762",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "main.js",
           "size": 2378467
         },
         {
           "digest": "sha256:f26ce40f1985bc071ebef069d012cd9a0bd9d51e4faba8e1ec5a61e6ceb99c89",
-          "downloadCount": 4,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 286
         },
         {
           "digest": "sha256:5db645b3b286921952fc6578c2e2d8ffc96ad0ba6fc5364f707d95f49cce0e24",
-          "downloadCount": 3,
+          "downloadCount": 5,
           "name": "styles.css",
           "size": 3377
         }
       ],
       "author": "LubrieDev",
       "description": "# 1.1.8\r\n\r\n## Maintenance\r\n\r\nMaintenance release with **no user-facing feature changes**. It clears the\r\nremaining warnings from Obsidian's automated plugin review — the loose\r\ntype-safety, logging and CSS items left after 1.1.7 cleared the large `Nodo`\r\ngroup. No graphing, equation-solving, derivative, integral, or parsing behavior\r\nwas changed, and the rendered output is visually identical.\r\n\r\n- **Type safety.** Typed the few remaining spots that still produced `any`:\r\n  the sampling arrays in function analysis, the root-conversion callback in the\r\n  parser, and the complex-number check in degenerate-function detection. These\r\n  were isolated leftovers, unrelated to the symbolic AST refactor of 1.1.7.\r\n- **Console logging.** The terminal tracer CLI now writes its output directly to\r\n  stdout instead of going through `console`. The in-app developer console (the\r\n  `lmath.*` global in DevTools, kept in place through 1.1.7) has been removed\r\n  from the plugin; the exact same tracing is still available from the terminal\r\n  via `npm run trazar`.\r\n- **Styles.** Removed the `!important` declarations from `styles.css`, relying on\r\n  more specific selectors instead, and replaced the unknown MathJax type\r\n  selectors (`mjx-container` / `mjx-math`) with their class equivalents. The\r\n  formula panel — size, horizontal scroll and edge fades — renders exactly as\r\n  before.\r\n\r\nExisting behavior is unchanged: the full test suite passes exactly as before.\r\n",
-      "downloadCount": 4,
+      "downloadCount": 6,
       "draft": false,
       "name": "1.1.8",
       "prerelease": false,

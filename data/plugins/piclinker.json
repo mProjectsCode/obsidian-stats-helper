@@ -4,20 +4,55 @@
   "description": "一款面向 Obsidian 的全库图片资产管理工具，覆盖扫描、去重、比对、批量等操作。 - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "piclinker",
-  "lastChangedAt": "2026-07-28T22:02:27.004Z",
-  "lastFetchedAt": "2026-07-28T09:04:27.028Z",
+  "lastChangedAt": "2026-07-30T09:02:27.068Z",
+  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
   "manifest": {
     "author": "Coeris",
-    "description": "A vault-wide image asset manager covering scanning, deduplication, comparison, and batch operations.",
+    "description": "全库图片资产管理插件，覆盖扫描、去重、比对与批量操作等核心能力.",
     "id": "piclinker",
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "PicLinker",
-    "version": "1.2.4"
+    "version": "1.2.6"
   },
   "name": "PicLinker",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:3cc3999c19d3e086ed6e5b7a4d17a33a855599318f4f102915991f65cc5da741",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 386866
+        },
+        {
+          "digest": "sha256:cecf71a542da993cf50d0e807a8c0dba96868a9e715eb9e5df6c1c04720ed28d",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 269
+        }
+      ],
+      "author": "Coeris",
+      "description": "PicLinker 1.2.6\n\n✨ 新增\n　重复图片区新增「清除缓存」按钮，可手动清空去重哈希缓存并持久化\n\n🐞 修复\n　腾讯云 COS 含中文/空格的对象名签名全错，导致删除和建目录必失败\n　阿里云 OSS 自定义域名时区域拼出 oss-oss-cn-hangzhou，签名与 host 全错\n　阿里云 OSS 超过 1000 个对象时分页 token 二次编码导致分页断裂\n　阿里云 listBuckets 失败时日志回显 AccessKeyId，存在凭据泄露风险\n　加密迁移后明文 Token 直接落盘，下次启动时密文被覆盖为明文\n　连续触发文件刷新时 1 秒回调定时器叠加，onunload 只能清理最后一个\n　loadSettings 未剔除 _bedTestResults 等私有键，混入 settings 污染类型\n　WebDAV 下载/诊断保存误刷 lastLocalModifiedAt，导致冲突检测恒误报\n　全局收起按钮未同步分区标题收起态，边框和圆角显示异常\n　manifest 描述含「Obsidian」字样且缺英文句号，未通过官方商店审核\n\n🔧 优化\n　分区标题边框从 JS 内联改为纯 CSS class 驱动，消除折叠后边框残留竞态\n　同名文件区补全 bedType 检测并按 (bedType,url) 合并云端项，消除重复显示\n　saveSettings 新增 markLocalModified 参数，区分用户编辑与同步/诊断保存",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "PicLinker 1.2.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T15:58:53Z",
+      "tag": "1.2.6"
+    },
+    {
+      "assets": [],
+      "author": "Coeris",
+      "description": "修复\n- 远程图片（豆瓣 banner/cover 等外链）被误归入「未找到」：按真实链接类型判定、取扩展名前先剥离 URL 查询串与锚点，非本地链接统一归入云端引用区\n- 去重时「云端名A / 本地名B」内容相同却漏判：移除按文件大小跳过下载的预筛（跨格式 webp/png 大小不同会被误杀），改为全量下载未缓存云端文件计算哈希\n- 分区标题吸顶时边框样式不刷新（阈值偏差）：改为读取标题条真实吸附位置，吸顶态正确收扁为底边分隔线\n- directFetch 在受限网络下逐个 HEAD 请求超时（约 30s/图）：新增超时与禁止回退参数，云端存在性检测改用 HEAD + 8s 超时\n- 云端删除逻辑：先识别图床类型（识别不出则取消），确认云端删除成功后再清理本地引用\n- 统一全插件用户可见提示文案\n\n优化\n- 统一卡片圆角与衔接样式：展开态标题条与内容区连成无断缝卡片，收起态四角圆角，末项去重底边线避免双线\n- VaultScanner 将 getFiles() 预取到 Map，避免内循环重复全库列举（大库提速）\n- 云端存在性检测的 HEAD 请求改为批并发，避免无限并发\n- main.ts 为云端刷新用的嵌套 setTimeout 增加清理，防卸载时崩溃\n\n其它\n- 新增 bedTypeLabel()：图床类型为空时回退显示 URL 主域名，不再一律显示「未知」\n- DedupCache / HashCache 增加 clear() / size 方法\n- manifest.json 描述改为中文\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "PicLinker 1.2.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-28T14:26:36Z",
+      "tag": "1.2.5"
+    },
     {
       "assets": [
         {
@@ -234,6 +269,6 @@
       "tag": "1.0.0"
     }
   ],
-  "removedAt": "2026-07-28T22:02:27.004Z",
+  "removedAt": null,
   "repo": "coeris/PicLinker"
 }

@@ -4,8 +4,8 @@
   "description": "Share vault folders with trusted people on your LAN in real time - invite links, per-folder access control, and live sync. No cloud, no separate server required. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-rooms",
-  "lastChangedAt": "2026-07-29T09:01:27.011Z",
-  "lastFetchedAt": "2026-07-28T09:04:27.028Z",
+  "lastChangedAt": "2026-07-30T09:02:27.068Z",
+  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
   "manifest": {
     "author": "DNDark",
     "authorUrl": "https://github.com/DNDark12",
@@ -14,35 +14,65 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.12.7",
     "name": "Vault Rooms",
-    "version": "0.2.3"
+    "version": "0.2.4"
   },
   "name": "Vault Rooms",
-  "presentInCommunityList": false,
+  "presentInCommunityList": true,
   "releases": [
     {
       "assets": [
         {
-          "digest": "sha256:81ccb53388a2c3c0e8ff7303564d6ac043f8597a31dd95aab643b48f95a1205a",
+          "digest": "sha256:b8cbb6eb829173249eca8b286b431e5445d8b3fb56f21e8b6ae1f396c172e55c",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 1705187
+        },
+        {
+          "digest": "sha256:04133e15475b211890165ad1935745170d7202fe4db3a00f00203cfa3eacb327",
           "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 421
+        },
+        {
+          "digest": "sha256:0aa21e090b2b3b08e644f731cc79f8f1dfdf5d9efcc933c47acb3be21b88ecdf",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 8714
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Vault Rooms 0.2.4 — Live cursors and safer collaboration\r\n\r\n### Highlights\r\n\r\n- Added live cursors and note presence for CRDT-enabled Markdown notes.\r\n- See teammates’ authenticated display names, carets, and selections while editing the same note.\r\n- Presence colors are assigned by the relay and remain unique among active users in the room session.\r\n- Colors adapt to Obsidian light and dark themes.\r\n- Presence is ephemeral and note-scoped: it disappears when the editor, session, or connection closes.\r\n- V1 intentionally does not include a participant bar.\r\n\r\n### Sync reliability\r\n\r\n- Fixed pinned WebSocket disconnects that could leave pending requests stranded.\r\n- Prevented rejected updates from recreating documents at their old path after a rename.\r\n- Improved CRDT recovery across rename, reconnect, unmount, and remount flows.\r\n- Fixed editor rebinding after session resync.\r\n- Fixed failed editor bindings being cached as rejected promises.\r\n- Preserved exactly-once bidirectional editing while live cursors are active.\r\n\r\n### Security and protocol hardening\r\n\r\n- Prevented identity changes on established WebSocket connections.\r\n- Same-device re-authentication can no longer downgrade CRDT or presence capabilities.\r\n- Invalid re-authentication tokens are still fully authenticated and rejected.\r\n- Improved safe, user-facing validation errors while keeping raw network failures in diagnostic logs.\r\n\r\n### LAN sharing and diagnostics\r\n\r\n- Improved LAN address validation and warnings for loopback, unspecified, stale, and link-local addresses.\r\n- Expanded the live-editing diagnostics command with presence transport, publication, visible-peer, and bound-editor status.\r\n- Added clearer troubleshooting messages for invite, connection, permission, and cursor failures.\r\n\r\n### Compatibility\r\n\r\n- Both devices need Vault Rooms 0.2.4 or newer to exchange live cursors.\r\n- The room must have CRDT live editing enabled.\r\n- Both users must have the same Markdown note open and retain `file:read` permission for that path.\r\n- Minimum supported Obsidian version remains 1.12.7.\r\n\r\n**Full changelog:** https://github.com/DNDark12/vault-rooms/compare/0.2.3...0.2.4",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "0.2.4",
+      "prerelease": false,
+      "publishedAt": "2026-07-29T07:09:55Z",
+      "tag": "0.2.4"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:81ccb53388a2c3c0e8ff7303564d6ac043f8597a31dd95aab643b48f95a1205a",
+          "downloadCount": 7,
           "name": "main.js",
           "size": 1675389
         },
         {
           "digest": "sha256:87b2228d6ffa93a6e5408e850f2c8ec062cd01b7cbd15dfe7a84be6e659cbf6f",
-          "downloadCount": 6,
+          "downloadCount": 8,
           "name": "manifest.json",
           "size": 421
         },
         {
           "digest": "sha256:ae35732109a442c7df78d93c7abbf447fd5f5799235aa385ce33d4c70ebfe273",
-          "downloadCount": 5,
+          "downloadCount": 7,
           "name": "styles.css",
           "size": 6793
         }
       ],
       "author": "github-actions[bot]",
       "description": "Live editing (CRDT sync) has been through extended two-device testing on a real LAN. That run found a\r\nnumber of real defects that no automated test had caught; this release fixes all of them. If you use live\r\nediting, upgrade both devices before using it again.\r\n\r\n### Fixed — data loss and corruption\r\n\r\n- A note open in an editor could have its unsaved text **deleted for everyone** when the sync handshake\r\n  ran. An open editor is now the source of truth for its own note: its on-disk copy is never reconciled\r\n  back while it's open, because Obsidian's autosave is allowed to lag behind what you typed.\r\n- Note content **duplicated itself on every unmount/remount**, compounding each cycle. A document is now\r\n  only seeded from your local copy when the server confirms it genuinely created it.\r\n- Unmounting a room left it subscribed, its editors still attached, and its retired document still\r\n  sending updates — which produced a self-sustaining update loop between two devices. Unmounting is now a\r\n  single atomic teardown.\r\n- A CRDT note could become **permanently undeletable**, failing with \"the file changed on the server\r\n  before your edit was applied\" on every attempt.\r\n- Renaming a note could fork it into two files, or trigger a runaway rename loop that generated dozens of\r\n  files with stacking names.\r\n- Renaming a note onto a name that had merely been deleted failed with an opaque error.\r\n\r\n### Fixed — sync that silently didn't happen\r\n\r\n- A newly created note is now announced immediately. Previously a note you created but hadn't typed in was\r\n  invisible to everyone else until they reconnected.\r\n- Edits no longer take ~3 seconds to appear. Live updates were being dropped by any device that didn't\r\n  happen to have the note open, leaving it to wait for a slower fallback.\r\n- After restarting the host, both vaults now agree on the file list without anyone having to open a file\r\n  first.\r\n- Edits are no longer stranded when the server reports it has no document at that path; the client\r\n  re-establishes it and keeps your text.\r\n\r\n### Changed\r\n\r\n- **Two people creating a note at the same time now get two notes.** Every new Obsidian note starts with\r\n  the same default name, so the first to reach the relay keeps it and the other is filed under a name\r\n  including its creator, with a notice explaining why. Their text is never merged together.\r\n- **A name you type is never rewritten.** Renaming onto a name a teammate already used is refused with a\r\n  notice so you can pick another.\r\n- The **\"Live editing (CRDT sync)\"** toggle now applies immediately. It previously only took effect if you\r\n  also pressed \"Save room settings\", so it could silently revert — which looked exactly like live editing\r\n  being broken.\r\n\r\n### Added\r\n\r\n- Command: **\"Vault Rooms: Diagnose live editing (CRDT) for the active note\"** — reports which link in the\r\n  live-editing chain is missing (room, its setting, push permission, editor binding, session) instead of\r\n  leaving you to guess.\r\n\r\n### Upgrade notes\r\n\r\n- Copy `main.js`, `manifest.json`, and `styles.css` to **both** devices and fully restart Obsidian; the\r\n  embedded relay holds state, so reloading the plugin alone isn't enough.\r\n- Content that was already duplicated, or stray files created by the old rename bug, are real data on the\r\n  server — this release stops producing them but does not clean them up. Delete them while connected so\r\n  the deletion propagates.\r\n- Live editing remains **off by default, per room**.",
-      "downloadCount": 6,
+      "downloadCount": 8,
       "draft": false,
       "name": "0.2.3",
       "prerelease": false,
@@ -140,6 +170,6 @@
       "tag": "0.1.0"
     }
   ],
-  "removedAt": "2026-07-29T09:01:27.011Z",
+  "removedAt": null,
   "repo": "dndark12/vault-rooms"
 }
