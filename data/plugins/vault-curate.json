@@ -4,8 +4,8 @@
   "description": "A local-first second brain for Obsidian — semantic search · relation graph · semantic paths · Hot/Cold rediscovery · strong Chinese/CJK · WebGPU on-device · no API keys. RAG LLM. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "vault-curate",
-  "lastChangedAt": "2026-07-30T05:04:26.997Z",
-  "lastFetchedAt": "2026-07-30T05:04:26.997Z",
+  "lastChangedAt": "2026-07-31T05:00:27.028Z",
+  "lastFetchedAt": "2026-07-31T05:00:27.028Z",
   "manifest": {
     "author": "Jacob Mei",
     "authorUrl": "https://github.com/notoriouslab",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Vault Curate",
-    "version": "1.4.0"
+    "version": "1.4.6"
   },
   "name": "Vault Curate",
   "presentInCommunityList": true,
@@ -22,39 +22,123 @@
     {
       "assets": [
         {
-          "digest": "sha256:8d26070451453ade562328b9b03556c5b1f7f9e7c7b77a96f6be57149a7ecc5c",
-          "downloadCount": 166,
+          "digest": "sha256:694d6a702eb9f52412abbc832de65b1907576085edbe6504931a049029273e8a",
+          "downloadCount": 43,
           "name": "main.js",
-          "size": 1798100
+          "size": 1820804
         },
         {
-          "digest": "sha256:abd6971ba878a4bc1e4245362755b7a86dd33b917a1067b8911f5996bdb9a255",
-          "downloadCount": 194,
+          "digest": "sha256:fa99dc5b8812e0f35bcc2aa09b5909a36439d7dd02e7f1d2cb229ecfb9c53541",
+          "downloadCount": 50,
           "name": "manifest.json",
           "size": 474
         },
         {
           "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
-          "downloadCount": 119,
+          "downloadCount": 12,
           "name": "ort-wasm-simd-threaded.wasm",
           "size": 12942611
         },
         {
           "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
-          "downloadCount": 101,
+          "downloadCount": 12,
+          "name": "sql-wasm.wasm",
+          "size": 659730
+        },
+        {
+          "digest": "sha256:5574d07ed010cf2370892db15c93b621dd6f15f3263b8424ae584a7c387df950",
+          "downloadCount": 39,
+          "name": "styles.css",
+          "size": 10149
+        }
+      ],
+      "author": "notoriouslab",
+      "description": "### Fixed\n\n- **Modifier clicks now work on search results** (#8). Every place a result opens a note — the sidebar rows (Search / Discover / Global Discover), the quick-search modal, and the hidden-suggestions list — now honors Obsidian's standard conventions: Cmd/Ctrl+click opens in a new tab, Cmd/Ctrl+Alt+click in a split pane, Cmd/Ctrl+Alt+Shift+click in a new window. Middle-click opens a sidebar result in a new tab. The quick-search modal also shows a `ctrl/⌘ ↵` hint in its instruction bar.\n\nThanks to @tvtjr for the report.",
+      "downloadCount": 50,
+      "draft": false,
+      "name": "1.4.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T09:45:12Z",
+      "tag": "1.4.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:9f843b36aefd03aa53eb5dafcc41c13753adbffbad1f7ba90794907bd1984b1d",
+          "downloadCount": 8,
+          "name": "main.js",
+          "size": 1820464
+        },
+        {
+          "digest": "sha256:2ec0f1de86fa4ffbab90b408a9e5ab5fd04cdeeb377f3d118c21d3ba1659e7c7",
+          "downloadCount": 8,
+          "name": "manifest.json",
+          "size": 474
+        },
+        {
+          "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 1,
+          "name": "ort-wasm-simd-threaded.wasm",
+          "size": 12942611
+        },
+        {
+          "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
+          "downloadCount": 1,
+          "name": "sql-wasm.wasm",
+          "size": 659730
+        },
+        {
+          "digest": "sha256:5574d07ed010cf2370892db15c93b621dd6f15f3263b8424ae584a7c387df950",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 10149
+        }
+      ],
+      "author": "notoriouslab",
+      "description": "The \"say no, and never freeze\" release: suggestions you reject finally stay rejected, and the semantic-path graph now builds in the background — the bigger your vault grows, the more this matters.\n\n## Added\n\n- **Don't suggest this again.** Every suggestion row (Find Similar, current-note Discover, global Discover) grows a hover **✕**; the relation graph's purple pairs get a per-row *Don't suggest* button inside the promote dialog. A dismissed pair vanishes from all suggestion surfaces — the freed slot is refilled by the next candidate, so rejecting never shrinks your results. Dismissals survive renames (including whole-folder renames), file deletions clean themselves up, and index rebuilds / provider switches can't touch them (they live in `data.json` and sync across devices with it). Review and restore anything under Settings → Advanced → **Hidden suggestions** — each entry links back to the note and has a copy-path button.\n- **Semantic-path graph builds in a background worker.** The k-NN graph build (~4s at 2.5k notes, quadratic beyond) no longer freezes the UI: it runs in a Web Worker with a live progress notice and a **Cancel** button, and the result is identical to the old in-place build. After the first build, editing a note updates the graph **incrementally in milliseconds** instead of throwing it away — repeat path queries stay instant even while you keep writing. The graph self-heals with a full background rebuild once enough notes have changed, and any index operation the maintainer didn't see (bulk rebuild, provider switch) safely falls back to one fresh build. If the worker can't start, the old main-thread build still works as a fallback.\n\n## Fixed\n\n- **Deleted and renamed notes no longer leave orphan chunks in the index.** The schema's `ON DELETE CASCADE` never fired under sql.js, so deletions leaked stale chunk rows into search results; chunks are now deleted explicitly and a one-time startup sweep prunes any orphans already accumulated.\n- **Renaming a note fully carries its graph state along** — the old path no longer lingers as a ghost node in the semantic graph.\n\n## Notes\n\n- Known limitation: purple-edge pairs on a relation graph can only be dismissed from the promote dialog (Obsidian's canvas exposes no public edge-interaction API).\n- Dismissals are deliberately *not* applied to semantic paths — a path query is a question you ask, not a suggestion the plugin makes.\n- Hardening from four independent review tracks on top of the per-change reviews: worker cancellation races, revision backstops, storm-load cost, store-audit sweep.",
+      "downloadCount": 8,
+      "draft": false,
+      "name": "1.4.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T07:42:41Z",
+      "tag": "1.4.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8d26070451453ade562328b9b03556c5b1f7f9e7c7b77a96f6be57149a7ecc5c",
+          "downloadCount": 171,
+          "name": "main.js",
+          "size": 1798100
+        },
+        {
+          "digest": "sha256:abd6971ba878a4bc1e4245362755b7a86dd33b917a1067b8911f5996bdb9a255",
+          "downloadCount": 200,
+          "name": "manifest.json",
+          "size": 474
+        },
+        {
+          "digest": "sha256:f4f290847a4df02d0b93cdbf39b4b0e71acefbe80573e7e6b9342a7abd7b290a",
+          "downloadCount": 122,
+          "name": "ort-wasm-simd-threaded.wasm",
+          "size": 12942611
+        },
+        {
+          "digest": "sha256:438c88f666dc054ce4e9395f80fe9db4218b1a3c379960454880f048a7898aed",
+          "downloadCount": 104,
           "name": "sql-wasm.wasm",
           "size": 659730
         },
         {
           "digest": "sha256:fc880360d760205970bf59ceff79b642adce3d815ab63cf5a728fa4b3a243f0c",
-          "downloadCount": 144,
+          "downloadCount": 149,
           "name": "styles.css",
           "size": 8756
         }
       ],
       "author": "notoriouslab",
       "description": "The close-the-loop release — a direct answer to community review (Obsidian forum #114527).\n\n**Added**\n- **Apply purple edges as wikilinks**: right-click a generated canvas → checkbox dialog (grouped by source note, Cmd/Ctrl+hover previews) → checked pairs are written into both notes' Related section as real wikilinks and the edges turn gray in place. Nothing is written unchecked. New settings: Related section heading, Bidirectional promotion.\n- **Keyword-aware related notes**: Find Similar / relation graph / current-note Discover fuse frontmatter tags (BM25) with semantic similarity via RRF — same-style-but-different-topic notes stop crowding out true neighbors. Falls back to pure semantic ranking automatically.\n- **Global Discover rebuilt**: ranked against your recent focus (recently edited/created notes, their topic tags, their vector centroid) and grouped by top-level folder, so each corner of the vault surfaces its own best forgotten notes. Roughly an order of magnitude faster.\n\n**Changed**\n- Hot/Cold now counts edits, not just creation date — any edit re-heats a note; merely opening one deliberately does not. The plugin's own batch writes no longer re-heat notes.\n- Tiers derive live at query time; changing Hot window (days) applies instantly, no re-index.\n- Current-note Discover ranks purely by relatedness (cold notes keep their ❄️ mark).\n- BM25 keyword index warms in the background in time slices — never blocks opening a note.\n\n**Notes**\n- First full rebuild right after a major OS update can be slower than usual; transient, resolves on its own.\n- Hardening from six independent review rounds (NaN guards, tamper-proof settings, per-run cancellation, unload-safe background builds).\n- Thanks to gauthierae for the review that shaped this release.",
-      "downloadCount": 194,
+      "downloadCount": 200,
       "draft": false,
       "name": "1.4.0",
       "prerelease": false,
