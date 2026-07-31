@@ -4,8 +4,8 @@
   "description": "Discover related notes in your vault.",
   "errors": [],
   "id": "related-notes",
-  "lastChangedAt": "2026-07-30T02:04:27.089Z",
-  "lastFetchedAt": "2026-07-30T02:04:27.089Z",
+  "lastChangedAt": "2026-07-31T02:05:27.007Z",
+  "lastFetchedAt": "2026-07-31T02:05:27.007Z",
   "manifest": {
     "author": "Oluwasanya Awe",
     "description": "Discover related notes and uncover missed connections.",
@@ -16,11 +16,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "0.15.0",
     "name": "Related Notes",
-    "version": "4.1.1"
+    "version": "4.3.0"
   },
   "name": "Related Notes",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:ab0fb08f7cd1cb412ab4154441e356aa2e9073939839f634a20a2e674baa9bed",
+          "downloadCount": 20,
+          "name": "main.js",
+          "size": 146353
+        },
+        {
+          "digest": "sha256:9eb8459ddd44b1e1daae981c9728a93f496d4ce2297e273177dc090251ee7019",
+          "downloadCount": 19,
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:f0c39db5dc52985903ddd7fcafb9b19c31039c581765eb9879ac396fda51cf7d",
+          "downloadCount": 18,
+          "name": "styles.css",
+          "size": 3751
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Better matches, especially for longer notes\n\nRelated-notes suggestions are computed from bigrams — adjacent word pairs — as well as individual words. Those bigrams were being built from 10-word fragments rather than from the note as a whole, which had three effects:\n\n- **Every tenth word pair was missing.** A pair straddling a fragment boundary was never recorded, so roughly 10% of the phrase information in every note was silently dropped.\n- **Long notes were over-weighted on phrases.** A limit meant to cap each note at 200 word pairs could never take effect, so a 1,000-word note contributed around 900 — drowning out its individual words and skewing what it matched against.\n- **A lower-detail mode for very long notes never ran at all**, along with a separate limit for CJK text.\n\nNotes are now analyzed as a whole before being indexed, so phrase information is complete and the limits apply as intended. Expect suggestions to shift, generally toward better matches on notes longer than a few hundred words.\n\n## Faster indexing\n\nBecause the phrase limit now works, there is less to index on long notes. Indexing 2,000-word notes is roughly **2.2x faster** than in 4.2.0 (measured over 200 documents: 3,449ms to 1,551ms). Shorter notes are modestly faster too.\n\n## Your index will rebuild once\n\nThis release changes what is stored in the index, so the existing cache cannot be reused and is rebuilt automatically the first time you open Obsidian after updating. That happens in the background and only once. Thanks to the indexing work in 4.2.0 and this release, rebuilding is far quicker than it used to be.\n\n## Internal\n\nRegression tests now assert that the batch size used for yielding cannot influence what gets indexed — the defect above existed because a performance mechanism was quietly determining scoring. Also covered: that indexing actually goes through the whole-document path rather than a per-fragment one, that word-pair limits are reachable, and that a stale index version is rejected rather than mixed with new data.\n\n**Requires Obsidian 0.15.0 or later.**\n",
+      "downloadCount": 19,
+      "draft": false,
+      "name": "4.3.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T11:52:46Z",
+      "tag": "4.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:c621f14f45f475e6394d5ac15ac9a4b2400b68ad8651ff3804e495ae4fa47674",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 144655
+        },
+        {
+          "digest": "sha256:29d2742380413ecaebfb8a1c37dd1d08f34a25dbdf5bab94f5eafa85938b6e67",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 309
+        },
+        {
+          "digest": "sha256:f0c39db5dc52985903ddd7fcafb9b19c31039c581765eb9879ac396fda51cf7d",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 3751
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Long notes now show up in related notes\n\nIf you have notes longer than roughly 800 words, they were being scored as almost completely unrelated to everything — including to near-duplicates of themselves. A 3,200-word note scored 99.4% dissimilar from an identical copy, so it never made it into the top results.\n\nThe cause was a saturation penalty applied to the similarity score: once a bloom filter passed 40% occupancy, the score was multiplied by `(1 - saturation)²`. Saturation is a real problem, but that was a penalty rather than a correction, and it discarded true matches. It also inverted ranking — identical long notes scored below barely-related short ones.\n\nSimilarity is now computed from estimated set cardinalities (Swamidass–Baldi) instead of raw bit counts, which corrects for hash collisions without any fudge factor. Self-similarity is 1.0 at every document length, and unrelated notes still score near zero.\n\n**No reindexing needed.** Your cache stores bloom filters, which haven't changed — only the scoring. Expect to see longer notes appearing in results where they previously didn't.\n\n## Indexing and lookups are dramatically faster\n\nIndexing slept a fixed 16ms after every ten words, plus more per file and per batch. A 1,000-word note took about 1.6 seconds to index, nearly all of it idle rather than working. On a large vault that added up to tens of seconds of pure waiting per indexing pass, and up to several seconds per lookup.\n\nThrottling now yields when it has actually held the main thread for a frame, rather than sleeping on a fixed schedule. The plugin stays responsive — measured at 0.2ms median UI delay while indexing — and finishes orders of magnitude sooner.\n\n## Maintenance\n\n- Fixed 14 security advisories in build-time dependencies, including one critical. None affected the published plugin, which bundles only its own source.\n- Upgraded the toolchain off end-of-life eslint 8 and Node 18.\n- Fixed two test files that had never actually run, and added regression tests for everything above.\n\n**Requires Obsidian 0.15.0 or later.**\n",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "4.2.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T11:23:25Z",
+      "tag": "4.2.0"
+    },
     {
       "assets": [
         {

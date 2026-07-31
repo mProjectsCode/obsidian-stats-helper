@@ -4,8 +4,8 @@
   "description": "A visual graph view of your tasks.",
   "errors": [],
   "id": "tasks-map",
-  "lastChangedAt": "2026-07-30T02:04:27.089Z",
-  "lastFetchedAt": "2026-07-30T02:04:27.089Z",
+  "lastChangedAt": "2026-07-31T02:05:27.007Z",
+  "lastFetchedAt": "2026-07-31T02:05:27.007Z",
   "manifest": {
     "author": "NicoKNL",
     "authorUrl": "https://github.com/NicoKNL",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:23046033c01d6ccc8ad78e49a0f963ccc20270f6ff7d7b069d6e0165602ac471",
-          "downloadCount": 144,
+          "downloadCount": 171,
           "name": "main.js",
           "size": 595471
         },
         {
           "digest": "sha256:a35e7189d959aabd7fdf355467b990d9b4c1e1984a5c18989017468d77f9fa6f",
-          "downloadCount": 145,
+          "downloadCount": 172,
           "name": "manifest.json",
           "size": 255
         },
         {
           "digest": "sha256:5f20e8c87541b61911bc486080ff92387223ade3a31b64a0b5f63fe88a5129c9",
-          "downloadCount": 140,
+          "downloadCount": 166,
           "name": "styles.css",
           "size": 46067
         }
       ],
       "author": "github-actions[bot]",
       "description": "## refactor: remove all @typescript-eslint/no-explicit-any disables\n\n## Why\n\nThe Obsidian plugin reviewer flags `// eslint-disable ... no-explicit-any` comments as a quality/risk signal — a suppressed lint rule reads as \"hiding a problem,\" which was marking the plugin as low quality. This removes every such disable in `src/` by giving the values real types instead of suppressing the rule.\n\n## What\n\n- **New `src/types/obsidian-internals.ts`** — typed interfaces for the undocumented `app.plugins` registry (deliberately omitted from Obsidian's public `App` type) and the slice of the Dataview API we read. Access now goes through `app as AppWithPlugins` instead of `app as any`.\n- **`src/lib/utils.ts`** — retyped function params to `App` / `TFile` / `CachedMetadata` / `FrontMatterCache` / `TAbstractFile` / `unknown`; `.find()` now infers `TFile` from `getMarkdownFiles()`.\n- **`src/views/TaskMapGraphView.tsx`** — the ReactFlow handlers use their exported types (`EdgeMouseHandler`, `OnConnect`, `OnConnectStart` via `useCallback<T>`); the custom `dataview:index-ready` event is registered by upcasting `app.metadataCache` to the `Events` base class (whose `on(name: string, …)` accepts custom event names — no cast needed).\n- **`src/components/tag-input.tsx`** — the react-select ref uses the exported `SelectInstance<TagOption>` type.\n\n## Verification\n\n- `tsc -noEmit` (build typecheck): passes\n- `npm run lint`: 0 errors\n- `jest`: 304 tests pass\n- `grep -rn no-explicit-any src/`: none remaining\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-      "downloadCount": 145,
+      "downloadCount": 172,
       "draft": false,
       "name": "0.36.1",
       "prerelease": false,
