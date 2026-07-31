@@ -4,8 +4,8 @@
   "description": "Automatically updates markdown image links when image files are renamed or moved in the vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "image-link-updater",
-  "lastChangedAt": "2026-07-30T04:00:27.022Z",
-  "lastFetchedAt": "2026-07-30T04:00:27.022Z",
+  "lastChangedAt": "2026-07-31T04:04:27.013Z",
+  "lastFetchedAt": "2026-07-31T04:04:27.013Z",
   "manifest": {
     "author": "Andy Lai",
     "authorUrl": "https://github.com/andy51002000",
@@ -24,20 +24,20 @@
       "assets": [
         {
           "digest": "sha256:c147e4ca1593b672e05886857451603f4ece3e197ad56f7af3618513a0ec463f",
-          "downloadCount": 19,
+          "downloadCount": 22,
           "name": "main.js",
           "size": 20577
         },
         {
           "digest": "sha256:831258dd7e6878421b1c15d667ee4289022dacc92bddc62cda31e8c35cbefc7b",
-          "downloadCount": 21,
+          "downloadCount": 25,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Fixed\n\n- **Moved or renamed image links are always normalized to Vault-root absolute paths** — When Obsidian's core link updater ran first and shortened a moved image's link to its bare basename (e.g. `![](img.png)`), the plugin previously left the shortened form in place if the basename did not resolve from the note's location. Links are now normalized to the full Vault-root absolute path (e.g. `![](/attachments/img.png)`) in every case, including when Core shortens first, so links stay valid regardless of the note's own location.\n- **Same-name target isolation** — When two images with the same filename exist in different folders, updates triggered by moving one of them can no longer touch links that resolve to the other. Each update pass is now scoped to the exact target file identity rather than the filename.\n\n### Internal\n\n- Metadata-cache lookups during link repair now use a safe bounded retry, so a not-yet-refreshed cache entry cannot stall or skip an update pass.\n\n\n\n",
-      "downloadCount": 21,
+      "downloadCount": 25,
       "draft": false,
       "name": "1.3.19",
       "prerelease": false,
@@ -54,14 +54,14 @@
         },
         {
           "digest": "sha256:744ef279d12bd35f2d32d897d6bc610f3da3eb102108f6895abc377279ecccd2",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Full Changelog**: https://github.com/hikosalaidarkcommit/obsidian-image-link-updater/compare/1.3.17...1.3.18",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "1.3.18",
       "prerelease": false,
@@ -78,14 +78,14 @@
         },
         {
           "digest": "sha256:66c2f9f13d558ab4cc667171b9dae7e077182041f2d1991d328bcd0fd7a61ca1",
-          "downloadCount": 9,
+          "downloadCount": 10,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n\n- **Faster, more private link updates** — Link updates no longer enumerate every file in the vault. The plugin now uses Obsidian's metadata cache (`resolvedLinks`) to target only the notes that actually reference the renamed or moved image, which is faster in large vaults and means the plugin no longer requests a listing of every file path.\n- **More robust link repair after quick successive moves** — Metadata-cache lookups now use a bounded retry with per-destination-path isolation, so moving several images in quick succession (or moving the same image twice quickly) can no longer cause one update to cancel or starve another.\n\n### Internal\n\n- Cleaned up the remaining automated-review warnings in the E2E test suite (unnecessary type assertions, `TFile` cast, bare `setTimeout`).\n- Committed `package-lock.json` and switched CI to `npm ci` so builds are reproducible byte-for-byte.\n- Release workflow now generates GitHub build provenance attestations (`actions/attest@v4`) for every published asset, and runs the unit test suite before building.\n\n\n\n",
-      "downloadCount": 9,
+      "downloadCount": 10,
       "draft": false,
       "name": "1.3.17",
       "prerelease": false,
@@ -102,14 +102,14 @@
         },
         {
           "digest": "sha256:d6fa97a57e8af2249e0e8475af67d8318d9fabe45dbe1edfd1412957bf93abf9",
-          "downloadCount": 5,
+          "downloadCount": 6,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n\n- **License changed to MIT** — The project is now released under the MIT License (Copyright (c) 2026 Andy Lai), replacing the previous AGPL-3.0-or-later license. The AGPL history prior to this release is preserved in the changelog for accuracy.\n- **Removed owner-bound repository URLs from README** — The `github.com/andy51002000/...` release badge, manual-install release link, Plugin Details Repository row, and Building-from-source clone URL have been removed or replaced with owner-neutral text to support a potential repository transfer. The Obsidian community listing URL (`obsidian.md/plugins?id=image-link-updater`) is unaffected. Author identity links (authorUrl, fundingUrl) are retained.\n\n\n\n",
-      "downloadCount": 5,
+      "downloadCount": 6,
       "draft": false,
       "name": "1.3.16",
       "prerelease": false,
@@ -126,14 +126,14 @@
         },
         {
           "digest": "sha256:7ddcdfc289db7de88430250ada5bc38b26b1cbd67cc8a50f9bce5744b5f6edfc",
-          "downloadCount": 12,
+          "downloadCount": 13,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "andy51002000",
       "description": "## What's Changed\n\n### Fixed\n- **Race condition in Smart attachment folder unique-naming** — The previous release used an `adapter.exists()` probe loop to find a unique filename before calling `createBinary`. This check-then-create pattern has a TOCTOU window where a concurrent paste can create the same file between the probe and the write. Fixed by replacing the probe loop with `createBinaryWithRetry()`: the create is attempted directly and retried with an incremented numeric suffix on collision — atomically, no existence check required. This mirrors the `renameWithRetry()` approach used for file moves since 1.3.11.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.14...1.3.15",
-      "downloadCount": 12,
+      "downloadCount": 13,
       "draft": false,
       "name": "1.3.15",
       "prerelease": false,
@@ -150,14 +150,14 @@
         },
         {
           "digest": "sha256:10d997e07bd0175d82e6f69bb1e233c2ab026c288d077ed3b2188bbc996a252a",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 447
         }
       ],
       "author": "andy51002000",
       "description": "## What's Changed\n\n### Added\n- **Smart attachment folder** — New optional setting (disabled by default) that saves clipboard-pasted images into the first matching sibling folder from a configurable priority list. Zero behavior change when disabled.\n- **Smart folder names** — Companion text setting (default: `assets, images`) defining the priority-ordered list of sibling folder names to probe. Matching is case-sensitive. Field is disabled in the UI when Smart attachment folder is off.\n\n### Also in this release\n- Applied deferred GEO description update to manifest.json for improved plugin directory visibility.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.13...1.3.14",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.3.14",
       "prerelease": false,
@@ -180,14 +180,14 @@
         },
         {
           "digest": "sha256:a07cba921c44a4a64cabca288dbb9df56ee38c31bc4ed6d5f5dc06bdd928ea9d",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "manifest.json",
           "size": 387
         }
       ],
       "author": "andy51002000",
       "description": "## What's Changed\n\n### Fixed\n- **License file corrected** — The LICENSE file now contains the exact canonical GNU AGPL-3.0 text, ensuring correct recognition by automated scanners in the Obsidian community directory.\n\n### Internal\n- Removed `as any` type casts from `vault.process()` — the API has been properly typed since Obsidian 1.1.0.\n- Removed unused `ObsFileManager` local interface.\n- Added `getSettingDefinitions()` to the settings tab for Obsidian 1.13+ settings search.\n- Fixed dead code path in link-replacement utility (`afterByName` unused variable).\n- Added `@wdio/globals` to `devDependencies` (was referenced in tsconfig but undeclared).\n- Fixed e2e test type casts: `FileSystemAdapter.getBasePath()` and typed `TFile` for rename.\n- Added `eslint-plugin-obsidianmd` recommended config; 0 lint errors on plugin source.\n\nSee [CHANGELOG.md](https://github.com/andy51002000/obsidian-image-link-updater/blob/main/CHANGELOG.md) for full history.\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.12...1.3.13",
-      "downloadCount": 10,
+      "downloadCount": 11,
       "draft": false,
       "name": "1.3.13",
       "prerelease": false,
@@ -210,14 +210,14 @@
         },
         {
           "digest": "sha256:9a6b0dd8a3788b5a9e989cbe09e4bf74a9683582517ee731148b363afaaa36ae",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 386
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Changed\n\n- Metadata-only release preparing for Obsidian Community Plugins directory submission — no functional changes:\n  - `manifest.json` description: corrected \"markdown\" to \"Markdown\" per the community submission style guide.\n  - Added `fundingUrl` (Buy Me a Coffee) to `manifest.json`, matching the existing README link.\n  - Raised `minAppVersion` from `1.0.0` to `1.5.7`: the plugin calls `FileManager.getAvailablePathForAttachment()`, which first appears in the public API type definitions in the `obsidian` npm package at version 1.5.7 (absent in 1.4.11 and earlier).\n\n\n\n",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.3.12",
       "prerelease": false,
@@ -240,14 +240,14 @@
         },
         {
           "digest": "sha256:eaefb32a8094f5de822a441262af1ed6b74c18f5906c1f79672c82ab091613f9",
-          "downloadCount": 1,
+          "downloadCount": 2,
           "name": "manifest.json",
           "size": 329
         }
       ],
       "author": "andy51002000",
       "description": "\n### Fixed\n\n- **Cut-and-paste could rarely overwrite a file with the same name** — When pasting multiple cut files and the destination already had a name conflict, the plugin probed for available names using a check-then-rename pattern. A concurrent operation (another paste, a file created by another app) could create that name in the gap between the check and the actual move, causing an unexpected collision. The rename now uses a retry-on-collision loop that is free from this race condition: if the destination already exists at the moment of rename, the plugin automatically tries the next numbered suffix without a separate existence check.\n\n### Internal\n\n- Removed the `uniquePath()` helper, which polled `adapter.exists()` in a loop — this is the method that had the race condition. Also removed `getFileNameAndExtension()`, which was only used by `uniquePath()`.\n- Hardened `scripts/prepare-release.mjs` with three pre-flight checks that run before packaging: (1) version consistency — fails if `manifest.json`, `package.json`, and `versions.json` do not all agree on the same version; (2) artifact freshness — fails if `main.js` is older than any TypeScript source file, preventing a stale build from shipping; (3) the script now produces a versioned release zip (`image-link-updater-{version}.zip`) alongside the release folder.\n\n\n\n## Also includes changes from 1.3.9 and 1.3.10\n\n_1.3.9 and 1.3.10 were never published as individual releases, so their changes ship here. Full delta since 1.3.8:_\n\n### [1.3.10] - 2026-07-18\n\n#### Fixed\n\n- **Cut selection lost after a partially failed paste** — When moving a batch of files via Cut/Paste and some moves failed, the entire cut list was cleared regardless of outcome, forcing the user to re-cut the failed files before retrying. Failed files now remain in the clipboard so the paste can be retried immediately after resolving the issue (e.g. a permissions error on the target folder).\n\n#### Added\n\n- **Debug logging toggle** — A new **Settings → Image Link Updater → Debug logging** toggle lets you enable detailed console output without editing source code. The preference is persisted across vault restarts. Open DevTools → Console to view the debug messages.\n\n\n\n### [1.3.9] - 2026-07-18\n\n#### Fixed\n\n- **Startup rewrite storm** — The plugin no longer scans and rewrites links for images that already existed when the vault was opened. Previously, every image present at launch triggered a full vault scan on startup, causing noticeable lag in large vaults.\n- **Short filename matching corruption** — Renaming an image with a short name (e.g. `a.png`) no longer accidentally rewrites links that merely contain that name as a substring (e.g. `data.png`, `banana.png`). Matches are now anchored to path-segment boundaries.\n- **Links inside code blocks rewritten** — Image links inside fenced code blocks (` ``` … ``` `) are now left untouched during rename/move operations.\n- **Non-atomic file writes** — Link updates now use Obsidian's `vault.process()` for atomic read-modify-write, eliminating a race condition where concurrent edits could be lost. Each file that fails to update now surfaces a user-facing error notice instead of failing silently.\n- **Double rewrite during cut-and-paste** — Moving files via the plugin's Cut/Paste menu no longer triggers two concurrent link-update passes. The rename event handler already covers the update; the redundant explicit call has been removed.\n- **Wiki links with aliases or headings not updated** — Wiki-style image embeds with a display size, alias, or heading (e.g. `![[image.png|300]]`, `![[image.png|My caption]]`, `![[image.png#section]]`) are now correctly updated on rename, and the suffix is preserved in the result.\n- **Filenames with parentheses producing broken Markdown** — Images whose names contain parentheses (e.g. `screenshot (1).png`) now generate correctly encoded paths (`%28`/`%29`) so the resulting Markdown link is valid and renders properly.\n- **Pasted SVG files saved with wrong extension** — Pasting an SVG image from the clipboard previously produced a file named `Pasted image … .svg+xml`. The MIME subtype is now mapped to the correct extension (`svg`, `jpg`, etc.).\n- **Paste silently swallowed when no note is active** — If no editor was open, calling `preventDefault` before the null-guard meant the clipboard event was consumed without doing anything. The guard order is now correct: the event is only claimed after confirming an active file exists.\n- **Paste blocked when another handler already handled the event** — The plugin now checks `evt.defaultPrevented` before acting, so it correctly yields to other handlers that have already processed the paste.\n- **Markdown link titles lost on rename** — Links of the form `![alt](image.png \"My Title\")` now preserve the title attribute when the image is renamed or moved.\n- **Attachment folder setting ignored for relative paths** — The paste handler now uses the public `fileManager.getAvailablePathForAttachment()` API, which correctly resolves all attachment folder modes including relative (`./attachments`) settings that the previous private API call handled incorrectly.\n- **Build script shipped stale plugin on failure** — The build command now uses `&&` so `main.js` is only copied from `dist/` when the compile step succeeds. Previously a failed build would leave the old artifact in place silently.\n\n#### Internal\n\n- Switched build toolchain from `rollup-plugin-typescript2` (broken with the installed dependency versions) to `esbuild` for faster, more reliable builds.\n- Added a `vitest`-based unit test suite (`npm test`) with 22 tests covering the core link-matching and path-encoding logic independently of the Obsidian runtime.\n- Extracted pure utility functions (`escapeRegExp`, `encodeMarkdownPath`, `mimeSubtypeToExtension`, `buildRenamePatterns`, `applyLinkReplacements`, etc.) into `src/utils.ts` to make them independently testable.\n\n\n\n\n\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.10...1.3.11",
-      "downloadCount": 1,
+      "downloadCount": 2,
       "draft": false,
       "name": "1.3.11",
       "prerelease": false,
@@ -264,14 +264,14 @@
         },
         {
           "digest": "sha256:f2e9258aff3d74a9d4cac736a58a3851d801660837537de066fbb0013dae9953",
-          "downloadCount": 20,
+          "downloadCount": 21,
           "name": "manifest.json",
           "size": 328
         }
       ],
       "author": "github-actions[bot]",
       "description": "- Refactor FileManager usage, and ignore main.js\r\n- Bump version to 1.3.8\r\n\r\n\r\n**Full Changelog**: https://github.com/andy51002000/obsidian-image-link-updater/compare/1.3.7...1.3.8",
-      "downloadCount": 20,
+      "downloadCount": 21,
       "draft": false,
       "name": "1.3.8",
       "prerelease": false,
