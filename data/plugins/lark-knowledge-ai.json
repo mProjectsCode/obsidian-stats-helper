@@ -4,8 +4,8 @@
   "description": "Ask AI questions about your vault in natural language. Semantic search over notes and PDFs, answers with clickable citations, running entirely on your own machine. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "lark-knowledge-ai",
-  "lastChangedAt": "2026-07-30T10:01:27.038Z",
-  "lastFetchedAt": "2026-07-30T10:01:27.038Z",
+  "lastChangedAt": "2026-07-31T10:03:27.013Z",
+  "lastFetchedAt": "2026-07-31T10:03:27.013Z",
   "manifest": {
     "author": "theozhang",
     "authorUrl": "https://github.com/iamtheozzz",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.7.2",
     "name": "Lark Knowledge AI",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   "name": "Lark Knowledge AI",
   "presentInCommunityList": true,
@@ -22,27 +22,147 @@
     {
       "assets": [
         {
+          "digest": "sha256:2cc06f1df28ca436e43a9fe33b0b2ff5913849ac017eaa794369611654b83150",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 104480
+        },
+        {
+          "digest": "sha256:236ab2bc02f10854687d950d9a2b3faee8f02ea9e645aa70d4be3dd83927fb8a",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 393
+        },
+        {
+          "digest": "sha256:8573c8dbcc3103fbffc32fe92d5363d2efdbe618dde32ab692e9890bb3aa2cab",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 18159
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 新增：字面检索的模糊兜底\n\n复述标题时极少一字不差。问「变强的唯一路径**是**心不受力」，而原文写的是「变强的唯一路径**：**心不受力」——只差一个字，`indexOf` 精确匹配全军覆没，字面检索这一路等于没有。\n\n现在精确匹配几乎没命中的长词会再走一次模糊匹配：中文按相邻二元组切片，ASCII 按单词切，按片段覆盖率打分。\n\n实测本库（20953 块）：\n\n| 查询词 | 原文写法 | 覆盖率 |\n|---|---|---|\n| 变强的唯一路径**是**心不受力 | 用冒号 | 0.818 |\n| 注定有出息的人**都**没有状态洁癖 | 有逗号 | 0.923 |\n| 高手最恐怖的能力**是**长期忍受悬而未决 | 用冒号 | 0.875 |\n| 比特有重量**：**从摩斯电码到香农极限 | 用破折号 | 0.929 |\n\n护栏（模糊匹配的风险全在误报）：\n\n- 只对精确命中 ≤ 2 块的词启用，正常情况下零额外开销\n- 覆盖率低于 0.7 不算命中\n- 切不出 3 个片段的短词不做模糊\n- 单次最多 3 条词走模糊，每条要再扫一遍全库\n- 命中超过全库 5% 的词判定为没有区分度，整条丢弃\n- 模糊命中按覆盖率折价再压一档，同段内与精确命中取较大值——精确命中不会被压低\n\n误报测试：两条完全不存在的标题零命中；最容易误报的泛化词（「机器学习模型训练方法总结」）只多召回 2 块，且分数压在 0.727 门槛线上。全库扫描单条约 100ms。\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.1.10",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T09:07:57Z",
+      "tag": "0.1.10"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:bd1ba6e52f19e836e0009360359c7adbf8bc35f3c6bf0718a93318ca915c0ecc",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 103708
+        },
+        {
+          "digest": "sha256:7ec084a0d8e0fa9f851bdf3dcb8fa09714838843b31935480c916634bab1c093",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:8573c8dbcc3103fbffc32fe92d5363d2efdbe618dde32ab692e9890bb3aa2cab",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 18159
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 修复：追问时召回错误的文件\n\n追问会先把问题改写成独立查询再检索，此前改写句会**替换**原问题。一旦改写丢了关键词，原问题本来能召回的材料就彻底拿不到了。\n\n实测一句自包含的完整提问：两篇正确文章在原句下的相似度是 0.63 和 0.56，都高于阈值；改写之后一篇都没进前八，取而代之的是一篇 0.53 的无关文章。\n\n- 改写句改为「补充」而非「替换」：原句和改写句各检索一次，用 RRF 融合。改写从此只会加不会减\n- 新增 `needsRewrite()`：只有真正含指代的追问才改写（开头是「那/这/继续/第几点」等，或句子过短）。自包含的完整提问直接用原句检索，同时省掉一次模型调用\n- `fuse()` 改为可变参数，支持多路名次融合\n\n判据只看句子开头，不看句中有没有「这/那」——「这两个主张同时成立」里的「这」指的是同一句内的内容，不需要向历史求解。\n",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "0.1.9",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T08:53:18Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e3a17c27b1c3d6e98daf03c18b605d031637835e2d3d2be400dcc33230ddbc17",
+          "downloadCount": 3,
+          "name": "main.js",
+          "size": 103306
+        },
+        {
+          "digest": "sha256:9cec11ca1bc915b0bb58ab04ee4f4c41223c91839a9e377a6703dc0b8796b07b",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:8573c8dbcc3103fbffc32fe92d5363d2efdbe618dde32ab692e9890bb3aa2cab",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 18159
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 修复：忽略的文件在后续对话中重新出现\n\n0.1.7 的忽略只在建索引时生效，靠「文件不在索引里」来实现。查询期没有任何过滤，所以只要文件曾经进过索引——规则是后加的、文件改过名、purge 那次没跑到——它就会一直能被检索到，而设置页上看不出任何异常。\n\n表现是第一轮对话正常挡住，后续轮次又出现在参考文件列表里。原因是追问会先把问题改写一遍再检索：原始问题与题库类文件的相似度约 0.45（低于默认阈值 0.5，挡住了），而改写后的查询描述的是对话意图本身，相似度升到 0.54–0.57，于是越过阈值被召回。\n\n- 忽略判定下沉到 `IndexStore`，`search` / `keyword` / `headOf` / `pageOf` 四个检索出口统一过滤，索引里有没有残留都不影响结果\n- 插件启动时同步规则并清理一次残留块，覆盖「插件没运行时改了配置」和多设备同步的情况\n- 忽略规则改动后立即推送给 store，不必重启\n- 设置页关闭时补提交一次：填完直接关窗时 blur 不一定触发，此前这一栏会白填\n- `isIgnored` 抽到 `src/index/ignore.ts`，索引期与查询期共用同一份判定\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.1.8",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T08:12:07Z",
+      "tag": "0.1.8"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e0e203ded4cbc03714c7f1a95ae80be2864f4c19d400196409b4f4c9715fc9c1",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 102818
+        },
+        {
+          "digest": "sha256:f1a7daaf64d4311c325d06993934e8f2249ef3b558e9ba5aeb27104f3f9b4f6a",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 392
+        },
+        {
+          "digest": "sha256:8573c8dbcc3103fbffc32fe92d5363d2efdbe618dde32ab692e9890bb3aa2cab",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 18159
+        }
+      ],
+      "author": "iamtheozzz",
+      "description": "## 新增：忽略的文件夹\n\n设置页 → 索引 → 「忽略的文件夹」，每行一个库内相对路径。这些文件留在库里照常能打开编辑，但不进索引，提问时不会被检索到。\n\n适合放测试题库、草稿、私人日记这类文件——留在库里有用，但被召回时会盖住真正该答的材料。\n\n- 填文件夹会连同子目录一起排除；填单个文件需要带扩展名\n- 按路径段匹配，填 `Eval` 不会误伤 `Evaluation/`\n- 填完立刻生效：已入库的相关段落会当场从索引移除，不用等下一次索引\n- 与「索引范围」同时命中时以忽略为准\n- 忽略目录内的文件改动不再触发自动索引\n\n## 其他\n\n- 设置页的输入框提示改为跟随界面语言，此前是硬编码中文\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.1.7",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T07:55:57Z",
+      "tag": "0.1.7"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:44a657fb97c7dae4499c3147addf9adbfbfcf2295935d448450f2b376cb5b417",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "main.js",
           "size": 100086
         },
         {
           "digest": "sha256:2f71967da0bf9aeb4f3c1ec2f3a3f40f47ef57af912e2d75a27ebf3cfb58fecf",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 392
         },
         {
           "digest": "sha256:caaf0088a776fc4bcacd13dfbb8060408ae98f29881cb03246f91bcc0de888e0",
-          "downloadCount": 6,
+          "downloadCount": 9,
           "name": "styles.css",
           "size": 17865
         }
       ],
       "author": "iamtheozzz",
       "description": "## 修复：分类调用不稳定\n\n判断「问题是否关于用户本人」的那次分类调用用的是默认 `temperature: 0.3`，导致同一个问题多次跑出不同结果。\n\n实测「我最近在研究什么」在 0.3 下五次里有一次返回「否」，走错分支——收藏的书的正文被完整送进模型，于是出现「《某书》里提到你曾经……」这类把书作者的经历安到用户头上的回答。\n\n分类调用改为 `temperature: 0`，五次全部一致。`streamChat` 新增 `temperature` 选项。\n\n## 其他\n\n- 源码注释与提示词中的举例改为通用表述，不再出现具体书名和人名\n",
-      "downloadCount": 6,
+      "downloadCount": 9,
       "draft": false,
       "name": "0.1.6",
       "prerelease": false,

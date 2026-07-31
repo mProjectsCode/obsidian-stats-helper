@@ -1,0 +1,445 @@
+{
+  "author": "Sertaç Yıldız",
+  "defaultBranch": "main",
+  "description": "Comprehensive, security-first sync of your vault to a Google backend you own — Google Drive or Google Cloud Storage. Bring your own Google account; no third-party server. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "google-cloud-sync",
+  "lastChangedAt": "2026-07-31T10:03:27.013Z",
+  "lastFetchedAt": "2026-07-31T10:03:27.013Z",
+  "manifest": {
+    "author": "Sertaç Yıldız",
+    "authorUrl": "https://github.com/sertacyildiz",
+    "description": "Comprehensive, security-first sync of your vault to a Google backend you own — Google Drive or Google Cloud Storage. Bring your own Google Cloud; no third-party server.",
+    "id": "google-cloud-sync",
+    "isDesktopOnly": true,
+    "minAppVersion": "1.13.0",
+    "name": "Google Sync",
+    "version": "0.7.0"
+  },
+  "name": "Google Sync",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:3cb2bd2e020fd5fd3e8871b30cf6a05999597dd6130eec7e83e8462aa69ac62b",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 40840
+        },
+        {
+          "digest": "sha256:75f9d1231e8ecc98cd248561d803149111bb20270dfc94fbe33bd772ce7c81be",
+          "downloadCount": 10,
+          "name": "manifest.json",
+          "size": 406
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 10,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "**Full Changelog**: https://github.com/sertacyildiz/obsidian-google-sync/compare/0.6.2...0.7.0",
+      "downloadCount": 10,
+      "draft": false,
+      "name": "0.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T11:20:10Z",
+      "tag": "0.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:63841643dfb7f4c8a2dd8be9789e6dc2ef48478ea113ec7c776f2756a5fef3f3",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 38600
+        },
+        {
+          "digest": "sha256:ff8567249582a566ed1f5cf7f2a4253f1b7c70ee19accfed6b9dbff14e6cc6e3",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "## Fix: Drive deletes are recoverable now\n\nDeleting a file on Drive during sync used a permanent delete that skipped the trash — so if a sync ever removed the wrong file, it was gone for good.\n\n- **Drive deletes now go to Drive's trash.** Anything the sync removes on Drive is recoverable from your Drive trash for ~30 days, instead of being permanently erased.\n- **Local deletes were already recoverable** — they route to your OS trash (macOS/Windows), falling back to the vault's `.trash`. Unchanged.\n- **GCS** deletes still depend on your bucket's Object Versioning / Soft Delete (GCS has no per-file trash). Enable one of those if you sync to GCS and want the same safety net.\n\nThis brings Drive in line with the local side's \"never lose data irreversibly\" guarantee.\n",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "0.6.2 — recoverable Drive deletes",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T16:34:46Z",
+      "tag": "0.6.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:2d095022350abc92d85da3a401738165dbf65ebba3bee1ca078f5ef3d3c1d088",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 38501
+        },
+        {
+          "digest": "sha256:c111b53a022a72972aa767be8557e6dae38a0479aec2087795351c9c22540081",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "## Fix: a stuck \"sync already running\"\n\nA stalled network request could hang a sync indefinitely — and the \"a sync is already running\" guard with it, so every later **Sync now** did nothing until you reloaded Obsidian.\n\n- **Requests can no longer hang forever.** Each request to Google now has a 120-second ceiling. If a connection opens but never responds (dead network, captive portal, a stalled endpoint), the sync fails cleanly, the lock clears, and you can retry right away.\n- **Real network problems surface instead of hiding.** A persistent stall now shows a \"timed out\" error rather than a silent, stuck sync.\n\nIf you ever land in the stuck state, reloading Obsidian still clears it — but it shouldn't happen anymore.\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.6.1 — no more stuck sync lock",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T16:10:10Z",
+      "tag": "0.6.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:8c5d72b0c404a429ffa2536c39128b72d8b321c7d6a41f26e983dd5de1e7566c",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 38207
+        },
+        {
+          "digest": "sha256:c3bbe4f61d70bf7088eafc43b7531366ff6413bd5066d2f8ab99573016beced7",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "## Smarter conflict resolution\n\nWhen the same note changed on two devices, sync now keeps the **newer** version — and never throws away the older one.\n\n- **Newest wins, nothing lost.** If a file changed on both sides since the last sync, the more recently modified version becomes the file you see; the older version is saved beside it as a recoverable `<name>.conflict-<timestamp>` copy. Previously the local copy always won.\n- **No more conflict storm on a new device.** Opening an already-populated vault on a second machine used to turn *every* matching file into a `.conflict-` duplicate. Identical files are no longer treated as conflicts — they're adopted cleanly, with no copies and no needless up/downloads.\n- **Safe by default.** When the remote's modified time can't be determined, the local copy wins (as before), and the losing side is always kept as a backup — so a wrong clock can never silently lose your work.\n\nBuilds on 0.5.0's safety work (recoverable trash + mass-deletion guard).\n",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "0.6.0 — smarter conflict resolution",
+      "prerelease": false,
+      "publishedAt": "2026-06-04T15:50:05Z",
+      "tag": "0.6.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:798b6034cfa70127a7847a48ac0941fb63109020edbb4051888737188c15eba3",
+          "downloadCount": 4,
+          "name": "main.js",
+          "size": 37491
+        },
+        {
+          "digest": "sha256:2b8005468d7a1e9e0007c1ab002a7dbb3f6e5f7710723d10947e9534baf6f1c6",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "## Last-synced visibility\n\nA small, safe follow-up to 0.5.0.\n\n- **See how fresh your sync is.** Settings now show how long ago each backend — and the vault overall — last synced (\"synced 2 hours ago\"). It's information only and never affects what a sync uploads, downloads, or deletes.\n\nBuilds on 0.5.0's safety work (recoverable trash + mass-deletion guard).\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "0.5.1 — last-synced visibility",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T16:23:19Z",
+      "tag": "0.5.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6d39451dae2fbc867cc4f05cee1afbc731e25a54bf4f017ecb488671252efbde",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 36843
+        },
+        {
+          "digest": "sha256:a7f230c984fa3277d41b7c5c9f130d6e1e0d18e456ed60a6c1be42feedb252ae",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "## Safer deletes\n\nThis release makes deletion **safe and recoverable** — the one place the plugin could previously lose data.\n\n- **Deletions go to the trash, not gone for good.** When a sync removes a file locally it now moves it to your system trash (or the vault's local `.trash`) instead of permanently deleting it, so it can always be restored.\n- **Mass-deletion guard.** If a sync would delete an unusually large number of files at once — more than `max(10, 20%)` of your synced files on either side, almost always a sign of a connection or folder problem rather than a real change — it stops and changes nothing, and tells you why.\n- **\"Protect local files\" is now \"Backup mode\" (off by default).** Normal two-way sync propagates deletions across your devices as expected, with the trash + guard as the safety net. Turn on **Backup mode** only for a one-way single-device → cloud backup.\n\nRecommended for everyone on 0.4.x.\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "0.5.0 — safe deletes",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T16:09:55Z",
+      "tag": "0.5.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:e42be4123f53dde1b2939a90dc856edcf3c84957dfebe56829ac84b8183c3a99",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 34888
+        },
+        {
+          "digest": "sha256:401f3fb5146f3f92eecd0e41ba29e16a1af9595b630c808ef4cd191bbba7d8e6",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "**Your Drive sync now mirrors your vault's folder structure.** Files used to land flat in the sync folder; now your folders are recreated as real folders in Drive, matching your vault. (The path-length limit is gone too.) Google Cloud Storage already nested via key prefixes.\n\n**Upgrading?** Your local files are safe — the first sync after updating uploads them into the new folder layout (it never mass-deletes). To avoid leftover copies of the old flat files, delete the old `Obsidian Sync/<vault>` contents in Drive before that first sync (or delete the `Obsidian Sync` folder and re-sync fresh).\n\nPer-vault folders, last-synced time, Sync-now button, and one-click Connect are all included.\n\n> Beta — use a throwaway vault and keep backups.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "Google Sync 0.4.6 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T14:48:21Z",
+      "tag": "0.4.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:6ae0303a7ffc7c0095093bf48cc48d9299fcd6440547087a71b8532f401d401c",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 34222
+        },
+        {
+          "digest": "sha256:dc9d81e505576290d5b3d07a08e50b7b9883a2c3bd813ba40302c38440f7f404",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "- **Per-vault folders** — each vault syncs into its own subfolder (`<folder>/<vault name>`), so syncing several vaults to the same Drive/bucket never collides (the vault name is added automatically).\n- **Last synced time** + a **Sync now** button in Settings.\n- One-click **Connect Google Drive** — zero setup (a built-in OAuth client ships with the plugin; power users can use their own under Advanced).\n\n> Beta — use a throwaway vault and keep backups.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "Google Sync 0.4.5 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T14:25:42Z",
+      "tag": "0.4.5"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:499aca10b9bb36deceaaf8ba204c0c7d1dfbf411c75e1f67cb0f53fcb74a791b",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 33372
+        },
+        {
+          "digest": "sha256:a6cdff9819b9d0306346f9ff34b0e60b6e49d168d9346b7f99d5e9ebc81ddc3c",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "One-click **Connect Google Drive** — zero setup.\n\nClick **Connect Google Drive** → approve in your browser → done. No client ID, no secret, nothing to paste — a built-in OAuth client ships with the plugin. Power users can still use their own OAuth client under **Advanced**.\n\nGoogle Cloud Storage works the same way (OAuth or an HMAC key under its section).\n\n> Beta — use a throwaway vault and keep backups.",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "Google Sync 0.4.3 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T13:49:49Z",
+      "tag": "0.4.3"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:7b3205cd9d20f82ce8612e2ad70ad3450c0e13cc2235f648e20bcbca264e672a",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 33337
+        },
+        {
+          "digest": "sha256:f0601a414055efd297249d8626581cfd3f9cba523d6b2e21a07eb8e8b9306187",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "Connect Google Drive — bring your own OAuth client.\n\nCreate a free **Desktop** OAuth client in Google Cloud Console (enable the Drive API; publish the consent screen or add yourself as a test user), then enter its **Client ID + Client secret** under **Settings → Advanced**. Your credentials stay on your device — never synced, never committed to this repo (GitHub blocks bundling OAuth secrets, so each user supplies their own). Then click **Connect Google Drive** → browser consent → done.\n\nGoogle Cloud Storage works the same way (OAuth or an HMAC key under its section).\n\n> Beta — use a throwaway vault and keep backups.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Google Sync 0.4.2 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T13:36:10Z",
+      "tag": "0.4.2"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d38d83bb2915d28ee1b0eed6660d44fc6e894d9761db7f51876c1bc28bf3f9ed",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 32331
+        },
+        {
+          "digest": "sha256:c76a92690637c1d83c2210b73b3ee1a082ca51c77c716a1613ad48b7dc527fde",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "**One-click \"Connect Google Drive\" is now live.**\n\nClick **Connect Google Drive** → your browser opens Google's sign-in → approve → done. No setup, no client ID to paste — a built-in OAuth client ships with the plugin (PKCE, no secret). You can still use your own OAuth client under **Advanced**.\n\nGoogle Cloud Storage is unchanged — connect via OAuth or an HMAC key under its section.\n\n> Beta — please test with a throwaway vault and keep backups.",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "Google Sync 0.4.1 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T12:48:19Z",
+      "tag": "0.4.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:0adb655d67d58d4d8b86f762f21a35d678530b7f1b734c46799d9cb59d695a7a",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 32259
+        },
+        {
+          "digest": "sha256:cf7d902047aa5a3b2ebd85a8da2e1169adcdbab213c3ba6033c0e7832a7616ba",
+          "downloadCount": 2,
+          "name": "manifest.json",
+          "size": 405
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "A simpler, more practical setup.\n\n- **Two independent backends.** Enable Google Drive, Google Cloud Storage, or **both at once** — your vault syncs to each (with its own state).\n- **One-click Connect, no passphrase to start.** Bring-your-own OAuth client, GCS HMAC keys, and end-to-end encryption now live under **Advanced**.\n- **Google Drive** works with any Google account (no Google Cloud needed); folder defaults to `Obsidian Sync`. **Google Cloud Storage** syncs to your own bucket.\n- Renamed to **Google Sync**.\n\n> Beta: the built-in one-click sign-in is still being finalized — for now, connect using your own OAuth client ID under **Settings → Advanced**. Please test with a throwaway vault and keep backups.",
+      "downloadCount": 2,
+      "draft": false,
+      "name": "Google Sync 0.4.0 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T11:40:59Z",
+      "tag": "0.4.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:d2dae1888f2518408cea34360544fbc94745904a19a20692bd24f3c98cf6d617",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 31078
+        },
+        {
+          "digest": "sha256:2a80206b6b55ab026239ffcb8bb294db41461557473f74d75dac97761941b5ed",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 411
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "Google Cloud Storage now has a one-click **OAuth \"Connect\"** option, alongside HMAC keys.\n\n- Reuse your own OAuth client (now shared by Drive + GCS) and connect with a browser consent — no HMAC key needed for GCS.\n- **HMAC stays the recommended, least-privilege path.** A GCS OAuth token (`devstorage.read_write`) can reach every bucket your Google account can access — GCS has no per-bucket OAuth scope — so the UI says so; prefer HMAC, or a Google account/project scoped to just your bucket.\n- OAuth tokens are treated like any credential: never synced, optionally passphrase-encrypted at rest.\n\nBeta — test with a throwaway vault and keep backups. Install via BRAT: `sertacyildiz/obsidian-google-sync`.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "Google Cloud Sync 0.3.0 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T10:41:45Z",
+      "tag": "0.3.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:feecc79c1f4e2420b2c755cb209feff6af69611a449540bfab5cb7e0f42c467c",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 28078
+        },
+        {
+          "digest": "sha256:4d9fd40f02a43b93dd70bc3280322dcbf326c70e14f8b7a73399e2af84b5f41a",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 411
+        },
+        {
+          "digest": "sha256:55181ffdf302307541b2f08b6bfb15017e69a9235074ab24717a345b237b2b47",
+          "downloadCount": 2,
+          "name": "styles.css",
+          "size": 58
+        }
+      ],
+      "author": "sertacyildiz",
+      "description": "Beta. Passphrase is now OPTIONAL (default off) — connect with no passphrase wall; set one only for E2EE or to encrypt the stored credential. GCS verified end-to-end; Drive via your own OAuth client. Install via BRAT: add 'sertacyildiz/obsidian-google-sync'. Use a throwaway vault first; keep backups.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "Google Cloud Sync 0.2.0 (beta)",
+      "prerelease": false,
+      "publishedAt": "2026-06-03T08:55:39Z",
+      "tag": "0.2.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "sertacyildiz/obsidian-google-sync"
+}
