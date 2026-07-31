@@ -4,8 +4,8 @@
   "description": "AI chat embedded in your vault — direct API calls and local CLI(only for Desktop), works on Desktop and iPad. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "claudian-api",
-  "lastChangedAt": "2026-07-30T08:02:27.017Z",
-  "lastFetchedAt": "2026-07-30T08:02:27.017Z",
+  "lastChangedAt": "2026-07-31T08:04:27.031Z",
+  "lastFetchedAt": "2026-07-31T08:04:27.031Z",
   "manifest": {
     "author": "virbird",
     "description": "AI chat embedded in your vault — direct API calls, works on Desktop and iPad.",
@@ -13,11 +13,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.7.2",
     "name": "AI Study Buddy",
-    "version": "1.1.4"
+    "version": "1.1.6"
   },
   "name": "AI Study Buddy",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:2b061f77a6c058ff2fc8749d3162a64ac2f6b301bbdcc8df39b28d0b75748156",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 1263831
+        },
+        {
+          "digest": "sha256:b63597b6b5230d114ab62ad51c2b752ffec57735b57b5e11636c8876b50102b4",
+          "downloadCount": 5,
+          "name": "manifest.json",
+          "size": 254
+        },
+        {
+          "digest": "sha256:56b5a9995dd3f27c1ae8d364ff9311cb40fd5c334665bdafda94417a8d425d58",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 21980
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## AI Study Buddy 1.1.6\n\nA UI overhaul release: the chat panel now breathes in narrow sidebars, and two long-standing silent failures are fixed.\n\n### Highlights\n\n**Compact header — 3 rows down to 1**\n\nProvider, model, material and role used to occupy three wrapping toolbar rows. Now the header is a single line:\n\n- Icon-only actions: new conversation / history / help\n- A **status chip** on the right shows the current `model · role · material` at a glance\n- Click the chip to open a quick settings panel with provider, model, material and a wrapping role grid — roles can keep growing without breaking the layout\n- Narrow sidebars (<400px) collapse the chip to the role icon and stack the settings rows\n\n**Rebalanced input area**\n\n- Send/Stop are docked inside the textarea's bottom-right corner — the button row is gone\n- Input box grew from one line to ~3 lines (76px) by default\n- Status text truncates on one thin line instead of squeezing the layout\n\n**Save replies as notes, now with Select all**\n\n- The save bar shows `N of M selected` plus a **Select all** button — save a whole multi-round session in one click\n- New command palette entry: **Select all AI replies in chat** (works before any checkbox is ticked)\n- The confirmation notice shows the note path and is clickable to open it\n- New command: **Open chat view in main pane** for full-width reading of long answers\n\n### Fixes\n\n- **\"Save selected\" silently did nothing** — settings saved by older versions dropped the `learning.noteFolder` field during load (shallow merge), so saving threw into a fire-and-forget call with zero feedback. Settings are now deep-merged, every failure path shows a Notice, and folder creation goes through the adapter with parents included.\n- **`is-hidden` regression** — since 1.1.2, removing `!important` let later component rules override the hide class; the \"0 selected\" bar, context indicator and loading spinner could all stay visible when they shouldn't. Fixed by specificity scoping, still no `!important`.\n- **Connection test hid the real API error** — \"Test\" showed only `HTTP 400: Request failed`; now the provider's own message comes through (e.g. DashScope's \"The product is not activated…\" for un-activated third-party models like `kimi/kimi-k3`).\n\n### Docs\n\n- README rewritten around the new header (status chip, quick settings panel), added the IELTS Writing High-Score Coach role and a \"Save replies as notes\" section\n- Help panel documents the chip, select-all flow, notes folder and main-pane command\n- en/zh locale parity verified: 294 keys each\n\n**Tests:** 369 passing (+14 new: settings deep-merge, select-all, connection error surfacing)\n",
+      "downloadCount": 5,
+      "draft": false,
+      "name": "1.1.6",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T01:52:59Z",
+      "tag": "1.1.6"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:375f3388243bb7a15d8e8ddaaff1429150dfffd7b6ae9a5daad42ccc768e5206",
+          "downloadCount": 5,
+          "name": "main.js",
+          "size": 1257482
+        },
+        {
+          "digest": "sha256:14ed3cc0c379fe45e0ebfc81dc9e7a1e28d83f31c8eefe648cfc0d5c7a3a96c0",
+          "downloadCount": 4,
+          "name": "manifest.json",
+          "size": 254
+        },
+        {
+          "digest": "sha256:e01878db8104c475ac402b5d875f14e18e5064ea48336ba64325da158b524ae8",
+          "downloadCount": 4,
+          "name": "styles.css",
+          "size": 18615
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## AI Study Buddy 1.1.5\n\nThis release brings **multimodal image support** — your vision-capable models can now actually see the images in your vault.\n\n### Highlights\n\n**See your images, not just your text**\n\nScreenshots of exam questions, handwritten essays, diagrams, textbook photos — these are now sent to vision models instead of being silently dropped.\n\n- `@screenshot.png` — reference an image directly in your message\n- `![[diagram.png]]` — images embedded in your **learning material** are picked up automatically\n- Markdown syntax `![alt](path.png)` also works (local paths only)\n- Limits: 4 images per message, 5 MB each; png / jpg / gif / webp\n\n**Images stay in context for follow-ups**\n\nImages from the last 2 turns are retained in the request, so you can grade an essay from a photo and then ask \"how should I fix paragraph 2?\" — the model still sees the original.\n\n**Learning commands read images too**\n\n`/flashcard`, `/checkup`, `/summary`, `/map`, `/plan`, `/buddy` now resolve images from your active learning material. Generate flashcards straight from a textbook screenshot, or build a quiz from a photographed exam paper.\n\n**IELTS Writing High-Score Coach**\n\nThe IELTS role was renamed to **雅思写作高分冲刺教练** and rebuilt around a 6-section grading report: band scores with reasoning, paragraph-by-paragraph critique, a full revised version, prioritised loss points, memorisable high-score expressions, and concrete next-session actions.\n\n### Provider Support\n\n| Provider | Images |\n|---|---|\n| Anthropic Claude | Yes (native) |\n| OpenAI | Yes |\n| OpenAI Compatible (Qwen-VL, GLM-4V, etc.) | Yes |\n| CLI providers | No — shown as a text placeholder |\n\nUse an API provider for vision tasks; CLI providers cannot transmit image data.\n\n### Fixes & Internals\n\n- Replaced guarded `require('fs')` with dynamic `await import('fs')` for mobile safety\n- Switched the message checkbox to Obsidian's `createEl` helper\n- Removed leftover debug logging from settings\n- Image attachments are kept in memory only — they never bloat your session files, and are cleared on `/clear` or context compression\n\n### Docs\n\nREADME gained a \"Use images with vision models\" section, and the in-app help panel (section 6, now \"Reference Notes & Images\") documents the syntax, limits, and retention behaviour in both English and Chinese.\n\n---\n\n**Testing:** 355 tests passing (27 new for image resolution, format conversion, and attachment lifecycle).",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.1.5",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T09:21:01Z",
+      "tag": "1.1.5"
+    },
     {
       "assets": [
         {
