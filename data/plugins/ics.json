@@ -4,8 +4,8 @@
   "description": "Add events from calendar ics on the web to daily notes on demand. Includes vdir support. Daily Planner, Templater and Dataview friendly.",
   "errors": [],
   "id": "ics",
-  "lastChangedAt": "2026-07-30T23:03:27.016Z",
-  "lastFetchedAt": "2026-07-30T23:03:27.016Z",
+  "lastChangedAt": "2026-07-31T23:01:27.036Z",
+  "lastFetchedAt": "2026-07-31T23:01:27.036Z",
   "manifest": {
     "author": "Open Horizon Labs",
     "authorUrl": "https://openhorizonlabs.ai/",
@@ -23,26 +23,26 @@
       "assets": [
         {
           "digest": "sha256:662b75366be505af036de36d0a0cee28dc5b5ebb4f96b5458fbb88db9fb24171",
-          "downloadCount": 150,
+          "downloadCount": 265,
           "name": "main.js",
           "size": 1084036
         },
         {
           "digest": "sha256:318b6d1885cbf73fa71fb9be14d583d4cd3908f2d4b94cd0990597419106c894",
-          "downloadCount": 151,
+          "downloadCount": 268,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 146,
+          "downloadCount": 261,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Multi-day and recurring events now keep their full span, land on the correct local day, and expose complete start/end data to templates.**\n\n## What's new\n\n- **Four new fields are available from `getEvents()`** without changing any existing field:\n  - `startDateTime` and `endDateTime` — full ISO 8601 values with UTC offsets;\n  - `endUtime` — the event's end as a Unix timestamp, mirroring `utime`;\n  - `allDay` — `true` for all-day (`VALUE=DATE`) events.\n- **“Show ongoing” now defaults to on for newly added calendars.** Multi-day events therefore appear on each day they span without requiring users to discover the setting first. Existing calendar settings are not migrated or changed.\n- **The README's Full Calendar example now preserves multi-day ends** using `endUtime` and passes `allDay` through. New documentation shows how to render full date ranges and handle all-day events' exclusive `DTEND`.\n\n## What's fixed\n\nThanks to @spi43984 for testing the betas and providing precise provider examples.\n\n- **Recurring, one-off, and multi-day events now use one occurrence-selection pipeline.** This fixes:\n  - overnight and multi-day recurrences losing their duration or later days;\n  - recurring overrides disappearing or suppressing the wrong occurrence;\n  - `EXDATE` removing every occurrence on the same day instead of one instance;\n  - DATE and DATE-TIME `RDATE` occurrences being omitted;\n  - all-day recurrences shifting dates in positive UTC offsets or across spring-forward days;\n  - duplicate emission, sparse queries returning intervening events, and parsed calendars being mutated during filtering.\n- **Distinct events are no longer lost during deduplication.** Identity now includes UID, recurrence identity, start, and end instead of relying on display text and time alone.\n- **Broken all-day re-exports are recovered.** Same-timezone events encoded as exactly `00:00:00` through `23:59:59` are exposed as all-day ranges with correct inclusive dates and exclusive ends.\n- **Missing metadata is deterministic.** Events without `CREATED` or `LAST-MODIFIED` no longer receive a different timestamp on every call.\n- **Calendar settings dialogs no longer leak unsaved changes.** Adding, editing, or cancelling a calendar no longer mutates defaults or saved toggle values before Save.\n\n## Behavior and compatibility\n\n- Timed recurring events are assigned to the day on which their instant occurs in the user's local timezone, consistently with one-off events and Daily Note queries. Previously they could use the organizer's calendar date.\n- Existing `getEvents()` signatures, flexible date inputs, output fields, `callUrl`/`callType`, markdown output, and saved calendars remain compatible.\n- The all-day recovery rule is intentionally narrow: start must be exactly `00:00:00`, end exactly `23:59:59`, and both must declare the same timezone. Near-miss timed events and legitimate next-midnight 24-hour events remain timed.\n- **Obsidian 1.12.7 or later is required.**\n\n## Verification\n\n- Validated through five public betas and a final live Obsidian vault test.\n- 119 Jest tests passed in each of 9 host timezones from UTC-11 through UTC+14: 1,071/1,071 total, zero skips.\n- 50 compiled-artifact contract tests passed against the shipped bundle; the same final runtime passed that contract in every timezone during the beta cycle.\n- The release build, lint gate, artifact provenance attestation, and downloaded release assets all passed verification.\n\n## Known limitations\n\n- `RDATE` values using the `PERIOD` form are not expanded.\n- All-day compatibility inference is limited to the reported same-timezone `00:00:00` through `23:59:59` shape. Fractional-second values are invalid RFC 5545 DATE-TIME input; ambiguous next-midnight and `23:59:00` forms remain timed unless a concrete provider case establishes the intended semantics.\n\nImplementation details: [public event date fields #243](https://github.com/open-horizon-labs/obsidian-ics/pull/243), [settings defaults #245](https://github.com/open-horizon-labs/obsidian-ics/pull/245), [artifact and override coverage #252](https://github.com/open-horizon-labs/obsidian-ics/pull/252), [occurrence selection #254](https://github.com/open-horizon-labs/obsidian-ics/pull/254), and [timezone portability #256](https://github.com/open-horizon-labs/obsidian-ics/pull/256).\n",
-      "downloadCount": 151,
+      "downloadCount": 268,
       "draft": false,
       "name": "1.15.0",
       "prerelease": false,
@@ -53,26 +53,26 @@
       "assets": [
         {
           "digest": "sha256:662b75366be505af036de36d0a0cee28dc5b5ebb4f96b5458fbb88db9fb24171",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "main.js",
           "size": 1084036
         },
         {
           "digest": "sha256:7a3f7d1715689208b827996bfe786346d5ba1b1dc5c475dc0ac24649bf71d604",
-          "downloadCount": 4,
+          "downloadCount": 5,
           "name": "manifest.json",
           "size": 391
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 3,
+          "downloadCount": 4,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "## What's changed\n\n- **The complete test suite is now checked across the full supported timezone range.** All 119 Jest tests run in nine deliberately awkward host zones from UTC-11 through UTC+14, including quarter-hour and 45-minute offsets.\n- **Timed-event tests now query and compare the user's local calendar day.** Expectations are derived from the represented instant instead of assuming the organizer's or UTC calendar date. `VALUE=DATE` all-day expectations remain fixed.\n- **The obsolete skipped Microsoft timezone test is gone.** The formerly failing `RECURRENCE-ID` case is already covered by an active passing regression test.\n\n## Runtime impact\n\nThis is a test-and-release-metadata update only. Plugin behavior is unchanged from **1.14.4-beta4**, and the published `main.js` is byte-for-byte identical. Beta5 republishes that runtime with stronger cross-timezone validation and a clean zero-skip suite before the final live-vault test.\n\n## Verification\n\n- 119 Jest tests passed in each of 9 host timezones: 1,071/1,071 total, zero skips.\n- 50 compiled-artifact contract tests passed in each timezone: 450/450 total.\n- The beta5 release build, artifact contract test, lint, provenance attestation, and asset publication all passed.\n- The downloaded release manifest reports version `1.14.4-beta5`, minimum Obsidian version `1.12.7`, and mobile compatibility.\n\n## Known limitations\n\n- `RDATE` values using the `PERIOD` form are not expanded.\n- All-day compatibility inference is limited to the reported same-timezone `00:00:00` through `23:59:59` shape. Fractional-second values are invalid RFC 5545 DATE-TIME input; ambiguous next-midnight and `23:59:00` forms remain timed unless a concrete provider case establishes the intended semantics.\n\nInstall **1.14.4-beta5** through BRAT and run the final live-vault validation. Please report any provider-specific recurrence or timezone cases you find.\n\nFull test portability details: [#256](https://github.com/open-horizon-labs/obsidian-ics/pull/256)\n",
-      "downloadCount": 4,
+      "downloadCount": 5,
       "draft": false,
       "name": "1.14.4-beta5",
       "prerelease": true,
@@ -203,26 +203,26 @@
       "assets": [
         {
           "digest": "sha256:bfdbee3d5a861c402536e4c240d44adebbb1bfc236239ec88b90af4558e6db97",
-          "downloadCount": 272,
+          "downloadCount": 275,
           "name": "main.js",
           "size": 1081415
         },
         {
           "digest": "sha256:1e6f55e6fd78838b19c703a1b733de696a0d89bac868f3c1caa4c48b4cd94b04",
-          "downloadCount": 271,
+          "downloadCount": 273,
           "name": "manifest.json",
           "size": 385
         },
         {
           "digest": "sha256:2225a3caecc02a99c04ea82edb5e1498079c70719fd03bee4defeb211910b86d",
-          "downloadCount": 268,
+          "downloadCount": 270,
           "name": "styles.css",
           "size": 3503
         }
       ],
       "author": "github-actions[bot]",
       "description": "**Fixes calendar settings that could silently fail or silently lose data**\n\n- Blank or malformed Calendar URLs are now rejected when you save, with a clear inline message — previously the calendar would save successfully and only fail later, during import\n- Calendar Name is now validated too: it's used internally to identify each calendar, so a blank or duplicate name used to silently overwrite another calendar's entire saved configuration with **no warning**. This is now blocked with an inline error.\n- Deleting a calendar now asks for confirmation first\n- The \"Add Pattern\" and \"Add Field Section\" dialogs (Field Extraction settings) no longer silently do nothing when a required field is empty — errors are shown inline, same as everywhere else\n- The Priority field in extraction patterns now rejects non-numeric input with a message instead of silently ignoring it\n- Clicking Save with an unresolved error now shows a notice and scrolls you to the problem field, instead of appearing to do nothing\n- General visual cleanup across the Calendars/Field Extraction settings: consistent section spacing and corrected heading alignment\n",
-      "downloadCount": 271,
+      "downloadCount": 273,
       "draft": false,
       "name": "1.14.3",
       "prerelease": false,
