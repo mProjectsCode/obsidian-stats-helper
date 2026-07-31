@@ -4,8 +4,8 @@
   "description": "Polyglot AI chat with 30+ providers (Anthropic, OpenAI, Gemini, Ollama, and more), image attachments, long-term memory, slash commands, and inline selection actions. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "curtis-ai-chat",
-  "lastChangedAt": "2026-07-30T09:02:27.068Z",
-  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
+  "lastChangedAt": "2026-07-31T09:04:26.998Z",
+  "lastFetchedAt": "2026-07-31T09:04:26.998Z",
   "manifest": {
     "author": "Jordan Newell",
     "authorUrl": "https://github.com/jordannewell",
@@ -26,27 +26,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:458494403da0b27f85429f1df6592c63373682b9744216618d580e87320e2b68",
+          "downloadCount": 0,
+          "name": "main.js",
+          "size": 181946
+        },
+        {
+          "digest": "sha256:72b7a3ded7e82f1c1b726650c07f51f143a6ff3c7f2b333243019f247a0adc63",
+          "downloadCount": 0,
+          "name": "manifest.json",
+          "size": 545
+        },
+        {
+          "digest": "sha256:102678d94322d0d25ca628ad167afd7c3a34005da9cb44ebe4023d89565f644b",
+          "downloadCount": 0,
+          "name": "styles.css",
+          "size": 50207
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "Release candidate. Addresses Obsidian plugin scanner findings surfaced during v1.0.3 community review.\n\n## What's new\n\n- **README code-level disclosures** — new \"Code-level disclosures\" subsection under Privacy & security with file:line tables for every `atob`/`btoa`, clipboard, and vault-enumeration call site\n- **Disclosure-pointer comments** at `btoa`/`atob` call sites\n- **In-plugin funding buttons removed** — 2 of 3 scanner-flagged domains gone (3 → 1). Funding still surfaces via the Obsidian plugin directory UI via `manifest.json` `fundingUrl`\n- **README Network access table** updated\n\nNo behavior change. No `data.json` schema change.\n\n## What's NOT here\n\nThe declarative settings API migration is deferred — the refactor is substantial (10+ complex sections in `settings.ts`) and warrants its own focused release. The 13 `display is deprecated` lint warnings remain, as in v1.0.3, and are non-blocking per the [1.0.3 notes](https://github.com/JordanNewell/curtis-ai-chat/blob/master/CHANGELOG.md#103---2026-07-23).\n\n## Rolling back\n\nInstall the [v1.0.3 release assets](https://github.com/JordanNewell/curtis-ai-chat/releases/tag/v1.0.3) (`main.js`, `manifest.json`, `styles.css`) into your `<vault>/.obsidian/plugins/curtis-ai-chat/` folder and reload Obsidian. All settings round-trip cleanly — no data loss.\n\n## Feedback\n\nPlease report regressions in [PR #7](https://github.com/JordanNewell/curtis-ai-chat/pull/7) or open a new issue. Stable `1.0.4` ships after 3-5 days of community feedback.",
+      "downloadCount": 0,
+      "draft": false,
+      "name": "v1.0.4-rc1",
+      "prerelease": true,
+      "publishedAt": "2026-07-31T08:24:31Z",
+      "tag": "v1.0.4-rc1"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:8402631006f6c0aebe1a670c3d0bcb77edb15cc2e319a29de774a3e8f963ae06",
-          "downloadCount": 33,
+          "downloadCount": 41,
           "name": "main.js",
           "size": 182444
         },
         {
           "digest": "sha256:2620fe64d376293b86030c38939fb414057ed1f82e713b9bf5a1972523994a05",
-          "downloadCount": 32,
+          "downloadCount": 40,
           "name": "manifest.json",
           "size": 541
         },
         {
           "digest": "sha256:102678d94322d0d25ca628ad167afd7c3a34005da9cb44ebe4023d89565f644b",
-          "downloadCount": 30,
+          "downloadCount": 38,
           "name": "styles.css",
           "size": 50207
         }
       ],
       "author": "github-actions[bot]",
       "description": "## [1.0.3] — 2026-07-23\n\nHotfix release. The 1.0.2 manifest declared `minAppVersion: 1.13.0` (a catalyst/insider-only build), which made the plugin uninstallable for every user on stable Obsidian (latest stable is 1.12.7). This release lowers the floor to 1.11.4 by removing the only 1.13-pinned APIs.\n\n### Fixed\n\n- **Install failure on stable Obsidian** — `minAppVersion` lowered from `1.13.0` → `1.11.4`. The 1.0.2 settings migration to the declarative `getSettingDefinitions()` API (Obsidian 1.13+) was the trigger; this reverts to the imperative `display()` API, which works on every version including 1.13+.\n- **Settings tab renders again** — `renderSettings()` → `display()` (public override), and all 12 internal `this.update()` refresh calls swapped back to `this.display()`. The 1.0.2 changelog claimed this was deferred to v1.1; the version-floor bug forced the revert early.\n- **Destructive buttons** — 3 `ButtonComponent.setDestructive()` calls (1.13-only) replaced with `btn.buttonEl.addClass('mod-destructive')`. Identical styling (Obsidian applies the same CSS class internally), ancient DOM API.\n\n### Notes\n\n- The true API floor is **1.11.4**, set by the `SecretStorage` API used for per-provider key storage in `core/secrets.ts`. `App.loadLocalStorage/saveLocalStorage` (1.8.7) and `Workspace.revealLeaf` (1.7.2) are also in use but below the floor. Nothing 1.13-specific remains.\n- The declarative settings API is still the intended future path; it will be re-adopted once 1.13 reaches stable. The 13 `display is deprecated` lint warnings are expected and non-blocking for plugin review.\n\n",
-      "downloadCount": 32,
+      "downloadCount": 40,
       "draft": false,
       "name": "1.0.3",
       "prerelease": false,

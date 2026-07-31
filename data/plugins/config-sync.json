@@ -4,8 +4,8 @@
   "description": "Selective, on-demand distribution of vault configuration (snippets, hotkeys, plugin settings) across devices and vaults. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "config-sync",
-  "lastChangedAt": "2026-07-30T09:02:27.068Z",
-  "lastFetchedAt": "2026-07-30T09:02:27.068Z",
+  "lastChangedAt": "2026-07-31T09:04:26.998Z",
+  "lastFetchedAt": "2026-07-31T09:04:26.998Z",
   "manifest": {
     "author": "xooooooooox",
     "authorUrl": "https://github.com/xooooooooox",
@@ -14,11 +14,71 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.8.7",
     "name": "Config Sync",
-    "version": "2.9.0"
+    "version": "2.10.1"
   },
   "name": "Config Sync",
   "presentInCommunityList": true,
   "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:8916e503ae07dff916bc324ac52d6495914a1d3058cc31fd14d365cd6c6cf405",
+          "downloadCount": 15,
+          "name": "main.js",
+          "size": 259697
+        },
+        {
+          "digest": "sha256:822317c242a6f04d62f10de40a1f6d2d23546627dd343a716c12c9c89c648fcc",
+          "downloadCount": 17,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:67ce6a5f6a54497c1c413b5f22684ba31d8e8f070998673128ca6b8161481915",
+          "downloadCount": 15,
+          "name": "styles.css",
+          "size": 84201
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## The \"newer version info\" hint learns to let go\n\n2.10.1 finishes what 2.10.0's cross-vault work started. Live testing against a source vault left two loose ends: a \"remote has newer version info; Pull refreshes it\" hint that no amount of pulling could clear, and a matched list that named Config Sync right above the note saying it stays out of the remote. Both are convergence bugs, and both trace back to the same blind spot — a store can legitimately hold content that isn't part of this vault's own sync list, and the version bookkeeping pretended it couldn't.\n\n### Fixed\n\n- **Pull can now clear the \"newer version info\" hint — and Capture keeps it cleared.** The version info for store content outside this vault's sync list could never take up residence locally: Pull only adopted entries it could attribute to a local item, and Capture rebuilt the record from the local list alone, dropping anything foreign. Pull now attributes matching files against both sides' lists, and Capture carries the foreign entries forward — so one Pull settles the hint for good, instead of promising a refresh it could never deliver.\n- **The remote comparison reads the other vault's current sync list again.** Comparisons resolved the remote's list only from its legacy format; vaults on the current settings format looked list-less, which is why files nobody local claimed showed under *(other store files)* and their version info had no home. The comparison now understands the current format on the remote side too.\n- **The matched list respects the exclusion.** With *Keep Config Sync's own settings out of this remote* turned on, expanding \"✓ N more items match\" no longer lists Config Sync — an excluded item was never compared, so it is neither changed nor matched. The standing note remains the one place that says where it went.\n\n### Docs\n\n- Architecture notes track the new lock semantics: two-sided attribution on Pull, foreign entries carried through Capture, and the remote list resolution for both settings formats.\n\nNode suite at 814 tests.\n",
+      "downloadCount": 17,
+      "draft": false,
+      "name": "2.10.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T12:13:53Z",
+      "tag": "2.10.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:73a0ba1e83b8c2125794f13146997bd348c54a07e2bf3616f3de61e7a970a563",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 259445
+        },
+        {
+          "digest": "sha256:9dc9963642a0aee8dcc36bac870ad9dadd5134e485c4df2930459433051d0c2b",
+          "downloadCount": 3,
+          "name": "manifest.json",
+          "size": 336
+        },
+        {
+          "digest": "sha256:67ce6a5f6a54497c1c413b5f22684ba31d8e8f070998673128ca6b8161481915",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 84201
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## Remotes learn to respect a vault that keeps its own setup\n\n2.10.0 is about pulling from a vault that is deliberately *not* your mirror. Testing a kickstart vault against its source vault surfaced three remote-pane problems: Config Sync's own settings ping-ponged forever between the two vaults' intentionally different contracts, a `−2` on a diff row couldn't be opened to see which two files it meant, and the pane's one-line summary promised changes that Pull would never actually make.\n\n### Added\n\n- **Keep Config Sync's own settings out of this remote.** A per-remote toggle (off by default) for vaults that keep their own setup: Pull and Push skip Config Sync's settings in both directions — Push's mirror pass leaves the remote's own copy untouched — and the comparison stops reporting them, including the store-lock \"newer version info\" hint that used to stick forever. The remote pane carries a standing note while the exclusion is on, and the pull-conflict dialog points at the setting whenever Config Sync's own file is the conflict, so the way out of the loop is discoverable right where the loop bites.\n- **Remote diff rows open up.** Every row in the remote comparison now expands to its file list — added, changed, and only-in-your-store — and each file opens an inline diff, with the same sorted views the rest of the Sync Center uses for JSON and on/off lists. Files that exist on one side only diff against an empty *not at {remote}* / *not in your store* side. Rows also use the same two-tone names as the device list, so the snippets folder reads *Appearance › CSS snippets* here too.\n\n### Fixed\n\n- **The direction summary now tells the truth.** Instead of one \"Pull would bring these changes\" line covering everything, the pane separates what the aligned action really carries (*Pull would bring 2 files*, or *Pull would bring nothing*) from what it deliberately won't do: files that exist only in your store get their own muted line — *Pull never removes files; Push would add them to {remote}* — and the push direction states the mirror consequence just as plainly.\n\n### Docs\n\n- README (en/zh) covers the exclusion toggle and the expandable remote diff; the architecture notes track the new data shapes and signatures.\n\nNode suite at 809 tests.\n",
+      "downloadCount": 3,
+      "draft": false,
+      "name": "2.10.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-30T09:52:13Z",
+      "tag": "2.10.0"
+    },
     {
       "assets": [
         {
@@ -29,7 +89,7 @@
         },
         {
           "digest": "sha256:90c6c0c9cf9447740e56b4f64e0a6955b3ce1652193a12c1b9de9d9e7551dc9e",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 335
         },
@@ -42,7 +102,7 @@
       ],
       "author": "github-actions[bot]",
       "description": "## The Sync Center now tells you when Config Sync itself needs the update\n\n2.9.0 closes two Sync Center blind spots found in device testing: a device running an older Config Sync than the version the store was captured on looked fully \"in sync\" everywhere, and the availability sections' head counts could contradict their own titles.\n\n### Added\n\n- **Update-available advisory for Config Sync itself.** When this device's Config Sync is older than the version the store's settings were captured on, the header *this device* chip, the sidebar entry, and the pane pill turn orange — *update available* — instead of a green check, and the Config Sync pane shows an advisory with an **Open Community plugins** shortcut: *\"Captured on Config Sync 2.9.0 — this device runs 2.8.0. Update before adopting or applying.\"* It's guidance, not an action — Config Sync can't update itself mid-run, so the update happens through Obsidian's own updater. The advisory shows in every pane state, so it also frames adopt/capture decisions on an outdated device.\n\n### Fixed\n\n- **Section head counts now count what's in the section.** \"Outdated on this device\" with one update-only plugin inside used to read `0` plus a green `✓ 1` — the count only tracked content drift, and settings that match the store are the *normal* case for a plugin that just needs updating. The heads of Outdated / Disabled / Not installed now count their rows (every row there carries an action payload), and the misleading in-sync pill is gone.\n- Removed two leftover unreachable branches that special-cased Config Sync inside the Outdated section — the self layer has lived in its own pane since it left the item list.\n\n### Docs\n\n- README (en/zh) chip descriptions and the architecture notes cover the new advisory.\n\nNode suite at 802 tests.\n",
-      "downloadCount": 8,
+      "downloadCount": 9,
       "draft": false,
       "name": "2.9.0",
       "prerelease": false,
@@ -53,26 +113,26 @@
       "assets": [
         {
           "digest": "sha256:ca895e2dac52d94a03409876117e828bf4c92d6e9eeeb0bb2933e91eca0215d6",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "main.js",
           "size": 254911
         },
         {
           "digest": "sha256:84b11aaf276ff6bb66e211b51e75878ae09312e89763636ea1c7f2be958f1d46",
-          "downloadCount": 11,
+          "downloadCount": 12,
           "name": "manifest.json",
           "size": 335
         },
         {
           "digest": "sha256:133da3b961d45e82ac5e11307e58788881a4db5a8081f1629e30f233e19b2b93",
-          "downloadCount": 10,
+          "downloadCount": 11,
           "name": "styles.css",
           "size": 81282
         }
       ],
       "author": "github-actions[bot]",
       "description": "A polish release: no new features, but words, icons, and colors across the plugin now do their job properly.\r\n\r\n## Fixed\r\n\r\n- The result strip's **✗ and ⚠ counters show their colors again** — failed and warning counts had been rendering with no color at all, easy to scan past.\r\n- A settings hint pointed at a panel that no longer exists; it now points where snippet device rules actually live (the Appearance card's companion folders).\r\n\r\n## Changed\r\n\r\n- The command palette entry is now **\"Open Sync Center\"** (was the doubled-up \"Sync: open the sync panel\"), and the ribbon icon's tooltip says what it opens.\r\n- A copy pass across settings and the Sync Center: consistent terms everywhere (on/off state, item), device-and-consequence phrasing instead of internals, proper plurals, sentence case.\r\n- Icon and glyph cleanup: the compact switcher uses the real settings icon, Stop syncing uses a standard icon instead of a hand-drawn one, collapse arrows in the conflict dialog match the rest of the app, and close buttons are real icons.\r\n- Color semantics tightened: the encryption lock shows the encryption color, destructive text actions (Delete, Clear all) read red, and warning/error tones are applied consistently.\r\n- README (EN/中文), the design doc, and the contributor docs are up to date with everything shipped through 2.7.x.\r\n",
-      "downloadCount": 11,
+      "downloadCount": 12,
       "draft": false,
       "name": "2.8.0",
       "prerelease": false,
