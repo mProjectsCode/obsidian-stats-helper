@@ -4,17 +4,16 @@
   "description": "AI-powered split-view reading: source note on the left, LLM-generated summary cards on the right with scroll-sync highlighting. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "parallel-reader",
-  "lastChangedAt": "2026-07-31T05:00:27.028Z",
-  "lastFetchedAt": "2026-07-31T05:00:27.028Z",
+  "lastChangedAt": "2026-08-01T05:05:27.032Z",
+  "lastFetchedAt": "2026-08-01T05:05:27.032Z",
   "manifest": {
-    "author": "lancivez",
+    "author": "fancive",
     "description": "AI-powered split-view reading: source note on the left, LLM-generated summary cards on the right with scroll-sync highlighting.",
-    "fundingUrl": "https://github.com/fancive",
     "id": "parallel-reader",
     "isDesktopOnly": true,
     "minAppVersion": "1.8.7",
     "name": "Parallel Reader",
-    "version": "1.0.24"
+    "version": "1.0.25"
   },
   "name": "Parallel Reader",
   "presentInCommunityList": true,
@@ -22,8 +21,44 @@
     {
       "assets": [
         {
+          "digest": "sha256:578bca2f5fa6e8c97c08429f0e9517d5fd8ec5c137a4029f96f7be06ad3f252e",
+          "downloadCount": 2,
+          "name": "main.js",
+          "size": 219855
+        },
+        {
+          "digest": "sha256:749d7fbb94431c9748f74ed0d86a6892845df1538108a85903345f9275e0d8ea",
+          "downloadCount": 0,
+          "name": "main.js.map",
+          "size": 500786
+        },
+        {
+          "digest": "sha256:dfc1f9c2ece21982646fa8628478272f4bc371e3a07707965cacbe0b095ef762",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 299
+        },
+        {
+          "digest": "sha256:5e21eca3a84097af9dc7f32fc421c8822fe1b107d85e745894e0cbd977f6670b",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 13836
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## [1.0.25] - 2026-08-01\n\n- ci: guard the release workflow so a pushed tag must match `manifest.json`'s\n  version and must exist as a key in `versions.json`, failing before any\n  publish/upload step (S5)\n- ci: use this CHANGELOG's per-version section as the GitHub release body\n  instead of `--generate-notes` (S5)\n- build: `scripts/bump-version.mjs` gains a `--tag` flag that commits and tags\n  the version bump in one step, instead of leaving commit+tag as separate\n  manual actions (S5)\n- docs: point install instructions at the official community plugin registry;\n  fix `manifest.json` identity fields (author, drop stale `fundingUrl`) (S2)\n- ci(coverage): stop reporting a fabricated 100% branch-coverage gate (S1a)\n- test(coverage): load `main.ts` / `src/*.ts` directly via Node type stripping\n  instead of an esbuild bundle, so branch and function coverage are real\n  (32 -> ~1200 measured branches, 12 -> ~320 functions); set thresholds to the\n  measured floor and add a CI assertion on the absolute totals (S1b)\n- fix: the summary card highlight no longer stays on the previous note's card\n  after switching files, and no longer jumps to the card above the one you\n  clicked (S3)\n- fix: offer Retry on timeout, rate-limit, schema and unrecognised generation\n  errors — previously only network errors could be retried from the notice (S4)\n- fix: the stale-cards banner is rebuilt from the warning colour instead of the\n  error red it was painted on, raising its contrast from ~1.4:1, and gains an\n  icon so the state is not signalled by colour alone (S6)\n- fix: the active summary card is now visually distinct from a hovered one\n  (both previously repainted to the sidebar's own background), activation no\n  longer nudges card text by 1px, keyboard focus is distinguishable from hover,\n  and icon buttons no longer show a duplicate OS tooltip (S7)\n- fix: clearing the cache from Settings now refreshes the panel, matching the\n  command; a failed card edit or delete no longer leaves the UI showing a\n  change that was not saved (S8)\n- fix: the editor scroll listener is released on unload instead of leaking the\n  plugin instance on every in-place update, and pending settings and cache\n  writes are flushed when Obsidian quits (S9)\n- fix: localise the three clipboard/action failure notices that were hardcoded\n  in English despite translations existing in all seven locales (S10)\n- test: replace two architecture guards that could never match with a real\n  cache-debounce test (S11)\n- a11y: honour `prefers-reduced-motion` for the loading spinner and card\n  scroll-sync animation\n- fix: opening or switching to a note with cached cards highlights the card the\n  editor is already on, instead of showing no highlight until you scroll\n- fix: a card edit or delete that finishes after you switched notes no longer\n  repaints the newly opened note with the previous note's cards\n- fix: a rejected cache write is rolled back in memory, so an edit the UI\n  reported as failed can no longer reappear when the note is reopened\n- fix: cache writes are serialized, so a failed write during batch generation\n  can no longer discard summaries that were saved successfully alongside it\n- fix: quitting Obsidian now waits for a debounced settings or cache write that\n  is already in flight, not just for one that has yet to start\n- fix: settings writes are queued, so two changes made in quick succession\n  cannot land out of order and revert the newer one\n- fix: opening a note within a moment of clicking a card in another note no\n  longer leaves the new note without a highlighted card until you scroll\n- a11y: the active card's title carries an underline, so \"you are here\" is no\n  longer signalled by colour alone\n- build: `scripts/bump-version.mjs --tag` refuses to tag when the tag already\n  exists, when the CHANGELOG section is missing, or when unrelated changes are\n  staged, and commits only the release files\n- fix: the initial card-highlight sync now prefers the Markdown leaf that is\n  actually focused when the same note is open in two leaves (a split),\n  instead of always reading whichever leaf the workspace happened to\n  enumerate first\n- fix: a card edit or delete superseded by a concurrent mutation on the same\n  card now shows a notice instead of silently doing nothing; it still fails\n  closed and does not persist, only the missing feedback was fixed\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.25",
+      "prerelease": false,
+      "publishedAt": "2026-08-01T03:14:29Z",
+      "tag": "1.0.25"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:387e7078f8d191a910b834181aa1e27a72f5329922f8224f9103ae9c01f1154f",
-          "downloadCount": 100,
+          "downloadCount": 101,
           "name": "main.js",
           "size": 216384
         },

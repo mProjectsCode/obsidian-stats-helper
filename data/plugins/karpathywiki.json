@@ -4,8 +4,8 @@
   "description": "Karpathy's LLM Wiki implementation - multi-page knowledge generation with entity/concept pages and conversational query. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "karpathywiki",
-  "lastChangedAt": "2026-07-31T05:00:27.028Z",
-  "lastFetchedAt": "2026-07-31T05:00:27.028Z",
+  "lastChangedAt": "2026-08-01T05:05:27.032Z",
+  "lastFetchedAt": "2026-08-01T05:05:27.032Z",
   "manifest": {
     "author": "Greener-Dalii",
     "authorUrl": "https://github.com/green-dalii",
@@ -15,7 +15,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.11.4",
     "name": "Karpathy LLM Wiki",
-    "version": "1.25.10"
+    "version": "1.25.11"
   },
   "name": "Karpathy LLM Wiki",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:74ad85d1fd5d18b5a8780eeb824caf378e3e6f30e0b3df83ebec85de96099c85",
+          "downloadCount": 353,
+          "name": "main.js",
+          "size": 3482723
+        },
+        {
+          "digest": "sha256:f68ab8227e82cb37a96132c834b919d382d06e6a0826f21d7c41ae2532312904",
+          "downloadCount": 362,
+          "name": "manifest.json",
+          "size": 406
+        },
+        {
+          "digest": "sha256:5c08c97e6f52e2e35f79246b055b1da3b15ff57affe0c2d03c177890cff0c031",
+          "downloadCount": 343,
+          "name": "styles.css",
+          "size": 34281
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "# 🌟 Karpathy LLM Wiki v1.25.11\n\n## Highlights\n\nA focused PATCH on v1.25.10 carrying three locked items from the 2026-07-30 triage, plus a code-quality cleanup pass. **No new features, no API surface changes, no breaking changes** — every change ships with a reproduction on a real-world corpus or a measurable improvement:\n\n- **Freshly generated pages now stamp `sources:` provenance at create time (#365).** Previously the create-page path relied on the LLM to remember to write the `sources:` frontmatter field. When the model forgot — common with smaller / quantized providers — the page entered the wiki with no provenance trail, and later re-ingest could not tell which source had produced which page. A new `appendSourceSlugToFrontmatter` helper at `src/wiki/page-factory/create-page.ts` splices the source slug into the existing frontmatter in a single linear pass — output is byte-shape identical to `merge-page.ts:93`, so pages written through either path now look the same to downstream readers.\n\n- **Internal README links now resolve in the Obsidian Community Plugin browser (#375).** The plugin's manifest `README.md` is rendered by the in-app Community Plugin browser, which strips relative cross-file links. 10 READMEs (EN + 9 locales) + `docs/PDF-OCR-GUIDE.md` now use absolute `https://github.com/green-dalii/obsidian-llm-wiki/blob/main/...` URLs everywhere a user might click between documents. Image refs are intentionally exempted — GitHub serves them via the absolute URL anyway.\n\n- **Status bar now reports the active stage by name (#169).** \"Reading source…\" / \"Extracting entities…\" / \"Running LLM analysis…\" / \"Generating pages…\" — each stage now has its own fine-grained label (15 keys × 10 locales: 7 ingest + 3 PDF + 5 lint SCAN phases). Not ETA, never ETA — the wall-clock variance across LLM providers and corpus sizes makes time estimates unreliable, but knowing which phase the plugin is in helps users decide whether to wait or interrupt.\n\n- **Query turn indicator redesigned as a windowed dot stack.** The previous v1.23.2 indicator grew to ~3k px tall on a 200-turn conversation and overflowed the history container, losing its purpose as a \"where am I in the conversation\" anchor. The new design keeps one dot per turn but constrains the indicator to a fixed window inside the history container (25% from top, 50% from bottom of the panel). As the user scrolls through the conversation, dots roll past the window edges — the same ChatGPT/Grok \"where am I in the conversation\" feel — without the dot stack itself growing unboundedly. Hover tooltips still show the question text; clicking a dot scrolls the corresponding turn into view.\n\n**2744 tests passing (204 files).** +31 net since v1.25.10.\n\n## Changes\n\n### Fixed\n\n- **Freshly generated pages now stamp `sources:` provenance at create time (#365).** The `appendSourceSlugToFrontmatter` helper splices the source slug into the existing frontmatter in a single linear pass — output is byte-shape identical to `merge-page.ts:93`. 5 new tests in `create-page.test.ts` pin the byte-identical contract.\n- **Internal README links now resolve in the Obsidian Community Plugin browser (#375).** Relative cross-file links are broken in the in-app reader; the patch moves them to absolute `https://github.com/...` URLs. 12 new tests in `readme-links.test.ts` enforce the invariant across all 10 READMEs + `PDF-OCR-GUIDE.md`. Image refs intentionally exempted.\n- **Frontmatter fence guard accepts malformed closing-fence shapes.** A previous parser tolerated a malformed `---` line at end-of-file on the read path; this patch tightens the guard so the create path emits a single, canonical `---` closing fence.\n\n### Added\n\n- **Fine-grained status-bar stage labels (#169).** `STAGE_KEYS` canonical ordered list (15 keys) lives in `src/core/ingest-stages.ts`. `buildIngestStatusBarText` accepts a 4th `stage` parameter. `analysis-phase` migrated from the old generic `lintStatusAnalyzing` to the new `lintStageAnalyzing`. NOT ETA — labels are stage names, never wall-clock estimates. 7 new tests in `ingest-stages.test.ts` + `status-bar.test.ts` pin the 4-arg contract.\n- **Turn-indicator redesigned as a windowed dot stack (Query UX).** The previous v1.23.2 indicator grew to ~3k px tall on a 200-turn conversation and overflowed the history container, losing its purpose as a \"where am I in the conversation\" anchor. The new design keeps one dot per turn but resolves the indicator's top/bottom offsets to a fixed window inside the history container (25% from top, 50% from bottom of the panel). As the user scrolls, dots roll past the window edges, giving the ChatGPT/Grok \"where am I in the conversation\" feel. Hover tooltips still show the question text; clicking a dot scrolls the corresponding turn into view.\n- **EN README banner polish.** Restored the \"Obsidian Review Perfect Score\" badge line + \"Local-first • No backend • GDPR-Friendly\" privacy line; tightened the comparison table from 12 rows to 8 (collapsing 4 near-duplicates); added a star CTA at the bottom of Quick Start.\n- **Ecosystem section (new EN H2).** Documents MinerU online conversion as an alternative to local PDF OCR for users who cannot run local OCR pipelines.\n\n### Internal\n\n- **5-agent audit applied 4 cleanups** (4× simplify angle + 1× code-review max-effort):\n  - **F2** — 4× frontmatter re-parse eliminated on the create-page path; the new `appendSourceSlugToFrontmatter` helper is single-pass linear.\n  - **F4** — `analysis-phase` migrated to `lintStageAnalyzing`; old generic `lintStatusAnalyzing` key removed.\n  - **F5** — 30 dead i18n entries deleted across 10 locales (`lintStatusReading`, `lintStatusDuplicates`, `lintStatusScanningLinks` × 10).\n  - **F6** — dead `fitIndicatorToContainer` alias export removed from `turn-indicator.ts` (zero callers).\n- **Indicator redesign iterated.** Three earlier variants (v1 dynamic gap, v2 12-slot sliding window, v4 percentage-based translation) were tried; v4's percentage-based positioning was broken because the JS path in `syncIndicatorWindowPx` writes explicit pixel values on every `buildTurnIndicator` call, overriding the CSS percentage fallback. The shipped version (v6 windowed-dot-stack) uses percentages for layout intent but always resolves them to pixels in JS — a pattern that survives container-resize without the brittle CSS-dependency. The three earlier iterations' findings are preserved in `turn-indicator.ts`'s v1.25.11 PATCH header comment.\n\n## Installation\n\n1. **From Community Plugins**: Obsidian Settings → Community Plugins → Browse → search \"Karpathy LLM Wiki\"\n2. **From Community Plugin Website**: [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\n3. **Manual**: Download `main.js`, `manifest.json`, `styles.css` from the release assets\n\n### Upgrading from v1.25.10\nNo migration needed. Replace `main.js`, `manifest.json`, and `styles.css` in your vault's `.obsidian/plugins/karpathywiki/` directory.\n\nExisting wikis are not touched on upgrade. Pages generated by older versions can be re-ingested to retroactively stamp the `sources:` field; the formatter on the read path tolerates the missing field gracefully, so existing wikis continue to load and query without re-ingest.\n\n## Tests\n\n- **2744 tests passing** (204 files). +31 net since v1.25.10:\n  - +7 `ingest-stages.test.ts` + `status-bar.test.ts` (4-arg `buildIngestStatusBarText` + `STAGE_KEYS` enumeration)\n  - +12 `readme-links.test.ts` (absolute-URL invariant across 10 READMEs + `PDF-OCR-GUIDE.md`)\n  - +5 `create-page.test.ts` (byte-identical output vs `merge-page.ts:93` for `appendSourceSlugToFrontmatter`)\n  - +2 `frontmatter.test.ts` (fence guard)\n  - +5 misc tests from the simplify follow-up `e02a33d`\n\n## Contributors\n\n**Code contributors (commits in the 1.25.10 → 1.25.11 range):**\n\n- **@green-dalii** — All 12 commits in this PATCH range. Implementation: #365 Plan A `appendSourceSlugToFrontmatter` helper (commit `9289bdd`), #375 absolute-URL rewrite (commit `7588034`), #169 fine-grained status-bar stage labels (commit `98f180c`), 5-agent audit follow-up (commits `c191878`, `e02a33d`), docs polish (commits `5b18655`, `94c4c72`), turn-indicator UX restore (commit `a300d1d`), release-prep (commit `527a46f`).\n\n**Issue reporters (issues closed by this release):**\n\n- **@DocTpoint** — reported #365 \"New pages rely on the model to write `sources:` — the create path never stamps provenance\". The diagnosis identified the create path as a separate write-side concern from the merge path's existing `merge-page.ts:93` provenance helper, which motivated the Plan A splice approach over a full frontmatter re-parse.\n- **@Gojob2987** — reported #375 \"Bug: README internal links non-functional in Obsidian community plugin browser\". The reported behaviour (clicking internal links in the in-app reader did nothing) traced to the Obsidian Community Plugin browser stripping relative cross-file links — absolute `https://github.com/...` URLs work in all rendering contexts.\n- **@Indexed-Apogrypha** — reported #169 \"Better status reporting, watch files as they are generated\". The reported gap (the status bar showed only \"Running…\" without saying which phase) drove the 15-key fine-grained stage system.\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.25.10...1.25.11",
+      "downloadCount": 362,
+      "draft": false,
+      "name": "1.25.11",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T07:34:12Z",
+      "tag": "1.25.11"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:3a28a7a87b4fb5c2fde36ab9fae4048c78c6b60370dd3550dc2211eb82984e01",
-          "downloadCount": 611,
+          "downloadCount": 666,
           "name": "main.js",
           "size": 3471146
         },
         {
           "digest": "sha256:d7c67f20650055d8a785dc0901b65626ae3ff3bf7e506ea97fbc35bcab808013",
-          "downloadCount": 615,
+          "downloadCount": 671,
           "name": "manifest.json",
           "size": 406
         },
         {
           "digest": "sha256:95de0dded79775a99e05d814b9d109cbdf56531d3b146ede18880388e2bcaefd",
-          "downloadCount": 594,
+          "downloadCount": 642,
           "name": "styles.css",
           "size": 29819
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 🌟 Karpathy LLM Wiki v1.25.10\n\n## Highlights\n\nA focused PATCH on v1.25.9 carrying bug fixes only — **no new features, no API surface changes**. Every item in this release has a measured reproduction on a real-world corpus:\n\n- **Mentions `[[|]]` parser + formatter fixed (#363).** Measured on a 417-note corpus (9272 writes): 119 frozen pages, 104 of the 144 unparseable lines were empty backlinks. The auto-provenance builder wrote a `MentionWithProvenance.source_path: ''` straight through `formatMentionsSection`, emitting `[[|]]`. `BULLET_RE` required a non-empty target, so the line failed to parse, `computeReingestMentions` returned `preserveRaw`, and the page never accumulated another quote — silently, on every subsequent re-ingest. Two coordinated fixes: the formatter now routes both branches through a single `renderCitation(leftPath)` helper that emits no link when the path is empty; the parser's `BULLET_RE` makes the citation segment optional and accepts an empty target, so the next merge fills attribution back from the source being ingested.\n\n- **Ingest-a-folder stopped pulling in sibling files sharing a name prefix (#364).** The bare `path.startsWith(folder.path)` leaked three cases: sibling folder with shared prefix (`Notizen` also matched `Notizen-temp/x.md`), file sitting beside the folder (`Notizen.md` also matched `Notizen`), and the folder itself. The new `folder-scope` helper anchors on a trailing slash and treats the vault root as a wildcard ancestor — 11 mutation-tested cases including `Notizen.md` beside the folder.\n\n- **Frontmatter re-touch no longer strips unknown top-level fields (#356).** A previous fix's call to `mergeFrontmatter` accidentally dropped fields the plugin did not author (e.g. `redirect_to:`, custom user fields). `extractPassthroughLines` + `replaceOrInsertYamlListField` + `CANONICAL_FRONTMATTER_KEYS` separate plugin keys from user keys and re-emit the user's verbatim.\n\n- **Lint fix-runners batched by `pageGenerationConcurrency` (#367 P0-1).** Five fix-runners now slice their input into batches of `pageGenerationConcurrency` and resolve each batch through `Promise.allSettled` so a single failure never poisons the rest. `concurrency = 1` (the v1.25.9 default) preserves prior behaviour; users who raise it to 4–8 in Settings see wall-clock drop roughly by `(n / concurrency)` on a 2000-page vault. P1-1 analysis cache + P1-2 smart-skip helpers ship as dead code in this release; the controller wire lands in v1.26.0 MINOR (existing `length > 0` guards already provide equivalent skip semantics today).\n\n**2713 tests passing (202 files).** +91 net since v1.25.9.\n\n## Changes\n\n### Fixed\n\n- **Mentions section stopped silently truncating pages with empty citation targets (#363).** The two halves are one fix, not two: shipping only the formatter half would have traded one unparseable shape for another. Round-trip interlock tests pin the formatter ↔ parser contract so neither half can ship alone again.\n- **Ingest-a-folder stopped pulling in sibling files that share a name prefix (#364).** Anchor on a trailing slash; treat the vault root as a wildcard ancestor.\n- **Frontmatter re-touch no longer strips unknown top-level fields on re-touch (#356).** User fields are separated from plugin keys and re-emitted verbatim.\n- **Merge triage can no longer drop a page's own primary source on a `skip` judgement (#312 part 2).** New `isSourceOwnPageLemma({ pageName, pageAliases, sourceBasename, sourceContext })` predicate compares slug keys against the page basename + curated aliases. `SourceContext` is optional everywhere — lint pipeline callers pass nothing and see no change.\n- **Slug comparison keys use a Turkish-aware case fold when the vault opts in (#366 phase 1).** New `slugKeys(name, aliases, { turkishFold })` returns the comparison-key set; `[[İsim]]` and `[[isim]]` collapse to the same key in Turkish vaults. File-name outputs stay byte-identical — `computeSlug` is unchanged; the fold is comparison-only.\n\n### Performance\n\n- **Lint fix-runners batched by `pageGenerationConcurrency` (#367 P0-1).** Five fix-runners (`runAliasCompletion`, `runDeadLinkFixes`, `runEmptyPageFixes`, `runOrphanFixes`, `runDuplicateMergeFixes`, `runRetagViolations`) now slice into batches and resolve through `Promise.allSettled`. P1-1 analysis cache + P1-2 smart-skip helpers ship as dead code; controller wire deferred to v1.26.0.\n- **Alias hardening floor lowered from 3 to 2 chars (`MIN_ALIAS_LENGTH = 2`).** Two-char aliases are real-world (`ML`, `HD`, `CD`, `AI`, `UI`, `OS`, `DB`); rejecting them at the floor would be over-aggressive. The constant lives in `src/constants.ts`, not in Settings.\n\n### Changed\n\n- **Custom tag vocabulary clarified as a hint, not an enforcement gate (#368).** Schema docs and the Settings UI hint now spell this out in user language. Root cause is a docs / semantic mismatch, not an enforcement bug.\n\n## Installation\n\n1. **From Community Plugins**: Obsidian Settings → Community Plugins → Browse → search \"Karpathy LLM Wiki\"\n2. **From Community Plugin Website**: [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\n3. **Manual**: Download `main.js`, `manifest.json`, `styles.css` from the release assets\n\n### Upgrading from v1.25.9\nNo migration needed. Replace `main.js`, `manifest.json`, and `styles.css` in your vault's `.obsidian/plugins/karpathywiki/` directory.\n\nExisting wikis are not touched on upgrade. Mentions sections on pages with `[[|]]` citations heal themselves automatically on the next re-ingest: the parser now accepts that shape, and `computeReingestMentions` fills the empty `source_path` from the source being merged.\n\n## Tests\n\n- **2713 tests passing** (202 files). +91 net since v1.25.9:\n  - +11 `folder-scope.test.ts` (prefix derivation + 7 predicate cases, including `Notizen.md` beside the folder)\n  - +6 `mentions-formatter-roundtrip.test.ts` (`#363 — empty and absent citations` describe block, including round-trip interlock tests)\n  - +84 lint fix-runner concurrency tests (5 fix-runners × per-batch-path)\n  - −10 net deletions: removed 4 `ingest-folder-boundary` tests and replaced 3 `dedec51` data-layer-fallback tests that were co-dependent on the now-removed behaviour\n\n## Contributors\n\n**Code contributors (commits in the 1.25.9 → 1.25.10 range):**\n\n- **@green-dalii** — 10-item PATCH scope lock and the majority of the implementation: #356 frontmatter passthrough (commit `6736b06`), #363 admission criterion + parser tolerance (initial 2-commit split in `dedec51` + `f3c61ab`), #364 folder-boundary helper (initial in `728f235`), #366 Turkish fold helper (`507e895`), #367 lint-perf P0-1 fix-runners parallelisation (`ece6007`, `17982b7`, `dbe9e13`, `76f2475`) + P1-1/P1-2 helpers, #368 schema docs + settings UI hint (`83dec0e`), DocTpoint §4 merge/contradictory route split (`e3861b5`), alias hardening (`f9a680e`, `b3e0b79`), simplify audit + 4-agent pass, release-prep.\n- **@eucher** — `7e22848` \"fix(llm): stop silent truncation in chat and ingest\" (PR #352) renamed `TOKENS_QUERY_LLM_SELECT` → `TOKENS_QUERY_ANSWER = 8000` so reasoning models stop truncating answers mid-sentence, and wired `onFinish` through all three Query call sites to surface `finishReason === 'length'` as a console warning. `43479d8` \"fix(ingest): keep source-page tags inside the closed vocabulary\" (PR #349) keeps the LLM-generated source-page tags within the active tag vocabulary. Both landed in the 2026-07-26 PATCH batch and form the base this PATCH refines.\n- **@DocTpoint** — `Co-authored-by: DocTpoint` trailers on `98afe42` and `292d42e` adopted his PR #370 (`folder-scope` mutation-tested helper for #364) and PR #371 (`renderCitation` single-render-gate design for #363). The render-layer `renderCitation(leftPath)` replaces the data-layer `m.source_path || sourcePath` fallback that silently rewrote attribution of empty-sourcePath mentions — strictly more correct, and the design now includes round-trip interlock tests. Both source PRs closed in favour of the merged result.\n\n**Issue reporters (issues closed by this release):**\n\n- **@Chris-Hestro** — reported #363 \"Mentions in Source renders `— [[|]]` when `mentions_with_provenance[].source_path` is blank\" with the failing render output that drove the formatter + parser tolerance fix.\n- **@DocTpoint** — reported #364 \"Folder ingest has no folder boundary — sibling folders sharing a name prefix are ingested too\", measured 50x folder mis-ingest on a real-world corpus, and contributed the `folder-scope` helper that the fix is built on.\n- **@Guru35** — reported three issues from an 11k-page Turkish vault corpus: #366 \"Slug derivation mismatch between link-writing and file-naming produces broken [[wikilinks]] at scale — degrades PPR retrieval\" (16.5% broken wikilinks), #367 \"Lint hangs indefinitely on large vaults (11.6k pages) — no candidates, zero API calls in 60 min\", and #368 \"Custom tag vocabulary not hard-enforced — invalid type tags written during ingest\" (9% vocabulary drift). The Guru35 morning batch of these three issues shaped the v1.25.10 PATCH scope alongside the DocTpoint batch.\n\n## Full Changelog\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.25.9...1.25.10",
-      "downloadCount": 615,
+      "downloadCount": 671,
       "draft": false,
       "name": "1.25.10",
       "prerelease": false,
@@ -54,26 +84,26 @@
       "assets": [
         {
           "digest": "sha256:3fbd371cca18d0dfb13692f159db3622bb00626a6bc4f10c113a3035855e2c73",
-          "downloadCount": 1326,
+          "downloadCount": 1327,
           "name": "main.js",
           "size": 3451946
         },
         {
           "digest": "sha256:adac4f30fbb31fd949522faee6add9733656d6578adf321860e6866e0b6b0313",
-          "downloadCount": 1349,
+          "downloadCount": 1350,
           "name": "manifest.json",
           "size": 405
         },
         {
           "digest": "sha256:95de0dded79775a99e05d814b9d109cbdf56531d3b146ede18880388e2bcaefd",
-          "downloadCount": 1282,
+          "downloadCount": 1283,
           "name": "styles.css",
           "size": 29819
         }
       ],
       "author": "github-actions[bot]",
       "description": "# 🌟 Karpathy LLM Wiki v1.25.9\n\n## Highlights\n\n**Re-publish of v1.25.8 PATCH Hotfix** — carries the **exact same code** as v1.25.8 (no functional changes). This release exists because the v1.25.8 GitHub release record was inadvertently deleted while Obsidian's automated community plugin review bot was mid-review, causing the v1.25.8 submission to fail. Obsidian's review process is one-shot per version, so v1.25.9 is the version the bot will now review on resubmission. **For the full description of what's in this build, see the [v1.25.8 release notes](https://github.com/green-dalii/obsidian-llm-wiki/releases/tag/1.25.8).**\n\n## What's Actually Different From v1.25.8\n\n- **No code changes.** v1.25.9 is byte-identical to v1.25.8 at the source level. The only differences are the version strings in `manifest.json`, `package.json`, and `versions.json`.\n- **`versions.json` trailing-comma fix.** The last entry (`\"0.2.0\": \"0.15.0\"`) had a trailing comma in `versions.json` (introduced in the v1.25.8 bump commit `c572c27`). Strict JSON parsers (Node V24+, Python `json`) reject this per RFC 8259. Removed.\n\n## Installation\n\n1. **From Community Plugins**: Obsidian Settings → Community Plugins → Browse → search \"Karpathy LLM Wiki\"\n2. **From Community Plugin Website**: [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\n3. **Manual**: Download `main.js`, `manifest.json`, and `styles.css` from the release assets\n\n### Upgrading from v1.25.8\nNo migration needed — v1.25.9 is identical to v1.25.8. Replace `main.js`, `manifest.json`, and `styles.css` and restart Obsidian.\n\n## Contributors\n\n- **@green-dalii** ([green-dalii](https://github.com/green-dalii)) — release engineering (re-publish of v1.25.8 after release-record recovery), `versions.json` trailing-comma fix.\n\n## Full Changelog\n\nThe complete change history for this build is the v1.25.8 commit + this version bump:\n\nhttps://github.com/green-dalii/obsidian-llm-wiki/compare/1.25.8...1.25.9",
-      "downloadCount": 1349,
+      "downloadCount": 1350,
       "draft": false,
       "name": "1.25.9",
       "prerelease": false,
@@ -834,26 +864,26 @@
       "assets": [
         {
           "digest": "sha256:849f18140e52fe59d17194c959b7622fd05bc54ca0fbf1f6331ec75293d60cd2",
-          "downloadCount": 186,
+          "downloadCount": 187,
           "name": "main.js",
           "size": 823597
         },
         {
           "digest": "sha256:f338b8125a40f29f01da7dd44421672641ab454a6b876ec87d894a3c2c50f09e",
-          "downloadCount": 219,
+          "downloadCount": 220,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:da05d8d2f6a85aabc98c937c91fbe231e397c2c5c12a8affbaa3a296d98b0893",
-          "downloadCount": 185,
+          "downloadCount": 186,
           "name": "styles.css",
           "size": 11779
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **🧠 Provider-first thinking control.** The plugin no longer sends provider-specific thinking-control fields by default (`disableThinking` defaults to `false`). The provider decides its own reasoning behavior. Users who explicitly want to suppress thinking can enable \"Disable thinking\" in Custom Advanced Settings, which triggers a 3-tier dialect fallback (thinking.type → reasoning_effort → none). This eliminates HTTP 400 errors on OpenAI, Gemini, Ollama, MiniMax, and other providers that reject thinking-control fields.\n- **💭 Collapsible thinking UI.** When thinking-capable models (DeepSeek, etc.) return reasoning content, it is displayed in a collapsed panel above the answer, ChatGPT/Claude.ai style. Users can expand to inspect reasoning steps. Fully localized in 8 languages.\n- **🔧 Anthropic baseUrl fix (Issues #141, #134).** `AnthropicClient` now normalizes `/v1` in the base URL, preventing 404 errors on Test Connection. Custom Anthropic-compatible endpoints work correctly.\n- **🔧 gpt-5 max_completion_tokens (Issue #143).** GPT-5 series models now use `max_completion_tokens` instead of `max_tokens`. Truncation retry also preserves the correct token key.\n- **💬 Query Wiki UX.** Respects user-configured `wikiFolder` (no longer hardcoded `wiki/`). Chat auto-scrolls to bottom on open. User message bubbles are right-aligned.\n\n### Added\n\n- `extractThinkingBlocks()` pure function — extracts think and thinking blocks from LLM responses\n- `wrapReasoningContent()` — encodes reasoning_content into think tags with nested-tag escaping\n- `renderThinkingBlocksUI()` — DOM construction for collapsible thinking panel\n- DeepSeek `reasoning_content` extraction in SSE parser (streaming + non-streaming paths)\n- `PROTECTED_FIELDS` whitelist (`model`, `messages`, `stream`) to prevent accidental stripping by `unsupportedFields`\n- v1.20.0 migration: old users automatically get `disableThinking=false` and `advancedSettingsMode=default`\n\n### Changed\n\n- Default `disableThinking` flipped from `true` to `false` (provider decides thinking behavior)\n- All 22 LLM call sites now use consistent `enableThinking` spread pattern\n- `isGpt5` prefix check tightened: exact match or `startsWith('gpt-5-')`\n- `.includes` guard for thinking tags is now case-insensitive\n- Settings UI: Default/Custom mode descriptions updated for new semantics\n\n### Fixed\n\n- Truncation retry `extractText` now preserves `reasoning_content` from retry responses\n- Streaming path missing final `renderMarkdownContent` call (thinking content was never rendered)\n- Non-streaming fallback missing `chatTemperature` parameter\n- `if (fullResponse)` dropping empty-string responses (changed to null guard)\n- `activeDocument` null guard in `renderThinkingBlocksUI`\n- `wrapReasoningContent` escaping of nested closing tags inside reasoning content\n\n### Tests\n\n- **771 tests passing** (was 728), 51 test files, 0 regressions\n- New test suites: llm-client-v120-default (12), llm-client-v120-fallback (5), thinking-blocks (10), query-thinking-ui (8), prompt-hardcode (4), llm-path (16), settings-thinkcache (8)\n\n### Contributors\n\n- **@green-dalii** — all v1.20.0 code (provider-first thinking, reasoning UI, hotfixes, 10 code-review fixes)\n- **@Indexed-Apogrypha** — reported Anthropic 400/404 errors (#141)\n- **@wwc559** — reported Anthropic 404 error (#134)\n- **@DocTpoint** — provided workaround diagnosis for Anthropic endpoint issue (#134)\n- **@artemn0va** — reported OpenAI gpt-5-mini/gpt-4o-mini 400 errors (#143)\n\n---\n\n## Installation\n\n### From Community Plugins (Recommended)\n\n1. Open Obsidian → **Settings** → **Community plugins**\n2. Click **Browse**, search for **\"Karpathy LLM Wiki\"**\n3. Click **Install**, then **Enable**\n\n### Or from the Community Plugin Website\n\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n### Manual Installation\n\nDownload `main.js`, `manifest.json`, and `styles.css` from the assets below, then copy them into your vault's `.obsidian/plugins/karpathywiki/` folder.\n\n## Configuration\n\nAfter enabling the plugin:\n\n1. Open **Settings** → **Karpathy LLM Wiki**\n2. Select a provider and enter your API key\n3. Click **Test Connection**, then **Save Settings**\n\n**New in v1.20.0:** The Default Advanced Settings mode sends no thinking-control fields — the provider decides its own behavior. Switch to Custom mode only if you need explicit control over thinking, temperature, or repetition penalty.\n\n---\n\n**Full Changelog**: https://github.com/green-dalii/obsidian-llm-wiki/compare/1.19.1...1.20.0\n",
-      "downloadCount": 219,
+      "downloadCount": 220,
       "draft": false,
       "name": "1.20.0",
       "prerelease": false,
@@ -954,26 +984,26 @@
       "assets": [
         {
           "digest": "sha256:b4200fc649e60e97010c2d3d0648280db9217a6d787982b15548a7fc78418fbf",
-          "downloadCount": 142,
+          "downloadCount": 143,
           "name": "main.js",
           "size": 736368
         },
         {
           "digest": "sha256:22469ff786a716c762216c8a5bbc56e9c782706392a70f362989fa2219e62253",
-          "downloadCount": 175,
+          "downloadCount": 176,
           "name": "manifest.json",
           "size": 354
         },
         {
           "digest": "sha256:e021a414862bf587605b342d63f6404d2485c60c077eecb7aadb658c3d4d5957",
-          "downloadCount": 143,
+          "downloadCount": 144,
           "name": "styles.css",
           "size": 9859
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Fixed\n- **Obsidian Community Plugin review compliance.** Removed `document` (bare global DOM reference) and all `eslint-disable` comments targeting `obsidianmd/prefer-active-doc` from production code. The `activeDocument` stub is now centralized in the test setup file, keeping all production code strictly compliant with Obsidian's multi-window `activeDocument` requirement. No user-visible behavior change.\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n## Contributors\n\n- **@green-dalii** — Code, release, compliance fix\n\n---\n\n**Full Changelog**: [1.18.0...1.18.1](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.18.0...1.18.1)",
-      "downloadCount": 175,
+      "downloadCount": 176,
       "draft": false,
       "name": "1.18.1",
       "prerelease": false,
@@ -984,26 +1014,26 @@
       "assets": [
         {
           "digest": "sha256:98d9557a6b1cfb0df97fa465537f6a02ad967eb9bbe1ec74076cb77109950ae6",
-          "downloadCount": 575,
+          "downloadCount": 576,
           "name": "main.js",
           "size": 692647
         },
         {
           "digest": "sha256:a2d250fdbc950b7cdeb77de4aa67530aef9d0bcd807be19e16c1a873a6debd56",
-          "downloadCount": 616,
+          "downloadCount": 617,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:2257cbfc799dc1bc889c8184dee444dbc0732c968a51e78f8f4aed08b76735a2",
-          "downloadCount": 572,
+          "downloadCount": 573,
           "name": "styles.css",
           "size": 7376
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\n\n### Highlights\n\n- **Long-document ingestion now works end-to-end.** A 619KB Chinese source like 史记 (Shiji) that previously failed after 3 minutes and 15 items now completes fully, extracting hundreds of entities and concepts. Root causes addressed: (a) custom granularity was hardcoded to 15 items max regardless of caps, (b) `max_tokens` was capped below the response length needed for large batches, (c) truncation retries couldn't grow beyond 16K. Fix: dynamic `initialBatchSize` (capped at 50), `maxBatchesBase` derived from caps, `max_tokens` scales 16K→20K→60K with auto halve-and-retry on truncation.\n- **Mentions carry source attribution (footnote-style).** The \"Mentions in Source\" section in entity and concept pages now renders each verbatim quote as `- \"quote\" — [[source-path|display-name]]`, replacing the previous free-form block of untraced quotes. Each quote is linkable to its origin, so future page merges can never mix up which quote came from which source.\n- **Source pages inherit tags from the source note frontmatter (Issue #90).** The LLM used to inject arbitrary concept names (e.g. `Alzheimer-Demenz`, `Neuroprotektion`) into source pages, polluting the user's tag vocabulary. New `extractSourceTags()` pure helper reads the source note's frontmatter and passes tags directly to the summary-page template, falling back to LLM-derived names only when the source has no tags.\n- **Provider settings now sync everywhere.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Fixed via `WikiEngine.updateSettings()` that keeps the EngineContext in sync with the live settings object.\n- **Custom granularity upper bound raised from 300 to 500** to support professional knowledge bases (legal, medical, deep research). 8-language i18n text updated accordingly.\n\n### Added\n\n- **Default Schema documents the new contracts.** Three new sections added to the default `wiki-folder/schema/config.md`:\n  - `## Source Page Template` — mandates tag inheritance from source note, no LLM-derived tags.\n  - `## Date Fields` — documents that `created`/`updated` are filled programmatically (the LLM may produce wrong dates; the system overrides them).\n  - `## Mentions Format` — academic-footnote style: `- \"verbatim quote (optional translation)\" — [[source-path|display-name]]`.\n  - Existing user schema files are NOT overwritten; only `regenerateDefaultSchema()` writes the new template.\n- **Lint report persistence with minute-precision timestamps.** Lint now writes the full report to `wiki-folder/log.md` before showing the modal, with a `📋 Full report saved to log.md` hint. Log entries have minute-precision timestamps (e.g. `[2026-06-08 14:35]`) so multiple Lint runs on the same day are distinguishable. The Lint Report Modal also points to the persisted log.\n\n### Changed\n\n- **Setting description for custom entity/concept limit now reads \"1-500\"** (was \"1-300\") in all 8 languages to match the new hard cap.\n- **Test connection no longer persists broken config on failure.** When \"Test Connection\" fails, the previously-saved settings are restored and a 2nd `saveData()` call re-persists the original. Prevents the user from accidentally saving settings that the test proved broken.\n\n### Fixed\n\n- **Provider settings no longer fail to propagate.** Switching Provider/API Key/Model in Settings used to fail to reach the wiki engine, so the next Ingest/Lint/Query would silently use the old provider. Root cause: `settings.ts` was replacing `plugin.settings` with a NEW object (from `tempSettings` spread), but the `EngineContext` passed to all submodules captured the OLD reference at construction time. Fix: `WikiEngine.updateSettings()` now keeps the EngineContext.settings reference in sync, and all settings paths (saveSettings, test connection, language switch) call it.\n- **LLM-hallucinated dates in frontmatter are now stripped.** The LLM sometimes invents wrong dates (e.g. a 2025 date on a 2026-06-08 ingestion). `enforceFrontmatterConstraints` now strips LLM-generated `created`/`updated` lines and replaces them with programmatic values: `created` is preserved on merge (older value kept), `updated` is always set to today.\n- **Long-source Notice no longer blocks the UI.** Was `new Notice(..., 0)` (persistent, never auto-hides). Now `NOTICE_NORMAL` (5-second auto-hide) so the user isn't stuck with a forever-visible notice.\n- **Lint dedup progress \"1/1/1\" display bug.** The progress template was `批次 {current}/{total}` but `progressLabel` was already passed `1/1` (with the total), causing duplication. Removed the extra `/{total}` substitution.\n- **Folder ingest `setDoneCallback` not restored on early return.** If `ingestCount === 0` (no new files), the method returned early without restoring the callback, so subsequent folder ingests used a wrong callback. Now restored before the early return.\n- **5 audit-discovered issues** (test settings pollution on connection failure; custom-scaling edge cases; repair-call max_tokens insufficient; constant duplication; comment misleading). All resolved with explicit Gate-4 performance verification.\n\n### Tests\n\n- 38 new tests added (549 → 587): 7 in `batch-limits.test.ts`, 6 in `truncateMentions` block of `utils.test.ts`, 3 in `enforceFrontmatterConstraints` block, 6 in `extractSourceTags` block, 1 in `default-schema.test.ts`, plus updates across reorganized test folders. Test suite: 28 files, 587 tests, 0 regressions.\n\n---\n\n## Contributors\n\n- **@green-dalii** — Code, release, bug fixes (long-document ingestion, mentions source attribution, Issue #90 source tags, provider settings sync, programmatic dates, lint log persistence, custom granularity 1-500, default schema expansion, Six-Gate strengthening, 38 new tests)\n\n---\n\n## Installation\n\n**Obsidian Community Plugin Market (recommended):**\n1. In Obsidian, go to **Settings → Community plugins**\n2. Click **Browse** and search for \"Karpathy LLM Wiki\"\n3. Click **Install**, then **Enable**\n\n**Or from the Community Plugin website:**\nVisit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki) and click **Add to Obsidian** to install directly.\n\n**Manual (alternative):**\n1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\n2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\n3. Create a folder named `karpathywiki`, drop the three files inside\n4. Back in Obsidian, click the refresh icon and enable the plugin\n\n**Development build:** `git clone`, `pnpm install`, `pnpm build`\n\n---\n\n## Configuration\n\n1. Open **Settings → Karpathy LLM Wiki**\n2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\n3. Enter your API key (not needed for Ollama)\n4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\n\nSee the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for detailed usage and model recommendations.\n\n---\n\n**Full Changelog**: [1.16.3...1.17.0](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.16.3...1.17.0)\n",
-      "downloadCount": 616,
+      "downloadCount": 617,
       "draft": false,
       "name": "1.17.0 — Long-Document Ingestion & Source Attribution",
       "prerelease": false,
@@ -1464,26 +1494,26 @@
       "assets": [
         {
           "digest": "sha256:cacd1526ef3a917511a716accde5913b6869ffc505490a56ba8b30a50ede93ad",
-          "downloadCount": 658,
+          "downloadCount": 659,
           "name": "main.js",
           "size": 661713
         },
         {
           "digest": "sha256:501014006b42867e41a9484d4075da8b9a72f6bea9cd8422f76fab0fb6fd3001",
-          "downloadCount": 717,
+          "downloadCount": 718,
           "name": "manifest.json",
           "size": 353
         },
         {
           "digest": "sha256:213622be8fe51d2cdf9eb886f2cf6620bcfaf54f86f81722b3f8bc28af20aac2",
-          "downloadCount": 650,
+          "downloadCount": 651,
           "name": "styles.css",
           "size": 6140
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Changes\r\n\r\n  ### Fixed\r\n  - **Custom granularity per-type limits ignored**: In custom mode, entity and concept limits were set separately in the UI but three code paths failed to enforce them separately:\r\n    - The extraction loop merged entityLimit + conceptLimit into a single total cap, losing per-type distinction\r\n    - The LLM instruction text was vague (\"user-defined limits\") with no concrete numbers injected\r\n    - The fix-limit function used hardcoded values ({maxEntities: 3, maxConcepts: 3}) ignoring user settings entirely\r\n    - All three now read `customEntityLimit`/`customConceptLimit` dynamically from settings. Added 6 unit tests (101 total). Non-custom modes\r\n  \r\n  **Cumulative since 1.9.1** (1.10.0 was the feature release, 1.10.1 and 1.10.2 are bug fixes):\r\n  - **Minimal extraction granularity**: New option limiting extraction to ~5 items, ideal for batch processing 100+ files\r\n  - **Custom extraction granularity**: User-defined entity/concept limits (1-300 each) with conditional input fields\r\n  - **Aliases support in duplicate detection**: LLM now sees page aliases when resolving entity names, preventing duplicate stubs for synonyms\r\n  - **Slug normalization in duplicate detection**: resolvePagePath checks title/alias slugs before falling back to LLM\r\n  \r\n  ---\r\n  \r\n  ## Installation\r\n  \r\n  **Obsidian Community Plugin Market (recommended):**\r\n  1. In Obsidian, go to **Settings → Community plugins**\r\n  2. Click **Browse** and search for \"Karpathy LLM Wiki\"\r\n  3. Click **Install**, then **Enable**\r\n  \r\n  **Or from the Community Plugin website:**\r\n  Visit [community.obsidian.md/plugins/karpathywiki](https://community.obsidian.md/plugins/karpathywiki)\r\n  and click **Add to Obsidian** to install directly.\r\n  \r\n  **Manual (alternative):**\r\n  1. Download `main.js`, `manifest.json`, `styles.css` from the assets below\r\n  2. In Obsidian, go to Settings → Community plugins → Installed plugins tab, click the folder icon\r\n  3. Create a folder named `karpathywiki`, drop the three files inside\r\n  4. Back in Obsidian, click the refresh icon and enable the plugin\r\n  \r\n  **Development build:** `git clone`, `pnpm install`, `pnpm build`\r\n  \r\n  ---\r\n  \r\n  ## Configuration\r\n  1. Open **Settings → Karpathy LLM Wiki**\r\n  2. Pick a provider (Anthropic, Gemini, OpenAI, DeepSeek, Kimi, GLM, Ollama, OpenRouter, or custom)\r\n  3. Enter your API key (not needed for Ollama)\r\n  4. Click **Fetch Models**, then **Test Connection**, then **Save Settings**\r\n  \r\n  See the [full README](https://github.com/green-dalii/obsidian-llm-wiki#readme) for\r\n  detailed usage and model recommendations.\r\n  \r\n  ---\r\n  \r\n  **Full Changelog**: [1.10.1...1.10.2](https://github.com/green-dalii/obsidian-llm-wiki/compare/1.10.1...1.10.2)",
-      "downloadCount": 717,
+      "downloadCount": 718,
       "draft": false,
       "name": "1.10.2 — Custom granularity per-type limits enforcement",
       "prerelease": false,
