@@ -1,0 +1,85 @@
+{
+  "author": "Shockwave3301",
+  "defaultBranch": "main",
+  "description": "Encrypt and decrypt selected text in place with AES-256-GCM. No external tools, binaries or key files. - This plugin has not been manually reviewed by Obsidian staff.",
+  "errors": [],
+  "id": "encrypt-selection",
+  "lastChangedAt": "2026-08-01T10:02:27.009Z",
+  "lastFetchedAt": "2026-08-01T10:02:27.009Z",
+  "manifest": {
+    "author": "Shockwave3301",
+    "authorUrl": "https://github.com/Shockwave3301",
+    "description": "Encrypt and decrypt selected text in place with AES-256-GCM. No external tools, binaries or key files.",
+    "id": "encrypt-selection",
+    "isDesktopOnly": false,
+    "minAppVersion": "1.4.0",
+    "name": "Encrypt Selection",
+    "version": "1.0.1"
+  },
+  "name": "Encrypt Selection",
+  "presentInCommunityList": true,
+  "releases": [
+    {
+      "assets": [
+        {
+          "digest": "sha256:fbea6b1d39cddf54d9cae7dd02d4267e6ef59489e763f89661a489b3b2698463",
+          "downloadCount": 6,
+          "name": "main.js",
+          "size": 22099
+        },
+        {
+          "digest": "sha256:ddd0986680505f4fb2ff5c94f7d694d945d6e4289305a6bacec41dadbe993f94",
+          "downloadCount": 6,
+          "name": "manifest.json",
+          "size": 342
+        },
+        {
+          "digest": "sha256:aa01dc90b57126e5e4aa1f5f8d42114d24fae2686eabbc27df1d0297d6a0e304",
+          "downloadCount": 5,
+          "name": "styles.css",
+          "size": 2903
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## [1.0.1] - 2026-07-31\r\n\r\nAddresses the findings from Obsidian's community plugin review. No change to\r\nthe payload format, so text encrypted with 1.0.0 decrypts unchanged.\r\n\r\n### Fixed\r\n\r\n- `SettingTab.update()` and `PluginSettingTab.setControlValue()` are Obsidian\r\n  1.13+ only and would have thrown for anyone running the 1.4.0 this plugin\r\n  declares as its minimum. Neither is called any more.\r\n\r\n### Changed\r\n\r\n- Command renamed from `Encrypt selection` to `Encrypt`, and its id from `encrypt-selection` to `encrypt`. Obsidian prefixes commands with the plugin name and namespaces ids itself, so the palette read \"Encrypt Selection: Encrypt selection\".\r\n- Settings now use Obsidian 1.13's declarative settings API, so they appear in settings search. The legacy renderer is kept for older versions and is driven by the same definitions, so the two cannot drift apart.\r\n- The settings tab no longer hides the \"forget the cached password\" row when nothing is cached; hiding it would have required `SettingTab.update()`, which is 1.13+ only.\r\n- Replaced `globalThis.crypto` with the bare `crypto` global, and `document.createElement` with Obsidian's `createSpan()` helper.\r\n- Dropped the `builtin-modules` dev dependency in favour of Node's own `node:module`.\r\n- Added `npm run lint`, running [`eslint-plugin-obsidianmd`](https://github.com/obsidianmd/eslint-plugin) — the plugin directory review's own ruleset — and wired it into CI alongside a production-only dependency audit.",
+      "downloadCount": 6,
+      "draft": false,
+      "name": "1.0.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T20:15:47Z",
+      "tag": "1.0.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:3c1a2c1099d2dfc7975d6b01143ecbdbfb08472e61b08a07f39b87967c9deb9e",
+          "downloadCount": 1,
+          "name": "main.js",
+          "size": 21565
+        },
+        {
+          "digest": "sha256:e1964ee6c6bd6c605df5e442d3f6f51d71714696a08d6504923fdf68fe7bd821",
+          "downloadCount": 1,
+          "name": "manifest.json",
+          "size": 342
+        },
+        {
+          "digest": "sha256:aa01dc90b57126e5e4aa1f5f8d42114d24fae2686eabbc27df1d0297d6a0e304",
+          "downloadCount": 1,
+          "name": "styles.css",
+          "size": 2903
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "## [1.0.0] - 2026-07-31\r\n\r\nFirst public release.\r\n\r\n### Added\r\n\r\n- **Encrypt selection** — replaces the selected text with an opaque token. A single-line selection becomes an inline `` `aes256:…` `` code span; a multi-line selection becomes a fenced ```` ```aes256 ```` block.\r\n- **Decrypt (peek, read-only)** — shows the plaintext in a modal and never writes it back to the note. This is the primary decrypt flow: under a stolen-vault threat model, plaintext should not touch the disk merely to be read.\r\n- **Decrypt in place** — writes the plaintext back into the note, for editing. Named so the consequence is visible in the command palette.\r\n- **Forget cached password (lock)** — clears the in-memory password and derived-key cache.\r\n- Token resolution from the **cursor position** as well as from a selection, so decrypting works with the caret merely inside a token.\r\n- Password caching for the app session, in memory only, never passed to `saveData()`. Derived keys are memoised per `password:salt:iterations` so repeat decryptions skip the PBKDF2 round.\r\n- Status-bar indicator showing whether a password is cached, which clears the cache when clicked.\r\n- Reading-mode lock widget: a `🔒 Encrypted — click to decrypt` pill in place of raw base64, for both fenced blocks and inline spans. Revealing is view-only and never written back to the file.\r\n- Optional plaintext hint, stored in the payload header and shown before the password prompt.\r\n- Confirm-password field on encryption, on by default, and a non-blocking weak-password warning.\r\n- Settings for iteration count, confirm-on-encrypt, hint field, token style, reading-mode widget and password caching.\r\n- A prominent warning in the settings tab about **File recovery** and **Obsidian Sync**. Both retain pre-encryption plaintext, which encryption alone does not address. The warning is shown unconditionally rather than probing whether those core plugins are enabled, since detecting them needs an undocumented API and a silent failure there would silently drop a security warning.\r\n- Unit tests (vitest) for the crypto, codec and token modules, including wrong-password, flipped-ciphertext-byte and tampered-header cases.\r\n\r\n### Security\r\n\r\n- AES-256-GCM via the Web Crypto API. Authenticated encryption, so a wrong password and a tampered payload both fail loudly rather than producing plausible garbage.\r\n- PBKDF2-HMAC-SHA256 key derivation, 600,000 iterations by default, per the current OWASP guidance. The iteration count is recorded in each payload, so raising the default never orphans existing text.\r\n- A fresh random 16-byte salt and 12-byte IV for every encryption. Neither is ever reused.\r\n- The full payload header — version, KDF id, cipher id, iteration count, salt, IV and hint — is passed to GCM as additional authenticated data, so none of it can be altered without failing the tag check.\r\n- Zero runtime dependencies. No third-party crypto code is in the trust surface.\r\n\r\n### Payload format\r\n\r\n- Version 1. Base64 of a length-prefixed binary struct: `magic 0xAE 0x52 | version u8 | kdfId u8 | cipherId u8 | iterations u32 | saltLen u8 | salt | ivLen u8 | iv | hintLen u16 | hint | ciphertext || GCM tag`. Overhead is roughly 57 bytes.\r\n\r\n### Known limitations\r\n\r\nSee [SECURITY.md](SECURITY.md) for the full threat model. In short: this protects the selected text at rest, and does nothing about File recovery snapshots, Sync version history, undo history, the search index, external backups, note titles and filenames, or the password's residency in memory.\r\n",
+      "downloadCount": 1,
+      "draft": false,
+      "name": "1.0.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T12:40:09Z",
+      "tag": "1.0.0"
+    }
+  ],
+  "removedAt": null,
+  "repo": "shockwave3301/encrypt-selection"
+}
