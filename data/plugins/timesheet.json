@@ -4,8 +4,8 @@
   "description": "Timesheet generator for tasks in daily notes.",
   "errors": [],
   "id": "timesheet",
-  "lastChangedAt": "2026-07-31T01:01:26.995Z",
-  "lastFetchedAt": "2026-07-31T01:01:26.995Z",
+  "lastChangedAt": "2026-08-01T01:05:27.028Z",
+  "lastFetchedAt": "2026-08-01T01:05:27.028Z",
   "manifest": {
     "author": "vkostyanetsky",
     "authorUrl": "https://github.com/vkostyanetsky",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.3",
     "name": "Timesheet",
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "name": "Timesheet",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:828d4b229b10da8a6a87da7dd6c7c84a0c0e72f1911adfbd342ca47d3c261ca5",
+          "digest": "sha256:b9fc927614096100dda970621e3ab1e3f712a98618cc32d398a6687954bf8b50",
           "downloadCount": 4,
           "name": "main.js",
-          "size": 36980
+          "size": 58779
         },
         {
-          "digest": "sha256:b10f726a91cf5a4f481e63ceaabc99719d5eb78308e501d903e7a6a28f2b8bcd",
-          "downloadCount": 3,
+          "digest": "sha256:8f0cee4ff3e20be1efb5f6e2706258db32b5a0cd600a565a348ed6f5032d913f",
+          "downloadCount": 4,
           "name": "manifest.json",
           "size": 261
         },
         {
           "digest": "sha256:b8777b3dea1cd44a7cdab0605b636de2914dd243ec3823fe148739d3168e5e83",
-          "downloadCount": 2,
+          "downloadCount": 3,
+          "name": "styles.css",
+          "size": 351
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "### Added\r\n\r\n* Every sheet type now renders a second code block, named after the first one with the `-query` suffix — `timesheet-query`, `timesheet-hobby-query`, and so on. Such a block reports on the daily notes of a date range instead of the note it is written in.\r\n* A date range is described in the code block, which is written in YAML. The `period` setting names a whole range at once: `2026`, `2026-07`, `2026-07-15`, `today`, `yesterday`, `this-week`, `last-week`, `this-month`, `last-month`, `this-year`, `last-year`.\r\n* The `from` and `to` settings set the bounds of a range one by one. Each of them accepts a date (`2026-07-01`, `2026-07`, `2026`) or a shift from today (`today`, `yesterday`, `tomorrow`, `-7d`, `+2w`, `-1m`, `-1y`). A date without a day is stretched towards the outside of the range, and a bound left out makes the range open on that side.\r\n* Daily notes are taken from the folder of the **Daily notes** core plugin (**New file location**) and recognized by its **Date format**, a format with subfolders in it included.\r\n* A query code block with no range shows an empty report with a hint above it, and a block the plugin cannot understand lists what exactly is wrong with its settings — an unknown setting, an unreadable period, or a date that doesn't exist, like `2026-02-31`.\r\n* Added a command inserting a query code block for every sheet type: “Insert timesheet query (Hobby)”, or “Insert timesheet-hobby-query” when the sheet type has no title.\r\n* A query report is rebuilt on its own whenever a daily note changes, since the notes it is built from are not the note it belongs to.\r\n\r\n### Changed\r\n\r\n* Task number patterns of a query code block always come from the **Default task number pattern** setting of its sheet type: the block itself is busy describing a date range.\r\n* Overlapping task records are now looked for in every note on its own, so records of different days covering the same part of a day are not reported by a query code block.\r\n* A code block type ending with `-query`, as well as the bare `query` one, is now treated the way a code block type starting with `timesheet-` is: the suffix is stripped, since the plugin adds it itself. In other words, `timesheet-hobby-query` typed into **Code block type** means the same sheet type as `hobby`, and `query` means an empty code block type. Dashes a code block type starts or ends with are dropped for the same reason.\r\n\r\n### Fixed\r\n\r\n* An empty line in the **Default task number pattern** setting, or in a code block listing patterns, no longer turns into a pattern matching everything, which made the plugin ignore the task records the patterns below it were meant for.\r\n* A report failing to build is no longer able to stay on the screen: a report saying exactly what the previous one said used to be skipped, even when the previous one was an error message.",
+      "downloadCount": 4,
+      "draft": false,
+      "name": "1.7.0",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T16:01:39Z",
+      "tag": "1.7.0"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:828d4b229b10da8a6a87da7dd6c7c84a0c0e72f1911adfbd342ca47d3c261ca5",
+          "downloadCount": 10,
+          "name": "main.js",
+          "size": 36980
+        },
+        {
+          "digest": "sha256:b10f726a91cf5a4f481e63ceaabc99719d5eb78308e501d903e7a6a28f2b8bcd",
+          "downloadCount": 9,
+          "name": "manifest.json",
+          "size": 261
+        },
+        {
+          "digest": "sha256:b8777b3dea1cd44a7cdab0605b636de2914dd243ec3823fe148739d3168e5e83",
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 351
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Changed\r\n\r\n* The plain `timesheet` code block is now described by a sheet type as well: a sheet type with an empty **Code block type** renders `timesheet` blocks, while a filled-in one keeps rendering `timesheet-` blocks.\r\n* Settings saved by an earlier version are converted on the first launch: the global patterns and templates become a sheet type with an empty code block type, and `timesheet` code blocks keep being rendered the way they were. The converted type is added after the existing sheet types, so the texts shown around task records are not affected. When a sheet type with an empty code block type is already there — an unfinished one, since such types used to be ignored — the converted values only fill in the properties it was left with.\r\n* A fresh install no longer creates any sheet type, and a sheet type with an empty **Code block type** is treated exactly like the others: until it is added, `timesheet` code blocks are not rendered and the **Insert timesheet** command is not there.\r\n* A sheet type shadowed by an earlier type with the same code block type is now fully ignored: it no longer shows its **Text before task** and **Text after task** around task records.\r\n* **Time rounding → Round up time**, **Time rounding → Time rounding interval**, **Output → Remove Markdown formatting** and **Output → Warn about overlapping tasks** stay global: they apply to every sheet type.\r\n\r\n### Removed\r\n\r\n* Removed the global **Default task number patterns** setting and the global **Templates** section. Their values now belong to the sheet type of the `timesheet` code block, so every kind of timesheet is set up in one and the same place.",
-      "downloadCount": 3,
+      "downloadCount": 9,
       "draft": false,
       "name": "1.6.0",
       "prerelease": false,
@@ -113,26 +143,26 @@
       "assets": [
         {
           "digest": "sha256:8d4cb015f7c88ef3377f91889d572fd3a92a2b6b63c7855dc48403b94f34db7d",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "main.js",
           "size": 25842
         },
         {
           "digest": "sha256:3be3d6f8abd66e25465c9240842750f4e72650cd0a50fb7ee0877a912d988a16",
-          "downloadCount": 8,
+          "downloadCount": 9,
           "name": "manifest.json",
           "size": 261
         },
         {
           "digest": "sha256:bb92557c0cf1c72a08b3a49c85fd0b3d26e5d0b6c65771e4a8cd8171b620b70f",
-          "downloadCount": 7,
+          "downloadCount": 8,
           "name": "styles.css",
           "size": 304
         }
       ],
       "author": "github-actions[bot]",
       "description": "### Fixed\r\n\r\n* Fixed the plugin failing to load when the settings contained a sheet type saved before the **Title** property was introduced. Properties missing from a saved sheet type are now filled in with their default values.",
-      "downloadCount": 8,
+      "downloadCount": 9,
       "draft": false,
       "name": "1.3.1",
       "prerelease": false,
