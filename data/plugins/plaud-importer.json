@@ -4,8 +4,8 @@
   "description": "Import meeting summaries, transcripts, and attachments from Plaud.AI into your vault. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "plaud-importer",
-  "lastChangedAt": "2026-07-31T07:05:27.023Z",
-  "lastFetchedAt": "2026-07-31T07:05:27.023Z",
+  "lastChangedAt": "2026-08-01T07:01:27.004Z",
+  "lastFetchedAt": "2026-08-01T07:01:27.004Z",
   "manifest": {
     "author": "Charles Kelsoe (ckelsoe)",
     "authorUrl": "https://github.com/ckelsoe",
@@ -14,7 +14,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.11.4",
     "name": "Plaud Importer",
-    "version": "0.36.0"
+    "version": "0.36.1"
   },
   "name": "Plaud Importer",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
-          "digest": "sha256:db35e260bb1830b168c3f29d11e6fa67572e95af58f8460866a1d97c4c269ce8",
-          "downloadCount": 71,
+          "digest": "sha256:a892191487dc4426b6e65c07b9183b64deeaf66b2586680fdb47656048d2771e",
+          "downloadCount": 15,
           "name": "main.js",
-          "size": 233709
+          "size": 234922
         },
         {
-          "digest": "sha256:66c3b4290a143c147d69eb9b7804b5402cffe64bc6ea03195e1b76942b77baf7",
-          "downloadCount": 72,
+          "digest": "sha256:a4ab9a89b1722055ba9bef0a7d5e603ed239d76c48cf1fe3ac05baba0d150e79",
+          "downloadCount": 15,
           "name": "manifest.json",
           "size": 316
         },
         {
           "digest": "sha256:eae4be024137078b69980970790317057c3643da6f52076f6587ea0f359e57f2",
-          "downloadCount": 69,
+          "downloadCount": 14,
+          "name": "styles.css",
+          "size": 17646
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\n### Fixed\n\n- **The sign-in popup no longer warns about a daily sign-in that is not coming.** Plaud now issues every session for about 24 hours, and since 0.36.0 a session from the email sign-in window renews itself in the background for about 30 days. The popup shown at sign-in still carried older wording written before renewal existed: it called a 24-hour session unusual (\"not the long session most accounts get\") and promised the plugin would ask you to sign in again when it expires, even when background renewal was about to make that untrue. It now says what actually happens for your sign-in method: renewal for email-window sessions, and a reconnect-on-expiry note for captures that renewal cannot carry. The sign-in help text in settings carried the same outdated claim (\"most accounts get a long session, months to about a year\") and now matches reality, including the recommendation for Google and Apple accounts to add a Plaud account password and use the email sign-in.\n- **Signing in now tells you when the token could not be saved.** Saving a sign-in stores the credential and then writes the plugin's settings, and that second write can fail for ordinary reasons: a vault on read-only storage, a full disk, or a sync client holding the file. From the **Sign in** and **Paste token from clipboard** buttons in settings, that failure showed you nothing at all. The button simply re-enabled and the sign-in looked like it had quietly done nothing. Both buttons now say the token could not be saved, and suggest checking that the vault is writable and has free space if it keeps happening (issue #86).\n- **The \"session expired\" prompt now goes away once your session is working again.** When background sync ran into an expired session it paused itself and showed a reconnect prompt. That prompt deliberately has no timeout, so it cannot disappear before you read it, but nothing ever took it back down. If the session recovered on its own, which is easiest to hit when Obsidian wakes from sleep and a background renewal finishes just after a sync attempt already failed, imports carried on normally while the prompt sat there asking you to reconnect a session that was already fine. Every path that clears the pause now clears the prompt with it, and the prompt is no longer raised at all if the plugin is shutting down while a background check is still finishing (issue #88).\n\n",
+      "downloadCount": 15,
+      "draft": false,
+      "name": "0.36.1",
+      "prerelease": false,
+      "publishedAt": "2026-07-31T14:37:26Z",
+      "tag": "0.36.1"
+    },
+    {
+      "assets": [
+        {
+          "digest": "sha256:db35e260bb1830b168c3f29d11e6fa67572e95af58f8460866a1d97c4c269ce8",
+          "downloadCount": 78,
+          "name": "main.js",
+          "size": 233709
+        },
+        {
+          "digest": "sha256:66c3b4290a143c147d69eb9b7804b5402cffe64bc6ea03195e1b76942b77baf7",
+          "downloadCount": 78,
+          "name": "manifest.json",
+          "size": 316
+        },
+        {
+          "digest": "sha256:eae4be024137078b69980970790317057c3643da6f52076f6587ea0f359e57f2",
+          "downloadCount": 75,
           "name": "styles.css",
           "size": 17646
         }
       ],
       "author": "github-actions[bot]",
       "description": "\n### Added\n\n- **Email sign-ins now keep themselves signed in for about 30 days.** Plaud sessions last 24 hours, so the plugin has been asking you to reconnect every day. If you signed in with the **Sign in with email** window, it now renews that session quietly in the background before it lapses, and imports and auto-sync keep running without you doing anything. After about 30 days Plaud requires a real sign-in again, and you get the usual reconnect prompt. This has a limit worth knowing: renewal works only for the email window, because that is the only sign-in the plugin can renew on your behalf. Google and Apple sign-ins finish in your web browser, and the bookmark runs there too, so neither leaves the plugin anything to renew with. Those sessions keep working exactly as before and ask you to reconnect when they lapse. Settings now says which of the two your session is, under the connection status.\n- **If a renewal fails, the plugin says so instead of failing quietly.** It stops, shows the reconnect prompt, and does not keep hammering Plaud, which has an hourly limit on sign-in attempts. Turning on debug logging adds a **Debug: refresh the session now** command so a failure can be captured for a bug report.\n\n### Fixed\n\n- **The sign-in window no longer gets stuck when your browser storage holds several old sign-in values.** It gathers a handful of possible credentials and tries each against Plaud, but it was counting anything that merely looked like a credential toward that handful. Expired leftovers and the companion value Plaud stores beside your real session could use up every slot before it reached the one that works, leaving the window open forever after a successful login. It now ignores values it can already tell are unusable, so the slots go to real candidates. This also means one less rejected call to Plaud each time you sign in.\n- **A failed sign-in no longer leaves the plugin pointed at the wrong Plaud region.** If the window discovered your account was on a different regional server and the sign-in then failed to save, the plugin kept the new server address next to your old credential, which could send a working token to a server that would reject it. The address is now saved only together with a credential that was actually stored.\n\n",
-      "downloadCount": 72,
+      "downloadCount": 78,
       "draft": false,
       "name": "0.36.0",
       "prerelease": false,
