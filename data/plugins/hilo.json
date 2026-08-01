@@ -4,8 +4,8 @@
   "description": "Multi-color highlights using Obsidian's native ==text== syntax. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "hilo",
-  "lastChangedAt": "2026-07-31T08:04:27.031Z",
-  "lastFetchedAt": "2026-07-31T08:04:27.031Z",
+  "lastChangedAt": "2026-08-01T08:02:27.002Z",
+  "lastFetchedAt": "2026-08-01T08:02:27.002Z",
   "manifest": {
     "author": "San",
     "authorUrl": "https://github.com/opellen",
@@ -14,7 +14,7 @@
     "isDesktopOnly": false,
     "minAppVersion": "1.5.0",
     "name": "Hilo",
-    "version": "0.1.8"
+    "version": "0.1.9"
   },
   "name": "Hilo",
   "presentInCommunityList": true,
@@ -22,27 +22,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:58f3e89951ff80a14606c4ad33534449b882dccb6e941371dc9e28c444a6e85e",
+          "downloadCount": 7,
+          "name": "main.js",
+          "size": 25510
+        },
+        {
+          "digest": "sha256:a3defda5b941eb1e3953f1218c0dbb43abdd8764c94216e56689f67f14714997",
+          "downloadCount": 7,
+          "name": "manifest.json",
+          "size": 262
+        },
+        {
+          "digest": "sha256:a59d368fb34b3ef54fc22ede59c5fb7c7264b910bebd037ba5b39beafe675a89",
+          "downloadCount": 6,
+          "name": "styles.css",
+          "size": 4729
+        }
+      ],
+      "author": "san-tekart",
+      "description": "Adds an \"Auto improve readability\" option (default on) that keeps highlight colors readable across light and dark themes, plus theme live-switch and a small popout-window compatibility fix. Existing installs migrate automatically.\n\n## What's new\n\n### 🌗 Auto improve readability (**Settings → Hilo**)\n\nNew toggle at the bottom of the Hilo settings tab. When on (the default), highlight backgrounds are compensated at render time so colors stay readable on both light and dark themes:\n\n- On dark themes, colors brighter than HSV Value 0.5 are darkened down to it.\n- On light themes, colors darker than HSV Value 0.5 are brightened up to it.\n- Hue and saturation are preserved. The stored palette hex values are never modified — compensation is render-time only.\n- Underlined style bypasses compensation so the thin band keeps its full brightness (it needs it to remain visible against the theme background).\n\nToggle off to render every color exactly as stored, in every style.\n\n### Theme live-switch\n\nHighlight colors now update immediately when you change Obsidian's theme (Settings → Appearance), no plugin reload required. This covers both the builtin theme-derived palette (which was already responsive via CSS vars) and the new readability compensation (which needs to recompute on theme change).\n\n### Popout-window compatibility\n\n`resolveBuiltinDisplayHex` and `getThemeMode` now read `activeDocument` instead of the main window's `document.body`, so popout windows resolve their swatches and theme mode against their own DOM.\n\n## Compatibility\n\n- No breaking changes for note content.\n- Same `minAppVersion` (1.5.0).\n- Auto-migration: existing `{palettes, activePalette, style}` saves gain `autoReadability: true` on load. Prefer the exact original colors? Toggle it off after upgrading.\n- Test suite: 153/153 pass (+10 new `compensateForReadability` tests).\n\n## Credits\n\nThanks to **[@PostPollux](https://github.com/PostPollux)** for the [#6](https://github.com/opellen/Hilo/pull/6) implementation covering HSV compensation, migration, theme-change hook, and comprehensive test coverage.\n\n## Install\n\n**Marketplace**: Settings → Community plugins → Browse → search \"Hilo\".\n\n**Manual**: download `main.js`, `manifest.json`, and `styles.css` below and drop them into your vault's `.obsidian/plugins/hilo/` folder, then enable Hilo under Community plugins.\n",
+      "downloadCount": 7,
+      "draft": false,
+      "name": "0.1.9 — Auto improve readability",
+      "prerelease": false,
+      "publishedAt": "2026-08-01T00:41:18Z",
+      "tag": "0.1.9"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c7f470c61f032256d0ca1a65ca5820460f4fd0a4c84262e76716252f7dc837c1",
-          "downloadCount": 123,
+          "downloadCount": 139,
           "name": "main.js",
           "size": 22874
         },
         {
           "digest": "sha256:6cd94e78eab4eac8230ceb86c0162b0c089f53eec19c68370568553f7cdb3ce5",
-          "downloadCount": 124,
+          "downloadCount": 139,
           "name": "manifest.json",
           "size": 262
         },
         {
           "digest": "sha256:24dd4c4157fa9feffd9871c5fdb3881362f511b55b532a74abe0374d6d447189",
-          "downloadCount": 120,
+          "downloadCount": 134,
           "name": "styles.css",
           "size": 4699
         }
       ],
       "author": "san-tekart",
       "description": "Small quality-of-life patch — settings-tab color edits now paint into open notes immediately, and popout-window compatibility is tightened.\n\n## Fixes\n\n- **Live-refresh on settings save** — editing a color's hex in Settings → Hilo now repaints the color in every open note the moment the settings modal closes. Previously the change didn't render until the next cursor click / viewport shift, because the plugin was dispatching an empty transaction into an internal API (`iterateCodeMirrors`) that returns no markdown views on recent Obsidian builds. Fixed by dispatching a dedicated CodeMirror `StateEffect` into each open markdown editor via `iterateAllLeaves` (a public API).\n- **`resolveBuiltinDisplayHex` uses `activeDocument`** — the settings-tab preview swatch for locked builtin rows now reads its computed color from the currently focused document, so popout windows resolve against their own DOM instead of always falling back to the main window's `document.body`.\n\n## Compatibility\n\n- No breaking changes.\n- Same `minAppVersion` (1.5.0).\n- 143/143 tests pass.\n\n## Install\n\n**Marketplace**: Settings → Community plugins → Browse → search \"Hilo\".\n\n**Manual**: download `main.js`, `manifest.json`, and `styles.css` below and drop them into your vault's `.obsidian/plugins/hilo/` folder, then enable Hilo under Community plugins.\n",
-      "downloadCount": 124,
+      "downloadCount": 139,
       "draft": false,
       "name": "0.1.8 — Live-refresh fix + activeDocument compat",
       "prerelease": false,
