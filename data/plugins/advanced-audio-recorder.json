@@ -4,8 +4,8 @@
   "description": "Advanced audio recording with input device and folder configuration. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "advanced-audio-recorder",
-  "lastChangedAt": "2026-07-31T04:04:27.013Z",
-  "lastFetchedAt": "2026-07-31T04:04:27.013Z",
+  "lastChangedAt": "2026-08-01T04:03:27.006Z",
+  "lastFetchedAt": "2026-08-01T04:03:27.006Z",
   "manifest": {
     "author": "Anatol Khmialeuski",
     "authorUrl": "https://coff.ee/akhmelevskiy",
@@ -24,26 +24,26 @@
       "assets": [
         {
           "digest": "sha256:149f05d75bf79ea18a2d51861be6a3f95cac3c3f9448981ae704d9676192d34e",
-          "downloadCount": 31,
+          "downloadCount": 55,
           "name": "main.js",
           "size": 2833302
         },
         {
           "digest": "sha256:e89126144e93c09a3638ddd6cb273590bba0f3f379c32057a01e29482f538e52",
-          "downloadCount": 31,
+          "downloadCount": 55,
           "name": "manifest.json",
           "size": 483
         },
         {
           "digest": "sha256:b80c536d0eba0e08b53e982d2c7163c28675f6c83be92333547cc38933da4c5e",
-          "downloadCount": 30,
+          "downloadCount": 54,
           "name": "styles.css",
           "size": 20637
         }
       ],
       "author": "github-actions[bot]",
       "description": "This release turns transcription into a full meeting-notes workflow. Advanced Audio Recorder can now **name the speakers in a diarized transcript and keep that roster with the recording**, **bias recognition with a custom dictionary**, **generate chapters from a transcript with an LLM**, and **estimate and track what a run costs before it runs**. An opt-in **two-pass context-biased mode** re-transcribes with domain context mined from the first draft for higher accuracy on names and jargon. Existing recordings, stored settings, and the recorder are unaffected, and every addition is opt-in or defaults to the previous behavior.\n\n## New: Speaker names that stay with the recording\n\nA diarized run labels speakers as Speaker 1, Speaker 2, and so on; a rename dialog turns those into real names, and the names now travel with the recording instead of living only in memory or a settings profile you have to remember to pick.\n\n- Assigned names are persisted in a per-recording sidecar and re-applied automatically to every later re-transcription, so naming a speaker once survives a re-run.\n- The Transcribe dialog gained a **Participant profile** picker (shown only when the run will actually produce speakers) that seeds the suggestions; a name typed once is suggested by that recording forever, and by the picked profile for the next recording that uses it.\n- Renames apply as a diff against the stored names: file outputs are rewritten at their recorded paths and formats, and notes with the speaker template each was actually written with, so changing settings later never breaks a rename. LLM-rewritten notes are skipped and reported instead of being left stale, and an **Undo** button replays the previous state.\n- Each speaker row has a sample button that plays where that speaker first talks, clamped to between 4 and 15 seconds, so you can identify a voice without the transcript that the dialog covers. Only one excerpt plays at a time and it is released with the dialog.\n\n## New: Custom dictionary\n\nA named-profile dictionary biases recognition toward domain terms, proper names, and acronyms so they are spelled correctly. Biasing is provider-aware: it enforces Deepgram's term and length limits, is gated by model, and uses a safe token bound so a long list cannot crowd out the audio. The dictionary lives under an **Advanced settings** switch (off by default) in both the Transcription settings and the Transcribe dialog.\n\n## New: LLM-generated chapters\n\nChapters can now be generated from a transcript with an LLM, on demand from a dialog, with selectable guidance profiles and timestamps grounded in the transcript rather than invented. The dialog lets you pick the chapter profile and shows a separate cost estimate for the chapter pass.\n\n## New: Advanced two-pass context-biased transcription\n\nAn opt-in mode (off by default, behind the advanced switch and carrying an explicit 2x-cost warning) transcribes the recording twice. Between the passes a team of sequential LLM agents mines the first draft for the meeting's domain context, its topic, proper names, jargon, and English terms garbled inside another language, and assembles it into a compact decoding bias for the second pass.\n\n- The bias is routed per engine: the Whisper API prompt field, whisper.cpp `--prompt`, Deepgram keyterm and keywords ahead of the dictionary, and Gemini instruction text.\n- The second pass pins the language to the first pass's detection, so an English-heavy hint cannot flip a Russian recording, and a configurable length safeguard reverts over-corrected output.\n- Both passes bill into one run cost, and every failure path keeps the first pass's transcript. Engines that cannot accept a bias degrade to a single pass with a notice before any LLM spend.\n\n## New: Cost estimation and session spending\n\nEvery enabled step of a run is now priced up front, transcription, LLM cleanup, chapters, and the two-pass doubling, and shown before you start, while the session tracks what was actually spent. Gemini is priced by modality, and each context-agent call bills its own share rather than the whole team.\n\n## New: Settings\n\n- Numeric input fields replace the old sliders, so every threshold takes an exact typed value.\n- The settings tab is now searchable.\n- The seed model lists were refreshed against the July 2026 provider catalogs (the Gemini 3.x generation, the GPT-5.6 family, and Claude Sonnet 5 and Fable 5) with updated cost rates, while lists you saved yourself stay priced.\n\n## Player fixes\n\nTimecode links and the player context menu now resolve against the note that actually owns the embed, found by locating the view whose container holds the clicked node. Both surfaces work correctly in pop-out windows and background splits, where a relative or ambiguous timecode link previously could resolve against the wrong note or feed a node to another window's editor.\n\n## Internal\n\nA new recording sidecar model and store (schema v2) underpins the speaker roster, the registered run outputs, and the per-speaker first-turn timings. The settings and transcription code was refactored substantially: the settings tab is split into sections built on shared controls, the three profile kinds are unified behind one module, every transcription engine and LLM vendor is described once in a registry, and the dialogs share one frame and control family. Dead code was removed and the test suites are now type-checked in CI.\n\n## Compatibility\n\nRequires Obsidian 1.6.6+. This release is backward compatible: existing recordings, stored settings, and the recorder are unaffected. Speaker naming, the custom dictionary, LLM chapters, and the two-pass mode are opt-in or gated behind default-off switches, and any transcription step that calls an LLM needs a configured provider and API key. The recording sidecar (schema v2) is written alongside new recordings, and recordings without one fall back to the previous stateless behavior.\n\n**Full Changelog**: https://github.com/akhmialeuski/advanced-audio-recorder/compare/2.1.1...2.2.0\n",
-      "downloadCount": 31,
+      "downloadCount": 55,
       "draft": false,
       "name": "2.2.0",
       "prerelease": false,
@@ -54,7 +54,7 @@
       "assets": [
         {
           "digest": "sha256:cc7f82584e8250a696c05d1ec6f515eaa42537ce97165c0c4496d730748ff81b",
-          "downloadCount": 227,
+          "downloadCount": 228,
           "name": "main.js",
           "size": 2751094
         },
