@@ -4,8 +4,8 @@
   "description": "Discover related notes in your vault.",
   "errors": [],
   "id": "related-notes",
-  "lastChangedAt": "2026-08-01T02:05:27.026Z",
-  "lastFetchedAt": "2026-08-01T02:05:27.026Z",
+  "lastChangedAt": "2026-08-02T02:05:27.025Z",
+  "lastFetchedAt": "2026-08-02T02:05:27.025Z",
   "manifest": {
     "author": "Oluwasanya Awe",
     "description": "Discover related notes and uncover missed connections.",
@@ -25,26 +25,26 @@
       "assets": [
         {
           "digest": "sha256:ab0fb08f7cd1cb412ab4154441e356aa2e9073939839f634a20a2e674baa9bed",
-          "downloadCount": 45,
+          "downloadCount": 53,
           "name": "main.js",
           "size": 146353
         },
         {
           "digest": "sha256:9eb8459ddd44b1e1daae981c9728a93f496d4ce2297e273177dc090251ee7019",
-          "downloadCount": 44,
+          "downloadCount": 51,
           "name": "manifest.json",
           "size": 309
         },
         {
           "digest": "sha256:f0c39db5dc52985903ddd7fcafb9b19c31039c581765eb9879ac396fda51cf7d",
-          "downloadCount": 43,
+          "downloadCount": 50,
           "name": "styles.css",
           "size": 3751
         }
       ],
       "author": "github-actions[bot]",
       "description": "## Better matches, especially for longer notes\n\nRelated-notes suggestions are computed from bigrams — adjacent word pairs — as well as individual words. Those bigrams were being built from 10-word fragments rather than from the note as a whole, which had three effects:\n\n- **Every tenth word pair was missing.** A pair straddling a fragment boundary was never recorded, so roughly 10% of the phrase information in every note was silently dropped.\n- **Long notes were over-weighted on phrases.** A limit meant to cap each note at 200 word pairs could never take effect, so a 1,000-word note contributed around 900 — drowning out its individual words and skewing what it matched against.\n- **A lower-detail mode for very long notes never ran at all**, along with a separate limit for CJK text.\n\nNotes are now analyzed as a whole before being indexed, so phrase information is complete and the limits apply as intended. Expect suggestions to shift, generally toward better matches on notes longer than a few hundred words.\n\n## Faster indexing\n\nBecause the phrase limit now works, there is less to index on long notes. Indexing 2,000-word notes is roughly **2.2x faster** than in 4.2.0 (measured over 200 documents: 3,449ms to 1,551ms). Shorter notes are modestly faster too.\n\n## Your index will rebuild once\n\nThis release changes what is stored in the index, so the existing cache cannot be reused and is rebuilt automatically the first time you open Obsidian after updating. That happens in the background and only once. Thanks to the indexing work in 4.2.0 and this release, rebuilding is far quicker than it used to be.\n\n## Internal\n\nRegression tests now assert that the batch size used for yielding cannot influence what gets indexed — the defect above existed because a performance mechanism was quietly determining scoring. Also covered: that indexing actually goes through the whole-document path rather than a per-fragment one, that word-pair limits are reachable, and that a stale index version is rejected rather than mixed with new data.\n\n**Requires Obsidian 0.15.0 or later.**\n",
-      "downloadCount": 44,
+      "downloadCount": 51,
       "draft": false,
       "name": "4.3.0",
       "prerelease": false,
