@@ -4,8 +4,8 @@
   "description": "Anki-like native system in obsidian. Review flashcards with FSRS spaced repetition. - This plugin has not been manually reviewed by Obsidian staff.",
   "errors": [],
   "id": "true-recall",
-  "lastChangedAt": "2026-08-01T03:02:27.026Z",
-  "lastFetchedAt": "2026-08-01T03:02:27.026Z",
+  "lastChangedAt": "2026-08-02T03:01:27.014Z",
+  "lastFetchedAt": "2026-08-02T03:01:27.014Z",
   "manifest": {
     "author": "Lucas Piera",
     "authorUrl": "https://www.truerecall.app/",
@@ -15,7 +15,7 @@
     "isDesktopOnly": true,
     "minAppVersion": "1.8.7",
     "name": "True Recall",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "name": "True Recall",
   "presentInCommunityList": true,
@@ -23,27 +23,57 @@
     {
       "assets": [
         {
+          "digest": "sha256:d44396dafb15ae95fb8291e7d5a782833332c8ca054958cad9d79cc8393e0658",
+          "downloadCount": 36,
+          "name": "main.js",
+          "size": 3340612
+        },
+        {
+          "digest": "sha256:18d7215b1592a0cc96f3098537515ab7659cd9ab05e53e3cf48a80ea69cc09ec",
+          "downloadCount": 51,
+          "name": "manifest.json",
+          "size": 379
+        },
+        {
+          "digest": "sha256:f238d5a2ca469c6342dbbace5efaf73a4f4c668d9f5ee17af25683f566ca0c11",
+          "downloadCount": 35,
+          "name": "styles.css",
+          "size": 102477
+        }
+      ],
+      "author": "github-actions[bot]",
+      "description": "\nThe workload forecast was quietly lying. Cards that were already due — every learning card sitting on a sub-day step, and anything overdue — were filtered out before the chart was drawn, so the busiest part of the day was the part you could not see. That is fixed, and the forecast now also projects the relearning volume your retention target implies, instead of pretending lapses are free. Alongside that: easy days are reachable from outside the settings tab, and a question can be captured mid-study without an answer without costing you a review slot.\n\n### Features\n\n- **Easy days from outside the settings tab** — mark recurring weekdays or a specific date as reduced-load from the API, the CLI (`get_easy_days`, `set_easy_days`, `add_easy_day`, `apply_easy_days`) or the new **Easy day: today** command. `add_easy_day` with no arguments is the \"today disappeared\" button: it records today and redistributes straight away. Easy days move reviews out of a day *before* it arrives, which is the difference between a lighter day and an overdue pile-up the morning after\n- **Capture a question without an answer** — `create_flashcard --suspended` creates a card outside the review queue. A question that occurs to you mid-study can be recorded and finished later without burning review slots on a card that has nothing to recall. Unsuspend once it has a real answer\n- **Card state in `list_cards`** — the response now carries `suspended` and `buriedUntil`. `get_card` always reported them, so the list endpoint was the odd one out, and asking \"which of my cards are suspended\" previously meant dropping down to SQL\n- **Lift a bury** — `bury_cards --unbury` returns cards to their normal schedule. Burying was previously one-way from outside the app\n\n### Improvements\n\n- **ai:** the chunked, draft and streaming generation services each assembled their own system prompt, format spec and user content, which is why the same preset could produce different prompts depending on which path ran it. Prompt assembly now lives in one place, and a preset id resolves to a runnable preset through a single function that folds together the Pro tier swap, the note-type lookup and the entitlement check\n- **assistant:** generation could be started from the panel, the selection toolbar or a command, each with its own copy of the queueing logic. Every entry point now funnels through one queue, and a missing API key is reported up front rather than after the request fails\n- **assistant:** when the streaming engine persists cards as it parses them there is nothing left to apply, and an empty proposal list looked identical to \"the model returned nothing\". Completed runs now report what actually landed, counting duplicates separately, so a run that produced only duplicates says so instead of claiming cards were created\n\n### Bug Fixes\n\n- **fsrs:** the workload forecast dropped every card that was already due. It filtered on the current timestamp rather than the start of the day, and learning cards use sub-day steps, so they are almost always slightly past due — they vanished from the chart entirely, along with any overdue reviews. Overdue work now buckets into today, where it belongs\n- **fsrs:** the per-preset filtered forecast carried a second copy of that logic and the same bug. Both paths now share one implementation, so they cannot drift apart again\n- **fsrs:** the forecast under-reported daily load by roughly the lapse rate, because the reviews your lapses will generate were not counted anywhere. Each day now includes a projected relearning estimate derived from the review cards due that day and the preset's retention target, and it feeds the average and the load-balance check\n- **cli:** `generate_flashcards_with_preset` ran straight into its own description in `--help`, with no space between them — the name is longer than the fixed column width. Column widths are now derived from the longest name, so the next long command will not break it either\n\n",
+      "downloadCount": 51,
+      "draft": false,
+      "name": "2.1.0",
+      "prerelease": false,
+      "publishedAt": "2026-08-01T09:00:33Z",
+      "tag": "2.1.0"
+    },
+    {
+      "assets": [
+        {
           "digest": "sha256:c99022b127fdbbdc368520ddd763f2b41afc4f03c5014b4686172baf0efb86a4",
-          "downloadCount": 133,
+          "downloadCount": 139,
           "name": "main.js",
           "size": 3334453
         },
         {
           "digest": "sha256:a22a38dad3c9f21fae730e31b06cf80276860614d2a5632e2718359dd81919e4",
-          "downloadCount": 239,
+          "downloadCount": 255,
           "name": "manifest.json",
           "size": 379
         },
         {
           "digest": "sha256:f8d34c522d669e9de0fb27e9975c61e36cafca6349bc678b9402cc50aa082c16",
-          "downloadCount": 130,
+          "downloadCount": 135,
           "name": "styles.css",
           "size": 102396
         }
       ],
       "author": "github-actions[bot]",
       "description": "\nThe AI side of True Recall was a collection of separate surfaces — Card Polish had its own preset menu and preview modal, generation had another, the Knowledge Chat a third. 2.0 replaces all of them with one assistant that keeps its work in threads you can review later. Alongside that: Anki-style Custom Study, a daily target that follows your actual pace, and FSRS load balancing that spreads an overdue backlog instead of dumping it on one day.\n\n### Breaking changes\n\n- **RAG / Knowledge Base removed.** The Knowledge Chat view, the knowledge-base plugin, the `/rag/*` API routes, the assistant's `search_knowledge` tool and every `rag*` setting are gone — the subsystem will be rebuilt from scratch later. Existing RAG tables are left in place (nothing is dropped), and evidence already attached to saved assistant threads still renders\n- **The legacy Card Polish UI is retired.** Its anchored preset menu, preview modal and presenter are deleted; the review ✨ action now opens the shared AI workspace in card-polish mode. Preset ids, command ids and hotkeys are unchanged, so saved presets and keybindings keep working\n- **✨ now requires both the Card Polish and AI Assistant plugins enabled.** A disabled AI family no longer offers its presets inside the workspace, and the mode navigation hides it\n\n### Features\n\n- **AI assistant with threads and an inbox** — every AI request becomes a thread you can apply, reject or retry from a dedicated inbox view, instead of a modal that loses its result when you close it. Reviewed conversations stay in place and pending drafts survive\n- **Dockable Ask AI panel** — a sidebar home for the AI workspace that outlives a single question. Its subject follows what you are studying (the card under review, otherwise the open note) and holds still while you have draft text in the composer, so grading mid-sentence cannot swap the subject out from under you\n- **Fast preset surface** — running a saved instruction is now one click: a keyboard-navigable preset list with Apply/Preview badges and a custom-instruction field directly underneath. A preset marked auto-apply lands its change immediately and keeps the thread as history; anything that conflicts falls back to the inbox rather than being dropped\n- **Generated-card draft review** — approve AI-generated cards per thread or inbox-wide, with the assistant available alongside the quick note editor\n- **Custom Study (Anki-style)** — six modes: increase today's new-card limit, increase today's review limit, review forgotten cards, review ahead, preview new cards, and study by card state or tag (with tag include/exclude). Builds a temporary filtered deck that shows up as its own card on the dashboard\n- **Conscious daily target** — a daily-target picker with pace chips and a catch-up preview, with the suggested target anchored to the pace you actually sustain rather than a fixed number\n- **FSRS load balancing overhaul** — auto or manual load-balance target, overdue backlog spread across upcoming days instead of piling onto today, per-review Anki-style fuzz balancing, a replay-based parameter optimizer, and per-project balance plus workload forecast\n- **Ink embeds render in review and note editors** — handwritten drawing and writing embeds from the Ink plugin now display on cards\n- **Hide tab bar** — a `Hide tab bar` toggle under Appearance plus a bindable \"Toggle tab bar\" command. Scoped to the main window, so sidebar tabs stay visible\n- **Baseline card quality rules for every non-Pro prompt** — the Pro prompt already banned ordinal/meta questions, multi-answer cards and long answers; those rules now apply to the basic builtin preset and to BYOK/user presets too, and preset instructions can explicitly override them. Settings migration also refreshes persisted builtin prompts, so older installs finally receive prompt improvements instead of keeping whatever text they were first seeded with\n- **BRAT beta channel** — opt into beta builds via `X.Y.Z-beta.N` tags cut from `pre-release`, without prereleases leaking into normal Obsidian updates\n- **FSRS preset and load-balance control from the API, CLI and MCP server** — read and update scheduling presets, set the load-balance target, and query per-project balance and forecast from outside Obsidian\n\n### Improvements\n\n- **toolbar:** the builtin basic and Pro generation buttons are collapsed into a single button\n- **assistant:** one Apply action that always dismisses the workspace, instead of several that behaved differently\n- **assistant:** the split-card procedure is now spelled out explicitly in the system prompt, so decomposition produces atomic cards more reliably\n- **performance:** review grading batches its data-layer patches and handles card removal incrementally instead of rebuilding the whole session\n- **performance:** hidden views no longer recompute, and content-only edits skip full cache invalidation\n- **the plugin registry shows deprecation badges** for plugins superseded by the assistant\n- removed dead code and consolidated duplicated helpers across core services\n\n### Bug Fixes\n\n- **assistant:** typing in an AI proposal field froze Obsidian — every keystroke rewrote the whole thread into SQLite and re-rendered every embedded editor. Edits are now debounced and flushed on blur, unmount and Apply, so nothing is lost\n- **anki:** `.apkg` export actually converts content and media filenames now\n- **anki:** one-way basic cards export under a single-template model instead of generating a phantom reverse card\n- **anki:** corrected scheduling and export mappings plus several converter edge cases\n- **cards:** editing the original of a reversed pair no longer flips it\n- **cards:** duplicate detection compares whole questions, and AI dedupe is real rather than approximate\n- **persistence:** restore-from-backup is protected, and cloze notes no longer fragment\n- **persistence:** five verified correctness fixes from a full persistence audit\n- **review:** closed four undo/race gaps found in the data-layer audit\n- **commands:** undo restores every card the command actually wrote, not just the primary one\n- **sync:** note and note-type rows are merged, with the watermark taken from observed rows\n- **stats:** timezone-safe streak math, correct weekday and day bucketing in workload forecasts, and filter-aware fast paths\n- **storage:** the default project folder is honored in every creation flow, and the Anki media preview path is aligned\n- **notes:** the target folder is created before a note is written into it\n- **deletion:** card cleanup runs before the frontmatter index clears, so deletes no longer leave orphans\n- **panel:** cloze-syntax detection stopped alternating results on repeated calls\n- **api:** hardened the local API server lifecycle and input validation\n- **ui:** fixed Tailwind variant class ordering in popout windows\n\n### Maintenance\n\n- resolved the Obsidian automated plugin review findings at their root: `setCssStyles()` instead of direct style assignment, `createDiv`/`createEl` helpers instead of `createElement`, `FileManager.trashFile()` (which respects the user's deletion preference) instead of `Vault.trash()`, `activeDocument` instead of `document` for popout compatibility, and `@floating-ui/dom` declared where it is used\n- cleared the full ESLint type-safety cluster (`no-unsafe-*`, `no-misused-promises`, enum comparisons, `await-thenable`), all 67 `react-hooks/exhaustive-deps` findings, all 17 `no-deprecated` findings, and sentence-case UI text\n- decoupled scanner-visible code from ambient Node types, and fixed monorepo dependency resolution so the MCP server is linted too\n- removed dead deprecated APIs instead of suppressing the lint that flagged them\n\n",
-      "downloadCount": 239,
+      "downloadCount": 255,
       "draft": false,
       "name": "2.0.0",
       "prerelease": false,
